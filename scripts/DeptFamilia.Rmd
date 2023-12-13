@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, warning=FALSE}
 library(tidyverse)
 library(readxl)
-setwd("~/IEPR/DashboardPARE")
+setwd("~/Estadisticas-Sobre-Violencia-de-Genero-en-Puerto-Rico/data/Departamento_de_Familia/")
 ```
 
 Funcion para manejar datos missing
