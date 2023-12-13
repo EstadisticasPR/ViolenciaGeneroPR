@@ -1,6 +1,6 @@
 ---
-title: "Visualizaciones Preliminares: Negociado de Policia"
-author: "Felix A Baez Santiago"
+title: "Visualizaciones Preliminares: Negociado de Policía de Puerto Rico"
+author: "Félix A Báez Santiago"
 date: "`r Sys.Date()`"
 output: html_document
 ---

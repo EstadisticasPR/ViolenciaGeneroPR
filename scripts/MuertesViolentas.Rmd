@@ -1,6 +1,8 @@
 ---
-title: "Visualizaciones Preliminares: Muertes Violentas"
-author: "Felix A Baez Santiago"
+title: "Visualizaciones Preliminares: Sistema de Notificación de Muertes Violentas"
+author: "Félix A Báez Santiago"
+
+
 date: "`r Sys.Date()`"
 output: html_document
 ---

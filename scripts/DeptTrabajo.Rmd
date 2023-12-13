@@ -1,6 +1,6 @@
 ---
-title: "Departamento del Trabajo y Recursos Humanos"
-author: "Felix A Baez Santiago"
+title: "Visualizaciones Preliminares: Departamento del Trabajo y Recursos Humanos"
+author: "Félix A Báez Santiago"
 date: "`r Sys.Date()`"
 output: html_document
 ---

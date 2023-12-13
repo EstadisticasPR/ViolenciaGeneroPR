@@ -1,6 +1,6 @@
 ---
 title: 'Visualizaciones Preliminares: Oficina de la Procuradora de las Mujeres'
-author: "Felix A Baez Santiago"
+author: "Félix A Báez Santiago"
 date: "`r Sys.Date()`"
 output: html_document
 ---
