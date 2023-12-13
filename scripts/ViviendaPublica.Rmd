@@ -1,0 +1,152 @@
+---
+title: "Administracion de Vivienda Publica"
+author: "Felix A Baez Santiago"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Imports
+```{r, warning=FALSE}
+library(tidyverse)
+library(readxl)
+setwd("~/IEPR/DashboardPARE")
+```
+
+Funcion para manejar datos missing
+
+```{r, eval=FALSE}
+# funcion para convertir columna con varios tipos de datos a numerico
+convert_mixed_columns <- function(data) {
+  mixed_columns <- sapply(data, function(col) any(is.character(col) & !is.na(as.numeric(col))))
+  mixed_columns_names <- names(mixed_columns)[mixed_columns]
+  
+  for (col in mixed_columns_names) {
+    data[[col]] <- ifelse(data[[col]] == "N/A", NA, as.character(data[[col]]))
+    data[[col]] <- as.numeric(data[[col]])
+  }
+  
+  return(data)
+}
+```
+
+```{r}
+avpAsignadas <- read_excel("data/Administracion_de_viviendas_publicas/avpAsignadas2017_23.xlsx") %>% 
+  rename(región = `Región `) %>%
+  pivot_longer(!región, names_to = "año", values_to = "asignadas")
+
+
+avpSolicitadas <- read_excel("data/Administracion_de_viviendas_publicas/avpSolicitudes2017_23.xlsx")  %>% 
+  rename(región = `Región `) %>%
+  pivot_longer(!región, names_to = "año", values_to = "solicitadas")
+
+# Unir los datasets por columna "región" y "año"
+avp_long <- left_join(avpAsignadas, avpSolicitadas, by = c("región", "año")) %>% 
+  filter(región != "Total")
+
+# Convertir el año a numérico para eliminar el asterisco y convertirlo a int
+avp_long$año <- as.integer(sub("\\*", "", avp_long$año))
+
+# Verificar el resultado
+avp_long
+```
+
+# Asignaciones
+```{r}
+# Crear un gráfico de líneas usando ggplot
+ggplot(avp_long, aes(x = año, y = asignadas, group = región, color = región)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Asignaciones por Año y Región", x = "Año", y = "Asignaciones") +
+  theme_minimal()
+```
+
+# Solicitudes
+```{r}
+# Crear un gráfico de líneas usando ggplot
+ggplot(avp_long, aes(x = año, y = solicitadas, group = región, color = región)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Solicitudes por Año y Región", x = "Año", y = "Solicitudes") +
+  theme_minimal()
+```
+
+```{r}
+# Crear un gráfico de dispersión para visualizar la interacción entre asignadas y solicitadas
+ggplot(avp_long, aes(x = solicitadas, y = asignadas, color = región)) +
+  geom_point(size = 3, alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +
+  labs(title = "Asignadas vs Solicitadas por Región", x = "Solicitadas", y = "Asignadas") +
+  theme_minimal()
+```
+
+```{r}
+# Ajustar un modelo de regresión lineal
+modelo_regresion <- lm(asignadas ~ solicitadas, data = avp_long)
+
+# Mostrar un resumen del modelo
+summary(modelo_regresion)
+```
+
+```{r}
+# Obtener la lista única de regiones
+regiones <- unique(avp_long$región)
+
+# Bucle para generar gráficos para cada región
+for (region in regiones) {
+  # Filtrar los datos por región
+  datos_region <- subset(avp_long, región == region)
+  
+  # Crear el gráfico para la región actual
+  graph <- ggplot(datos_region, aes(x = año, y = asignadas, group = región, color = región)) +
+    geom_line() +
+    geom_point() +
+    labs(title = paste("Asignaciones por Año en", region), x = "Año", y = "Asignaciones") +
+    theme_minimal()
+  
+  # Mostrar el gráfico actual
+  print(graph)
+}
+```
+
+```{r}
+# Obtener la lista única de regiones
+regiones <- unique(avp_long$región)
+
+# Bucle para generar gráficos para cada región
+for (region in regiones) {
+  # Filtrar los datos por región
+  datos_region <- subset(avp_long, región == region)
+  
+  # Crear el gráfico para la región actual
+  graph <- ggplot(datos_region, aes(x = año, y = asignadas, group = región, color = región)) +
+    geom_line() +
+    geom_point() +
+    labs(title = paste("Solicitudes por Año en", region), x = "Año", y = "Regiones") +
+    theme_minimal()
+  
+  # Mostrar el gráfico actual
+  print(graph)
+}
+```
+
+```{r}
+ggplot(avp_long, aes(x = año, y = asignadas, group = región, color = región)) +
+  geom_line(alpha = 0.7) +
+  geom_point() +
+  labs(title = "Asignaciones por Año y Región", x = "Año", y = "Asignaciones") +
+  theme_minimal() +
+  facet_wrap(~región, scales = "fixed") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+
+
+
+
+

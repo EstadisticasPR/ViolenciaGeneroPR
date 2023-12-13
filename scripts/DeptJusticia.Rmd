@@ -1,0 +1,289 @@
+---
+title: "Visualizaciones Preliminares: Departamento de Justicia"
+author: "Felix A Baez Santiago"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(zoo)
+setwd("~/IEPR/DashboardPARE")
+```
+
+Funcion para manejar datos missing
+```{r}
+# funcion para convertir columna con varios tipos de datos a numerico
+convert_mixed_columns <- function(data) {
+  mixed_columns <- sapply(data, function(col) any(is.character(col) & !is.na(as.numeric(col))))
+  mixed_columns_names <- names(mixed_columns)[mixed_columns]
+  
+  for (col in mixed_columns_names) {
+    data[[col]] <- ifelse(data[[col]] == "N/A", NA, as.character(data[[col]]))
+    data[[col]] <- as.numeric(data[[col]])
+  }
+  
+  return(data)
+}
+```
+
+```{r}
+# importando delitos del 2020
+deli2020 <- read_excel("data/Departamento_de_Justicia/djDelitos2020.xlsx") %>% 
+  convert_mixed_columns() %>%
+  mutate(Año = "2020") %>% select(-TOTAL) %>%
+  pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
+  filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE))
+
+# importando delitos del 2021
+deli2021 <- read_excel("data/Departamento_de_Justicia/djDelitos2021.xlsx") %>%
+  convert_mixed_columns() %>%
+  mutate(Año = "2021") %>% select(-TOTAL) %>% 
+  pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
+  filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE))
+
+# importando delitos del 2022
+deli2022 <- read_excel("data/Departamento_de_Justicia/djDelitos2022.xlsx") %>%
+  convert_mixed_columns() %>%
+  mutate(Año = "2022") %>% select(-TOTAL) %>%
+  pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
+  filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE))
+
+# importando delitos del 2023
+deli2023 <- read_excel("data/Departamento_de_Justicia/djDelitos2020.xlsx") %>%
+  convert_mixed_columns() %>%
+  mutate(Año = "2023") %>% select(-TOTAL) %>%
+  pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
+  filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE))
+
+deli_long_xtotals <- full_join(deli2020, deli2021) %>% 
+  full_join(deli2022) %>%
+  full_join(deli2023) %>%
+  mutate(Año = factor(Año))
+deli_long_xtotals
+```
+
+# Gráfico de barras para comparar el número de casos por delito para un año específico:
+```{r}
+limites <- c(0, sum(deli_long_xtotals$Casos, na.rm = TRUE) + 20)
+
+# Obtener los años
+año_seleccionado <- unique(deli_long_xtotals$Año)
+
+# Loop para crear y mostrar las gráficas
+for (i in seq_along(año_seleccionado)) {
+  plot_data <- subset(deli_long_xtotals, Año == año_seleccionado[i])
+  
+  # Crear la gráfica
+  p <- ggplot(subset(deli_long_xtotals, Año == año_seleccionado[i]), aes(x = Delito, y = Casos, fill = Delito)) +
+  geom_bar(stat = "identity") +
+  labs(title = paste("Número de Casos por Delito", año_seleccionado[i]), x = "Delito Cometido", y = "Número de Casos", fill = "Delito Cometido") +
+  #coord_cartesian(ylim = limites) +
+  theme_minimal()
+  
+  # Mostrar la gráfica
+  print(p)
+}
+```
+
+
+```{r}
+ggplot(deli_long_xtotals, aes(x = Delito, y = Casos, fill = Delito)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Número de Casos por Delito (Año 2023)", x = "Delito Cometido", y = "Número de Casos", fill = "Delito Cometido") +
+  facet_wrap(~ Año, scales = "fixed") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(deli_long_xtotals, aes(x = Delito, y = Casos, color = factor(Año), group = Año)) +
+  geom_line(size = 1.2) +
+  labs(title = "Número de Casos por Delito (Año 2023)", x = "Delito Cometido", y = "Número de Casos", fill = "Año") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+# Gráfico de líneas para mostrar la tendencia de casos para un delito específico a lo largo de los años:
+```{r}
+# Obtener los años
+delito_seleccionado <- unique(deli_long_xtotals$Delito)
+
+# Loop para crear y mostrar las gráficas
+for (i in seq_along(delito_seleccionado)) {
+  plot_data <- subset(deli_long_xtotals, Delito == delito_seleccionado[i])
+  
+  # Crear la gráfica
+  p <- ggplot(subset(deli_long_xtotals, Delito == delito_seleccionado[i]), aes(x = factor(Año), y = Casos)) +
+  geom_boxplot() +
+  labs(title = paste("Distribución de Casos por Distrito para el Delito", delito_seleccionado[i]), x = "Año", y = "Casos") +
+  #coord_cartesian(ylim = limites) +
+  theme_minimal()
+  
+  # Mostrar la gráfica
+  print(p)
+}
+```
+
+
+```{r}
+ggplot(deli_long_xtotals, aes(x = factor(Año), y = Casos)) +
+  geom_boxplot() +
+  labs(title = "Distribución de Casos por Delito", x = "Año", y = "Casos") +
+  theme_minimal() +
+  facet_wrap(~Delito, scales = "fixed")
+```
+
+# Gráfico de puntos para mostrar la distribución de casos entre los distritos fiscales para un año y un delito específico:
+```{r}
+# Obtener los delitos
+delito_seleccionado <- unique(deli_long_xtotals$Delito)
+año_seleccionado <- unique(deli_long_xtotals$Año)
+
+# Loop para crear y mostrar las gráficas
+for (i in seq_along(delito_seleccionado)) {
+  plot_data <- subset(deli_long_xtotals, Delito == delito_seleccionado[i])
+  
+  # Crear la gráfica
+  p <- ggplot(subset(deli_long_xtotals, Delito == delito_seleccionado[i]), aes(x = factor(Año), y = Casos)) +
+  geom_boxplot() +
+  labs(title =  paste("Distribución de Casos por Distrito para el Delito", delito_seleccionado[i]), x = "Año", y = "Casos", color = "FISCALIA DISTRITO") +
+  geom_point(aes(color = factor(`FISCALIA DISTRITO`)), position = position_jitter(width = 0.2), size = 2.5) +
+  theme_minimal()
+  
+  # Mostrar la gráfica
+  print(p)
+}
+```
+
+```{r}
+# Obtener los delitos
+delito_seleccionado <- unique(deli_long_xtotals$Delito)
+año_seleccionado <- unique(deli_long_xtotals$Año)
+
+# Loop para crear y mostrar las gráficas
+for (i in seq_along(año_seleccionado)) {
+  for (j in seq_along(delito_seleccionado)){
+    plot_data <- subset(deli_long_xtotals, Delito == delito_seleccionado[j] & Año == año_seleccionado[i])
+  
+    # Crear la gráfica
+    p <- ggplot(subset(deli_long_xtotals, Año == año_seleccionado[i] & Delito == delito_seleccionado[j]), aes(x = `FISCALIA DISTRITO`, y = Casos, fill = `FISCALIA DISTRITO`)) +
+  geom_bar(stat = "identity", width = 0.7) +
+  labs(title = paste("Distribución de Casos por Distrito Fiscal para", delito_seleccionado[j], "en el", año_seleccionado[i]), x = "Fiscalía Distrito", y = "Casos", fill = "Distrito Fiscal") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+    # Mostrar la gráfica
+    print(p)
+  }
+}
+```
+
+# Gráfico de barras apiladas para comparar los casos de diferentes delitos a lo largo de los años:
+```{r}
+ggplot(deli_long_xtotals, aes(x = Año, y = Casos, fill = Delito)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Comparación de Numero de Casos por Delito a lo largo de los Años", x = "Año", y = "Casos", fill = "Delito") +
+  theme_minimal()
+```
+
+## Pruebas Estadisticas
+```{r}
+# modelo de regresion entre año y el delito del articulo 2.8
+modelo_regresion_2.8 <- lm(Casos ~ as.factor(Año), data = subset(deli_long_xtotals, Delito == "Art2.8"))
+summary(modelo_regresion_2.8)
+
+# modelo de regresion entre año y el delito del articulo 3.1
+modelo_regresion_3.1 <- lm(Casos ~ as.factor(Año), data = subset(deli_long_xtotals, Delito == "Art3.1"))
+summary(modelo_regresion_3.1)
+
+# modelo de regresion entre año y el delito del articulo 3.2
+modelo_regresion_3.2 <- lm(Casos ~ as.factor(Año), data = subset(deli_long_xtotals, Delito == "Art3.2"))
+summary(modelo_regresion_3.2)
+
+# modelo de regresion entre año y el delito del articulo 3.3
+modelo_regresion_3.3 <- lm(Casos ~ as.factor(Año), data = subset(deli_long_xtotals, Delito == "Art3.3"))
+summary(modelo_regresion_3.3)
+
+# modelo de regresion entre año y el delito del articulo 3.4
+modelo_regresion_3.4 <- lm(Casos ~ as.factor(Año), data = subset(deli_long_xtotals, Delito == "Art3.4"))
+summary(modelo_regresion_3.4)
+
+# modelo de regresion entre año y el delito del articulo 3.5
+modelo_regresion_3.5 <- lm(Casos ~ as.factor(Año), data = subset(deli_long_xtotals, Delito == "Art3.5"))
+summary(modelo_regresion_3.5)
+
+# modelo de regresion entre año y el delito del articulo 3.5
+modelo_regresion_todos_arts <- lm(Casos ~ as.factor(Año), data = deli_long_xtotals)
+summary(modelo_regresion_todos_arts)
+```
+# Casos Mapa y Convicciones Municipales
+```{r}
+casosMapa <- read_excel("data/Departamento_de_Justicia/djCasosMapa.xlsx") %>% 
+  convert_mixed_columns()
+  
+convicMuni <- read_excel("data/Departamento_de_Justicia/djConvicMuni.xlsx") %>% 
+  convert_mixed_columns()
+
+convic_df <- full_join(casosMapa, convicMuni)
+convic_df
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+

@@ -1,0 +1,43 @@
+---
+title: "Departamento del Trabajo y Recursos Humanos"
+author: "Felix A Baez Santiago"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Imports
+```{r, warning=FALSE}
+library(tidyverse)
+library(readxl)
+library(zoo)
+library(kableExtra)
+setwd("~/IEPR/DashboardPARE")
+```
+
+## Tasa de participación laboral según el año natural y el sexo
+```{r}
+# importando el dataset de Casos en Supervisión de Ley 54
+dtPartlab <- read_excel("data/departamento_de_trabajo/dtpartlab.xlsx") %>%
+  filter(Género != "Ambos") %>%
+  pivot_longer(!Género, names_to = "Año", values_to = "Cantidad") %>%
+  mutate(
+    Año = factor(Año)
+  )
+dtPartlab
+
+ggplot(dtPartlab, aes(x = Año, y = Cantidad, color = Género)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Tasa de participación laboral según el año natural y el sexo", x = "Año", y = "Porcentaje Laboral") +
+  theme_minimal()
+
+ggplot(dtPartlab, aes(x = Año, y = Cantidad, color = Género, group = Género)) +
+  geom_line(size = 1) +
+  geom_point(size = 3) +
+  labs(title = "Tasa de participación laboral por género y año", x = "Año", y = "Porcentaje Laboral") +
+  theme_minimal()
+```
