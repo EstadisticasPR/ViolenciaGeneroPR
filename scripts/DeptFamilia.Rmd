@@ -34,8 +34,26 @@ convert_mixed_columns <- function(data) {
 ```
 
 ```{r}
+# Obtener la lista de archivos en el directorio
+file_list <- list.files("~/Estadisticas-Sobre-Violencia-de-Genero-en-Puerto-Rico/data/Departamento_de_Familia", pattern = "\\.xlsx$", full.names = TRUE)
+
+# Crear una lista para almacenar los datos de los archivos
+data_list <- list()
+
+# Leer cada archivo en la lista y almacenar los datos en la lista de datos
+for (file in file_list) {
+  data_list[[file]] <- read_excel(file)
+}
+data_list
+```
+
+
+```{r}
+# camino de los datos del Departamento de Familia
+path <- "~/Estadisticas-Sobre-Violencia-de-Genero-en-Puerto-Rico/data/Departamento_de_Familia/"
+
 # importando datos del 2018
-dfMalt2018 <- read_excel("data/Departamento_de_Familia/dfMalt2018.xlsx") %>%
+dfMalt2018 <- read_excel(paste0(path, "dfMalt2018.xlsx")) %>%
   rename(
     Masculino = `Cantidad Masculino`,
     Femenino = `Cantidad Femenino`
@@ -48,7 +66,7 @@ dfMalt2018 <- read_excel("data/Departamento_de_Familia/dfMalt2018.xlsx") %>%
   mutate(Año = "2018")
 
 # importando datos del 2019
-dfMalt2019 <- read_excel("data/Departamento_de_Familia/dfMalt2019.xlsx") %>%
+dfMalt2019 <- read_excel(paste0(path, "dfMalt2019.xlsx")) %>%
   rename(
     Masculino = `Cantidad Masculino`,
     Femenino = `Cantidad Femenino`
@@ -61,7 +79,7 @@ dfMalt2019 <- read_excel("data/Departamento_de_Familia/dfMalt2019.xlsx") %>%
   mutate(Año = "2019")
 
 # importando datos del 2020
-dfMalt2020 <- read_excel("data/Departamento_de_Familia/dfMalt2020.xlsx") %>%
+dfMalt2020 <- read_excel(paste0(path, "dfMalt2020.xlsx")) %>%
   rename(
     Masculino = `Cantidad Masculino`,
     Femenino = `Cantidad Femenino`
@@ -74,7 +92,7 @@ dfMalt2020 <- read_excel("data/Departamento_de_Familia/dfMalt2020.xlsx") %>%
   mutate(Año = "2020")
 
 # importando datos del 2021
-dfMalt2021 <- read_excel("data/Departamento_de_Familia/dfMalt2021.xlsx") %>%
+dfMalt2021 <- read_excel(paste0(path, "dfMalt2021.xlsx")) %>%
   rename(
     Masculino = `Cantidad Masculino`,
     Femenino = `Cantidad Femenino`
@@ -87,7 +105,7 @@ dfMalt2021 <- read_excel("data/Departamento_de_Familia/dfMalt2021.xlsx") %>%
   mutate(Año = "2021")
 
 # importando datos del 2022
-dfMalt2022 <- read_excel("data/Departamento_de_Familia/dfMalt2022.xlsx") %>%
+dfMalt2022 <- read_excel(paste0(path, "dfMalt2022.xlsx")) %>%
   rename(
     Masculino = `Cantidad Masculino`,
     Femenino = `Cantidad Femenino`
@@ -113,7 +131,7 @@ dfMalt_long
 ```
 ```{r}
 ggplot(dfMalt_long, aes(x = Año, y = Casos, color = `Tipo de Maltrato`, group = `Tipo de Maltrato`)) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   geom_point() +
   labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
   theme_minimal() +
@@ -121,7 +139,7 @@ ggplot(dfMalt_long, aes(x = Año, y = Casos, color = `Tipo de Maltrato`, group =
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggplot(subset(dfMalt_long, Sexo == "Masculino"), aes(x = Año, y = Casos, color = `Tipo de Maltrato`, group = `Tipo de Maltrato`)) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   geom_point() +
   labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
   theme_minimal() +
@@ -129,7 +147,7 @@ ggplot(subset(dfMalt_long, Sexo == "Masculino"), aes(x = Año, y = Casos, color 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggplot(subset(dfMalt_long, Sexo == "Femenino"), aes(x = Año, y = Casos, color = `Tipo de Maltrato`, group = `Tipo de Maltrato`)) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   geom_point() +
   labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
   theme_minimal() +
@@ -139,7 +157,7 @@ ggplot(subset(dfMalt_long, Sexo == "Femenino"), aes(x = Año, y = Casos, color =
 
 ```{r}
 ggplot(dfMalt_long, aes(x = Año, y = Casos, color = Sexo, group = Sexo)) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   geom_point() +
   labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
   theme_minimal() +
