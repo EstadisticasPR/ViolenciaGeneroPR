@@ -15,13 +15,16 @@ library(tidyverse)
 library(readxl)
 library(zoo)
 library(kableExtra)
-setwd("~/IEPR/DashboardPARE")
+library(here)
+# función para encontrar el filepath automáticamente 
+
+path <- here("data", "Departamento_de_correccion_y_rehabilitacion/")
 ```
 
 ## Casos en Supervisión de Ley 54 en Programas Alternos al Confinamiento: Programas de Comunidad(desde enero 2021 hasta febrero 2023)
 ```{r}
 # importando el dataset de Casos en Supervisión de Ley 54
-dcrCasosInv <- read_excel("data/Departamento_de_correccion_y_rehabilitacion/dcrCasosInv.xlsx") %>%
+dcrCasosInv <- read_excel(paste0(path, "dcrCasosInv.xlsx")) %>%
   filter(sexo != "Total") %>%
   mutate(
     # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
@@ -50,7 +53,7 @@ ggplot(dcrCasosInv, aes(x = fecha, y = cantidad, color = sexo)) +
 
 ## Personas sentenciadas integradas al Programa de Supervisión Electrónica por incurrir en delitos de violencia doméstica (desde enero 2020 hasta febrero 2023)
 ```{r}
-dcrSentenciadas <- read_excel("data/Departamento_de_correccion_y_rehabilitacion/dcrSentenciadas.xlsx")  %>%
+dcrSentenciadas <- read_excel(paste0(path, "dcrSentenciadas.xlsx"))  %>%
   mutate(
     # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
     fecha = as.yearmon(paste(year, mes), "%Y %m")

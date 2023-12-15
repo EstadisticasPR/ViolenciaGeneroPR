@@ -14,14 +14,15 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readxl)
 library(kableExtra)
-setwd("~/IEPR/DashboardPARE")
+library(here)
+path <- here("data", "Oficina_de_procuradora_de_mujeres/")
 ```
 
 ## Violencia Doméstica
 
 ```{r}
 # violencia domestica
-opmFemiVD <- read_excel("data/Oficina_de_procuradora_de_mujeres/opmFemiVD.xlsx") # año, asesinatos, tasa x100k 
+opmFemiVD <- read_excel(paste0(path, "opmFemiVD.xlsx")) # año, asesinatos, tasa x100k 
 ```
 
 Gráfico de líneas para mostrar la tendencia de la cantidad de asesinatos a lo largo de los años:
@@ -33,7 +34,6 @@ ggplot(opmFemiVD, aes(x = Año, y = `Cantidad de asesinatos`, group = 1)) +
   geom_smooth(method = "lm", se = FALSE, color = "green" ) +  # Añade líneas de tendencia lineal
   labs(title = "Tendencia de Asesinatos a lo largo de los Años", x = "Año", y = "Cantidad de Asesinatos") +
   theme_minimal()
-
 ```
 
 Gráfico de dispersión para visualizar la relación entre la cantidad de asesinatos y la tasa por cada 100,000 mujeres:
@@ -72,7 +72,7 @@ ggplot(opmFemiVD, aes(x = `Tasa (x100,000 mujeres)`)) +
 meses <- c("1" = "enero", "2" = "febrero", "3" = "marzo",  "4" = "abril", "5" = "mayo", "6" = "junio", "7" = "julio", "8" = "agosto", "9" = "septiembre","10" = "octubre", "11" = "noviembre", "12" = "diciembre")
 
 # importando el dataset de Casos en Supervisión de Ley 54
-opm_casos <-  read_excel("data/Oficina_de_procuradora_de_mujeres/opmPartMes.xlsx") %>%
+opm_casos <-  read_excel(paste0(path, "opmPartMes.xlsx")) %>%
   mutate(
     # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
     fecha = as.yearmon(paste(year, month), "%Y %m"),
@@ -126,7 +126,7 @@ for (i in seq_along(tipos_casos)) {
 
 # Victimas por Genero
 ```{r}
-opmVic_long <- read_excel("data/Oficina_de_procuradora_de_mujeres/opmVicGraf.xlsx") %>% 
+opmVic_long <- read_excel(paste0(path, "opmVicGraf.xlsx")) %>% 
   rename_at(vars(1,2,3,4), ~ c("género","2020", "2021", "2022")) %>%
   pivot_longer(!género, names_to = "año", values_to = "víctimas")
 opmVic_long
@@ -155,12 +155,11 @@ ggplot(opmVic_long, aes(x = año, y = víctimas, fill = género)) +
   geom_bar(stat = "identity") +
   labs(title = "Víctimas por Género y Año", x = "Año", y = "Número de Víctimas", fill = "Género") +
   theme_minimal()
-
 ```
 
 # Medio de Orientacion
 ```{r}
-opmMedio_long <- read_excel("data/Oficina_de_procuradora_de_mujeres/opmMedio.xlsx") %>% 
+opmMedio_long <- read_excel(paste0(path, "opmMedio.xlsx")) %>% 
   rename_at(vars(2,3,4), ~ c("2020", "2021", "2022")) %>%
   pivot_longer(!`Medio de orientación`, names_to = "año", values_to = "personas atendidas") %>% 
   filter(`Medio de orientación` != "Total")
@@ -187,7 +186,7 @@ ggplot(opmMedio_long, aes(x = año, y = `personas atendidas`, fill = `Medio de o
 ```
 
 ```{r}
-read_excel("data/Oficina_de_procuradora_de_mujeres/opmServiciosMes.xlsx") # mes, año, tipo de servicio, # ofrecidos
+read_excel(paste0(path, "opmServiciosMes.xlsx")) # mes, año, tipo de servicio, # ofrecidos
 ```
 
 

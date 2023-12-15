@@ -15,7 +15,8 @@ library(tidyverse)
 library(readxl)
 library(kableExtra)
 library(zoo)
-setwd("~/IEPR/DashboardPARE")
+library(here)
+path <- here("data", "Negociado_de_Policia/")
 ```
 
 Funcion para manejar datos missing
@@ -37,13 +38,13 @@ convert_mixed_columns <- function(data) {
 # Mujeres Desaparecidas
 ```{r}
 # importando data del 2020
-desp2020 <- read_excel("data/Negociado_de_Policia/npprDesp2020.xlsx") %>% mutate(Año = "2020") %>% rename(Categoria = Mes,Total = `Total Año 2020`)
+desp2020 <- read_excel(paste0(path, "npprDesp2020.xlsx")) %>% mutate(Año = "2020") %>% rename(Categoria = Mes,Total = `Total Año 2020`)
 
 # importando data del 2021
-desp2021 <- read_excel("data/Negociado_de_Policia/npprDesp2021.xlsx") %>% mutate(Año = "2021") %>% rename(Categoria = Mes, Total = `Total Año 2021`)
+desp2021 <- read_excel(paste0(path, "npprDesp2021.xlsx")) %>% mutate(Año = "2021") %>% rename(Categoria = Mes, Total = `Total Año 2021`)
 
 # importando data del 2022
-desp2022 <- read_excel("data/Negociado_de_Policia/npprDesp2022.xlsx") %>% mutate(Año = "2022") %>% rename(Categoria = Mes, Total = `Total Año 2022`)
+desp2022 <- read_excel(paste0(path, "npprDesp2022.xlsx")) %>% mutate(Año = "2022") %>% rename(Categoria = Mes, Total = `Total Año 2022`)
 
 #No incluyo 2023 porque faltan datos desde abril
 #desp2023 <- read_excel("data/Negociado_de_Policia/npprDesp2023.xlsx") %>% mutate(Año = "2023") %>% rename(Categoria = Mes, Total = `Total Año 2023`)
@@ -299,13 +300,13 @@ Muestra cómo cambian los Casos a lo largo de los meses para cada año, permitie
 
 ## Incidentes
 ```{r}
-inci2021 <- read_excel("data/Negociado_de_Policia/NPPRincidentes_2021.xlsx") %>% 
+inci2021 <- read_excel(paste0(path, "NPPRincidentes_2021.xlsx")) %>% 
   rename_with(~gsub("2021", "",.), contains("2021")) %>%
   rename_at(vars(2), ~ "Población") %>% 
   mutate(Año = "2021")
 
 # faltan datos para el 2022
-inci2022 <- read_excel("data/Negociado_de_Policia/NPPRincidentes_2022.xlsx") %>% 
+inci2022 <- read_excel(paste0(path, "NPPRincidentes_2022.xlsx")) %>% 
   rename_with(~gsub("2022", "",.), contains("2022")) %>%
   rename_at(vars(2), ~ "Población") %>% 
   mutate(Año = "2022")
@@ -326,12 +327,12 @@ inciDF
 
 ```{r}
 # importando la data de relaciones familiares
-familiar <- read_excel("data/Negociado_de_Policia/npprRelFam.xlsx") %>%
+familiar <- read_excel(paste0(path, "npprRelFam.xlsx")) %>%
   rename(Valor = Familiar) %>%
   mutate(Tipo = "Familiar")
 
 # importando la data de relaciones no familiares
-nofamiliar <- read_excel("data/Negociado_de_Policia/npprRelNoFam.xlsx") %>%
+nofamiliar <- read_excel(paste0(path, "npprRelNoFam.xlsx")) %>%
   rename(Valor = NoFamiliar) %>%
   mutate(Tipo = "NoFamiliar")
 
@@ -373,8 +374,6 @@ ggplot(relacion, aes(x = Relación, y = Casos, fill = Tipo)) +
 
 
 ```
-
-
 
 ```{r}
 # Ordenar el factor Relación para el gráfico lineal
@@ -495,24 +494,4 @@ ggplot(relacion, aes(x = Relación, y = Casos, fill = Tipo)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Numero de casos por tipo de relación ofensor-victima", x = "Relación", y = "Casos", fill = "Tipo de Relación") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-```{r}
-
-
-```
-
-```{r}
-
-
-```
-
-```{r}
-
-
-```
-
-```{r}
-
-
 ```

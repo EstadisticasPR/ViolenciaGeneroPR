@@ -13,7 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readxl)
 library(zoo)
-setwd("~/IEPR/DashboardPARE")
+library(here)
+path <- here("data", "Departamento_de_Justicia/")
 ```
 
 Funcion para manejar datos missing
@@ -34,28 +35,28 @@ convert_mixed_columns <- function(data) {
 
 ```{r}
 # importando delitos del 2020
-deli2020 <- read_excel("data/Departamento_de_Justicia/djDelitos2020.xlsx") %>% 
+deli2020 <- read_excel(paste0(path, "djDelitos2020.xlsx")) %>% 
   convert_mixed_columns() %>%
   mutate(Año = "2020") %>% select(-TOTAL) %>%
   pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
   filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE))
 
 # importando delitos del 2021
-deli2021 <- read_excel("data/Departamento_de_Justicia/djDelitos2021.xlsx") %>%
+deli2021 <- read_excel(paste0(path, "djDelitos2021.xlsx")) %>%
   convert_mixed_columns() %>%
   mutate(Año = "2021") %>% select(-TOTAL) %>% 
   pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
   filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE))
 
 # importando delitos del 2022
-deli2022 <- read_excel("data/Departamento_de_Justicia/djDelitos2022.xlsx") %>%
+deli2022 <- read_excel(paste0(path, "djDelitos2022.xlsx")) %>%
   convert_mixed_columns() %>%
   mutate(Año = "2022") %>% select(-TOTAL) %>%
   pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
   filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE))
 
 # importando delitos del 2023
-deli2023 <- read_excel("data/Departamento_de_Justicia/djDelitos2020.xlsx") %>%
+deli2023 <- read_excel(paste0(path, "djDelitos2023.xlsx")) %>%
   convert_mixed_columns() %>%
   mutate(Año = "2023") %>% select(-TOTAL) %>%
   pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%

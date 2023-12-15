@@ -15,20 +15,22 @@ library(tidyverse)
 library(readxl)
 library(zoo)
 library(kableExtra)
-setwd("~/IEPR/DashboardPARE")
+library(here)
+path <- here("data", "departamento_de_trabajo/")
 ```
 
 ## Tasa de participación laboral según el año natural y el sexo
 ```{r}
 # importando el dataset de Casos en Supervisión de Ley 54
-dtPartlab <- read_excel("data/departamento_de_trabajo/dtpartlab.xlsx") %>%
+dtPartlab <- read_excel(paste0(path, "dtpartlab.xlsx")) %>%
   filter(Género != "Ambos") %>%
   pivot_longer(!Género, names_to = "Año", values_to = "Cantidad") %>%
   mutate(
     Año = factor(Año)
   )
-dtPartlab
+```
 
+```{r}
 ggplot(dtPartlab, aes(x = Año, y = Cantidad, color = Género)) +
   geom_line() +
   geom_point() +
