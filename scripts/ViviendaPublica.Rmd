@@ -14,8 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readxl)
 library(here)
-path <- here("data", "Administracion_de_viviendas_publicas/")
-paste0(path, "avpAsignadas2017_23.xlsx")
+path <- here("data", "Administracion_de_viviendas_publicas", "/")
 ```
 
 Funcion para manejar datos missing

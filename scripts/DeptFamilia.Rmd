@@ -16,7 +16,7 @@ library(tidyverse)
 library(readxl)
 # función para encontrar el filepath automáticamente 
 library(here)
-path <- here("data", "Departamento_de_Familia/")
+path <- here("data", "Departamento_de_Familia", "/")
 ```
 
 Funcion para manejar datos missing

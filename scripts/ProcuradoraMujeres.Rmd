@@ -15,7 +15,7 @@ library(tidyverse)
 library(readxl)
 library(kableExtra)
 library(here)
-path <- here("data", "Oficina_de_procuradora_de_mujeres/")
+path <- here("data", "Oficina_de_procuradora_de_mujeres", "/")
 ```
 
 ## Violencia Doméstica

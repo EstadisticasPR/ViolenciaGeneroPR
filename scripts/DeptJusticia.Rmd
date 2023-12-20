@@ -14,7 +14,7 @@ library(tidyverse)
 library(readxl)
 library(zoo)
 library(here)
-path <- here("data", "Departamento_de_Justicia/")
+path <- here("data", "Departamento_de_Justicia", "/")
 ```
 
 Funcion para manejar datos missing

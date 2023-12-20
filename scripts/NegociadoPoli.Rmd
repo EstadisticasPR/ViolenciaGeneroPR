@@ -16,7 +16,7 @@ library(readxl)
 library(kableExtra)
 library(zoo)
 library(here)
-path <- here("data", "Negociado_de_Policia/")
+path <- here("data", "Negociado_de_Policia", "/")
 ```
 
 Funcion para manejar datos missing

@@ -18,7 +18,7 @@ library(kableExtra)
 library(here)
 # función para encontrar el filepath automáticamente 
 
-path <- here("data", "Departamento_de_correccion_y_rehabilitacion/")
+path <- here("data", "Departamento_de_correccion_y_rehabilitacion", "/")
 ```
 
 ## Casos en Supervisión de Ley 54 en Programas Alternos al Confinamiento: Programas de Comunidad(desde enero 2021 hasta febrero 2023)

@@ -16,7 +16,7 @@ library(readxl)
 library(zoo)
 library(kableExtra)
 library(here)
-path <- here("data", "departamento_de_trabajo/")
+path <- here("data", "departamento_de_trabajo", "/")
 ```
 
 ## Tasa de participación laboral según el año natural y el sexo

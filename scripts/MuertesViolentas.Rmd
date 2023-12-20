@@ -17,7 +17,7 @@ library(openxlsx)
 library(viridis)
 library(here)
 
-path <- here("data", "Sistema_de_Notificacion_de_Muertes_Violentas/")
+path <- here("data", "Sistema_de_Notificacion_de_Muertes_Violentas", "/")
 ```
 
 ```{r}
