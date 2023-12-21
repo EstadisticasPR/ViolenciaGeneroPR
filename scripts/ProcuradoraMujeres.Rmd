@@ -60,6 +60,8 @@ El p-value del intercepto es 0.021, lo que sugiere que el intercepto es signific
 
 El R-cuadrado es 0.9869, lo que significa que alrededor del 98.69% de la variabilidad de la Tasa por 100k mujeres (la variable dependiente) puede ser explicada por la cantidad de asesinatos en este modelo. Esto indica que el ajuste del modelo es adecuado para los datos provistos.
 
+**Puede ser un cálculo especial**
+
 ```{r}
 ggplot(opmFemiVD, aes(x = `Tasa (x100,000 mujeres)`)) +
   geom_density(fill = "skyblue", alpha = 0.7) +
