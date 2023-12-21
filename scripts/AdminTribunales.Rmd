@@ -314,8 +314,201 @@ OP_LEY148Denegadas <- full_join(
 OP_LEY148Denegadas
 ```
 
+# Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
 ```{r}
+# lista con nuevos nombres de columnas para mejor interpretación
+new_names <- c("Total", "AgresiónSexual", "AcosoSexual", "ActosLascivos", "Incesto")
 
+# datos de solicitudes ex parte emitidas de la ley 148 en 2020-2021
+OP_LEY148FinalEmitidas2020_21 <- read_excel(paste0(path, "OP_LEY148FinalEmitidas2020_21.xlsx")) %>%
+  rename_at(vars(2:6), ~ new_names) %>%
+  pivot_longer(
+    !Región, 
+    names_to = "Delito", 
+    values_to = "ÓrdenesEmitidas"
+    ) %>%
+  mutate(
+    AñoFiscal = factor("2020-2021")
+    ) %>%
+  filter(
+    Región != "Total",
+    Delito != "Total"
+  )
+
+# datos de solicitudes ex parte emitidas de la ley 148 en 2021-2022
+OP_LEY148FinalEmitidas2021_22 <- read_excel(paste0(path, "OP_LEY148FinalEmitidas2021_22.xlsx")) %>%
+  rename_at(vars(2:6), ~ new_names) %>%
+  pivot_longer(
+    !Región, 
+    names_to = "Delito", 
+    values_to = "ÓrdenesEmitidas"
+    ) %>%
+  mutate(
+    AñoFiscal = factor("2021-2022")
+    ) %>%
+  filter(
+    Región != "Total",
+    Delito != "Total"
+  )
+
+# dataset joined
+OP_LEY148FinalEmitidas <- full_join(
+  OP_LEY148FinalEmitidas2020_21, OP_LEY148FinalEmitidas2021_22)
+OP_LEY148FinalEmitidas
 ```
 
+# Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por sexo de la parte
+```{r}
+OP_LEY148Genero2020_21 <- read_excel(paste0(path, "OP_LEY148Genero2020_21.xlsx")) %>%
+  pivot_longer(
+    !Sexo, 
+    names_to = "Parte", 
+    values_to = "Solicitudes"
+    ) %>%
+  mutate(
+    AñoFiscal = factor("2020-2021")
+    ) %>%
+  filter(
+    Sexo != "Total"
+  )
+OP_LEY148Genero2021_22 <- read_excel(paste0(path, "OP_LEY148Genero2021_22.xlsx")) %>%
+  pivot_longer(
+    !Sexo, 
+    names_to = "Parte", 
+    values_to = "Solicitudes"
+    ) %>%
+  mutate(
+    AñoFiscal = factor("2021-2022")
+    ) %>%
+  filter(
+    Sexo != "Total"
+  )
+
+# dataset joined
+OP_LEY148Genero <- full_join(
+  OP_LEY148Genero2020_21, OP_LEY148Genero2021_22)
+OP_LEY148Genero
+```
+
+# Tribunal de Primera Instancia: Movimiento de casos criminales de acoso sexual, actos lascivos, agresión sexual, incesto y ley contra el acecho. Ley Núm. 148-2015
+```{r}
+# lista con nuevos nombres de columnas para mejor interpretación 
+new_names <- c("Delito", "PendienteInicio", "Presentados", 
+               "AResolver", "Condenas", "Absoluciones", 
+               "Archivos", "Traslados", "Otros", "Total", "PendienteFinal")
+
+# datos de movimiento de casos criminales en año fiscal 2019-2020
+tribCasosCrim19 <- read_excel(paste0(path, "tribCasosCrim19.xlsx")) %>%
+  rename_at(vars(1:11), ~ new_names) %>%
+  pivot_longer(
+    !Delito, 
+    names_to = "Casos", 
+    values_to = "Cantidad"
+    ) %>%
+  mutate(
+    AñoFiscal = factor("2019-2020")
+    ) %>%
+  filter(
+    !(Delito %in% c("2019-2020", "Total")
+    )
+  )
+
+# datos de movimiento de casos criminales en año fiscal 2020-2021
+tribCasosCrim20 <- read_excel(paste0(path, "tribCasosCrim20.xlsx")) %>%
+  rename_at(vars(1:11), ~ new_names) %>%
+  pivot_longer(
+    !Delito, 
+    names_to = "Casos", 
+    values_to = "Cantidad"
+    ) %>%
+  mutate(
+    AñoFiscal = factor("2020-2021")
+    ) %>%
+  filter(
+    !(Delito %in% c("2020-2021", "Total")
+    )
+  )
+
+# datos de movimiento de casos criminales en año fiscal 2021-2022
+tribCasosCrim21 <- read_excel(paste0(path, "tribCasosCrim21.xlsx")) %>%
+  rename_at(vars(1:11), ~ new_names) %>%
+  pivot_longer(
+    !Delito, 
+    names_to = "Casos", 
+    values_to = "Cantidad"
+    ) %>%
+  mutate(
+    AñoFiscal = factor("2021-2022")
+    ) %>%
+  filter(
+    !(Delito %in% c("2021-2022", "Total")
+    )
+  )
+
+# dataset joined
+tribCasosCrim <- full_join(
+  tribCasosCrim19, tribCasosCrim20) %>%
+  full_join(tribCasosCrim21)
+tribCasosCrim
+```
+
+
+```{r}
+# lista con nuevos nombres de columnas para mejor interpretación 
+new_names <- c("TotalSolicitudes", "TotalExParte", "TotalFinalesEmitidas")
+
+# datos de movimiento de casos criminales en año fiscal 2020-2021
+tribordprot20 <- read_excel(paste0(path, "tribordprot20.xlsx")) %>%
+  rename_at(vars(2:4), ~ new_names) %>%
+  pivot_longer(
+    !Región, 
+    names_to = "órdenes", 
+    values_to = "Total"
+    ) %>%
+  mutate(
+    AñoFiscal = factor("2020-2021")
+    ) %>%
+  filter(
+    !(Región %in% c("Total")
+    )
+  )
+
+# datos de movimiento de casos criminales en año fiscal 2021-2022
+tribordprot21 <- read_excel(paste0(path, "tribordprot21.xlsx")) %>%
+  rename_at(vars(2:4), ~ new_names) %>%
+  pivot_longer(
+    !Región, 
+    names_to = "órdenes", 
+    values_to = "Total"
+    ) %>%
+  mutate(
+    AñoFiscal = factor("2021-2022")
+    ) %>%
+  filter(
+    !(Región %in% c("Total")
+    )
+  )
+
+# datos de movimiento de casos criminales en año fiscal 2022-2023
+tribordprot22 <- read_excel(paste0(path, "tribordprot22.xlsx")) %>%
+  rename_at(vars(2:4), ~ new_names) %>%
+  pivot_longer(
+    !Región, 
+    names_to = "órdenes", 
+    values_to = "Total"
+    ) %>%
+  mutate(
+    AñoFiscal = factor("2022-2023")
+    ) %>%
+  filter(
+    !(Región %in% c("Total")
+    )
+  )
+
+# dataset joined
+tribordprot <- full_join(
+  tribordprot20, tribordprot21) %>%
+  full_join(tribordprot22)
+tribordprot
+```
 
