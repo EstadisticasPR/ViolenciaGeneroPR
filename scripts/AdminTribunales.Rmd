@@ -452,7 +452,7 @@ tribCasosCrim <- full_join(
 tribCasosCrim
 ```
 
-
+# Solicitudes de órdenes de protección y órdenes de protección emitidas al amparo de la Ley Núm. 54-1989 para la prevención e intervención con la violencia doméstica, por Región Judicial
 ```{r}
 # lista con nuevos nombres de columnas para mejor interpretación 
 new_names <- c("TotalSolicitudes", "TotalExParte", "TotalFinalesEmitidas")
@@ -510,5 +510,10 @@ tribordprot <- full_join(
   tribordprot20, tribordprot21) %>%
   full_join(tribordprot22)
 tribordprot
+```
+# Delitos de Violencia Doméstica Radicado por Querella(s) 2023* (1 de enero al 14 noviembre)
+```{r}
+read_excel(paste0(path, "Departamento Justicia.xlsx"), sheet = 1) %>%
+  mutate(Año = "2023")
 ```
 
