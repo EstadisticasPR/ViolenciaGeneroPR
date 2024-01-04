@@ -7,7 +7,8 @@ packages <- c(
   "kableExtra",
   "zoo",
   "here",
-  "viridis"
+  "viridis",
+  "shinythemes"
 )
 
 # Instalar paquetes si no están instalados

@@ -104,23 +104,28 @@ summary(modelo_anova)
 Conclusión: Los resultados de ANOVA muestran una diferencia significativa entre al menos dos de las medias de las categorías (F = 151, p < 0.0000000000000002), lo que sugiere que al menos una de las categorías tiene una media significativamente diferente a las demás. 
 # Distribución de Casos a lo largo del año
 ```{r}
-casos_mean <- mean(desp_long_xtotals$Casos_Normalizados)
+# Calcular la mediana por cada Categoría
+casos_median <- desp_long_xtotals %>%
+  group_by(Categoria) %>%
+  summarize(median_Casos = median(Casos))
+
+
 ggplot(desp_long_xtotals, aes(x = Fecha, y = Casos, fill = Categoria)) +
   geom_bar(stat = "identity", position = "dodge") +
   theme_minimal()+
   geom_line()+
-  geom_hline(yintercept = casos_mean, color="red") +
+  geom_hline(data = casos_median, aes(yintercept = median_Casos), color = "blue") +
   labs(title = "Casos por Mes y Categoría", x = "Meses", y = "Número de Casos") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   facet_wrap(~ Categoria, scales = "fixed") 
 
 
-casos_norm_mean <- mean(desp_long_xtotals$Casos_Normalizados)
+casos_norm_median <- median(desp_long_xtotals$Casos_Normalizados)
 ggplot(desp_long_xtotals, aes(x = Fecha, y = Casos_Normalizados, fill = Categoria)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
   geom_line() + 
-  geom_hline(yintercept = casos_norm_mean, color ="blue") +
+  geom_hline(yintercept = casos_norm_median, color ="blue") +
   labs(title = "Distribucion de Casos Normalizados por Mes y Categoría", x = "Meses", y = "Número de Casos") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   facet_wrap(~ Categoria, scales = "fixed") 

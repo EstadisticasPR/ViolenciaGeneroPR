@@ -15,8 +15,9 @@ library(tidyverse)
 library(readxl)
 library(zoo)
 library(kableExtra)
-library(here)
 # función para encontrar el filepath automáticamente 
+library(here)
+
 
 path <- here("data", "administracion_de_tribunales", "/")
 ```
@@ -514,6 +515,10 @@ tribordprot
 # Delitos de Violencia Doméstica Radicado por Querella(s) 2023* (1 de enero al 14 noviembre)
 ```{r}
 read_excel(paste0(path, "Departamento Justicia.xlsx"), sheet = 1) %>%
-  mutate(Año = "2023")
+  mutate(
+    Año = "2023",
+    Región = str_replace(`Querellas Jurisdicción`, "Fiscalía Distrito de", "")
+         ) %>%
+  select(!c(`Querellas Jurisdicción`, Total))
 ```
 

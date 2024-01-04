@@ -36,12 +36,6 @@ convert_mixed_columns <- function(data) {
 ```
 
 ```{r}
-# funciona en la mac
-read_xlsx(paste0(path, "dfMalt2018.xlsx"))           
-
-# funciona en la windows
-#read_xlsx("~/Estadisticas-Sobre-Violencia-de-Genero-en-Puerto-Rico/data/Departamento_de_Familia/dfMalt2018.xlsx")
-
 # importando datos del 2018
 dfMalt2018 <- read_excel(paste0(path, "dfMalt2018.xlsx")) %>%
   rename(

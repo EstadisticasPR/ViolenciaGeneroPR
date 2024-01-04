@@ -208,6 +208,7 @@ ggplot(subset(homiEdad_long_xtotals, año == año_individual[4]), aes(x = edad, 
 
 # Incidentes 
 ```{r}
+# compara inci con homiedad para enseñarle a Manuel la discrepancia en los numeros
 inci <- read_excel(paste0(path, "svmvIncidentes.xlsx"))
 inci_long_xtotals <- inci %>%
   select(-total) %>%
