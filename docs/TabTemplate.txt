@@ -1,0 +1,56 @@
+#### Tab Template ####
+    tabPanel(
+      "Nombre de la Agencia",  # Cambiar por el nombre de la agencia
+      tabsetPanel(
+        
+        # Subtab con datos específicos para el primer dataset de la agencia
+        tabPanel(
+          "Datos 1",  # Cambiar por el nombre del primer dataset
+          # Título del Tab
+          titlePanel("Título del Tab"),  # Cambiar por el título adecuado
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Fuente de Datos"), tags$br(),
+          tags$span(paste0("Actualizado: ", actualizacion)), tags$br(),
+          tags$span("Nota: Nota sobre los datos"),
+          
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              checkboxGroupInput(
+                "checkGroup",
+                label = h3("Seleccione Grupo(s)"),
+                choices = c("Seleccionar Todos", levels(dataset$columna)),
+                selected = "Seleccionar Todos"
+              ),
+              actionButton("deselectAll", "Deseleccionar todo"),
+              hr(),
+              fluidRow(column(3, verbatimTextOutput("value"))),
+              selectInput("yearInput", "Seleccionar Año:", choices = unique(dataset$yearColumna))
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("linePlot"),
+              plotlyOutput("barPlot"),
+              DTOutput("dataTable")
+            )
+          )
+        ),
+        
+        # Subtab con datos específicos para el segundo dataset de la agencia
+        tabPanel(
+          "Datos 2"  # Cambiar por el nombre del segundo dataset
+          # ... Estructura similar a la anterior para el segundo dataset
+        ),
+        
+        # Subtab con datos específicos para el tercer dataset de la agencia
+        tabPanel(
+          "Datos 3"  # Cambiar por el nombre del tercer dataset
+          # ... Estructura similar a la anterior para el tercer dataset
+        )
+      )
+    ),
+    
+  )
+)

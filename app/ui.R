@@ -1,10 +1,10 @@
 # Cargar el contenido de global.R
 source("global.R")
 
-# UI
+# User Interface 
 ui <- fluidPage(
   
-  #### El theme (colores) de la app ####
+  ### El theme (colores) de la app ###
   theme = shinytheme("sandstone"),
   
   #### Encabezado ####
@@ -12,10 +12,10 @@ ui <- fluidPage(
     tags$div(
       tags$title('Instituto de Estadísticas de Puerto Rico'),
       
-      #### Foto con enlace a la página de IEPR ####
+      ### Foto con enlace a la página de IEPR ###
       tags$ul(
         tags$li(
-          style = 'display: inline-block;',
+          style = 'display: inline-block; margin-right: 20px; vertical-align: middle;',
           div(
             id = 'logo_IEPR',
             tags$a(
@@ -27,9 +27,9 @@ ui <- fluidPage(
           )
         ),
         
-        #### Foto con enlace a la página de PARE ####
+        ### Foto con enlace a la página de PARE ###
         tags$li(
-          style = 'display: inline-block;',
+          style = 'display: inline-block; margin-left: 10px; vertical-align: middle;',
           div(
             id = 'logo_PARE',
             tags$a(
@@ -41,7 +41,7 @@ ui <- fluidPage(
           )
         ),
         
-        #### Título de la App ####
+        ### Título de la App ###
         tags$li(
           style = 'display: inline-block;margin-bottom: 12px;margin-right: 25px;',
           div(
@@ -75,9 +75,19 @@ ui <- fluidPage(
     tabPanel(
       "Sistema de Notificación de Muertes Violentas",
       tabsetPanel(
+        
+        # tab con datos de Homicidios por grupo de Edad
         tabPanel(
           "homiEdad",
+          # Título del Tab
           titlePanel("Homicidios de mujeres por grupo de edad según el año"),
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
+          tags$span(paste0("Actualizado: ", actualizacion_snmvA)),
+          tags$span("Nota: Los datos del año 2020 son preliminares"),
+          
+          # Menu sidebar con widgets
           sidebarLayout(
             sidebarPanel(
               checkboxGroupInput(
@@ -91,6 +101,8 @@ ui <- fluidPage(
               fluidRow(column(3, verbatimTextOutput("value"))),
               selectInput("yearInput", "Seleccionar Año:", choices = unique(homiEdad$año))
             ),
+            
+            # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("linePlot"),
               plotlyOutput("barPlot"),
@@ -98,8 +110,12 @@ ui <- fluidPage(
             )
           )
         ),
-        tabPanel("Incidentes"), # Mantener vacío
-        tabPanel("Tasas"), # Mantener vacío
+        
+        # tab con datos de Incidentes
+        tabPanel("Incidentes"), 
+        
+        # tab con datos de Tasas
+        tabPanel("Tasas"), 
       )
     ),
     
@@ -115,6 +131,8 @@ ui <- fluidPage(
         tabPanel("Información Adicional")  # Mantener vacío
       )
     ),
+  )
+)
     
     #### Tab Acerca del Dashboard ####
     tabPanel(

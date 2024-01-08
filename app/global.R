@@ -102,3 +102,50 @@ dfMalt <- dfMalt2018 %>%
     Año = factor(Año),
     Sexo = factor(Sexo)
   )
+########################################
+##### Actualizaciones de los Datos #####
+########################################
+# Fecha actualizacion de los datos de violencia domestica
+actualizacion_policiaA <- "06/09/2023"
+
+# Fecha cuando se actualizan los datos de desaparecidas
+actualizacion_policiaB <- "05/03/2023"
+
+# Fecha actualizacion delitos Ley 54
+actualizacion_justiciaA <- "06/09/2023"
+
+# Fecha actualizacion registro de personas convictas
+actualizacion_justiciaB <- "06/09/2023"
+
+# Fecha actualizacion feminicidios
+actualizacion_opmA <- "05/17/2022"
+
+# Fecha actualizacion resto de los datos de OPM
+actualizacion_opmB <- "04/20/2023"
+
+# Fecha actualizacion datos del SNMV
+actualizacion_snmvA <- "12/23/2021"
+
+# Fecha actualizacion tasas ajustadas del SNMV
+actualizacion_snmvB <- "06/30/2022"
+
+# Fecha actualizacion datos de Correcion
+actualizacion_correcion <- "04/03/2023"
+
+# Fecha actualizacion datos de Vivienda
+actualizacion_vivienda <- "07/19/2023"
+
+# Fecha actualizacion datos del Observatorio
+actualizacion_observatorio <- ""
+
+# Fecha actualizacion datos del Dept de Trabajo
+actualizacion_trabajo <- "07/12/2021"
+
+# Fecha actualizacion datos Dept Familia
+actualizacion_familia <- "06/09/2021"
+
+# Fecha actualizacion Ordenes de Proteccion
+actualizacion_tribunalesA <- "02/21/2023"
+
+# Fecha actualizacion Movimiento Casos
+actualizacion_tribunalesB <- "02/21/2023"
