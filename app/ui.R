@@ -4,42 +4,74 @@ source("global.R")
 # UI
 ui <- fluidPage(
   
-  # estableciendo el tema del app
+  #### El theme (colores) de la app ####
   theme = shinytheme("sandstone"),
   
-  #Encabezado
+  #### Encabezado ####
   div(
     tags$div(
       tags$title('Instituto de Estadísticas de Puerto Rico'),
+      
+      #### Foto con enlace a la página de IEPR ####
       tags$ul(
-        tags$li(style='  display: inline-block;', div( id='logo', tags$a(tags$figure(img(src="ieprlogo.png",height=60,
-                                                                                         alt="estadisticas.pr",deleteFile=FALSE), 
+        tags$li(
+          style = 'display: inline-block;',
+          div(
+            id = 'logo_IEPR',
+            tags$a(
+              tags$figure(
+                img(src = "ieprlogo.png", height = 60, alt = "estadisticas.pr", deleteFile = FALSE)
+              ),
+              href = 'https://estadisticas.pr/'
+            )
+          )
         ),
-        href='https://estadisticas.pr/'))),
-        tags$li(style=' display: inline-block;margin-bottom: 12px;margin-right: 25px;' ,
-                div(tags$h3('Estadísticas de Violencia de Género en Puerto Rico      ',
-                            style='font-family:"Arial Black",sans-serif;'))),
         
+        #### Foto con enlace a la página de PARE ####
+        tags$li(
+          style = 'display: inline-block;',
+          div(
+            id = 'logo_PARE',
+            tags$a(
+              tags$figure(
+                img(src = "logo_PARE.png", height = 60, alt = "PARE.gov", deleteFile = FALSE)
+              ),
+              href = "https://parelaviolencia.pr.gov/"
+            )
+          )
+        ),
         
-        style='list-style-type: none;
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0px;
-  justify-content: space-between;
-  background: pink;
-  margin: 0px;
-  padding-bottom: 10;
-  border-radius: 0;
-  ')
+        #### Título de la App ####
+        tags$li(
+          style = 'display: inline-block;margin-bottom: 12px;margin-right: 25px;',
+          div(
+            tags$h3(
+              'Estadísticas de Violencia de Género en Puerto Rico',
+              style = 'font-family:"Arial Black",sans-serif;'
+            )
+          )
+        ),
+        
+        style = 'list-style-type: none;
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0px;
+      justify-content: space-between;
+      background: pink;
+      margin: 0px;
+      padding-bottom: 10;
+      border-radius: 0;'
+      )
     ),
-    
-    
-    style = " top: 1px;"), 
+    style = "top: 1px;"
+  ),
+  
   
   # Titulo de la app
   navbarPage(
     "",
     
+    #### Tab del Sistema de Notificación de Muertes Violentas ####
     tabPanel(
       "Sistema de Notificación de Muertes Violentas",
       tabsetPanel(
@@ -71,7 +103,7 @@ ui <- fluidPage(
       )
     ),
     
-    # tab del Departamento de la Familia
+    #### Tab del Departamento de la Familia ####
     tabPanel(
       "Departamento de la Familia",
       tabsetPanel(
@@ -84,7 +116,7 @@ ui <- fluidPage(
       )
     ),
     
-    # tab del Acerca del Dashboard
+    #### Tab Acerca del Dashboard ####
     tabPanel(
       "Acerca del Dashboard",
       tabsetPanel(
@@ -97,7 +129,7 @@ ui <- fluidPage(
       )
     ),
     
-    # tab format
+    #### Formato del Tab ####
     tabPanel(
       "Tab 3",
       tabsetPanel(

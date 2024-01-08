@@ -1,13 +1,21 @@
 ########################################
 #### Cargar bibliotecas necesarias #####
 ########################################
-library(shiny)
-library(ggplot2)
-library(dplyr)
-library(DT)
-library(here)
-library(readxl)
-library(shinythemes)
+packages <- c(
+  "tidyverse",
+  "readxl",
+  "kableExtra",
+  "zoo",
+  "here",
+  "viridis",
+  "shinythemes",
+  "plotly",
+  "DT"
+)
+
+for (package in packages) {
+  library(package, character.only = TRUE)
+}
 
 ##################################################################
 ##### convert_mixed_columns se usa para manejar missing data #####
@@ -45,7 +53,7 @@ homiEdad <- read_excel(paste0(snmv, "svmvhomiEdad.xlsx")) %>%
 # Definir una paleta de colores personalizada
 colores_homiEdad <- setNames(
   unique(homiEdad$edad), 
-  scales::hue_pal()(length(grupos_edad))
+  scales::hue_pal()(length(unique(homiEdad$edad)))
 )
 
 #############################################################

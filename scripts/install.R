@@ -8,7 +8,8 @@ packages <- c(
   "zoo",
   "here",
   "viridis",
-  "shinythemes"
+  "shinythemes",
+  "plotly"
 )
 
 # Instalar paquetes si no están instalados
