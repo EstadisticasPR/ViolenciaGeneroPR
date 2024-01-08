@@ -101,6 +101,9 @@ dfMalt <- dfMalt2018 %>%
     `Tipo de Maltrato` = factor(`Tipo de Maltrato`),
     Año = factor(Año),
     Sexo = factor(Sexo)
+  ) %>%
+  rename(
+     Maltrato = `Tipo de Maltrato`
   )
 ########################################
 ##### Actualizaciones de los Datos #####

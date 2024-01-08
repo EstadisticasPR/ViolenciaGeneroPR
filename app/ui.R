@@ -91,22 +91,22 @@ ui <- fluidPage(
           sidebarLayout(
             sidebarPanel(
               checkboxGroupInput(
-                "checkGroup",
+                "checkGroup_snmv",
                 label = h3("Seleccione Grupo(s) de Edad"),
                 choices = c("Seleccionar Todos", levels(homiEdad$edad)),
                 selected = "Seleccionar Todos"
               ),
-              actionButton("deselectAll", "Deseleccionar todo"),
+              actionButton("deselectAll_snmv", "Deseleccionar todo"),
               hr(),
               fluidRow(column(3, verbatimTextOutput("value"))),
-              selectInput("yearInput", "Seleccionar Año:", choices = unique(homiEdad$año))
+              selectInput("yearInput_snmv", "Seleccionar Año:", choices = unique(homiEdad$año))
             ),
             
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("linePlot"),
-              plotlyOutput("barPlot"),
-              DTOutput("dataTable")
+              plotlyOutput("linePlot_snmv"),
+              plotlyOutput("barPlot_snmv"),
+              DTOutput("dataTable_snmv")
             )
           )
         ),
@@ -123,16 +123,41 @@ ui <- fluidPage(
     tabPanel(
       "Departamento de la Familia",
       tabsetPanel(
-        
-        # tab de dfmalt
-        tabPanel("dfmalt",
-                 p("Cantidad de menores que fueron víctimas de maltrato, según sexo y tipo de maltrato: Años 2018-2022"),
-        ), # Mantener vacío
-        tabPanel("Información Adicional")  # Mantener vacío
+        # Tab para 
+        tabPanel(
+          "dfMalt", 
+          # Título del Tab
+          titlePanel("Cantidad de menores que fueron víctimas de maltrato, según sexo y Maltrato: Años 2018-*2022"),
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Departamento de la Familia"), tags$br(),
+          tags$span("Actualizado:", actualizacion_familia), tags$br(),
+          
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              checkboxGroupInput(
+                "checkGroup_fam",
+                label = h3("Seleccione Tipo(s) de Maltrato"),
+                choices = c("Seleccionar Todos", levels(dfMalt$Maltrato)),
+                selected = "Seleccionar Todos"
+              ),
+              actionButton("deselectAll_fam", "Deseleccionar todo"),
+              hr(),
+              selectInput("yearInput_fam", "Seleccionar Año:", choices = unique(dfMalt$Año))
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("linePlot_fam"),
+              plotlyOutput("barPlot_fam"),
+              DTOutput("dataTable_fam")
+            )
+          ),
+          tags$span("NOTA IMPORTANTE: Las cantidades podrían representar conteos duplicados del o la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son parte de uno o múltiples referidos. Este conteo es conocido por el Departamento de la Familia como el pareo de menores-reportado. Estos datos están en proceso de revisión por el Instituto de Estadísticas de Puerto Rico. *Nota: Datos parciales y preliminares del año 2022. Están disponibles hasta noviembre de 2022."),
+        )
       )
     ),
-  )
-)
     
     #### Tab Acerca del Dashboard ####
     tabPanel(

@@ -138,6 +138,21 @@ ggplot(subset(dfMalt_long, Sexo == "Femenino"), aes(x = Año, y = Casos, color =
   theme_minimal() +
   facet_wrap(~Sexo , scales = "fixed") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(dfMalt_long, aes(x = Año, y = Casos, color = `Tipo de Maltrato`, linetype = Sexo, group_by = Sexo)) +
+  geom_line(size = 1) +
+  geom_point(size = 3) +
+  labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(dfMalt_long, aes(x = Año, y = Casos, color = Sexo, linetype = Sexo)) +
+  geom_line(size = 1) +
+  geom_point(size = 3) +
+  labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
+  facet_wrap(~`Tipo de Maltrato`, scales = "free_y", ncol = 2) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r}
@@ -147,6 +162,31 @@ ggplot(dfMalt_long, aes(x = Año, y = Casos, color = Sexo, group = Sexo)) +
   labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
   theme_minimal() +
   facet_wrap(~`Tipo de Maltrato`, scales = "fixed") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+Graficos Finales
+```{r}
+ggplot(dfMalt_long, aes(x = Año, y = Casos, color = `Tipo de Maltrato`, group = `Tipo de Maltrato`)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
+  theme_minimal() +
+  facet_wrap(~Sexo , scales = "fixed") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+### bar graph
+# Gráfico de barras apiladas para un año específico (2018 en este caso)
+year_selected <- 2019
+
+# Filtrar los datos para el año seleccionado
+dfMalt_year <- subset(dfMalt, Año == as.character(year_selected))
+
+# Gráfico de barras apiladas para el año seleccionado
+ggplot(dfMalt_year, aes(x = `Tipo de Maltrato`, y = Casos, fill = Sexo)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = paste("Distribución de Tipos de Maltrato en el Año", year_selected),
+       x = "Tipo de Maltrato", y = "Casos", fill = "Sexo") +
+  theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
