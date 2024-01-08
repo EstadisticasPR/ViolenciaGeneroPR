@@ -29,26 +29,31 @@ server <- function(input, output, session) {
     updateCheckboxGroupInput(session, "checkGroup", selected = character(0))
   })
   
-  output$linePlot <- renderPlot({
+  # arreglar issue del tooltip duplicando la edad
+  output$linePlot <- renderPlotly({
     # Gráfico de línea para la evolución de casos por grupo de edad y año
-    ggplot(filtered_edad_homi(), aes(x = año, y = casos, group = edad, color = edad)) +
+    p <- ggplot(filtered_edad_homi(), aes(x = año, y = casos, group = edad, color = edad)) +
       geom_line(size = 1.3) +
       geom_point(size = 1.5) +
       scale_fill_manual(values = colores_homiEdad) +
-      ylim(0, max(filtered_edad_homi()$casos) + 5) +  # Establecer límites del eje y entre 0 y el maximo
+      #ylim(0, max(filtered_edad_homi()$casos) + 5) +  # Establecer límites del eje y entre 0 y el maximo
       theme_minimal() +
       labs(title = "Evolución de Casos por Grupo de Edad y Año", x = "Año", y = "Casos", color = "Grupos de Edad") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    
+    ggplotly(p)
   })
   
-  output$barPlot <- renderPlot({
-    # Gráfico de barras para la cantidad de casos por grupo de edad en el año seleccionado
-    ggplot(filtered_edad_año(), aes(x = edad, y = casos, fill = edad)) +
+  # arreglar issue del tooltip duplicando la edad
+  output$barPlot <- renderPlotly({
+    p <- ggplot(filtered_edad_año(), aes(x = edad, y = casos, fill = edad)) +
       geom_bar(stat = "identity") +
-      ylim(0, max(filtered_edad_homi()$casos) + 5) +  # Establecer límites del eje y entre 0 y el maximo
-      labs(title = paste("Cantidad de Casos por Grupo de Edad en el año", input$yearInput),
+      #ylim(0, max(filtered_edad_homi()$casos) + 5) +
+      labs(title = paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput),
            x = "Grupo de Edad", y = "Casos", fill = "Grupos de Edad") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    
+    ggplotly(p, tooltip = c("edad", "casos"))  # Especificamos qué información mostrar en el tooltip
   })
   
   output$dataTable <- renderDT({

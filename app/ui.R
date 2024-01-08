@@ -7,14 +7,45 @@ ui <- fluidPage(
   # estableciendo el tema del app
   theme = shinytheme("sandstone"),
   
+  #Encabezado
+  div(
+    tags$div(
+      tags$title('Instituto de Estadísticas de Puerto Rico'),
+      tags$ul(
+        tags$li(style='  display: inline-block;', div( id='logo', tags$a(tags$figure(img(src="ieprlogo.png",height=60,
+                                                                                         alt="estadisticas.pr",deleteFile=FALSE), 
+        ),
+        href='https://estadisticas.pr/'))),
+        tags$li(style=' display: inline-block;margin-bottom: 12px;margin-right: 25px;' ,
+                div(tags$h3('Estadísticas de Violencia de Género en Puerto Rico      ',
+                            style='font-family:"Arial Black",sans-serif;'))),
+        
+        
+        style='list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px;
+  justify-content: space-between;
+  background: pink;
+  margin: 0px;
+  padding-bottom: 10;
+  border-radius: 0;
+  ')
+    ),
+    
+    
+    style = " top: 1px;"), 
+  
+  # Titulo de la app
   navbarPage(
-    "Estadísticas de Violencia de Género en Puerto Rico",
+    "",
+    
     tabPanel(
       "Sistema de Notificación de Muertes Violentas",
       tabsetPanel(
         tabPanel(
           "homiEdad",
-          titlePanel("Análisis de Casos por Grupo de Edad y Año"),
+          titlePanel("Homicidios de mujeres por grupo de edad según el año"),
           sidebarLayout(
             sidebarPanel(
               checkboxGroupInput(
@@ -29,8 +60,8 @@ ui <- fluidPage(
               selectInput("yearInput", "Seleccionar Año:", choices = unique(homiEdad$año))
             ),
             mainPanel(
-              plotOutput("linePlot"),
-              plotOutput("barPlot"),
+              plotlyOutput("linePlot"),
+              plotlyOutput("barPlot"),
               DTOutput("dataTable")
             )
           )
