@@ -27,7 +27,6 @@
               ),
               actionButton("deselectAll", "Deseleccionar todo"),
               hr(),
-              fluidRow(column(3, verbatimTextOutput("value"))),
               selectInput("yearInput", "Seleccionar Año:", choices = unique(dataset$yearColumna))
             ),
             

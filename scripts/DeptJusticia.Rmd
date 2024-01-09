@@ -222,12 +222,12 @@ summary(modelo_regresion_todos_arts)
 ```
 # Casos Mapa y Convicciones Municipales
 ```{r}
-casosMapa <- read_excel("data/Departamento_de_Justicia/djCasosMapa.xlsx") %>% 
-  convert_mixed_columns()
-  
-convicMuni <- read_excel("data/Departamento_de_Justicia/djConvicMuni.xlsx") %>% 
+casosMapa <- read_excel(paste0(path, "djCasosMapa.xlsx")) %>% 
   convert_mixed_columns()
 
-convic_df <- full_join(casosMapa, convicMuni)
-convic_df
+convicMuni <- read_excel(paste0(path, "djConvicMuni.xlsx")) %>% 
+  convert_mixed_columns()
+
+convic <- full_join(casosMapa, convicMuni)
+convic
 ```

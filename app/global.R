@@ -105,6 +105,45 @@ dfMalt <- dfMalt2018 %>%
   rename(
      Maltrato = `Tipo de Maltrato`
   )
+
+###############################################################
+##### Procesamiento de datos del Departamento de Justicia #####
+###############################################################
+djus <- here("data", "Departamento_de_Justicia", "/")
+
+# importando delitos del 2020
+deli2020 <- read_excel(paste0(djus, "djDelitos2020.xlsx")) %>% 
+  convert_mixed_columns() %>%
+  mutate(Año = "2020") 
+
+# importando delitos del 2021
+deli2021 <- read_excel(paste0(djus, "djDelitos2021.xlsx")) %>%
+  convert_mixed_columns() %>%
+  mutate(Año = "2021")
+
+# importando delitos del 2022
+deli2022 <- read_excel(paste0(djus, "djDelitos2022.xlsx")) %>%
+  convert_mixed_columns() %>%
+  mutate(Año = "2022")
+
+# importando delitos del 2023
+deli2023 <- read_excel(paste0(path, "djDelitos2023.xlsx")) %>%
+  convert_mixed_columns() %>%
+  mutate(Año = "2023")
+
+dfDeli <- full_join(deli2020, deli2021) %>% 
+  full_join(deli2022) %>%
+  full_join(deli2023) %>% 
+  filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE)) %>%
+  select(-TOTAL) %>%
+  pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
+  mutate(
+    Año = factor(Año),
+    Delito = factor(Delito),
+    `FISCALIA DISTRITO` = factor(`FISCALIA DISTRITO`)
+    )
+dfDeli
+
 ########################################
 ##### Actualizaciones de los Datos #####
 ########################################

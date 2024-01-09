@@ -159,6 +159,60 @@ ui <- fluidPage(
       )
     ),
     
+    #### Tab del Departamento de Justicia ####
+    tabPanel(
+      "Departamento de Justicia",
+      tabsetPanel(
+        # Subtab con datos específicos para dfDeli
+        tabPanel(
+          "dfDeli",
+          # Título del Tab
+          titlePanel("Delitos a la Ley 54, casos radicados por jurisdicción y articulo de la Ley de Violencia Domestica, año 2020 a *2023"),  # Cambiar por el título adecuado
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Departamento de Justicia" ), tags$br(),
+          tags$span(paste0("Actualizado: ", actualizacion_justiciaA)), tags$br(),
+          
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              
+              # el checkbox
+              checkboxGroupInput(
+                "checkGroup_just",
+                label = h3("Seleccione el/los Articulo(s)"),
+                choices = c("Seleccionar Todos", levels(dfDeli$Delito)),
+                selected = "Seleccionar Todos"
+              ),
+              # botón de deselección
+              actionButton("deselectAll_just", "Deseleccionar todo"),
+              hr(),
+              # botón de seleccionar input
+              selectInput("yearInput_just", "Seleccionar Año:", choices = unique(dfDeli$Año))
+            ),
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("boxPlot_just"),
+              plotlyOutput("barPlot_just"),
+              DTOutput("dataTable_just")
+            )
+          )
+        ),
+        
+        # Subtab con datos específicos para el segundo dfDeli de la agencia
+        tabPanel(
+          "convic"  # Cambiar por el nombre del segundo dfDeli
+          # ... Estructura similar a la anterior para el segundo dfDeli
+        ),
+        
+        # Subtab con datos específicos para el tercer dfDeli de la agencia
+        tabPanel(
+          "Yeiza"  # Cambiar por el nombre del tercer dfDeli
+          # ... Estructura similar a la anterior para el tercer dfDeli
+        )
+      )
+    ),
+    
     #### Tab Acerca del Dashboard ####
     tabPanel(
       "Acerca del Dashboard",
