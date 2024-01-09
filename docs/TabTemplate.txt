@@ -1,4 +1,6 @@
 #### Tab Template ####
+
+#### UI ####
     tabPanel(
       "Nombre de la Agencia",  # Cambiar por el nombre de la agencia
       tabsetPanel(
@@ -51,3 +53,93 @@
         )
       )
     ),
+    
+#### Server ####
+
+# Cargar el contenido de global.R
+source("global.R")
+
+# Server
+server <- function(input, output, session) {
+  
+  ########## Server de la Nueva Agencia ##########
+  # Filtrar el conjunto de datos según los valores seleccionados del checkGroup_nueva_agencia
+  filtered_data_nueva_agencia <- reactive({
+    filter(dataset_nueva_agencia, columna_nueva_agencia %in% input$checkGroup_nueva_agencia)
+  })
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año y el checkGroup_nueva_agencia
+  filtered_data_año_nueva_agencia <- reactive({
+    filter(dataset_nueva_agencia, 
+           año_nueva_agencia %in% input$yearInput_nueva_agencia,
+           columna_nueva_agencia %in% input$checkGroup_nueva_agencia)
+  })
+  
+  # función que activa la opción de Seleccionar Todos
+  observe({
+    if("Seleccionar Todos" %in% input$checkGroup_nueva_agencia) {
+      updateCheckboxGroupInput(session, "checkGroup_nueva_agencia", choices = c("Seleccionar Todos", levels(dataset_nueva_agencia$columna_nueva_agencia)),
+                               selected = levels(dataset_nueva_agencia$columna_nueva_agencia))
+    }
+  })
+  
+  # función que revierte la opción de seleccionar todos
+  observeEvent(input$deselectAll_nueva_agencia, {
+    updateCheckboxGroupInput(session, "checkGroup_nueva_agencia", selected = character(0))
+  })
+  
+  # arreglar issue del tooltip duplicando la columna
+  output$linePlot_nueva_agencia <- renderPlotly({
+    # Gráfico de línea para la evolución de casos por grupo de columna y año
+    p <- ggplot(filtered_data_nueva_agencia(), aes(x = año_nueva_agencia, y = casos, group = columna_nueva_agencia, color = columna_nueva_agencia)) +
+      geom_line(size = 1.3) +
+      geom_point(size = 1.5) +
+      scale_fill_manual(values = colores_dataset_nueva_agencia) +
+      #ylim(0, max(filtered_data_nueva_agencia()$casos) + 5) +  # Establecer límites del eje y entre 0 y el máximo
+      theme_minimal() +
+      labs(title = "Evolución de Casos por Grupo de Columna y Año", x = "Año", y = "Casos", color = "Grupos de Columna") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    
+    ggplotly(p)
+  })
+  
+  # arreglar issue del tooltip duplicando la columna
+  output$barPlot_nueva_agencia <- renderPlotly({
+    p <- ggplot(filtered_data_año_nueva_agencia(), aes(x = columna_nueva_agencia, y = casos, fill = columna_nueva_agencia)) +
+      geom_bar(stat = "identity") +
+      #ylim(0, max(filtered_data_nueva_agencia()$casos) + 5) +
+      labs(title = paste("Evolución de casos por Grupo de Columna en el Año", input$yearInput_nueva_agencia),
+           x = "Grupo de Columna", y = "Casos", fill = "Grupos de Columna") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    
+    ggplotly(p, tooltip = c("columna_nueva_agencia", "casos"))  # Especificamos qué información mostrar en el tooltip
+  })
+  
+  output$dataTable_nueva_agencia <- renderDT({
+    datatable(
+      filtered_data_nueva_agencia(),
+      extensions = c('Buttons'), # Asegúrate de incluir la extensión 'Buttons'
+      options = list(
+        pageLength = 10,
+        lengthMenu = c(10, nrow(filtered_data_nueva_agencia()) / 2, nrow(filtered_data_nueva_agencia())),
+        scrollX = TRUE,
+        paging = TRUE,
+        searching = TRUE,
+        fixedColumns = TRUE,
+        autoWidth = FALSE,
+        ordering = TRUE,
+        dom = 'lftpB', 
+        buttons = c('copy', 'csv', 'excel')
+      )
+    ) %>% 
+      formatRound(columns = 2:ncol(filtered_data_nueva_agencia()), digits = 0, mark = ",")
+  })
+  
+  observeEvent(input$yearInput_nueva_agencia, {
+    updateSelectInput(session, "yearInput_nueva_agencia", selected = input$yearInput_nueva_agencia)
+  })
+  
+  # Aquí se puede agregar más lógica para otros datasets de la nueva agencia
+  
+}
+ß

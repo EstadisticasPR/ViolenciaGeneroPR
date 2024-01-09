@@ -78,7 +78,7 @@ ui <- fluidPage(
         
         # tab con datos de Homicidios por grupo de Edad
         tabPanel(
-          "homiEdad",
+          "homiEdad_snmv",
           # Título del Tab
           titlePanel("Homicidios de mujeres por grupo de edad según el año"),
           
@@ -112,10 +112,10 @@ ui <- fluidPage(
         ),
         
         # tab con datos de Incidentes
-        tabPanel("Incidentes"), 
+        tabPanel("Incidentes_snmv"), 
         
         # tab con datos de Tasas
-        tabPanel("Tasas"), 
+        tabPanel("Tasas_snmv"), 
       )
     ),
     
@@ -125,9 +125,9 @@ ui <- fluidPage(
       tabsetPanel(
         # Tab para 
         tabPanel(
-          "dfMalt", 
+          "dfMalt_fam", 
           # Título del Tab
-          titlePanel("Cantidad de menores que fueron víctimas de maltrato, según sexo y Maltrato: Años 2018-*2022"),
+          titlePanel("Cantidad de menores que fueron víctimas de maltrato, según sexo y tipo de maltrato: Años 2018-*2022"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Departamento de la Familia"), tags$br(),
@@ -165,7 +165,7 @@ ui <- fluidPage(
       tabsetPanel(
         
         # tab de dfmalt
-        tabPanel("Transfondo del Proyecto"),
+        tabPanel("Transfondo_del_Proyecto"),
         tabPanel("Fuentes"), 
         tabPanel("Autores"),
         tabPanel("Contacto")
@@ -174,12 +174,12 @@ ui <- fluidPage(
     
     #### Formato del Tab ####
     tabPanel(
-      "Tab 3",
+      "Tab_3",
       tabsetPanel(
         
         # tab de dfmalt
-        tabPanel("Subtab 3A"), # Mantener vacío
-        tabPanel("Subtab 3B")  # Mantener vacío
+        tabPanel("Subtab_3A"), # Mantener vacío
+        tabPanel("Subtab_3B")  # Mantener vacío
       )
     )
   )
