@@ -116,6 +116,16 @@ ui <- fluidPage(
         
         # tab con datos de Tasas
         tabPanel("Tasas_snmv"), 
+        
+        ### yeiza
+        tabPanel(
+          "Xiomy",  # Cambiar por el nombre del tercer dfDeli
+          # ... Estructura similar a la anterior para el tercer dfDeli
+          tags$div(
+            tags$h2("xiomara"),
+            tags$img(src = "xiomy.jpg", height = 200, width = 300)
+          )
+        ),
       )
     ),
     
@@ -188,12 +198,14 @@ ui <- fluidPage(
               actionButton("deselectAll_just", "Deseleccionar todo"),
               hr(),
               # botón de seleccionar input
-              selectInput("yearInput_just", "Seleccionar Año:", choices = unique(dfDeli$Año))
+              selectInput("yearInput_just", "Seleccionar Año:", choices = unique(dfDeli$Año)),
+              selectInput("districtInput_just", "Seleccionar Distrito:", choices = unique(dfDeli$`FISCALIA DISTRITO`))
             ),
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("boxPlot_just"),
               plotlyOutput("barPlot_just"),
+              plotOutput("deliPlot_just"),
               DTOutput("dataTable_just")
             )
           )
@@ -206,10 +218,15 @@ ui <- fluidPage(
         ),
         
         # Subtab con datos específicos para el tercer dfDeli de la agencia
+        ### yeiza
         tabPanel(
-          "Yeiza"  # Cambiar por el nombre del tercer dfDeli
+          "Yeiza",  # Cambiar por el nombre del tercer dfDeli
           # ... Estructura similar a la anterior para el tercer dfDeli
-        )
+          tags$div(
+            tags$h2("yeyeyey"),
+            tags$img(src = "yeiza.jpg", height = 200, width = 300)
+          )
+        ),
       )
     ),
     

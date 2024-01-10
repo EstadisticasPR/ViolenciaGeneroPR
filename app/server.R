@@ -42,7 +42,7 @@ server <- function(input, output, session) {
       labs(title = "Evolución de Casos por Grupo de Edad y Año", x = "Año", y = "Casos", color = "Grupos de Edad") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
     
-    ggplotly(p)
+    ggplotly(p, tooltip = c("x", "y", "color"))
   })
   
   # arreglar issue del tooltip duplicando la edad
@@ -54,7 +54,7 @@ server <- function(input, output, session) {
            x = "Grupo de Edad", y = "Casos", fill = "Grupos de Edad") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
     
-    ggplotly(p, tooltip = c("edad", "casos"))  # Especificamos qué información mostrar en el tooltip
+    ggplotly(p, tooltip = c("x", "y"))  # Especificamos qué información mostrar en el tooltip
   })
   
   output$dataTable_snmv <- renderDT({
@@ -117,7 +117,7 @@ server <- function(input, output, session) {
       facet_wrap(~Sexo, scales = "fixed", drop = FALSE) +
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
     
-    ggplotly(p)
+    ggplotly(p, tooltip = c("x", "y", "color"))
   })
   
   output$barPlot_fam <- renderPlotly({
@@ -128,7 +128,7 @@ server <- function(input, output, session) {
       theme_minimal() +
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
     
-    ggplotly(p)
+    ggplotly(p, tooltip = c("x", "y", "fill"))
   })
   
   output$dataTable_fam <- renderDT({
@@ -198,14 +198,16 @@ server <- function(input, output, session) {
   # })
   
   output$boxPlot_just <- renderPlotly({
-    p <- ggplot(filtered_data_just(), aes(x = factor(Año), y = Casos, color = Delito)) +
-      geom_boxplot(outlier.shape = NA) +  # Eliminar los puntos atípicos del boxplot
-      geom_jitter(width = 0.2, alpha = 0.5) +  # Añadir los scatters
-      labs(title = "Distribución de Casos por Delito", x = "Año", y = "Casos") +
+    p <- ggplot(filtered_data_just(), aes(x = Año, y = Casos)) +
+      geom_boxplot() +  # Eliminar los puntos atípicos del boxplot
+      #geom_jitter(width = 0.2, alpha = 0.5) +  # Añadir los scatters
+      labs(
+        title = "Distribución de Casos por Delito", x = "Año", y = "Casos") +
+      geom_point(aes(color = `FISCALIA DISTRITO`)) +
       theme_minimal() +
       facet_wrap(~Delito, scales = "fixed")
     
-    ggplotly(p)
+    ggplotly(p, tooltip = c("x", "y", "color"))
   })
   
   # arreglar issue del tooltip duplicando la columna
@@ -216,7 +218,24 @@ server <- function(input, output, session) {
       facet_wrap(~ Año, scales = "fixed") +
       theme_minimal()
     
-    ggplotly(p, tooltip = c("Delito", "Casos"))  # Especificamos qué información mostrar en el tooltip
+    ggplotly(p, tooltip = c("x", "y", "fill"))  # Especificamos qué información mostrar en el tooltip
+  })
+  
+  # need to add tooltip functionality; ggplotly returns an error 
+  output$deliPlot_just <- renderPlot({
+    filtered_data <- subset(dfDeli, Año == input$yearInput_just & Delito == input$checkGroup_just)
+    
+    p <- ggplot(filtered_data, aes(x = `FISCALIA DISTRITO`, y = Casos, fill = `FISCALIA DISTRITO`)) +
+      geom_bar(stat = "identity", width = 0.7) +
+      labs(
+        title = paste("Distribución de Casos por Distrito para el Delito", input$checkGroup_just, "en el", input$yearInput_just),
+        x = "Fiscalía Distrito",
+        y = "Casos",
+        fill = "Distrito Fiscal"
+      ) +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    
+    print(p)
   })
   
   output$dataTable_just <- renderDT({
