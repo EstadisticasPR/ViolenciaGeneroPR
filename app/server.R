@@ -5,6 +5,7 @@ source("global.R")
 server <- function(input, output, session) {
   
   ########## Server del Sistema de Notificación de Muertes Violentas ##########
+  
   # Filtrar el conjunto de datos según los valores seleccionados del checkGroup_snmv
   filtered_edad_snmv <- reactive({
     filter(homiEdad, edad %in% input$checkGroup_snmv)
@@ -17,20 +18,26 @@ server <- function(input, output, session) {
            edad %in% input$checkGroup_snmv)
   })
   
-  # función que activa la opción de Seleccionar Todos
-  observe({
-    if("Seleccionar Todos" %in% input$checkGroup_snmv) {
-      updateCheckboxGroupInput(session, "checkGroup_snmv", choices = c("Seleccionar Todos", levels(homiEdad$edad)),
-                               selected = levels(homiEdad$edad))
+  ### funcion para el boton de deseleccionar/seleccionar
+  observeEvent(input$deselectAll_snmv, {
+    
+    if (is.null(input$checkGroup_snmv)) {
+      updateCheckboxGroupInput(
+        session, 
+        "checkGroup_snmv", 
+        choices = levels(homiEdad$edad),
+        selected = levels(homiEdad$edad)
+        )
+    } else {
+      updateCheckboxGroupInput(
+        session, 
+        "checkGroup_snmv", 
+        selected = character(0)
+        )
     }
   })
   
-  # función que revierte la opción de seleccionar todos
-  observeEvent(input$deselectAll_snmv, {
-    updateCheckboxGroupInput(session, "checkGroup_snmv", selected = character(0))
-  })
-  
-  # arreglar issue del tooltip duplicando la edad
+  # Grafico lineal del SNMV
   output$linePlot_snmv <- renderPlotly({
     # Gráfico de línea para la evolución de casos por grupo de edad y año
     p <- ggplot(filtered_edad_snmv(), aes(x = año, y = casos, group = edad, color = edad)) +
@@ -45,25 +52,27 @@ server <- function(input, output, session) {
     ggplotly(p, tooltip = c("x", "y", "color"))
   })
   
-  # arreglar issue del tooltip duplicando la edad
+  # Grafico de barras del SNMV
   output$barPlot_snmv <- renderPlotly({
     p <- ggplot(filtered_edad_año_snmv(), aes(x = edad, y = casos, fill = edad)) +
       geom_bar(stat = "identity") +
       #ylim(0, max(filtered_edad_snmv()$casos) + 5) +
       labs(title = paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
            x = "Grupo de Edad", y = "Casos", fill = "Grupos de Edad") +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+      coord_flip()
     
     ggplotly(p, tooltip = c("x", "y"))  # Especificamos qué información mostrar en el tooltip
   })
   
+  # Data table del SNMV
   output$dataTable_snmv <- renderDT({
     datatable(
       filtered_edad_snmv(),
       extensions = c('Buttons'), # Asegúrate de incluir la extensión 'Buttons'
       options = list(
-        pageLength = 10,
-        lengthMenu = c(10, nrow(filtered_edad_snmv()) / 2, nrow(filtered_edad_snmv())),
+        pageLength = 5,
+        lengthMenu = c(5, nrow(filtered_edad_snmv()) / 2, nrow(filtered_edad_snmv())),
         scrollX = TRUE,
         paging = TRUE,
         searching = TRUE,
@@ -94,19 +103,39 @@ server <- function(input, output, session) {
            Maltrato %in% input$checkGroup_fam)
   })
   
-  observe({
-    if ("Seleccionar Todos" %in% input$checkGroup_fam) {
+  # observe({
+  #   if ("Seleccionar Todos" %in% input$checkGroup_fam) {
+  #     updateCheckboxGroupInput(
+  #       session, "checkGroup_fam",
+  #       choices = c("Seleccionar Todos", levels(dfMalt$Maltrato)),
+  #       selected = levels(dfMalt$Maltrato)
+  #     )
+  #   }
+  # })
+  # 
+  # observeEvent(input$deselectAll_fam, {
+  #   updateCheckboxGroupInput(session, "checkGroup_fam", selected = character(0))
+  # })
+  
+  ### funcion para el boton de deseleccionar/seleccionar
+  observeEvent(input$deselectAll_fam, {
+    
+    if (is.null(input$checkGroup_fam)) {
       updateCheckboxGroupInput(
-        session, "checkGroup_fam",
-        choices = c("Seleccionar Todos", levels(dfMalt$Maltrato)),
+        session, 
+        "checkGroup_fam", 
+        choices = levels(dfMalt$Maltrato),
         selected = levels(dfMalt$Maltrato)
+      )
+    } else {
+      updateCheckboxGroupInput(
+        session, 
+        "checkGroup_fam", 
+        selected = character(0)
       )
     }
   })
   
-  observeEvent(input$deselectAll_fam, {
-    updateCheckboxGroupInput(session, "checkGroup_fam", selected = character(0))
-  })
   
   output$linePlot_fam <- renderPlotly({
     p <- ggplot(filtered_data_fam(), aes(x = Año, y = Casos, color = Maltrato, group = Maltrato)) +
@@ -126,18 +155,20 @@ server <- function(input, output, session) {
       labs(title = paste("Distribución de Tipos de Maltrato en el Año", input$yearInput_fam),
            x = "Tipo de Maltrato", y = "Casos", fill = "Sexo") +
       theme_minimal() +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      coord_flip()
     
     ggplotly(p, tooltip = c("x", "y", "fill"))
   })
   
+  # Data Table del DeptFam
   output$dataTable_fam <- renderDT({
     datatable(
       filtered_data_fam(),
       extensions = c('Buttons'),
       options = list(
-        pageLength = 10,
-        lengthMenu = c(10, nrow(filtered_data_fam()) / 2, nrow(filtered_data_fam())),
+        pageLength = 5,
+        lengthMenu = c(5, nrow(filtered_data_fam()) / 2, nrow(filtered_data_fam())),
         scrollX = TRUE,
         paging = TRUE,
         searching = TRUE,
@@ -169,17 +200,23 @@ server <- function(input, output, session) {
            Delito %in% input$checkGroup_just)
   })
   
-  # función que activa la opción de Seleccionar Todos
-  observe({
-    if("Seleccionar Todos" %in% input$checkGroup_just) {
-      updateCheckboxGroupInput(session, "checkGroup_just", choices = c("Seleccionar Todos", levels(dfDeli$Delito)),
-                               selected = levels(dfDeli$Delito))
-    }
-  })
-  
-  # función que revierte la opción de seleccionar todos
+  ### funcion para el boton de deseleccionar/seleccionar
   observeEvent(input$deselectAll_just, {
-    updateCheckboxGroupInput(session, "checkGroup_just", selected = character(0))
+    
+    if (is.null(input$checkGroup_just)) {
+      updateCheckboxGroupInput(
+        session, 
+        "checkGroup_just", 
+        choices = levels(dfDeli$Delito),
+        selected = levels(dfDeli$Delito)
+      )
+    } else {
+      updateCheckboxGroupInput(
+        session, 
+        "checkGroup_just", 
+        selected = character(0)
+      )
+    }
   })
   
   # # arreglar issue del tooltip duplicando la columna
@@ -199,8 +236,8 @@ server <- function(input, output, session) {
   
   output$boxPlot_just <- renderPlotly({
     p <- ggplot(filtered_data_just(), aes(x = Año, y = Casos)) +
-      geom_boxplot() +  # Eliminar los puntos atípicos del boxplot
-      #geom_jitter(width = 0.2, alpha = 0.5) +  # Añadir los scatters
+      geom_boxplot() +
+      #geom_jitter(width = 0.1, alpha = 0.5) +  # Añadir los scatters
       labs(
         title = "Distribución de Casos por Delito", x = "Año", y = "Casos") +
       geom_point(aes(color = `FISCALIA DISTRITO`)) +
@@ -216,9 +253,10 @@ server <- function(input, output, session) {
       geom_bar(stat = "identity") +
       labs(title = "Número de Casos por Delito (Año 2023)", x = "Delito Cometido", y = "Número de Casos", fill = "Delito Cometido") +
       facet_wrap(~ Año, scales = "fixed") +
-      theme_minimal()
+      theme_minimal() +
+      coord_flip()
     
-    ggplotly(p, tooltip = c("x", "y", "fill"))  # Especificamos qué información mostrar en el tooltip
+    ggplotly(p, tooltip = c("y", "fill"))  # Especificamos qué información mostrar en el tooltip
   })
   
   # need to add tooltip functionality; ggplotly returns an error 
@@ -238,13 +276,14 @@ server <- function(input, output, session) {
     print(p)
   })
   
+  # Data table del DeptJust
   output$dataTable_just <- renderDT({
     datatable(
       filtered_data_just(),
       extensions = c('Buttons'), # Asegúrate de incluir la extensión 'Buttons'
       options = list(
-        pageLength = 10,
-        lengthMenu = c(10, nrow(filtered_data_just()) / 2, nrow(filtered_data_just())),
+        pageLength = 5,
+        lengthMenu = c(5, nrow(filtered_data_just()) / 2, nrow(filtered_data_just())),
         scrollX = TRUE,
         paging = TRUE,
         searching = TRUE,

@@ -90,13 +90,19 @@ ui <- fluidPage(
           # Menu sidebar con widgets
           sidebarLayout(
             sidebarPanel(
-              checkboxGroupInput(
-                "checkGroup_snmv",
-                label = h3("Seleccione Grupo(s) de Edad"),
-                choices = c("Seleccionar Todos", levels(homiEdad$edad)),
-                selected = "Seleccionar Todos"
+
+              # botón para tener el checkbox en un menu dropdown 
+              dropdownButton(
+                circle = "FALSE",
+                label = "Seleccione Grupo(s) de Edad:", status = "default", width = 350,
+                actionButton("deselectAll_snmv", "(De)seleccionar todo"),
+                checkboxGroupInput("checkGroup_snmv",
+                  label = h3("Seleccione Grupo(s) de Edad"),
+                  choices = levels(homiEdad$edad),
+                  selected = levels(homiEdad$edad)
+                )
               ),
-              actionButton("deselectAll_snmv", "Deseleccionar todo"),
+              
               hr(),
               fluidRow(column(3, verbatimTextOutput("value"))),
               selectInput("yearInput_snmv", "Seleccionar Año:", choices = unique(homiEdad$año))
@@ -117,15 +123,15 @@ ui <- fluidPage(
         # tab con datos de Tasas
         tabPanel("Tasas_snmv"), 
         
-        ### yeiza
-        tabPanel(
-          "Xiomy",  # Cambiar por el nombre del tercer dfDeli
-          # ... Estructura similar a la anterior para el tercer dfDeli
-          tags$div(
-            tags$h2("xiomara"),
-            tags$img(src = "xiomy.jpg", height = 200, width = 300)
-          )
-        ),
+        # ### xiomy
+        # tabPanel(
+        #   "Xiomy",  # Cambiar por el nombre del tercer dfDeli
+        #   # ... Estructura similar a la anterior para el tercer dfDeli
+        #   tags$div(
+        #     tags$h2("xiomara"),
+        #     tags$img(src = "xiomy.jpg", height = 1000, width = 1000)
+        #   )
+        # ),
       )
     ),
     
@@ -146,13 +152,27 @@ ui <- fluidPage(
           # Menu sidebar con widgets
           sidebarLayout(
             sidebarPanel(
-              checkboxGroupInput(
-                "checkGroup_fam",
-                label = h3("Seleccione Tipo(s) de Maltrato"),
-                choices = c("Seleccionar Todos", levels(dfMalt$Maltrato)),
-                selected = "Seleccionar Todos"
+              # checkboxGroupInput(
+              #   "checkGroup_fam",
+              #   label = h3("Seleccione Tipo(s) de Maltrato"),
+              #   choices = c("Seleccionar Todos", levels(dfMalt$Maltrato)),
+              #   selected = "Seleccionar Todos"
+              # ),
+              # actionButton("deselectAll_fam", "Deseleccionar todo"),
+              # botón para tener el checkbox en un menu dropdown 
+              dropdownButton(
+                circle = "FALSE",
+                label = "Seleccione Tipo(s) de Maltrato:",
+                status = "default",
+                width = 300,
+                actionButton("deselectAll_fam", "(De)seleccionar todo"),
+                checkboxGroupInput(
+                  "checkGroup_fam",
+                  label = h3("Seleccione Tipo(s) de Maltrato"),
+                  choices = levels(dfMalt$Maltrato),
+                  selected = levels(dfMalt$Maltrato)
+                )
               ),
-              actionButton("deselectAll_fam", "Deseleccionar todo"),
               hr(),
               selectInput("yearInput_fam", "Seleccionar Año:", choices = unique(dfMalt$Año))
             ),
@@ -187,15 +207,28 @@ ui <- fluidPage(
           sidebarLayout(
             sidebarPanel(
               
-              # el checkbox
-              checkboxGroupInput(
-                "checkGroup_just",
-                label = h3("Seleccione el/los Articulo(s)"),
-                choices = c("Seleccionar Todos", levels(dfDeli$Delito)),
-                selected = "Seleccionar Todos"
+              # # el checkbox
+              # checkboxGroupInput(
+              #   "checkGroup_just",
+              #   label = h3("Seleccione el/los Articulo(s)"),
+              #   choices = c("Seleccionar Todos", levels(dfDeli$Delito)),
+              #   selected = "Seleccionar Todos"
+              # ),
+              # # botón de deselección
+              # actionButton("deselectAll_just", "Deseleccionar todo"),
+              # botón para tener el checkbox en un menu dropdown 
+              dropdownButton(
+                circle = "FALSE",
+                label = "Seleccione Tipo(s) de Maltrato:", status = "default", width = 350,
+                actionButton("deselectAll_just", "Deseleccionar todo"),
+                # el checkbox
+                checkboxGroupInput(
+                  "checkGroup_just",
+                  label = "Seleccione el/los Articulo(s)",
+                  choices = levels(dfDeli$Delito),
+                  selected = levels(dfDeli$Delito)
+                )
               ),
-              # botón de deselección
-              actionButton("deselectAll_just", "Deseleccionar todo"),
               hr(),
               # botón de seleccionar input
               selectInput("yearInput_just", "Seleccionar Año:", choices = unique(dfDeli$Año)),
@@ -218,15 +251,15 @@ ui <- fluidPage(
         ),
         
         # Subtab con datos específicos para el tercer dfDeli de la agencia
-        ### yeiza
-        tabPanel(
-          "Yeiza",  # Cambiar por el nombre del tercer dfDeli
-          # ... Estructura similar a la anterior para el tercer dfDeli
-          tags$div(
-            tags$h2("yeyeyey"),
-            tags$img(src = "yeiza.jpg", height = 200, width = 300)
-          )
-        ),
+        # ### yeiza
+        # tabPanel(
+        #   "Yeiza",  # Cambiar por el nombre del tercer dfDeli
+        #   # ... Estructura similar a la anterior para el tercer dfDeli
+        #   tags$div(
+        #     tags$h2("yeyeyey"),
+        #     tags$img(src = "yeiza.jpg", height = 1000, width = 1000)
+        #   )
+        # ),
       )
     ),
     
