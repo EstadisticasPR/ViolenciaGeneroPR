@@ -10,12 +10,20 @@ packages <- c(
   "viridis",
   "shinythemes",
   "plotly",
-  "DT"
+  "DT",
+  "shinyWidgets"
 )
 
-for (package in packages) {
-  library(package, character.only = TRUE)
+# Instalar los paquetes si no están instalados
+not_installed <- setdiff(packages, installed.packages()[,"Package"])
+if (length(not_installed) > 0) {
+  install.packages(not_installed)
 }
+
+# Cargar paquetes
+lapply(packages, function(pkg) {
+  library(pkg, character.only = TRUE)
+})
 
 ##################################################################
 ##### convert_mixed_columns se usa para manejar missing data #####
@@ -127,7 +135,7 @@ deli2022 <- read_excel(paste0(djus, "djDelitos2022.xlsx")) %>%
   mutate(Año = "2022")
 
 # importando delitos del 2023
-deli2023 <- read_excel(paste0(path, "djDelitos2023.xlsx")) %>%
+deli2023 <- read_excel(paste0(djus, "djDelitos2023.xlsx")) %>%
   convert_mixed_columns() %>%
   mutate(Año = "2023")
 
