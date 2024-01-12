@@ -207,31 +207,45 @@ ui <- fluidPage(
           sidebarLayout(
             sidebarPanel(
               
-              # # el checkbox
-              # checkboxGroupInput(
-              #   "checkGroup_just",
-              #   label = h3("Seleccione el/los Articulo(s)"),
-              #   choices = c("Seleccionar Todos", levels(dfDeli$Delito)),
-              #   selected = "Seleccionar Todos"
-              # ),
-              # # botón de deselección
-              # actionButton("deselectAll_just", "Deseleccionar todo"),
               # botón para tener el checkbox en un menu dropdown 
-              dropdownButton(
-                circle = "FALSE",
-                label = "Seleccione Tipo(s) de Maltrato:", status = "default", width = 350,
-                actionButton("deselectAll_just", "Deseleccionar todo"),
-                # el checkbox
-                checkboxGroupInput(
-                  "checkGroup_just",
-                  label = "Seleccione el/los Articulo(s)",
-                  choices = levels(dfDeli$Delito),
-                  selected = levels(dfDeli$Delito)
-                )
+              div(
+                dropdownButton(
+                  circle = "FALSE",
+                  label = "Seleccione el/los Articulo(s):",
+                  status = "default",
+                  width = 350,
+                  actionButton("deselectAll_just", "(De)Seleccionar todo"),
+                  style = "background-color: white;",
+                  checkboxGroupInput(
+                    "checkGroup_just",
+                    label = "Seleccione el/los Articulo(s)",
+                    choices = levels(dfDeli$Delito),
+                    selected = levels(dfDeli$Delito)
+                  )
+                ),
+                style = "display: inline-block; padding-right: 20px;"
               ),
-              hr(),
+              
               # botón de seleccionar input
-              selectInput("yearInput_just", "Seleccionar Año:", choices = unique(dfDeli$Año)),
+              
+              # botón para tener el checkbox en un menu dropdown 
+              div(
+                dropdownButton(
+                  circle = "FALSE",
+                  label = "Seleccionar Año:",
+                  status = "default",
+                  width = 350,
+                  actionButton("deselectAll_year", "(De)Seleccionar todo"),
+                  checkboxGroupInput(
+                    "yearInput_just",
+                    label = "Seleccionar Año:",
+                    choices = unique(dfDeli$Año),
+                    selected = levels(dfDeli$Año)
+                  )
+                ),
+                style = "display: inline-block;"
+              ),
+              
               selectInput("districtInput_just", "Seleccionar Distrito:", choices = unique(dfDeli$`FISCALIA DISTRITO`))
             ),
             # Sección principal con los gráficos

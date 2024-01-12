@@ -164,11 +164,11 @@ server <- function(input, output, session) {
   # Data Table del DeptFam
   output$dataTable_fam <- renderDT({
     datatable(
-      filtered_data_fam(),
+      dfMalt,
       extensions = c('Buttons'),
       options = list(
         pageLength = 5,
-        lengthMenu = c(5, nrow(filtered_data_fam()) / 2, nrow(filtered_data_fam())),
+        lengthMenu = c(5, nrow(dfMalt) / 2, nrow(dfMalt)),
         scrollX = TRUE,
         paging = TRUE,
         searching = TRUE,
@@ -179,8 +179,27 @@ server <- function(input, output, session) {
         buttons = c('copy', 'csv', 'excel')
       )
     ) %>% 
-      formatRound(columns = 2:ncol(filtered_data_fam()), digits = 0, mark = ",")
+      formatRound(columns = 2:ncol(dfMalt), digits = 0, mark = ",")
   })
+  # output$dataTable_fam <- renderDT({
+  #   datatable(
+  #     filtered_data_fam(),
+  #     extensions = c('Buttons'),
+  #     options = list(
+  #       pageLength = 5,
+  #       lengthMenu = c(5, nrow(filtered_data_fam()) / 2, nrow(filtered_data_fam())),
+  #       scrollX = TRUE,
+  #       paging = TRUE,
+  #       searching = TRUE,
+  #       fixedColumns = TRUE,
+  #       autoWidth = FALSE,
+  #       ordering = TRUE,
+  #       dom = 'lftpB', 
+  #       buttons = c('copy', 'csv', 'excel')
+  #     )
+  #   ) %>% 
+  #     formatRound(columns = 2:ncol(filtered_data_fam()), digits = 0, mark = ",")
+  # })
   
   observeEvent(input$yearInput_fam, {
     updateSelectInput(session, "yearInput_fam", selected = input$yearInput_fam)
@@ -250,10 +269,11 @@ server <- function(input, output, session) {
   # arreglar issue del tooltip duplicando la columna
   output$barPlot_just <- renderPlotly({
     p <- ggplot(filtered_data_año_just(), aes(x = Delito, y = Casos, fill = Delito)) +
-      geom_bar(stat = "identity") +
+      geom_bar(stat = "identity", position = "dodge") +
       labs(title = "Número de Casos por Delito (Año 2023)", x = "Delito Cometido", y = "Número de Casos", fill = "Delito Cometido") +
       facet_wrap(~ Año, scales = "fixed") +
       theme_minimal() +
+      facet_wrap(~`FISCALIA DISTRITO`, scales = "fixed") + 
       coord_flip()
     
     ggplotly(p, tooltip = c("y", "fill"))  # Especificamos qué información mostrar en el tooltip
