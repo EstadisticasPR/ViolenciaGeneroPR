@@ -111,7 +111,18 @@ dfMalt_long <- dfMalt2018 %>%
                  Sexo = factor(Sexo),
                  `Tipo de Maltrato` = factor(`Tipo de Maltrato`)
                  )
+suma_casos <- dfMalt_long%>%
+  group_by(`Tipo de Maltrato`, Año) %>%
+  summarise(Total_Casos = sum(Casos))
 dfMalt_long
+
+ggplot(suma_casos, aes(x = Año, y = Total_Casos, color = `Tipo de Maltrato`, group = `Tipo de Maltrato`)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
+  theme_minimal() +
+  #facet_wrap(~Sexo , scales = "fixed") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r}
