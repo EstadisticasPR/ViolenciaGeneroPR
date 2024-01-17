@@ -74,6 +74,7 @@ ui <- fluidPage(
     #### Tab del Sistema de Notificación de Muertes Violentas ####
     tabPanel(
       "Sistema de Notificación de Muertes Violentas",
+      icon = icon("exclamation-triangle"),
       tabsetPanel(
         
         # tab con datos de Homicidios por grupo de Edad
@@ -94,13 +95,15 @@ ui <- fluidPage(
               # botón para tener el checkbox en un menu dropdown 
               dropdownButton(
                 circle = "FALSE",
-                label = "Seleccione Grupo(s) de Edad:", status = "default", width = 350,
-                actionButton("deselectAll_snmv", "(De)seleccionar todo"),
+                label = "Seleccione Grupo(s) de Edad:", 
+                status = "default", 
+                size = "default",
                 checkboxGroupInput("checkGroup_snmv",
-                  label = h3("Seleccione Grupo(s) de Edad"),
+                  label = "",
                   choices = levels(homiEdad$edad),
                   selected = levels(homiEdad$edad)
-                )
+                ),
+                actionButton("deselectAll_snmv", "(De)seleccionar todo")
               ),
               
               hr(),
@@ -138,6 +141,7 @@ ui <- fluidPage(
     #### Tab del Departamento de la Familia ####
     tabPanel(
       "Departamento de la Familia",
+      icon = icon("users"),
       tabsetPanel(
         # Tab para 
         tabPanel(
@@ -152,14 +156,6 @@ ui <- fluidPage(
           # Menu sidebar con widgets
           sidebarLayout(
             sidebarPanel(
-              # checkboxGroupInput(
-              #   "checkGroup_fam",
-              #   label = h3("Seleccione Tipo(s) de Maltrato"),
-              #   choices = c("Seleccionar Todos", levels(dfMalt$Maltrato)),
-              #   selected = "Seleccionar Todos"
-              # ),
-              # actionButton("deselectAll_fam", "Deseleccionar todo"),
-              # botón para tener el checkbox en un menu dropdown 
               dropdownButton(
                 circle = "FALSE",
                 label = "Seleccione Tipo(s) de Maltrato:",
@@ -179,6 +175,7 @@ ui <- fluidPage(
             
             # Sección principal con los gráficos
             mainPanel(
+              # aglomerar masculino y femenino
               plotlyOutput("linePlot_fam"),
               plotlyOutput("barPlot_fam"),
               DTOutput("dataTable_fam")
@@ -192,6 +189,7 @@ ui <- fluidPage(
     #### Tab del Departamento de Justicia ####
     tabPanel(
       "Departamento de Justicia",
+      icon = icon("balance-scale"),
       tabsetPanel(
         # Subtab con datos específicos para dfDeli
         tabPanel(
@@ -280,6 +278,7 @@ ui <- fluidPage(
     #### Tab Acerca del Dashboard ####
     tabPanel(
       "Acerca del Dashboard",
+      icon = icon("info-circle"),
       tabsetPanel(
         
         # tab de dfmalt
@@ -292,13 +291,57 @@ ui <- fluidPage(
     
     #### Formato del Tab ####
     tabPanel(
-      "Tab_3",
+      "test1",
       tabsetPanel(
         
         # tab de dfmalt
-        tabPanel("Subtab_3A"), # Mantener vacío
-        tabPanel("Subtab_3B")  # Mantener vacío
+        tabPanel("test_A",
+                 mainPanel(
+                   DTOutput("dataTable_test"),
+                   plotlyOutput("boxPlot_test"),
+                   plotlyOutput("barPlot_test"),
+                   plotOutput("linePlot_test")
+                 )
+                 ),
+        tabPanel("test_B",
+                 mainPanel(
+                   DTOutput("dataTable_test2")
+                 ))
+        
+      )
+    ),
+    
+    #### Formato del Tab ####
+    tabPanel(
+      "test2",
+      icon = icon("exclamation-triangle"),
+      sidebarLayout(
+        div(sidebarPanel(
+          selectInput("yearInput_xiom", "Seleccionar xiom:", choices = unique(homiEdad$año)),
+          selectInput("yearInput_yeiz", "Seleccionar yeiza:", choices = unique(homiEdad$año))
+        )
+        ),
+        
+        mainPanel(
+          tabsetPanel(
+            tabPanel(
+              "Homicidios por grupo de Edad",
+              uiOutput("yearInput_xiom"),
+              uiOutput("yearInput_yeiz")
+            ),
+
+            # tab con datos de Incidentes
+            # tabPanel("Incidentes_snmv",
+            #          uiOutput("yearInput_yeiz")),
+            # 
+            # # tab con datos de Tasas
+            # tabPanel("Tasas_snmv",
+            #          uiOutput("yearInput_xiom")
+            #          )
+          )
+        )
       )
     )
+    
   )
 )

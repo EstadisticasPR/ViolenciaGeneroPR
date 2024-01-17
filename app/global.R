@@ -25,6 +25,9 @@ lapply(packages, function(pkg) {
   library(pkg, character.only = TRUE)
 })
 
+# cargando el dataset starwars para testing
+data("starwars")
+
 ##################################################################
 ##### convert_mixed_columns se usa para manejar missing data #####
 ##################################################################

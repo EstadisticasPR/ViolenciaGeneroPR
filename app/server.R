@@ -44,6 +44,7 @@ server <- function(input, output, session) {
       geom_line(size = 1.3) +
       geom_point(size = 1.5) +
       scale_fill_manual(values = colores_homiEdad) +
+      # pepe: recuerda que no hay limite de y fijo y que se reajusta con cada filtración; arregla esto
       #ylim(0, max(filtered_edad_snmv()$casos) + 5) +  # Establecer límites del eje y entre 0 y el maximo
       theme_minimal() +
       labs(title = "Evolución de Casos por Grupo de Edad y Año", x = "Año", y = "Casos", color = "Grupos de Edad") +
@@ -56,7 +57,8 @@ server <- function(input, output, session) {
   output$barPlot_snmv <- renderPlotly({
     p <- ggplot(filtered_edad_año_snmv(), aes(x = edad, y = casos, fill = edad)) +
       geom_bar(stat = "identity") +
-      #ylim(0, max(filtered_edad_snmv()$casos) + 5) +
+      # pepe: recuerda que no hay limite de y fijo y que se reajusta con cada filtración; arregla esto
+      #ylim(0, max(filtered_edad_snmv()$casos) + 5) + 
       labs(title = paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
            x = "Grupo de Edad", y = "Casos", fill = "Grupos de Edad") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
@@ -82,8 +84,7 @@ server <- function(input, output, session) {
         dom = 'lftpB', 
         buttons = c('copy', 'csv', 'excel')
       )
-    ) %>% 
-      formatRound(columns = 2:ncol(filtered_edad_snmv()), digits = 0, mark = ",")
+    ) 
   })
   
   observeEvent(input$yearInput_snmv, {
@@ -102,20 +103,6 @@ server <- function(input, output, session) {
            Año %in% input$yearInput_fam,
            Maltrato %in% input$checkGroup_fam)
   })
-  
-  # observe({
-  #   if ("Seleccionar Todos" %in% input$checkGroup_fam) {
-  #     updateCheckboxGroupInput(
-  #       session, "checkGroup_fam",
-  #       choices = c("Seleccionar Todos", levels(dfMalt$Maltrato)),
-  #       selected = levels(dfMalt$Maltrato)
-  #     )
-  #   }
-  # })
-  # 
-  # observeEvent(input$deselectAll_fam, {
-  #   updateCheckboxGroupInput(session, "checkGroup_fam", selected = character(0))
-  # })
   
   ### funcion para el boton de deseleccionar/seleccionar
   observeEvent(input$deselectAll_fam, {
@@ -162,44 +149,25 @@ server <- function(input, output, session) {
   })
   
   # Data Table del DeptFam
+
   output$dataTable_fam <- renderDT({
     datatable(
-      dfMalt,
-      extensions = c('Buttons'),
+      filtered_data_fam(),
+      extensions = c('Buttons'), 
       options = list(
         pageLength = 5,
-        lengthMenu = c(5, nrow(dfMalt) / 2, nrow(dfMalt)),
+        lengthMenu = c(5, nrow(filtered_data_fam()) / 2, nrow(filtered_data_fam())),
         scrollX = TRUE,
         paging = TRUE,
         searching = TRUE,
         fixedColumns = TRUE,
         autoWidth = FALSE,
         ordering = TRUE,
-        dom = 'lftpB', 
+        dom = 'lftpB',
         buttons = c('copy', 'csv', 'excel')
       )
-    ) %>% 
-      formatRound(columns = 2:ncol(dfMalt), digits = 0, mark = ",")
+    )
   })
-  # output$dataTable_fam <- renderDT({
-  #   datatable(
-  #     filtered_data_fam(),
-  #     extensions = c('Buttons'),
-  #     options = list(
-  #       pageLength = 5,
-  #       lengthMenu = c(5, nrow(filtered_data_fam()) / 2, nrow(filtered_data_fam())),
-  #       scrollX = TRUE,
-  #       paging = TRUE,
-  #       searching = TRUE,
-  #       fixedColumns = TRUE,
-  #       autoWidth = FALSE,
-  #       ordering = TRUE,
-  #       dom = 'lftpB', 
-  #       buttons = c('copy', 'csv', 'excel')
-  #     )
-  #   ) %>% 
-  #     formatRound(columns = 2:ncol(filtered_data_fam()), digits = 0, mark = ",")
-  # })
   
   observeEvent(input$yearInput_fam, {
     updateSelectInput(session, "yearInput_fam", selected = input$yearInput_fam)
@@ -237,21 +205,6 @@ server <- function(input, output, session) {
       )
     }
   })
-  
-  # # arreglar issue del tooltip duplicando la columna
-  # output$boxPlot_just <- renderPlotly({
-  #   # Gráfico de línea para la evolución de casos por grupo de columna y año
-  #   p <- ggplot(filtered_data_just(), aes(x = Año, y = casos, group = Delito, color = Delito)) +
-  #     geom_line(size = 1.3) +
-  #     geom_point(size = 1.5) +
-  #     #scale_fill_manual(values = colores_dfDeli_nueva_agencia) +
-  #     #ylim(0, max(filtered_data_nueva_agencia()$casos) + 5) +  # Establecer límites del eje y entre 0 y el máximo
-  #     theme_minimal() +
-  #     labs(title = "Evolución de Casos por Grupo de Columna y Año", x = "Año", y = "Casos", color = "Grupos de Columna") +
-  #     theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  #   
-  #   ggplotly(p)
-  # })
   
   output$boxPlot_just <- renderPlotly({
     p <- ggplot(filtered_data_just(), aes(x = Año, y = Casos)) +
@@ -313,11 +266,50 @@ server <- function(input, output, session) {
         dom = 'lftpB', 
         buttons = c('copy', 'csv', 'excel')
       )
-    ) %>% 
-      formatRound(columns = 2:ncol(filtered_data_just()), digits = 0, mark = ",")
+    ) 
   })
   
   observeEvent(input$yearInput_just, {
     updateSelectInput(session, "yearInput_just", selected = input$yearInput_just)
+  })
+  ########## Server de Prueba ##########
+  # Data table del DeptJust
+  output$dataTable_test <- renderDT({
+    datatable(
+      starwars,
+      extensions = c('Buttons'), # Asegúrate de incluir la extensión 'Buttons'
+      options = list(
+        pageLength = 5,
+        lengthMenu = c(5, nrow(starwars) / 2, nrow(starwars)),
+        scrollX = TRUE,
+        paging = TRUE,
+        searching = TRUE,
+        fixedColumns = TRUE,
+        autoWidth = FALSE,
+        ordering = TRUE,
+        dom = 'lftpB', 
+        buttons = c('copy', 'csv', 'excel')
+      )
+    )
+  })
+  
+  ## tab 2
+  output$dataTable_test2 <- renderDT({
+    datatable(
+      dfMalt,
+      extensions = c('Buttons'), # Asegúrate de incluir la extensión 'Buttons'
+      options = list(
+        pageLength = 5,
+        lengthMenu = c(5, nrow(starwars) / 2, nrow(starwars)),
+        scrollX = TRUE,
+        paging = TRUE,
+        searching = TRUE,
+        fixedColumns = TRUE,
+        autoWidth = FALSE,
+        ordering = TRUE,
+        dom = 'lftpB', 
+        buttons = c('copy', 'csv', 'excel')
+      )
+    )
   })
 }
