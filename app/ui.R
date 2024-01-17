@@ -1,6 +1,3 @@
-# Cargar el contenido de global.R
-source("global.R")
-
 # User Interface 
 ui <- fluidPage(
   

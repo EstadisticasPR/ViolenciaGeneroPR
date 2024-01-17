@@ -1,6 +1,3 @@
-# Cargar el contenido de global.R
-source("global.R")
-
 # Server
 server <- function(input, output, session) {
   
@@ -20,36 +17,47 @@ server <- function(input, output, session) {
   
   ### funcion para el boton de deseleccionar/seleccionar
   observeEvent(input$deselectAll_snmv, {
-    
+
     if (is.null(input$checkGroup_snmv)) {
       updateCheckboxGroupInput(
-        session, 
-        "checkGroup_snmv", 
+        session,
+        "checkGroup_snmv",
         choices = levels(homiEdad$edad),
         selected = levels(homiEdad$edad)
         )
     } else {
       updateCheckboxGroupInput(
-        session, 
-        "checkGroup_snmv", 
+        session,
+        "checkGroup_snmv",
         selected = character(0)
         )
     }
   })
   
+  ### pepe: arreglar issue cuando el boton se reactiva
+  # observeEvent(input$deselectAll_snmv, {
+  #   updateCheckboxGroup(session, "checkGroup_snmv", levels(homiEdad$edad), levels(homiEdad$edad))
+  # })
+  
   # Grafico lineal del SNMV
+  # output$linePlot_snmv <- renderPlotly({
+  #   # Gráfico de línea para la evolución de casos por grupo de edad y año
+  #   p <- ggplot(filtered_edad_snmv(), aes(x = año, y = casos, group = edad, color = edad)) +
+  #     geom_line(linewidth = 1.3) +
+  #     geom_point(size = 1.5) +
+  #     scale_fill_manual(values = colores_homiEdad) + 
+  #     # pepe: recuerda que no hay limite de y fijo y que se reajusta con cada filtración; arregla esto
+  #     #ylim(0, max(filtered_edad_snmv()$casos) + 5) +  # Establecer límites del eje y entre 0 y el maximo
+  #     theme_minimal() +
+  #     labs(title = "Evolución de Casos por Grupo de Edad y Año", x = "Año", y = "Casos", color = "Grupos de Edad") +
+  #     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  # 
+  #   ggplotly(p, tooltip = c("x", "y", "color"))
+  # })
+  
   output$linePlot_snmv <- renderPlotly({
-    # Gráfico de línea para la evolución de casos por grupo de edad y año
-    p <- ggplot(filtered_edad_snmv(), aes(x = año, y = casos, group = edad, color = edad)) +
-      geom_line(size = 1.3) +
-      geom_point(size = 1.5) +
-      scale_fill_manual(values = colores_homiEdad) +
-      # pepe: recuerda que no hay limite de y fijo y que se reajusta con cada filtración; arregla esto
-      #ylim(0, max(filtered_edad_snmv()$casos) + 5) +  # Establecer límites del eje y entre 0 y el maximo
-      theme_minimal() +
-      labs(title = "Evolución de Casos por Grupo de Edad y Año", x = "Año", y = "Casos", color = "Grupos de Edad") +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
-    
+    p <- renderLinePlot(filtered_edad_snmv, "año", "casos", "edad", "edad",
+                   "Evolución de Casos por Grupo de Edad y Año", "Año", "Casos")
     ggplotly(p, tooltip = c("x", "y", "color"))
   })
   
@@ -124,17 +132,25 @@ server <- function(input, output, session) {
   })
   
   
+  # output$linePlot_fam <- renderPlotly({
+  #   p <- ggplot(filtered_data_fam(), aes(x = Año, y = Casos, color = Maltrato, group = Maltrato)) +
+  #     geom_line(linewidth = 1) +
+  #     geom_point() +
+  #     labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos", color = "Tipo de Maltrato") +
+  #     theme_minimal() +
+  #     facet_wrap(~Sexo, scales = "fixed", drop = FALSE) +
+  #     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  # 
+  #   ggplotly(p, tooltip = c("x", "y", "color"))
+  # })
+  
   output$linePlot_fam <- renderPlotly({
-    p <- ggplot(filtered_data_fam(), aes(x = Año, y = Casos, color = Maltrato, group = Maltrato)) +
-      geom_line(linewidth = 1) +
-      geom_point() +
-      labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos", color = "Tipo de Maltrato") +
-      theme_minimal() +
-      facet_wrap(~Sexo, scales = "fixed", drop = FALSE) +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
-    
+    p <- renderLinePlot(filtered_data_fam, "Año", "Casos", "Maltrato", "Maltrato",
+                   "Casos de Maltrato por Año y Tipo", "Año", "Casos", facet = TRUE, facet_var = "Sexo")
+
     ggplotly(p, tooltip = c("x", "y", "color"))
   })
+  
   
   output$barPlot_fam <- renderPlotly({
     p <- ggplot(filtered_data_año_fam(), aes(x = Maltrato, y = Casos, fill = Sexo)) +
