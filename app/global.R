@@ -1,3 +1,5 @@
+# pepe: traduce a español
+print("Sourcing global objects from global.R")
 ########################################
 #### Cargar bibliotecas necesarias #####
 ########################################

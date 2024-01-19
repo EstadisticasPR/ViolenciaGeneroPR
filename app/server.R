@@ -1,3 +1,7 @@
+# Importar el contenido de global.R y utils.R
+source("utils.R")
+source("global.R")
+
 # Server
 server <- function(input, output, session) {
   
@@ -40,21 +44,6 @@ server <- function(input, output, session) {
   # })
   
   # Grafico lineal del SNMV
-  # output$linePlot_snmv <- renderPlotly({
-  #   # Gráfico de línea para la evolución de casos por grupo de edad y año
-  #   p <- ggplot(filtered_edad_snmv(), aes(x = año, y = casos, group = edad, color = edad)) +
-  #     geom_line(linewidth = 1.3) +
-  #     geom_point(size = 1.5) +
-  #     scale_fill_manual(values = colores_homiEdad) + 
-  #     # pepe: recuerda que no hay limite de y fijo y que se reajusta con cada filtración; arregla esto
-  #     #ylim(0, max(filtered_edad_snmv()$casos) + 5) +  # Establecer límites del eje y entre 0 y el maximo
-  #     theme_minimal() +
-  #     labs(title = "Evolución de Casos por Grupo de Edad y Año", x = "Año", y = "Casos", color = "Grupos de Edad") +
-  #     theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  # 
-  #   ggplotly(p, tooltip = c("x", "y", "color"))
-  # })
-  
   output$linePlot_snmv <- renderPlotly({
     p <- renderLinePlot(filtered_edad_snmv, "año", "casos", "edad", "edad",
                    "Evolución de Casos por Grupo de Edad y Año", "Año", "Casos")
@@ -66,14 +55,22 @@ server <- function(input, output, session) {
     p <- ggplot(filtered_edad_año_snmv(), aes(x = edad, y = casos, fill = edad)) +
       geom_bar(stat = "identity") +
       # pepe: recuerda que no hay limite de y fijo y que se reajusta con cada filtración; arregla esto
-      #ylim(0, max(filtered_edad_snmv()$casos) + 5) + 
+      #ylim(0, max(filtered_edad_snmv()$casos) + 5) +
       labs(title = paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
            x = "Grupo de Edad", y = "Casos", fill = "Grupos de Edad") +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
       coord_flip()
-    
+
     ggplotly(p, tooltip = c("x", "y"))  # Especificamos qué información mostrar en el tooltip
   })
+  
+  # output$barPlot_snmv <- renderPlotly({
+  #   p <- renderBarPlot(filtered_edad_año_snmv, "edad", "casos", "edad",
+  #                 paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
+  #                 "Grupos de Edad", "Grupo de Edad", "Casos")
+  # 
+  #   ggplotly(p, tooltip = c("x", "y", "fill"))
+  # })
   
   # Data table del SNMV
   output$dataTable_snmv <- renderDT({
@@ -89,11 +86,17 @@ server <- function(input, output, session) {
         fixedColumns = TRUE,
         autoWidth = FALSE,
         ordering = TRUE,
-        dom = 'lftpB', 
+        dom = 'lftpB',
         buttons = c('copy', 'csv', 'excel')
       )
-    ) 
+    )
   })
+
+#output$dataTable_snmv <- renderPepe(filtered_edad_snmv)
+
+
+
+  
   
   observeEvent(input$yearInput_snmv, {
     updateSelectInput(session, "yearInput_snmv", selected = input$yearInput_snmv)
@@ -131,19 +134,7 @@ server <- function(input, output, session) {
     }
   })
   
-  
-  # output$linePlot_fam <- renderPlotly({
-  #   p <- ggplot(filtered_data_fam(), aes(x = Año, y = Casos, color = Maltrato, group = Maltrato)) +
-  #     geom_line(linewidth = 1) +
-  #     geom_point() +
-  #     labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos", color = "Tipo de Maltrato") +
-  #     theme_minimal() +
-  #     facet_wrap(~Sexo, scales = "fixed", drop = FALSE) +
-  #     theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  # 
-  #   ggplotly(p, tooltip = c("x", "y", "color"))
-  # })
-  
+  # crear gráfico lineal
   output$linePlot_fam <- renderPlotly({
     p <- renderLinePlot(filtered_data_fam, "Año", "Casos", "Maltrato", "Maltrato",
                    "Casos de Maltrato por Año y Tipo", "Año", "Casos", facet = TRUE, facet_var = "Sexo")
@@ -151,15 +142,16 @@ server <- function(input, output, session) {
     ggplotly(p, tooltip = c("x", "y", "color"))
   })
   
-  
+  # crear gráfico de barras
   output$barPlot_fam <- renderPlotly({
-    p <- ggplot(filtered_data_año_fam(), aes(x = Maltrato, y = Casos, fill = Sexo)) +
-      geom_bar(stat = "identity", position = "dodge") +
-      labs(title = paste("Distribución de Tipos de Maltrato en el Año", input$yearInput_fam),
-           x = "Tipo de Maltrato", y = "Casos", fill = "Sexo") +
-      theme_minimal() +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-      coord_flip()
+    p <- renderBarPlot(data = filtered_data_año_fam, 
+                  x = "Maltrato",
+                  y = "Casos",
+                  fill = "Sexo",
+                  title = paste("Distribución de Tipos de Maltrato en el Año", input$yearInput_fam),
+                  xlab = "Tipo de Maltrato",
+                  ylab = "Casos",
+                  fillLab = "Sexo")
     
     ggplotly(p, tooltip = c("x", "y", "fill"))
   })
@@ -231,24 +223,29 @@ server <- function(input, output, session) {
       geom_point(aes(color = `FISCALIA DISTRITO`)) +
       theme_minimal() +
       facet_wrap(~Delito, scales = "fixed")
-    
+
     ggplotly(p, tooltip = c("x", "y", "color"))
   })
   
-  # arreglar issue del tooltip duplicando la columna
+  # output$boxPlot_just <- renderPlotly({
+  #   p <- renderBoxPlot(
+  #     data = filtered_data_just(), x = "Año", y = "Casos", color = "`FISCALIA DISTRITO`",
+  #     title = "Distribución de Casos por Delito", xlab = "Año", ylab = "Casos",
+  #     colorLab = "Distrito Fiscal", facet = TRUE, facet_var = "Delito"
+  #   )
+  #   ggplotly(p, tooltip = c("x", "y", "color"))
+  # })
+  
+  # crear el grafico de barras
   output$barPlot_just <- renderPlotly({
-    p <- ggplot(filtered_data_año_just(), aes(x = Delito, y = Casos, fill = Delito)) +
-      geom_bar(stat = "identity", position = "dodge") +
-      labs(title = "Número de Casos por Delito (Año 2023)", x = "Delito Cometido", y = "Número de Casos", fill = "Delito Cometido") +
-      facet_wrap(~ Año, scales = "fixed") +
-      theme_minimal() +
-      facet_wrap(~`FISCALIA DISTRITO`, scales = "fixed") + 
-      coord_flip()
-    
+    p <- renderBarPlot(filtered_data_año_just, x = "Delito", y = "Casos", fill = "Delito",
+                       title = "Número de Casos por Delito (Año 2023)",
+                       xlab = "Delito Cometido", ylab = "Número de Casos",
+                       fillLab = "Delito Cometido", facet = TRUE, 
+                       facet_var = "`FISCALIA DISTRITO`")
     ggplotly(p, tooltip = c("y", "fill"))  # Especificamos qué información mostrar en el tooltip
   })
   
-  # need to add tooltip functionality; ggplotly returns an error 
   output$deliPlot_just <- renderPlot({
     filtered_data <- subset(dfDeli, Año == input$yearInput_just & Delito == input$checkGroup_just)
     

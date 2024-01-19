@@ -2,11 +2,12 @@ Estructura de carpetas
 app: Carpeta principal que contiene los archivos de la aplicación Shiny.
 ui.R: Archivo de definición de la interfaz de usuario.
 server.R: Archivo de definición del servidor.
-global.R (opcional): Archivo para definiciones y operaciones globales.
-www: Carpeta opcional para recursos estáticos como imágenes, CSS o archivos JavaScript.
+global.R: Archivo para definiciones y operaciones globales.
+utils.R: Archivo para funciones auxiliares.
+www: Carpeta para recursos estáticos como imágenes, CSS o archivos JavaScript.
 data: Carpeta para almacenar archivos de datos utilizados en la aplicación.
-docs: Carpeta opcional, puede contener la documentación del proyecto.
-scripts: Carpeta para scripts adicionales utilizados en el proyecto (por ejemplo, scripts de limpieza de datos).
+docs: Carpeta para contener la documentación del proyecto.
+scripts: Carpeta para scripts adicionales utilizados en el proyecto (por ejemplo, scripts de visualizaciones preliminares).
 tests: Carpeta para archivos de pruebas si se están utilizando.
 .Rproj: Archivo de proyecto de RStudio.
 

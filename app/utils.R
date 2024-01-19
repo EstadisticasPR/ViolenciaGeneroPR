@@ -1,3 +1,5 @@
+# pepe: traduce a español
+print("Sourcing helper functions from utils.R")
 ###############################
 #### Helper Functions: UI  ####
 ###############################
@@ -46,16 +48,7 @@ updateCheckboxGroup <- function(session, inputId, choices, selected) {
 }
 
 # Función para renderizar gráficos de línea
-renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab) {
-  ggplot(data(), aes_string(x = x, y = y, group = group, color = color)) +
-    geom_line(linewidth = 1.3) +
-    geom_point(size = 1.5) +
-    theme_minimal() +
-    labs(title = title, x = xlab, y = ylab, color = color) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-}
-
-renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, facet = FALSE, facet_var = NULL) {
+renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, facet = FALSE, facet_var = NULL) {
   p <- ggplot(data(), aes_string(x = x, y = y, group = group, color = color)) +
     geom_line(linewidth = 1.3) +
     geom_point(size = 1.5) +
@@ -70,30 +63,38 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, facet = 
   print(p)
 }
 
-
 #### cosas pa añadir a renderLinePlot
-scale_fill_manual(values = colores_homiEdad) # añadir funcionalidad para setear manualmente los colores de las graficas
-
-
+#scale_fill_manual(values = colores_homiEdad) # añadir funcionalidad para setear manualmente los colores de las graficas
 
 # Función para renderizar gráficos de barras
-renderBarPlot <- function(data, x, y, fill, title, xlab, ylab) {
-  ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
-    geom_bar(stat = "identity") +
+renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, facet = FALSE, facet_var = NULL) {
+  p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
+    geom_bar(stat = "identity", position = "dodge") +
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     coord_flip() +
-    labs(title = title, x = xlab, y = ylab, fill = fill)
+    labs(title = title, x = xlab, y = ylab, fill = fillLab)
+  
+  if (facet && !is.null(facet_var)) {
+    p <- p + facet_wrap(as.formula(paste("~", facet_var)), scales = "fixed", drop = FALSE)
+  }
+  print(p)
+  #return(p)
 }
 
 # Función para renderizar gráficos de caja
-renderBoxPlot <- function(data, x, y, title, xlab, ylab) {
-  ggplot(data(), aes_string(x = x, y = y)) +
+renderBoxPlot <- function(data, x, y, color, title, xlab, ylab, colorlab = color, facet = FALSE, facet_var = NULL) {
+  p <- ggplot(data, aes_string(x = x, y = y)) +
     geom_boxplot() +
-    geom_point(aes(color = "FISCALIA DISTRITO")) +
+    geom_point(aes(color = color)) +
     theme_minimal() +
-    facet_wrap(~Delito, scales = "fixed") +
-    labs(title = title, x = xlab, y = ylab)
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title = title, x = xlab, y = ylab, color = colorlab)
+  
+  if (facet && !is.null(facet_var)) {
+    p <- p + facet_wrap(as.formula(paste("~", facet_var)), scales = "fixed", drop = FALSE)
+  }
+  print(p)
 }
 
 # Función para renderizar gráficos de distribución
@@ -117,9 +118,9 @@ renderPointPlot <- function(data, x, y, title, xlab, ylab) {
 }
 
 # Función para renderizar tablas de datos
-renderDataTable <- function(data) {
+renderPepe <- function(data) {
   datatable(
-    data,
+    data(),
     extensions = c('Buttons'),
     options = list(
       pageLength = 5,
