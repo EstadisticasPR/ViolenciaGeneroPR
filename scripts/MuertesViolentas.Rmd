@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Imports
-```{r}
+```{r, message=FALSE, echo=FALSE}
 library(tidyverse)
 library(readxl)
 library(openxlsx)
@@ -20,59 +20,10 @@ library(here)
 path <- here("data", "Sistema_de_Notificacion_de_Muertes_Violentas", "/")
 ```
 
-```{r}
-options(scipen = 999, digits = 3)
-tasas <- read_excel(paste0(path, "snmvTasas.xlsx")) %>%
-  rename(año = year)
-tasas_calc <- tasas %>% 
-  filter(tipo %in% c("Tasa Cruda", "Tasa Ajustada")) 
-tasas_calc
-```
-# Gráfico de barras para comparar la cantidad de homicidios a lo largo de los años para ambos sexos.
-```{r}
-ggplot(subset(tasas, tipo == "Homicidios"), aes(x = factor(año), y = cantidad, fill = sexo)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Comparación de Cantidad de Homicidios por Año y Sexo", x = "Año", y = "Cantidad", fill = "Sexo") +
-  theme_minimal()
-```
-# Gráfico de puntos para mostrar la relación entre la población y los homicidios en ambos sexos.
-```{r}
-ggplot(subset(tasas, tipo %in% c("Tasa Cruda", "Tasa Ajustada")), aes(x = año, y = cantidad, fill = tipo)) +
-  geom_area() +
-  facet_wrap(~ sexo) +
-  labs(title = "Distribución de Tasas Crudas y Ajustadas por Año y Sexo", x = "Año", y = "Cantidad", fill = "Tipo") +
-  theme_minimal()
-```
-
-```{r}
-ggplot(tasas_calc, aes(x = factor(año), y = cantidad, fill = tipo)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Cantidad por Tipo en cada Año", x = "Año", y = "Cantidad", fill = "Tipo") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggplot(tasas, aes(x = factor(año), y = cantidad, color = tipo)) +
-  geom_line() +
-  labs(title = "Tendencia de Cada Tipo a lo largo de los Años", x = "Año", y = "Cantidad", color = "Tipo") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggplot(tasas, aes(x = factor(año), y = cantidad, color = tipo)) +
-  geom_point(position = position_dodge(width = 0.5), size = 3) +
-  labs(title = "Comparación de Cantidad por Tipo en cada Año", x = "Año", y = "Cantidad", color = "Tipo") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-```
-
-
-# Homicidios por Grupo de Edad 
-```{r}
-homiEdad <- read_excel(paste0(path, "svmvhomiEdad.xlsx"))
-
-
+## Incidentes violentos: Homicidios de mujeres por grupo de edad según el año, desde 2017-2020
+```{r, echo=FALSE}
 # Eliminar la fila 'Total' ya que molesta en las visualizaciones
-homiEdad_long_xtotals <- homiEdad %>%
+homiEdad <- read_excel(paste0(path, "svmvhomiEdad.xlsx")) %>%
   select(-Total) %>%
   filter(!grepl("Total", `Grupo de edad`) & `Grupo de edad` != "Desconocido") %>%
   pivot_longer(!`Grupo de edad`, names_to = "año", values_to = "casos") %>%
@@ -83,187 +34,168 @@ homiEdad_long_xtotals <- homiEdad %>%
     )
 
 # Definir una paleta de colores personalizada
-grupos_edad <- unique(homiEdad_long_xtotals$edad)
+grupos_edad <- unique(homiEdad$edad)
 paleta_colores <- scales::hue_pal()(length(grupos_edad))
 colores_grupos_edad <- setNames(paleta_colores, grupos_edad)
+homiEdad
 ```
 
-
-# Cantidad de Incidentes por Grupo de Edad por Año
-```{r}
-# Gráfico de barras por año y grupo de edad
-ggplot(subset(homiEdad_long_xtotals, año == "2017"), aes(x = edad, y = casos, fill = factor(edad))) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = colores_grupos_edad) +
-  theme_minimal() +
-  labs(title = "Cantidad de Incidentes por Grupo de Edad en el 2017", x = "Grupo de Edad", y = "Cantidad de Incidentes", fill = "Grupo de Edad") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-# Gráfico de barras por año y grupo de edad
-ggplot(subset(homiEdad_long_xtotals, año == "2018"), aes(x = edad, y = casos, fill = factor(edad))) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = colores_grupos_edad) +
-  theme_minimal() +
-  labs(title = "Cantidad de Incidentes por Grupo de Edad en el 2018", x = "Grupo de Edad", y = "Cantidad de Incidentes", fill = "Grupo de Edad") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-# Gráfico de barras por año y grupo de edad
-ggplot(subset(homiEdad_long_xtotals, año == "2019"), aes(x = edad, y = casos, fill = factor(edad))) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = colores_grupos_edad) +
-  theme_minimal() +
-  labs(title = "Cantidad de Incidentes por Grupo de Edad en el 2019", x = "Grupo de Edad", y = "Cantidad de Incidentes", fill = "Grupo de Edad") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-# Gráfico de barras por año y grupo de edad
-ggplot(subset(homiEdad_long_xtotals, año == "2020"), aes(x = edad, y = casos, fill = factor(edad))) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = colores_grupos_edad) +
-  theme_minimal() +
-  labs(title = "Cantidad de Incidentes por Grupo de Edad en el 2020", x = "Grupo de Edad", y = "Cantidad de Incidentes", fill = "Grupo de Edad") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-```{r}
-# Gráfico de barras por año y grupo de edad
-ggplot(homiEdad_long_xtotals, aes(x = edad, y = casos, fill = factor(edad))) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = colores_grupos_edad) +
-  theme_minimal() +
-  labs(title = "Cantidad de Incidentes por Grupo de Edad por Año", x = "Grupo de Edad", y = "Cantidad de Incidentes", fill = "Grupo de Edad") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
-  facet_wrap(~ año, scales = "fixed")
-```
-# Evolución de Casos por Grupo de Edad y Año
-```{r}
+```{r, echo=FALSE}
 # Crear el gráfico lineal
-ggplot(homiEdad_long_xtotals, aes(x = factor(año), y = casos, group = edad, color = edad)) +
-  geom_line(size = 1.3) +
+ggplot(homiEdad, aes(x = factor(año), y = casos, group = edad, color = edad)) +
+  geom_line(linewidth = 1.3) +
   geom_point(size = 1.5) +
   theme_minimal() +
   scale_fill_manual(values = colores_grupos_edad) +
-  labs(title = "Evolución de Casos por Grupo de Edad y Año", x = "Año", y = "Casos", color = "Grupos de Edad") +
+  labs(title = "1: Evolución de Casos por Grupo de Edad y Año", x = "Año", y = "Casos", color = "Grupos de Edad") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+# Gráfico de barras por año y grupo de edad
+ggplot(homiEdad, aes(x = edad, y = casos, fill = factor(edad))) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = colores_grupos_edad) +
+  theme_minimal() +
+  labs(title = "2: Cantidad de Incidentes por Grupo de Edad por Año", x = "Grupo de Edad", y = "Cantidad de Incidentes", fill = "Grupo de Edad") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  facet_wrap(~ año, scales = "fixed") +
+  coord_flip()
+```
+# Evolución de Casos por Grupo de Edad y Año
+```{r, echo=FALSE}
+# # Definir una paleta de colores personalizada
+# grupos_año <- c("2017", "2018","2019","2020")
+# paleta_colores <- scales::hue_pal()(length(grupos_año))
+# colores_grupos_año <- año_individual <- setNames(paleta_colores, grupos_año)
+# 
+# ggplot(homiEdad, aes(x = edad, y = casos, color = factor(año), group = año)) +
+#   geom_line(size = 1.0) +
+#   geom_point() +
+#   theme_minimal() +
+#   scale_fill_manual(values = colores_grupos_año) +
+#   geom_smooth(method = "lm", se = FALSE) +
+#   labs(title = "Cantidad de Incidentes por Grupo de Edad por Año", x = "Grupo de Edad", y = "Cantidad de Incidentes", color = "Año") +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# # Definir una paleta de colores personalizada
+# año_individual <- c("2017", "2018","2019","2020")
+# paleta_colores <- scales::hue_pal()(length(año_individual))
+# colores_grupos_año <- setNames(paleta_colores, año_individual)
+# 
+# ggplot(subset(homiEdad, año == año_individual[1]), aes(x = edad, y = casos, color =  año, group = año)) +
+#   geom_line(size = 1.0) +
+#   geom_point() +
+#   theme_minimal() +
+#   scale_color_manual(values = colores_grupos_año[1]) +
+#   geom_smooth(method = "lm", se = FALSE) +
+#   labs(title = paste("Cantidad de Incidentes por Grupo de Edad en el", año_individual[1]), x = "Grupo de Edad", y = "Cantidad de Incidentes", color = "año") +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# 
+# ggplot(subset(homiEdad, año == año_individual[2]), aes(x = edad, y = casos, color = factor(año), group = año)) +
+#   geom_line(size = 1.0) +
+#   geom_point() +
+#   theme_minimal() +
+#   scale_color_manual(values = colores_grupos_año[2]) +
+#   geom_smooth(method = "lm", se = FALSE) +
+#   labs(title = paste("Cantidad de Incidentes por Grupo de Edad en el", año_individual[2]), x = "Grupo de Edad", y = "Cantidad de Incidentes", color = "año") +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# 
+# ggplot(subset(homiEdad, año == año_individual[3]), aes(x = edad, y = casos, color = factor(año), group = año)) +
+#   geom_line(linewidth = 1.0) +
+#   geom_point() +
+#   theme_minimal() +
+#   scale_color_manual(values = colores_grupos_año[3]) +
+#   geom_smooth(method = "lm", se = FALSE) +
+#   labs(title = paste("Cantidad de Incidentes por Grupo de Edad en el", año_individual[3]), x = "Grupo de Edad", y = "Cantidad de Incidentes", color = "año") +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# 
+# ggplot(subset(homiEdad, año == año_individual[4]), aes(x = edad, y = casos, color = factor(año), group = año)) +
+#   geom_line(size = 1.0) +
+#   geom_point() +
+#   theme_minimal() +
+#   scale_color_manual(values = colores_grupos_año[4]) +
+#   geom_smooth(method = "lm", se = FALSE) +
+#   labs(title = paste("Cantidad de Incidentes por Grupo de Edad en el", año_individual[4]), x = "Grupo de Edad", y = "Cantidad de Incidentes", color = "año") +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+##
+
+# # Calcula las estadísticas necesarias
+# summary_stats <- homiEdad %>%
+#   group_by(año) %>%
+#   summarise(media = mean(casos),
+#             mediana = median(casos),
+#             desv_std = sd(casos),
+#             intervalo_inf = mean(casos) - 1.96 * (sd(casos) / sqrt(length(casos))), # límite inferior del intervalo de confianza del 95%
+#             intervalo_sup = mean(casos) + 1.96 * (sd(casos) / sqrt(length(casos)))  # límite superior del intervalo de confianza del 95%
+#             )
+# 
+# # Gráfico de líneas con estadísticas
+# ggplot(homiEdad, aes(x = factor(año), y = casos, group = edad, color = edad)) +
+#   geom_line(size = 1.3) +
+#   geom_point(size = 1.5) +
+#   stat_summary(fun = "median", geom = "point", size = 3, shape = 23, fill = "white") + # Punto para la mediana
+#   stat_summary(fun = "mean", geom = "line", aes(group = 1), color = "black", size = 1) + # Línea para la media
+#   geom_ribbon(data = summary_stats, aes(x = factor(año), ymin = intervalo_inf, ymax = intervalo_sup), alpha = 0.3, fill = "blue") + # Intervalo de confianza
+#   labs(title = "Evolución de Casos por Grupo de Edad y Año", x = "Año", y = "Casos", color = "Grupos de Edad") +
+#   theme_minimal() +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-# Cantidad de Incidentes por Grupo de Edad por Año
-```{r}
-# Definir una paleta de colores personalizada
-grupos_año <- c("2017", "2018","2019","2020")
-paleta_colores <- scales::hue_pal()(length(grupos_año))
-colores_grupos_año <- año_individual <- setNames(paleta_colores, grupos_año)
 
-ggplot(homiEdad_long_xtotals, aes(x = edad, y = casos, color = factor(año), group = año)) +
-  geom_line(size = 1.0) +
-  geom_point() +
-  theme_minimal() +
-  scale_fill_manual(values = colores_grupos_año) +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(title = "Cantidad de Incidentes por Grupo de Edad por Año", x = "Grupo de Edad", y = "Cantidad de Incidentes", color = "Año") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-```{r}
-# Definir una paleta de colores personalizada
-año_individual <- c("2017", "2018","2019","2020")
-paleta_colores <- scales::hue_pal()(length(año_individual))
-colores_grupos_año <- setNames(paleta_colores, año_individual)
-
-ggplot(subset(homiEdad_long_xtotals, año == año_individual[1]), aes(x = edad, y = casos, color =  año, group = año)) +
-  geom_line(size = 1.0) +
-  geom_point() +
-  theme_minimal() +
-  scale_color_manual(values = colores_grupos_año[1]) +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(title = paste("Cantidad de Incidentes por Grupo de Edad en el", año_individual[1]), x = "Grupo de Edad", y = "Cantidad de Incidentes", color = "año") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggplot(subset(homiEdad_long_xtotals, año == año_individual[2]), aes(x = edad, y = casos, color = factor(año), group = año)) +
-  geom_line(size = 1.0) +
-  geom_point() +
-  theme_minimal() +
-  scale_color_manual(values = colores_grupos_año[2]) +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(title = paste("Cantidad de Incidentes por Grupo de Edad en el", año_individual[2]), x = "Grupo de Edad", y = "Cantidad de Incidentes", color = "año") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggplot(subset(homiEdad_long_xtotals, año == año_individual[3]), aes(x = edad, y = casos, color = factor(año), group = año)) +
-  geom_line(size = 1.0) +
-  geom_point() +
-  theme_minimal() +
-  scale_color_manual(values = colores_grupos_año[3]) +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(title = paste("Cantidad de Incidentes por Grupo de Edad en el", año_individual[3]), x = "Grupo de Edad", y = "Cantidad de Incidentes", color = "año") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggplot(subset(homiEdad_long_xtotals, año == año_individual[4]), aes(x = edad, y = casos, color = factor(año), group = año)) +
-  geom_line(size = 1.0) +
-  geom_point() +
-  theme_minimal() +
-  scale_color_manual(values = colores_grupos_año[4]) +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(title = paste("Cantidad de Incidentes por Grupo de Edad en el", año_individual[4]), x = "Grupo de Edad", y = "Cantidad de Incidentes", color = "año") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-# Incidentes 
-```{r}
-# compara inci con homiedad para enseñarle a Manuel la discrepancia en los numeros
-inci <- read_excel(paste0(path, "svmvIncidentes.xlsx"))
-inci_long_xtotals <- inci %>%
+## Incidentes violentos: Tipo de muerte según el año, desde 2017-2020
+*Manuel, mira como este dataset contradice lo que dice homiEdad arriba*
+```{r, echo=FALSE}
+inci <- read_excel(paste0(path, "svmvIncidentes.xlsx")) %>%
   select(-total) %>%
   pivot_longer(!`Tipo de Incidente`, names_to = "año", values_to = "casos") %>%
   filter(!grepl("Total de víctimas mujeres", `Tipo de Incidente`) & `Tipo de Incidente` != "Total de incidentes")
-
-# por alguna razon el filter() no esta leyendo el total de victimas mujeres
-inci_prop_sexo <- inci %>%
-  filter(`Tipo de Incidente` %in% c("Total de víctimas mujeres", "Total de incidentes"))
-
-inci %>%
-  filter(`Tipo de Incidente` == "Total de víctimas mujeres")
-
-inci %>%
-  select(-total) %>%
-  pivot_longer(!`Tipo de Incidente`, names_to = "año", values_to = "casos") %>%
-  filter(`Tipo de Incidente` %in% c("Total de víctimas mujeres", "Total de incidentes"))
+inci
 ```
 
-# Evolución de Casos por Tipo de Incidente y Año
-```{r}
-ggplot(inci_long_xtotals, aes(x = año, y = casos, color = `Tipo de Incidente`, group = `Tipo de Incidente`)) +
-  geom_line(size = 1.0) +
+```{r, echo=FALSE}
+ggplot(inci, aes(x = año, y = casos, color = `Tipo de Incidente`, group = `Tipo de Incidente`)) +
+  geom_line(linewidth = 1.0) +
   geom_point() +
-  labs(title = "Evolución de Casos por Tipo de Incidente y Año", x = "Año", y = "Casos", color = "Tipo de Incidente") +
+  labs(title = "3: Evolución de Casos por Tipo de Incidente y Año", x = "Año", y = "Casos", color = "Tipo de Incidente") +
   theme_minimal()
-```
-# Gráfico de barras apiladas para mostrar la distribución de casos por tipo de incidente en cada año
-```{r}
-ggplot(inci_long_xtotals, aes(x = año, y = casos, fill = `Tipo de Incidente`)) +
-  geom_bar(stat = "identity", position = "stack") +
-  labs(title = "Distribución de Casos por Tipo de Incidente en cada Año", x = "Año", y = "Casos", fill = "Tipo de Incidente") +
-  theme_minimal()
-```
-# Gráfico de barras agrupadas para comparar el número de casos entre los años para cada tipo de incidente
-```{r}
-ggplot(inci_long_xtotals, aes(x = año, y = casos, fill = `Tipo de Incidente`)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Comparación de Casos por Tipo de Incidente entre Años", x = "Año", y = "Casos", fill = "Tipo de Incidente") +
-  theme_minimal()
-```
 
-```{r}
-ggplot(inci_long_xtotals, aes(x = factor(año), y = casos, color = factor(año))) +
-  geom_line(aes(group = `Tipo de Incidente`), size = 1.2, alpha = 0.8) +
-  labs(title = "Casos por Tipo de Incidente y Año", x = "Año", y = "Casos", color = "Año") +
-  theme_minimal()
-```
-
-```{r}
-# Por ejemplo, para comparar los tipos de incidentes en 2020
-ggplot(subset(inci_long_xtotals, año == "2020"), aes(x = `Tipo de Incidente`, y = casos)) +
-  geom_point(position = position_dodge(width = 0.5), aes(color = `Tipo de Incidente`), size = 3) +
-  labs(title = "Comparación de Casos por Tipo de Incidente en 2020", x = "Tipo de Incidente", y = "Casos", color = "Tipo de Incidente") +
+ggplot(subset(inci, `Tipo de Incidente` %in% c("Homicidio único", "Homicidio múltiple")), aes(x = año, y = casos, fill = `Tipo de Incidente`)) +
+  geom_bar(stat = "identity") +
+  labs(title = "4: Comparación de Homicidios Únicos y Múltiples a lo largo de los Años", x = "Año", y = "Número de Casos") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
 
+## Tasas de homicidios crudas y ajustasas por edad, Puerto Rico desde 2017 al 2019
+```{r, echo=FALSE}
+options(scipen = 999, digits = 3)
+tasas <- read_excel(paste0(path, "snmvTasas.xlsx")) %>%
+  rename(año = year)
+tasas_calc <- tasas %>% 
+  filter(tipo %in% c("Tasa Cruda", "Tasa Ajustada")) 
+tasas_calc
+```
+
+```{r, echo=FALSE}
+ggplot(subset(tasas, tipo %in% c("Tasa Cruda", "Tasa Ajustada")), aes(x = año, y = cantidad, fill = tipo)) +
+  geom_area() +
+  facet_wrap(~ sexo) +
+  labs(title = "5: Distribución de Tasas Crudas y Ajustadas por Año y Sexo", x = "Año", y = "Cantidad", fill = "Tipo") +
+  theme_minimal()
+
+ggplot(tasas_calc, aes(x = factor(año), y = cantidad, fill = tipo)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "6: Cantidad por Tipo en cada Año", x = "Año", y = "Cantidad", fill = "Tipo") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  coord_flip()
+
+tasas_ambos <- tasas %>%
+  filter(sexo == "Ambos Sexos" & tipo != "Población")
+
+ggplot(tasas_ambos, aes(x = factor(año), y = cantidad, color = tipo, group = tipo)) +
+  geom_point(position = position_dodge(width = 0.5), size = 3) +
+  geom_line(position = position_dodge(width = 0.5), linewidth = 1) +
+  labs(title = "7: Comparación de Cantidad por Tipo en cada Año", x = "Año", y = "Cantidad", color = "Tipo") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```

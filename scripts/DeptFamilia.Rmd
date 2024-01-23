@@ -9,9 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Cantidad de menores que fueron víctimas de maltrato, según sexo y tipo de maltrato: Años 2018-2022
+
 # Imports
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(readxl)
 # función para encontrar el filepath automáticamente 
@@ -20,7 +20,7 @@ path <- here("data", "Departamento_de_Familia", "/")
 ```
 
 Funcion para manejar datos missing
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo=FALSE}
 # funcion para convertir columna con varios tipos de datos a numerico
 convert_mixed_columns <- function(data) {
   mixed_columns <- sapply(data, function(col) any(is.character(col) & !is.na(as.numeric(col))))
@@ -35,7 +35,8 @@ convert_mixed_columns <- function(data) {
 }
 ```
 
-```{r}
+## Cantidad de menores que fueron víctimas de maltrato, según sexo y tipo de maltrato: Años 2018-2022
+```{r, echo=FALSE, warning=FALSE}
 # importando datos del 2018
 dfMalt2018 <- read_excel(paste0(path, "dfMalt2018.xlsx")) %>%
   rename(
@@ -115,72 +116,29 @@ suma_casos <- dfMalt_long%>%
   group_by(`Tipo de Maltrato`, Año) %>%
   summarise(Total_Casos = sum(Casos))
 dfMalt_long
+```
 
+```{r, echo=FALSE}
 ggplot(suma_casos, aes(x = Año, y = Total_Casos, color = `Tipo de Maltrato`, group = `Tipo de Maltrato`)) +
   geom_line(linewidth = 1) +
   geom_point() +
-  labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
+  labs(title = "1: Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
   theme_minimal() +
   #facet_wrap(~Sexo , scales = "fixed") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
 
-```{r}
-ggplot(dfMalt_long, aes(x = Año, y = Casos, color = `Tipo de Maltrato`, group = `Tipo de Maltrato`)) +
-  geom_line(linewidth = 1) +
-  geom_point() +
-  labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
-  theme_minimal() +
-  facet_wrap(~Sexo , scales = "fixed") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggplot(subset(dfMalt_long, Sexo == "Masculino"), aes(x = Año, y = Casos, color = `Tipo de Maltrato`, group = `Tipo de Maltrato`)) +
-  geom_line(linewidth = 1) +
-  geom_point() +
-  labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
-  theme_minimal() +
-  facet_wrap(~Sexo , scales = "fixed") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggplot(subset(dfMalt_long, Sexo == "Femenino"), aes(x = Año, y = Casos, color = `Tipo de Maltrato`, group = `Tipo de Maltrato`)) +
-  geom_line(linewidth = 1) +
-  geom_point() +
-  labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
-  theme_minimal() +
-  facet_wrap(~Sexo , scales = "fixed") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggplot(dfMalt_long, aes(x = Año, y = Casos, color = `Tipo de Maltrato`, linetype = Sexo, group_by = Sexo)) +
-  geom_line(size = 1) +
-  geom_point(size = 3) +
-  labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggplot(dfMalt_long, aes(x = Año, y = Casos, color = Sexo, linetype = Sexo)) +
-  geom_line(size = 1) +
-  geom_point(size = 3) +
-  labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
-  facet_wrap(~`Tipo de Maltrato`, scales = "free_y", ncol = 2) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-```{r}
 ggplot(dfMalt_long, aes(x = Año, y = Casos, color = Sexo, group = Sexo)) +
   geom_line(linewidth = 1) +
   geom_point() +
-  labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
+  labs(title = "2: Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
   theme_minimal() +
   facet_wrap(~`Tipo de Maltrato`, scales = "fixed") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-Graficos Finales
-```{r}
+
 ggplot(dfMalt_long, aes(x = Año, y = Casos, color = `Tipo de Maltrato`, group = `Tipo de Maltrato`)) +
   geom_line(linewidth = 1) +
   geom_point() +
-  labs(title = "Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
+  labs(title = "3: Casos de Maltrato por Año y Tipo", x = "Año", y = "Casos") +
   theme_minimal() +
   facet_wrap(~Sexo , scales = "fixed") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -190,14 +148,14 @@ ggplot(dfMalt_long, aes(x = Año, y = Casos, color = `Tipo de Maltrato`, group =
 year_selected <- 2019
 
 # Filtrar los datos para el año seleccionado
-dfMalt_year <- subset(dfMalt, Año == as.character(year_selected))
+dfMalt_year <- subset(dfMalt_long, Año == as.character(year_selected))
 
 # Gráfico de barras apiladas para el año seleccionado
 ggplot(dfMalt_year, aes(x = `Tipo de Maltrato`, y = Casos, fill = Sexo)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = paste("Distribución de Tipos de Maltrato en el Año", year_selected),
+  labs(title = paste("4: Distribución de Tipos de Maltrato en el Año", year_selected),
        x = "Tipo de Maltrato", y = "Casos", fill = "Sexo") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  coord_flip()
 ```
-

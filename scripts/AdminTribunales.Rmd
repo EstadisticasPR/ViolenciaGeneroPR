@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Imports
-```{r, warning=FALSE}
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
 library(tidyverse)
 library(readxl)
 library(zoo)
@@ -22,27 +22,8 @@ library(here)
 path <- here("data", "administracion_de_tribunales", "/")
 ```
 
-```{r}
-list.files(path)
-```
-Función para manejar missing data
-```{r}
-# funcion para convertir columna con varios tipos de datos a numerico
-convert_mixed_columns <- function(data) {
-  mixed_columns <- sapply(data, function(col) any(is.character(col) & !is.na(as.numeric(col))))
-  mixed_columns_names <- names(mixed_columns)[mixed_columns]
-  
-  for (col in mixed_columns_names) {
-    data[[col]] <- ifelse(data[[col]] == "N/A", NA, as.character(data[[col]]))
-    data[[col]] <- as.numeric(data[[col]])
-  }
-  
-  return(data)
-}
-```
-
-# Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y grupo de edad de la parte peticionaria
-```{r}
+## Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y grupo de edad de la parte peticionaria
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # importando datos del año fiscal 2020-2021
 ## faltan datos
 casosCrimLey148_20 <- read_excel(paste0(path, "casosCrimLey148_20.xlsx")) %>%
@@ -76,8 +57,8 @@ casosCrimLey148_long <- full_join(casosCrimLey148_20, casosCrimLey148_21)
 casosCrimLey148_long
 ```
 
-# Solicitudes y órdenes de protección emitidas al amparo de la Ley Núm. 54-1989 que fueron denegadas y archivadas y órdenes de protección finales archivadas, por Región Judicial
-```{r}
+## Solicitudes y órdenes de protección emitidas al amparo de la Ley Núm. 54-1989 que fueron denegadas y archivadas y órdenes de protección finales archivadas, por Región Judicial
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 ley54Denegada_21 <- read_excel(paste0(path, "ley54Denegada21.xlsx")) %>%
   mutate(AñoFiscal = "2021-2022") 
 
@@ -90,7 +71,7 @@ ley54Denegada
 ```
 
 # Personas que solicitaron órdenes de protección emitidas al amparo de la ley 54-1989, por grupo de edad y sexo: Todas las Regiones Judiciales
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 new_names <- c("OP_Solicitadas","OP_Emitidas", "OP_Retiradas", "OP_Denegadas")
 
 # datos de Órdenes de protección para hombres 2021-2022
@@ -133,7 +114,7 @@ ley54_long <- full_join(
   filter(Edad != "Total")
 ley54_long
 ```
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 ggplot(ley54_long, aes(x = Edad, y = OP_Solicitadas, color = Sexo)) +
   geom_line() +
   geom_point() +
@@ -144,7 +125,7 @@ ggplot(ley54_long, aes(x = Edad, y = OP_Solicitadas, color = Sexo)) +
 ```
 
 # Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y grupo de edad de la parte peticionaria
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 new_names <- c("Total", "<20", "21-29", "30-39", "40-49", "50-59", ">60", "No Indica")
 
 # datos de solicitudes de órdenes de protección en el 2020-2021
@@ -191,7 +172,7 @@ OP_148_SoliGrupEdad_long
 ```
 
 # Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # lista con nuevos nombres de columnas para mejor interpretación
 new_names <- c("Total", "AgresiónSexual", "AcosoSexual", "ActosLascivos", "Incesto") 
 
@@ -232,7 +213,7 @@ OP_Ley148_ex_parteEmitidas
 ```
 
 # Cantidad de solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual archivadas por Región Judicial
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # lista con nuevos nombres de columnas para mejor interpretación
 new_names <- c("Total", "SolicitudPeticionaria", "Otra Razón")
 
@@ -273,7 +254,7 @@ OP_LEY148Archivadas
 ```
 
 # Cantidad de solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual denegadas por Región Judicial
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # lista con nuevos nombres de columnas para mejor interpretación
 new_names <- c("NoAplicanDisposicionesLey148", "NoPruebanElementos")
 
@@ -316,7 +297,7 @@ OP_LEY148Denegadas
 ```
 
 # Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # lista con nuevos nombres de columnas para mejor interpretación
 new_names <- c("Total", "AgresiónSexual", "AcosoSexual", "ActosLascivos", "Incesto")
 
@@ -359,7 +340,7 @@ OP_LEY148FinalEmitidas
 ```
 
 # Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por sexo de la parte
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 OP_LEY148Genero2020_21 <- read_excel(paste0(path, "OP_LEY148Genero2020_21.xlsx")) %>%
   pivot_longer(
     !Sexo, 
@@ -392,7 +373,7 @@ OP_LEY148Genero
 ```
 
 # Tribunal de Primera Instancia: Movimiento de casos criminales de acoso sexual, actos lascivos, agresión sexual, incesto y ley contra el acecho. Ley Núm. 148-2015
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # lista con nuevos nombres de columnas para mejor interpretación 
 new_names <- c("Delito", "PendienteInicio", "Presentados", 
                "AResolver", "Condenas", "Absoluciones", 
@@ -454,7 +435,7 @@ tribCasosCrim
 ```
 
 # Solicitudes de órdenes de protección y órdenes de protección emitidas al amparo de la Ley Núm. 54-1989 para la prevención e intervención con la violencia doméstica, por Región Judicial
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # lista con nuevos nombres de columnas para mejor interpretación 
 new_names <- c("TotalSolicitudes", "TotalExParte", "TotalFinalesEmitidas")
 
@@ -513,7 +494,7 @@ tribordprot <- full_join(
 tribordprot
 ```
 # Delitos de Violencia Doméstica Radicado por Querella(s) 2023* (1 de enero al 14 noviembre)
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 read_excel(paste0(path, "Departamento Justicia.xlsx"), sheet = 1) %>%
   mutate(
     Año = "2023",
@@ -522,3 +503,4 @@ read_excel(paste0(path, "Departamento Justicia.xlsx"), sheet = 1) %>%
   select(!c(`Querellas Jurisdicción`, Total))
 ```
 
+Rscript -e "rmarkdown::render('scripts/DeptCorrección.Rmd', output_format = 'pdf_document')"

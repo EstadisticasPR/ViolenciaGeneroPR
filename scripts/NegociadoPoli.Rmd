@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Imports
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(readxl)
 library(kableExtra)
@@ -20,7 +20,7 @@ path <- here("data", "Negociado_de_Policia", "/")
 ```
 
 Funcion para manejar datos missing
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo=FALSE}
 # funcion para convertir columna con varios tipos de datos a numerico
 convert_mixed_columns <- function(data) {
   mixed_columns <- sapply(data, function(col) any(is.character(col) & !is.na(as.numeric(col))))
@@ -35,8 +35,8 @@ convert_mixed_columns <- function(data) {
 }
 ```
 
-# Mujeres Desaparecidas
-```{r}
+## Cantidad de mujeres desaparecidas, localizadas y sin localizar- adultas y menores (desde enero 2020 a marzo 2023)
+```{r, echo=FALSE}
 # importando data del 2020
 desp2020 <- read_excel(paste0(path, "npprDesp2020.xlsx")) %>% mutate(Año = "2020") %>% rename(Categoria = Mes,Total = `Total Año 2020`)
 
@@ -76,17 +76,8 @@ desp_long_xtotals <- desp_long %>%
 desp_long_xtotals
 ```
 
-# Mujeres Desaparecidas
-```{r}
-ggplot(data = despDF, aes(x = Categoria, y = Total, fill = Año)) + 
-  geom_bar(stat = "identity", position = position_stack(0.5)) + 
-  theme_minimal() + 
-  labs(title = "Mujeres desaparecidas, localizadas y sin localizar", x = "Categorias", y = "Numero de Casos") + 
-  scale_fill_discrete(name = "Año") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
 # Resumen Estadístico
-```{r}
+```{r, echo=FALSE}
 # Resumen estadístico por categoría
 resumen_estadistico <- desp_long_xtotals %>%
   group_by(Categoria) %>%
@@ -102,8 +93,9 @@ summary(modelo_anova)
 ``` 
 
 Conclusión: Los resultados de ANOVA muestran una diferencia significativa entre al menos dos de las medias de las categorías (F = 151, p < 0.0000000000000002), lo que sugiere que al menos una de las categorías tiene una media significativamente diferente a las demás. 
+
 # Distribución de Casos a lo largo del año
-```{r}
+```{r, echo=FALSE}
 # Calcular la mediana por cada Categoría
 casos_median <- desp_long_xtotals %>%
   group_by(Categoria) %>%
@@ -115,28 +107,26 @@ ggplot(desp_long_xtotals, aes(x = Fecha, y = Casos, fill = Categoria)) +
   theme_minimal()+
   geom_line()+
   geom_hline(data = casos_median, aes(yintercept = median_Casos), color = "blue") +
-  labs(title = "Casos por Mes y Categoría", x = "Meses", y = "Número de Casos") +
+  labs(title = "1: Tendencia de por Mes y Categoría", x = "Meses", y = "Número de Casos") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   facet_wrap(~ Categoria, scales = "fixed") 
 
 
-casos_norm_median <- median(desp_long_xtotals$Casos_Normalizados)
-ggplot(desp_long_xtotals, aes(x = Fecha, y = Casos_Normalizados, fill = Categoria)) +
-  geom_bar(stat = "identity") +
-  theme_minimal() +
-  geom_line() + 
-  geom_hline(yintercept = casos_norm_median, color ="blue") +
-  labs(title = "Distribucion de Casos Normalizados por Mes y Categoría", x = "Meses", y = "Número de Casos") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  facet_wrap(~ Categoria, scales = "fixed") 
-```
+# casos_norm_median <- median(desp_long_xtotals$Casos_Normalizados)
+# ggplot(desp_long_xtotals, aes(x = Fecha, y = Casos_Normalizados, fill = Categoria)) +
+#   geom_bar(stat = "identity") +
+#   theme_minimal() +
+#   geom_line() + 
+#   geom_hline(yintercept = casos_norm_median, color ="blue") +
+#   labs(title = "Distribucion de Casos Normalizados por Mes y Categoría", x = "Meses", y = "Número de Casos") +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+#   facet_wrap(~ Categoria, scales = "fixed") 
 
-```{r}
 ggplot(desp_long_xtotals, aes(x = Fecha, y = Casos, color = Categoria)) +
   geom_line(size = 1.0) +
   geom_point() +
   theme_minimal() +
-  labs(title = "Tendencia de Casos por Mes y Categoría", x = "Meses", y = "Número de Casos") +
+  labs(title = "2: Tendencia de Casos por Mes y Categoría", x = "Meses", y = "Número de Casos") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   facet_wrap(~ Categoria, scales = "fixed")
 
@@ -144,106 +134,112 @@ ggplot(desp_long_xtotals, aes(x = Fecha, y = Casos, color = Categoria)) +
   geom_line(size = 1.0) +
   geom_point() +
   theme_minimal() +
-  labs(title = "Tendencia de Casos por Mes y Categoría", x = "Meses", y = "Número de Casos") +
+  labs(title = "3: Tendencia de Casos por Mes y Categoría", x = "Meses", y = "Número de Casos") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 
-# Gráfico de líneas para datos normalizados
-ggplot(desp_long_xtotals, aes(x = Fecha, y = Casos_Normalizados, color = Categoria)) +
+ggplot(desp_long_xtotals, aes(x = Fecha, y = Casos, color = Categoria)) +
   geom_line(size = 1.0) +
-  geom_point() +
-  labs(title = "Tendencia de Casos Normalizados por Mes y Categoría", x = "Meses", y = "Porcentaje de Casos", fill = "Categoría") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  facet_wrap(~ Categoria, scales = "fixed") 
-
-ggplot(desp_long_xtotals, aes(x = Fecha, y = Casos_Normalizados, color = Categoria)) +
-  geom_line(size = 1.0) +
+  geom_smooth(method = "lm", se = FALSE, color = "green") +
   geom_point() +
   theme_minimal() +
-  labs(title = "Tendencia de Casos por Mes y Categoría", x = "Meses", y = "Número de Casos") +
+  labs(title = "4: Tendencia de Casos por Mes y Categoría", x = "Meses", y = "Número de Casos") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+# # Gráfico de líneas para datos normalizados
+# ggplot(desp_long_xtotals, aes(x = Fecha, y = Casos_Normalizados, color = Categoria)) +
+#   geom_line(size = 1.0) +
+#   geom_point() +
+#   labs(title = "Tendencia de Casos Normalizados por Mes y Categoría", x = "Meses", y = "Porcentaje de Casos", fill = "Categoría") +
+#   theme_minimal() +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+#   facet_wrap(~ Categoria, scales = "fixed") 
+# 
+# ggplot(desp_long_xtotals, aes(x = Fecha, y = Casos_Normalizados, color = Categoria)) +
+#   geom_line(size = 1.0) +
+#   geom_point() +
+#   theme_minimal() +
+#   labs(title = "Tendencia de Casos por Mes y Categoría", x = "Meses", y = "Número de Casos") +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 ```
 Muestra como varían los Casos a lo largo del tiempo para cada grupo.
-```{r}
-# Obtener los tipos únicos
-categorias <- unique(desp_long_xtotals$Categoria)
 
-# Loop para crear y mostrar las gráficas
-for (i in seq_along(categorias)) {
-  plot_data <- subset(desp_long_xtotals, Categoria == categorias[i])
-  
-  # Crear la gráfica
-  p <- ggplot(subset(desp_long_xtotals, Categoria == categorias[i]), aes(x = Fecha, y = Casos, color = Categoria)) +
-  geom_line(size = 1.0) +
-  geom_point() +
-  theme_minimal() +
-  geom_smooth(method = "lm", se = FALSE, color = "green") +  # Añade líneas de tendencia lineal
-  labs(title = paste(categorias[i], "por Mes"), x = "Meses", y = "Número de Casos") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
-  
-  # Mostrar la gráfica
-  print(p)
-}
+```{r, echo=FALSE}
+# # Obtener los tipos únicos
+# categorias <- unique(desp_long_xtotals$Categoria)
+# 
+# # Loop para crear y mostrar las gráficas
+# for (i in seq_along(categorias)) {
+#   plot_data <- subset(desp_long_xtotals, Categoria == categorias[i])
+#   
+#   # Crear la gráfica
+#   p <- ggplot(subset(desp_long_xtotals, Categoria == categorias[i]), aes(x = Fecha, y = Casos, color = Categoria)) +
+#   geom_line(size = 1.0) +
+#   geom_point() +
+#   theme_minimal() +
+#   geom_smooth(method = "lm", se = FALSE, color = "green") +  # Añade líneas de tendencia lineal
+#   labs(title = paste(categorias[i], "por Mes"),
+#        subtitle = "Este gráfico sería resultado de un filtro de la categoría escogida",
+#        x = "Meses", y = "Número de Casos") +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+#   
+#   # Mostrar la gráfica
+#   print(p)
+# }
 ```
 
 
 # Boxplot de la distribución de Casos por Año y Categoría
-```{r}
+```{r, echo = FALSE}
 ggplot(desp_long_xtotals, aes(x = Año, y = Casos, fill = Año)) +
   geom_boxplot() +
-  labs(title = "Distribución de Casos por Año y Categoría", x = "Año", y = "Casos") +
+  labs(title = "5: Distribución de Casos por Año y Categoría", x = "Año", y = "Casos") +
   theme_minimal()+
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   facet_wrap(~Categoria, scales = "fixed")
 
 ggplot(desp_long_xtotals, aes(x = factor(Año), y = Casos, fill = factor(Año))) +
   geom_boxplot(outlier.colour = "red", outlier.shape = 1) +  # Cambia el color y forma de los outliers
-  labs(title = "Distribución de Casos por Año y Categoría", x = "Año", y = "Casos", fill = "Año") +
+  labs(title = "6: Distribución de Casos por Año y Categoría", x = "Año", y = "Casos", fill = "Año") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   #scale_fill_brewer(palette = "Set3") +  # Cambia la paleta de colores
   facet_wrap(~Categoria, scales = "fixed", ncol = 2) +  # Ajusta el escalado de ejes para cada categoría
   geom_hline(yintercept = median(desp_long_xtotals$Casos), linetype = "dashed", color = "blue") +  # Agrega línea para mediana
   geom_text(aes(label = round(median(desp_long_xtotals$Casos), 2)), x = 1, y = median(desp_long_xtotals$Casos), vjust = -0.5, color = "blue")  # Etiqueta para la mediana
-
-ggplot(desp_long_xtotals, aes(x = Año, y = Casos_Normalizados, fill = Año)) +
-  geom_boxplot() +
-  labs(title = "Distribución de Casos Normalizados por Año y Categoría", x = "Año", y = "Casos") +
-  theme_minimal()+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  facet_wrap(~Categoria, scales = "fixed")
 ```
 
-```{r}
-# Obtener los tipos únicos
-categoria_seleccionada <- unique(desp_long_xtotals$Categoria)
-
-# Loop para crear y mostrar las gráficas
-for (i in seq_along(categoria_seleccionada)) {
-  plot_data <- subset(desp_long_xtotals, Categoria == categoria_seleccionada[i])
-  
-  # Crear la gráfica
-  p <- ggplot(subset(desp_long_xtotals, Categoria == categoria_seleccionada[i]), aes(x = factor(Año), y = Casos, fill = factor(Año))) +
-  geom_boxplot(outlier.colour = "black", outlier.shape = 1) +
-  labs(title = paste("Distribución de Casos para", categoria_seleccionada[i]), x = "Año", y = "Casos") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  geom_hline(yintercept = median(subset(desp_long_xtotals, Categoria == categoria_seleccionada)$Casos), linetype = "dashed", color = "blue") +
-  geom_text(aes(label = round(median(subset(desp_long_xtotals, Categoria == categoria_seleccionada)$Casos), 2)), x = 1, y = median(subset(desp_long_xtotals, Categoria == categoria_seleccionada[i])$Casos), vjust = -0.5, color = "blue")
-  
-  # Mostrar la gráfica
-  print(p)
-}
+```{r, echo=FALSE}
+# # Obtener los tipos únicos
+# categoria_seleccionada <- unique(desp_long_xtotals$Categoria)
+# 
+# # Loop para crear y mostrar las gráficas
+# for (i in seq_along(categoria_seleccionada)) {
+#   plot_data <- subset(desp_long_xtotals, Categoria == categoria_seleccionada[i])
+#   
+#   # Crear la gráfica
+#   p <- ggplot(subset(desp_long_xtotals, Categoria == categoria_seleccionada[i]), aes(x = factor(Año), y = Casos, fill = factor(Año))) +
+#   geom_boxplot(outlier.colour = "black", outlier.shape = 1) +
+#   labs(title = paste("Distribución de Casos para",
+#                      subtitle = "Este gráfico sería resultado de un filtro de la categoría escogida",
+#                      categoria_seleccionada[i]), x = "Año", y = "Casos") +
+#   theme_minimal() +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+#   geom_hline(yintercept = median(subset(desp_long_xtotals, Categoria == categoria_seleccionada)$Casos), linetype = "dashed", color = "blue") +
+#   geom_text(aes(label = round(median(subset(desp_long_xtotals, Categoria == categoria_seleccionada)$Casos), 2)), x = 1, y = median(subset(desp_long_xtotals, Categoria == categoria_seleccionada[i])$Casos), vjust = -0.5, color = "blue")
+#   
+#   # Mostrar la gráfica
+#   print(p)
+# }
 ```
 
 
 Muestra la distribución de Casos en cada mes para las diferentes categorías.
 
 # Mapa de Calor de Casos por Mes y Categoría
-```{r}
+```{r, echo=FALSE}
 ggplot(desp_long_xtotals, aes(x = Meses, y = Año , fill = Casos)) +
   geom_tile() +
-  labs(title = "Distribución de Casos por Mes y Año, Agrupados por Categoría", x = "Meses", y = "Mes") +
+  labs(title = "7: Distribución de Casos por Mes y Año, Agrupados por Categoría", x = "Meses", y = "Mes") +
   scale_fill_gradient(low = "white", high = "blue") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
@@ -259,7 +255,7 @@ top_segments <- desp_long_xtotals %>%
 # Gráfico de calor con los 10 segmentos principales para cada categoría
 ggplot(top_segments, aes(x = Meses, y = Año, fill = Casos)) +
   geom_tile() +
-  labs(title = "Mapa de Calor de los 10 Segmentos Principales por Mes y Categoría", x = "Meses", y = "Año") +
+  labs(title = "8: Mapa de Calor de los 10 Segmentos Principales por Mes y Categoría", x = "Meses", y = "Año") +
   scale_fill_gradient(low = "white", high = "blue") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
@@ -268,43 +264,44 @@ ggplot(top_segments, aes(x = Meses, y = Año, fill = Casos)) +
 Muestra la diferencia entre Casos en diferentes meses para cada categoría.
 
 # Grafico de Densidad 
-```{r}
+```{r, echo=FALSE}
 ggplot(desp_long_xtotals, aes(x = Casos, fill = Año)) +
   geom_density(alpha = 0.5) +
   facet_wrap(~ Categoria, scales = "fixed") +
-  labs(title = "Densidad de Casos por Categoría", x = "Casos", y = "Densidad", color = "Año") +
+  labs(title = "9: Densidad de Casos por Categoría", x = "Casos", y = "Densidad", color = "Año") +
   theme_minimal() + 
   theme(legend.position = "top")
 
 ggplot(desp_long_xtotals, aes(x = Casos, fill = Categoria)) +
   geom_density(alpha = 0.5) +
-  labs(title = "Densidad de Casos por Categoría", x = "Casos", y = "Densidad", color = "Año") +
+  labs(title = "10: Densidad de Casos por Categoría", x = "Casos", y = "Densidad", color = "Año") +
   theme_minimal() + 
   theme(legend.position = "top")
 ```
 Muestra la distribución de los Casos para cada categoría en cada mes usando curvas de densidad.
 
-```{r}
-# Loop para crear y mostrar las gráficas
-for (i in seq_along(categoria_seleccionada)) {
-  plot_data <- subset(desp_long_xtotals, Categoria == categoria_seleccionada[i])
-  
-  # Crear la gráfica
-  p <- ggplot(subset(desp_long_xtotals, Categoria == categoria_seleccionada[i]), aes(x = Casos, fill = Año)) +
-  geom_density(alpha = 0.5) +
-  labs(title = paste("Densidad de Casos ", categoria_seleccionada[i]), x = "Casos", y = "Densidad", color = "Año") +
-  theme_minimal() + 
-  theme(legend.position = "top")
-  
-  # Mostrar la gráfica
-  print(p)
-}
+```{r, echo=FALSE}
+# # Loop para crear y mostrar las gráficas
+# for (i in seq_along(categoria_seleccionada)) {
+#   plot_data <- subset(desp_long_xtotals, Categoria == categoria_seleccionada[i])
+#   
+#   # Crear la gráfica
+#   p <- ggplot(subset(desp_long_xtotals, Categoria == categoria_seleccionada[i]), aes(x = Casos, fill = Año)) +
+#   geom_density(alpha = 0.5) +
+#   labs(title = paste("Densidad de Casos ",
+#                      subtitle = "Este gráfico sería resultado de un filtro de la categoría escogida",
+#                      categoria_seleccionada[i]), x = "Casos", y = "Densidad", color = "Año") +
+#   theme_minimal() + 
+#   theme(legend.position = "top")
+#   
+#   # Mostrar la gráfica
+#   print(p)
+# }
 ```
-
 Muestra cómo cambian los Casos a lo largo de los meses para cada año, permitiendo comparar las tendencias a lo largo del tiempo.
 
-## Incidentes
-```{r}
+## Incidentes de violencia doméstica por edad de la víctima (desde enero 2021 a abril 2023)
+```{r, echo=FALSE}
 inci2021 <- read_excel(paste0(path, "NPPRincidentes_2021.xlsx")) %>% 
   rename_with(~gsub("2021", "",.), contains("2021")) %>%
   rename_at(vars(2), ~ "Población") %>% 
@@ -313,24 +310,55 @@ inci2021 <- read_excel(paste0(path, "NPPRincidentes_2021.xlsx")) %>%
 # faltan datos para el 2022
 inci2022 <- read_excel(paste0(path, "NPPRincidentes_2022.xlsx")) %>% 
   rename_with(~gsub("2022", "",.), contains("2022")) %>%
-  rename_at(vars(2), ~ "Población") %>% 
+  rename_at(vars(2), ~"Población") %>% 
   mutate(Año = "2022")
 
 # faltan datos desde mayo en adelante
-#inci2023 <- read_excel("data/Negociado_de_Policia/NPPRincidentes_2023.xlsx") %>% rename_with(~gsub("2022", "",.), contains("2022")) %>% #rename_with(~gsub("2023", "",.), contains("2023")) %>%
-#  rename_at(vars(2), ~ "Población") %>% 
-#  mutate(Año = "2023")
+inci2023 <- read_excel(paste0(path,"NPPRincidentes_2023.xlsx")) %>% rename_with(~gsub("2022", "",.), contains("2022")) %>%
+  rename_with(~gsub("2023", "",.), contains("2023")) %>%
+  rename_at(vars(2), ~ "Población") %>%
+  mutate(Año = "2023")
 
 # dataframe con toda la data combinada
-inciDF <- full_join(inci2021, inci2022) %>% 
-  #full_join(inci2023) %>%
-  pivot_longer(cols = -c(`Áreas Policiacas`) , names_to = "Eliminar", values_to = "Casos")
-  
-  
+inciDF <- bind_rows(inci2021, inci2022, inci2023) %>%
+  filter(`Áreas Policiacas` != "Total") %>%
+  pivot_longer(cols = -c(`Áreas Policiacas`, Población, Año), names_to = "Mes", values_to = "Casos") %>%
+  mutate(
+    `Áreas Policiacas` = str_trim(`Áreas Policiacas`),
+    Año = as.factor(Año),
+    Meses = factor(Mes), 
+    Meses_Numéricos = match(Meses, Mes),
+    Fecha = as.yearmon(paste(Año, Meses_Numéricos), "%Y %m")
+  ) %>%
+  select(-c(Año, Meses_Numéricos, Mes, Meses))
 inciDF
 ```
 
-```{r}
+```{r, echo=FALSE}
+ggplot(inciDF, aes(x = `Áreas Policiacas`, y = Casos, fill = `Áreas Policiacas`)) +
+  geom_bar(stat = "identity") +
+  labs(title = "11: Distribución de Casos por Área Policiaca", x = "Área Policiaca", y = "Número de Casos") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(inciDF, aes(x = Fecha, y = Casos, color = `Áreas Policiacas`, group = `Áreas Policiacas`)) +
+  geom_line(size = 1) +
+  geom_point(size = 3) +
+  labs(title = "12: Tendencia de Casos a lo Largo del Tiempo por Área Policiaca", x = "Fecha", y = "Número de Casos") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(inciDF, aes(x = Fecha, y = Casos, color = `Áreas Policiacas`, group = `Áreas Policiacas`)) +
+  geom_line(size = 1) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "green") + 
+  labs(title = "13: Tendencia de Casos a lo Largo del Tiempo por Área Policiaca", x = "Fecha", y = "Número de Casos") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Relación ofensor-víctima violencia doméstica (desde enero 2021 a febrero de 2023)
+```{r, echo=FALSE}
 # importando la data de relaciones familiares
 familiar <- read_excel(paste0(path, "npprRelFam.xlsx")) %>%
   rename(Valor = Familiar) %>%
@@ -347,7 +375,7 @@ relacion <- bind_rows(familiar, nofamiliar) %>%
   select(-Eliminar)
 relacion
 ```
-```{r}
+```{r, echo=FALSE}
 # Resumen estadístico por tipo de relación
 resumen_tipo_relacion <- relacion %>%
   group_by(Tipo) %>%
@@ -359,7 +387,7 @@ resumen_tipo_relacion <- relacion %>%
 resumen_tipo_relacion
 ```
 
-```{r}
+```{r, echo=FALSE}
 # Calcular el total de casos por relación
 total_casos_por_relacion <- relacion %>%
   group_by(Relación) %>%
@@ -373,27 +401,27 @@ relacion$Relación <- factor(relacion$Relación, levels = total_casos_por_relaci
 # Gráfico de barras apiladas por Tipo
 ggplot(relacion, aes(x = Relación, y = Casos, fill = Tipo)) +
   geom_bar(stat = "identity") +
-  labs(title = "Casos por Tipo de Relación", x = "Tipo de Relación", y = "Casos", fill = "Tipo") +
+  labs(title = "14: Casos por Tipo de Relación", x = "Tipo de Relación", y = "Casos", fill = "Tipo") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
 ```
 
-```{r}
+```{r, echo=FALSE}
 # Ordenar el factor Relación para el gráfico lineal
 relacion$Relación <- factor(relacion$Relación, levels = unique(relacion$Relación))
 
 # Gráfico lineal
 ggplot(relacion, aes(x = Relación, y = Casos, group = Tipo, color = Tipo)) +
   geom_line() +
-  labs(title = "Tendencia de Casos por Tipo y Relación", x = "Relación", y = "Casos", color = "Tipo") +
+  labs(title = "15: Tendencia de Casos por Tipo y Relación", x = "Relación", y = "Casos", color = "Tipo") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_color_brewer(palette = "Dark2")
 
 ```
 
-```{r}
+```{r, echo=FALSE}
 # Resumen estadístico por tipo de relación
 resumen_tipo_relacion <- relacion %>%
   group_by(Tipo) %>%
@@ -411,13 +439,11 @@ resumen_tipo_relacion <- relacion %>%
 kable(resumen_estadistico, caption = "Resumen estadístico por tipo de relación") %>%
   kable_styling()
 
-resumen_tipo_relacion
-
 #crosstab importante
 # Gráfico de barras por tipo de relación
 ggplot(relacion, aes(x = Tipo, y = Casos, fill = Relación)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Casos por Relación, Agrupados por Tipo", x = "Tipo de Relación", y = "Número de Casos") +
+  labs(title = "16: Casos por Relación, Agrupados por Tipo", x = "Tipo de Relación", y = "Número de Casos") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   facet_wrap(~ Tipo, scales = "fixed")
@@ -427,7 +453,7 @@ ggplot(relacion, aes(x = Tipo, y = Casos, fill = Relación)) +
 
 # T-Test entre Familiar y No Familiar
 Las pruebas t se utilizan para comparar si las medias de dos grupos son significativamente diferentes.
-```{r}
+```{r, echo=FALSE}
 # Filtrar los datos por los dos tipos de relación (Familiar y NoFamiliar)
 familiar <- filter(relacion, Tipo == "Familiar")$Casos
 no_familiar <- filter(relacion, Tipo == "NoFamiliar")$Casos
@@ -438,14 +464,14 @@ t_test
 ```
 # Wilcoxon-Mann-Whitney entre Familiar y No Familiar
 Esta prueba se utiliza para verificar si las medianas de los grupos Familiar y NoFamiliar son significativamente diferentes
-```{r}
+```{r, echo=FALSE}
 # Prueba de Wilcoxon-Mann-Whitney
  wilcox_test <- wilcox.test(familiar, no_familiar)
  wilcox_test
 ```
 # ANOVA entre Familiar y No Familiar
 Se usa para comparar las medias entre Familiar y No Familiar
-```{r}
+```{r, echo=FALSE}
 # Prueba de ANOVA
 modelo_anova <- lm(Casos ~ Tipo, data = relacion)
 anova_resultados <- anova(modelo_anova)
@@ -453,7 +479,7 @@ anova_resultados
 ```
 # Chi-Squared Test entre Familiar y No Familiar
 Esta prueba se utiliza para determinar si existe una asociación entre dos variables categóricas.
-```{r}
+```{r, echo=FALSE}
 # Crear una tabla de contingencia entre Relación y Tipo
 tabla_contingencia <- table(relacion$Relación, relacion$Tipo)
 
@@ -477,14 +503,14 @@ kable(resultados_tabla, format = "markdown", col.names = c("Prueba Estadística"
   kable_styling()
 ```
 
-```{r}
+```{r, echo=FALSE}
 ggplot(relacion, aes(x = Tipo, y = Casos, fill = Tipo)) +
   geom_boxplot() +
-  labs(title = "Distribución de Casos por Tipo de Relacion entre Agresor y Victima", x = "Tipo de Relacion", y = "Numero de Casos") +
+  labs(title = "17: Distribución de Casos por Tipo de Relacion entre Agresor y Victima", x = "Tipo de Relacion", y = "Numero de Casos") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-```{r}
+```{r, echo=FALSE}
 # Suma de Casos por cada nivel de Relación
 relacion_suma <- relacion %>%
   group_by(Relación) %>%
@@ -497,6 +523,6 @@ relacion$Relación <- factor(relacion$Relación, levels = relacion_suma)
 
 ggplot(relacion, aes(x = Relación, y = Casos, fill = Tipo)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Numero de casos por tipo de relación ofensor-victima", x = "Relación", y = "Casos", fill = "Tipo de Relación") +
+  labs(title = "18: Numero de casos por tipo de relación ofensor-victima", x = "Relación", y = "Casos", fill = "Tipo de Relación") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```

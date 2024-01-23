@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Imports
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(readxl)
 library(zoo)
@@ -20,7 +20,7 @@ path <- here("data", "departamento_de_trabajo", "/")
 ```
 
 ## Tasa de participación laboral según el año natural y el sexo
-```{r}
+```{r, echo=FALSE}
 # importando el dataset de Casos en Supervisión de Ley 54
 dtPartlab <- read_excel(paste0(path, "dtpartlab.xlsx")) %>%
   filter(Género != "Ambos") %>%
@@ -28,18 +28,25 @@ dtPartlab <- read_excel(paste0(path, "dtpartlab.xlsx")) %>%
   mutate(
     Año = factor(Año)
   )
+dtPartlab
 ```
 
-```{r}
-ggplot(dtPartlab, aes(x = Año, y = Cantidad, color = Género)) +
-  geom_line() +
-  geom_point() +
-  labs(title = "Tasa de participación laboral según el año natural y el sexo", x = "Año", y = "Porcentaje Laboral") +
-  theme_minimal()
-
+```{r, echo=FALSE}
 ggplot(dtPartlab, aes(x = Año, y = Cantidad, color = Género, group = Género)) +
   geom_line(size = 1) +
   geom_point(size = 3) +
-  labs(title = "Tasa de participación laboral por género y año", x = "Año", y = "Porcentaje Laboral") +
+  labs(title = "1. Tasa de participación laboral por género y año", x = "Año", y = "Porcentaje Laboral") +
+  theme_minimal() + 
+  scale_y_continuous(limits = c(0, NA))
+
+ggplot(dtPartlab, aes(x = Género, y = Cantidad, fill = Año)) +
+  geom_bar(stat = "identity") +
+  labs(title = "2. Tasa de participación laboral por género y año", x = "Género", y = "Cantidad") +
   theme_minimal()
+
+ggplot(dtPartlab, aes(x = Género, y = Cantidad, fill = Año)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "3. Tasa de participación laboral por género y año", x = "Género", y = "Cantidad") +
+  theme_minimal()
+
 ```

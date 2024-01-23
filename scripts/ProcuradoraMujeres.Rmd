@@ -10,38 +10,40 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Imports
-```{r, warning=FALSE}
+```{r,  message=FALSE, echo=FALSE}
 library(tidyverse)
 library(readxl)
 library(kableExtra)
 library(here)
+library(zoo)
 path <- here("data", "Oficina_de_procuradora_de_mujeres", "/")
 ```
 
-## Violencia Doméstica
+## Feminicidios por violencia doméstica, desde 1990 a 2021
 
-```{r}
+```{r, echo=FALSE}
 # violencia domestica
 opmFemiVD <- read_excel(paste0(path, "opmFemiVD.xlsx")) # año, asesinatos, tasa x100k 
+opmFemiVD
 ```
 
 Gráfico de líneas para mostrar la tendencia de la cantidad de asesinatos a lo largo de los años:
 
-```{r}
+```{r, echo=FALSE}
 ggplot(opmFemiVD, aes(x = Año, y = `Cantidad de asesinatos`, group = 1)) +
   geom_line(color = "blue", linewidth = 1) +
   geom_point(color = "red", size = 2) +
   geom_smooth(method = "lm", se = FALSE, color = "green" ) +  # Añade líneas de tendencia lineal
-  labs(title = "Tendencia de Asesinatos a lo largo de los Años", x = "Año", y = "Cantidad de Asesinatos") +
+  labs(title = "1. Tendencia de Asesinatos a lo largo de los Años", x = "Año", y = "Cantidad de Asesinatos") +
   theme_minimal()
 ```
 
 Gráfico de dispersión para visualizar la relación entre la cantidad de asesinatos y la tasa por cada 100,000 mujeres:
 
-```{r}
+```{r, echo=FALSE}
 ggplot(opmFemiVD, aes(x = `Cantidad de asesinatos`, y = `Tasa (x100,000 mujeres)`)) +
   geom_point() +
-  labs(title = "Relación entre Asesinatos y Tasa por 100,000 Mujeres", x = "Cantidad de asesinatos", y = "Tasa (x100,000 mujeres)") +
+  labs(title = "2. Relación entre Asesinatos y Tasa por 100,000 Mujeres", x = "Cantidad de asesinatos", y = "Tasa (x100,000 mujeres)") +
   geom_smooth(method = "lm", se = FALSE, color = "green" ) +  # Añade líneas de tendencia lineal
   theme_minimal()
 
@@ -60,17 +62,17 @@ El p-value del intercepto es 0.021, lo que sugiere que el intercepto es signific
 
 El R-cuadrado es 0.9869, lo que significa que alrededor del 98.69% de la variabilidad de la Tasa por 100k mujeres (la variable dependiente) puede ser explicada por la cantidad de asesinatos en este modelo. Esto indica que el ajuste del modelo es adecuado para los datos provistos.
 
-**Puede ser un cálculo especial**
+**Creo que los findings son redundantes y obvios ya que la tasa por 100k mujeres se calculó usando la cantidad de asesinatos**
 
-```{r}
+```{r, echo=FALSE}
 ggplot(opmFemiVD, aes(x = `Tasa (x100,000 mujeres)`)) +
   geom_density(fill = "skyblue", alpha = 0.7) +
-  labs(title = "Distribución de la Tasa por 100,000 Mujeres", x = "Tasa (x100,000 mujeres)", y = "Densidad") +
+  labs(title = "3. Distribución de la Tasa por 100,000 Mujeres", x = "Tasa (x100,000 mujeres)", y = "Densidad") +
   theme_minimal()
 ```
-#  Tipo de Caso 
 
-```{r}
+##  Orientaciones según el tipo de participante (a través de CRIAS). Años 2020 a *2023.
+```{r, echo=FALSE}
 meses <- c("1" = "enero", "2" = "febrero", "3" = "marzo",  "4" = "abril", "5" = "mayo", "6" = "junio", "7" = "julio", "8" = "agosto", "9" = "septiembre","10" = "octubre", "11" = "noviembre", "12" = "diciembre")
 
 # importando el dataset de Casos en Supervisión de Ley 54
@@ -84,18 +86,18 @@ opm_casos <-  read_excel(paste0(path, "opmPartMes.xlsx")) %>%
 opm_casos
 ```
 
-```{r}
+```{r, echo=FALSE}
 ggplot(opm_casos, aes(x = fecha, y = cantidad, group = tipo, color = tipo)) +
   geom_line(size = 1) +
   geom_point(size = 3) +
-  labs(title = "Tendencias Mensuales de Violencia Doméstica por Año", x = "Fecha", y = "Cantidad de Casos") +
+  labs(title = "4. Tendencias Mensuales de Violencia Doméstica por Año", x = "Fecha", y = "Cantidad de Casos") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggplot(opm_casos, aes(x = fecha, y = cantidad, color = tipo)) +
   geom_line(size = 1) +
   geom_point(size = 3) +
-  labs(title = "Tendencias Mensuales de Violencia Doméstica por Año y Tipo", x = "Mes", y = "Cantidad de Casos") +
+  labs(title = "5. Tendencias Mensuales de Violencia Doméstica por Año y Tipo", x = "Mes", y = "Cantidad de Casos") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   theme_minimal() + 
   facet_wrap(~ tipo, scales = "fixed") +
@@ -104,63 +106,59 @@ ggplot(opm_casos, aes(x = fecha, y = cantidad, color = tipo)) +
 
 
 
-```{r}
-# Obtener los tipos únicos
-tipos_casos <- unique(opm_casos$tipo)
-
-# Loop para crear y mostrar las gráficas
-for (i in seq_along(tipos_casos)) {
-  plot_data <- subset(opm_casos, tipo == tipos_casos[i])
-  
-  # Crear la gráfica
-  p <- ggplot(plot_data, aes(x = fecha, y = cantidad, color = tipo)) +
-    geom_line(size = 1) +
-    geom_point(size = 3) +
-    labs(title = paste("Tendencias Mensuales de", tipos_casos[i], "por Año"), x = "Mes", y = "Cantidad de Casos", color = "Año") +
-    geom_smooth(method = "lm", se = FALSE) +  
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  
-  # Mostrar la gráfica
-  print(p)
-}
+```{r, echo=FALSE}
+# # Obtener los tipos únicos
+# tipos_casos <- unique(opm_casos$tipo)
+# 
+# # Loop para crear y mostrar las gráficas
+# for (i in seq_along(tipos_casos)) {
+#   plot_data <- subset(opm_casos, tipo == tipos_casos[i])
+#   
+#   # Crear la gráfica
+#   p <- ggplot(plot_data, aes(x = fecha, y = cantidad, color = tipo)) +
+#     geom_line(size = 1) +
+#     geom_point(size = 3) +
+#     labs(title = paste("Tendencias Mensuales de", tipos_casos[i], "por Año"), x = "Mes", y = "Cantidad de Casos", color = "Año") +
+#     geom_smooth(method = "lm", se = FALSE) +  
+#     theme_minimal() +
+#     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+#   
+#   # Mostrar la gráfica
+#   print(p)
+# }
 ```
 
-# Victimas por Genero
-```{r}
+## Identidad de género de las víctimas (a través de CRIAS). Años 2020 a *2023.
+```{r, echo=FALSE}
 opmVic_long <- read_excel(paste0(path, "opmVicGraf.xlsx")) %>% 
   rename_at(vars(1,2,3,4), ~ c("género","2020", "2021", "2022")) %>%
   pivot_longer(!género, names_to = "año", values_to = "víctimas")
 opmVic_long
 ```
 
-```{r}
+```{r, echo=FALSE}
 # Gráfico de líneas para las tendencias de víctimas por género a lo largo de los años
 ggplot(opmVic_long, aes(x = año, y = víctimas, group = género, color = género)) +
   geom_line(size = 1.5) +
   geom_point(size = 3) +
-  labs(title = "Tendencias de Víctimas por Género a lo largo de los Años", x = "Año", y = "Número de Víctimas", color = "Género") +
+  labs(title = "6. Tendencias de Víctimas por Género a lo largo de los Años", x = "Año", y = "Número de Víctimas", color = "Género") +
   theme_minimal()
-```
 
-```{r}
 # Gráfico de barras agrupadas por género y año
 ggplot(opmVic_long, aes(x = año, y = víctimas, fill = género)) +
   geom_bar(stat = "identity", position = "dodge", width = 0.7) +
-  labs(title = "Víctimas por Género y Año", x = "Año", y = "Número de Víctimas", fill = "Género") +
+  labs(title = "7. Víctimas por Género y Año", x = "Año", y = "Número de Víctimas", fill = "Género") +
   theme_minimal()
-```
 
-```{r}
 # Gráfico de barras apiladas por género y año
 ggplot(opmVic_long, aes(x = año, y = víctimas, fill = género)) +
   geom_bar(stat = "identity") +
-  labs(title = "Víctimas por Género y Año", x = "Año", y = "Número de Víctimas", fill = "Género") +
+  labs(title = "8. Víctimas por Género y Año", x = "Año", y = "Número de Víctimas", fill = "Género") +
   theme_minimal()
 ```
 
-# Medio de Orientacion
-```{r}
+## Orientaciones según el Medio (a través de CRIAS). Años 2020 a *2023.
+```{r, echo=FALSE}
 opmMedio_long <- read_excel(paste0(path, "opmMedio.xlsx")) %>% 
   rename_at(vars(2,3,4), ~ c("2020", "2021", "2022")) %>%
   pivot_longer(!`Medio de orientación`, names_to = "año", values_to = "personas atendidas") %>% 
@@ -168,30 +166,46 @@ opmMedio_long <- read_excel(paste0(path, "opmMedio.xlsx")) %>%
 opmMedio_long
 ```
 Gráfico de Líneas por Medio de Orientación a lo Largo de los Años
-```{r}
+```{r, echo=FALSE}
 # Gráfico de líneas por medio de orientación a lo largo de los años
 ggplot(opmMedio_long, aes(x = año, y = `personas atendidas`, group = `Medio de orientación`, color = `Medio de orientación`)) +
   geom_line(size = 1.5) +
   geom_point(size = 3) +
-  labs(title = "Personas Atendidas por Medio de Orientación a lo largo de los Años", x = "Año", y = "Número de Personas Atendidas", color = "Medio de Orientación") +
+  labs(title = "9. Personas Atendidas por Medio de Orientación a lo largo de los Años", x = "Año", y = "Número de Personas Atendidas", color = "Medio de Orientación") +
   theme_minimal()
-```
 
-Gráfico de Barras Agrupadas por Año y Medio de Orientación
-```{r}
 # Gráfico de barras agrupadas por año y medio de orientación
 ggplot(opmMedio_long, aes(x = año, y = `personas atendidas`, fill = `Medio de orientación`)) +
   geom_bar(stat = "identity", position = "dodge", width = 0.7) +
-  labs(title = "Personas Atendidas por Medio de Orientación y Año", x = "Año", y = "Número de Personas Atendidas", fill = "Medio de Orientación") +
+  labs(title = "10. Personas Atendidas por Medio de Orientación y Año", x = "Año", y = "Número de Personas Atendidas", fill = "Medio de Orientación") +
   theme_minimal()
-
 ```
 
-```{r}
-read_excel(paste0(path, "opmServiciosMes.xlsx")) # mes, año, tipo de servicio, # ofrecidos
+## Población atendida, servicios ofrecidos y seguimientos por mes. Años 2020 a *2023.
+```{r, echo=FALSE}
+# importando el dataset de Casos en Supervisión de Ley 54
+opmServiciosMes <-  read_excel(paste0(path, "opmServiciosMes.xlsx")) %>%
+  mutate(
+    fecha = as.yearmon(paste(year, month), "%Y %m")
+    ) %>%
+  select(-c(month, year))
+opmServiciosMes
 ```
 
+```{r, echo=FALSE}
+ggplot(opmServiciosMes, aes(x = fecha, y = cantidad, color = tipo, group = tipo)) +
+  geom_line(size = 1) +
+  geom_point(size = 3) +
+  labs(title = "11: Tendencia de Cantidad por Servicios por Tipo", x = "Fecha (Mes/Año)", y = "Cantidad") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+ggplot(opmServiciosMes, aes(x = fecha, y = cantidad, fill = tipo)) +
+  geom_bar(stat = "identity") +
+  labs(title = "12: Tendencia de Cantidad por Servicios por Tipo", x = "Fecha (Mes/Año)", y = "Cantidad") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
 
 
 

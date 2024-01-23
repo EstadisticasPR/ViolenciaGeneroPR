@@ -1,6 +1,6 @@
 ---
 title: "Visualizaciones Preliminares: Departamento de Correción y Rehabilitación"
-author: "Felix A Baez Santiago"
+author: "Félix A Báez Santiago"
 date: "`r Sys.Date()`"
 output: html_document
 ---
@@ -10,19 +10,18 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Imports
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(readxl)
 library(zoo)
 library(kableExtra)
 library(here)
 # función para encontrar el filepath automáticamente 
-
 path <- here("data", "Departamento_de_correccion_y_rehabilitacion", "/")
 ```
 
 ## Casos en Supervisión de Ley 54 en Programas Alternos al Confinamiento: Programas de Comunidad(desde enero 2021 hasta febrero 2023)
-```{r}
+```{r, echo= FALSE}
 # importando el dataset de Casos en Supervisión de Ley 54
 dcrCasosInv <- read_excel(paste0(path, "dcrCasosInv.xlsx")) %>%
   filter(sexo != "Total") %>%
@@ -33,26 +32,33 @@ dcrCasosInv <- read_excel(paste0(path, "dcrCasosInv.xlsx")) %>%
 dcrCasosInv
 ```
 
-```{r}
+```{r, echo= FALSE}
+ggplot(dcrCasosInv, aes(x = fecha, y = cantidad, color = sexo)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "1: Investigaciones Realizadas por Año", x = "Fecha (Mes/Año)", y = "Cantidad") +
+  theme_minimal() +
+  facet_wrap(~ tipo, scales = "fixed") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ggplot(dcrCasosInv, aes(x = fecha, y = cantidad, color = tipo)) +
   geom_line() +
   geom_point() +
-  labs(title = "Tendencia de Investigaciones Realizadas por Año", x = "Fecha (Mes/Año)", y = "Cantidad de Casos") +
+  labs(title = "2: Tendencia de Investigaciones Realizadas por Año", x = "Fecha (Mes/Año)", y = "Cantidad de Casos") +
   theme_minimal() +
   facet_wrap(~ sexo, scales = "fixed") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-ggplot(dcrCasosInv, aes(x = fecha, y = cantidad, color = sexo)) +
-  geom_line() +
-  geom_point() +
-  labs(title = "Investigaciones Realizadas por Año", x = "Fecha (Mes/Año)", y = "Cantidad") +
+ggplot(dcrCasosInv, aes(x = fecha, y = cantidad, fill = tipo)) +
+  geom_bar(stat = "identity") +
+  labs(title = "3: Distribución de Investigaciones por Tipo y Sexo", x = "Fecha (Mes/Año)", y = "Cantidad de Casos") +
   theme_minimal() +
-  facet_wrap(~ tipo, scales = "fixed") +
+  facet_wrap(~ sexo, scales = "fixed") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ## Personas sentenciadas integradas al Programa de Supervisión Electrónica por incurrir en delitos de violencia doméstica (desde enero 2020 hasta febrero 2023)
-```{r}
+```{r, echo= FALSE}
 dcrSentenciadas <- read_excel(paste0(path, "dcrSentenciadas.xlsx"))  %>%
   mutate(
     # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
@@ -62,11 +68,17 @@ dcrSentenciadas <- read_excel(paste0(path, "dcrSentenciadas.xlsx"))  %>%
 dcrSentenciadas
 ```
 
-```{r}
-ggplot(dcrSentenciadas, aes(x = fecha, y = cantidad, group = tipo, color = tipo)) + 
+```{r, echo= FALSE}
+ggplot(dcrSentenciadas, aes(x = fecha, y = cantidad, color = tipo)) +
   geom_line() +
   geom_point() +
-  labs(title = "Cantidad por Tipo a lo largo del tiempo", x = "Fecha (Mes/Año)", y = "Cantidad de Casos") +
+  labs(title = "4: Tendencia de Casos Activos por Tipo y Mes", x = "Fecha (Mes/Año)", y = "Cantidad de Casos Activos") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(dcrSentenciadas, aes(x = fecha, y = cantidad, fill = tipo)) +
+  geom_bar(stat = "identity") +
+  labs(title = "5: Distribución de Tipos de Casos Activos por Mes", x = "Fecha (Mes/Año)", y = "Cantidad de Casos") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
