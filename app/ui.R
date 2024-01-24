@@ -98,7 +98,7 @@ ui <- fluidPage(
                 checkboxGroupInput("checkGroup_snmv",
                   label = "",
                   choices = levels(homiEdad$edad),
-                  selected = levels(homiEdad$edad)
+                  selected = levels(homiEdad$edad)[1]
                 ),
                 actionButton("deselectAll_snmv", "(De)seleccionar todo")
               ),
@@ -163,7 +163,7 @@ ui <- fluidPage(
                   "checkGroup_fam",
                   label = h3("Seleccione Tipo(s) de Maltrato"),
                   choices = levels(dfMalt$Maltrato),
-                  selected = levels(dfMalt$Maltrato)
+                  selected = levels(dfMalt$Maltrato)[4]
                 )
               ),
               hr(),
@@ -215,7 +215,7 @@ ui <- fluidPage(
                     "checkGroup_just",
                     label = "Seleccione el/los Articulo(s)",
                     choices = levels(dfDeli$Delito),
-                    selected = levels(dfDeli$Delito)
+                    selected = levels(dfDeli$Delito)[6]
                   )
                 ),
                 style = "display: inline-block; padding-right: 20px;"

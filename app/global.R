@@ -13,7 +13,8 @@ packages <- c(
   "shinythemes",
   "plotly",
   "DT",
-  "shinyWidgets"
+  "shinyWidgets",
+  "sf"
 )
 
 # Instalar los paquetes si no están instalados
