@@ -1,9 +1,8 @@
-# Importar el contenido de global.R y utils.R
-source("utils.R")
-source("global.R")
-
 # Server
 server <- function(input, output, session) {
+  # Importar el contenido de global.R y utils.R
+  source("utils.R")
+  source("global.R")
   
   ########## Server del Sistema de Notificación de Muertes Violentas ##########
   
@@ -21,27 +20,8 @@ server <- function(input, output, session) {
   
   ### funcion para el boton de deseleccionar/seleccionar
   observeEvent(input$deselectAll_snmv, {
-
-    if (is.null(input$checkGroup_snmv)) {
-      updateCheckboxGroupInput(
-        session,
-        "checkGroup_snmv",
-        choices = levels(homiEdad$edad),
-        selected = levels(homiEdad$edad)
-        )
-    } else {
-      updateCheckboxGroupInput(
-        session,
-        "checkGroup_snmv",
-        selected = character(0)
-        )
-    }
+    updateCheckboxGroup(session, "checkGroup_snmv", input, homiEdad$edad)
   })
-  
-  ### pepe: arreglar issue cuando el boton se reactiva
-  # observeEvent(input$deselectAll_snmv, {
-  #   updateCheckboxGroup(session, "checkGroup_snmv", levels(homiEdad$edad), levels(homiEdad$edad))
-  # })
   
   # Grafico lineal del SNMV
   output$linePlot_snmv <- renderPlotly({
@@ -63,14 +43,6 @@ server <- function(input, output, session) {
 
     ggplotly(p, tooltip = c("x", "y"))  # Especificamos qué información mostrar en el tooltip
   })
-  
-  # output$barPlot_snmv <- renderPlotly({
-  #   p <- renderBarPlot(filtered_edad_año_snmv, "edad", "casos", "edad",
-  #                 paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
-  #                 "Grupos de Edad", "Grupo de Edad", "Casos")
-  # 
-  #   ggplotly(p, tooltip = c("x", "y", "fill"))
-  # })
   
   # Data table del SNMV
   output$dataTable_snmv <- renderDT({
@@ -117,21 +89,7 @@ server <- function(input, output, session) {
   
   ### funcion para el boton de deseleccionar/seleccionar
   observeEvent(input$deselectAll_fam, {
-    
-    if (is.null(input$checkGroup_fam)) {
-      updateCheckboxGroupInput(
-        session, 
-        "checkGroup_fam", 
-        choices = levels(dfMalt$Maltrato),
-        selected = levels(dfMalt$Maltrato)
-      )
-    } else {
-      updateCheckboxGroupInput(
-        session, 
-        "checkGroup_fam", 
-        selected = character(0)
-      )
-    }
+    updateCheckboxGroup(session, "checkGroup_fam", input, dfMalt$Maltrato)
   })
   
   # crear gráfico lineal
@@ -197,21 +155,7 @@ server <- function(input, output, session) {
   
   ### funcion para el boton de deseleccionar/seleccionar
   observeEvent(input$deselectAll_just, {
-    
-    if (is.null(input$checkGroup_just)) {
-      updateCheckboxGroupInput(
-        session, 
-        "checkGroup_just", 
-        choices = levels(dfDeli$Delito),
-        selected = levels(dfDeli$Delito)
-      )
-    } else {
-      updateCheckboxGroupInput(
-        session, 
-        "checkGroup_just", 
-        selected = character(0)
-      )
-    }
+    updateCheckboxGroup(session, "checkGroup_just", input, dfDeli$Delito)
   })
   
   output$boxPlot_just <- renderPlotly({
@@ -226,15 +170,6 @@ server <- function(input, output, session) {
 
     ggplotly(p, tooltip = c("x", "y", "color"))
   })
-  
-  # output$boxPlot_just <- renderPlotly({
-  #   p <- renderBoxPlot(
-  #     data = filtered_data_just(), x = "Año", y = "Casos", color = "`FISCALIA DISTRITO`",
-  #     title = "Distribución de Casos por Delito", xlab = "Año", ylab = "Casos",
-  #     colorLab = "Distrito Fiscal", facet = TRUE, facet_var = "Delito"
-  #   )
-  #   ggplotly(p, tooltip = c("x", "y", "color"))
-  # })
   
   # crear el grafico de barras
   output$barPlot_just <- renderPlotly({
