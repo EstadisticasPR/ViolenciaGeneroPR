@@ -118,10 +118,14 @@ ui <- fluidPage(
         ),
         
         # tab con datos de Incidentes
-        tabPanel("Incidentes_snmv"), 
+        tabPanel(
+          "Incidentes_snmv"
+          ), 
         
         # tab con datos de Tasas
-        tabPanel("Tasas_snmv"), 
+        tabPanel(
+          "Tasas_snmv"
+          ), 
         
         # ### xiomy
         # tabPanel(

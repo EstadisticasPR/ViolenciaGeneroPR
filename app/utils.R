@@ -38,37 +38,13 @@ filterData <- function(data, inputValues, column) {
   filter(data, (!!sym(column)) %in% inputValues)
 }
 
-# Función para el botón de deselección/selección
-# updateCheckboxGroup <- function(session, inputId, choices, selected) {
-#   if (is.null(selected)) {
-#     updateCheckboxGroupInput(session, inputId, choices = choices, selected = choices)
-#   } else {
-#     updateCheckboxGroupInput(session, inputId, selected = character(0))
-#   }
-# }
-
-# updateCheckboxGroup <- function(session, inputId, input, choices) {
-#   #print(selected)
-#   # print("Activó el botón")
-#   print(is.null(input$inputID))
-#   if (is.null(input$inputID)) {
-#     print("el checkbox está vacío, llénalo")
-#     updateCheckboxGroupInput(session = session, inputId, choices = choices, selected = choices)
-#   } else {
-#     print("vacía el checkbox")
-#     updateCheckboxGroupInput(session = session, inputId, selected = character(0))
-#     
-#     # updateCheckboxGroupInput(session, inputId, selected = "50 a 54")
-#   }
-# }
-
 ### funcion para el boton de deseleccionar/seleccionar
 updateCheckboxGroup <- function(session, inputId, input, data) {
   print(is.null(input[[inputId]]))
   print(input[[inputId]])
   
   if (is.null(input[[inputId]])) {
-    print("El checkbox está vacío, llénalo")
+    # "El checkbox está vacío, llénalo"
     updateCheckboxGroupInput(
       session,
       inputId,
@@ -76,7 +52,7 @@ updateCheckboxGroup <- function(session, inputId, input, data) {
       selected = levels(data)
     )
   } else {
-    print("Vacía el checkbox")
+    # "Vacía el checkbox"
     updateCheckboxGroupInput(
       session,
       inputId,
@@ -117,7 +93,6 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, f
     p <- p + facet_wrap(as.formula(paste("~", facet_var)), scales = "fixed", drop = FALSE)
   }
   print(p)
-  #return(p)
 }
 
 # Función para renderizar gráficos de caja
@@ -156,13 +131,13 @@ renderPointPlot <- function(data, x, y, title, xlab, ylab) {
 }
 
 # Función para renderizar tablas de datos
-renderPepe <- function(data) {
+renderDataTable <- function(filtered_data) {
   datatable(
-    data(),
-    extensions = c('Buttons'),
+    filtered_data,
+    extensions = c('Buttons'), # Asegúrate de incluir la extensión 'Buttons'
     options = list(
       pageLength = 5,
-      lengthMenu = c(5, nrow(data) / 2, nrow(data)),
+      lengthMenu = c(5, nrow(filtered_data) / 2, nrow(filtered_data)),
       scrollX = TRUE,
       paging = TRUE,
       searching = TRUE,

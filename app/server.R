@@ -32,44 +32,17 @@ server <- function(input, output, session) {
   
   # Grafico de barras del SNMV
   output$barPlot_snmv <- renderPlotly({
-    p <- ggplot(filtered_edad_año_snmv(), aes(x = edad, y = casos, fill = edad)) +
-      geom_bar(stat = "identity") +
-      # pepe: recuerda que no hay limite de y fijo y que se reajusta con cada filtración; arregla esto
-      #ylim(0, max(filtered_edad_snmv()$casos) + 5) +
-      labs(title = paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
-           x = "Grupo de Edad", y = "Casos", fill = "Grupos de Edad") +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-      coord_flip()
-
+    p <- renderBarPlot(filtered_edad_año_snmv, "edad", "casos", "edad",
+                  paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
+                  "Grupo de Edad", "Casos")
+    
     ggplotly(p, tooltip = c("x", "y"))  # Especificamos qué información mostrar en el tooltip
   })
   
-  # Data table del SNMV
   output$dataTable_snmv <- renderDT({
-    datatable(
-      filtered_edad_snmv(),
-      extensions = c('Buttons'), # Asegúrate de incluir la extensión 'Buttons'
-      options = list(
-        pageLength = 5,
-        lengthMenu = c(5, nrow(filtered_edad_snmv()) / 2, nrow(filtered_edad_snmv())),
-        scrollX = TRUE,
-        paging = TRUE,
-        searching = TRUE,
-        fixedColumns = TRUE,
-        autoWidth = FALSE,
-        ordering = TRUE,
-        dom = 'lftpB',
-        buttons = c('copy', 'csv', 'excel')
-      )
-    )
+    renderDataTable(filtered_edad_snmv())
   })
 
-#output$dataTable_snmv <- renderPepe(filtered_edad_snmv)
-
-
-
-  
-  
   observeEvent(input$yearInput_snmv, {
     updateSelectInput(session, "yearInput_snmv", selected = input$yearInput_snmv)
   })
@@ -96,43 +69,20 @@ server <- function(input, output, session) {
   output$linePlot_fam <- renderPlotly({
     p <- renderLinePlot(filtered_data_fam, "Año", "Casos", "Maltrato", "Maltrato",
                    "Casos de Maltrato por Año y Tipo", "Año", "Casos", facet = TRUE, facet_var = "Sexo")
-
     ggplotly(p, tooltip = c("x", "y", "color"))
   })
   
   # crear gráfico de barras
   output$barPlot_fam <- renderPlotly({
-    p <- renderBarPlot(data = filtered_data_año_fam, 
-                  x = "Maltrato",
-                  y = "Casos",
-                  fill = "Sexo",
+    p <- renderBarPlot(data = filtered_data_año_fam, x = "Maltrato", y = "Casos", fill = "Sexo",
                   title = paste("Distribución de Tipos de Maltrato en el Año", input$yearInput_fam),
-                  xlab = "Tipo de Maltrato",
-                  ylab = "Casos",
-                  fillLab = "Sexo")
-    
+                  xlab = "Tipo de Maltrato", ylab = "Casos", fillLab = "Sexo")
     ggplotly(p, tooltip = c("x", "y", "fill"))
   })
   
   # Data Table del DeptFam
-
   output$dataTable_fam <- renderDT({
-    datatable(
-      filtered_data_fam(),
-      extensions = c('Buttons'), 
-      options = list(
-        pageLength = 5,
-        lengthMenu = c(5, nrow(filtered_data_fam()) / 2, nrow(filtered_data_fam())),
-        scrollX = TRUE,
-        paging = TRUE,
-        searching = TRUE,
-        fixedColumns = TRUE,
-        autoWidth = FALSE,
-        ordering = TRUE,
-        dom = 'lftpB',
-        buttons = c('copy', 'csv', 'excel')
-      )
-    )
+    renderDataTable(filtered_data_fam())
   })
   
   observeEvent(input$yearInput_fam, {
@@ -157,6 +107,21 @@ server <- function(input, output, session) {
   observeEvent(input$deselectAll_just, {
     updateCheckboxGroup(session, "checkGroup_just", input, dfDeli$Delito)
   })
+  
+  # crear gráfico de barras
+  # output$boxPlot_just <- renderPlotly({
+  #   renderBoxPlot(
+  #     data = filtered_data_just(),
+  #     x = "Año",
+  #     y = "Casos",
+  #     color = "FISCALIA DISTRITO",
+  #     title = "Distribución de Casos por Delito",
+  #     xlab = "Año",
+  #     ylab = "Casos",
+  #     facet = TRUE,
+  #     facet_var = "Delito"
+  #   )
+  # })
   
   output$boxPlot_just <- renderPlotly({
     p <- ggplot(filtered_data_just(), aes(x = Año, y = Casos)) +
@@ -199,22 +164,7 @@ server <- function(input, output, session) {
   
   # Data table del DeptJust
   output$dataTable_just <- renderDT({
-    datatable(
-      filtered_data_just(),
-      extensions = c('Buttons'), # Asegúrate de incluir la extensión 'Buttons'
-      options = list(
-        pageLength = 5,
-        lengthMenu = c(5, nrow(filtered_data_just()) / 2, nrow(filtered_data_just())),
-        scrollX = TRUE,
-        paging = TRUE,
-        searching = TRUE,
-        fixedColumns = TRUE,
-        autoWidth = FALSE,
-        ordering = TRUE,
-        dom = 'lftpB', 
-        buttons = c('copy', 'csv', 'excel')
-      )
-    ) 
+    renderDataTable(filtered_data_just())
   })
   
   observeEvent(input$yearInput_just, {
@@ -222,42 +172,13 @@ server <- function(input, output, session) {
   })
   ########## Server de Prueba ##########
   # Data table del DeptJust
+  
   output$dataTable_test <- renderDT({
-    datatable(
-      starwars,
-      extensions = c('Buttons'), # Asegúrate de incluir la extensión 'Buttons'
-      options = list(
-        pageLength = 5,
-        lengthMenu = c(5, nrow(starwars) / 2, nrow(starwars)),
-        scrollX = TRUE,
-        paging = TRUE,
-        searching = TRUE,
-        fixedColumns = TRUE,
-        autoWidth = FALSE,
-        ordering = TRUE,
-        dom = 'lftpB', 
-        buttons = c('copy', 'csv', 'excel')
-      )
-    )
+    renderDataTable(starwars)
   })
   
   ## tab 2
   output$dataTable_test2 <- renderDT({
-    datatable(
-      dfMalt,
-      extensions = c('Buttons'), # Asegúrate de incluir la extensión 'Buttons'
-      options = list(
-        pageLength = 5,
-        lengthMenu = c(5, nrow(starwars) / 2, nrow(starwars)),
-        scrollX = TRUE,
-        paging = TRUE,
-        searching = TRUE,
-        fixedColumns = TRUE,
-        autoWidth = FALSE,
-        ordering = TRUE,
-        dom = 'lftpB', 
-        buttons = c('copy', 'csv', 'excel')
-      )
-    )
+    renderDataTable(dfMalt)
   })
 }
