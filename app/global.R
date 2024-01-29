@@ -1,5 +1,4 @@
-# pepe: traduce a español
-print("Sourcing global objects from global.R")
+cat("Loading global objects from global.R...\n\n")
 ########################################
 #### Cargar bibliotecas necesarias #####
 ########################################
@@ -14,7 +13,8 @@ packages <- c(
   "plotly",
   "DT",
   "shinyWidgets",
-  "sf"
+  "sf",
+  "roxygen2"
 )
 
 # Instalar los paquetes si no están instalados
@@ -40,12 +40,15 @@ convert_mixed_columns <- function(data) {
   mixed_columns_names <- names(mixed_columns)[mixed_columns]
   
   for (col in mixed_columns_names) {
-    data[[col]] <- ifelse(data[[col]] == "N/A", NA, as.character(data[[col]]))
-    data[[col]] <- as.numeric(data[[col]])
+    suppressWarnings({
+      data[[col]] <- ifelse(data[[col]] == "N/A", NA, as.character(data[[col]]))
+      data[[col]] <- as.numeric(data[[col]])
+    })
   }
   
   return(data)
 }
+
 
 ##################################################################################
 #### Procesamiento de datos del Sistema de Notificacion de Muertes Violentas #####
@@ -69,6 +72,24 @@ colores_homiEdad <- setNames(
   unique(homiEdad$edad), 
   scales::hue_pal()(length(unique(homiEdad$edad)))
 )
+
+# importar los datos de incidentes violentos segun tipo de muerte según el año, desde 2017-2020
+inci <- read_excel(file.path(snmv, "svmvIncidentes.xlsx")) %>%
+  # Seleccionar columnas y pivote largo
+  select(-total) %>%
+  pivot_longer(!`Tipo de Incidente`, names_to = "año", values_to = "casos") %>%
+  # Filtrar datos no deseados
+  filter(
+    !grepl("Total de víctimas mujeres", `Tipo de Incidente`),
+    `Tipo de Incidente` != "Total de incidentes"
+  ) %>%
+  mutate(
+    `Tipo de Incidente` = factor(`Tipo de Incidente`),
+    año = factor(año)
+  ) %>%
+  rename(
+    tipo = `Tipo de Incidente`
+  )
 
 #############################################################
 #### Procesamiento de datos del Departamento de Familia #####
@@ -97,11 +118,9 @@ dfMalt2021 <- read_excel(paste0(dfam, "dfMalt2021.xlsx")) %>%
 dfMalt2022 <- read_excel(paste0(dfam, "dfMalt2022.xlsx")) %>%
   mutate(Año = "2022")
 
-dfMalt <- dfMalt2018 %>%
-  full_join(dfMalt2019) %>%
-  full_join(dfMalt2020) %>%
-  full_join(dfMalt2021) %>%
-  full_join(dfMalt2022) %>%
+dfMalt <- bind_rows(
+  list(dfMalt2018, dfMalt2019, dfMalt2020, dfMalt2021, dfMalt2022)
+) %>%
   rename(
     Masculino = `Cantidad Masculino`,
     Femenino = `Cantidad Femenino`
@@ -145,9 +164,9 @@ deli2023 <- read_excel(paste0(djus, "djDelitos2023.xlsx")) %>%
   convert_mixed_columns() %>%
   mutate(Año = "2023")
 
-dfDeli <- full_join(deli2020, deli2021) %>% 
-  full_join(deli2022) %>%
-  full_join(deli2023) %>% 
+dfDeli <- bind_rows(
+  list(deli2020, deli2021, deli2022, deli2023)
+) %>%
   filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE)) %>%
   select(-TOTAL) %>%
   pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%

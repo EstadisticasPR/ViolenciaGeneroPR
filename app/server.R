@@ -1,8 +1,8 @@
 # Server
+cat("Loading Server from server.R...\n")
 server <- function(input, output, session) {
   # Importar el contenido de global.R y utils.R
   source("utils.R")
-  source("global.R")
   
   ########## Server del Sistema de Notificación de Muertes Violentas ##########
   
@@ -39,6 +39,7 @@ server <- function(input, output, session) {
     ggplotly(p, tooltip = c("x", "y"))  # Especificamos qué información mostrar en el tooltip
   })
   
+  # Data Table del SNMV
   output$dataTable_snmv <- renderDT({
     renderDataTable(filtered_edad_snmv())
   })

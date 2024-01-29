@@ -1,4 +1,5 @@
 # User Interface 
+cat("Loading User Interface from ui.R...\n")
 ui <- fluidPage(
   
   ### El theme (colores) de la app ###
@@ -82,7 +83,7 @@ ui <- fluidPage(
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
-          tags$span(paste0("Actualizado: ", actualizacion_snmvA)),
+          tags$span(paste0("Actualizado: ", actualizacion_snmvB)),
           tags$span("Nota: Los datos del año 2020 son preliminares"),
           
           # Menu sidebar con widgets
@@ -95,10 +96,11 @@ ui <- fluidPage(
                 label = "Seleccione Grupo(s) de Edad:", 
                 status = "default", 
                 size = "default",
-                checkboxGroupInput("checkGroup_snmv",
+                checkboxGroupInput(
+                  "checkGroup_snmv",
                   label = "",
                   choices = levels(homiEdad$edad),
-                  selected = levels(homiEdad$edad)[1]
+                  selected = levels(homiEdad$edad)[8]
                 ),
                 actionButton("deselectAll_snmv", "(De)seleccionar todo")
               ),
@@ -117,9 +119,48 @@ ui <- fluidPage(
           )
         ),
         
-        # tab con datos de Incidentes
+        # tab con datos de Incidentes segun el año
         tabPanel(
-          "Incidentes_snmv"
+          "Incidentes_snmv",
+          
+          # Título del Tab
+          titlePanel("Tipo de muerte según el año"),
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
+          tags$span(paste0("Actualizado: ", actualizacion_snmvA)),
+          tags$span("Nota: Los datos del año 2020 son preliminares"),
+          
+          sidebarLayout(
+            sidebarPanel(
+              # botón para tener el checkbox en un menu dropdown 
+              dropdownButton(
+                circle = "FALSE",
+                label = "Seleccione Tipo(s) de Incidente:",
+                status = "default",
+                size = "default",
+                checkboxGroupInput(
+                  "checkGroup_snmv_A",
+                  label = "",
+                  choices = levels(inci$tipo),
+                  selected = levels(inci$tipo)
+                ),
+                actionButton("deselectAll_snmv_A", "(De)seleccionar todo")
+              ),
+
+              hr()
+              # fluidRow(column(3, verbatimTextOutput("value")))
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              # plotlyOutput("linePlot_snmv"),
+              # plotlyOutput("barPlot_snmv"),
+              # DTOutput("dataTable_snmv")
+            )
+          ),
+            
+          
           ), 
         
         # tab con datos de Tasas
@@ -286,7 +327,38 @@ ui <- fluidPage(
         tabPanel("Transfondo_del_Proyecto"),
         tabPanel("Fuentes"), 
         tabPanel("Autores"),
-        tabPanel("Contacto")
+        
+        tabPanel(
+          "Contacto",
+          mainPanel(
+            fluidRow(
+              
+              column(6, 
+                     h1("Instituto De Estadísticas De Puerto Rico"),
+                     h4('Postal: P.O. Box 195484 | San Juan, PR 00919-5484'),
+                     h4( a(href="tel:787-819-0730", 'Tel: (787) 819-0730')),
+                     h4('Email: preguntas@estadisticas.pr'),
+                     h4('Horario de Oficina: lunes a viernes, 8:00 am a 4:30 pm'),
+                     a(href='https://www.facebook.com/estadisticas.pr',
+                       icon("facebook","fa-2x"),) ,
+                     a(href='https://www.instagram.com/institutodeestadisticas/' ,
+                       icon('instagram','fa-2x')),
+                     a(href="https://twitter.com/EstadisticasPR",
+                       icon('twitter','fa-2x')),
+                     a(href="https://www.youtube.com/channel/UCIZggRtE5KK0z9D39FGZtyQ",
+                       icon('youtube','fa-2x'))),
+              
+              column(3),
+              column(3,
+                     br(),
+                     a(img(src='IEPRlocal.png',height=200),
+                       href="https://www.google.com/maps/place/Instituto+de+Estad%C3%ADsticas+de+Puerto+Rico/@18.4279999,-66.056444,17.5z/data=!4m5!3m4!1s0x8c0368a432af0b3d:0x274ac1c656b89f89!8m2!3d18.4275192!4d-66.0562994"),
+                     a(img(src='IEPRmap.png',height=200),
+                       href='https://www.google.com/maps/place/Instituto+de+Estad%C3%ADsticas+de+Puerto+Rico/@18.4279999,-66.056444,17.5z/data=!4m5!3m4!1s0x8c0368a432af0b3d:0x274ac1c656b89f89!8m2!3d18.4275192!4d-66.0562994'))
+            )
+            
+          )
+          )
       )
     ),
     
