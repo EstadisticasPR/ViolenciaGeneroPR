@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r, warning=FALSE, echo=FALSE, message=FALSE}
+library(leaflet)
 library(tidyverse)
 library(readxl)
 library(zoo)
@@ -73,6 +74,84 @@ deliDF <- full_join(deli2020, deli2021) %>%
     )
 deliDF
 ```
+
+```{r}
+# Crear un dataframe con las coordenadas de los distritos fiscales de Puerto Rico
+coordenadas_pr <- data.frame(
+  `FISCALIA DISTRITO` = c("AGUADILLA", "AIBONITO", "ARECIBO", "BAYAMÓN", "CAGUAS", "CAROLINA",
+                          "FAJARDO", "GUAYAMA", "HUMACAO", "MAYAGÜEZ", "PONCE", "SAN JUAN", "UTUADO"),
+  longitud = c(-67.1541, -66.2625, -66.7181, -66.1653, -66.0399, -65.9665,
+               -65.6522, -66.1109, -65.8329, -67.1457, -66.6168, -66.1057, -66.688),
+  latitud = c(18.4274, 18.142, 18.4503, 18.3798, 18.2343, 18.3802,
+              18.3258, 17.9756, 18.148, 18.201, 18.0108, 18.4655, 18.2635)
+)
+
+# Fusionar los datos filtrados con las coordenadas de los distritos fiscales
+delitos_mapa <- merge(deliDF, coordenadas_pr,
+                      by.x = "FISCALIA DISTRITO", by.y = "FISCALIA.DISTRITO")
+
+# Filtrar el dataframe deliDF para el año 2020 y el delito "Art2.8"
+delitos_2020 <- subset(delitos_mapa, Año == 2020 & Delito == "Art2.8")
+
+
+# Create a leaflet map
+m <- leaflet() %>% addTiles()
+
+# Set bounds
+m <- m %>% fitBounds(-67.1541, 18.2635, -65.6522, 18.4655)
+
+# Move the center to Puerto Rico
+m <- m %>% setView(-66.1057, 18.2376, zoom = 9)
+
+# Add circle markers for each district
+m <- m %>% addCircleMarkers(data = delitos_mapa,
+                             lng = ~longitud,
+                             lat = ~latitud,
+                             radius = sqrt(deliDF$Casos) * 5,
+                             color = "red",
+                             fillOpacity = 0.8,
+                             stroke = FALSE,
+                             popup = paste("Distrito:", deliDF$`FISCALIA DISTRITO`, "<br>", "Casos:", deliDF$Casos))
+
+# Show the map
+m
+
+```
+
+```{r}
+# Crear un mapa base
+m <- leaflet() %>% addTiles()
+
+# Establecer la vista en Puerto Rico
+m <- m %>% setView(-66.1057, 18.2376, zoom = 9)
+
+# Prepare the text for tooltips:
+tooltip_text <- paste(
+  "Municipio: ", deliDF$`FISCALIA DISTRITO`,"<br/>",
+  "Casos: ", deliDF$Casos,
+  sep="") %>%
+  lapply(htmltools::HTML)
+
+# Convertir el dataframe a un objeto sf
+delitos_mapa <- st_as_sf(delitos_mapa, coords = c("longitud", "latitud"), crs = 4326)
+
+# Crear el mapa
+m <- leaflet(data = delitos_mapa) %>%
+  addTiles() %>%
+  setView(lat = 18.1, lng = -66.4, zoom = 8) %>%
+  addPolygons(
+    fillColor = "blue",  # Color de relleno de los polígonos
+    stroke = TRUE,
+    fillOpacity = 0.5,
+    color = "black",
+    weight = 0.3,
+    popup = ~`FISCALIA DISTRITO`
+  )
+
+# Mostrar el mapa
+m
+```
+
 
 ```{r, warning=FALSE, echo=FALSE, message=FALSE}
 # limites <- c(0, sum(deliDF$Casos, na.rm = TRUE) + 20)
