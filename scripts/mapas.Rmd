@@ -1,0 +1,133 @@
+---
+title: "Funcionalidad de Mapas"
+author: "Félix A Báez Santiago"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+library(leaflet)
+library(tidyverse)
+library(readxl)
+library(zoo)
+library(here)
+library(lubridate)
+library(sf)
+path <- here("data", "mapas//")
+```
+
+Funcion para manejar datos missing
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+# funcion para convertir columna con varios tipos de datos a numerico
+convert_mixed_columns <- function(data) {
+  mixed_columns <- sapply(data, function(col) any(is.character(col) & !is.na(as.numeric(col))))
+  mixed_columns_names <- names(mixed_columns)[mixed_columns]
+  
+  for (col in mixed_columns_names) {
+    data[[col]] <- ifelse(data[[col]] == "N/A", NA, as.character(data[[col]]))
+    data[[col]] <- as.numeric(data[[col]])
+  }
+  
+  return(data)
+}
+```
+
+## Delitos a la Ley 54, casos radicados por jurisdicción y articulo de la Ley de Violencia Domestica, año 2020 a *2023
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+# importando delitos del 2020
+deli2020 <- read_excel(paste0(path, "djDelitos2020.xlsx")) %>% 
+  convert_mixed_columns() %>%
+  mutate(Año = "2020") %>% select(-TOTAL) %>%
+  pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
+  filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE))
+
+# importando delitos del 2021
+deli2021 <- read_excel(paste0(path, "djDelitos2021.xlsx")) %>%
+  convert_mixed_columns() %>%
+  mutate(Año = "2021") %>% select(-TOTAL) %>% 
+  pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
+  filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE))
+
+# importando delitos del 2022
+deli2022 <- read_excel(paste0(path, "djDelitos2022.xlsx")) %>%
+  convert_mixed_columns() %>%
+  mutate(Año = "2022") %>% select(-TOTAL) %>%
+  pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
+  filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE))
+
+# importando delitos del 2023
+deli2023 <- read_excel(paste0(path, "djDelitos2023.xlsx")) %>%
+  convert_mixed_columns() %>%
+  mutate(Año = "2023") %>% select(-TOTAL) %>%
+  pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
+  filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE))
+
+deliDF <- full_join(deli2020, deli2021) %>% 
+  full_join(deli2022) %>%
+  full_join(deli2023) %>%
+  mutate(
+    Año = as.factor(Año),
+    `FISCALIA DISTRITO` = str_to_title(tolower(`FISCALIA DISTRITO`))
+    )
+deliDF
+```
+
+```{r}
+# Crear un dataframe con las coordenadas de las fiscalías policiacas
+regiones_agricolas <- sf::st_read(paste0(path, "distritos_fiscales.json"))
+as.tibble(regiones_agricolas)
+```
+
+```{r}
+# Coordenadas de los distritos fiscales de Puerto Rico
+coordenadas_pr <- data.frame(
+  `FISCALIA DISTRITO` = c("Aguadilla", "Aibonito", "Arecibo", "Bayamón", "Caguas", "Carolina", "Fajardo", "Guayama", "Humacao", "Mayagüez", "Ponce", "San Juan", "Utuado"),
+  longitud = c(-67.1541, -66.2625, -66.7181, -66.1653, -66.0399, -65.9665,
+               -65.6522, -66.1109, -65.8329, -67.1457, -66.6168, -66.1057, -66.688),
+  latitud = c(18.4274, 18.142, 18.4503, 18.3798, 18.2343, 18.3802,
+              18.3258, 17.9756, 18.148, 18.201, 18.0108, 18.4655, 18.2635)
+)
+
+# Crear una paleta de colores basada en el atributo deseado
+colores <- colorFactor(
+  palette = c('violet', 'limegreen', 'yellow', 'cyan', 'orange', 'magenta', 'darkblue', 'brown', 'gold', 'sienna', 'maroon', 'purple'),  # Colores disponibles
+  domain = regiones_agricolas$GROUP  # Atributo de las regiones agrícolas utilizado para generar la paleta de colores
+)
+
+# Filtrar y fusionar datos
+delitos_2020 <- subset(merge(deliDF, coordenadas_pr, by.x = "FISCALIA DISTRITO", by.y = "FISCALIA.DISTRITO"), Año == 2020 & Delito == "Art2.8")
+
+# Crear el mapa Leaflet
+m <- leaflet() %>% 
+  addTiles() %>%  # Agregar capa de teselas base
+  fitBounds(-67.1541, 18.2635, -65.6522, 18.4655) %>%  # Ajustar límites del mapa
+  setView(-66.1057, 18.2376, zoom = 9) %>%  # Establecer vista centrada en Puerto Rico
+  addPolygons(
+    data = regiones_agricolas,  # Añadir polígonos de las regiones agrícolas
+    fillColor = ~colores(GROUP), # Asignar colores a cada región agrícola basados en el atributo STATE
+    color = "green",
+    fillOpacity = 0.3,
+    weight = 2,
+    highlight = highlightOptions(
+    weight = 5,  # Grosor del borde al resaltar
+    color = "white",  # Color del borde al resaltar
+    fillOpacity = 0.7,  # Opacidad del relleno al resaltar
+    )
+    ) %>%
+  addMarkers(
+    lng = coordenadas_pr$longitud, 
+    lat = coordenadas_pr$latitud,
+    popup = paste("Distrito:", coordenadas_pr$`FISCALIA DISTRITO`)
+    )  # Añadir marcadores en los pueblos seleccionados
+# Mostrar el mapa
+m
+```
+
+
+
+
+

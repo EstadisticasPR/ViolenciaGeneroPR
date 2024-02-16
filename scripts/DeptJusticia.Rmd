@@ -17,7 +17,7 @@ library(zoo)
 library(here)
 library(lubridate)
 library(sf)
-path <- here("data", "Departamento_de_Justicia/")
+path <- here("data", "Departamento_de_Justicia//")
 ```
 
 Funcion para manejar datos missing
@@ -76,7 +76,10 @@ deliDF
 ```
 
 ```{r}
-# Crear un dataframe con las coordenadas de los distritos fiscales de Puerto Rico
+# Crear un dataframe con las coordenadas de las regiones agrícolas
+regiones_agricolas <- sf::st_read("https://raw.githubusercontent.com/LuisAponteLopez/PuertoRicoCoordenadas/main/municipios.json")
+
+# Coordenadas de los distritos fiscales de Puerto Rico
 coordenadas_pr <- data.frame(
   `FISCALIA DISTRITO` = c("AGUADILLA", "AIBONITO", "ARECIBO", "BAYAMÓN", "CAGUAS", "CAROLINA",
                           "FAJARDO", "GUAYAMA", "HUMACAO", "MAYAGÜEZ", "PONCE", "SAN JUAN", "UTUADO"),
@@ -86,70 +89,108 @@ coordenadas_pr <- data.frame(
               18.3258, 17.9756, 18.148, 18.201, 18.0108, 18.4655, 18.2635)
 )
 
-# Fusionar los datos filtrados con las coordenadas de los distritos fiscales
-delitos_mapa <- merge(deliDF, coordenadas_pr,
-                      by.x = "FISCALIA DISTRITO", by.y = "FISCALIA.DISTRITO")
+# Crear una paleta de colores basada en el atributo deseado
+colores <- colorFactor(
+  palette = c('cyan', 'magenta', 'yellow', 'violet', 'orange', 'limegreen', 'darkblue', 'brown'),  # Colores disponibles
+  domain = regiones_agricolas$STATE  # Atributo de las regiones agrícolas utilizado para generar la paleta de colores
+)
 
-# Filtrar el dataframe deliDF para el año 2020 y el delito "Art2.8"
-delitos_2020 <- subset(delitos_mapa, Año == 2020 & Delito == "Art2.8")
+# Filtrar y fusionar datos
+delitos_2020 <- subset(merge(deliDF, coordenadas_pr, by.x = "FISCALIA DISTRITO", by.y = "FISCALIA.DISTRITO"), Año == 2020 & Delito == "Art2.8")
 
-
-# Create a leaflet map
-m <- leaflet() %>% addTiles()
-
-# Set bounds
-m <- m %>% fitBounds(-67.1541, 18.2635, -65.6522, 18.4655)
-
-# Move the center to Puerto Rico
-m <- m %>% setView(-66.1057, 18.2376, zoom = 9)
-
-# Add circle markers for each district
-m <- m %>% addCircleMarkers(data = delitos_mapa,
-                             lng = ~longitud,
-                             lat = ~latitud,
-                             radius = sqrt(deliDF$Casos) * 5,
-                             color = "red",
-                             fillOpacity = 0.8,
-                             stroke = FALSE,
-                             popup = paste("Distrito:", deliDF$`FISCALIA DISTRITO`, "<br>", "Casos:", deliDF$Casos))
-
-# Show the map
+# Crear el mapa Leaflet
+m <- leaflet() %>% 
+  addTiles() %>%  # Agregar capa de teselas base
+  fitBounds(-67.1541, 18.2635, -65.6522, 18.4655) %>%  # Ajustar límites del mapa
+  setView(-66.1057, 18.2376, zoom = 9) %>%  # Establecer vista centrada en Puerto Rico
+  # addCircleMarkers(data = delitos_2020,  # Añadir marcadores circulares
+  #                  lng = ~longitud,
+  #                  lat = ~latitud,
+  #                  radius = sqrt(delitos_2020$Casos) * 5,  # Tamaño del marcador basado en la raíz cuadrada de los casos
+  #                  color = "red",
+  #                  fillOpacity = 0.8,
+  #                  stroke = FALSE,
+  #                  popup = paste("Distrito:", delitos_2020$`FISCALIA DISTRITO`, "<br>", "Casos:", delitos_2020$Casos)) %>%  # Popup con información
+  addPolygons(data = regiones_agricolas,  # Añadir polígonos de las regiones agrícolas
+              fillColor = ~colores(STATE), # Asignar colores a cada región agrícola basados en el atributo STATE
+              color = "green",
+              fillOpacity = 0.3,
+              weight = 2,
+              highlight = highlightOptions(
+                weight = 5,  # Grosor del borde al resaltar
+                color = "white",  # Color del borde al resaltar
+                fillOpacity = 0.7,  # Opacidad del relleno al resaltar
+                bringToFront = TRUE
+              )) %>%
+  addMarkers(lng = coordenadas_pr$longitud, 
+             lat = coordenadas_pr$latitud,
+             popup = paste("Distrito:", coordenadas_pr$`FISCALIA DISTRITO`))  # Añadir marcadores en los pueblos seleccionados
+# Mostrar el mapa
 m
+```
+
+```{r}
+# Definir una paleta de colores para las regiones agrícolas
+colores_region_agricola <- c('cyan', 'magenta', 'yellow', 'violet', 'orange', 'limegreen', 'darkblue', 'brown')
+
+# Crear el mapa Leaflet
+m <- leaflet() %>% 
+  addTiles() %>%  # Agregar capa de teselas base
+  fitBounds(-67.1541, 18.2635, -65.6522, 18.4655) %>%  # Ajustar límites del mapa
+  setView(-66.1057, 18.2376, zoom = 9) %>%  # Establecer vista centrada en Puerto Rico
+  addPolygons(data = regiones_agricolas,  # Añadir polígonos de las regiones agrícolas
+              fillColor = ~colores_region_agricola[as.numeric(STATE)], # Asignar colores a cada región agrícola basados en el atributo STATE
+              #color = "green",
+              fillOpacity = 0.3,
+              weight = 2,
+              highlight = highlightOptions(
+                weight = 5,  # Grosor del borde al resaltar
+                color = "white",  # Color del borde al resaltar
+                fillOpacity = 0.7,  # Opacidad del relleno al resaltar
+                bringToFront = TRUE
+              )) %>%
+  addMarkers(lng = coordenadas_pr$longitud, 
+             lat = coordenadas_pr$latitud,
+             popup = paste("Distrito:", coordenadas_pr$`FISCALIA DISTRITO`))  # Añadir marcadores en los pueblos seleccionados
+# Mostrar el mapa
+m
+```
+
+
+```{r}
+# Crear un dataframe de asignación de pueblos a regiones policíacas
+asignacion <- data.frame(
+  Area_Policiaca = c("Aibonito", "Aguadilla", "Arecibo", "Bayamón", "Caguas", "Carolina", 
+                     "Fajardo", "Guayama", "Humacao", "Mayagüez", "Ponce", "San Juan", "Utuado"),
+  Pueblo = c("Aibonito, Barranquitas, Coamo, Comerío, Orocovis", 
+              "Aguadilla, Aguada, Isabela, Moca, Rincón, San Sebastián",
+              "Arecibo, Barceloneta, Camuy, Ciales, Florida, Hatillo, Manatí, Morovis, Quebradillas",
+              "Bayamón, Cataño, Guaynabo, Toa Alta, Dorado, Naranjito, Corozal, Vega Alta, Vega Baja",
+              "Caguas, Aguas Buenas, Cidra, Gurabo, Juntos, San Lorenzo",
+              "Carolina, Trujillo Alto, Canóvanas, Loíza",
+              "Fajardo, Ceiba, Culebra, Luquillo, Río Grande, Vieques",
+              "Guayama, Arroyo, Cayey, Patillas, Salinas, Santa Isabel",
+              "Humacao, Las Piedras, Maunabo, Yabucoa",
+              "Mayagüez, Añasco, Cabo Rojo, Hormigueros, Lajas, Las Marías, Maricao, Sabana Grande, San Germán",
+              "Ponce, Guánica, Guayanilla, Juana Díaz, Peñuelas, Villalba, Yauco",
+              "San Juan",
+              "Utuado, Adjuntas, Jayuya, Lares"),
+  stringsAsFactors = FALSE
+)
+
+# Dividir la columna 'Pueblos' en filas para cada pueblo
+pueblos_por_area <- tidyr::separate_rows(asignacion, Pueblo, sep = ", ")
+pueblos_por_area
 
 ```
 
 ```{r}
-# Crear un mapa base
-m <- leaflet() %>% addTiles()
+# Crear dataframe de áreas policiacas y pueblos
+areas_policiacas <- data.frame(
+  Area_Policiaca = c("Aibonito", "Aguadilla", "Arecibo", "Bayamón", "Caguas", "Carolina", "Fajardo", "Guayama", "Humacao", "Mayagüez", "Ponce", "San Juan", "Utuado"),
+  Pueblos = c("Aibonito, Barranquitas, Coamo, Comerío, Orocovis", "Aguadilla, Aguada, Isabela, Moca, Rincón, San Sebastián", "Arecibo, Barceloneta, Camuy, Ciales, Florida, Hatillo, Manatí, Morovis, Quebradillas", "Bayamón, Cataño, Guaynabo, Toa Alta, Dorado, Naranjito, Corozal, Vega Alta, Vega Baja", "Caguas, Aguas Buenas, Cidra, Gurabo, Juntos, San Lorenzo", "Carolina, Trujillo Alto, Canóvanas, Loíza", "Fajardo, Ceiba, Culebra, Luquillo, Río Grande, Vieques", "Guayama, Arroyo, Cayey, Patillas, Salinas, Santa Isabel", "Humacao, Las Piedras, Maunabo, Yabucoa", "Mayagüez, Añasco, Cabo Rojo, Hormigueros, Lajas, Las Marías, Maricao, Sabana Grande, San Germán", "Ponce, Guánica, Guayanilla, Juana Díaz, Peñuelas, Villalba, Yauco", "San Juan", "Utuado, Adjuntas, Jayuya, Lares")
+)
 
-# Establecer la vista en Puerto Rico
-m <- m %>% setView(-66.1057, 18.2376, zoom = 9)
-
-# Prepare the text for tooltips:
-tooltip_text <- paste(
-  "Municipio: ", deliDF$`FISCALIA DISTRITO`,"<br/>",
-  "Casos: ", deliDF$Casos,
-  sep="") %>%
-  lapply(htmltools::HTML)
-
-# Convertir el dataframe a un objeto sf
-delitos_mapa <- st_as_sf(delitos_mapa, coords = c("longitud", "latitud"), crs = 4326)
-
-# Crear el mapa
-m <- leaflet(data = delitos_mapa) %>%
-  addTiles() %>%
-  setView(lat = 18.1, lng = -66.4, zoom = 8) %>%
-  addPolygons(
-    fillColor = "blue",  # Color de relleno de los polígonos
-    stroke = TRUE,
-    fillOpacity = 0.5,
-    color = "black",
-    weight = 0.3,
-    popup = ~`FISCALIA DISTRITO`
-  )
-
-# Mostrar el mapa
-m
 ```
 
 
