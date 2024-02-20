@@ -17,7 +17,9 @@ library(zoo)
 library(here)
 library(lubridate)
 library(sf)
-path <- here("data", "mapas//")
+library(plotly)
+path <- here("data", "Departamento_de_Justicia//")
+path2 <- here("data", "mapas/")
 ```
 
 Funcion para manejar datos missing
@@ -78,38 +80,47 @@ deliDF
 
 ```{r}
 # Crear un dataframe con las coordenadas de las fiscalías policiacas
-regiones_agricolas <- sf::st_read(paste0(path, "distritos_fiscales.json"))
-as.tibble(regiones_agricolas)
+distritos_fiscales <- sf::st_read(paste0(path2, "distritos_fiscales.json"))
+as.tibble(distritos_fiscales)
 ```
+
+```{r}
+# Combinar los datos de delitos con los datos geográficos de los distritos fiscales
+deliMapa <- merge(distritos_fiscales, deliDF, by.x = "GROUP", by.y = "FISCALIA DISTRITO")
+deliMapa
+```
+
 
 ```{r}
 # Coordenadas de los distritos fiscales de Puerto Rico
 coordenadas_pr <- data.frame(
-  `FISCALIA DISTRITO` = c("Aguadilla", "Aibonito", "Arecibo", "Bayamón", "Caguas", "Carolina", "Fajardo", "Guayama", "Humacao", "Mayagüez", "Ponce", "San Juan", "Utuado"),
+  `FISCALIA DISTRITO` = c("Aguadilla", "Aibonito", "Arecibo", "Bayamón", "Caguas", "Carolina", "Fajardo", "Guayama", "Humacao", "Mayagüez", "Ponce", "San Juan", "Utuado", "Vega Baja"),
   longitud = c(-67.1541, -66.2625, -66.7181, -66.1653, -66.0399, -65.9665,
-               -65.6522, -66.1109, -65.8329, -67.1457, -66.6168, -66.1057, -66.688),
+               -65.6522, -66.1109, -65.8329, -67.1457, -66.6168, -66.1057, -66.688, -66.4337),
   latitud = c(18.4274, 18.142, 18.4503, 18.3798, 18.2343, 18.3802,
-              18.3258, 17.9756, 18.148, 18.201, 18.0108, 18.4655, 18.2635)
+              18.3258, 17.9756, 18.148, 18.201, 18.0108, 18.4655, 18.2635, 18.4461)
 )
 
-# Crear una paleta de colores basada en el atributo deseado
-colores <- colorFactor(
-  palette = c('violet', 'limegreen', 'yellow', 'cyan', 'orange', 'magenta', 'darkblue', 'brown', 'gold', 'sienna', 'maroon', 'purple'),  # Colores disponibles
-  domain = regiones_agricolas$GROUP  # Atributo de las regiones agrícolas utilizado para generar la paleta de colores
-)
 
 # Filtrar y fusionar datos
 delitos_2020 <- subset(merge(deliDF, coordenadas_pr, by.x = "FISCALIA DISTRITO", by.y = "FISCALIA.DISTRITO"), Año == 2020 & Delito == "Art2.8")
 
+# Crear una paleta de colores basada en el atributo deseado
+colores <- colorFactor(
+  palette = c('#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf', '#aec7e8', '#ffbb78'),  # Colores disponibles
+  domain = distritos_fiscales$GROUP  # Atributo de las regiones agrícolas utilizado para generar la paleta de colores
+)
+
 # Crear el mapa Leaflet
 m <- leaflet() %>% 
-  addTiles() %>%  # Agregar capa de teselas base
-  fitBounds(-67.1541, 18.2635, -65.6522, 18.4655) %>%  # Ajustar límites del mapa
-  setView(-66.1057, 18.2376, zoom = 9) %>%  # Establecer vista centrada en Puerto Rico
+  addTiles(urlTemplate = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png") %>%  # Agregar capa de teselas base
+  fitBounds(-67.5, 17.8, -65, 18.6) %>%  # Ajustar límites del mapa
+  setView(-66.3, 18.2, zoom = 8.5) %>%  # Establecer vista centrada en Puerto Rico
+  setMaxBounds(lng1 = -67.5, lat1 = 17.8, lng2 = -65, lat2 = 18.6) %>%
   addPolygons(
-    data = regiones_agricolas,  # Añadir polígonos de las regiones agrícolas
+    data = distritos_fiscales,  # Añadir polígonos de las regiones agrícolas
     fillColor = ~colores(GROUP), # Asignar colores a cada región agrícola basados en el atributo STATE
-    color = "green",
+    color = "",
     fillOpacity = 0.3,
     weight = 2,
     highlight = highlightOptions(
@@ -127,6 +138,45 @@ m <- leaflet() %>%
 m
 ```
 
+```{r}
+# Seleccionar solo los datos para un tipo de delito específico
+delito_seleccionado <- "Art3.5"  # Reemplaza con el delito que deseas visualizar
+año_seleccionado <- "2021"
+
+datos_delito_seleccionado <- deliMapa %>%
+  filter(
+    Delito == delito_seleccionado,
+    Año == año_seleccionado
+  )
+
+# Crear el objeto sf para los datos del delito seleccionado
+datos_delito_seleccionado_sf <- st_as_sf(datos_delito_seleccionado)
+
+# Crear el mapa con ggplot2
+mapa_delitos <- ggplot() +
+  geom_sf(data = datos_delito_seleccionado_sf, aes(fill = Casos)) +
+  labs(title = paste("Incidencia de casos de", delito_seleccionado, "en el año", año_seleccionado)) + 
+  scale_fill_gradient(name = "Incidencia de Casos", low = "lightblue", high = "darkblue") +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+    )
+mapa_delitos
+
+### interactividad
+mapa_interactivo <- ggplotly(mapa_delitos, 
+                             tooltip = "text") %>%
+  style(
+    text = paste("Fiscalía:", datos_delito_seleccionado$GROUP, "<br>",
+                 "Casos:", datos_delito_seleccionado$Casos, "<br>",
+                 "Municipio:", datos_delito_seleccionado$NAME)
+  )
+# Mostrar el mapa
+mapa_interactivo
+```
 
 
 
