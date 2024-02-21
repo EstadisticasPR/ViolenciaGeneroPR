@@ -1,41 +1,42 @@
 # Estadísticas sobre Violencia de Género en Puerto Rico
 
-Breve descripción o resumen del proyecto. Ejemplo: Análisis de datos de [nombre del dominio o tema del proyecto].
+Este proyecto proporciona una aplicación Shiny para explorar y visualizar datos relacionados con la violencia de género y los feminicidios en Puerto Rico.
 
 ## Tabla de Contenidos
 
 - [Descripción](#descripción)
 - [Requisitos](#requisitos)
-- [Instalación](#instalación)
-- [Uso](#uso)
-- [Contribución](#contribución)
-- [Licencia](#licencia)
+- [Instalación y Uso](#instalación)
 
 ## Descripción
 
-Descripción detallada del proyecto, su objetivo y su contexto. Incluye la importancia del proyecto, su alcance y los datos utilizados.
+Este proyecto tiene como objetivo proporcionar una herramienta interactiva para analizar y comprender la incidencia de la violencia de género y los feminicidios en Puerto Rico. Utiliza datos públicos y ofrece visualizaciones interactivas para explorar diferentes aspectos de este tema importante.
+
+Para experimentar la funcionalidad completa del proyecto, te invitamos a explorar nuestra [página web](https://estadisticas.pr/en/Comite-Pare).
 
 ## Requisitos
 
-- Lista de requisitos del sistema o software necesarios para ejecutar el proyecto.
-- Puede incluir versiones de R, paquetes específicos o cualquier otro requisito.
+- R >= 3.6
+- Paquetes: tidyverse, readxl, kableExtra, zoo, here, viridis, shinythemes, plotly, DT, shinyWidgets, sf, roxygen2
 
-## Instalación
-
-Instrucciones paso a paso para instalar y configurar el entorno de trabajo del proyecto. Incluye la instalación de R, si es necesario, y los pasos para instalar los paquetes necesarios.
+## Instalación y Uso
 
 ### Pasos de Instalación
 
-1. Instalar R (si no está instalado).
-2. Clonar este repositorio.
-3. Ejecutar el script `install.R` para instalar las dependencias necesarias.
+1. **Instala R**: Si aún no tienes R instalado en tu sistema, puedes descargar e instalar la última versión desde el sitio web oficial de R: [https://www.r-project.org/](https://www.r-project.org/). Sigue las instrucciones de instalación adecuadas para tu sistema operativo.
 
-## Uso
+2. **Instala el paquete desde GitHub**: Utiliza `remotes::install_github()` para instalar el paquete directamente desde GitHub 
 
-Explicación detallada de cómo utilizar el proyecto. Puedes incluir comandos o scripts para ejecutar el análisis, visualización o cualquier funcionalidad principal del proyecto.
+```R
+# Instala el paquete desde GitHub
+install.packages("remotes")
+library(remotes)
+remotes::install_github("nombre_del_usuario/ViolenciaGeneroPR")
+```
 
-### Ejemplo de Uso
-
-```bash
-# Comando o script para ejecutar el proyecto
-Rscript main_analysis.R
+3. **Ejecuta la aplicación Shiny**: Después de instalar el paquete, puedes cargar la biblioteca y ejecutar la aplicación Shiny utilizando la función run_app()
+```R
+# Carga la biblioteca y ejecuta la aplicación Shiny
+library(ViolenciaGeneroPR)
+ViolenciaGeneroPR::run_app()
+```
