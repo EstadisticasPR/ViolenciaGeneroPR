@@ -1,4 +1,4 @@
-Package: EstadisticasSobreViolenciaGeneroPR
+Package: ViolenciaGeneroPR
 Type: Package
 Title: Shiny App para Exploración de Datos de Violencia de Género y Feminicidios en Puerto Rico
 Version: 0.1.0
