@@ -1,7 +1,7 @@
 # User Interface 
 cat("Loading User Interface from ui_helpers.R...\n")
 # Importar funciones auxiliares de ui_helpers.R
-source("ui_helpers.R")
+source("R/ui_helpers.R")
 ui <- fluidPage(
   ### El theme (colores) de la app ###
   theme = shinytheme("sandstone"),

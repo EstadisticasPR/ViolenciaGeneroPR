@@ -16,7 +16,7 @@ header <- function() {
             id = 'logo_IEPR',
             tags$a(
               tags$figure(
-                img(src = "ieprlogo.png", height = 60, alt = "estadisticas.pr", deleteFile = FALSE)
+                img(src = "www/ieprlogo.png", height = 60, alt = "estadisticas.pr", deleteFile = FALSE)
               ),
               href = 'https://estadisticas.pr/'
             )
@@ -30,7 +30,7 @@ header <- function() {
             id = 'logo_PARE',
             tags$a(
               tags$figure(
-                img(src = "logo_PARE.png", height = 60, alt = "PARE.gov", deleteFile = FALSE)
+                img(src = "R/www/logo_PARE.png", height = 60, alt = "PARE.gov", deleteFile = FALSE)
               ),
               href = "https://parelaviolencia.pr.gov/"
             )

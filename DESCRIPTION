@@ -2,14 +2,14 @@ Package: ViolenciaGeneroPR
 Type: Package
 Title: Shiny App para Exploración de Datos de Violencia de Género y Feminicidios en Puerto Rico
 Version: 0.1.0
-Authors@R: 
-    person("Félix", "Báez Santiago", role = c("aut", "cre")),
-    person("Manuel", "Mangual Martinez", role = "ctb"),
-    person("Franqui", "Rodriguez", role = "ctb")
+Authors@R: c(
+    person("Félix", "Báez Santiago", email = "felix.baez@estadisticas.pr", role = c("aut","cre")),
+    person("Manuel", "Mangual Martínez", email = "manuel.mangual@estadisticas.pr", role = "ctb"),
+    person("Frankie", "Rodriguez", email = "frankie.rodriguez@estadisticas.pr", role = "ctb"))
 Description: El paquete contiene el código de una shiny app usada para visualizar y explorar datos de violencia de género y feminicidios en Puerto Rico. Adicionalmente, las funciones definidas se usan en el ui.R y server.R.
 Imports: 
-    R (>= 3.6),
     tidyverse,
+    shiny,
     readxl,
     kableExtra,
     zoo,

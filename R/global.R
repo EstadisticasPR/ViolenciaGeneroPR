@@ -2,32 +2,32 @@ cat("Loading global objects from global.R...\n\n")
 ########################################
 #### Cargar bibliotecas necesarias #####
 ########################################
-packages <- c(
-  "tidyverse",
-  "readxl",
-  "kableExtra",
-  "zoo",
-  "here",
-  "viridis",
-  "shinythemes",
-  "plotly",
-  "DT",
-  "shinyWidgets",
-  "sf",
-  "roxygen2"
-  #"leaflet"
-)
-
-# Instalar los paquetes si no están instalados
-not_installed <- setdiff(packages, installed.packages()[,"Package"])
-if (length(not_installed) > 0) {
-  install.packages(not_installed)
-}
-
-# Cargar paquetes
-lapply(packages, function(pkg) {
-  library(pkg, character.only = TRUE)
-})
+# packages <- c(
+#   "tidyverse",
+#   "readxl",
+#   "kableExtra",
+#   "zoo",
+#   "here",
+#   "viridis",
+#   "shinythemes",
+#   "plotly",
+#   "DT",
+#   "shinyWidgets",
+#   "sf",
+#   "roxygen2"
+#   #"leaflet"
+# )
+# 
+# # Instalar los paquetes si no están instalados
+# not_installed <- setdiff(packages, installed.packages()[,"Package"])
+# if (length(not_installed) > 0) {
+#   install.packages(not_installed)
+# }
+# 
+# # Cargar paquetes
+# lapply(packages, function(pkg) {
+#   library(pkg, character.only = TRUE)
+# })
 
 # cargando el dataset starwars para testing
 data("starwars")

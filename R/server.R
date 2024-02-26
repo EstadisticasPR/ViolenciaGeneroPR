@@ -2,7 +2,7 @@
 cat("Loading Server from server.R...\n")
 server <- function(input, output, session) {
   # Importar el contenido de server_helpers.R
-  source("server_helpers.R")
+  source("R/server_helpers.R")
   
   ########## Server del Sistema de Notificación de Muertes Violentas ##########
   
