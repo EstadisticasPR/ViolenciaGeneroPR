@@ -2,7 +2,10 @@ cat("Loading UI helper functions from ui_helpers.R...\n")
 ###############################
 #### Helper Functions: UI  ####
 ###############################
-# Definición del Encabezado
+#### Tab del Encabezado ####
+
+# Agrega el directorio de www como un recurso en la aplicación Shiny
+addResourcePath("www", "R/www/")
 header <- function() {
   div(
     tags$div(
@@ -16,7 +19,7 @@ header <- function() {
             id = 'logo_IEPR',
             tags$a(
               tags$figure(
-                img(src = "www/ieprlogo.png", height = 60, alt = "estadisticas.pr", deleteFile = FALSE)
+                img(src = "www/iepr_logo.png", height = 60, alt = "estadisticas.pr", deleteFile = FALSE)
               ),
               href = 'https://estadisticas.pr/'
             )
@@ -30,7 +33,7 @@ header <- function() {
             id = 'logo_PARE',
             tags$a(
               tags$figure(
-                img(src = "R/www/logo_PARE.png", height = 60, alt = "PARE.gov", deleteFile = FALSE)
+                img(src = "www/logo_PARE.png", height = 60, alt = "PARE.gov", deleteFile = FALSE)
               ),
               href = "https://parelaviolencia.pr.gov/"
             )
@@ -250,7 +253,7 @@ tabPanel_just <- function(){
             div(
               dropdownButton(
                 circle = "FALSE",
-                label = "Seleccione el/los Articulo(s):",
+                label = "Seleccione el/los Delitos(s):",
                 status = "default",
                 width = 350,
                 actionButton("deselectAll_just", "(De)Seleccionar todo"),
@@ -277,7 +280,7 @@ tabPanel_just <- function(){
                   "yearInput_just",
                   label = "Seleccionar Año:",
                   choices = unique(dfDeli$Año),
-                  selected = levels(dfDeli$Año)
+                  selected = levels(dfDeli$Año)[4]
                 )
               ),
               style = "display: inline-block;"
@@ -287,9 +290,11 @@ tabPanel_just <- function(){
           ),
           # Sección principal con los gráficos
           mainPanel(
-            plotlyOutput("boxPlot_just"),
-            plotlyOutput("barPlot_just"),
-            plotOutput("deliPlot_just"),
+            #plotlyOutput("boxPlot_just"),
+            #plotlyOutput("barPlot_just"),
+            plotlyOutput("map_just"),
+            #plotlyOutput("facet_bartest"),
+            # plotOutput("deliPlot_just"),
             DTOutput("dataTable_just")
           )
         )
@@ -350,9 +355,9 @@ tabPanel_about <- function(){
             column(3),
             column(3,
                    br(),
-                   a(img(src='IEPRlocal.png',height=200),
+                   a(img(src='www/IEPRlocal.png',height=200),
                      href="https://www.google.com/maps/place/Instituto+de+Estad%C3%ADsticas+de+Puerto+Rico/@18.4279999,-66.056444,17.5z/data=!4m5!3m4!1s0x8c0368a432af0b3d:0x274ac1c656b89f89!8m2!3d18.4275192!4d-66.0562994"),
-                   a(img(src='IEPRmap.png',height=200),
+                   a(img(src='www/IEPRmap.png',height=200),
                      href='https://www.google.com/maps/place/Instituto+de+Estad%C3%ADsticas+de+Puerto+Rico/@18.4279999,-66.056444,17.5z/data=!4m5!3m4!1s0x8c0368a432af0b3d:0x274ac1c656b89f89!8m2!3d18.4275192!4d-66.0562994'))
           )
           

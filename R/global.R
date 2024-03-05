@@ -55,10 +55,10 @@ convert_mixed_columns <- function(data) {
 #### Procesamiento de datos del Sistema de Notificacion de Muertes Violentas #####
 ##################################################################################
 # path para Sistema_de_Notificacion_de_Muertes_Violentas
-snmv <- here("data", "Sistema_de_Notificacion_de_Muertes_Violentas", "/")
+snmv <- here("data", "Sistema_de_Notificacion_de_Muertes_Violentas")
 
 # importar los datos de homicidios por grupo de edad; homiEdad
-homiEdad <- read_excel(paste0(snmv, "svmvhomiEdad.xlsx")) %>%
+homiEdad <- read_excel(paste0(snmv, "/svmvHomiEdad.xlsx")) %>%
   select(-Total) %>%
   filter(!grepl("Total", `Grupo de edad`) & `Grupo de edad` != "Desconocido") %>%
   pivot_longer(!`Grupo de edad`, names_to = "año", values_to = "casos") %>%
@@ -144,6 +144,7 @@ dfMalt <- bind_rows(
 ##### Procesamiento de datos del Departamento de Justicia #####
 ###############################################################
 djus <- here("data", "Departamento_de_Justicia", "/")
+maps_fol <- here("data", "mapas/")
 
 # importando delitos del 2020
 deli2020 <- read_excel(paste0(djus, "djDelitos2020.xlsx")) %>% 
@@ -176,7 +177,10 @@ dfDeli <- bind_rows(
     Delito = factor(Delito),
     `FISCALIA DISTRITO` = factor(`FISCALIA DISTRITO`)
     )
-dfDeli
+
+# Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
+mapaDeli <- sf::st_read(paste0(maps_fol, "distritos_fiscales.json")) %>%
+  merge(dfDeli, by.x = "GROUP", by.y = "FISCALIA DISTRITO")
 
 ########################################
 ##### Actualizaciones de los Datos #####
