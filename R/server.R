@@ -117,7 +117,7 @@ server <- function(input, output, session) {
            Delito %in% input$checkGroup_just)
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar
+  #### funcion para el boton de deseleccionar/seleccionar
   observeEvent(input$deselectAll_just, {
     updateCheckboxGroup(session, "checkGroup_just", input, dfDeli$Delito)
   })

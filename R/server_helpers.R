@@ -173,7 +173,7 @@ renderDataTable <- function(filtered_data) {
   )
 }
 
-#' Renderiza un mapa utilizando ggplot2 en el UI de Shiny.
+#' Renderiza un mapa utilizando ggplot2 en el UI del ShinyApp
 #' 
 #' Esta función toma un conjunto de datos y diversos parámetros para generar un mapa utilizando ggplot2.
 #' 
