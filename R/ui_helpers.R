@@ -73,7 +73,7 @@ tabPanel_snmv <- function() {
     icon = icon("exclamation-triangle"),
     tabsetPanel(
       
-      # tab con datos de Homicidios por grupo de Edad
+      #### tab con datos de Homicidios por grupo de Edad ####
       tabPanel(
         "homiEdad_snmv",
         # Título del Tab
@@ -117,12 +117,12 @@ tabPanel_snmv <- function() {
         )
       ),
       
-      # tab con datos de Incidentes segun el año
+      #### tab con datos de Incidentes segun el año ####
       tabPanel(
         "Incidentes_snmv",
         
         # Título del Tab
-        titlePanel("Tipo de muerte según el año"),
+        titlePanel("Incidentes Violentos: Tipo de muerte según el año"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
@@ -131,30 +131,50 @@ tabPanel_snmv <- function() {
         
         sidebarLayout(
           sidebarPanel(
-            # botón para tener el checkbox en un menu dropdown 
-            dropdownButton(
-              circle = "FALSE",
-              label = "Seleccione Tipo(s) de Incidente:",
-              status = "default",
-              size = "default",
-              checkboxGroupInput(
-                "checkGroup_snmv_A",
-                label = "",
-                choices = levels(inci$tipo),
-                selected = levels(inci$tipo)
+            
+            # botón para seleccionar tipo de incidente
+            div(
+              dropdownButton(
+                circle = "FALSE",
+                label = "Seleccione Tipo(s) de Incidente:",
+                status = "default",
+                size = "default",
+                checkboxGroupInput(
+                  "checkGroup_snmv_inci_tipo",
+                  label = "",
+                  choices = levels(inci$tipo),
+                  selected = levels(inci$tipo)
+                ),
+                actionButton("deselectAll_snmv_inci_tipo", "(De)seleccionar todo")
               ),
-              actionButton("deselectAll_snmv_A", "(De)seleccionar todo")
+              style = "display: inline-block; padding-right: 20px;"
+            ),
+            
+            # botón para seleccionar año
+            div(
+              dropdownButton(
+                circle = "FALSE",
+                label = "Seleccione el Año(s)",
+                status = "default",
+                size = "default",
+                checkboxGroupInput(
+                  "checkGroup_snmv_inci_año",
+                  label = "",
+                  choices = levels(inci$año),
+                  selected = levels(inci$año)[4]
+                ),
+                actionButton("deselectAll_snmv_inci_año", "(De)seleccionar todo")
+              ),
+              style = "display: inline-block;"
             ),
             
             hr()
-            # fluidRow(column(3, verbatimTextOutput("value")))
           ),
           
-          # Sección principal con los gráficos
+          # Sección principal con los gráficos y datatable
           mainPanel(
-            # plotlyOutput("linePlot_snmv"),
-            # plotlyOutput("barPlot_snmv"),
-            # DTOutput("dataTable_snmv")
+            plotlyOutput("barPlot_snmv_inci"),
+            DTOutput("dataTable_snmv_inci")
           )
         ),
         

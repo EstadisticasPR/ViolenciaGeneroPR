@@ -5,7 +5,7 @@ server <- function(input, output, session) {
   source("R/server_helpers.R")
   
   ########## Server del Sistema de Notificación de Muertes Violentas ##########
-  
+  #### Tab de Homicidios por Grupo de Edad (homiEdad) ####
   # Filtrar el conjunto de datos según los valores seleccionados del checkGroup_snmv
   filtered_edad_snmv <- reactive({
     filter(homiEdad, edad %in% input$checkGroup_snmv)
@@ -26,15 +26,15 @@ server <- function(input, output, session) {
   # Grafico lineal del SNMV
   output$linePlot_snmv <- renderPlotly({
     p <- renderLinePlot(filtered_edad_snmv, "año", "casos", "edad", "edad",
-                   "Evolución de Casos por Grupo de Edad y Año", "Año", "Casos")
+                        "Evolución de Casos por Grupo de Edad y Año", "Año", "Casos")
     ggplotly(p, tooltip = c("x", "y", "color"))
   })
   
   # Grafico de barras del SNMV
   output$barPlot_snmv <- renderPlotly({
     p <- renderBarPlot(filtered_edad_año_snmv, "edad", "casos", "edad",
-                  paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
-                  "Grupo de Edad", "Casos")
+                       paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
+                       "Grupo de Edad", "Casos")
     
     ggplotly(p, tooltip = c("x", "y"))  # Especificamos qué información mostrar en el tooltip
   })
@@ -43,9 +43,42 @@ server <- function(input, output, session) {
   output$dataTable_snmv <- renderDT({
     renderDataTable(filtered_edad_snmv())
   })
-
+  
   observeEvent(input$yearInput_snmv, {
     updateSelectInput(session, "yearInput_snmv", selected = input$yearInput_snmv)
+  })
+  
+  # #### Tab de Tipo de Muerte (inci) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de incidente
+  inci_snmv <- reactive({
+    filter(inci,
+           tipo %in% input$checkGroup_snmv_inci_tipo,
+           año %in% input$checkGroup_snmv_inci_año)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de tipo
+  observeEvent(input$deselectAll_snmv_inci_tipo, {
+    updateCheckboxGroup(session, "checkGroup_snmv_inci_tipo", input, inci$tipo)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_snmv_inci_año, {
+    updateCheckboxGroup(session, "checkGroup_snmv_inci_año", input, inci$año)
+  })
+  
+  # Grafico de barras
+  output$barPlot_snmv_inci <- renderPlotly({
+    p <- renderBarPlot(inci_snmv, x = "año", y = "casos", fill = "tipo",
+                       paste("Comparación de incidentes violentos a lo largo de los Años"),
+                       xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Incidente")
+    
+    ggplotly(p, tooltip = c("fill", "x", "y"))
+  })
+  
+  # Data Table del SNMV
+  output$dataTable_snmv_inci <- renderDT({
+    renderDataTable(inci_snmv())
   })
   
   ########## Server del Departamento de la Familia ##########
