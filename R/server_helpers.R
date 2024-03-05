@@ -50,7 +50,7 @@ updateCheckboxGroup <- function(session, inputId, input, data) {
 #' Renderiza un gráfico de línea utilizando ggplot2 en el UI de Shiny.
 #' 
 #' Esta función toma un conjunto de datos `data` y diversos parámetros para generar
-#' un gráfico de línea con ggplot2. Puede incluir opciones adicionales como facetas.
+#' un gráfico de línea con ggplot2. 
 #' 
 #' @param data Conjunto de datos a utilizar en el gráfico.
 #' @param x Variable para el eje x.
@@ -61,16 +61,14 @@ updateCheckboxGroup <- function(session, inputId, input, data) {
 #' @param xlab Etiqueta del eje x.
 #' @param ylab Etiqueta del eje y.
 #' @param colorlab Etiqueta para la leyenda de colores.
-#' @param facet Booleano que indica si se deben agregar facetas al gráfico.
-#' @param facet_var Variable para facetas (si `facet` es TRUE).
 #' 
-#' @return No retorna un valor, pero imprime el gráfico generado en la consola.
+#' @return No regresa un valor, pero imprime el gráfico generado en la consola.
 #' 
 #' @examples
 #' # Ejemplo de uso:
 #' renderLinePlot(homiEdad, "x", "y", "group", "color", "Title", "X Label", "Y Label")
 #' 
-renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, facet = FALSE, facet_var = NULL) {
+renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color) {
   p <- ggplot(data(), aes_string(x = x, y = y, group = group, color = color)) +
     geom_line(linewidth = 1.3) +
     geom_point(size = 1.5) +
@@ -78,17 +76,13 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
     labs(title = title, x = xlab, y = ylab, color = color) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
   
-  if (facet && !is.null(facet_var)) {
-    p <- p + facet_wrap(as.formula(paste("~", facet_var)), scales = "fixed", drop = FALSE)
-  }
-  
   print(p)
 }
 
 #' Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
 #' 
 #' Esta función toma un conjunto de datos `data` y diversos parámetros para generar
-#' un gráfico de barras con ggplot2. Puede incluir opciones adicionales como facetas.
+#' un gráfico de barras con ggplot2. 
 #' 
 #' @param data Conjunto de datos a utilizar en el gráfico.
 #' @param x Variable para el eje x.
@@ -98,8 +92,6 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
 #' @param xlab Etiqueta del eje x.
 #' @param ylab Etiqueta del eje y.
 #' @param fillLab Etiqueta para la leyenda de colores de relleno.
-#' @param facet Booleano que indica si se deben agregar facetas al gráfico.
-#' @param facet_var Variable para facetas (si `facet` es TRUE).
 #' 
 #' @return No retorna un valor, pero imprime el gráfico generado en la consola.
 #' 
@@ -107,7 +99,7 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
 #' # Ejemplo de uso:
 #' renderBarPlot(homiEdad, "x", "y", "fill", "Title", "X Label", "Y Label")
 #' 
-renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, facet = FALSE, facet_var = NULL) {
+renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill) {
   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
     geom_bar(stat = "identity", position = "dodge") +
     theme_minimal() +
@@ -115,16 +107,14 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, f
     coord_flip() +
     labs(title = title, x = xlab, y = ylab, fill = fillLab)
   
-  if (facet && !is.null(facet_var)) {
-    p <- p + facet_wrap(as.formula(paste("~", facet_var)), scales = "fixed", drop = FALSE)
-  }
   print(p)
 }
+
 
 #' Renderiza un gráfico de caja utilizando ggplot2 en el UI de Shiny.
 #' 
 #' Esta función toma un conjunto de datos `data` y diversos parámetros para generar
-#' un gráfico de caja con ggplot2. Puede incluir opciones adicionales como facetas.
+#' un gráfico de caja con ggplot2. 
 #' 
 #' @param data Conjunto de datos a utilizar en el gráfico.
 #' @param x Variable para el eje x.
@@ -134,8 +124,6 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, f
 #' @param xlab Etiqueta del eje x.
 #' @param ylab Etiqueta del eje y.
 #' @param colorlab Etiqueta para la leyenda de colores.
-#' @param facet Booleano que indica si se deben agregar facetas al gráfico.
-#' @param facet_var Variable para facetas (si `facet` es TRUE).
 #' 
 #' @return No retorna un valor, pero imprime el gráfico generado en la consola.
 #' 
@@ -143,17 +131,13 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, f
 #' # Ejemplo de uso:
 #' renderBoxPlot(homiEdad, "x", "y", "color", "Title", "X Label", "Y Label")
 #' 
-renderBoxPlot <- function(data, x, y, color, title, xlab, ylab, colorlab = color, facet = FALSE, facet_var = NULL) {
-  p <- ggplot(data, aes_string(x = x, y = y)) +
+renderBoxPlot <- function(data, x, y, color, title, xlab, ylab, colorlab = color) {
+  p <- ggplot(data, aes(x = x, y = y)) +
     geom_boxplot() +
     geom_point(aes(color = color)) +
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     labs(title = title, x = xlab, y = ylab, color = colorlab)
-  
-  if (facet && !is.null(facet_var)) {
-    p <- p + facet_wrap(as.formula(paste("~", facet_var)), scales = "fixed", drop = FALSE)
-  }
   print(p)
 }
 
@@ -204,17 +188,17 @@ renderDataTable <- function(filtered_data) {
 #' código hexadecimal que represente un color válido.
 #' 
 #' @return Esta función no retorna un valor, pero imprime el mapa generado en la consola.
-#' 
+#' @export
 #' @examples
 #' # Ejemplo de uso:
 #' renderMap(datos_delito_seleccionado, "Casos", "Incidencia de casos de Delito X")
 #' 
-renderMap <- function(data, fill, title, 
-                       fill_lab = fill, fill_color = "blue") {
-  p <- ggplot(data) +
+renderMap <- function(data, fill, title, fill_lab = fill, 
+                      light_color = "lightblue", dark_color = "darkblue") {
+  p <- ggplot(data()) +
     geom_sf(aes(fill = {{fill}})) +
     labs(title = title, fill = fill_lab) +
-    scale_fill_gradient(name = fill_lab, low = paste0("light", fill_color), high = paste0("dark", fill_color)) +
+    scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
     theme_minimal() +
     theme(
       legend.position = "bottom",
@@ -222,10 +206,12 @@ renderMap <- function(data, fill, title,
       axis.ticks = element_blank(),
       panel.grid = element_blank()
     )
-  
   print(p)
 }
 
+
+
+###########################
 
 # Función para renderizar gráficos de distribución
 renderDistributionPlot <- function(data, x, y, fill, title, xlab, ylab) {

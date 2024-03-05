@@ -30,6 +30,7 @@
 myApp <- function() {
   packages <- c(
     "tidyverse",
+    "testthat",
     "shiny",
     "readxl",
     "kableExtra",
@@ -55,8 +56,8 @@ myApp <- function() {
     library(pkg, character.only = TRUE)
   })
   
+  source("R/global.R")$value
   ui <- source("R/ui.R", local = TRUE)$value
   server <- source("R/server.R", local = TRUE)$value
-  source("R/global.R")$value
   shinyApp(ui = ui, server = server)
 }

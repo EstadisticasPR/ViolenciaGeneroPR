@@ -175,12 +175,14 @@ dfDeli <- bind_rows(
   mutate(
     Año = factor(Año),
     Delito = factor(Delito),
-    `FISCALIA DISTRITO` = factor(`FISCALIA DISTRITO`)
+    `FISCALIA DISTRITO` = factor(str_to_title(tolower(`FISCALIA DISTRITO`))
+    )
     )
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
-mapaDeli <- sf::st_read(paste0(maps_fol, "distritos_fiscales.json")) %>%
+mapaDeli <- st_read(paste0(maps_fol, "distritos_fiscales.json")) %>%
   merge(dfDeli, by.x = "GROUP", by.y = "FISCALIA DISTRITO")
+
 
 ########################################
 ##### Actualizaciones de los Datos #####

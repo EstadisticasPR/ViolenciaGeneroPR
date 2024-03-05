@@ -36,6 +36,27 @@ convert_mixed_columns <- function(data) {
   
   return(data)
 }
+
+### renderMap_static para static graphs
+renderMap_static <- function(data, fill, title, fill_lab = fill, 
+                      light_color = "lightblue", dark_color = "darkblue",
+                      facet = FALSE, facet_var = NULL) {
+  p <- ggplot(data) +
+    geom_sf(aes(fill = {{fill}})) +
+    labs(title = title, fill = fill_lab) +
+    scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
+    theme_minimal() +
+    theme(
+      legend.position = "bottom",
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      panel.grid = element_blank()
+    )
+  if (facet && !is.null(facet_var)) {
+    p <- p + facet_wrap(as.formula(paste("~", facet_var)), scales = "fixed", drop = FALSE)
+  }
+  print(p)
+}
 ```
 
 ## Delitos a la Ley 54, casos radicados por jurisdicción y articulo de la Ley de Violencia Domestica, año 2020 a *2023
@@ -68,28 +89,79 @@ deli2023 <- read_excel(paste0(path, "djDelitos2023.xlsx")) %>%
   pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
   filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE))
 
-deliDF <- full_join(deli2020, deli2021) %>% 
+dfDeli2 <- full_join(deli2020, deli2021) %>% 
   full_join(deli2022) %>%
   full_join(deli2023) %>%
   mutate(
     Año = as.factor(Año),
     `FISCALIA DISTRITO` = str_to_title(tolower(`FISCALIA DISTRITO`))
     )
-deliDF
+class(dfDeli2)
 ```
 
 ```{r}
 # Crear un dataframe con las coordenadas de las fiscalías policiacas
 distritos_fiscales <- sf::st_read(paste0(path2, "distritos_fiscales.json"))
-as.tibble(distritos_fiscales)
+distritos_fiscales
 ```
 
 ```{r}
 # Combinar los datos de delitos con los datos geográficos de los distritos fiscales
-deliMapa <- merge(distritos_fiscales, deliDF, by.x = "GROUP", by.y = "FISCALIA DISTRITO")
-deliMapa
+mapaDeli <- merge(distritos_fiscales, dfDeli, by.x = "GROUP", by.y = "FISCALIA DISTRITO")
+mapaDeli
 ```
 
+```{r}
+# Seleccionar solo los datos para un tipo de delito específico
+delito_seleccionado <- "Art3.5"  # Reemplaza con el delito que deseas visualizar
+año_seleccionado <- c("2020","2021", "2022", "2023")
+
+datos_delito_seleccionado <- mapaDeli %>%
+  filter(
+    Delito == delito_seleccionado,
+    Año %in% año_seleccionado
+  )
+
+# Crear el mapa con ggplot2
+mapa_delitos <- renderMap(data = mapaDeli,
+            fill = Casos,
+            title = paste("Incidencia de casos de", delito_seleccionado, "en el año", año_seleccionado),
+            fill_lab = "Incidencia de Casos",
+            light_color = "pink",
+            dark_color = "darkred")
+mapa_delitos
+
+# Crear el mapa con ggplot2
+mapa_delitos <- renderMap(data = mapaDeli,
+            fill = Casos,
+            title = paste("Incidencia de casos de", delito_seleccionado),
+            fill_lab = "Incidencia de Casos",
+            light_color = "pink",
+            dark_color = "red")
+mapa_delitos
+
+### interactividad
+mapa_interactivo <- ggplotly(mapa_delitos, 
+                             tooltip = "text") %>%
+  style(
+    text = paste("Fiscalía:", datos_delito_seleccionado$GROUP, "<br>",
+                 "Casos:", datos_delito_seleccionado$Casos, "<br>",
+                 "Municipio:", datos_delito_seleccionado$NAME)
+  )
+# Mostrar el mapa
+mapa_interactivo
+```
+
+
+```{r}
+mapa_delitos <- renderMap_static(data = datos_delito_seleccionado, 
+            fill = Casos, 
+            title = paste("Incidencia de casos de", delito_seleccionado, "en el año", año_seleccionado),
+            fill_lab = "Incidencia de Casos", 
+            light_color = "pink",
+            dark_color = "purple")
+mapa_delitos
+```
 
 ```{r}
 # Coordenadas de los distritos fiscales de Puerto Rico
@@ -103,7 +175,7 @@ coordenadas_pr <- data.frame(
 
 
 # Filtrar y fusionar datos
-delitos_2020 <- subset(merge(deliDF, coordenadas_pr, by.x = "FISCALIA DISTRITO", by.y = "FISCALIA.DISTRITO"), Año == 2020 & Delito == "Art2.8")
+delitos_2020 <- subset(merge(dfDeli, coordenadas_pr, by.x = "FISCALIA DISTRITO", by.y = "FISCALIA.DISTRITO"), Año == 2020 & Delito == "Art2.8")
 
 # Crear una paleta de colores basada en el atributo deseado
 colores <- colorFactor(
@@ -137,64 +209,3 @@ m <- leaflet() %>%
 # Mostrar el mapa
 m
 ```
-
-```{r}
-# Seleccionar solo los datos para un tipo de delito específico
-delito_seleccionado <- "Art3.5"  # Reemplaza con el delito que deseas visualizar
-año_seleccionado <- "2021"
-
-datos_delito_seleccionado <- deliMapa %>%
-  filter(
-    Delito == delito_seleccionado,
-    Año == año_seleccionado
-  )
-
-# Crear el mapa con ggplot2
-mapa_delitos <- ggplot() +
-  geom_sf(data = datos_delito_seleccionado, aes(fill = Casos)) +
-  labs(title = paste("Incidencia de casos de", delito_seleccionado, "en el año", año_seleccionado)) + 
-  scale_fill_gradient(name = "Incidencia de Casos", low = "lightblue", high = "darkblue") +
-  theme_minimal() +
-  theme(
-    legend.position = "bottom",
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
-    panel.grid = element_blank()
-    )
-mapa_delitos
-
-### interactividad
-mapa_interactivo <- ggplotly(mapa_delitos, 
-                             tooltip = "text") %>%
-  style(
-    text = paste("Fiscalía:", datos_delito_seleccionado$GROUP, "<br>",
-                 "Casos:", datos_delito_seleccionado$Casos, "<br>",
-                 "Municipio:", datos_delito_seleccionado$NAME)
-  )
-# Mostrar el mapa
-mapa_interactivo
-```
-
-
-```{r}
-renderMap(data = datos_delito_seleccionado, 
-            fill = Casos, 
-            title = paste("Incidencia de casos de", delito_seleccionado, "en el año", año_seleccionado),
-            fill_lab = "Incidencia de Casos", 
-            fill_color = "blue")
-
-renderMap(data = datos_delito_seleccionado, 
-            fill = Casos, 
-            title = paste("Incidencia de casos de", delito_seleccionado, "en el año", año_seleccionado),
-            fill_lab = "Incidencia de Casos", 
-            fill_color = "green")
-```
-
-```{r}
-list.files(paste0(here(),"/data"))
-list.files(paste0(here(),"/app"))
-list.files(paste0(here(),"/data_processing"))
-list.files(paste0(here(),"/docs"))
-list.files(paste0(here(),"/scripts"))
-```
-

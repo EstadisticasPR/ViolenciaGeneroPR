@@ -39,3 +39,19 @@ renderHistogram <- function(data, x, fill, title, xlab, ylab, fillLab = fill, bi
   
   print(p)
 }
+
+renderMap <- function(data, fill, title, fill_lab = fill, 
+                      light_color = "lightblue", dark_color = "darkblue") {
+  p <- ggplot(data) +
+    geom_sf(aes(fill = {{fill}})) +
+    labs(title = title, fill = fill_lab) +
+    scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
+    theme_minimal() +
+    theme(
+      legend.position = "bottom",
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      panel.grid = element_blank()
+    )
+  print(p)
+}

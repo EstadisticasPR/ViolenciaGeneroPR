@@ -69,7 +69,8 @@ server <- function(input, output, session) {
   # crear gráfico lineal
   output$linePlot_fam <- renderPlotly({
     p <- renderLinePlot(filtered_data_fam, "Año", "Casos", "Maltrato", "Maltrato",
-                   "Casos de Maltrato por Año y Tipo", "Año", "Casos", facet = TRUE, facet_var = "Sexo")
+                   "Casos de Maltrato por Año y Tipo", "Año", "Casos")
+    p <- p + facet_wrap(~Sexo)
     ggplotly(p, tooltip = c("x", "y", "color"))
   })
   
@@ -112,6 +113,7 @@ server <- function(input, output, session) {
   
   filtered_map_just <- reactive({
     filter(mapaDeli, 
+           Año %in% input$yearInput_just,
            Delito %in% input$checkGroup_just)
   })
   
@@ -120,7 +122,7 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_just", input, dfDeli$Delito)
   })
   
-  # crear gráfico de barras
+  # crear gráfico de caja
   # output$boxPlot_just <- renderPlotly({
   #   renderBoxPlot(
   #     data = filtered_data_just(),
@@ -129,10 +131,10 @@ server <- function(input, output, session) {
   #     color = "FISCALIA DISTRITO",
   #     title = "Distribución de Casos por Delito",
   #     xlab = "Año",
-  #     ylab = "Casos",
-  #     facet = TRUE,
-  #     facet_var = "Delito"
+  #     ylab = "Casos"
   #   )
+  #   p <- p + facet_wrap(~Delito)
+  #   ggplotly(p)
   # })
   
   # output$boxPlot_just <- renderPlotly({
@@ -148,53 +150,70 @@ server <- function(input, output, session) {
   #   ggplotly(p, tooltip = c("x", "y", "color"))
   # })
   
-  # crear el grafico de barras
-  # output$barPlot_just <- renderPlotly({
-  #   p <- renderBarPlot(filtered_data_año_just, x = "Delito", y = "Casos", fill = "Delito",
+  #crear el grafico de barras
+  output$barPlot_just <- renderPlotly({
+    p <- renderBarPlot(filtered_data_año_just, x = "Delito", y = "Casos", fill = "Delito",
+                       title = "Número de Casos por Delito (Año 2023)",
+                       xlab = "Delito Cometido", ylab = "Número de Casos",
+                       fillLab = "Delito Cometido")
+    p <- p + facet_wrap(~`FISCALIA DISTRITO`)
+    ggplotly(p, tooltip = c("y", "fill"))
+  })
+  
+  #crear el grafico de barras
+  # output$facet_bartest <- renderPlotly({
+  #   p <- renderBoxPlot(filtered_data_año_just, x = "Año", y = "Casos", fill = "Delito",
   #                      title = "Número de Casos por Delito (Año 2023)",
   #                      xlab = "Delito Cometido", ylab = "Número de Casos",
-  #                      fillLab = "Delito Cometido", facet = TRUE, 
-  #                      facet_var = "`FISCALIA DISTRITO`")
+  #                      fillLab = "Delito Cometido", facet = TRUE,
+  #                      facet_var = "Delito")
   #   ggplotly(p, tooltip = c("y", "fill"))
   # })
   
-  # crear el mapa
-  # output$map_just <- renderPlotly({
-  #   p <- renderMap(
-  #     data = filtered_data_año_just, fill = "Delito",
-  #     title = "Número de Casos por Delito (Año 2023)",
-  #     fill_lab = "Delito Cometido",
-  #     fill_color = "green"
-  #     )
-  #   ggplotly(p, tooltip = c("y", "fill"))
-  # })
   
   output$map_just <- renderPlotly({
     p <- renderMap(
-      data = filtered_map_just, fill = "Casos",
-      title = "Número de Casos por Delito (Año 2023)",
+      data = filtered_map_just, fill = Casos,
+      title = paste("Número de Casos por Delito"),
       fill_lab = "Delito Cometido",
       light_color = "pink",
       dark_color = "darkred"
     )
-    ggplotly(p)
+    ggplotly(p + facet_wrap(~Año), tooltip = c("text")) %>%
+      style(
+        text = paste("Fiscalía:", filtered_map_just()$GROUP, "<br>",
+                     "Casos:", filtered_map_just()$Casos, "<br>",
+                     "Municipio:", filtered_map_just()$NAME)
+      )
+    # ggplotly(p + facet_wrap(~Año) +
+    #                 geom_sf_text(aes(label = NULL, text = paste("Fiscalía:", GROUP, "<br>",
+    #                                                             "Casos:", Casos, "<br>",
+    #                                                             "Municipio:", NAME)), color = "black"),
+    #               tooltip = "text")
+    # p <- ggplotly(p + facet_wrap(~Año) +
+    #                 geom_sf_text(aes(label = paste("Fiscalía:", GROUP, "<br>",
+    #                                                "Casos:", Casos, "<br>",
+    #                                                "Municipio:", NAME)), size = 0, color = "black"),
+    #                 tooltip = "text")
+    # p$x$data[[1]]$hoverinfo <- "text"
+    # p
   })
   
-  output$deliPlot_just <- renderPlot({
-    filtered_data <- subset(dfDeli, Año == input$yearInput_just & Delito == input$checkGroup_just)
-    
-    p <- ggplot(filtered_data, aes(x = `FISCALIA DISTRITO`, y = Casos, fill = `FISCALIA DISTRITO`)) +
-      geom_bar(stat = "identity", width = 0.7) +
-      labs(
-        title = paste("Distribución de Casos por Distrito para el Delito", input$checkGroup_just, "en el", input$yearInput_just),
-        x = "Fiscalía Distrito",
-        y = "Casos",
-        fill = "Distrito Fiscal"
-      ) +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
-    
-    print(p)
-  })
+  # output$deliPlot_just <- renderPlot({
+  #   filtered_data <- subset(dfDeli, Año == input$yearInput_just & Delito == input$checkGroup_just)
+  #   
+  #   p <- ggplot(filtered_data, aes(x = `FISCALIA DISTRITO`, y = Casos, fill = `FISCALIA DISTRITO`)) +
+  #     geom_bar(stat = "identity", width = 0.7) +
+  #     labs(
+  #       title = paste("Distribución de Casos por Distrito para el Delito", input$checkGroup_just, "en el", input$yearInput_just),
+  #       x = "Fiscalía Distrito",
+  #       y = "Casos",
+  #       fill = "Distrito Fiscal"
+  #     ) +
+  #     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  #   
+  #   print(p)
+  # })
   
   # Data table del DeptJust
   output$dataTable_just <- renderDT({
