@@ -107,10 +107,10 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill) {
   print(p)
 }
 
-renderBarPlottest <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, mis_colores) {
+renderBarPlottest <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill) {
   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
     geom_bar(stat = "identity", position = "dodge") +
-    scale_fill_manual(values = mis_colores) +   # Utilizar los colores predeterminados de ggplot
+    scale_fill_manual(values = colorFill) +   # Utilizar los colores predeterminados de ggplot
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     labs(title = title, x = xlab, y = ylab, fill = fillLab)
@@ -218,7 +218,30 @@ renderMap <- function(data, fill, title, fill_lab = fill,
   print(p)
 }
 
-
+#' Genera una paleta de colores para los niveles de una variable categórica.
+#' 
+#' Esta función toma un dataframe y el nombre de una variable categórica, 
+#' y devuelve una paleta de colores con un color único para cada nivel de la variable.
+#' 
+#' @param df Un dataframe que contiene la variable categórica.
+#' @param variable El nombre de la variable categórica en el dataframe.
+#' 
+#' @return Un vector con los nombres de los niveles de la variable como claves y colores únicos como valores.
+#' 
+#' @examples
+#' # Ejemplo de uso:
+#' setColorFill(data, "Sexo")
+#' 
+setColorFill <- function(df, variable) {
+  # Obtener los niveles únicos de la variable
+  unique_levels <- unique(df[[variable]])
+  
+  # Generar una paleta de colores basada en el número de niveles únicos
+  my_colors <- rainbow(length(unique_levels))
+  names(my_colors) <- unique_levels
+  
+  return(my_colors)
+}
 
 
 

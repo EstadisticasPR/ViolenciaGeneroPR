@@ -30,14 +30,19 @@ server <- function(input, output, session) {
     ggplotly(p, tooltip = c("x", "y", "color"))
   })
   
-  # Grafico de barras del SNMV
+  
+  # Colores de las edades
+  homiEdad_fill_edad <- setColorFill(homiEdad, "edad")
+  # Grafico de barras de homiEdad
   output$barPlot_snmv <- renderPlotly({
-    p <- renderBarPlot(filtered_edad_año_snmv, "edad", "casos", "edad",
+    p <- renderBarPlottest(filtered_edad_año_snmv, "edad", "casos", "edad",
                        paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
-                       "Grupo de Edad", "Casos")
+                       "Grupo de Edad", "Casos", colorFill = homiEdad_fill_edad)
     
     ggplotly(p, tooltip = c("x", "y"))  # Especificamos qué información mostrar en el tooltip
   })
+  
+  # Grafico de barras
   
   # Data Table del SNMV
   output$dataTable_snmv <- renderDT({
@@ -67,12 +72,23 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_snmv_inci_año", input, inci$año)
   })
   
+  # 
+  inci_fill_sexo <- setColorFill(inci, "tipo")
   # Grafico de barras
-  colores <- generate_color_vector(inci, "tipo")
+  # output$barPlot_snmv_inci <- renderPlotly({
+  #   p <- renderBarPlot(inci_filt, x = "año", y = "casos", fill = "tipo",
+  #                      paste("Comparación de incidentes violentos a lo largo de los Años"),
+  #                      xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Incidente")
+  #   
+  #   ggplotly(p, tooltip = c("fill", "x", "y"))
+  # })
+  
   output$barPlot_snmv_inci <- renderPlotly({
-    p <- renderBarPlot(inci_filt, x = "año", y = "casos", fill = "tipo",
+    p <- renderBarPlottest(inci_filt, x = "año", y = "casos", fill = "tipo",
                        paste("Comparación de incidentes violentos a lo largo de los Años"),
-                       xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Incidente")
+                       xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Incidente",
+                       colorFill = inci_fill_sexo
+                       )
     
     ggplotly(p, tooltip = c("fill", "x", "y"))
   })
@@ -83,6 +99,8 @@ server <- function(input, output, session) {
   })
   
   ########## Server del Departamento de la Familia ##########
+  #### Tab de Maltrato (dfMalt) ####
+  
   # Filtrar el conjunto de datos según los valores seleccionados del checkGroup_fam
   filtered_data_fam <- reactive({
     filter(dfMalt, Maltrato %in% input$checkGroup_fam)
