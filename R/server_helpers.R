@@ -26,8 +26,6 @@ filterData <- function(data, inputValues, column) {
 #' updateCheckboxGroup(session, "checkGroup_snmv", input, homiEdad)
 #' 
 updateCheckboxGroup <- function(session, inputId, input, data) {
-  print(is.null(input[[inputId]]))
-  print(input[[inputId]])
   
   if (is.null(input[[inputId]])) {
     # "El checkbox está vacío, llénalo"
@@ -108,6 +106,18 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill) {
   
   print(p)
 }
+
+renderBarPlottest <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, mis_colores) {
+  p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    scale_fill_manual(values = mis_colores) +   # Utilizar los colores predeterminados de ggplot
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title = title, x = xlab, y = ylab, fill = fillLab)
+  
+  print(p)
+}
+
 
 
 #' Renderiza un gráfico de caja utilizando ggplot2 en el UI de Shiny.
@@ -207,6 +217,8 @@ renderMap <- function(data, fill, title, fill_lab = fill,
     )
   print(p)
 }
+
+
 
 
 

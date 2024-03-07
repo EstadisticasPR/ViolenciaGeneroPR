@@ -340,6 +340,77 @@ tabPanel_just <- function(){
   )
 }
 
+#### Tab del Departamento del Trabajo y Recursos Humanos ####
+tabPanel_trab <- function(){
+  tabPanel(
+    "Departamento del Trabajo y Recursos Humanos",
+    icon = icon("briefcase"),
+    tabsetPanel(
+      # Tab para el df dtPartlab
+      tabPanel(
+        "dtPartlab", 
+        # Título del Tab
+        titlePanel("Tasa de participación laboral por género y año"),
+        
+        # Fuente de Datos, Actualización
+        tags$span("Fuente: Departamento del Trabajo y Recursos Humanos"), tags$br(),
+        tags$span("Actualizado:", actualizacion_trabajo), tags$br(),
+        
+        # Menu sidebar con widgets
+        sidebarLayout(
+          sidebarPanel(
+            
+            # botón para seleccionar el año
+            div(
+              dropdownButton(
+                circle = "FALSE",
+                label = "Seleccione Año(s):",
+                status = "default",
+                width = 300,
+                actionButton("deselectAll_trab_parLab_año", "(De)seleccionar todo"),
+                checkboxGroupInput(
+                  "checkGroup_trab_parLab_año",
+                  label = h3(""),
+                  choices = levels(parLab$Año),
+                  selected = levels(parLab$Año)
+                )
+              ),
+              style = "display: inline-block; padding-right: 20px;"
+            ),
+            
+            # botón para seleccionar el sexo
+            div(
+              dropdownButton(
+                circle = "FALSE",
+                label = "Seleccione Sexo(s):",
+                status = "default",
+                width = 300,
+                actionButton("deselectAll_trab_parLab_sexo", "(De)seleccionar todo"),
+                checkboxGroupInput(
+                  "checkGroup_trab_parLab_sexo",
+                  label = h3(""),
+                  choices = levels(parLab$Sexo),
+                  selected = levels(parLab$Sexo)
+                )
+              ),
+              style = "display: inline-block; padding-right: 20px;"
+            ),
+            
+            hr(),
+            # selectInput("yearInput_fam", "Seleccionar Año:", choices = unique(dfMalt$Año))
+          ),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            plotlyOutput("barPlot_trab_parLab"),
+            DTOutput("dataTable_trab_parLab")
+          )
+        ),
+        )
+    )
+  )
+}
+
 #### Tab Acerca del Dashboard ####
 tabPanel_about <- function(){
   tabPanel(

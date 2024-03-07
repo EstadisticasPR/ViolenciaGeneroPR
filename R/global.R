@@ -49,8 +49,6 @@ convert_mixed_columns <- function(data) {
   
   return(data)
 }
-
-
 ##################################################################################
 #### Procesamiento de datos del Sistema de Notificacion de Muertes Violentas #####
 ##################################################################################
@@ -182,6 +180,23 @@ dfDeli <- bind_rows(
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
 mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.json")) %>%
   merge(dfDeli, by.x = "GROUP", by.y = "FISCALIA DISTRITO")
+
+###############################################################################
+#### Procesamiento de datos el Departamento del Trabajo y Recursos Humanos ####
+###############################################################################
+dtra <- here("data", "departamento_de_trabajo", "/")
+
+# importando el dataset de Casos en Supervisión de Ley 54
+parLab <- read_excel(paste0(dtra, "dtpartlab.xlsx")) %>%
+  rename(
+    Sexo = Género
+  ) %>%
+  filter(Sexo != "Ambos") %>%
+  pivot_longer(!Sexo, names_to = "Año", values_to = "Tasa") %>%
+  mutate(
+    Año = factor(Año),
+    Sexo = factor(Sexo)
+  )
 
 
 ########################################

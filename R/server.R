@@ -48,10 +48,10 @@ server <- function(input, output, session) {
     updateSelectInput(session, "yearInput_snmv", selected = input$yearInput_snmv)
   })
   
-  # #### Tab de Tipo de Muerte (inci) ####
+  #### Tab de Tipo de Muerte (inci) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de incidente
-  inci_snmv <- reactive({
+  inci_filt <- reactive({
     filter(inci,
            tipo %in% input$checkGroup_snmv_inci_tipo,
            año %in% input$checkGroup_snmv_inci_año)
@@ -68,8 +68,9 @@ server <- function(input, output, session) {
   })
   
   # Grafico de barras
+  colores <- generate_color_vector(inci, "tipo")
   output$barPlot_snmv_inci <- renderPlotly({
-    p <- renderBarPlot(inci_snmv, x = "año", y = "casos", fill = "tipo",
+    p <- renderBarPlot(inci_filt, x = "año", y = "casos", fill = "tipo",
                        paste("Comparación de incidentes violentos a lo largo de los Años"),
                        xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Incidente")
     
@@ -78,7 +79,7 @@ server <- function(input, output, session) {
   
   # Data Table del SNMV
   output$dataTable_snmv_inci <- renderDT({
-    renderDataTable(inci_snmv())
+    renderDataTable(inci_filt())
   })
   
   ########## Server del Departamento de la Familia ##########
@@ -266,5 +267,39 @@ server <- function(input, output, session) {
   ## tab 2
   output$dataTable_test2 <- renderDT({
     renderDataTable(dfMalt)
+  })
+  
+  ########## Server del Departamento del Trabajo y Recursos Humanos ##########
+  #### Tab de Participación Laboral (parLab) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de incidente
+  parLab_filt <- reactive({
+    filter(parLab,
+           Año %in% input$checkGroup_trab_parLab_año,
+           Sexo %in% input$checkGroup_trab_parLab_sexo)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_trab_parLab_año, {
+    updateCheckboxGroup(session, "checkGroup_trab_parLab_año", input, parLab$Año)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de sexo
+  observeEvent(input$deselectAll_trab_parLab_sexo, {
+    updateCheckboxGroup(session, "checkGroup_trab_parLab_sexo", input, parLab$Sexo)
+  })
+  
+  # Grafico de barras
+  output$barPlot_trab_parLab <- renderPlotly({
+    p <- renderBarPlot(parLab_filt, x = "Año", y = "Tasa", fill = "Sexo",
+                       paste("Tasa de participación laboral según el año natural y el sexo"),
+                       xlab = "Año", ylab = "Tasa de participación", fillLab = "Sexo")
+
+    ggplotly(p, tooltip = c("fill", "x", "y"))
+  })
+  
+  # Data Table del SNMV
+  output$dataTable_trab_parLab <- renderDT({
+    renderDataTable(parLab_filt())
   })
 }

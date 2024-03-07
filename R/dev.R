@@ -40,18 +40,52 @@ renderHistogram <- function(data, x, fill, title, xlab, ylab, fillLab = fill, bi
   print(p)
 }
 
-renderMap <- function(data, fill, title, fill_lab = fill, 
-                      light_color = "lightblue", dark_color = "darkblue") {
-  p <- ggplot(data) +
-    geom_sf(aes(fill = {{fill}})) +
-    labs(title = title, fill = fill_lab) +
-    scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
-    theme_minimal() +
-    theme(
-      legend.position = "bottom",
-      axis.text = element_blank(),
-      axis.ticks = element_blank(),
-      panel.grid = element_blank()
-    )
-  print(p)
+
+################################
+#' Genera una paleta de colores para los niveles de una variable categórica.
+#' 
+#' Esta función toma un dataframe y el nombre de una variable categórica, 
+#' y devuelve una paleta de colores con un color único para cada nivel de la variable.
+#' 
+#' @param df Un dataframe que contiene la variable categórica.
+#' @param variable El nombre de la variable categórica en el dataframe.
+#' 
+#' @return Un vector con los nombres de los niveles de la variable como claves y colores únicos como valores.
+#' 
+#' @examples
+#' # Ejemplo de uso:
+#' generate_color_vector(data, "Sexo")
+#' 
+generate_color_vector <- function(df, variable) {
+  # Obtener los niveles únicos de la variable
+  unique_levels <- unique(df[[variable]])
+  
+  # Generar una paleta de colores basada en el número de niveles únicos
+  my_colors <- rainbow(length(unique_levels))
+  names(my_colors) <- unique_levels
+  
+  return(my_colors)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

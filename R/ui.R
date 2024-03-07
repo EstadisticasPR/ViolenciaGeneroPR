@@ -22,6 +22,9 @@ ui <- fluidPage(
     #### Tab del Departamento de Justicia ####
     tabPanel_just(),
     
+    #### Tab del Departamento del Trabajo y Recursos Humanos ####
+    tabPanel_trab(),
+    
     #### Tab Acerca del Dashboard ####
     tabPanel_about(),
     

@@ -49,4 +49,12 @@ ggplot(dtPartlab, aes(x = Género, y = Cantidad, fill = Año)) +
   labs(title = "3. Tasa de participación laboral por género y año", x = "Género", y = "Cantidad") +
   theme_minimal()
 
+ggplot(dtPartlab, aes(x = Año, y = Cantidad, fill = Género)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = " Tasa de participación laboral por sexo y año", x = "Año", y = "Tasa", fill = "Sexo") +
+  theme_minimal()
+
+renderBarPlottest(dtPartlab, x = "Año", y = "Cantidad", fill = "Género",
+                       paste("Tasa de participación laboral por sexo y año"),
+                       xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Incidente")
 ```
