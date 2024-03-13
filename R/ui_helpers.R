@@ -88,24 +88,41 @@ tabPanel_snmv <- function() {
         sidebarLayout(
           sidebarPanel(
             
-            # botón para tener el checkbox en un menu dropdown 
-            dropdownButton(
-              circle = "FALSE",
-              label = "Seleccione Grupo(s) de Edad:", 
-              status = "default", 
-              size = "default",
-              checkboxGroupInput(
-                "checkGroup_snmv",
-                label = "",
-                choices = levels(homiEdad$edad),
-                selected = levels(homiEdad$edad)[8]
+            div(
+              # botón para tener el checkbox para grupos de edad 
+              dropdownButton(
+                circle = "FALSE",
+                label = "Seleccione Grupo(s) de Edad:", 
+                status = "default", 
+                size = "default",
+                checkboxGroupInput(
+                  "checkGroup_snmv_homiEdad_edad",
+                  label = "",
+                  choices = levels(homiEdad$edad),
+                  selected = levels(homiEdad$edad)[8]
+                ),
+                actionButton("deselectAll_snmv_homiEdad_edad", "(De)seleccionar todo")
               ),
-              actionButton("deselectAll_snmv", "(De)seleccionar todo")
+              style = "display: inline-block; padding-right: 20px;"
             ),
             
-            hr(),
-            fluidRow(column(3, verbatimTextOutput("value"))),
-            selectInput("yearInput_snmv", "Seleccionar Año:", choices = unique(homiEdad$año))
+            div(
+              # botón para checkbox de año
+              dropdownButton(
+                circle = "FALSE",
+                label = "Seleccione Año(s):", 
+                status = "default", 
+                size = "default",
+                checkboxGroupInput(
+                  "checkGroup_snmv_homiEdad_año",
+                  label = "",
+                  choices = levels(homiEdad$año),
+                  selected = levels(homiEdad$año)
+                ),
+                actionButton("deselectAll_snmv_homiEdad_año", "(De)seleccionar todo")
+              ),
+              style = "display: inline-block; padding-right: 20px;"
+            ),
           ),
           
           # Sección principal con los gráficos
@@ -165,7 +182,7 @@ tabPanel_snmv <- function() {
                 ),
                 actionButton("deselectAll_snmv_inci_año", "(De)seleccionar todo")
               ),
-              style = "display: inline-block;"
+              style = "display: inline-block; padding-right: 20px;"
             ),
             
             hr()

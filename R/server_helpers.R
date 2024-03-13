@@ -3,11 +3,6 @@ cat("Loading Server helper functions from server_helpers.R...\n")
 #### Helper Functions: Server #### 
 ##################################
 
-# Función para filtrar el conjunto de datos según los valores seleccionados
-filterData <- function(data, inputValues, column) {
-  filter(data, (!!sym(column)) %in% inputValues)
-}
-
 #' Actualiza un grupo de checkbox en el UI de Shiny.
 #' 
 #' Esta función toma como entrada el `session`, el `inputId` correspondiente al grupo
@@ -237,7 +232,9 @@ setColorFill <- function(df, variable) {
   unique_levels <- unique(df[[variable]])
   
   # Generar una paleta de colores basada en el número de niveles únicos
-  my_colors <- rainbow(length(unique_levels))
+  #my_colors <- rainbow(length(unique_levels))
+  #my_colors <- scales::viridis_pal()(length(unique_levels))
+  my_colors <- scales::hue_pal()(length(unique_levels))
   names(my_colors) <- unique_levels
   
   return(my_colors)

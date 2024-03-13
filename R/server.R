@@ -6,47 +6,55 @@ server <- function(input, output, session) {
   
   ########## Server del Sistema de Notificación de Muertes Violentas ##########
   #### Tab de Homicidios por Grupo de Edad (homiEdad) ####
-  # Filtrar el conjunto de datos según los valores seleccionados del checkGroup_snmv
-  filtered_edad_snmv <- reactive({
-    filter(homiEdad, edad %in% input$checkGroup_snmv)
-  })
   
   # Filtrar el conjunto de datos según los valores seleccionados del año y el checkGroup_snmv
-  filtered_edad_año_snmv <- reactive({
+  homiEdad_filt <- reactive({
     filter(homiEdad, 
-           año %in% input$yearInput_snmv,
-           edad %in% input$checkGroup_snmv)
+           año %in% input$checkGroup_snmv_homiEdad_año,
+           edad %in% input$checkGroup_snmv_homiEdad_edad)
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar
-  observeEvent(input$deselectAll_snmv, {
-    updateCheckboxGroup(session, "checkGroup_snmv", input, homiEdad$edad)
+  ### funcion para el boton de deseleccionar/seleccionar edad
+  observeEvent(input$deselectAll_snmv_homiEdad_edad, {
+    updateCheckboxGroup(session, "checkGroup_snmv_homiEdad_edad", input, homiEdad$edad)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar año
+  observeEvent(input$deselectAll_snmv_homiEdad_año, {
+    updateCheckboxGroup(session, "checkGroup_snmv_homiEdad_año", input, homiEdad$año)
   })
   
   # Grafico lineal del SNMV
   output$linePlot_snmv <- renderPlotly({
-    p <- renderLinePlot(filtered_edad_snmv, "año", "casos", "edad", "edad",
+    p <- renderLinePlot(homiEdad_filt, "año", "casos", "edad", "edad",
                         "Evolución de Casos por Grupo de Edad y Año", "Año", "Casos")
     ggplotly(p, tooltip = c("x", "y", "color"))
   })
+  
+  
+  # inci_fill_sexo <- setColorFill(inci, "tipo")
+  # renderBarPlottest(inci_filt, x = "año", y = "casos", fill = "tipo",
+  #                          paste("Comparación de incidentes violentos a lo largo de los Años"),
+  #                          xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Incidente",
+  #                          colorFill = inci_fill_sexo)
   
   
   # Colores de las edades
   homiEdad_fill_edad <- setColorFill(homiEdad, "edad")
   # Grafico de barras de homiEdad
   output$barPlot_snmv <- renderPlotly({
-    p <- renderBarPlottest(filtered_edad_año_snmv, "edad", "casos", "edad",
+    p <- renderBarPlottest(homiEdad_filt, "año", "casos", "edad",
                        paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
                        "Grupo de Edad", "Casos", colorFill = homiEdad_fill_edad)
     
-    ggplotly(p, tooltip = c("x", "y"))  # Especificamos qué información mostrar en el tooltip
+    ggplotly(p, tooltip = c("x", "y", "fill"))  # Especificamos qué información mostrar en el tooltip
   })
   
   # Grafico de barras
   
   # Data Table del SNMV
   output$dataTable_snmv <- renderDT({
-    renderDataTable(filtered_edad_snmv())
+    renderDataTable(homiEdad_filt())
   })
   
   observeEvent(input$yearInput_snmv, {
