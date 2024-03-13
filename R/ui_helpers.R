@@ -2,6 +2,47 @@ cat("Loading UI helper functions from ui_helpers.R...\n")
 ###############################
 #### Helper Functions: UI  ####
 ###############################
+
+#' Crear un dropdownButton con checkboxGroupInput
+#'
+#' Esta función crea un dropdownButton con un checkboxGroupInput dentro,
+#' estilizado con inline-block.
+#'
+#' @param label La etiqueta para el dropdownButton.
+#' @param choices Las opciones para el checkboxGroupInput.
+#' @param selected Las opciones seleccionadas para el checkboxGroupInput.
+#' @param id El identificador a ser usado en el checkboxGroupInput.
+#' @param actionButtonId El identificador para el actionButton dentro del dropdownButton.
+#' @return Un div conteniendo el dropdownButton con las opciones especificadas.
+#' @export
+#' @examples
+#' createDropdownCheckbox(
+#'   label = "Seleccionar Grupos:",
+#'   choices = c("A", "B", "C"),
+#'   selected = "A",
+#'   id = "grupo",
+#'   actionButtonId = "deselectAll_grupo"
+#' )
+createDropdownCheckbox <- function(label, choices, selected, id) {
+  div(
+    dropdownButton(
+      circle = FALSE,
+      label = label,
+      status = "default",
+      size = "default",
+      checkboxGroupInput(
+        paste0("checkGroup_", id),
+        label = "",
+        choices = levels(choices),
+        selected = levels(selected)
+      ),
+      actionButton(paste0("deselectAll_", id), "(De)seleccionar todo")
+    ),
+    style = "display: inline-block; padding-right: 20px;"
+  )
+}
+
+
 #### Tab del Encabezado ####
 
 # Agrega el directorio de www como un recurso en la aplicación Shiny
@@ -75,7 +116,7 @@ tabPanel_snmv <- function() {
       
       #### tab con datos de Homicidios por grupo de Edad ####
       tabPanel(
-        "homiEdad_snmv",
+        "homiEdad",
         # Título del Tab
         titlePanel("Homicidios de mujeres por grupo de edad según el año"),
         
@@ -88,46 +129,25 @@ tabPanel_snmv <- function() {
         sidebarLayout(
           sidebarPanel(
             
-            div(
-              # botón para tener el checkbox para grupos de edad 
-              dropdownButton(
-                circle = "FALSE",
-                label = "Seleccione Grupo(s) de Edad:", 
-                status = "default", 
-                size = "default",
-                checkboxGroupInput(
-                  "checkGroup_snmv_homiEdad_edad",
-                  label = "",
-                  choices = levels(homiEdad$edad),
-                  selected = levels(homiEdad$edad)[8]
-                ),
-                actionButton("deselectAll_snmv_homiEdad_edad", "(De)seleccionar todo")
-              ),
-              style = "display: inline-block; padding-right: 20px;"
+            # botón checkbox para seleccionar grupos de edad 
+            createDropdownCheckbox(
+              label = "Seleccione Grupo(s) de Edad:",
+              choices = homiEdad$edad,
+              selected = homiEdad$edad[8],
+              id = "snmv_homiEdad_edad"
             ),
-            
-            div(
-              # botón para checkbox de año
-              dropdownButton(
-                circle = "FALSE",
-                label = "Seleccione Año(s):", 
-                status = "default", 
-                size = "default",
-                checkboxGroupInput(
-                  "checkGroup_snmv_homiEdad_año",
-                  label = "",
-                  choices = levels(homiEdad$año),
-                  selected = levels(homiEdad$año)
-                ),
-                actionButton("deselectAll_snmv_homiEdad_año", "(De)seleccionar todo")
-              ),
-              style = "display: inline-block; padding-right: 20px;"
+            # botón checkbox para seleccionar año
+            createDropdownCheckbox(
+              label = "Seleccione Año(s):",
+              choices = homiEdad$año,
+              selected = homiEdad$año,
+              id = "snmv_homiEdad_año"
             ),
           ),
           
           # Sección principal con los gráficos
           mainPanel(
-            plotlyOutput("linePlot_snmv"),
+            #plotlyOutput("linePlot_snmv"),
             plotlyOutput("barPlot_snmv"),
             DTOutput("dataTable_snmv")
           )
@@ -136,7 +156,7 @@ tabPanel_snmv <- function() {
       
       #### tab con datos de Incidentes segun el año ####
       tabPanel(
-        "Incidentes_snmv",
+        "inci",
         
         # Título del Tab
         titlePanel("Incidentes Violentos: Tipo de muerte según el año"),
@@ -150,39 +170,19 @@ tabPanel_snmv <- function() {
           sidebarPanel(
             
             # botón para seleccionar tipo de incidente
-            div(
-              dropdownButton(
-                circle = "FALSE",
-                label = "Seleccione Tipo(s) de Incidente:",
-                status = "default",
-                size = "default",
-                checkboxGroupInput(
-                  "checkGroup_snmv_inci_tipo",
-                  label = "",
-                  choices = levels(inci$tipo),
-                  selected = levels(inci$tipo)
-                ),
-                actionButton("deselectAll_snmv_inci_tipo", "(De)seleccionar todo")
-              ),
-              style = "display: inline-block; padding-right: 20px;"
+            createDropdownCheckbox(
+              label = "Seleccione Tipo(s) de Incidente:",
+              choices = inci$tipo,
+              selected = inci$tipo,
+              id = "snmv_inci_tipo"
             ),
             
             # botón para seleccionar año
-            div(
-              dropdownButton(
-                circle = "FALSE",
-                label = "Seleccione el Año(s)",
-                status = "default",
-                size = "default",
-                checkboxGroupInput(
-                  "checkGroup_snmv_inci_año",
-                  label = "",
-                  choices = levels(inci$año),
-                  selected = levels(inci$año)[4]
-                ),
-                actionButton("deselectAll_snmv_inci_año", "(De)seleccionar todo")
-              ),
-              style = "display: inline-block; padding-right: 20px;"
+            createDropdownCheckbox(
+              label = "Seleccione Año(s):",
+              choices = inci$año,
+              selected = inci$año[4],
+              id = "snmv_inci_año"
             ),
             
             hr()
@@ -224,7 +224,7 @@ tabPanel_fam <- function(){
     tabsetPanel(
       # Tab para 
       tabPanel(
-        "dfMalt_fam", 
+        "dfMalt", 
         # Título del Tab
         titlePanel("Cantidad de menores que fueron víctimas de maltrato, según sexo y tipo de maltrato: Años 2018-*2022"),
         
@@ -235,21 +235,21 @@ tabPanel_fam <- function(){
         # Menu sidebar con widgets
         sidebarLayout(
           sidebarPanel(
-            dropdownButton(
-              circle = "FALSE",
+            
+            createDropdownCheckbox(
               label = "Seleccione Tipo(s) de Maltrato:",
-              status = "default",
-              width = 300,
-              actionButton("deselectAll_fam", "(De)seleccionar todo"),
-              checkboxGroupInput(
-                "checkGroup_fam",
-                label = h3("Seleccione Tipo(s) de Maltrato"),
-                choices = levels(dfMalt$Maltrato),
-                selected = levels(dfMalt$Maltrato)[4]
-              )
+              choices = dfMalt$Maltrato,
+              selected = dfMalt$Maltrato[4],
+              id = "fam_dfMalt_tipo"
             ),
-            hr(),
-            selectInput("yearInput_fam", "Seleccionar Año:", choices = unique(dfMalt$Año))
+            
+            # botón para seleccionar año
+            createDropdownCheckbox(
+              label = "Seleccione Año(s):",
+              choices = dfMalt$Año,
+              selected = dfMalt$Año,
+              id = "fam_dfMalt_año"
+            )
           ),
           
           # Sección principal con los gráficos
@@ -365,7 +365,7 @@ tabPanel_trab <- function(){
     tabsetPanel(
       # Tab para el df dtPartlab
       tabPanel(
-        "dtPartlab", 
+        "parLab", 
         # Título del Tab
         titlePanel("Tasa de participación laboral por género y año"),
         
@@ -378,43 +378,20 @@ tabPanel_trab <- function(){
           sidebarPanel(
             
             # botón para seleccionar el año
-            div(
-              dropdownButton(
-                circle = "FALSE",
-                label = "Seleccione Año(s):",
-                status = "default",
-                width = 300,
-                actionButton("deselectAll_trab_parLab_año", "(De)seleccionar todo"),
-                checkboxGroupInput(
-                  "checkGroup_trab_parLab_año",
-                  label = h3(""),
-                  choices = levels(parLab$Año),
-                  selected = levels(parLab$Año)
-                )
-              ),
-              style = "display: inline-block; padding-right: 20px;"
+            createDropdownCheckbox(
+              label = "Seleccione Año(s):",
+              choices = parLab$Año,
+              selected = parLab$Año,
+              id = "trab_parLab_año"
             ),
             
             # botón para seleccionar el sexo
-            div(
-              dropdownButton(
-                circle = "FALSE",
-                label = "Seleccione Sexo(s):",
-                status = "default",
-                width = 300,
-                actionButton("deselectAll_trab_parLab_sexo", "(De)seleccionar todo"),
-                checkboxGroupInput(
-                  "checkGroup_trab_parLab_sexo",
-                  label = h3(""),
-                  choices = levels(parLab$Sexo),
-                  selected = levels(parLab$Sexo)
-                )
-              ),
-              style = "display: inline-block; padding-right: 20px;"
+            createDropdownCheckbox(
+              label = "Seleccione Sexo(s):",
+              choices = parLab$Sexo,
+              selected = parLab$Sexo,
+              id = "trab_parLab_sexo"
             ),
-            
-            hr(),
-            # selectInput("yearInput_fam", "Seleccionar Año:", choices = unique(dfMalt$Año))
           ),
           
           # Sección principal con los gráficos

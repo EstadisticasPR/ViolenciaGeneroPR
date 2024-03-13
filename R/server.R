@@ -7,37 +7,29 @@ server <- function(input, output, session) {
   ########## Server del Sistema de Notificación de Muertes Violentas ##########
   #### Tab de Homicidios por Grupo de Edad (homiEdad) ####
   
-  # Filtrar el conjunto de datos según los valores seleccionados del año y el checkGroup_snmv
+  # Filtro para el dataset según los valores de año y edad
   homiEdad_filt <- reactive({
     filter(homiEdad, 
            año %in% input$checkGroup_snmv_homiEdad_año,
            edad %in% input$checkGroup_snmv_homiEdad_edad)
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar edad
+  ### lógica para el boton de deseleccionar/seleccionar edad
   observeEvent(input$deselectAll_snmv_homiEdad_edad, {
     updateCheckboxGroup(session, "checkGroup_snmv_homiEdad_edad", input, homiEdad$edad)
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar año
+  ### lógica para el boton de deseleccionar/seleccionar año
   observeEvent(input$deselectAll_snmv_homiEdad_año, {
     updateCheckboxGroup(session, "checkGroup_snmv_homiEdad_año", input, homiEdad$año)
   })
   
   # Grafico lineal del SNMV
-  output$linePlot_snmv <- renderPlotly({
-    p <- renderLinePlot(homiEdad_filt, "año", "casos", "edad", "edad",
-                        "Evolución de Casos por Grupo de Edad y Año", "Año", "Casos")
-    ggplotly(p, tooltip = c("x", "y", "color"))
-  })
-  
-  
-  # inci_fill_sexo <- setColorFill(inci, "tipo")
-  # renderBarPlottest(inci_filt, x = "año", y = "casos", fill = "tipo",
-  #                          paste("Comparación de incidentes violentos a lo largo de los Años"),
-  #                          xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Incidente",
-  #                          colorFill = inci_fill_sexo)
-  
+  # output$linePlot_snmv <- renderPlotly({
+  #   p <- renderLinePlot(homiEdad_filt, "año", "casos", "edad", "edad",
+  #                       "Evolución de Casos por Grupo de Edad y Año", "Año", "Casos")
+  #   ggplotly(p, tooltip = c("x", "y", "color"))
+  # })
   
   # Colores de las edades
   homiEdad_fill_edad <- setColorFill(homiEdad, "edad")
@@ -50,47 +42,34 @@ server <- function(input, output, session) {
     ggplotly(p, tooltip = c("x", "y", "fill"))  # Especificamos qué información mostrar en el tooltip
   })
   
-  # Grafico de barras
-  
-  # Data Table del SNMV
+  # Data Table de homiEdad
   output$dataTable_snmv <- renderDT({
     renderDataTable(homiEdad_filt())
   })
   
-  observeEvent(input$yearInput_snmv, {
-    updateSelectInput(session, "yearInput_snmv", selected = input$yearInput_snmv)
-  })
-  
   #### Tab de Tipo de Muerte (inci) ####
   
-  # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de incidente
+  # Filtro para el dataset según los valores de año y el tipo de incidente
   inci_filt <- reactive({
     filter(inci,
            tipo %in% input$checkGroup_snmv_inci_tipo,
            año %in% input$checkGroup_snmv_inci_año)
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar del botón de tipo
+  ### lógica para el botón de deseleccionar/seleccionar tipo de incidente
   observeEvent(input$deselectAll_snmv_inci_tipo, {
     updateCheckboxGroup(session, "checkGroup_snmv_inci_tipo", input, inci$tipo)
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  ### lógica para el botón de deseleccionar/seleccionar el año
   observeEvent(input$deselectAll_snmv_inci_año, {
     updateCheckboxGroup(session, "checkGroup_snmv_inci_año", input, inci$año)
   })
   
-  # 
+  # colores de los tipos de incidentes
   inci_fill_sexo <- setColorFill(inci, "tipo")
-  # Grafico de barras
-  # output$barPlot_snmv_inci <- renderPlotly({
-  #   p <- renderBarPlot(inci_filt, x = "año", y = "casos", fill = "tipo",
-  #                      paste("Comparación de incidentes violentos a lo largo de los Años"),
-  #                      xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Incidente")
-  #   
-  #   ggplotly(p, tooltip = c("fill", "x", "y"))
-  # })
   
+  # Gráfico de barras de incidentes
   output$barPlot_snmv_inci <- renderPlotly({
     p <- renderBarPlottest(inci_filt, x = "año", y = "casos", fill = "tipo",
                        paste("Comparación de incidentes violentos a lo largo de los Años"),
@@ -111,14 +90,14 @@ server <- function(input, output, session) {
   
   # Filtrar el conjunto de datos según los valores seleccionados del checkGroup_fam
   filtered_data_fam <- reactive({
-    filter(dfMalt, Maltrato %in% input$checkGroup_fam)
+    filter(dfMalt, Maltrato %in% input$checkGroup_fam_dfMalt_tipo)
   })
   
   # Filtrar el conjunto de datos según los valores seleccionados del año y el checkGroup
   filtered_data_año_fam <- reactive({
     filter(dfMalt, 
-           Año %in% input$yearInput_fam,
-           Maltrato %in% input$checkGroup_fam)
+           Año %in% input$checkGroup_fam_dfMalt_año,
+           Maltrato %in% input$checkGroup_fam_dfMalt_tipo)
   })
   
   ### funcion para el boton de deseleccionar/seleccionar
@@ -151,7 +130,7 @@ server <- function(input, output, session) {
     updateSelectInput(session, "yearInput_fam", selected = input$yearInput_fam)
   })
   ########## Server del Departamento de Justicia ##########
-  
+  #### Tab de Delitos (dfDeli) ####
   # Filtrar el conjunto de datos según los valores seleccionados del checkGroup_nueva_agencia
   filtered_data_just <- reactive({
     filter(dfDeli,
