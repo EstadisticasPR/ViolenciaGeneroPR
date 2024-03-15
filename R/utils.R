@@ -1,4 +1,54 @@
-cat("Loading Server helper functions from server_helpers.R...\n")
+cat("Loading helper functions from utils.R...\n")
+###############################
+#### Helper Functions: UI  ####
+###############################
+
+#' Crear un dropdownButton con checkboxGroupInput
+#'
+#' Esta función crea un dropdownButton con un checkboxGroupInput dentro,
+#' estilizado con inline-block.
+#'
+#' @param label La etiqueta para el dropdownButton.
+#' @param choices Las opciones para el checkboxGroupInput.
+#' @param selected Las opciones seleccionadas para el checkboxGroupInput.
+#' @param id El identificador a ser usado en el checkboxGroupInput.
+#' @param actionButtonId El identificador para el actionButton dentro del dropdownButton.
+#' @return Un div conteniendo el dropdownButton con las opciones especificadas.
+#' @export
+#' @examples
+#' createDropdownCheckbox(
+#'   label = "Seleccionar Grupos:",
+#'   choices = c("A", "B", "C"),
+#'   selected = "A",
+#'   id = "grupo",
+#'   actionButtonId = "deselectAll_grupo"
+#' )
+createDropdownCheckbox <- function(label, choices, selected, id) {
+  choices <- levels(choices)
+  if (is.null(selected)) {
+    selected <- choices  # Seleccionar todos los elementos
+  } else {
+    selected <- choices[selected]
+  }
+  
+  div(
+    dropdownButton(
+      circle = FALSE,
+      label = label,
+      status = "default",
+      size = "default",
+      checkboxGroupInput(
+        paste0("checkGroup_", id),
+        label = "",
+        choices = choices,
+        selected = selected
+      ),
+      actionButton(paste0("deselectAll_", id), "(De)seleccionar todo")
+    ),
+    style = "display: inline-block; padding-right: 20px;"
+  )
+}
+
 ##################################
 #### Helper Functions: Server #### 
 ##################################

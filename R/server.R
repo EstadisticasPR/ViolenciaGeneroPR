@@ -1,8 +1,6 @@
 # Server
 cat("Loading Server from server.R...\n")
 server <- function(input, output, session) {
-  # Importar el contenido de server_helpers.R
-  source("R/server_helpers.R")
   
   ########## Server del Sistema de Notificación de Muertes Violentas ##########
   #### Tab de Homicidios por Grupo de Edad (homiEdad) ####
@@ -100,9 +98,14 @@ server <- function(input, output, session) {
            Maltrato %in% input$checkGroup_fam_dfMalt_tipo)
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar
-  observeEvent(input$deselectAll_fam, {
-    updateCheckboxGroup(session, "checkGroup_fam", input, dfMalt$Maltrato)
+  # funcion para el boton de deseleccionar/seleccionar tipo de maltrato
+  observeEvent(input$deselectAll_fam_dfMalt_tipo, {
+    updateCheckboxGroup(session, "checkGroup_fam_dfMalt_tipo", input, dfMalt$Maltrato)
+  })
+  
+  # funcion para el boton de deseleccionar/seleccionar año
+  observeEvent(input$deselectAll_fam_dfMalt_año, {
+    updateCheckboxGroup(session, "checkGroup_fam_dfMalt_año", input, dfMalt$Año)
   })
   
   # crear gráfico lineal
@@ -125,10 +128,6 @@ server <- function(input, output, session) {
   output$dataTable_fam <- renderDT({
     renderDataTable(filtered_data_fam())
   })
-  
-  observeEvent(input$yearInput_fam, {
-    updateSelectInput(session, "yearInput_fam", selected = input$yearInput_fam)
-  })
   ########## Server del Departamento de Justicia ##########
   #### Tab de Delitos (dfDeli) ####
   # Filtrar el conjunto de datos según los valores seleccionados del checkGroup_nueva_agencia
@@ -140,7 +139,7 @@ server <- function(input, output, session) {
   # Filtrar el conjunto de datos según los valores seleccionados del año y el checkGroup_nueva_agencia
   filtered_data_año_just <- reactive({
     filter(dfDeli, 
-           Año %in% input$yearInput_just,
+           Año %in% input$checkGroup_just_dfDeli_año,
            Delito %in% input$checkGroup_just)
   })
   
@@ -152,7 +151,7 @@ server <- function(input, output, session) {
   
   filtered_map_just <- reactive({
     filter(mapaDeli, 
-           Año %in% input$yearInput_just,
+           Año %in% input$checkGroup_just_dfDeli_año,
            Delito %in% input$checkGroup_just)
   })
   

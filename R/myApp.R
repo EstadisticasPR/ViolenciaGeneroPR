@@ -57,6 +57,7 @@ myApp <- function() {
   })
   
   source("R/global.R")$value
+  source("R/utils.R")$value
   ui <- source("R/ui.R", local = TRUE)$value
   server <- source("R/server.R", local = TRUE)$value
   shinyApp(ui = ui, server = server)
