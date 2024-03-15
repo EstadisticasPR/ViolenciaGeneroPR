@@ -133,14 +133,14 @@ server <- function(input, output, session) {
   # Filtrar el conjunto de datos según los valores seleccionados del checkGroup_nueva_agencia
   filtered_data_just <- reactive({
     filter(dfDeli,
-           Delito %in% input$checkGroup_just)
+           Delito %in% input$checkGroup_just_dfDeli_delito)
   })
   
   # Filtrar el conjunto de datos según los valores seleccionados del año y el checkGroup_nueva_agencia
   filtered_data_año_just <- reactive({
     filter(dfDeli, 
            Año %in% input$checkGroup_just_dfDeli_año,
-           Delito %in% input$checkGroup_just)
+           Delito %in% input$checkGroup_just_dfDeli_delito)
   })
   
   # filtered_map_just <- reactive({
@@ -152,12 +152,17 @@ server <- function(input, output, session) {
   filtered_map_just <- reactive({
     filter(mapaDeli, 
            Año %in% input$checkGroup_just_dfDeli_año,
-           Delito %in% input$checkGroup_just)
+           Delito %in% input$checkGroup_just_dfDeli_delito)
   })
   
-  #### funcion para el boton de deseleccionar/seleccionar
-  observeEvent(input$deselectAll_just, {
-    updateCheckboxGroup(session, "checkGroup_just", input, dfDeli$Delito)
+  # funcion para el boton de deseleccionar/seleccionar el delito
+  observeEvent(input$deselectAll_just_dfDeli_delito, {
+    updateCheckboxGroup(session, "checkGroup_just_dfDeli_delito", input, dfDeli$Delito)
+  })
+  
+  # funcion para el boton de deseleccionar/seleccionar el delito
+  observeEvent(input$deselectAll_just_dfDeli_año, {
+    updateCheckboxGroup(session, "checkGroup_just_dfDeli_año", input, dfDeli$Año)
   })
   
   # crear gráfico de caja
@@ -256,10 +261,6 @@ server <- function(input, output, session) {
   # Data table del DeptJust
   output$dataTable_just <- renderDT({
     renderDataTable(filtered_map_just())
-  })
-  
-  observeEvent(input$yearInput_just, {
-    updateSelectInput(session, "yearInput_just", selected = input$yearInput_just)
   })
   ########## Server de Prueba ##########
   # Data table del DeptJust

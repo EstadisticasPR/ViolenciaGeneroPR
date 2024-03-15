@@ -11,34 +11,12 @@ ui <- fluidPage(
     tags$div(
       tags$title('Instituto de Estadísticas de Puerto Rico'),
       
-      ### Foto con enlace a la página de IEPR ###
       tags$ul(
-        tags$li(
-          style = 'display: inline-block; margin-right: 20px; vertical-align: middle;',
-          div(
-            id = 'logo_IEPR',
-            tags$a(
-              tags$figure(
-                img(src = "www/iepr_logo.png", height = 60, alt = "estadisticas.pr", deleteFile = FALSE)
-              ),
-              href = 'https://estadisticas.pr/'
-            )
-          )
-        ),
+        ### Foto con enlace a la página de IEPR ###
+        embedImage("logo_IEPR", "www/iepr_logo.png", "https://estadisticas.pr/", "estadisticas.pr"),
         
         ### Foto con enlace a la página de PARE ###
-        tags$li(
-          style = 'display: inline-block; margin-left: 10px; vertical-align: middle;',
-          div(
-            id = 'logo_PARE',
-            tags$a(
-              tags$figure(
-                img(src = "www/logo_PARE.png", height = 60, alt = "PARE.gov", deleteFile = FALSE)
-              ),
-              href = "https://parelaviolencia.pr.gov/"
-            )
-          )
-        ),
+        embedImage("logo_PARE", "www/logo_PARE.png", "https://parelaviolencia.pr.gov/", "PARE.gov"),
         
         ### Título de la App ###
         tags$li(
@@ -155,8 +133,6 @@ ui <- fluidPage(
               DTOutput("dataTable_snmv_inci")
             )
           ),
-          
-          
         ), 
         
         # tab con datos de Tasas
@@ -248,7 +224,7 @@ ui <- fluidPage(
                 label = "Seleccione el/los Delitos(s):",
                 choices = dfDeli$Delito,
                 selected = 1,
-                id = "just"
+                id = "just_dfDeli_delito"
               ),
               
               # botón para seleccionar año

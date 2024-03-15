@@ -40,89 +40,33 @@ renderHistogram <- function(data, x, fill, title, xlab, ylab, fillLab = fill, bi
   print(p)
 }
 
+##############################
 
-#' Crear un dropdownButton con checkboxGroupInput
+#' Crea una imagen con enlace a una página web
 #'
-#' Esta función crea un dropdownButton con un checkboxGroupInput dentro,
-#' estilizado con inline-block.
-#'
-#' @param label La etiqueta para el dropdownButton.
-#' @param choices Las opciones para el checkboxGroupInput.
-#' @param selected Las opciones seleccionadas para el checkboxGroupInput.
-#' @param id El identificador a ser usado en el checkboxGroupInput.
-#' @param actionButtonId El identificador para el actionButton dentro del dropdownButton.
-#' @return Un div conteniendo el dropdownButton con las opciones especificadas.
-#' @export
+#' Esta función crea una imagen con un enlace a una página web especificada.
+#' 
+#' @param ID El identificador del contenedor de la imagen.
+#' @param img_src La ruta de la imagen.
+#' @param link_href La URL de la página web a la que se enlazará la imagen.
+#' @param link_alt El texto alternativo para la imagen.
+#' @return Una lista HTML con la imagen enlazada.
 #' @examples
-#' createDropdownCheckbox(
-#'   label = "Seleccionar Grupos:",
-#'   choices = c("A", "B", "C"),
-#'   selected = "A",
-#'   id = "grupo",
-#'   actionButtonId = "deselectAll_grupo"
-#' )
-createDropdownCheckbox1 <- function(label, choices, selected, id) {
-  div(
-    dropdownButton(
-      circle = FALSE,
-      label = label,
-      status = "default",
-      size = "default",
-      checkboxGroupInput(
-        paste0("checkGroup_", id),
-        label = "",
-        choices = levels(choices),
-        selected = choices[selected]
-      ),
-      actionButton(paste0("deselectAll_", id), "(De)seleccionar todo")
-    ),
-    style = "display: inline-block; padding-right: 20px;"
+#' embedImage("logo_IEPR", "www/iepr_logo.png", "https://estadisticas.pr/", "estadisticas.pr")
+#' embedImage("logo_PARE", "www/logo_PARE.png", "https://parelaviolencia.pr.gov/", "PARE.gov")
+embedImage <- function(ID, img_src, link_href, link_alt) {
+  tags$li(
+    style = 'display: inline-block; margin-right: 20px; vertical-align: middle;',
+    div(
+      id = ID,
+      tags$a(
+        tags$figure(
+          img(src = img_src, height = 60, alt = link_alt, deleteFile = FALSE)
+        ),
+        href = link_href
+      )
+    )
   )
 }
-
-createDropdownCheckbox2 <- function(choices, selected) {
-  choices <- levels(choices)
-  if (is.null(selected)) {
-    selected <- choices  # Seleccionar todos los elementos
-  } else {
-    selected <- choices[selected]
-  }
-  print(selected)
-}
-
-
-createDropdownCheckbox2(
-  choices = homiEdad$edad,
-  selected = 8
-)
-
-createDropdownCheckbox2(
-  choices = homiEdad$edad,
-  selected = homiEdad$edad
-)
-
-createDropdownCheckbox2(
-  choices = homiEdad$edad,
-  selected = NULL
-)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

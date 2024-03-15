@@ -19,7 +19,7 @@ library(lubridate)
 library(sf)
 library(plotly)
 path <- here("data", "Departamento_de_Justicia//")
-path2 <- here("data", "mapas/")
+path2 <- here("data", "mapas//")
 ```
 
 Funcion para manejar datos missing
@@ -123,7 +123,7 @@ datos_delito_seleccionado <- mapaDeli %>%
   )
 
 # Crear el mapa con ggplot2
-mapa_delitos <- renderMap(data = mapaDeli,
+mapa_delitos <- renderMap_static(data = mapaDeli,
             fill = Casos,
             title = paste("Incidencia de casos de", delito_seleccionado, "en el año", año_seleccionado),
             fill_lab = "Incidencia de Casos",
@@ -132,7 +132,7 @@ mapa_delitos <- renderMap(data = mapaDeli,
 mapa_delitos
 
 # Crear el mapa con ggplot2
-mapa_delitos <- renderMap(data = mapaDeli,
+mapa_delitos <- renderMap_static(data = mapaDeli,
             fill = Casos,
             title = paste("Incidencia de casos de", delito_seleccionado),
             fill_lab = "Incidencia de Casos",

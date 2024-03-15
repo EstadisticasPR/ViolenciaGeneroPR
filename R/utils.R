@@ -49,6 +49,33 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
   )
 }
 
+#' Crea una imagen con enlace a una página web
+#'
+#' Esta función crea una imagen con un enlace a una página web especificada.
+#' 
+#' @param ID El identificador del contenedor de la imagen.
+#' @param img_src La ruta de la imagen.
+#' @param link_href La URL de la página web a la que se enlazará la imagen.
+#' @param link_alt El texto alternativo para la imagen.
+#' @return Una lista HTML con la imagen enlazada.
+#' @examples
+#' embedImage("logo_IEPR", "www/iepr_logo.png", "https://estadisticas.pr/", "estadisticas.pr")
+#' embedImage("logo_PARE", "www/logo_PARE.png", "https://parelaviolencia.pr.gov/", "PARE.gov")
+embedImage <- function(ID, img_src, link_href, link_alt) {
+  tags$li(
+    style = 'display: inline-block; margin-right: 20px; vertical-align: middle;',
+    div(
+      id = ID,
+      tags$a(
+        tags$figure(
+          img(src = img_src, height = 60, alt = link_alt, deleteFile = FALSE)
+        ),
+        href = link_href
+      )
+    )
+  )
+}
+
 ##################################
 #### Helper Functions: Server #### 
 ##################################
