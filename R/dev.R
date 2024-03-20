@@ -92,3 +92,28 @@ homiEdad_fill_edad <- setColorFill(homiEdad, "edad")
 renderLinePlot(data = homiEdad, x = "año", y = "casos", group = "edad", color = "edad",
               title = "Evolución de homicidios por Grupo de Edad en el Año",
               xlab = "Grupo de Edad", ylab = "Casos", colorlab = "pepe", colorLine = homiEdad_fill_edad)
+########### tab template
+
+avp <- here("data", "Administracion_de_viviendas_publicas", "/")
+
+# importando el dataset de Casos en Supervisión de Ley 54
+avpAsignadas <- read_excel(paste0(avp, "avpAsignadas2017_23.xlsx")) %>% 
+  rename(región = `Región `) %>%
+  pivot_longer(!región, names_to = "año", values_to = "asignadas")
+
+avpSolicitadas <- read_excel(paste0(avp, "avpSolicitudes2017_23.xlsx")) %>% 
+  rename(región = `Región `) %>%
+  pivot_longer(!región, names_to = "año", values_to = "solicitadas")
+
+# Unir los datasets por columna "región" y "año"
+dfAvp <- left_join(avpSolicitadas, avpAsignadas, by = c("región", "año")) %>% 
+  filter(región != "Total") %>%
+  mutate(
+    región = factor(región)
+  ) %>%
+  pivot_longer(
+    !c(región, año), names_to = "status", values_to = "cantidad"
+  )
+
+# Convertir el año a numérico para eliminar el asterisco y convertirlo a int
+dfAvp$año <- as.factor(sub("\\*", "", dfAvp$año))

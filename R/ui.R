@@ -266,7 +266,7 @@ ui <- fluidPage(
           )
         ),
         
-        # Subtab con datos específicos para el mapa de las Fiscalías
+        #### tab con datos del mapa de Distritos Fiscales de Puerto Rico (mapaDeli) ####
         tabPanel(
           "mapaFisc",
           
@@ -281,7 +281,7 @@ ui <- fluidPage(
           )
         ), 
         
-        # Subtab con datos específicos para el mapaDeli
+        #### tab con datos del mapa delitos de violencia doméstica (mapaDeli) ####
         tabPanel(
           "mapaDeli",
           
@@ -391,6 +391,79 @@ ui <- fluidPage(
             mainPanel(
               plotlyOutput("barPlot_trab_parLab"),
               DTOutput("dataTable_trab_parLab")
+            )
+          ),
+        )
+      )
+    ),
+    
+    #### Tab de la Administración de Vivienda Pública ####
+    tabPanel(
+      "Administración de Vivienda Pública",
+      icon = icon("house"),
+      tabsetPanel(
+        
+        #### tab con datos de Adminsitración de Vivienda Públicas(dfAvp) ####
+        tabPanel(
+          "dfAvp", 
+          # Título del Tab
+          titlePanel("Total de solicitudes de vivienda pública con preferencias por violencia doméstica, Puerto Rico desde 2017 a 2023"),
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Administración de Vivienda Pública"), tags$br(),
+          tags$span("Actualizado:", actualizacion_vivienda), tags$br(),
+          
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              # botón para seleccionar la región
+              createDropdownCheckbox(
+                label = "Seleccione Region:",
+                choices = dfAvp$región,
+                selected = dfAvp$región,
+                id = "avp_dfAvp_región"
+              ),
+              
+              # botón para seleccionar el año
+              createDropdownCheckbox(
+                label = "Seleccione Año(s):",
+                choices = dfAvp$año,
+                selected = dfAvp$año,
+                id = "avp_dfAvp_año"
+              ),
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("barPlot_avp_dfAvp"),
+              DTOutput("dataTable_avp_dfAvp")
+            )
+          ),
+        ),
+        
+        #### tab para el mapa de Adminsitración de Vivienda Públicas (dfAvp) ####
+        tabPanel(
+          "mapaAvp",
+          # Título del Tab
+          titlePanel("Total de solicitudes de vivienda pública con preferencias por violencia doméstica, Puerto Rico desde 2017 a 2023"),
+
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Administración de Vivienda Pública"), tags$br(),
+          tags$span("Actualizado:", actualizacion_vivienda), tags$br(),
+
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              # botón para seleccionar el año
+              selectInput("select_avp_mapaAvp_año", "Seleccione Año:",
+                          choices = levels(mapaAvp$año),
+                          selected = 1)
+            ),
+
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("map_avp_mapaAvp")
+              #DTOutput("dataTable_avp_mapaAvp")
             )
           ),
         )

@@ -208,6 +208,36 @@ parLab <- read_excel(paste0(dtra, "dtpartlab.xlsx")) %>%
     Sexo = factor(Sexo)
   )
 
+##########################################################################
+#### Procesamiento de datos de la Administración de Vivienda Pública #####
+##########################################################################
+
+
+avpAsignadas <- read_excel(paste0(avp, "avpAsignadas2017_23.xlsx")) %>% 
+  rename(región = `Región `) %>%
+  pivot_longer(!región, names_to = "año", values_to = "asignadas")
+
+avpSolicitadas <- read_excel(paste0(avp, "avpSolicitudes2017_23.xlsx")) %>% 
+  rename(región = `Región `) %>%
+  pivot_longer(!región, names_to = "año", values_to = "solicitadas")
+
+# Unir los datasets por columna "región" y "año"
+dfAvp <- left_join(avpSolicitadas, avpAsignadas, by = c("región", "año")) %>% 
+  filter(región != "Total") %>%
+  mutate(
+    región = factor(región)
+  ) %>%
+  pivot_longer(
+    !c(región, año), names_to = "status", values_to = "cantidad"
+  )
+
+# Convertir el año a numérico para eliminar el asterisco y convertirlo a int
+dfAvp$año <- as.factor(sub("\\*", "", dfAvp$año))
+
+# Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
+mapaAvp <- st_read(paste0(maps_fol, "/regiones_vivienda.json")) %>%
+  merge(dfAvp, by.x = "GROUP", by.y = "región")
+  
 
 ########################################
 ##### Actualizaciones de los Datos #####

@@ -310,4 +310,70 @@ server <- function(input, output, session) {
   output$dataTable_trab_parLab <- renderDT({
     renderDataTable(parLab_filt())
   })
+  
+  ########## Tab de la Administración de Vivienda Pública ##########
+  #### Tab de Administración de Vivienda Pública (dfAvp) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de incidente
+  dfAvp_filt <- reactive({
+    filter(dfAvp,
+           región %in% input$checkGroup_avp_dfAvp_región,
+           año %in% input$checkGroup_avp_dfAvp_año)
+  })
+  
+  # Filtrar el conjunto de datos según el año, delito o distrito seleccionado
+  mapaAvp_filt <- reactive({
+    filter(mapaAvp, 
+           año %in% input$select_avp_mapaAvp_año)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de región
+  observeEvent(input$deselectAll_avp_dfAvp_región, {
+    updateCheckboxGroup(session, "checkGroup_avp_dfAvp_región", input, dfAvp$región)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_avp_dfAvp_año, {
+    updateCheckboxGroup(session, "checkGroup_avp_dfAvp_año", input, dfAvp$año)
+  })
+  
+  # Colores del status
+  dfAvp_fill_status <- setColorFill(dfAvp, "status")
+  # Grafico de barras
+  output$barPlot_avp_dfAvp <- renderPlotly({
+    p <- renderBarPlot(dfAvp_filt, x = "año", y = "cantidad", fill = "status",
+                       paste("Total de solicitudes de vivienda pública con preferencias por violencia doméstica, Puerto Rico desde 2017 a 2023"),
+                       xlab = "Año", ylab = "Cantidad de viviendas públicas", fillLab = "Estado de la Vivienda",
+                       colorFill = dfAvp_fill_status)
+
+    ggplotly(p + facet_wrap(~región), 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  # mapa de las regiones de vivienda
+  output$map_avp_mapaAvp <- renderPlotly({
+    p <- renderMapGroup(
+      data = mapaAvp, fill = GROUP,
+      title = "Regiones de Vivienda ",
+      fill_lab = "Region"
+    )
+    ggplotly(p, tooltip = c("all"))
+  })
+  
+  # output$map_just_mapaAvp <- renderPlotly({
+  #   p <- renderMap(
+  #     data = mapaAvp_filt, fill = status,
+  #     title = paste0("Total de solicitudes de vivienda pública con preferencias por violencia doméstica en el año ", input$select_avp_mapaAvp_año),
+  #     group = GROUP,
+  #     fill_lab = "Delito Cometido",
+  #     light_color = "lightgreen",
+  #     dark_color = "darkgreen"
+  #   )
+  #   ggplotly(p, tooltip = c("all"))
+  # })
+  
+  # Data Table
+  output$dataTable_avp_dfAvp <- renderDT({
+    renderDataTable(dfAvp_filt())
+  })
 }
