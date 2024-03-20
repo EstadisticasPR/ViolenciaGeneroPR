@@ -42,31 +42,53 @@ renderHistogram <- function(data, x, fill, title, xlab, ylab, fillLab = fill, bi
 
 ##############################
 
-#' Crea una imagen con enlace a una página web
-#'
-#' Esta función crea una imagen con un enlace a una página web especificada.
-#' 
-#' @param ID El identificador del contenedor de la imagen.
-#' @param img_src La ruta de la imagen.
-#' @param link_href La URL de la página web a la que se enlazará la imagen.
-#' @param link_alt El texto alternativo para la imagen.
-#' @return Una lista HTML con la imagen enlazada.
-#' @examples
-#' embedImage("logo_IEPR", "www/iepr_logo.png", "https://estadisticas.pr/", "estadisticas.pr")
-#' embedImage("logo_PARE", "www/logo_PARE.png", "https://parelaviolencia.pr.gov/", "PARE.gov")
-embedImage <- function(ID, img_src, link_href, link_alt) {
-  tags$li(
-    style = 'display: inline-block; margin-right: 20px; vertical-align: middle;',
-    div(
-      id = ID,
-      tags$a(
-        tags$figure(
-          img(src = img_src, height = 60, alt = link_alt, deleteFile = FALSE)
-        ),
-        href = link_href
-      )
-    )
-  )
+
+#############
+renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, colorLine) {
+  p <- ggplot(data, aes_string(x = x, y = y, group = group, color = colorLine)) +
+    geom_line(linewidth = 1.3) +  
+    geom_point(size = 1.5) +      
+    theme_minimal() +
+    labs(title = title, x = xlab, y = ylab, color = colorlab) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  print(p)
 }
 
+renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, colorLine) {
+  p <- ggplot(data, aes_string(x = x, y = y, group = group)) +
+    geom_line(aes(color = factor(colorLine)), linewidth = 1.3) +  
+    geom_point(aes(color = factor(colorLine)), size = 1.5) +      
+    theme_minimal() +
+    labs(title = title, x = xlab, y = ylab, color = colorlab) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  print(p)
+}
 
+renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, colorLine) {
+  p <- ggplot(data, aes_string(x = x, y = y, group = group)) +
+    geom_line(linewidth = 1.3, color = colorLine) +  # Especificar el color directamente
+    geom_point(aes(color = factor(colorLine)), size = 1.5) +      
+    theme_minimal() +
+    labs(title = title, x = xlab, y = ylab, color = colorlab) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  print(p)
+}
+
+renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, colorLine) {
+  p <- ggplot(data, aes_string(x = x, y = y, group = group)) +
+    geom_line(linewidth = 1.3, color = colorLine) +  
+    geom_point(size = 1.5, color = colorLine) +  # Especificar el color directamente
+    theme_minimal() +
+    labs(title = title, x = xlab, y = ylab, color = colorlab) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  print(p)
+}
+
+homiEdad_fill_edad <- setColorFill(homiEdad, "edad")
+renderLinePlot(data = homiEdad, x = "año", y = "casos", group = "edad", color = "edad",
+              title = "Evolución de homicidios por Grupo de Edad en el Año",
+              xlab = "Grupo de Edad", ylab = "Casos", colorlab = "pepe", colorLine = homiEdad_fill_edad)

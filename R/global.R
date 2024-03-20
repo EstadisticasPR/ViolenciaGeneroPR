@@ -124,6 +124,9 @@ dfMalt <- bind_rows(
     Masculino = `Cantidad Masculino`,
     Femenino = `Cantidad Femenino`
   ) %>%
+  mutate(
+    `Ambos Sexos` = Masculino + Femenino
+  ) %>%
   pivot_longer(
     !c(`Tipo de Maltrato`, Año),
     names_to = "Sexo",
@@ -174,8 +177,15 @@ dfDeli <- bind_rows(
     Año = factor(Año),
     Delito = factor(Delito),
     `FISCALIA DISTRITO` = factor(str_to_title(tolower(`FISCALIA DISTRITO`))
-    )
-    )
+    ),
+    Delito = recode(Delito,
+                    "Art3.5" = "Agresión Sexual Conyugal",
+                    "Art3.2" = "Maltrato Agravado",
+                    "Art3.1" = "Maltrato",
+                    "Art3.3" = "Maltrato por Amenaza",
+                    "Art3.4" = "Maltrato por Restricción de Libertad",
+                    "Art2.8" = "Incumplimiento de la Órden de Protección")
+  )
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
 mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.json")) %>%

@@ -174,7 +174,7 @@ OP_148_SoliGrupEdad_long
 # Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # lista con nuevos nombres de columnas para mejor interpretación
-new_names <- c("Total", "AgresiónSexual", "AcosoSexual", "ActosLascivos", "Incesto") 
+new_names <- c("Total", "Agresión Sexual", "Acoso Sexual", "Actos Lascivos", "Incesto") 
 
 # datos de solicitudes de órdenes de protección en el 2021-2022
 OP_Ley148_ex_parteEmitidas2020_21 <- read_excel(paste0(path, "OP_Ley148_ex_parteEmitidas2020_21.xlsx")) %>%
@@ -256,7 +256,7 @@ OP_LEY148Archivadas
 # Cantidad de solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual denegadas por Región Judicial
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # lista con nuevos nombres de columnas para mejor interpretación
-new_names <- c("NoAplicanDisposicionesLey148", "NoPruebanElementos")
+new_names <- c("No Aplican Disposiciones Ley148", "No Prueban Elementos")
 
 # datos de solicitudes denegadas de órdenes de protección en 2022-2023
 OP_LEY148Denegadas2020_2021 <- read_excel(paste0(path, "OP_LEY148Denegadas2020_21.xlsx")) %>%
@@ -299,7 +299,7 @@ OP_LEY148Denegadas
 # Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # lista con nuevos nombres de columnas para mejor interpretación
-new_names <- c("Total", "AgresiónSexual", "AcosoSexual", "ActosLascivos", "Incesto")
+new_names <- c("Total", "Agresión Sexual", "Acoso Sexual", "Actos Lascivos", "Incesto")
 
 # datos de solicitudes ex parte emitidas de la ley 148 en 2020-2021
 OP_LEY148FinalEmitidas2020_21 <- read_excel(paste0(path, "OP_LEY148FinalEmitidas2020_21.xlsx")) %>%
@@ -375,9 +375,9 @@ OP_LEY148Genero
 # Tribunal de Primera Instancia: Movimiento de casos criminales de acoso sexual, actos lascivos, agresión sexual, incesto y ley contra el acecho. Ley Núm. 148-2015
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # lista con nuevos nombres de columnas para mejor interpretación 
-new_names <- c("Delito", "PendienteInicio", "Presentados", 
-               "AResolver", "Condenas", "Absoluciones", 
-               "Archivos", "Traslados", "Otros", "Total", "PendienteFinal")
+new_names <- c("Delito", "Pendiente Inicio", "Presentados", 
+               "A Resolver", "Condenas", "Absoluciones", 
+               "Archivos", "Traslados", "Otros", "Total", "Pendiente Final")
 
 # datos de movimiento de casos criminales en año fiscal 2019-2020
 tribCasosCrim19 <- read_excel(paste0(path, "tribCasosCrim19.xlsx")) %>%
@@ -437,7 +437,7 @@ tribCasosCrim
 # Solicitudes de órdenes de protección y órdenes de protección emitidas al amparo de la Ley Núm. 54-1989 para la prevención e intervención con la violencia doméstica, por Región Judicial
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # lista con nuevos nombres de columnas para mejor interpretación 
-new_names <- c("TotalSolicitudes", "TotalExParte", "TotalFinalesEmitidas")
+new_names <- c("Total Solicitudes", "Total Ex Parte", "Total Finales Emitidas")
 
 # datos de movimiento de casos criminales en año fiscal 2020-2021
 tribordprot20 <- read_excel(paste0(path, "tribordprot20.xlsx")) %>%

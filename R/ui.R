@@ -112,7 +112,7 @@ ui <- fluidPage(
               createDropdownCheckbox(
                 label = "Seleccione Tipo(s) de Incidente:",
                 choices = inci$tipo,
-                selected = NULL,
+                selected = 7,
                 id = "snmv_inci_tipo"
               ),
               
@@ -157,7 +157,7 @@ ui <- fluidPage(
       "Departamento de la Familia",
       icon = icon("users"),
       tabsetPanel(
-        # Tab para 
+        #### tab con datos de menores víctimas de maltrato (dfMalt)  ####
         tabPanel(
           "dfMalt", 
           # Título del Tab
@@ -171,6 +171,7 @@ ui <- fluidPage(
           sidebarLayout(
             sidebarPanel(
               
+              # botón para seleccionar tipo de maltrato
               createDropdownCheckbox(
                 label = "Seleccione Tipo(s) de Maltrato:",
                 choices = dfMalt$Maltrato,
@@ -182,15 +183,23 @@ ui <- fluidPage(
               createDropdownCheckbox(
                 label = "Seleccione Año(s):",
                 choices = dfMalt$Año,
-                selected = 1,
+                selected = NULL,
                 id = "fam_dfMalt_año"
-              )
+              ),
+              hr(),
+              # botón para seleccionar sexo
+              createDropdownCheckbox(
+                label = "Seleccione sexo de las víctimas:",
+                choices = dfMalt$Sexo,
+                selected = 1,
+                id = "fam_dfMalt_sexo"
+              ),
             ),
             
             # Sección principal con los gráficos
             mainPanel(
               # aglomerar masculino y femenino
-              plotlyOutput("linePlot_fam"),
+              #plotlyOutput("linePlot_fam"),
               plotlyOutput("barPlot_fam"),
               DTOutput("dataTable_fam")
             )
@@ -205,11 +214,12 @@ ui <- fluidPage(
       "Departamento de Justicia",
       icon = icon("balance-scale"),
       tabsetPanel(
-        # Subtab con datos específicos para dfDeli
+        #### tab con datos de delitos de violencia doméstica (dfDeli) ####
         tabPanel(
           "dfDeli",
           # Título del Tab
-          titlePanel("Delitos a la Ley 54, casos radicados por jurisdicción y articulo de la Ley de Violencia Domestica, año 2020 a *2023"),  # Cambiar por el título adecuado
+          # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
+          titlePanel("Delitos a la Ley 54, casos radicados por jurisdicción y articulo de la Ley de Violencia Domestica"),  # Cambiar por el título adecuado
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Departamento de Justicia" ), tags$br(),
@@ -223,7 +233,7 @@ ui <- fluidPage(
               createDropdownCheckbox(
                 label = "Seleccione el/los Delitos(s):",
                 choices = dfDeli$Delito,
-                selected = 1,
+                selected = 2,
                 id = "just_dfDeli_delito"
               ),
               
@@ -231,23 +241,96 @@ ui <- fluidPage(
               createDropdownCheckbox(
                 label = "Seleccionar Año:",
                 choices = dfDeli$Año,
-                selected = 1,
+                selected = NULL,
                 id = "just_dfDeli_año"
               ),
+              hr(),
+              # botón para seleccionar distrito
+              createDropdownCheckbox(
+                label = "Seleccionar Distrito(s):",
+                choices = dfDeli$`FISCALIA DISTRITO`,
+                selected = NULL,
+                id = "just_dfDeli_distrito"
+              ),
               
-              selectInput("districtInput_just", "Seleccionar Distrito:", choices = unique(dfDeli$`FISCALIA DISTRITO`))
             ),
             # Sección principal con los gráficos
             mainPanel(
               #plotlyOutput("boxPlot_just"),
-              #plotlyOutput("barPlot_just"),
-              plotlyOutput("map_just"),
+              plotlyOutput("barPlot_just"),
+              #plotlyOutput("map_just"),
               #plotlyOutput("facet_bartest"),
               # plotOutput("deliPlot_just"),
               DTOutput("dataTable_just")
             )
           )
         ),
+        
+        # Subtab con datos específicos para el mapa de las Fiscalías
+        tabPanel(
+          "mapaFisc",
+          
+          # Título del Tab 
+          # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
+          titlePanel("Distritos Fiscales de Puerto Rico"),  # Cambiar por el título adecuado
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            plotlyOutput("map_just_mapaFisc"),
+            #DTOutput("dataTable_just_mapaFisc")
+          )
+        ), 
+        
+        # Subtab con datos específicos para el mapaDeli
+        tabPanel(
+          "mapaDeli",
+          
+          # Título del Tab 
+          # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
+          titlePanel("Delitos a la Ley 54, casos radicados por jurisdicción y articulo de la Ley de Violencia Domestica"),  # Cambiar por el título adecuado
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Departamento de Justicia" ), tags$br(),
+          tags$span(paste0("Actualizado: ", actualizacion_justiciaA)), tags$br(),
+          
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              
+              # botón para seleccionar delito
+              # createDropdownCheckbox(
+              #   label = "Seleccione el/los Delitos(s):",
+              #   choices = mapaDeli$Delito,
+              #   selected = 2,
+              #   id = "just_mapaDeli_delito"
+              # ),
+              
+              # botón para seleccionar delito
+              selectInput("select_just_mapaDeli_delito", "Seleccione Delito:",
+                          choices = levels(mapaDeli$Delito),
+                          selected = 2),
+              
+              # createDropdownCheckbox(
+              #   label = "Seleccionar Año:",
+              #   choices = mapaDeli$Año,
+              #   selected = NULL,
+              #   id = "just_mapaDeli_año"
+              # ),
+              
+              # botón para seleccionar año
+              selectInput("select_just_mapaDeli_año", "Seleccione Año:",
+                          choices = levels(mapaDeli$Año),
+                          selected = 1)
+              
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("map_just_mapaDeli"),
+              DTOutput("dataTable_just_mapaDeli")
+            )
+          )
+        ), 
         
         # Subtab con datos específicos para el segundo dfDeli de la agencia
         tabPanel(
@@ -273,7 +356,7 @@ ui <- fluidPage(
       "Departamento del Trabajo y Recursos Humanos",
       icon = icon("briefcase"),
       tabsetPanel(
-        # Tab para el df dtPartlab
+        #### tab con datos de participación laboral (dtParlab) ####
         tabPanel(
           "parLab", 
           # Título del Tab
@@ -360,35 +443,36 @@ ui <- fluidPage(
     ),
     
     #### Tab de prueba ####
-    tabPanel(
-      "test",
-      icon = icon("exclamation-triangle"),
-      sidebarLayout(
-        div(sidebarPanel(
-          selectInput("yearInput_xiom", "Seleccionar xiom:", choices = unique(homiEdad$año)),
-          selectInput("yearInput_yeiz", "Seleccionar yeiza:", choices = unique(homiEdad$año))
-        )
-        ),
-        
-        mainPanel(
-          tabsetPanel(
-            tabPanel(
-              "Homicidios por grupo de Edad",
-              uiOutput("yearInput_xiom"),
-              uiOutput("yearInput_yeiz")
-            ),
-            
-            # tab con datos de Incidentes
-            # tabPanel("Incidentes_snmv",
-            #          uiOutput("yearInput_yeiz")),
-            # 
-            # # tab con datos de Tasas
-            # tabPanel("Tasas_snmv",
-            #          uiOutput("yearInput_xiom")
-            #          )
-          )
-        )
-      )
-    )
+    # tabPanel(
+    #   "test",
+    #   icon = icon("exclamation-triangle"),
+    #   sidebarLayout(
+    #     div(sidebarPanel(
+    #       selectInput("yearInput_xiom", "Seleccionar xiom:", choices = unique(homiEdad$año)),
+    #       selectInput("yearInput_yeiz", "Seleccionar yeiza:", choices = unique(homiEdad$año))
+    #     )
+    #     ),
+    #     
+    #     mainPanel(
+    #       tabsetPanel(
+    #         tabPanel(
+    #           "Homicidios por grupo de Edad",
+    #           uiOutput("yearInput_xiom"),
+    #           uiOutput("yearInput_yeiz")
+    #         ),
+    #         
+    #         # tab con datos de Incidentes
+    #         # tabPanel("Incidentes_snmv",
+    #         #          uiOutput("yearInput_yeiz")),
+    #         # 
+    #         # # tab con datos de Tasas
+    #         # tabPanel("Tasas_snmv",
+    #         #          uiOutput("yearInput_xiom")
+    #         #          )
+    #       )
+    #     )
+    #   )
+    # )
+    
   )
 )

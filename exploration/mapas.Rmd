@@ -96,7 +96,6 @@ dfDeli2 <- full_join(deli2020, deli2021) %>%
     Año = as.factor(Año),
     `FISCALIA DISTRITO` = str_to_title(tolower(`FISCALIA DISTRITO`))
     )
-class(dfDeli2)
 ```
 
 ```{r}
@@ -154,13 +153,25 @@ mapa_interactivo
 
 
 ```{r}
-mapa_delitos <- renderMap_static(data = datos_delito_seleccionado, 
-            fill = Casos, 
-            title = paste("Incidencia de casos de", delito_seleccionado, "en el año", año_seleccionado),
-            fill_lab = "Incidencia de Casos", 
-            light_color = "pink",
-            dark_color = "purple")
-mapa_delitos
+renderMap_static2 <- function(data, fill, title, fill_lab = fill, 
+                      light_color = "lightblue", dark_color = "darkblue") {
+  p <- ggplot(data) +
+    geom_sf(aes(fill = {{fill}})) +
+    labs(title = title, fill = fill_lab) +
+    #scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
+    theme_minimal() +
+    theme(
+      legend.position = "bottom",
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      panel.grid = element_blank()
+    )
+  print(p)
+}
+mapa_distritos <- renderMap_static2(data = mapaDeli, 
+            fill = GROUP, 
+            title = "Distritos Fiscales de Puerto Rico",
+            fill_lab = "Distrito Fiscal")
 ```
 
 ```{r}
@@ -209,3 +220,21 @@ m <- leaflet() %>%
 # Mostrar el mapa
 m
 ```
+
+
+```{r}
+library(ggplot2)
+
+# Convertir los datos a un formato adecuado para ggplot2
+delitos_mapa <- merge(delitos_2020, coordenadas_pr, by.x = "FISCALIA DISTRITO", by.y = "FISCALIA.DISTRITO")
+
+# Crear el mapa utilizando ggplot2
+ggplot() +
+  geom_polygon(data = distritos_fiscales, aes(x = long, y = lat, group = GROUP, fill = as.factor(GROUP)), color = "black") +
+  geom_point(data = coordenadas_pr, aes(x = longitud, y = latitud), color = "red", size = 3) +
+  scale_fill_manual(values = c('#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf', '#aec7e8', '#ffbb78')) +
+  labs(title = "Mapa de Delitos en Puerto Rico (2020)", x = "Longitud", y = "Latitud") +
+  theme_minimal()
+
+```
+

@@ -33,7 +33,7 @@ server <- function(input, output, session) {
   homiEdad_fill_edad <- setColorFill(homiEdad, "edad")
   # Grafico de barras de homiEdad
   output$barPlot_snmv <- renderPlotly({
-    p <- renderBarPlottest(homiEdad_filt, "año", "casos", "edad",
+    p <- renderBarPlot(homiEdad_filt, "año", "casos", "edad",
                        paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
                        "Grupo de Edad", "Casos", colorFill = homiEdad_fill_edad)
     
@@ -69,7 +69,7 @@ server <- function(input, output, session) {
   
   # Gráfico de barras de incidentes
   output$barPlot_snmv_inci <- renderPlotly({
-    p <- renderBarPlottest(inci_filt, x = "año", y = "casos", fill = "tipo",
+    p <- renderBarPlot(inci_filt, x = "año", y = "casos", fill = "tipo",
                        paste("Comparación de incidentes violentos a lo largo de los Años"),
                        xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Incidente",
                        colorFill = inci_fill_sexo
@@ -86,16 +86,12 @@ server <- function(input, output, session) {
   ########## Server del Departamento de la Familia ##########
   #### Tab de Maltrato (dfMalt) ####
   
-  # Filtrar el conjunto de datos según los valores seleccionados del checkGroup_fam
-  filtered_data_fam <- reactive({
-    filter(dfMalt, Maltrato %in% input$checkGroup_fam_dfMalt_tipo)
-  })
-  
   # Filtrar el conjunto de datos según los valores seleccionados del año y el checkGroup
-  filtered_data_año_fam <- reactive({
+  dfMalt_filt <- reactive({
     filter(dfMalt, 
            Año %in% input$checkGroup_fam_dfMalt_año,
-           Maltrato %in% input$checkGroup_fam_dfMalt_tipo)
+           Maltrato %in% input$checkGroup_fam_dfMalt_tipo,
+           Sexo %in% input$checkGroup_fam_dfMalt_sexo)
   })
   
   # funcion para el boton de deseleccionar/seleccionar tipo de maltrato
@@ -108,51 +104,47 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_fam_dfMalt_año", input, dfMalt$Año)
   })
   
-  # crear gráfico lineal
-  output$linePlot_fam <- renderPlotly({
-    p <- renderLinePlot(filtered_data_fam, "Año", "Casos", "Maltrato", "Maltrato",
-                   "Casos de Maltrato por Año y Tipo", "Año", "Casos")
-    p <- p + facet_wrap(~Sexo)
-    ggplotly(p, tooltip = c("x", "y", "color"))
+  # funcion para el boton de deseleccionar/seleccionar sexo
+  observeEvent(input$deselectAll_fam_dfMalt_sexo, {
+    updateCheckboxGroup(session, "checkGroup_fam_dfMalt_sexo", input, dfMalt$Sexo)
   })
+  
+  # crear gráfico lineal
+  # output$linePlot_fam <- renderPlotly({
+  #   p <- renderLinePlot(dfMalt_filt, "Año", "Casos", "Maltrato", "Maltrato",
+  #                  "Casos de Maltrato por Año y Tipo", "Año", "Casos")
+  #   p <- p + facet_wrap(~Sexo)
+  #   ggplotly(p, tooltip = c("x", "y", "color"))
+  # })
+  
+  # Colores de las edades
+  dfMalt_fill_Maltrato <- setColorFill(dfMalt, "Maltrato")
   
   # crear gráfico de barras
   output$barPlot_fam <- renderPlotly({
-    p <- renderBarPlot(data = filtered_data_año_fam, x = "Maltrato", y = "Casos", fill = "Sexo",
-                  title = paste("Distribución de Tipos de Maltrato en el Año", input$yearInput_fam),
-                  xlab = "Tipo de Maltrato", ylab = "Casos", fillLab = "Sexo")
+    # p <- renderBarPlot(data = dfMalt_filt, x = "Maltrato", y = "Casos", fill = "Sexo",
+    #               title = paste("Distribución de Tipos de Maltrato en el Año", input$yearInput_fam),
+    #               xlab = "Tipo de Maltrato", ylab = "Casos", fillLab = "Sexo")
+    p <- renderBarPlot(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
+                       title = "Distribución de Tipos de Maltrato en el Año",
+                       xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Maltrato", colorFill = dfMalt_fill_Maltrato)
+    p <- p + facet_wrap(~Sexo, scales = "fixed")
     ggplotly(p, tooltip = c("x", "y", "fill"))
   })
   
   # Data Table del DeptFam
   output$dataTable_fam <- renderDT({
-    renderDataTable(filtered_data_fam())
+    renderDataTable(dfMalt_filt())
   })
   ########## Server del Departamento de Justicia ##########
   #### Tab de Delitos (dfDeli) ####
-  # Filtrar el conjunto de datos según los valores seleccionados del checkGroup_nueva_agencia
-  filtered_data_just <- reactive({
-    filter(dfDeli,
-           Delito %in% input$checkGroup_just_dfDeli_delito)
-  })
   
-  # Filtrar el conjunto de datos según los valores seleccionados del año y el checkGroup_nueva_agencia
-  filtered_data_año_just <- reactive({
+  # Filtrar el conjunto de datos según el año, delito o distrito seleccionado
+  dfDeli_filt <- reactive({
     filter(dfDeli, 
            Año %in% input$checkGroup_just_dfDeli_año,
-           Delito %in% input$checkGroup_just_dfDeli_delito)
-  })
-  
-  # filtered_map_just <- reactive({
-  #   filter(mapaDeli, 
-  #          Año %in% input$yearInput_just,
-  #          Delito %in% input$checkGroup_just)
-  # })
-  
-  filtered_map_just <- reactive({
-    filter(mapaDeli, 
-           Año %in% input$checkGroup_just_dfDeli_año,
-           Delito %in% input$checkGroup_just_dfDeli_delito)
+           Delito %in% input$checkGroup_just_dfDeli_delito,
+           `FISCALIA DISTRITO` %in% input$checkGroup_just_dfDeli_distrito)
   })
   
   # funcion para el boton de deseleccionar/seleccionar el delito
@@ -160,15 +152,20 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_just_dfDeli_delito", input, dfDeli$Delito)
   })
   
-  # funcion para el boton de deseleccionar/seleccionar el delito
+  # funcion para el boton de deseleccionar/seleccionar el año
   observeEvent(input$deselectAll_just_dfDeli_año, {
     updateCheckboxGroup(session, "checkGroup_just_dfDeli_año", input, dfDeli$Año)
+  })
+  
+  # funcion para el boton de deseleccionar/seleccionar el distrito fiscal
+  observeEvent(input$deselectAll_just_dfDeli_distrito, {
+    updateCheckboxGroup(session, "checkGroup_just_dfDeli_distrito", input, dfDeli$`FISCALIA DISTRITO`)
   })
   
   # crear gráfico de caja
   # output$boxPlot_just <- renderPlotly({
   #   renderBoxPlot(
-  #     data = filtered_data_just(),
+  #     data = dfDeli_filt(),
   #     x = "Año",
   #     y = "Casos",
   #     color = "FISCALIA DISTRITO",
@@ -180,66 +177,17 @@ server <- function(input, output, session) {
   #   ggplotly(p)
   # })
   
-  # output$boxPlot_just <- renderPlotly({
-  #   p <- ggplot(filtered_data_just(), aes(x = Año, y = Casos)) +
-  #     geom_boxplot() +
-  #     #geom_jitter(width = 0.1, alpha = 0.5) +  # Añadir los scatters
-  #     labs(
-  #       title = "Distribución de Casos por Delito", x = "Año", y = "Casos") +
-  #     geom_point(aes(color = `FISCALIA DISTRITO`)) +
-  #     theme_minimal() +
-  #     facet_wrap(~Delito, scales = "fixed")
-  # 
-  #   ggplotly(p, tooltip = c("x", "y", "color"))
-  # })
+  # Colores de las edades
+  dfDeli_fill_Delito <- setColorFill(dfDeli, "Delito")
   
   #crear el grafico de barras
   output$barPlot_just <- renderPlotly({
-    p <- renderBarPlot(filtered_data_año_just, x = "Delito", y = "Casos", fill = "Delito",
-                       title = "Número de Casos por Delito (Año 2023)",
-                       xlab = "Delito Cometido", ylab = "Número de Casos",
-                       fillLab = "Delito Cometido")
+    p <- renderBarPlot(dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
+                       title = "Distribución de Casos por Distrito Fiscal",
+                       xlab = "Año", ylab = "Número de Casos",
+                       fillLab = "Delito Cometido", colorFill = dfDeli_fill_Delito)
     p <- p + facet_wrap(~`FISCALIA DISTRITO`)
-    ggplotly(p, tooltip = c("y", "fill"))
-  })
-  
-  #crear el grafico de barras
-  # output$facet_bartest <- renderPlotly({
-  #   p <- renderBoxPlot(filtered_data_año_just, x = "Año", y = "Casos", fill = "Delito",
-  #                      title = "Número de Casos por Delito (Año 2023)",
-  #                      xlab = "Delito Cometido", ylab = "Número de Casos",
-  #                      fillLab = "Delito Cometido", facet = TRUE,
-  #                      facet_var = "Delito")
-  #   ggplotly(p, tooltip = c("y", "fill"))
-  # })
-  
-  
-  output$map_just <- renderPlotly({
-    p <- renderMap(
-      data = filtered_map_just, fill = Casos,
-      title = paste("Número de Casos por Delito"),
-      fill_lab = "Delito Cometido",
-      light_color = "pink",
-      dark_color = "darkred"
-    )
-    ggplotly(p + facet_wrap(~Año), tooltip = c("text")) %>%
-      style(
-        text = paste("Fiscalía:", filtered_map_just()$GROUP, "<br>",
-                     "Casos:", filtered_map_just()$Casos, "<br>",
-                     "Municipio:", filtered_map_just()$NAME)
-      )
-    # ggplotly(p + facet_wrap(~Año) +
-    #                 geom_sf_text(aes(label = NULL, text = paste("Fiscalía:", GROUP, "<br>",
-    #                                                             "Casos:", Casos, "<br>",
-    #                                                             "Municipio:", NAME)), color = "black"),
-    #               tooltip = "text")
-    # p <- ggplotly(p + facet_wrap(~Año) +
-    #                 geom_sf_text(aes(label = paste("Fiscalía:", GROUP, "<br>",
-    #                                                "Casos:", Casos, "<br>",
-    #                                                "Municipio:", NAME)), size = 0, color = "black"),
-    #                 tooltip = "text")
-    # p$x$data[[1]]$hoverinfo <- "text"
-    # p
+    ggplotly(p, tooltip = c("x", "y", "fill"))
   })
   
   # output$deliPlot_just <- renderPlot({
@@ -260,8 +208,60 @@ server <- function(input, output, session) {
   
   # Data table del DeptJust
   output$dataTable_just <- renderDT({
-    renderDataTable(filtered_map_just())
+    renderDataTable(dfDeli_filt())
   })
+  
+  #### Tab del Mapa de  Delitos por Distritos Fiscales (mapaDeli) ####
+  
+  # Filtrar el conjunto de datos según el año, delito o distrito seleccionado
+  mapaDeli_filt <- reactive({
+    filter(mapaDeli, 
+           Año %in% input$select_just_mapaDeli_año,
+           Delito %in% input$select_just_mapaDeli_delito)
+  })
+  
+  # funcion para el boton de deseleccionar/seleccionar el delito
+  observeEvent(input$deselectAll_just_mapaDeli_delito, {
+    updateCheckboxGroup(session, "checkGroup_just_mapaDeli_delito", input, mapaDeli$Delito)
+  })
+  
+  # funcion para el boton de deseleccionar/seleccionar el año
+  observeEvent(input$deselectAll_just_mapaDeli_año, {
+    updateCheckboxGroup(session, "checkGroup_just_mapaDeli_año", input, mapaDeli$año)
+  })
+  
+  # output$map_just_mapaDeli <- renderPlotly({
+  #   p <- renderMap(
+  #     data = mapaDeli_filt, fill = Casos,
+  #     title = paste0("Distribución de Delitos por ", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año),
+  #     fill_lab = "Delito Cometido",
+  #     light_color = "pink",
+  #     dark_color = "darkred"
+  #   )
+  #   ggplotly(p, tooltip = c("all"))
+  # })
+  
+  output$map_just_mapaDeli <- renderPlotly({
+    p <- renderMap(
+      data = mapaDeli_filt, fill = Casos,
+      title = paste0("Distribución de Delitos por ", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año),
+      group = GROUP,
+      fill_lab = "Delito Cometido",
+      light_color = "pink",
+      dark_color = "darkred"
+    )
+    ggplotly(p, tooltip = c("all"))
+  })
+  
+  #### Tab del Mapa de Distritos Fiscales ####
+  output$map_just_mapaFisc <- renderPlotly({
+    p <- renderMapGroup(data = mapaDeli, 
+                        fill = GROUP, 
+                        title = "",
+                        fill_lab = "Distrito Fiscal")
+    ggplotly(p, tooltip = c("fill"))
+  })
+  
   ########## Server de Prueba ##########
   # Data table del DeptJust
   
@@ -294,11 +294,14 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_trab_parLab_sexo", input, parLab$Sexo)
   })
   
+  # Colores de las edades
+  parLab_fill_sexo <- setColorFill(parLab, "Sexo")
   # Grafico de barras
   output$barPlot_trab_parLab <- renderPlotly({
     p <- renderBarPlot(parLab_filt, x = "Año", y = "Tasa", fill = "Sexo",
                        paste("Tasa de participación laboral según el año natural y el sexo"),
-                       xlab = "Año", ylab = "Tasa de participación", fillLab = "Sexo")
+                       xlab = "Año", ylab = "Tasa de participación", fillLab = "Sexo", 
+                       colorFill = parLab_fill_sexo)
 
     ggplotly(p, tooltip = c("fill", "x", "y"))
   })

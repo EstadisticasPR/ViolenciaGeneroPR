@@ -126,11 +126,12 @@ updateCheckboxGroup <- function(session, inputId, input, data) {
 #' @param x Variable para el eje x.
 #' @param y Variable para el eje y.
 #' @param group Variable para agrupar los datos.
-#' @param color Variable para asignar colores.
+#' @param color Variable para asignar colores a la línea y los puntos.
 #' @param title Título del gráfico.
 #' @param xlab Etiqueta del eje x.
 #' @param ylab Etiqueta del eje y.
 #' @param colorlab Etiqueta para la leyenda de colores.
+#' @param colorLine Color de la línea y los puntos en el gráfico.
 #' 
 #' @return No regresa un valor, pero imprime el gráfico generado en la consola.
 #' 
@@ -138,16 +139,17 @@ updateCheckboxGroup <- function(session, inputId, input, data) {
 #' # Ejemplo de uso:
 #' renderLinePlot(homiEdad, "x", "y", "group", "color", "Title", "X Label", "Y Label")
 #' 
-renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color) {
+renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, colorLine) {
   p <- ggplot(data(), aes_string(x = x, y = y, group = group, color = color)) +
-    geom_line(linewidth = 1.3) +
-    geom_point(size = 1.5) +
+    geom_line(linewidth = 1.3, color = colorLine) +  
+    geom_point(size = 1.5, color = "black") +      
     theme_minimal() +
-    labs(title = title, x = xlab, y = ylab, color = color) +
+    labs(title = title, x = xlab, y = ylab, color = colorlab) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
   
   print(p)
 }
+
 
 #' Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
 #' 
@@ -169,20 +171,20 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
 #' # Ejemplo de uso:
 #' renderBarPlot(homiEdad, "x", "y", "fill", "Title", "X Label", "Y Label")
 #' 
-renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill) {
-  p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
-    geom_bar(stat = "identity", position = "dodge") +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    labs(title = title, x = xlab, y = ylab, fill = fillLab)
-  
-  print(p)
-}
+# renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill) {
+#   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
+#     geom_bar(stat = "identity", position = "dodge") +
+#     theme_minimal() +
+#     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+#     labs(title = title, x = xlab, y = ylab, fill = fillLab)
+#   
+#   print(p)
+# }
 
-renderBarPlottest <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill) {
+renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill) {
   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
     geom_bar(stat = "identity", position = "dodge") +
-    scale_fill_manual(values = colorFill) +   # Utilizar los colores predeterminados de ggplot
+    scale_fill_manual(values = colorFill) + 
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     labs(title = title, x = xlab, y = ylab, fill = fillLab)
@@ -274,12 +276,44 @@ renderDataTable <- function(filtered_data) {
 #' # Ejemplo de uso:
 #' renderMap(datos_delito_seleccionado, "Casos", "Incidencia de casos de Delito X")
 #' 
-renderMap <- function(data, fill, title, fill_lab = fill, 
+# renderMap <- function(data, fill, title, fill_lab = fill, 
+#                       light_color = "lightblue", dark_color = "darkblue") {
+#   p <- ggplot(data()) +
+#     geom_sf(aes(fill = {{fill}})) +
+#     labs(title = title, fill = fill_lab) +
+#     scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
+#     theme_minimal() +
+#     theme(
+#       legend.position = "bottom",
+#       axis.text = element_blank(),
+#       axis.ticks = element_blank(),
+#       panel.grid = element_blank()
+#     )
+#   print(p)
+# }
+
+renderMap <- function(data, fill, title, group, fill_lab = fill, 
                       light_color = "lightblue", dark_color = "darkblue") {
   p <- ggplot(data()) +
-    geom_sf(aes(fill = {{fill}})) +
+    geom_sf(aes(fill = {{fill}}, group = {{group}})) +  # Incluye group como aesthetic mapping
     labs(title = title, fill = fill_lab) +
     scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
+    theme_minimal() +
+    theme(
+      legend.position = "bottom",
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      panel.grid = element_blank()
+    )
+  print(p)
+}
+
+
+renderMapGroup <- function(data, fill, title, fill_lab = fill) {
+  p <- ggplot(data) +
+    geom_sf(aes(fill = {{fill}})) +
+    labs(title = title, fill = fill_lab) +
+    #scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
     theme_minimal() +
     theme(
       legend.position = "bottom",
@@ -309,8 +343,6 @@ setColorFill <- function(df, variable) {
   unique_levels <- unique(df[[variable]])
   
   # Generar una paleta de colores basada en el número de niveles únicos
-  #my_colors <- rainbow(length(unique_levels))
-  #my_colors <- scales::viridis_pal()(length(unique_levels))
   my_colors <- scales::hue_pal()(length(unique_levels))
   names(my_colors) <- unique_levels
   
