@@ -291,7 +291,6 @@ renderDataTable <- function(filtered_data) {
 #     )
 #   print(p)
 # }
-
 renderMap <- function(data, fill, title, group, fill_lab = fill, 
                       light_color = "lightblue", dark_color = "darkblue") {
   p <- ggplot(data()) +

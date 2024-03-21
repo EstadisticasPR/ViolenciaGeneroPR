@@ -223,12 +223,13 @@ avpSolicitadas <- read_excel(paste0(avp, "avpSolicitudes2017_23.xlsx")) %>%
 
 # Unir los datasets por columna "región" y "año"
 dfAvp <- left_join(avpSolicitadas, avpAsignadas, by = c("región", "año")) %>% 
-  filter(región != "Total") %>%
-  mutate(
-    región = factor(región)
-  ) %>%
+  filter(región != "Total")  %>%
   pivot_longer(
     !c(región, año), names_to = "status", values_to = "cantidad"
+  ) %>%
+  mutate(
+    región = factor(región),
+    status = factor(status, levels = c("solicitadas", "asignadas"))
   )
 
 # Convertir el año a numérico para eliminar el asterisco y convertirlo a int

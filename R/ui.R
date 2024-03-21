@@ -45,7 +45,7 @@ ui <- fluidPage(
   
   # Titulo de la app
   navbarPage(
-    "",
+    "PEPE",
     
     #### Tab del Sistema de Notificación de Muertes Violentas ####
     tabPanel(
@@ -443,30 +443,55 @@ ui <- fluidPage(
         
         #### tab para el mapa de Adminsitración de Vivienda Públicas (dfAvp) ####
         tabPanel(
+          "mapaRegiones",
+          
+          # Título del Tab 
+          titlePanel("Regiones de la Adminsitración de Vivienda Públicas"),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            plotlyOutput("map_avp_mapaRegi")
+            #DTOutput("dataTable_avp_mapaRegi")
+          )
+        ), 
+        
+        #### tab para el mapa de Adminsitración de Vivienda Públicas (dfAvp) ####
+        tabPanel(
           "mapaAvp",
+          
           # Título del Tab
           titlePanel("Total de solicitudes de vivienda pública con preferencias por violencia doméstica, Puerto Rico desde 2017 a 2023"),
-
+          
           # Fuente de Datos, Actualización
           tags$span("Fuente: Administración de Vivienda Pública"), tags$br(),
           tags$span("Actualizado:", actualizacion_vivienda), tags$br(),
-
+          
           # Menu sidebar con widgets
           sidebarLayout(
             sidebarPanel(
+              
+              
               # botón para seleccionar el año
               selectInput("select_avp_mapaAvp_año", "Seleccione Año:",
                           choices = levels(mapaAvp$año),
-                          selected = 1)
+                          selected = 1),
+              
+              # createDropdownCheckbox(
+              #   label = "Seleccionar Año:",
+              #   choices = mapaDeli$Año,
+              #   selected = NULL,
+              #   id = "just_mapaDeli_año"
+              # ),
+              
             ),
-
+            
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("map_avp_mapaAvp")
-              #DTOutput("dataTable_avp_mapaAvp")
+              #plotlyOutput("map_avp_mapaAvp"),
+              DTOutput("dataTable_avp_mapaAvp")
             )
-          ),
-        )
+          )
+        ), 
       )
     ),
     

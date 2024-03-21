@@ -351,7 +351,7 @@ server <- function(input, output, session) {
   })
   
   # mapa de las regiones de vivienda
-  output$map_avp_mapaAvp <- renderPlotly({
+  output$map_avp_mapaRegi <- renderPlotly({
     p <- renderMapGroup(
       data = mapaAvp, fill = GROUP,
       title = "Regiones de Vivienda ",
@@ -360,20 +360,28 @@ server <- function(input, output, session) {
     ggplotly(p, tooltip = c("all"))
   })
   
-  # output$map_just_mapaAvp <- renderPlotly({
-  #   p <- renderMap(
-  #     data = mapaAvp_filt, fill = status,
-  #     title = paste0("Total de solicitudes de vivienda pública con preferencias por violencia doméstica en el año ", input$select_avp_mapaAvp_año),
-  #     group = GROUP,
-  #     fill_lab = "Delito Cometido",
-  #     light_color = "lightgreen",
-  #     dark_color = "darkgreen"
-  #   )
-  #   ggplotly(p, tooltip = c("all"))
-  # })
-  
-  # Data Table
-  output$dataTable_avp_dfAvp <- renderDT({
-    renderDataTable(dfAvp_filt())
+  output$map_avp_mapaAvp <- renderPlotly({
+    p <- renderMap(
+      data = mapaAvp_filt, fill = cantidad,
+      title = paste0("Total de solicitudes de vivienda pública con preferencias por violencia doméstica en el año ", input$select_avp_mapaAvp_año),
+      group = GROUP,
+      fill_lab = "Número de Viviendas",
+      light_color = "lightgreen",
+      dark_color = "darkgreen"
+    )
+    ggplotly(p + facet_wrap(~status),
+             tooltip = c("all"))
   })
+  
+  # Data Table para la gráfica de barras de dfAvp
+  output$dataTable_avp_dfAvp <- renderDT({
+    renderDataTable(dfAvp)
+  })
+  
+  # Data Table para el mapa de dfAvp
+  output$dataTable_avp_mapaAvp <- renderDT({
+    renderDataTable(mapaAvp_filt())
+  })
+  
+  
 }

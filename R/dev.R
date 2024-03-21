@@ -92,28 +92,52 @@ homiEdad_fill_edad <- setColorFill(homiEdad, "edad")
 renderLinePlot(data = homiEdad, x = "año", y = "casos", group = "edad", color = "edad",
               title = "Evolución de homicidios por Grupo de Edad en el Año",
               xlab = "Grupo de Edad", ylab = "Casos", colorlab = "pepe", colorLine = homiEdad_fill_edad)
-########### tab template
 
-avp <- here("data", "Administracion_de_viviendas_publicas", "/")
 
-# importando el dataset de Casos en Supervisión de Ley 54
-avpAsignadas <- read_excel(paste0(avp, "avpAsignadas2017_23.xlsx")) %>% 
-  rename(región = `Región `) %>%
-  pivot_longer(!región, names_to = "año", values_to = "asignadas")
+############################
+renderMap2 <- function(data, fill, title, group, fill_lab = fill, 
+                      light_color = "lightblue", dark_color = "darkblue") {
+  p <- ggplot(data) +
+    geom_sf(aes(fill = {{fill}}, group = {{group}})) +  # Incluye group como aesthetic mapping
+    labs(title = title, fill = fill_lab) +
+    scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
+    theme_minimal() +
+    theme(
+      legend.position = "bottom",
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      panel.grid = element_blank()
+    )
+  print(p)
+}
 
-avpSolicitadas <- read_excel(paste0(avp, "avpSolicitudes2017_23.xlsx")) %>% 
-  rename(región = `Región `) %>%
-  pivot_longer(!región, names_to = "año", values_to = "solicitadas")
+############
 
-# Unir los datasets por columna "región" y "año"
-dfAvp <- left_join(avpSolicitadas, avpAsignadas, by = c("región", "año")) %>% 
-  filter(región != "Total") %>%
-  mutate(
-    región = factor(región)
-  ) %>%
-  pivot_longer(
-    !c(región, año), names_to = "status", values_to = "cantidad"
+ui <- fluidPage(
+  titlePanel("Tabs con Dropdown Menu"),
+  navbarPage(
+    title = "Tabs",
+    id = "tabs",
+    navbarMenu("PARE",
+               tabPanel("Agencia 1", "Contenido del Tab 5", icon = icon("suitcase")),
+               tabPanel("Agencia 2", "Contenido del Agencia 6"),
+               tabPanel("Agencia 3", "Contenido del Tab 7"),
+               tabPanel("Agencia 4", "Contenido del Tab 8"),
+               tabPanel("Agencia 5", "Contenido del Tab 9"),
+               tabPanel("Agencia 6", "Contenido del Tab 10")
+    ),
+    navbarMenu("FEMINICIDIOS",
+               tabPanel("Agencia 5", "Contenido del Tab 5"),
+               tabPanel("Agencia 6", "Contenido del Tab 6"),
+               tabPanel("Agencia 7", "Contenido del Tab 7"),
+               tabPanel("Tab 8", "Contenido del Tab 8"),
+               tabPanel("Tab 9", "Contenido del Tab 9"),
+               tabPanel("Tab 10", "Contenido del Tab 10")
+    )
   )
+)
 
-# Convertir el año a numérico para eliminar el asterisco y convertirlo a int
-dfAvp$año <- as.factor(sub("\\*", "", dfAvp$año))
+server <- function(input, output) {}
+
+shinyApp(ui = ui, server = server)
+
