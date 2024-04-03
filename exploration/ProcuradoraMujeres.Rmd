@@ -33,7 +33,7 @@ Gráfico de líneas para mostrar la tendencia de la cantidad de asesinatos a lo 
 ggplot(opmFemiVD, aes(x = Año, y = `Cantidad de asesinatos`, group = 1)) +
   geom_line(color = "blue", linewidth = 1) +
   geom_point(color = "red", size = 2) +
-  geom_smooth(method = "lm", se = FALSE, color = "green" ) +  # Añade líneas de tendencia lineal
+  #geom_smooth(method = "lm", se = FALSE, color = "green" ) +  # Añade líneas de tendencia lineal
   labs(title = "1. Tendencia de Asesinatos a lo largo de los Años", x = "Año", y = "Cantidad de Asesinatos") +
   theme_minimal()
 ```

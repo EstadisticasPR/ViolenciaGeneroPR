@@ -139,17 +139,36 @@ updateCheckboxGroup <- function(session, inputId, input, data) {
 #' # Ejemplo de uso:
 #' renderLinePlot(homiEdad, "x", "y", "group", "color", "Title", "X Label", "Y Label")
 #' 
-renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, colorLine) {
+# renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, colorLine) {
+#   p <- ggplot(data(), aes_string(x = x, y = y, group = group, color = color)) +
+#     geom_line(linewidth = 1.3, color = colorLine) +  
+#     geom_point(size = 1.5, color = "black") +      
+#     theme_minimal() +
+#     labs(title = title, x = xlab, y = ylab, color = colorlab) +
+#     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+#   
+#   print(p)
+# }
+renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color) {
   p <- ggplot(data(), aes_string(x = x, y = y, group = group, color = color)) +
-    geom_line(linewidth = 1.3, color = colorLine) +  
-    geom_point(size = 1.5, color = "black") +      
-    theme_minimal() +
+    geom_line(color = "blue", size = 1) +
+    geom_point(color = "red", size = 2) +
     labs(title = title, x = xlab, y = ylab, color = colorlab) +
+    theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
   
   print(p)
 }
-
+# renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color) {
+#   p <- ggplot(data(), aes(x = x, y = y, group = group, color = color)) +
+#     geom_line(linewidth = 1.3) +  
+#     geom_point(size = 1.5, color = "black") +      
+#     theme_minimal() +
+#     labs(title = title, x = xlab, y = ylab, color = colorlab) +
+#     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+#   
+#   print(p)
+# }
 
 #' Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
 #' 
@@ -181,7 +200,7 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
 #   print(p)
 # }
 
-renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill) {
+renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1") {
   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
     geom_bar(stat = "identity", position = "dodge") +
     scale_fill_manual(values = colorFill) + 

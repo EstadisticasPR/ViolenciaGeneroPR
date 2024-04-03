@@ -45,7 +45,7 @@ ui <- fluidPage(
   
   # Titulo de la app
   navbarPage(
-    "PEPE",
+    "",
     
     #### Tab del Sistema de Notificación de Muertes Violentas ####
     tabPanel(
@@ -487,12 +487,451 @@ ui <- fluidPage(
             
             # Sección principal con los gráficos
             mainPanel(
-              #plotlyOutput("map_avp_mapaAvp"),
+              plotlyOutput("map_avp_mapaAvp"),
               DTOutput("dataTable_avp_mapaAvp")
             )
           )
         ), 
       )
+    ),
+    
+    #### Tab del Negociado de Policía de Puerto Rico ####
+    tabPanel(
+      "Negociado de Policía",
+      icon = icon("building-shield"),
+      tabsetPanel(
+        
+        #### tab con datos de mujeres desaparecidas (despDF) ####
+        tabPanel(
+          "despDF", 
+          # Título del Tab
+          titlePanel("Cantidad de mujeres desaparecidas, localizadas y sin localizar- adultas y menores (desde enero 2020 a marzo 2023)"),
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
+          tags$span("Actualizado:", actualizacion_policiaB), tags$br(),
+          
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              
+              # botón para seleccionar la Categoría
+              createDropdownCheckbox(
+                label = "Seleccione Categoría:",
+                choices = despDF$Categoria,
+                selected = despDF$Categoria,
+                id = "poli_despDF_categoría"
+              ),
+              
+              # botón para seleccionar el año
+              createDropdownCheckbox(
+                label = "Seleccione Año(s):",
+                choices = despDF$Año,
+                selected = despDF$Año,
+                id = "poli_despDF_año"
+              ),
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("barPlot_poli_despDF"),
+              DTOutput("dataTable_poli_despDF")
+            )
+          ),
+        ),
+        
+        #### tab para el barplot de incidentes de violencia doméstica por edad de la víctima (vEdad) ####
+        tabPanel(
+          "vEdad",
+          
+          # Título del Tab
+          titlePanel("Incidentes de violencia doméstica por edad de la víctima (desde enero 2021 a abril 2023)"),
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
+          tags$span("Actualizado:", actualizacion_policiaA), tags$br(),
+          
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              
+              # botón para seleccionar el año
+              createDropdownCheckbox(
+                label = "Seleccione Grupo(s) de Edad:",
+                choices = vEdad$Edad,
+                selected = vEdad$Edad,
+                id = "poli_vEdad_edad"
+              ),
+              
+              # botón para seleccionar el sexo
+              createDropdownCheckbox(
+                label = "Seleccione sexo de las víctimas:",
+                choices = vEdad$Sexo,
+                selected = vEdad$Sexo[1],
+                id = "poli_vEdad_sexo"
+              ),
+              hr(),
+              # botón para seleccionar el año
+              createDropdownCheckbox(
+                label = "Seleccione Año(s):",
+                choices = vEdad$Año,
+                selected = vEdad$Año,
+                id = "poli_vEdad_año"
+              ),
+              
+              # createDropdownCheckbox(
+              #   label = "Seleccionar Año:",
+              #   choices = mapaDeli$Año,
+              #   selected = NULL,
+              #   id = "just_mapaDeli_año"
+              # ),
+              
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("barPlot_poli_vEdad"),
+              DTOutput("dataTable_poli_vEdad")
+            )
+          )
+        ), 
+        
+        #### tab para el mapa de incidentes de violencia doméstica por área policiaca (inciMapa) ####
+        tabPanel(
+          "inciMapa",
+          
+          # Título del Tab
+          titlePanel("Incidentes de violencia doméstica por área policíaca (desde enero de 2021 a abril de 2023)"),
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
+          tags$span("Actualizado:", actualizacion_policiaA), tags$br(),
+          
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              
+              # botón para seleccionar año
+              selectInput("select_poli_inciMapa_año", "Seleccione Año:",
+                          choices = levels(inciMapa$Año),
+                          selected = 1),
+              
+              # createDropdownCheckbox(
+              #   label = "Seleccionar Año:",
+              #   choices = mapaDeli$Año,
+              #   selected = NULL,
+              #   id = "just_mapaDeli_año"
+              # ),
+              
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("map_poli_inciMapa")
+              #DTOutput("dataTable_poli_inciMapa")
+            )
+          )
+        ), 
+      )
+    ),
+    
+    #### Tab de la Oficina de la Procuradora de las Mujeres ####
+    tabPanel(
+      "Oficina de la Procuradora de la Mujer",
+      icon = icon("person-dress"),
+      tabsetPanel(
+        
+        #### tab con datos de violencia domestica (opmFemiVD) ####
+        tabPanel(
+          "opmFemiVD", 
+          # Título del Tab
+          titlePanel("Feminicidios por violencia doméstica, desde 1990 a 2021"),
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
+          tags$span("Actualizado:", actualizacion_opmA), tags$br(),
+          
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              
+              # botón para seleccionar el año
+              createDropdownCheckbox(
+                label = "Seleccione Año(s):",
+                choices = opmFemiVD$Año,
+                selected = opmFemiVD$Año,
+                id = "opm_opmFemiVD_año"
+              ),
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("barPlot_opm_opmFemiVD"),
+              DTOutput("dataTable_opm_opmFemiVD")
+            )
+          ),
+        ),
+        
+        #### tab con datos de violencia domestica (opmCasos) ####
+        tabPanel(
+          "opmCasos", 
+          # Título del Tab
+          titlePanel("Feminicidios por violencia doméstica, desde 1990 a 2021"),
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
+          tags$span("Actualizado:", actualizacion_opmA), tags$br(),
+          
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              
+              # botón para seleccionar el año
+              createDropdownCheckbox(
+                label = "Seleccione Año(s):",
+                choices = opmCasos$year,
+                selected = opmCasos$year,
+                id = "opm_opmCasos_año"
+              ),
+              
+              # botón para seleccionar el tipo de violencia
+              createDropdownCheckbox(
+                label = "Seleccione tipo de Violencia:",
+                choices = opmCasos$tipo,
+                selected = opmCasos$tipo,
+                id = "opm_opmCasos_tipo"
+              ),
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("barPlot_opm_opmCasos"),
+              DTOutput("dataTable_opm_opmCasos")
+            )
+          ),
+        ),
+        
+        #### tab con datos del género de las víctimas (opmVic) ####
+        tabPanel(
+          "opmVic", 
+          # Título del Tab
+          titlePanel("Identidad de género de las víctimas (a través de CRIAS). Años 2020 a *2023"),
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
+          tags$span("Actualizado:", actualizacion_opmB), tags$br(),
+          
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              
+              # botón para seleccionar el año
+              createDropdownCheckbox(
+                label = "Seleccione Año(s):",
+                choices = opmVic$año,
+                selected = opmVic$año,
+                id = "opm_opmVic_año"
+              ),
+              
+              # botón para seleccionar el género de las victimas
+              createDropdownCheckbox(
+                label = "Seleccione el Género(s):",
+                choices = opmVic$género,
+                selected = opmVic$género,
+                id = "opm_opmVic_género"
+              ),
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("barPlot_opm_opmVic"),
+              DTOutput("dataTable_opm_opmVic")
+            )
+          ),
+        ),
+        
+        #### tab con datos de orientaciones medio de comunicación (opmMedio) ####
+        tabPanel(
+          "opmMedio", 
+          # Título del Tab
+          titlePanel("Orientaciones según el Medio (a través de CRIAS). Años 2020 a *2023."),
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
+          tags$span("Actualizado:", actualizacion_opmB), tags$br(),
+          
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              
+              # botón para seleccionar el año
+              createDropdownCheckbox(
+                label = "Seleccione Año(s):",
+                choices = opmMedio$año,
+                selected = opmMedio$año,
+                id = "opm_opmMedio_año"
+              ),
+              
+              # botón para seleccionar el medio de orientación
+              createDropdownCheckbox(
+                label = "Seleccione el Medio de Orientación:",
+                choices = opmMedio$`Medio de orientación`,
+                selected = opmMedio$`Medio de orientación`,
+                id = "opm_opmMedio_medio"
+              ),
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("barPlot_opm_opmMedio"),
+              DTOutput("dataTable_opm_opmMedio")
+            )
+          ),
+        ),
+        
+        #### tab con datos de los servicios ofrecidos por mes (opmServiciosMes) ####
+        tabPanel(
+          "opmServiciosMes", 
+          # Título del Tab
+          titlePanel("Población atendida, servicios ofrecidos y seguimientos por mes. Años 2020 a *2023."),
+          
+          # Fuente de Datos, Actualización
+          tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
+          tags$span("Actualizado:", actualizacion_opmB), tags$br(),
+          
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              
+              # botón para seleccionar el año
+              createDropdownCheckbox(
+                label = "Seleccione Año(s):",
+                choices = opmServiciosMes$year,
+                selected = opmServiciosMes$year,
+                id = "opm_opmServiciosMes_año"
+              ),
+              
+              # botón para seleccionar el género de las victimas
+              createDropdownCheckbox(
+                label = "Seleccione el tipo de servicio:",
+                choices = opmServiciosMes$tipo,
+                selected = opmServiciosMes$tipo,
+                id = "opm_opmServiciosMes_tipo"
+              ),
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              plotlyOutput("barPlot_opm_opmServiciosMes"),
+              DTOutput("dataTable_opm_opmServiciosMes")
+            )
+          ),
+        )
+        
+      ),
+    ),
+    
+    
+    
+    #### Tab del Departamento de Corrección y Rehabilitación ####
+    tabPanel(
+      "Departamento de Corrección y Rehabilitación",
+      icon = icon("door-open"),
+      tabsetPanel(
+        #### tab con datos del género de las víctimas (dcrCasosInv) ####
+        tabPanel(
+        "dcrCasosInv", 
+        # Título del Tab
+        titlePanel("Casos en Supervisión de Ley 54 en Programas Alternos al Confinamiento: Programas de Comunidad(desde enero 2021 hasta febrero 2023)"),
+      
+        # Fuente de Datos, Actualización
+        tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
+        tags$span("Actualizado:", actualizacion_correcion), tags$br(),
+      
+        # Menu sidebar con widgets
+        sidebarLayout(
+          sidebarPanel(
+          
+            # botón para seleccionar el año
+          createDropdownCheckbox(
+            label = "Seleccione Año(s):",
+            choices = dcrCasosInv$year,
+            selected = dcrCasosInv$year,
+            id = "dcr_dcrCasosInv_year"
+          ),
+          
+            # botón para seleccionar el tipo de investigación 
+          createDropdownCheckbox(
+            label = "Seleccione el tipo de Investigación:",
+            choices = dcrCasosInv$tipo,
+            selected = dcrCasosInv$tipo,
+            id = "dcr_dcrCasosInv_tipo"
+          ),
+          
+          # botón para seleccionar el sexo
+          createDropdownCheckbox(
+            label = "Seleccione el sexo:",
+            choices = dcrCasosInv$sexo,
+            selected = dcrCasosInv$sexo,
+            id = "dcr_dcrCasosInv_sexo"
+          ),
+        ),
+        
+        # Sección principal con los gráficos
+        mainPanel(
+          plotlyOutput("barPlot_dcr_dcrCasosInv"),
+          DTOutput("dataTable_dcr_dcrCasosInv")
+        )
+      ),
+    ),
+    
+    #### tab con datos personas sentenciadas al Programa de Supervisión Electrónica (dcrSentenciadas) ####
+    # tabPanel(
+    #   "dcrSentenciadas", 
+    #   # Título del Tab
+    #   titlePanel("Personas sentenciadas integradas al Programa de Supervisión Electrónica por incurrir en delitos de violencia doméstica (desde enero 2020 hasta febrero 2023)"),
+    #   
+    #   # Fuente de Datos, Actualización
+    #   tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
+    #   tags$span("Actualizado:", actualizacion_correcion), tags$br(),
+    #   
+    #   # Menu sidebar con widgets
+    #   sidebarLayout(
+    #     sidebarPanel(
+    #       
+    #       # botón para seleccionar el año
+    #       createDropdownCheckbox(
+    #         label = "Seleccione Año(s):",
+    #         choices = dcrSentenciadas$year,
+    #         selected = dcrSentenciadas$year,
+    #         id = "dcr_dcrCasosInv_year"
+    #       ),
+    #       
+    #       # botón para seleccionar el tipo de investigación 
+    #       createDropdownCheckbox(
+    #         label = "Seleccione el tipo de Investigación:",
+    #         choices = dcrSentenciadas$tipo,
+    #         selected = dcrSentenciadas$tipo,
+    #         id = "dcr_dcrCasosInv_tipo"
+    #       ),
+    #       
+    #       # botón para seleccionar el sexo
+    #       createDropdownCheckbox(
+    #         label = "Seleccione el sexo:",
+    #         choices = dcrSentenciadas,
+    #         selected = dcrCasosInv$sexo,
+    #         id = "dcr_dcrCasosInv_sexo"
+    #       ),
+    #     ),
+    #     
+    #     # Sección principal con los gráficos
+    #     mainPanel(
+    #       plotlyOutput("barPlot_dcr_dcrCasosInv"),
+    #       DTOutput("dataTable_dcr_dcrCasosInv")
+    #     )
+    #   )
+    # )
+  )
     ),
     
     #### Tab Acerca del Dashboard ####
@@ -574,3 +1013,4 @@ ui <- fluidPage(
     
   )
 )
+

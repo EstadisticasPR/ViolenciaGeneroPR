@@ -211,7 +211,7 @@ parLab <- read_excel(paste0(dtra, "dtpartlab.xlsx")) %>%
 ##########################################################################
 #### Procesamiento de datos de la Administración de Vivienda Pública #####
 ##########################################################################
-
+avp <- here("data", "Administracion_de_viviendas_publicas/")
 
 avpAsignadas <- read_excel(paste0(avp, "avpAsignadas2017_23.xlsx")) %>% 
   rename(región = `Región `) %>%
@@ -238,7 +238,182 @@ dfAvp$año <- as.factor(sub("\\*", "", dfAvp$año))
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
 mapaAvp <- st_read(paste0(maps_fol, "/regiones_vivienda.json")) %>%
   merge(dfAvp, by.x = "GROUP", by.y = "región")
-  
+
+#########################################################
+#### Procesamiento de datos del Negociado de Policía ####
+#########################################################
+poli <- here("data", "Negociado_de_Policia", "/")
+
+############################################################################
+#### Procesamiento de datos Departamento de Corrección y Rehabilitación ####
+############################################################################
+dcr <- here("data", "Departamento_de_correccion_y_rehabilitacion", "/")
+
+#### dcrCasosInv ####
+# importando el dataset de Casos en Supervisión de Ley 54
+dcrCasosInv <- read_excel(paste0(dcr, "dcrCasosInv.xlsx")) %>%
+  #filter(sexo != "Total") %>%
+  mutate(
+    year = factor(year),
+    sexo = factor(sexo),
+    tipo = factor(tipo)
+  ) %>%
+  select(
+    -c(mes)
+  )
+dcrCasosInv
+
+#### dcrSentenciadas ####
+dcrSentenciadas <- read_excel(paste0(dcr, "dcrSentenciadas.xlsx"))  %>%
+  mutate(
+    # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
+    #fecha = as.yearmon(paste(year, mes), "%Y %m")
+    tipo = factor(tipo)
+  ) %>%
+  select(-c(mes))
+dcrSentenciadas
+#### despDF ####
+meses <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
+
+# importando data del 2020
+desp2020 <- read_excel(paste0(poli, "npprDesp2020.xlsx")) %>% mutate(Año = "2020") %>% rename(Categoria = Mes,Total = `Total Año 2020`)
+
+# importando data del 2021
+desp2021 <- read_excel(paste0(poli, "npprDesp2021.xlsx")) %>% mutate(Año = "2021") %>% rename(Categoria = Mes, Total = `Total Año 2021`)
+
+# importando data del 2022
+desp2022 <- read_excel(paste0(poli, "npprDesp2022.xlsx")) %>% mutate(Año = "2022") %>% rename(Categoria = Mes, Total = `Total Año 2022`)
+
+#No incluyo 2023 porque faltan datos desde abril
+desp2023 <- read_excel("data/Negociado_de_Policia/npprDesp2023.xlsx") %>% mutate(Año = "2023") %>% rename(Categoria = Mes, Total = `Total Año 2023`)
+
+# uniendo los datasets de 2020, 2021 y 2022
+despDF <- bind_rows(
+  list(desp2020, desp2021, desp2022, desp2023)
+) %>%
+  pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
+  filter(!grepl("Total", Meses)) %>%
+  group_by(Categoria) %>%
+  mutate(
+    Meses = factor(Meses, levels = meses), 
+    Meses_Numéricos = match(Meses, meses) ,
+    Fecha = as.yearmon(paste(Año, Meses_Numéricos), "%Y %m"),
+    Categoria = factor(Categoria),
+    Año = factor(Año)
+  ) %>%
+  ungroup() %>%
+  select(-Meses_Numéricos)
+
+#### vEdad ####
+vEdad2021 <- read_excel(paste0(poli, "npprVDedad2021.xlsx")) %>% 
+  mutate(Año = "2021")
+vEdad2022 <- read_excel(paste0(poli, "npprVDedad2022.xlsx")) %>% 
+  mutate(Año = "2022")
+vEdad2023 <- read_excel(paste0(poli, "npprVDedad2023.xlsx")) %>% 
+  mutate(Año = "2023")
+vEdad <- bind_rows(vEdad2021, vEdad2022, vEdad2023) %>%
+  rename(
+    Edad = `Grupos de Edad`,
+    `Ambos Sexos` = Total,
+    Mujeres = `Cantidad de mujeres víctimas`,
+    Hombres = Masculino,
+    Año = Año
+  ) %>%
+  pivot_longer(
+    !c(Edad, Año), names_to = "Sexo", values_to = "Casos"
+  ) %>%
+  mutate(
+    Edad = factor(Edad),
+    Año = factor(Año),
+    Sexo = factor(Sexo)
+  )
+
+#### inciDF ####
+inci2021 <- read_excel(paste0(poli, "NPPRincidentes_2021.xlsx")) %>% 
+  rename_with(~gsub("2021", "",.), contains("2021")) %>%
+  rename_at(vars(2), ~ "Población") %>% 
+  mutate(Año = "2021")
+
+# faltan datos para el 2022
+inci2022 <- read_excel(paste0(poli, "NPPRincidentes_2022.xlsx")) %>% 
+  rename_with(~gsub("2022", "",.), contains("2022")) %>%
+  rename_at(vars(2), ~"Población") %>% 
+  mutate(Año = "2022")
+
+# faltan datos desde mayo en adelante
+inci2023 <- read_excel(paste0(poli,"NPPRincidentes_2023.xlsx")) %>% rename_with(~gsub("2022", "",.), contains("2022")) %>%
+  rename_with(~gsub("2023", "",.), contains("2023")) %>%
+  rename_at(vars(2), ~ "Población") %>%
+  mutate(Año = "2023")
+
+# dataframe con toda la data combinada
+inciDF <- bind_rows(inci2021, inci2022, inci2023) %>%
+  filter(`Áreas Policiacas` != "Total") %>%
+  pivot_longer(cols = -c(`Áreas Policiacas`, Población, Año), names_to = "Mes", values_to = "Casos") %>%
+  mutate(
+    `Áreas Policiacas` = factor(str_trim(`Áreas Policiacas`)),
+    Año = factor(Año),
+    Meses = factor(Mes), 
+    Meses_Numéricos = match(Meses, Mes),
+    Fecha = as.yearmon(paste(Año, Meses_Numéricos), "%Y %m")
+  ) %>%
+  select(-c(Meses_Numéricos, Mes, Meses))
+
+# Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
+inciMapa <- st_read(paste0(maps_fol, "/distritos_fiscales.json")) %>%
+  merge(inciDF, by.x = "GROUP", by.y = "Áreas Policiacas") %>%
+  filter(Año == "2022")
+
+###############################################################################
+#### Procesamiento de datos de la Oficina de la Procuradora de las Mujeres ####
+###############################################################################
+opm <- here("data", "Oficina_de_procuradora_de_mujeres", "/")
+
+#### opmFemiVD ####
+opmFemiVD <- read_excel(paste0(opm, "opmFemiVD.xlsx")) %>%
+  mutate(
+    Año = factor(Año)
+  )
+
+#### opmCasos ####
+meses <- c("1" = "enero", "2" = "febrero", "3" = "marzo",  "4" = "abril", "5" = "mayo", "6" = "junio", "7" = "julio", "8" = "agosto", "9" = "septiembre","10" = "octubre", "11" = "noviembre", "12" = "diciembre")
+opmCasos <-  read_excel(paste0(opm, "opmPartMes.xlsx")) %>%
+  mutate(
+    # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
+    fecha = as.yearmon(paste(year, month), "%Y %m"),
+    month =  factor(month, levels = 1:12, labels = meses), 
+    year = factor(year),
+    tipo = factor(tipo)
+  )
+
+#### opmVic ####
+opmVic <- read_excel(paste0(opm, "opmVicGraf.xlsx")) %>% 
+  rename_at(vars(1,2,3,4), ~ c("género","2020", "2021", "2022")) %>%
+  pivot_longer(!género, names_to = "año", values_to = "víctimas") %>%
+  mutate(
+    género = factor(género),
+    año = factor(año)
+  )
+
+#### opmMedio ####
+opmMedio <- read_excel(paste0(opm, "opmMedio.xlsx")) %>% 
+  rename_at(vars(2,3,4), ~ c("2020", "2021", "2022")) %>%
+  pivot_longer(!`Medio de orientación`, names_to = "año", values_to = "personas atendidas") %>% 
+  filter(`Medio de orientación` != "Total") %>%
+  mutate(
+    `Medio de orientación` = factor(`Medio de orientación`),
+    año = factor(año)
+  )
+
+#### opmServiciosMes ####
+opmServiciosMes <-  read_excel(paste0(opm, "opmServiciosMes.xlsx")) %>%
+  mutate(
+    fecha = as.yearmon(paste(year, month), "%Y %m"),
+    tipo = factor(tipo),
+    year = factor(year)
+  ) %>%
+  select(-c(month))
+
 
 ########################################
 ##### Actualizaciones de los Datos #####
@@ -262,10 +437,10 @@ actualizacion_opmA <- "05/17/2022"
 actualizacion_opmB <- "04/20/2023"
 
 # Fecha actualizacion datos del SNMV
-actualizacion_snmvA <- "12/23/2021"
+actualizacion_snmvA <- "12/31/2023"
 
 # Fecha actualizacion tasas ajustadas del SNMV
-actualizacion_snmvB <- "06/30/2022"
+actualizacion_snmvB <- "12/31/2023"
 
 # Fecha actualizacion datos de Correcion
 actualizacion_correcion <- "04/03/2023"

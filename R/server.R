@@ -384,4 +384,295 @@ server <- function(input, output, session) {
   })
   
   
+  ########## Tab del Negociado de Policia ##########
+  #### Tab con datos de mujeres desaparecidas (despDF) ####
+  # Filtrar el conjunto de datos según los valores seleccionados del año y la categoria de evento
+  despDF_filt <- reactive({
+    filter(despDF,
+           Categoria %in% input$checkGroup_poli_despDF_categoría,
+           Año %in% input$checkGroup_poli_despDF_año)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de categoria
+  observeEvent(input$deselectAll_poli_despDF_categoría, {
+    updateCheckboxGroup(session, "checkGroup_poli_despDF_categoría", input, despDF$Categoria)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_poli_despDF_año, {
+    updateCheckboxGroup(session, "checkGroup_poli_despDF_año", input, despDF$Año)
+  })
+  
+  # Colores del status
+  despDF_fill_categoria <- setColorFill(despDF, "Categoria")
+  # Grafico de barras
+  output$barPlot_poli_despDF <- renderPlotly({
+    p <- renderBarPlot(despDF_filt, x = "Año", y = "Casos", fill = "Categoria",
+                       paste("Cantidad de mujeres desaparecidas, localizadas y sin localizar"),
+                       xlab = "Año", ylab = "Cantidad de Mujeres", fillLab = "Estado de la Mujer",
+                       colorFill = despDF_fill_categoria)
+    
+    ggplotly(p, 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  
+  # Data Table para el mapa de despDF
+  output$dataTable_poli_despDF <- renderDT({
+    renderDataTable(despDF_filt())
+  })
+  
+  
+  #### Tab con datos de victimas por edad (vEdad) ####
+  # Filtrar el conjunto de datos según los valores seleccionados del el grupo de edad y año 
+  vEdad_filt <- reactive({
+    filter(vEdad,
+           Edad %in% input$checkGroup_poli_vEdad_edad,
+           Año %in% input$checkGroup_poli_vEdad_año,
+           Sexo %in% input$checkGroup_poli_vEdad_sexo)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar el grupo de edad
+  observeEvent(input$deselectAll_poli_vEdad_edad, {
+    updateCheckboxGroup(session, "checkGroup_poli_vEdad_edad", input, vEdad$Edad)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_poli_vEdad_año, {
+    updateCheckboxGroup(session, "checkGroup_poli_vEdad_año", input, vEdad$Año)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar el sexo
+  observeEvent(input$deselectAll_poli_vEdad_sexo, {
+    updateCheckboxGroup(session, "checkGroup_poli_vEdad_sexo", input, vEdad$Sexo)
+  })
+  
+  # Colores del status
+  vEdad_fill_edad <- setColorFill(vEdad, "Edad")
+  # Grafico de barras
+  output$barPlot_poli_vEdad <- renderPlotly({
+    p <- renderBarPlot(vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
+                       paste("Incidentes de violencia doméstica por edad de la víctima"),
+                       xlab = "Año", ylab = "Cantidad de Mujeres", fillLab = "Grupo de Edad",
+                       colorFill = vEdad_fill_edad)
+    
+    ggplotly(p + facet_wrap(~Sexo), 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  # Data Table para el mapa de despDF
+  output$dataTable_poli_vEdad <- renderDT({
+    renderDataTable(vEdad_filt())
+  })
+  
+  #### tab con datos de incidentes de violencia doméstica (inciDF) ####
+  # Filtrar el conjunto de datos según los valores seleccionados del el grupo de edad y año 
+  inciMapa_filt <- reactive({
+    filter(inciMapa,
+           Año %in% input$select_poli_inciMapa_año)
+  })
+  
+  ### mapa 
+  output$map_poli_inciMapa <- renderPlotly({
+    p <- renderMap(
+      data = inciMapa_filt, fill = Casos,
+      title = paste0("Incidentes de violencia doméstica por área policíaca en el año ", input$select_poli_inciMapa_año),
+      group = GROUP,
+      fill_lab = "Número de incidentes de violencia doméstica",
+      light_color = "lightblue",
+      dark_color = "darkblue"
+    )
+    ggplotly(p, tooltip = c("all"))
+  })
+  
+  # Data Table para el mapa de despDF
+  # output$dataTable_poli_inciMapa <- renderDT({
+  #   renderDataTable(inciMapa_filt())
+  # })
+  ########## Tab de la Oficina de la Procuradora de las Mujeres ##########
+  #### tab con datos de asesinatos por violencia domestica (opmFemiVD) ####
+  # Filtrar el conjunto de datos según los valores seleccionados del año y la categoria de evento
+  opmFemiVD_filt <- reactive({
+    filter(opmFemiVD,
+           Año %in% input$checkGroup_opm_opmFemiVD_año)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_opm_opmFemiVD_año, {
+    updateCheckboxGroup(session, "checkGroup_opm_opmFemiVD_año", input, opmFemiVD$Año)
+  })
+  
+  # Colores del status
+  #despDF_fill_categoria <- setColorFill(despDF, "Categoria")
+  # Grafico de barras
+  output$barPlot_opm_opmFemiVD <- renderPlotly({
+    p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "`Cantidad de asesinatos`", group = "1",
+                        color = "1", title = "Tendencia de Asesinatos a lo largo de los Años",
+                        xlab = "Año", ylab = "Cantidad de Asesinatos")
+    # p <- ggplot(opmFemiVD_filt(), aes(x = Año, y = `Cantidad de asesinatos`, group = 1)) +
+    #   geom_line(color = "blue", linewidth = 1) +
+    #   geom_point(color = "red", size = 2) +
+    #   #geom_smooth(method = "lm", se = FALSE, color = "green" ) +  # Añade líneas de tendencia lineal
+    #   labs(title = "Tendencia de Asesinatos a lo largo de los Años", x = "Año", y = "Cantidad de Asesinatos") +
+    #   theme_minimal()
+    
+    ggplotly(p, 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  
+  # Data Table para el mapa de despDF
+  output$dataTable_opm_opmFemiVD <- renderDT({
+    renderDataTable(opmFemiVD_filt())
+  })
+  
+  #### tab con datos de casos de violencia (opmCasos) ####
+  # Filtrar el conjunto de datos según los valores seleccionados del año y la categoria de evento
+  opmCasos_filt <- reactive({
+    filter(opmCasos,
+           year %in% input$checkGroup_opm_opmCasos_año,
+           tipo %in% input$checkGroup_opm_opmCasos_tipo
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_opm_opmCasos_año, {
+    updateCheckboxGroup(session, "checkGroup_opm_opmCasos_año", input, opmCasos$year)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de tipo de violencia
+  observeEvent(input$deselectAll_opm_opmCasos_tipo, {
+    updateCheckboxGroup(session, "checkGroup_opm_opmCasos_tipo", input, opmCasos$tipo)
+  })
+  
+  # Colores del status
+  opm_fill_tipo <- setColorFill(opmCasos, "tipo")
+  # Grafico de barras
+  output$barPlot_opm_opmCasos <- renderPlotly({
+    p <- renderBarPlot(opmCasos_filt, x = "year", y = "cantidad", fill = "tipo",
+                       paste("Tendencias Mensuales de Violencia Doméstica por Año"),
+                       xlab = "Año", ylab = "Cantidad de Asesinatos", fillLab = "Tipo de Violencia",
+                       colorFill = opm_fill_tipo)
+    
+    ggplotly(p, 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  
+  # Data Table para el mapa de despDF
+  output$dataTable_opm_opmCasos <- renderDT({
+    renderDataTable(opmCasos_filt())
+  })
+  #### tab con datos del género de las víctimas (opmVic) ####
+  # Filtrar el conjunto de datos según los valores seleccionados del año y el género de la víctima
+  opmVic_filt <- reactive({
+    filter(opmVic,
+           año %in% input$checkGroup_opm_opmVic_año,
+           género %in% input$checkGroup_opm_opmVic_género
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_opm_opmVic_año, {
+    updateCheckboxGroup(session, "checkGroup_opm_opmVic_año", input, opmVic$año)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón del género de la víctima
+  observeEvent(input$deselectAll_opm_opmVic_género, {
+    updateCheckboxGroup(session, "checkGroup_opm_opmVic_género", input, opmVic$género)
+  })
+  
+  # Colores del status
+  opmVic_fill_género <- setColorFill(opmVic, "género")
+  # Grafico de barras
+  output$barPlot_opm_opmVic <- renderPlotly({
+    p <- renderBarPlot(opmVic_filt, x = "año", y = "víctimas", fill = "género",
+                       paste("Identidad de género de las víctimas"),
+                       xlab = "Año", ylab = "Cantidad de Víctimas", fillLab = "Género de la Víctima",
+                       colorFill = opmVic_fill_género)
+    
+    ggplotly(p, 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  
+  # Data Table para el mapa de despDF
+  output$dataTable_opm_opmVic <- renderDT({
+    renderDataTable(opmVic_filt())
+  })
+  #### tab con datos del género de las víctimas (opmMedio) ####
+  # Filtrar el conjunto de datos según los valores seleccionados del año y el género de la víctima
+  opmMedio_filt <- reactive({
+    filter(opmMedio,
+           año %in% input$checkGroup_opm_opmMedio_año,
+           `Medio de orientación` %in% input$checkGroup_opm_opmMedio_medio
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_opm_opmMedio_año, {
+    updateCheckboxGroup(session, "checkGroup_opm_opmMedio_año", input, opmMedio$año)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón del medio de orientación 
+  observeEvent(input$deselectAll_opm_opmMedio_medio, {
+    updateCheckboxGroup(session, "checkGroup_opm_opmMedio_medio", input, opmMedio$`Medio de orientación`)
+  })
+  
+  # Colores del status
+  opmMedio_fill_medio <- setColorFill(opmMedio, "Medio de orientación")
+  # Grafico de barras
+  output$barPlot_opm_opmMedio <- renderPlotly({
+    p <- renderBarPlot(opmMedio_filt, x = "año", y = "`personas atendidas`", fill = "`Medio de orientación`",
+                       title = "Orientaciones según el Medio",
+                       xlab = "Año", ylab = "Cantidad de Personas Orientadas", fillLab = "`Medio de Orientación`",
+                       colorFill = opmMedio_fill_medio)
+    
+    ggplotly(p, 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  
+  # Data Table para opmMedio
+  output$dataTable_opm_opmMedio <- renderDT({
+    renderDataTable(opmMedio_filt())
+  })
+  
+  #### tab con datos de los servicios ofrecidos (opmServiciosMes) ####
+  # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de servicio
+  opmServiciosMes_filt <- reactive({
+    filter(opmServiciosMes,
+           year %in% input$checkGroup_opm_opmServiciosMes_año
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_opm_opmServiciosMes_año, {
+    updateCheckboxGroup(session, "checkGroup_opm_opmServiciosMes_año", input, opmServiciosMes$year)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de tipo de servicio
+  observeEvent(input$deselectAll_opm_opmServiciosMes_tipo, {
+    updateCheckboxGroup(session, "checkGroup_opm_opmServiciosMes_tipo", input, opmServiciosMes$tipo)
+  })
+  
+  # Colores del status
+  opmServiciosMes_fill_tipo <- setColorFill(opmServiciosMes, "tipo")
+  # Grafico de barras
+  output$barPlot_opm_opmServiciosMes <- renderPlotly({
+    p <- renderBarPlot(opmServiciosMes_filt, x = "year", y = "cantidad", fill = "tipo",
+                       title = "Población atendida, servicios ofrecidos y seguimientos",
+                       xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "`Medio de Orientación`",
+                       colorFill = opmServiciosMes_fill_tipo)
+    
+    ggplotly(p, 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  
+  # Data Table para opmServiciosMes
+  output$dataTable_opm_opmServiciosMes <- renderDT({
+    renderDataTable(opmServiciosMes_filt())
+  })
+  
 }
