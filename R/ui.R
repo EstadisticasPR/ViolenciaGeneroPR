@@ -862,7 +862,7 @@ ui <- fluidPage(
           
             # botón para seleccionar el tipo de investigación 
           createDropdownCheckbox(
-            label = "Seleccione el tipo de Investigación:",
+            label = "Seleccione el estado de Investigación:",
             choices = dcrCasosInv$tipo,
             selected = dcrCasosInv$tipo,
             id = "dcr_dcrCasosInv_tipo"
@@ -886,51 +886,51 @@ ui <- fluidPage(
     ),
     
     #### tab con datos personas sentenciadas al Programa de Supervisión Electrónica (dcrSentenciadas) ####
-    # tabPanel(
-    #   "dcrSentenciadas", 
-    #   # Título del Tab
-    #   titlePanel("Personas sentenciadas integradas al Programa de Supervisión Electrónica por incurrir en delitos de violencia doméstica (desde enero 2020 hasta febrero 2023)"),
-    #   
-    #   # Fuente de Datos, Actualización
-    #   tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
-    #   tags$span("Actualizado:", actualizacion_correcion), tags$br(),
-    #   
-    #   # Menu sidebar con widgets
-    #   sidebarLayout(
-    #     sidebarPanel(
-    #       
-    #       # botón para seleccionar el año
-    #       createDropdownCheckbox(
-    #         label = "Seleccione Año(s):",
-    #         choices = dcrSentenciadas$year,
-    #         selected = dcrSentenciadas$year,
-    #         id = "dcr_dcrCasosInv_year"
-    #       ),
-    #       
-    #       # botón para seleccionar el tipo de investigación 
-    #       createDropdownCheckbox(
-    #         label = "Seleccione el tipo de Investigación:",
-    #         choices = dcrSentenciadas$tipo,
-    #         selected = dcrSentenciadas$tipo,
-    #         id = "dcr_dcrCasosInv_tipo"
-    #       ),
-    #       
-    #       # botón para seleccionar el sexo
-    #       createDropdownCheckbox(
-    #         label = "Seleccione el sexo:",
-    #         choices = dcrSentenciadas,
-    #         selected = dcrCasosInv$sexo,
-    #         id = "dcr_dcrCasosInv_sexo"
-    #       ),
-    #     ),
-    #     
-    #     # Sección principal con los gráficos
-    #     mainPanel(
-    #       plotlyOutput("barPlot_dcr_dcrCasosInv"),
-    #       DTOutput("dataTable_dcr_dcrCasosInv")
-    #     )
-    #   )
-    # )
+    tabPanel(
+      "dcrSentenciadas",
+      # Título del Tab
+      titlePanel("Personas sentenciadas integradas al Programa de Supervisión Electrónica por incurrir en delitos de violencia doméstica (desde enero 2020 hasta febrero 2023)"),
+
+      # Fuente de Datos, Actualización
+      tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
+      tags$span("Actualizado:", actualizacion_correcion), tags$br(),
+
+      # Menu sidebar con widgets
+      sidebarLayout(
+        sidebarPanel(
+
+          # botón para seleccionar el año
+          createDropdownCheckbox(
+            label = "Seleccione Año(s):",
+            choices = dcrSentenciadas$year,
+            selected = dcrSentenciadas$year,
+            id = "dcr_dcrCasosInv_year"
+          ),
+
+          # botón para seleccionar el tipo de investigación
+          createDropdownCheckbox(
+            label = "Seleccione el tipo de Investigación:",
+            choices = dcrSentenciadas$tipo,
+            selected = dcrSentenciadas$tipo,
+            id = "dcr_dcrCasosInv_tipo"
+          ),
+
+          # # botón para seleccionar el sexo
+          # createDropdownCheckbox(
+          #   label = "Seleccione el sexo:",
+          #   choices = dcrSentenciadas,
+          #   selected = dcrCasosInv$sexo,
+          #   id = "dcr_dcrCasosInv_sexo"
+          # ),
+        ),
+
+        # Sección principal con los gráficos
+        mainPanel(
+          plotlyOutput("barPlot_dcr_dcrSentenciadas"),
+          DTOutput("dataTable_dcr_dcrSentenciadas")
+        )
+      )
+    )
   )
     ),
     

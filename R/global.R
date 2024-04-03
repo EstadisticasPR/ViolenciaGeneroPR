@@ -213,11 +213,11 @@ parLab <- read_excel(paste0(dtra, "dtpartlab.xlsx")) %>%
 ##########################################################################
 avp <- here("data", "Administracion_de_viviendas_publicas/")
 
-avpAsignadas <- read_excel(paste0(avp, "avpAsignadas2017_23.xlsx")) %>% 
+avpAsignadas <- read_excel(paste0(avp, "/avpAsignadas2017_23.xlsx")) %>% 
   rename(región = `Región `) %>%
   pivot_longer(!región, names_to = "año", values_to = "asignadas")
 
-avpSolicitadas <- read_excel(paste0(avp, "avpSolicitudes2017_23.xlsx")) %>% 
+avpSolicitadas <- read_excel(paste0(avp, "/avpSolicitudes2017_23.xlsx")) %>% 
   rename(región = `Región `) %>%
   pivot_longer(!región, names_to = "año", values_to = "solicitadas")
 
@@ -268,7 +268,8 @@ dcrSentenciadas <- read_excel(paste0(dcr, "dcrSentenciadas.xlsx"))  %>%
   mutate(
     # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
     #fecha = as.yearmon(paste(year, mes), "%Y %m")
-    tipo = factor(tipo)
+    tipo = factor(tipo),
+    year = factor(year)
   ) %>%
   select(-c(mes))
 dcrSentenciadas

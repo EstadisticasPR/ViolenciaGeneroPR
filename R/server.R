@@ -675,4 +675,47 @@ server <- function(input, output, session) {
     renderDataTable(opmServiciosMes_filt())
   })
   
+  ########## Tab del Departamento de Correción y Rehabilitación ##########
+  #### tab con datos de los servicios ofrecidos (dcrCasosInv) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año, el tipo de servicio y el sexo
+  dcrCasosInv_filt <- reactive({
+    filter(dcrCasosInv,
+           year %in% input$checkGroup_dcr_dcrCasosInv_year,
+           tipo %in% input$checkGroup_dcr_dcrCasosInv_tipo,
+           sexo %in% input$checkGroup_dcr_dcrCasosInv_sexo
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_dcr_dcrCasosInv_año, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_año", input, dcrCasosInv$año)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de tipo de servicio
+  observeEvent(input$deselectAll_dcr_dcrCasosInv_tipo, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_medio", input, dcrCasosInv$tipo)
+  })
+  
+  # Colores del status
+  dcrCasosInv_fill_tipo <- setColorFill(dcrCasosInv, "tipo")
+  # Grafico de barras
+  output$barPlot_dcr_dcrCasosInv <- renderPlotly({
+    p <- renderBarPlot(dcrCasosInv_filt, x = "year", y = "cantidad", fill = "tipo",
+                       title = "Casos en Supervisión",
+                       xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Estado de la Investigación",
+                       colorFill = dcrCasosInv_fill_tipo)
+    
+    ggplotly(p + facet_wrap(~sexo), 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  
+  # Data Table para dcrCasosInv
+  output$dataTable_dcr_dcrCasosInv <- renderDT({
+    renderDataTable(dcrCasosInv_filt())
+  })
+  
+  
+  
 }

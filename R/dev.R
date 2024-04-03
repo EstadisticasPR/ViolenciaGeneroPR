@@ -187,105 +187,8 @@ renderBarPlot(opmServiciosMes, x = "year", y = "cantidad", fill = "tipo",
               title = "Población atendida, servicios ofrecidos y seguimientos",
               xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "`Medio de Orientación`",
               colorFill = opmServiciosMes_fill_tipo)
-###############################################################################
-#### Procesamiento de datos de la Oficina de la Procuradora de las Mujeres ####
-###############################################################################
-opm <- here("data", "Oficina_de_procuradora_de_mujeres", "/")
 
-#### violencia domestica ####
-opmFemiVD <- read_excel(paste0(opm, "opmFemiVD.xlsx")) 
-opmFemiVD
 
-meses <- c("1" = "enero", "2" = "febrero", "3" = "marzo",  "4" = "abril", "5" = "mayo", "6" = "junio", "7" = "julio", "8" = "agosto", "9" = "septiembre","10" = "octubre", "11" = "noviembre", "12" = "diciembre")
-
-#### Casos en Supervisión de Ley 54 ####
-opmCasos <-  read_excel(paste0(path, "opmPartMes.xlsx")) %>%
-  mutate(
-    # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
-    fecha = as.yearmon(paste(year, month), "%Y %m"),
-    month =  factor(month, levels = 1:12, labels = meses), 
-    year = factor(year),
-    tipo = factor(tipo)
-  )
-opmCasos
-
-#### Tab de la Oficina de la Procuradora de las Mujeres ####
-tabPanel(
-  "Oficina de la Procuradora de la Mujer",
-  icon = icon("person-dress"),
-  tabsetPanel(
-    
-    #### tab con datos de violencia domestica (opmFemiVD) ####
-    tabPanel(
-      "opmFemiVD", 
-      # Título del Tab
-      titlePanel("Feminicidios por violencia doméstica, desde 1990 a 2021"),
-      
-      # Fuente de Datos, Actualización
-      tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-      tags$span("Actualizado:", actualizacion_opmA), tags$br(),
-      
-      # Menu sidebar con widgets
-      sidebarLayout(
-        sidebarPanel(
-          
-          # botón para seleccionar el año
-          createDropdownCheckbox(
-            label = "Seleccione Año(s):",
-            choices = opmFemiVD$Año,
-            selected = opmFemiVD$Año,
-            id = "opm_opmFemiVD_año"
-          ),
-        ),
-        
-        # Sección principal con los gráficos
-        mainPanel(
-          plotlyOutput("barPlot_opm_opmFemiVD"),
-          DTOutput("dataTable_opm_opmFemiVD")
-        )
-      ),
-    ),
-    
-    #### tab con datos de violencia domestica (opmCasos) ####
-    tabPanel(
-      "opmCasos", 
-      # Título del Tab
-      titlePanel("Feminicidios por violencia doméstica, desde 1990 a 2021"),
-      
-      # Fuente de Datos, Actualización
-      tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-      tags$span("Actualizado:", actualizacion_opmA), tags$br(),
-      
-      # Menu sidebar con widgets
-      sidebarLayout(
-        sidebarPanel(
-          
-          # botón para seleccionar el año
-          createDropdownCheckbox(
-            label = "Seleccione Año(s):",
-            choices = opmCasos$year,
-            selected = opmCasos$year,
-            id = "opm_opmCasos_año"
-          ),
-          
-          # botón para seleccionar el tipo de violencia
-          createDropdownCheckbox(
-            label = "Seleccione tipo de Violencia:",
-            choices = opmCasos$tipo,
-            selected = opmCasos$tipo,
-            id = "opm_opmCasos_tipo"
-          ),
-        ),
-        
-        # Sección principal con los gráficos
-        mainPanel(
-          plotlyOutput("barPlot_opm_opmCasos"),
-          DTOutput("dataTable_opm_opmCasos")
-        )
-      ),
-    )
-  )
-)
 
 ############################################################################
 #### Procesamiento de datos Departamento de Corrección y Rehabilitación ####
@@ -418,124 +321,51 @@ tabPanel(
 
 
 
-#### tab con datos de orientaciones medio de comunicación (opmMedio) ####
-tabPanel(
-  "opmMedio", 
-  # Título del Tab
-  titlePanel("Orientaciones según el Medio (a través de CRIAS). Años 2020 a *2023."),
-  
-  # Fuente de Datos, Actualización
-  tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-  tags$span("Actualizado:", actualizacion_opmB), tags$br(),
-  
-  # Menu sidebar con widgets
-  sidebarLayout(
-    sidebarPanel(
-      
-      # botón para seleccionar el año
-      createDropdownCheckbox(
-        label = "Seleccione Año(s):",
-        choices = opmMedio$año,
-        selected = opmMedio$año,
-        id = "opm_opmMedio_año"
-      ),
-      
-      # botón para seleccionar el medio de orientación
-      createDropdownCheckbox(
-        label = "Seleccione el Medio de Orientación:",
-        choices = opmMedio$`Medio de orientación`,
-        selected = opmMedio$`Medio de orientación`,
-        id = "opm_opmVic_medio"
-      ),
-    ),
-    
-    # Sección principal con los gráficos
-    mainPanel(
-      plotlyOutput("barPlot_opm_opmMedio"),
-      DTOutput("dataTable_opm_opmMedio")
-    )
-  ),
-)
-
-#### tab con datos de los servicios ofrecidos por mes (opmServiciosMes) ####
-tabPanel(
-  "opmServiciosMes", 
-  # Título del Tab
-  titlePanel("Población atendida, servicios ofrecidos y seguimientos por mes. Años 2020 a *2023."),
-  
-  # Fuente de Datos, Actualización
-  tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-  tags$span("Actualizado:", actualizacion_opmB), tags$br(),
-  
-  # Menu sidebar con widgets
-  sidebarLayout(
-    sidebarPanel(
-      
-      # botón para seleccionar el año
-      createDropdownCheckbox(
-        label = "Seleccione Año(s):",
-        choices = opmServiciosMes$year,
-        selected = opmServiciosMes$year,
-        id = "opm_opmServiciosMes_año"
-      ),
-      
-      # botón para seleccionar el género de las victimas
-      createDropdownCheckbox(
-        label = "Seleccione el tipo de servicio:",
-        choices = opmServiciosMes$tipo,
-        selected = opmServiciosMes$tipo,
-        id = "opm_opmServiciosMes_tipo"
-      ),
-    ),
-    
-    # Sección principal con los gráficos
-    mainPanel(
-      plotlyOutput("barPlot_opm_opmServiciosMes"),
-      DTOutput("dataTable_opm_opmServiciosMes")
-    )
-  ),
-)
 
 
-#### tab con datos de los servicios ofrecidos (opmServiciosMes) ####
-# Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de servicio
-opmServiciosMes_filt <- reactive({
-  filter(opmServiciosMes,
-         año %in% input$checkGroup_opm_opmServiciosMes_año,
-         tipo %in% input$checkGroup_opm_opmServiciosMes_tipo
+
+#### tab con datos de los servicios ofrecidos (dcrCasosInv) ####
+# Filtrar el conjunto de datos según los valores seleccionados del año, el tipo de servicio y el sexo
+dcrCasosInv_filt <- reactive({
+  filter(dcrCasosInv,
+         year %in% input$checkGroup_dcr_dcrCasosInv_year,
+         tipo %in% input$checkGroup_dcr_dcrCasosInv_tipo,
+         sexo %in% input$checkGroup_dcr_dcrCasosInv_sexo
   )
 })
 
 ### funcion para el boton de deseleccionar/seleccionar del botón de año
-observeEvent(input$deselectAll_opm_opmServiciosMes_año, {
-  updateCheckboxGroup(session, "checkGroup_opm_opmServiciosMes_año", input, opmServiciosMes$año)
+observeEvent(input$deselectAll_dcr_dcrCasosInv_año, {
+  updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_año", input, dcrCasosInv$año)
 })
 
 ### funcion para el boton de deseleccionar/seleccionar del botón de tipo de servicio
-observeEvent(input$deselectAll_opm_opmServiciosMes_tipo, {
-  updateCheckboxGroup(session, "checkGroup_opm_opmServiciosMes_medio", input, opmServiciosMes$tipo)
+observeEvent(input$deselectAll_dcr_dcrCasosInv_tipo, {
+  updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_medio", input, dcrCasosInv$tipo)
 })
 
 # Colores del status
-opmServiciosMes_fill_tipo <- setColorFill(opmServiciosMes, "tipo")
+dcrCasosInv_fill_tipo <- setColorFill(dcrCasosInv, "tipo")
 # Grafico de barras
-output$barPlot_opm_opmServiciosMes <- renderPlotly({
-  p <- renderBarPlot(opmServiciosMes_filt, x = "año", y = "cantidad", fill = "tipo",
+output$barPlot_dcr_dcrCasosInv <- renderPlotly({
+  p <- renderBarPlot(dcrCasosInv_filt, x = "year", y = "cantidad", fill = "tipo",
                      title = "Población atendida, servicios ofrecidos y seguimientos",
                      xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "`Medio de Orientación`",
-                     colorFill = opmServiciosMes_fill_tipo)
+                     colorFill = dcrCasosInv_fill_tipo)
   
-  ggplotly(p, 
+  ggplotly(p + facet_wrap(~sexo), 
            tooltip = c("fill", "x", "y"))
 })
 
 
-# Data Table para opmServiciosMes
-output$dataTable_opm_opmServiciosMes <- renderDT({
-  renderDataTable(opmServiciosMes_filt())
+# Data Table para dcrCasosInv
+output$dataTable_dcr_dcrCasosInv <- renderDT({
+  renderDataTable(dcrCasosInv_filt())
 })
 
-#### tab con datos del género de las víctimas (opmMedio) ####
+
+
+
 # Filtrar el conjunto de datos según los valores seleccionados del año y el género de la víctima
 opmMedio_filt <- reactive({
   filter(opmMedio,

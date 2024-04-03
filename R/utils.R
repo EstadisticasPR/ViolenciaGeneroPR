@@ -356,15 +356,41 @@ renderMapGroup <- function(data, fill, title, fill_lab = fill) {
 #' # Ejemplo de uso:
 #' setColorFill(data, "Sexo")
 #' 
+# setColorFill <- function(df, variable) {
+#   # Obtener los niveles únicos de la variable
+#   unique_levels <- unique(df[[variable]])
+#   
+#   # Generar una paleta de colores basada en el número de niveles únicos
+#   my_colors <- scales::hue_pal()(length(unique_levels))
+#   names(my_colors) <- unique_levels
+#   
+#   return(my_colors)
+# }
+library(RColorBrewer)
+
 setColorFill <- function(df, variable) {
   # Obtener los niveles únicos de la variable
   unique_levels <- unique(df[[variable]])
   
-  # Generar una paleta de colores basada en el número de niveles únicos
-  my_colors <- scales::hue_pal()(length(unique_levels))
-  names(my_colors) <- unique_levels
+  # Elegir una paleta de colores apropiada para el número de niveles únicos
+  num_colors <- length(unique_levels)
+  if (num_colors <= 8) {
+    palette <- brewer.pal(n = num_colors, name = "Set1")
+  } else {
+    palette <- rainbow(num_colors)
+  }
   
-  return(my_colors)
+  # Generar una lista de patrones para los colores
+  patterns <- c("#CC6677", "#E69F00", "#88CCEE", "#B8E186", 
+                "#F0E442", "#332288", "#D55E00", "#CC79A7", "#661100", "#888888", "#117733", "#000000")
+  # Asignar patrones y colores a cada nivel único
+  my_fill <- rep("black", length(unique_levels))
+  names(my_fill) <- unique_levels
+  for (i in 1:length(unique_levels)) {
+    my_fill[i] <- ifelse(i <= length(patterns), patterns[i], palette[i])
+  }
+  
+  return(my_fill)
 }
 
 
