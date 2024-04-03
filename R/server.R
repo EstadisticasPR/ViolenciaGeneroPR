@@ -718,4 +718,42 @@ server <- function(input, output, session) {
   
   
   
+  #### tab con datos de personas sentenciadas integradas a Supervisión Electrónica (dcrSentenciadas) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año y el estado del caso
+  dcrSentenciadas_filt <- reactive({
+    filter(dcrSentenciadas,
+           year %in% input$checkGroup_dcr_dcrSentenciadas_year,
+           tipo %in% input$checkGroup_dcr_dcrSentenciadas_tipo
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_dcr_dcrSentenciadas_year, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrSentenciadas_year", input, dcrSentenciadas$year)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón del estado de caso 
+  observeEvent(input$deselectAll_dcr_dcrSentenciadas_tipo, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrSentenciadas_tipo", input, dcrSentenciadas$tipo)
+  })
+  
+  # Colores del status
+  dcrSentenciadas_fill_tipo <- setColorFill(dcrSentenciadas, "tipo")
+  # Grafico de barras
+  output$barPlot_dcr_dcrSentenciadas <- renderPlotly({
+    p <- renderBarPlot(dcrSentenciadas_filt, x = "year", y = "cantidad", fill = "tipo",
+                       title = "Personas sentenciadas por incurrir en delitos de violencia doméstica",
+                       xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", fillLab = "Estado del Caso",
+                       colorFill = dcrSentenciadas_fill_tipo)
+    
+    ggplotly(p, 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  
+  # Data Table para dcrSentenciadas
+  output$dataTable_dcr_dcrSentenciadas <- renderDT({
+    renderDataTable(dcrSentenciadas_filt())
+  })
 }

@@ -860,20 +860,20 @@ ui <- fluidPage(
             id = "dcr_dcrCasosInv_year"
           ),
           
-            # botón para seleccionar el tipo de investigación 
+          # botón para seleccionar el sexo
+          createDropdownCheckbox(
+            label = "Seleccione el sexo:",
+            choices = dcrCasosInv$sexo,
+            selected = 1,
+            id = "dcr_dcrCasosInv_sexo"
+          ),
+          hr(),
+          # botón para seleccionar el tipo de investigación 
           createDropdownCheckbox(
             label = "Seleccione el estado de Investigación:",
             choices = dcrCasosInv$tipo,
             selected = dcrCasosInv$tipo,
             id = "dcr_dcrCasosInv_tipo"
-          ),
-          
-          # botón para seleccionar el sexo
-          createDropdownCheckbox(
-            label = "Seleccione el sexo:",
-            choices = dcrCasosInv$sexo,
-            selected = dcrCasosInv$sexo,
-            id = "dcr_dcrCasosInv_sexo"
           ),
         ),
         
@@ -904,7 +904,7 @@ ui <- fluidPage(
             label = "Seleccione Año(s):",
             choices = dcrSentenciadas$year,
             selected = dcrSentenciadas$year,
-            id = "dcr_dcrCasosInv_year"
+            id = "dcr_dcrSentenciadas_year"
           ),
 
           # botón para seleccionar el tipo de investigación
@@ -912,7 +912,7 @@ ui <- fluidPage(
             label = "Seleccione el tipo de Investigación:",
             choices = dcrSentenciadas$tipo,
             selected = dcrSentenciadas$tipo,
-            id = "dcr_dcrCasosInv_tipo"
+            id = "dcr_dcrSentenciadas_tipo"
           ),
 
           # # botón para seleccionar el sexo

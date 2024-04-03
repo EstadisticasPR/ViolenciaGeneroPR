@@ -318,128 +318,50 @@ tabPanel(
 )
 
 
+#### tab con datos de personas sentenciadas integradas a Supervisión Electrónica (dcrSentenciadas) ####
 
-
-
-
-
-
-#### tab con datos de los servicios ofrecidos (dcrCasosInv) ####
-# Filtrar el conjunto de datos según los valores seleccionados del año, el tipo de servicio y el sexo
-dcrCasosInv_filt <- reactive({
-  filter(dcrCasosInv,
-         year %in% input$checkGroup_dcr_dcrCasosInv_year,
-         tipo %in% input$checkGroup_dcr_dcrCasosInv_tipo,
-         sexo %in% input$checkGroup_dcr_dcrCasosInv_sexo
+# Filtrar el conjunto de datos según los valores seleccionados del año y el estado del caso
+dcrSentenciadas_filt <- reactive({
+  filter(dcrSentenciadas,
+         year %in% input$checkGroup_dcr_dcrSentenciadas_year,
+         tipo %in% input$checkGroup_dcr_dcrSentenciadas_tipo
   )
 })
 
 ### funcion para el boton de deseleccionar/seleccionar del botón de año
-observeEvent(input$deselectAll_dcr_dcrCasosInv_año, {
-  updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_año", input, dcrCasosInv$año)
+observeEvent(input$deselectAll_dcr_dcrSentenciadas_year, {
+  updateCheckboxGroup(session, "checkGroup_dcr_dcrSentenciadas_año", input, dcrSentenciadas$year)
 })
 
-### funcion para el boton de deseleccionar/seleccionar del botón de tipo de servicio
-observeEvent(input$deselectAll_dcr_dcrCasosInv_tipo, {
-  updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_medio", input, dcrCasosInv$tipo)
-})
-
-# Colores del status
-dcrCasosInv_fill_tipo <- setColorFill(dcrCasosInv, "tipo")
-# Grafico de barras
-output$barPlot_dcr_dcrCasosInv <- renderPlotly({
-  p <- renderBarPlot(dcrCasosInv_filt, x = "year", y = "cantidad", fill = "tipo",
-                     title = "Población atendida, servicios ofrecidos y seguimientos",
-                     xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "`Medio de Orientación`",
-                     colorFill = dcrCasosInv_fill_tipo)
-  
-  ggplotly(p + facet_wrap(~sexo), 
-           tooltip = c("fill", "x", "y"))
-})
-
-
-# Data Table para dcrCasosInv
-output$dataTable_dcr_dcrCasosInv <- renderDT({
-  renderDataTable(dcrCasosInv_filt())
-})
-
-
-
-
-# Filtrar el conjunto de datos según los valores seleccionados del año y el género de la víctima
-opmMedio_filt <- reactive({
-  filter(opmMedio,
-         año %in% input$checkGroup_opm_opmMedio_año,
-         género %in% input$checkGroup_opm_opmVic_género
-  )
-})
-
-### funcion para el boton de deseleccionar/seleccionar del botón de año
-observeEvent(input$deselectAll_opm_opmMedio_año, {
-  updateCheckboxGroup(session, "checkGroup_opm_opmMedio_año", input, opmMedio$año)
-})
-
-### funcion para el boton de deseleccionar/seleccionar del botón del medio de orientación 
-observeEvent(input$deselectAll_opm_opmMedio_medio, {
-  updateCheckboxGroup(session, "checkGroup_opm_opmMedio_medio", input, opmMedio$`Medio de orientación`)
+### funcion para el boton de deseleccionar/seleccionar del botón del estado de caso 
+observeEvent(input$deselectAll_dcr_dcrSentenciadas_tipo, {
+  updateCheckboxGroup(session, "checkGroup_dcr_dcrSentenciadas_medio", input, dcrSentenciadas$tipo)
 })
 
 # Colores del status
-opmMedio_fill_medio <- setColorFill(opmMedio, "Medio de orientación")
+dcrSentenciadas_fill_tipo <- setColorFill(dcrSentenciadas, "tipo")
 # Grafico de barras
-output$barPlot_opm_opmMedio <- renderPlotly({
-  p <- renderBarPlot(opmMedio_filt, x = "año", y = "`personas atendidas`", fill = "`Medio de orientación`",
-                     title = "Orientaciones según el Medio",
-                     xlab = "Año", ylab = "Cantidad de Personas Orientadas", fillLab = "`Medio de Orientación`",
-                     colorFill = opmMedio_fill_medio)
+output$barPlot_dcr_dcrSentenciadas <- renderPlotly({
+  p <- renderBarPlot(dcrSentenciadas_filt, x = "year", y = "cantidad", fill = "tipo",
+                     title = "Personas sentenciadas por incurrir en delitos de violencia doméstica",
+                     xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", fillLab = "Estado del Caso",
+                     colorFill = dcrSentenciadas_fill_tipo)
   
   ggplotly(p, 
            tooltip = c("fill", "x", "y"))
 })
 
 
-# Data Table para opmMedio
-output$dataTable_opm_opmMedio <- renderDT({
-  renderDataTable(opmMedio_filt())
-})
-
-#### tab con datos del género de las víctimas (opmVic) ####
-# Filtrar el conjunto de datos según los valores seleccionados del año y el género de la víctima
-opmVic_filt <- reactive({
-  filter(opmVic,
-         año %in% input$checkGroup_opm_opmVic_año,
-         género %in% input$checkGroup_opm_opmVic_género
-         )
-})
-
-### funcion para el boton de deseleccionar/seleccionar del botón de año
-observeEvent(input$deselectAll_opm_opmVic_año, {
-  updateCheckboxGroup(session, "checkGroup_opm_opmVic_año", input, opmVic$año)
-})
-
-### funcion para el boton de deseleccionar/seleccionar del botón del género de la víctima
-observeEvent(input$deselectAll_opm_opmVic_género, {
-  updateCheckboxGroup(session, "checkGroup_opm_opmVic_género", input, opmVic$género)
-})
-
-# Colores del status
-opmVic_fill_género <- setColorFill(opmVic, "género")
-# Grafico de barras
-output$barPlot_opm_opmCasos <- renderPlotly({
-  p <- renderBarPlot(opmVic_filt, x = "año", y = "víctimas", fill = "género",
-                     paste("Identidad de género de las víctimas"),
-                     xlab = "Año", ylab = "Cantidad de Víctimas", fillLab = "Género de la Víctima",
-                     colorFill = opmVic_fill_género)
-  
-  ggplotly(p, 
-           tooltip = c("fill", "x", "y"))
+# Data Table para dcrSentenciadas
+output$dataTable_dcr_dcrSentenciadas <- renderDT({
+  renderDataTable(dcrSentenciadas_filt())
 })
 
 
-# Data Table para el mapa de despDF
-output$dataTable_opm_opmVic <- renderDT({
-  renderDataTable(opmVic_filt())
-})
+
+
+
+
 
 
 
