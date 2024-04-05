@@ -438,10 +438,10 @@ actualizacion_opmA <- "05/17/2022"
 actualizacion_opmB <- "04/20/2023"
 
 # Fecha actualizacion datos del SNMV
-actualizacion_snmvA <- "12/31/2023"
+actualizacion_snmvA <- "05/10/2024"
 
 # Fecha actualizacion tasas ajustadas del SNMV
-actualizacion_snmvB <- "12/31/2023"
+actualizacion_snmvB <- "05/10/2024"
 
 # Fecha actualizacion datos de Correcion
 actualizacion_correcion <- "04/03/2023"
