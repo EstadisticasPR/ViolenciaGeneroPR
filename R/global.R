@@ -188,7 +188,7 @@ dfDeli <- bind_rows(
   )
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
-mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.json")) %>%
+mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
   merge(dfDeli, by.x = "GROUP", by.y = "FISCALIA DISTRITO")
 
 ###############################################################################
@@ -236,7 +236,7 @@ dfAvp <- left_join(avpSolicitadas, avpAsignadas, by = c("región", "año")) %>%
 dfAvp$año <- as.factor(sub("\\*", "", dfAvp$año))
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
-mapaAvp <- st_read(paste0(maps_fol, "/regiones_vivienda.json")) %>%
+mapaAvp <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
   merge(dfAvp, by.x = "GROUP", by.y = "región")
 
 #########################################################
@@ -361,9 +361,8 @@ inciDF <- bind_rows(inci2021, inci2022, inci2023) %>%
   select(-c(Meses_Numéricos, Mes, Meses))
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
-inciMapa <- st_read(paste0(maps_fol, "/distritos_fiscales.json")) %>%
-  merge(inciDF, by.x = "GROUP", by.y = "Áreas Policiacas") %>%
-  filter(Año == "2022")
+inciMapa <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
+  merge(inciDF, by.x = "GROUP", by.y = "Áreas Policiacas")
 
 ###############################################################################
 #### Procesamiento de datos de la Oficina de la Procuradora de las Mujeres ####
