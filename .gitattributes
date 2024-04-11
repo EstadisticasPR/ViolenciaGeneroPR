@@ -1,0 +1,4 @@
+*linguist-vendored
+*.r linguist-vendored = false
+
+
