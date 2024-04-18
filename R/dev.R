@@ -30,19 +30,19 @@ shinyApp(ui = ui, server = server)
 
 #### Tab de la Administración de Tribunales ####
 tabPanel(
-  "Oficina de la Procuradora de la Mujer",
-  icon = icon("person-dress"),
+  "Tab de la Administración de Tribunales",
+  icon = icon("building-circle-exclamation"),
   tabsetPanel(
     
     #### tab con datos de solicitudes de órdenes de protección al amparo de la Ley 148 (casosCrimLey148) ####
     tabPanel(
-      "opmFemiVD", 
+      "casosCrimLey148", 
       # Título del Tab
       titlePanel("Feminicidios por violencia doméstica, desde 1990 a 2021"),
       
       # Fuente de Datos, Actualización
-      tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-      tags$span("Actualizado:", actualizacion_opmA), tags$br(),
+      tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+      tags$span("Actualizado:", actualizacion_tribunalesA), tags$br(),
       
       # Menu sidebar con widgets
       sidebarLayout(
@@ -51,29 +51,29 @@ tabPanel(
           # botón para seleccionar el año
           createDropdownCheckbox(
             label = "Seleccione Año(s):",
-            choices = opmFemiVD$Año,
-            selected = opmFemiVD$Año,
-            id = "opm_opmFemiVD_año"
+            choices = casosCrimLey148$AñoFiscal,
+            selected = casosCrimLey148$AñoFiscal,
+            id = "trib_casosCrimLey148_AñoFiscal"
           ),
         ),
         
         # Sección principal con los gráficos
         mainPanel(
-          plotlyOutput("barPlot_opm_opmFemiVD"),
-          DTOutput("dataTable_opm_opmFemiVD")
+          plotlyOutput("barPlot_trib_casosCrimLey148"),
+          DTOutput("dataTable_trib_casosCrimLey148")
         )
       ),
     ),
     
-    #### tab con datos de violencia domestica (OP_148_SoliGrupEdad) ####
+    #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad) ####
     tabPanel(
-      "opmCasos", 
+      "OP_148_SoliGrupEdad", 
       # Título del Tab
-      titlePanel("Feminicidios por violencia doméstica, desde 1990 a 2021"),
+      titlePanel("Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y grupo de edad de la parte peticionaria"),
       
       # Fuente de Datos, Actualización
-      tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-      tags$span("Actualizado:", actualizacion_opmA), tags$br(),
+      tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+      tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
       
       # Menu sidebar con widgets
       sidebarLayout(
@@ -82,29 +82,37 @@ tabPanel(
           # botón para seleccionar el año
           createDropdownCheckbox(
             label = "Seleccione Año(s):",
-            choices = opmCasos$year,
-            selected = opmCasos$year,
-            id = "opm_opmCasos_año"
+            choices = OP_148_SoliGrupEdad$AñoFiscal,
+            selected = OP_148_SoliGrupEdad$AñoFiscal,
+            id = "trib_OP_148_SoliGrupEdad_AñoFiscal"
           ),
           
-          # botón para seleccionar el tipo de violencia
+          # botón para seleccionar el grupo de edad
           createDropdownCheckbox(
-            label = "Seleccione tipo de Violencia:",
-            choices = opmCasos$tipo,
-            selected = opmCasos$tipo,
-            id = "opm_opmCasos_tipo"
+            label = "Seleccione el grupo de edad:",
+            choices = OP_148_SoliGrupEdad$Edad,
+            selected = OP_148_SoliGrupEdad$Edad,
+            id = "trib_OP_148_SoliGrupEdad_Edad"
+          ),
+          
+          # botón para seleccionar el distrito fiscal
+          createDropdownCheckbox(
+            label = "Seleccione el Distrito Fiscal:",
+            choices = OP_148_SoliGrupEdad$Región,
+            selected = OP_148_SoliGrupEdad$Región,
+            id = "trib_OP_148_SoliGrupEdad_Región"
           ),
         ),
         
         # Sección principal con los gráficos
         mainPanel(
-          plotlyOutput("barPlot_opm_opmCasos"),
-          DTOutput("dataTable_opm_opmCasos")
+          plotlyOutput("barPlot_OP_148_SoliGrupEdad"),
+          DTOutput("dataTable_OP_148_SoliGrupEdad")
         )
       ),
     ),
     
-    #### tab con datos del género de las víctimas (OP_Ley148_ex_parteEmitidas) ####
+    #### tab con datos de  (OP_Ley148_ex_parteEmitidas) ####
     tabPanel(
       "opmVic", 
       # Título del Tab
@@ -498,4 +506,6 @@ tribCasosCrim21 <- read_excel(paste0(trib, "tribCasosCrim21.xlsx")) %>%
 tribCasosCrim <- full_join(
   tribCasosCrim19, tribCasosCrim20) %>%
   full_join(tribCasosCrim21)
+
+
 

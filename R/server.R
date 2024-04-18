@@ -756,4 +756,92 @@ server <- function(input, output, session) {
   output$dataTable_dcr_dcrSentenciadas <- renderDT({
     renderDataTable(dcrSentenciadas_filt())
   })
+  ########## Tab de la Administración de Tribunales ##########
+  #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el grupo de edad y el distrito fiscal
+  OP_148_SoliGrupEdad_filt <- reactive({
+    filter(OP_148_SoliGrupEdad,
+           AñoFiscal %in% input$checkGroup_trib_OP_148_SoliGrupEdad_AñoFiscal,
+           Edad %in% input$checkGroup_trib_OP_148_SoliGrupEdad_Edad,
+           Región %in% input$checkGroup_trib_OP_148_SoliGrupEdad_Región
+    )
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+  observeEvent(input$deselectAll_trib_OP_148_SoliGrupEdad_AñoFiscal, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_148_SoliGrupEdad_AñoFiscal", input, OP_148_SoliGrupEdad$AñoFiscal)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el grupo de edad
+  observeEvent(input$deselectAll_trib_OP_148_SoliGrupEdad_Edad, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_148_SoliGrupEdad_Edad", input, OP_148_SoliGrupEdad$Edad)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar la región fiscal
+  observeEvent(input$deselectAll_trib_OP_148_SoliGrupEdad_Región, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_148_SoliGrupEdad_Región", input, OP_148_SoliGrupEdad$Región)
+  })
+  
+  # Colores del status
+  OP_148_SoliGrupEdad_fill_edad <- setColorFill(OP_148_SoliGrupEdad, "Edad")
+  # Grafico de barras
+  output$barPlot_OP_148_SoliGrupEdad <- renderPlotly({
+    p <- renderBarPlot(OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
+                       title = "Órdenes de protección solicitadas por Violencia Sexual, por región judicial y grupo de edad de la parte peticionaria",
+                       xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
+                       colorFill = OP_148_SoliGrupEdad_fill_edad)
+    
+    ggplotly(p + facet_wrap(~Región), 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  # Data Table para dcrCasosInv
+  output$dataTable_OP_148_SoliGrupEdad <- renderDT({
+    renderDataTable(OP_148_SoliGrupEdad_filt())
+  })
+  
+  #### (OP_Ley148_ex_parteEmitidas) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el delito cometido y la región fiscal
+  OP_Ley148_ex_parteEmitidas_filt <- reactive({
+    filter(OP_Ley148_ex_parteEmitidas,
+           AñoFiscal %in% input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal,
+           Delito %in% input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Delito,
+           Región %in% input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región
+    )
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+  observeEvent(input$deselectAll_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal", input, OP_Ley148_ex_parteEmitidas$AñoFiscal)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el delito
+  observeEvent(input$deselectAll_trib_OP_Ley148_ex_parteEmitidas_Delito, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_Ley148_ex_parteEmitidas_Delito", input, OP_Ley148_ex_parteEmitidas$Delito)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el Región
+  observeEvent(input$deselectAll_trib_OP_Ley148_ex_parteEmitidas_Región, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región", input, OP_Ley148_ex_parteEmitidas$Región)
+  })
+  
+  # Colores de los Delitos
+  OP_Ley148_ex_parteEmitidas_fill_delito <- setColorFill(OP_Ley148_ex_parteEmitidas, "Delito")
+  # Grafico de barras
+  output$barPlot_OP_Ley148_ex_parteEmitidas <- renderPlotly({
+    p <- renderBarPlot(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+                       title = "Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito",
+                       xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
+                       colorFill = OP_Ley148_ex_parteEmitidas_fill_delito)
+    
+    ggplotly(p + facet_wrap(~Región), 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  # Data Table para dcrCasosInv
+  output$dataTable_OP_Ley148_ex_parteEmitidas <- renderDT({
+    renderDataTable(OP_Ley148_ex_parteEmitidas_filt())
+  })
 }

@@ -933,6 +933,113 @@ ui <- fluidPage(
     )
   )
     ),
+  
+  #### Tab de la Administración de Tribunales ####
+  tabPanel(
+    "Administración de Tribunales",
+    icon = icon("building-circle-exclamation"),
+    tabsetPanel(
+      
+      #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad) ####
+      tabPanel(
+        "OP_148_SoliGrupEdad", 
+        # Título del Tab
+        titlePanel("Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y grupo de edad de la parte peticionaria"),
+        
+        # Fuente de Datos, Actualización
+        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        
+        # Menu sidebar con widgets
+        sidebarLayout(
+          sidebarPanel(
+            
+            # botón para seleccionar el año
+            createDropdownCheckbox(
+              label = "Seleccione Año(s) Fiscal:",
+              choices = OP_148_SoliGrupEdad$AñoFiscal,
+              selected = OP_148_SoliGrupEdad$AñoFiscal,
+              id = "trib_OP_148_SoliGrupEdad_AñoFiscal"
+            ),
+            
+            # botón para seleccionar el grupo de edad
+            createDropdownCheckbox(
+              label = "Seleccione el grupo de edad:",
+              choices = OP_148_SoliGrupEdad$Edad,
+              selected = OP_148_SoliGrupEdad$Edad,
+              id = "trib_OP_148_SoliGrupEdad_Edad"
+            ),
+            
+            # botón para seleccionar el distrito fiscal
+            createDropdownCheckbox(
+              label = "Seleccione el Distrito Fiscal:",
+              choices = OP_148_SoliGrupEdad$Región,
+              selected = OP_148_SoliGrupEdad$Región,
+              id = "trib_OP_148_SoliGrupEdad_Región"
+            ),
+          ),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            plotlyOutput("barPlot_OP_148_SoliGrupEdad"),
+            DTOutput("dataTable_OP_148_SoliGrupEdad")
+          )
+        ),
+      ),
+      
+      #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_Ley148_ex_parteEmitidas) ####
+      tabPanel(
+        "OP_Ley148_ex_parteEmitidas", 
+        # Título del Tab
+        titlePanel("Número de Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito"),
+        
+        # Fuente de Datos, Actualización
+        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        
+        # Menu sidebar con widgets
+        sidebarLayout(
+          sidebarPanel(
+            
+            # botón para seleccionar el año fiscal
+            createDropdownCheckbox(
+              label = "Seleccione Año(s) Fiscal:",
+              choices = OP_Ley148_ex_parteEmitidas$AñoFiscal,
+              selected = OP_Ley148_ex_parteEmitidas$AñoFiscal,
+              id = "trib_OP_Ley148_ex_parteEmitidas_AñoFiscal"
+            ),
+            
+            # botón para seleccionar el delito
+            createDropdownCheckbox(
+              label = "Seleccione Delito(s):",
+              choices = OP_Ley148_ex_parteEmitidas$Delito,
+              selected = OP_Ley148_ex_parteEmitidas$Delito,
+              id = "trib_OP_Ley148_ex_parteEmitidas_Delito"
+            ),
+            
+            # botón para seleccionar la región fiscal
+            createDropdownCheckbox(
+              label = "Seleccione Distrito(s) Fiscal:",
+              choices = OP_Ley148_ex_parteEmitidas$Región,
+              selected = OP_Ley148_ex_parteEmitidas$Región,
+              id = "trib_OP_Ley148_ex_parteEmitidas_Región"
+            ),
+            
+          ),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            plotlyOutput("barPlot_OP_Ley148_ex_parteEmitidas"),
+            DTOutput("dataTable_OP_Ley148_ex_parteEmitidas")
+          )
+        ),
+        
+        
+      )
+      
+      
+    )
+  ),
     
     #### Tab Acerca del Dashboard ####
     tabPanel(

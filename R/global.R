@@ -500,7 +500,8 @@ OP_148_SoliGrupEdad2021_22 <- read_excel(paste0(trib, "OP_148_SoliGrupEdad2021_2
 OP_148_SoliGrupEdad <- full_join(
   OP_148_SoliGrupEdad2020_21, OP_148_SoliGrupEdad2021_22) %>%
   mutate(
-    AñoFiscal = factor(AñoFiscal, levels = unique(AñoFiscal))
+    AñoFiscal = factor(AñoFiscal, levels = unique(AñoFiscal)),
+    Región = factor(Región)
   )
 
 #### OP_Ley148_ex_parteEmitidas ####
@@ -541,7 +542,12 @@ OP_Ley148_ex_parteEmitidas2021_22 <- read_excel(paste0(trib, "OP_Ley148_ex_parte
 
 # dataset unido
 OP_Ley148_ex_parteEmitidas <- full_join(
-  OP_Ley148_ex_parteEmitidas2020_21, OP_Ley148_ex_parteEmitidas2021_22)
+  OP_Ley148_ex_parteEmitidas2020_21, OP_Ley148_ex_parteEmitidas2021_22 
+  ) %>%
+  mutate(
+    Región = factor(Región),
+    Delito = factor(Delito)
+  )
 
 #### OP_LEY148Archivadas ####
 
