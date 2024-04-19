@@ -844,4 +844,92 @@ server <- function(input, output, session) {
   output$dataTable_OP_Ley148_ex_parteEmitidas <- renderDT({
     renderDataTable(OP_Ley148_ex_parteEmitidas_filt())
   })
+  
+  #### (OP_LEY148Archivadas) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, la razón de archivado y la región fiscal
+  OP_LEY148Archivadas_filt <- reactive({
+    filter(OP_LEY148Archivadas,
+           AñoFiscal %in% input$checkGroup_trib_OP_LEY148Archivadas_AñoFiscal,
+           Razón %in% input$checkGroup_trib_OP_LEY148Archivadas_Razón,
+           Región %in% input$checkGroup_trib_OP_LEY148Archivadas_Región
+    )
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+  observeEvent(input$deselectAll_trib_OP_LEY148Archivadas_AñoFiscal, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Archivadas_AñoFiscal", input, OP_LEY148Archivadas$AñoFiscal)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar la razón de archivado
+  observeEvent(input$deselectAll_trib_OP_LEY148Archivadas_Razón, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Archivadas_Razón", input, OP_LEY148Archivadas$Razón)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el Región
+  observeEvent(input$deselectAll_trib_OP_LEY148Archivadas_Región, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Archivadas_Región", input, OP_LEY148Archivadas$Región)
+  })
+  
+  # Colores de las razones
+  OP_LEY148Archivadas_fill_Razón <- setColorFill(OP_LEY148Archivadas, "Razón")
+  # Grafico de barras
+  output$barPlot_OP_LEY148Archivadas <- renderPlotly({
+    p <- renderBarPlot(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
+                       title = "Órdenes de protección archivadas - Violencia Sexual, por Región Judicial",
+                       xlab = "Año Fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
+                       colorFill = OP_LEY148Archivadas_fill_Razón)
+    
+    ggplotly(p + facet_wrap(~Región), 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  # Data Table 
+  output$dataTable_OP_LEY148Archivadas <- renderDT({
+    renderDataTable(OP_LEY148Archivadas_filt())
+  })
+  
+  #### (OP_LEY148Denegadas) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, la razón de archivado y la región fiscal
+  OP_LEY148Denegadas_filt <- reactive({
+    filter(OP_LEY148Denegadas,
+           AñoFiscal %in% input$checkGroup_trib_OP_LEY148Denegadas_AñoFiscal,
+           Razón %in% input$checkGroup_trib_OP_LEY148Denegadas_Razón,
+           Región %in% input$checkGroup_trib_OP_LEY148Denegadas_Región
+    )
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+  observeEvent(input$deselectAll_trib_OP_LEY148Denegadas_AñoFiscal, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Denegadas_AñoFiscal", input, OP_LEY148Denegadas$AñoFiscal)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar la razón de archivado
+  observeEvent(input$deselectAll_trib_OP_LEY148Denegadas_Razón, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Denegadas_Razón", input, OP_LEY148Denegadas$Razón)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el Región
+  observeEvent(input$deselectAll_trib_OP_LEY148Denegadas_Región, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Denegadas_Región", input, OP_LEY148Denegadas$Región)
+  })
+  
+  # Colores de las razones
+  OP_LEY148Denegadas_fill_Razón <- setColorFill(OP_LEY148Denegadas, "Razón")
+  # Grafico de barras
+  output$barPlot_OP_LEY148Denegadas <- renderPlotly({
+    p <- renderBarPlot(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
+                       title = "Solicitudes Denegadas de Órdenes de Protección bajo la Ley 148 por Región Judicial en Casos de Violencia Sexual",
+                       xlab = "Año Fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
+                       colorFill = OP_LEY148Denegadas_fill_Razón)
+    
+    ggplotly(p + facet_wrap(~Región), 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  # Data Table 
+  output$dataTable_OP_LEY148Denegadas <- renderDT({
+    renderDataTable(OP_LEY148Denegadas_filt())
+  })
 }

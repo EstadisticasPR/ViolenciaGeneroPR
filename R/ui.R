@@ -1033,11 +1033,104 @@ ui <- fluidPage(
             DTOutput("dataTable_OP_Ley148_ex_parteEmitidas")
           )
         ),
+      ),
+      
+      #### tab con datos de solicitudes de órdenes de protección archivadas (OP_LEY148Archivadas) ####
+      tabPanel(
+        "OP_LEY148Archivadas", 
         
+        # Título del Tab
+        titlePanel("Cantidad de solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual archivadas por Región Judicial"),
         
+        # Fuente de Datos, Actualización
+        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        
+        # Menu sidebar con widgets
+        sidebarLayout(
+          sidebarPanel(
+            
+            # botón para seleccionar el año fiscal
+            createDropdownCheckbox(
+              label = "Seleccione Año(s) Fiscal:",
+              choices = OP_LEY148Archivadas$AñoFiscal,
+              selected = OP_LEY148Archivadas$AñoFiscal,
+              id = "trib_OP_LEY148Archivadas_AñoFiscal"
+            ),
+            
+            # botón para seleccionar la razón de archivado
+            createDropdownCheckbox(
+              label = "Seleccione Razón(s):",
+              choices = OP_LEY148Archivadas$Razón,
+              selected = OP_LEY148Archivadas$Razón,
+              id = "trib_OP_LEY148Archivadas_Razón"
+            ),
+            
+            # botón para seleccionar la región fiscal
+            createDropdownCheckbox(
+              label = "Seleccione Distrito(s) Fiscal:",
+              choices = OP_LEY148Archivadas$Región,
+              selected = OP_LEY148Archivadas$Región,
+              id = "trib_OP_LEY148Archivadas_Región"
+            ),
+            
+          ),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            plotlyOutput("barPlot_OP_LEY148Archivadas"),
+            DTOutput("dataTable_OP_LEY148Archivadas")
+          )
+        ),
+      ),
+      
+      #### tab con datos de solicitudes de órdenes de protección denegadas (OP_LEY148Denegadas) ####
+      tabPanel(
+        "OP_LEY148Denegadas", 
+        
+        # Título del Tab
+        titlePanel("Cantidad de solicitudes de órdenes de protección denegadas al amparo de la Ley 148 - Violencia Sexual denegadas por Región Judicial"),
+        
+        # Fuente de Datos, Actualización
+        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        
+        # Menu sidebar con widgets
+        sidebarLayout(
+          sidebarPanel(
+            
+            # botón para seleccionar el año fiscal
+            createDropdownCheckbox(
+              label = "Seleccione Año(s) Fiscal:",
+              choices = OP_LEY148Denegadas$AñoFiscal,
+              selected = OP_LEY148Denegadas$AñoFiscal,
+              id = "trib_OP_LEY148Denegadas_AñoFiscal"
+            ),
+            #customSeparator(),
+            # botón para seleccionar la razón de archivado
+            createDropdownCheckbox(
+              label = "Seleccione Razón(s):",
+              choices = OP_LEY148Denegadas$Razón,
+              selected = OP_LEY148Denegadas$Razón,
+              id = "trib_OP_LEY148Denegadas_Razón"
+            ),
+            #customSeparator(),
+            # botón para seleccionar la región fiscal
+            createDropdownCheckbox(
+              label = "Seleccione Distrito(s) Fiscal:",
+              choices = OP_LEY148Denegadas$Región,
+              selected = OP_LEY148Denegadas$Región,
+              id = "trib_OP_LEY148Denegadas_Región"
+            ),
+          ),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            plotlyOutput("barPlot_OP_LEY148Denegadas"),
+            DTOutput("dataTable_OP_LEY148Denegadas")
+          )
+        ),
       )
-      
-      
     )
   ),
     

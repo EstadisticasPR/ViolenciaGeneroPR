@@ -30,7 +30,7 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
   } else {
     selected <- choices[selected]
   }
-  
+
   div(
     dropdownButton(
       circle = FALSE,
@@ -48,6 +48,42 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
     style = "display: inline-block; padding-right: 20px;"
   )
 }
+# createDropdownCheckbox <- function(label, choices, selected, id) {
+#   choices <- levels(choices)
+#   if (is.null(selected)) {
+#     selected <- choices  # Seleccionar todos los elementos
+#   } else {
+#     selected <- choices[selected]
+#   }
+#   
+#   div(
+#     dropdownButton(
+#       circle = FALSE,
+#       label = label,
+#       status = "default",
+#       size = "default",
+#       checkboxGroupInput(
+#         paste0("checkGroup_", id),
+#         label = "",
+#         choices = choices,
+#         selected = selected
+#       ),
+#       actionButton(paste0("deselectAll_", id), "(De)seleccionar todo")
+#     ),
+#     style = "display: inline-block; padding-right: 20px;",
+#     tags$style(HTML('
+#       .btn {
+#         background-color: white !important;
+#         color: black !important;
+#         border-color: #ccc !important;
+#       }
+#       .btn-default:hover, .btn-default:focus, .btn-default:active {
+#         background-color: #f5f5f5 !important;
+#         color: black !important;
+#       }
+#     '))
+#   )
+# }
 
 #' Crea una imagen con enlace a una página web
 #'
@@ -75,6 +111,14 @@ embedImage <- function(ID, img_src, link_href, link_alt) {
     )
   )
 }
+
+# # Función para crear separador personalizado
+# customSeparator <- function() {
+#   tags$div(
+#     style = "margin: 5px 0;",
+#     ""
+#   )
+# }
 
 ##################################
 #### Helper Functions: Server #### 

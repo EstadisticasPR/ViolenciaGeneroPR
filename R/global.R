@@ -552,7 +552,6 @@ OP_Ley148_ex_parteEmitidas <- full_join(
 #### OP_LEY148Archivadas ####
 
 # Cantidad de solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual archivadas por Región Judicial
-# lista con nuevos nombres de columnas para mejor interpretación
 new_names <- c("Total", "SolicitudPeticionaria", "Otra Razón")
 
 # datos de solicitudes archivadas de órdenes de protección en 2020-2021
@@ -587,12 +586,15 @@ OP_LEY148Archivadas2021_22 <- read_excel(paste0(trib, "OP_LEY148Archivadas2021_2
 
 # datos de solicitudes archivadas de órdenes de protección en juntadas
 OP_LEY148Archivadas <- full_join(
-  OP_LEY148Archivadas2020_21, OP_LEY148Archivadas2021_22)
+  OP_LEY148Archivadas2020_21, OP_LEY148Archivadas2021_22) %>%
+  mutate(
+    Razón = factor(Razón),
+    Región = factor(Región)
+  )
 
 #### OP_LEY148Denegadas ####
 
-# Cantidad de solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual denegadas por Región Judicial
-
+# Cantidad de solicitudes de órdenes de protección denegadas al amparo de la Ley 148 - Violencia Sexual denegadas por Región Judicial
 # lista con nuevos nombres de columnas para mejor interpretación
 new_names <- c("No Aplican Disposiciones Ley148", "No Prueban Elementos")
 
@@ -630,7 +632,11 @@ OP_LEY148Denegadas2021_22 <- read_excel(paste0(trib, "OP_LEY148Denegadas2021_22.
 
 # dataset joined
 OP_LEY148Denegadas <- full_join(
-  OP_LEY148Denegadas2020_2021, OP_LEY148Denegadas2021_22)
+  OP_LEY148Denegadas2020_2021, OP_LEY148Denegadas2021_22) %>%
+  mutate(
+    Región = factor(Región),
+    Razón = factor(Razón)
+  )
 
 #### OP_LEY148FinalEmitidas ####
 
