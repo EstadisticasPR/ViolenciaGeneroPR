@@ -693,7 +693,7 @@ ui <- fluidPage(
                 selected = opmCasos$year,
                 id = "opm_opmCasos_año"
               ),
-              
+              customSeparator(),
               # botón para seleccionar el tipo de violencia
               createDropdownCheckbox(
                 label = "Seleccione tipo de Violencia:",
@@ -732,7 +732,7 @@ ui <- fluidPage(
                 selected = opmVic$año,
                 id = "opm_opmVic_año"
               ),
-              
+              customSeparator(),
               # botón para seleccionar el género de las victimas
               createDropdownCheckbox(
                 label = "Seleccione el Género(s):",
@@ -771,7 +771,7 @@ ui <- fluidPage(
                 selected = opmMedio$año,
                 id = "opm_opmMedio_año"
               ),
-              
+              customSeparator(),
               # botón para seleccionar el medio de orientación
               createDropdownCheckbox(
                 label = "Seleccione el Medio de Orientación:",
@@ -810,7 +810,7 @@ ui <- fluidPage(
                 selected = opmServiciosMes$year,
                 id = "opm_opmServiciosMes_año"
               ),
-              
+              customSeparator(),
               # botón para seleccionar el género de las victimas
               createDropdownCheckbox(
                 label = "Seleccione el tipo de servicio:",
@@ -859,7 +859,7 @@ ui <- fluidPage(
             selected = dcrCasosInv$year,
             id = "dcr_dcrCasosInv_year"
           ),
-          
+          customSeparator(),
           # botón para seleccionar el sexo
           createDropdownCheckbox(
             label = "Seleccione el sexo:",
@@ -867,7 +867,7 @@ ui <- fluidPage(
             selected = 1,
             id = "dcr_dcrCasosInv_sexo"
           ),
-          hr(),
+          customSeparator(),
           # botón para seleccionar el tipo de investigación 
           createDropdownCheckbox(
             label = "Seleccione el estado de Investigación:",
@@ -906,7 +906,7 @@ ui <- fluidPage(
             selected = dcrSentenciadas$year,
             id = "dcr_dcrSentenciadas_year"
           ),
-
+          customSeparator(),
           # botón para seleccionar el tipo de investigación
           createDropdownCheckbox(
             label = "Seleccione el tipo de Investigación:",
@@ -914,7 +914,7 @@ ui <- fluidPage(
             selected = dcrSentenciadas$tipo,
             id = "dcr_dcrSentenciadas_tipo"
           ),
-
+          customSeparator(),
           # # botón para seleccionar el sexo
           # createDropdownCheckbox(
           #   label = "Seleccione el sexo:",
@@ -961,7 +961,7 @@ ui <- fluidPage(
               selected = OP_148_SoliGrupEdad$AñoFiscal,
               id = "trib_OP_148_SoliGrupEdad_AñoFiscal"
             ),
-            
+            customSeparator(),
             # botón para seleccionar el grupo de edad
             createDropdownCheckbox(
               label = "Seleccione el grupo de edad:",
@@ -969,7 +969,7 @@ ui <- fluidPage(
               selected = OP_148_SoliGrupEdad$Edad,
               id = "trib_OP_148_SoliGrupEdad_Edad"
             ),
-            
+            customSeparator(),
             # botón para seleccionar el distrito fiscal
             createDropdownCheckbox(
               label = "Seleccione el Distrito Fiscal:",
@@ -1008,7 +1008,7 @@ ui <- fluidPage(
               selected = OP_Ley148_ex_parteEmitidas$AñoFiscal,
               id = "trib_OP_Ley148_ex_parteEmitidas_AñoFiscal"
             ),
-            
+            customSeparator(),
             # botón para seleccionar el delito
             createDropdownCheckbox(
               label = "Seleccione Delito(s):",
@@ -1016,7 +1016,7 @@ ui <- fluidPage(
               selected = OP_Ley148_ex_parteEmitidas$Delito,
               id = "trib_OP_Ley148_ex_parteEmitidas_Delito"
             ),
-            
+            customSeparator(),
             # botón para seleccionar la región fiscal
             createDropdownCheckbox(
               label = "Seleccione Distrito(s) Fiscal:",
@@ -1057,7 +1057,7 @@ ui <- fluidPage(
               selected = OP_LEY148Archivadas$AñoFiscal,
               id = "trib_OP_LEY148Archivadas_AñoFiscal"
             ),
-            
+            customSeparator(),
             # botón para seleccionar la razón de archivado
             createDropdownCheckbox(
               label = "Seleccione Razón(s):",
@@ -1065,7 +1065,7 @@ ui <- fluidPage(
               selected = OP_LEY148Archivadas$Razón,
               id = "trib_OP_LEY148Archivadas_Razón"
             ),
-            
+            customSeparator(),
             # botón para seleccionar la región fiscal
             createDropdownCheckbox(
               label = "Seleccione Distrito(s) Fiscal:",
@@ -1106,7 +1106,7 @@ ui <- fluidPage(
               selected = OP_LEY148Denegadas$AñoFiscal,
               id = "trib_OP_LEY148Denegadas_AñoFiscal"
             ),
-            #customSeparator(),
+            customSeparator(),
             # botón para seleccionar la razón de archivado
             createDropdownCheckbox(
               label = "Seleccione Razón(s):",
@@ -1114,7 +1114,7 @@ ui <- fluidPage(
               selected = OP_LEY148Denegadas$Razón,
               id = "trib_OP_LEY148Denegadas_Razón"
             ),
-            #customSeparator(),
+            customSeparator(),
             # botón para seleccionar la región fiscal
             createDropdownCheckbox(
               label = "Seleccione Distrito(s) Fiscal:",
