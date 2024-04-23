@@ -219,16 +219,29 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
 #   print(p)
 # }
 
-renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1") {
+# renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1") {
+#   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
+#     geom_bar(stat = "identity", position = "dodge") +
+#     scale_fill_manual(values = colorFill) +
+#     theme_minimal() +
+#     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+#     labs(title = title, x = xlab, y = ylab, fill = fillLab)
+# 
+#   print(p)
+# }
+renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
+                          barWidth = 1, xGap = 0.1) {
   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
-    geom_bar(stat = "identity", position = "dodge") +
-    scale_fill_manual(values = colorFill) + 
+    geom_bar(stat = "identity", position = position_dodge2(width = barWidth, padding = xGap)) +
+    scale_fill_manual(values = colorFill) +
+    scale_y_continuous(labels = scales::comma_format(big.mark = ",", decimal.mark = ".")) +
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     labs(title = title, x = xlab, y = ylab, fill = fillLab)
-  
+
   print(p)
 }
+
 
 
 
@@ -400,8 +413,8 @@ setColorFill <- function(df, variable) {
   }
   
   # Generar una lista de patrones para los colores
-  patterns <- c("#CC6677", "#E69F00", "#88CCEE", "#B8E186", 
-                "#F0E442", "#332288", "#D55E00", "#CC79A7", "#661100", "#888888", "#117733", "#000000")
+  patterns <- c("#CC6677", "#E69F00", "#88CCEE", "#B8E186", "#332288", "#D55E00", 
+                "#F0E442", "#CC79A7", "#661100", "#888888", "#117733", "#000000")
   # Asignar patrones y colores a cada nivel único
   my_fill <- rep("black", length(unique_levels))
   names(my_fill) <- unique_levels

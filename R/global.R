@@ -640,7 +640,7 @@ OP_LEY148Denegadas <- full_join(
 
 #### OP_LEY148FinalEmitidas ####
 
-# Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
+# Órdenes de protección finales emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
 
 # lista con nuevos nombres de columnas para mejor interpretación
 new_names <- c("Total", "Agresión Sexual", "Acoso Sexual", "Actos Lascivos", "Incesto")
@@ -679,7 +679,11 @@ OP_LEY148FinalEmitidas2021_22 <- read_excel(paste0(trib, "OP_LEY148FinalEmitidas
 
 # dataset joined
 OP_LEY148FinalEmitidas <- full_join(
-  OP_LEY148FinalEmitidas2020_21, OP_LEY148FinalEmitidas2021_22)
+  OP_LEY148FinalEmitidas2020_21, OP_LEY148FinalEmitidas2021_22) %>%
+  mutate(
+    Región = factor(Región),
+    Delito = factor(Delito)
+  )
 
 #### OP_LEY148Genero ####
 
@@ -713,12 +717,17 @@ OP_LEY148Genero2021_22 <- read_excel(paste0(trib, "OP_LEY148Genero2021_22.xlsx")
 
 # dataset joined
 OP_LEY148Genero <- full_join(
-  OP_LEY148Genero2020_21, OP_LEY148Genero2021_22)
+  OP_LEY148Genero2020_21, OP_LEY148Genero2021_22) %>%
+  mutate(
+    Sexo = factor(Sexo),
+    Parte = factor(Parte)
+  )
+
 
 
 #### tribCasosCrim ####
 
-# Tribunal de Primera Instancia: Movimiento de casos criminales de acoso sexual, actos lascivos, agresión sexual, incesto y ley contra el acecho. Ley Núm. 148-2015
+# Tribunal de Primera Instancia: Movimiento de casos criminales al amparo de la Ley Núm. 54-1989 para la prevención e intervención con la violencia doméstica
 
 # lista con nuevos nombres de columnas para mejor interpretación 
 new_names <- c("Delito", "Pendiente Inicio", "Presentados", 
@@ -776,7 +785,11 @@ tribCasosCrim21 <- read_excel(paste0(trib, "tribCasosCrim21.xlsx")) %>%
 # dataset joined
 tribCasosCrim <- full_join(
   tribCasosCrim19, tribCasosCrim20) %>%
-  full_join(tribCasosCrim21)
+  full_join(tribCasosCrim21) %>%
+  mutate(
+    Delito = factor(Delito),
+    Casos = factor(Casos)
+  )
 
 
 ########################################

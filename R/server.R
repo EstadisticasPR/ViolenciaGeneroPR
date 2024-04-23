@@ -34,7 +34,7 @@ server <- function(input, output, session) {
   # Grafico de barras de homiEdad
   output$barPlot_snmv <- renderPlotly({
     p <- renderBarPlot(homiEdad_filt, "año", "casos", "edad",
-                       paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
+                       paste("Evolución de homicidios por Grupo de Edad según el Año", input$yearInput_snmv),
                        "Grupo de Edad", "Casos", colorFill = homiEdad_fill_edad)
     
     ggplotly(p, tooltip = c("x", "y", "fill"))  # Especificamos qué información mostrar en el tooltip
@@ -931,5 +931,137 @@ server <- function(input, output, session) {
   # Data Table 
   output$dataTable_OP_LEY148Denegadas <- renderDT({
     renderDataTable(OP_LEY148Denegadas_filt())
+  })
+  #### (OP_LEY148FinalEmitidas) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el delito cometido y la región fiscal
+  OP_LEY148FinalEmitidas_filt <- reactive({
+    filter(OP_LEY148FinalEmitidas,
+           AñoFiscal %in% input$checkGroup_trib_OP_LEY148FinalEmitidas_AñoFiscal,
+           Delito %in% input$checkGroup_trib_OP_LEY148FinalEmitidas_Delito,
+           Región %in% input$checkGroup_trib_OP_LEY148FinalEmitidas_Región
+    )
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+  observeEvent(input$deselectAll_trib_OP_LEY148FinalEmitidas_AñoFiscal, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148FinalEmitidas_AñoFiscal", input, OP_LEY148FinalEmitidas$AñoFiscal)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar delito cometido
+  observeEvent(input$deselectAll_trib_OP_LEY148FinalEmitidas_Delito, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148FinalEmitidas_Delito", input, OP_LEY148FinalEmitidas$Delito)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el Región
+  observeEvent(input$deselectAll_trib_OP_LEY148FinalEmitidas_Región, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148FinalEmitidas_Región", input, OP_LEY148FinalEmitidas$Región)
+  })
+  
+  # Colores de las razones
+  OP_LEY148FinalEmitidas_fill_Delito <- setColorFill(OP_LEY148FinalEmitidas, "Delito")
+  
+  # Grafico de barras
+  output$barPlot_OP_LEY148FinalEmitidas <- renderPlotly({
+    p <- renderBarPlot(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+                       title = "Órdenes de Protección Final emitidas según la Ley 148 en Casos de Violencia Sexual, por Región Judicial y Tipo de Delito",
+                       xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
+                       colorFill = OP_LEY148FinalEmitidas_fill_Delito)
+    
+    ggplotly(p + facet_wrap(~Región), 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  # Data Table 
+  output$dataTable_OP_LEY148FinalEmitidas <- renderDT({
+    renderDataTable(OP_LEY148FinalEmitidas_filt())
+  })
+  #### (OP_LEY148Genero) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, la parte peticionaria y el sexo de la parte
+  OP_LEY148Genero_filt <- reactive({
+    filter(OP_LEY148Genero,
+           AñoFiscal %in% input$checkGroup_trib_OP_LEY148Genero_AñoFiscal,
+           Parte %in% input$checkGroup_trib_OP_LEY148Genero_Parte,
+           Sexo %in% input$checkGroup_trib_OP_LEY148Genero_Sexo
+    )
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+  observeEvent(input$deselectAll_trib_OP_LEY148Genero_AñoFiscal, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Genero_AñoFiscal", input, OP_LEY148Genero$AñoFiscal)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar la parte peticionaria
+  observeEvent(input$deselectAll_trib_OP_LEY148Genero_Parte, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Genero_Parte", input, OP_LEY148Genero$Parte)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el sexo de la parte
+  observeEvent(input$deselectAll_trib_OP_LEY148Genero_Sexo, {
+    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Genero_Sexo", input, OP_LEY148Genero$Sexo)
+  })
+  
+  # Colores de las partes
+  OP_LEY148Genero_fill_Parte <- setColorFill(OP_LEY148Genero, "Parte")
+  
+  # Grafico de barras
+  output$barPlot_OP_LEY148Genero <- renderPlotly({
+    p <- renderBarPlot(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte",
+                       title = "",
+                       xlab = "Año Fiscal", ylab = "Solicitudes de Órdenes de Protección", fillLab = "Parte",
+                       colorFill = OP_LEY148Genero_fill_Parte)
+    
+    ggplotly(p + facet_wrap(~Sexo), 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  # Data Table 
+  output$dataTable_OP_LEY148Genero <- renderDT({
+    renderDataTable(OP_LEY148Genero_filt())
+  })
+  #### (tribCasosCrim) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el delito cometido y el estado del caso
+  tribCasosCrim_filt <- reactive({
+    filter(tribCasosCrim,
+           AñoFiscal %in% input$checkGroup_trib_tribCasosCrim_AñoFiscal,
+           Delito %in% input$checkGroup_trib_tribCasosCrim_Delito,
+           Casos %in% input$checkGroup_trib_tribCasosCrim_Casos
+    )
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+  observeEvent(input$deselectAll_trib_tribCasosCrim_AñoFiscal, {
+    updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_AñoFiscal", input, tribCasosCrim$AñoFiscal)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el delito cometido
+  observeEvent(input$deselectAll_trib_tribCasosCrim_Delito, {
+    updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Delito", input, tribCasosCrim$Delito)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el Estado del Caso
+  observeEvent(input$deselectAll_trib_tribCasosCrim_Casos, {
+    updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Casos", input, tribCasosCrim$Casos)
+  })
+  
+  # Colores de los delitos cometidos
+  tribCasosCrim_fill_Delito <- setColorFill(tribCasosCrim, "Delito")
+  
+  # Grafico de barras
+  output$barPlot_tribCasosCrim <- renderPlotly({
+    p <- renderBarPlot(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
+                       title = "",
+                       xlab = "Año Fiscal", ylab = "Solicitudes de Órdenes de Protección", fillLab = "Delito Cometido",
+                       colorFill = tribCasosCrim_fill_Delito)
+    
+    ggplotly(p + facet_wrap(~Casos), 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  # Data Table 
+  output$dataTable_tribCasosCrim <- renderDT({
+    renderDataTable(tribCasosCrim_filt())
   })
 }

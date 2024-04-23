@@ -186,7 +186,7 @@ ui <- fluidPage(
                 selected = NULL,
                 id = "fam_dfMalt_año"
               ),
-              hr(),
+              customSeparator(),
               # botón para seleccionar sexo
               createDropdownCheckbox(
                 label = "Seleccione sexo de las víctimas:",
@@ -244,7 +244,7 @@ ui <- fluidPage(
                 selected = NULL,
                 id = "just_dfDeli_año"
               ),
-              hr(),
+              customSeparator(),
               # botón para seleccionar distrito
               createDropdownCheckbox(
                 label = "Seleccionar Distrito(s):",
@@ -562,7 +562,7 @@ ui <- fluidPage(
                 selected = vEdad$Edad,
                 id = "poli_vEdad_edad"
               ),
-              
+              customSeparator(),
               # botón para seleccionar el sexo
               createDropdownCheckbox(
                 label = "Seleccione sexo de las víctimas:",
@@ -570,7 +570,7 @@ ui <- fluidPage(
                 selected = vEdad$Sexo[1],
                 id = "poli_vEdad_sexo"
               ),
-              hr(),
+              customSeparator(),
               # botón para seleccionar el año
               createDropdownCheckbox(
                 label = "Seleccione Año(s):",
@@ -1130,10 +1130,161 @@ ui <- fluidPage(
             DTOutput("dataTable_OP_LEY148Denegadas")
           )
         ),
+      ),
+      
+      #### tab con datos de solicitudes de órdenes de protección finales emitidas (OP_LEY148FinalEmitidas) ####
+      tabPanel(
+        "OP_LEY148FinalEmitidas", 
+        
+        # Título del Tab
+        titlePanel("Órdenes de protección finales emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito"),
+        
+        # Fuente de Datos, Actualización
+        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        
+        # Menu sidebar con widgets
+        sidebarLayout(
+          sidebarPanel(
+            
+            # botón para seleccionar el año fiscal
+            createDropdownCheckbox(
+              label = "Seleccione Año(s) Fiscal:",
+              choices = OP_LEY148FinalEmitidas$AñoFiscal,
+              selected = OP_LEY148FinalEmitidas$AñoFiscal,
+              id = "trib_OP_LEY148FinalEmitidas_AñoFiscal"
+            ),
+            customSeparator(),
+            # botón para seleccionar la razón de archivado
+            createDropdownCheckbox(
+              label = "Seleccione Delito(s):",
+              choices = OP_LEY148FinalEmitidas$Delito,
+              selected = OP_LEY148FinalEmitidas$Delito,
+              id = "trib_OP_LEY148FinalEmitidas_Delito"
+            ),
+            customSeparator(),
+            # botón para seleccionar la región fiscal
+            createDropdownCheckbox(
+              label = "Seleccione Distrito(s) Fiscal:",
+              choices = OP_LEY148FinalEmitidas$Región,
+              selected = OP_LEY148FinalEmitidas$Región,
+              id = "trib_OP_LEY148FinalEmitidas_Región"
+            ),
+          ),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            plotlyOutput("barPlot_OP_LEY148FinalEmitidas"),
+            DTOutput("dataTable_OP_LEY148FinalEmitidas")
+          )
+        ),
+      ),
+      
+      #### tab con datos de solicitudes de órdenes de protección finales emitidas (OP_LEY148Genero) ####
+      tabPanel(
+        "OP_LEY148Genero", 
+        
+        # Título del Tab
+        titlePanel("Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por sexo de la parte
+"),
+        
+        # Fuente de Datos, Actualización
+        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        
+        # Menu sidebar con widgets
+        sidebarLayout(
+          sidebarPanel(
+            
+            # botón para seleccionar el año fiscal
+            createDropdownCheckbox(
+              label = "Seleccione Año(s) Fiscal:",
+              choices = OP_LEY148Genero$AñoFiscal,
+              selected = OP_LEY148Genero$AñoFiscal,
+              id = "trib_OP_LEY148Genero_AñoFiscal"
+            ),
+            customSeparator(),
+            # botón para seleccionar la parte
+            createDropdownCheckbox(
+              label = "Seleccione Parte(s):",
+              choices = OP_LEY148Genero$Parte,
+              selected = OP_LEY148Genero$Parte,
+              id = "trib_OP_LEY148Genero_Parte"
+            ),
+            customSeparator(),
+            # botón para seleccionar el sexo de la parte
+            createDropdownCheckbox(
+              label = "Seleccione Sexo:",
+              choices = OP_LEY148Genero$Sexo,
+              selected = OP_LEY148Genero$Sexo,
+              id = "trib_OP_LEY148Genero_Sexo"
+            ),
+          ),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            plotlyOutput("barPlot_OP_LEY148Genero"),
+            DTOutput("dataTable_OP_LEY148Genero")
+          )
+        ),
+      ),
+      
+      
+      #### tab con datos de Movimiento de Casos Criminales de Violencia Doméstica (tribCasosCrim) ####
+      tabPanel(
+        "tribCasosCrim", 
+        
+        # Título del Tab
+        titlePanel("Movimiento de Casos Criminales de Violencia Doméstica en el Tribunal de Primera Instancia según la Ley Núm. 54-1989"),
+        
+        # Fuente de Datos, Actualización
+        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        
+        # Menu sidebar con widgets
+        sidebarLayout(
+          sidebarPanel(
+            
+            # botón para seleccionar el año fiscal
+            createDropdownCheckbox(
+              label = "Seleccione Año(s) Fiscal:",
+              choices = tribCasosCrim$AñoFiscal,
+              selected = tribCasosCrim$AñoFiscal,
+              id = "trib_tribCasosCrim_AñoFiscal"
+            ),
+            customSeparator(),
+            # botón para seleccionar el Delito
+            createDropdownCheckbox(
+              label = "Seleccione Delito(s):",
+              choices = tribCasosCrim$Delito,
+              selected = tribCasosCrim$Delito,
+              id = "trib_tribCasosCrim_Delito"
+            ),
+            customSeparator(),
+            # botón para seleccionar el estado del caso
+            createDropdownCheckbox(
+              label = "Seleccione Estado del Caso:",
+              choices = tribCasosCrim$Casos,
+              selected = 1,
+              id = "trib_tribCasosCrim_Casos"
+            ),
+          ),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            plotlyOutput("barPlot_tribCasosCrim"),
+            DTOutput("dataTable_tribCasosCrim")
+          )
+        ),
       )
+  
+  
     )
   ),
     
+      
+      
+  
     #### Tab Acerca del Dashboard ####
     tabPanel(
       "Acerca del Dashboard",
