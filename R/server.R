@@ -688,13 +688,18 @@ server <- function(input, output, session) {
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
-  observeEvent(input$deselectAll_dcr_dcrCasosInv_año, {
-    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_año", input, dcrCasosInv$año)
+  observeEvent(input$deselectAll_dcr_dcrCasosInv_year, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_year", input, dcrCasosInv$year)
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar del botón de tipo de servicio
+  ### funcion para el boton de deseleccionar/seleccionar del botón del estado de investigación
   observeEvent(input$deselectAll_dcr_dcrCasosInv_tipo, {
-    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_medio", input, dcrCasosInv$tipo)
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_tipo", input, dcrCasosInv$tipo)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de sexo
+  observeEvent(input$deselectAll_dcr_dcrCasosInv_sexo, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_sexo", input, dcrCasosInv$sexo)
   })
   
   # Colores del status
