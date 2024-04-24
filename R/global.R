@@ -139,7 +139,8 @@ dfMalt <- bind_rows(
   ) %>%
   rename(
      Maltrato = `Tipo de Maltrato`
-  )
+  ) %>%
+  distinct() 
 
 ###############################################################
 ##### Procesamiento de datos del Departamento de Justicia #####
@@ -248,26 +249,28 @@ dcr <- here("data", "Departamento_de_correccion_y_rehabilitacion", "/")
 # importando el dataset de Casos en Supervisión de Ley 54
 dcrCasosInv <- read_excel(paste0(dcr, "dcrCasosInv.xlsx")) %>%
   #filter(sexo != "Total") %>%
+  select(-c(mes)) %>%
+  group_by(tipo, year, sexo) %>%
+  summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
+  ungroup() %>%
   mutate(
     year = factor(year),
     sexo = factor(sexo),
     tipo = factor(tipo)
-  ) %>%
-  select(
-    -c(mes)
   )
-dcrCasosInv
 
 #### dcrSentenciadas ####
 dcrSentenciadas <- read_excel(paste0(dcr, "dcrSentenciadas.xlsx"))  %>%
+  select(-c(mes)) %>%
+  group_by(tipo, year) %>%
+  summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
+  ungroup() %>%
   mutate(
     # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
     #fecha = as.yearmon(paste(year, mes), "%Y %m")
     tipo = factor(tipo),
     year = factor(year)
-  ) %>%
-  select(-c(mes))
-dcrSentenciadas
+  )
 
 #########################################################
 #### Procesamiento de datos del Negociado de Policía ####
@@ -295,16 +298,30 @@ despDF <- bind_rows(
 ) %>%
   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
   filter(!grepl("Total", Meses)) %>%
-  group_by(Categoria) %>%
-  mutate(
-    Meses = factor(Meses, levels = meses), 
-    Meses_Numéricos = match(Meses, meses) ,
-    Fecha = as.yearmon(paste(Año, Meses_Numéricos), "%Y %m"),
-    Categoria = factor(Categoria),
-    Año = factor(Año)
-  ) %>%
+  group_by(Categoria, Año) %>%
+  summarise(Casos = sum(Casos, na.rm = TRUE)) %>%
   ungroup() %>%
-  select(-Meses_Numéricos)
+  mutate(
+    Año = factor(Año),
+    Categoria = factor(Categoria)
+  )
+
+# despDF <- bind_rows(
+#   list(desp2020, desp2021, desp2022, desp2023)
+# ) %>%
+#   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
+#   filter(!grepl("Total", Meses)) %>%
+#   group_by(Categoria) %>%
+#   mutate(
+#     Meses = factor(Meses, levels = meses),
+#     Meses_Numéricos = match(Meses, meses) ,
+#     Fecha = as.yearmon(paste(Año, Meses_Numéricos), "%Y %m"),
+#     Categoria = factor(Categoria),
+#     Año = factor(Año)
+#   ) %>%
+#   ungroup() %>%
+#   select(-Meses_Numéricos)
+
 
 #### vEdad ####
 vEdad2021 <- read_excel(paste0(poli, "npprVDedad2021.xlsx")) %>% 
@@ -377,12 +394,13 @@ opmFemiVD <- read_excel(paste0(opm, "opmFemiVD.xlsx")) %>%
   )
 
 #### opmCasos ####
-meses <- c("1" = "enero", "2" = "febrero", "3" = "marzo",  "4" = "abril", "5" = "mayo", "6" = "junio", "7" = "julio", "8" = "agosto", "9" = "septiembre","10" = "octubre", "11" = "noviembre", "12" = "diciembre")
+#meses <- c("1" = "enero", "2" = "febrero", "3" = "marzo",  "4" = "abril", "5" = "mayo", "6" = "junio", "7" = "julio", "8" = "agosto", "9" = "septiembre","10" = "octubre", "11" = "noviembre", "12" = "diciembre")
 opmCasos <-  read_excel(paste0(opm, "opmPartMes.xlsx")) %>%
+  select(-c(month)) %>%
+  group_by(tipo, year) %>%
+  summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
+  ungroup() %>%
   mutate(
-    # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
-    fecha = as.yearmon(paste(year, month), "%Y %m"),
-    month =  factor(month, levels = 1:12, labels = meses), 
     year = factor(year),
     tipo = factor(tipo)
   )
@@ -408,12 +426,15 @@ opmMedio <- read_excel(paste0(opm, "opmMedio.xlsx")) %>%
 
 #### opmServiciosMes ####
 opmServiciosMes <-  read_excel(paste0(opm, "opmServiciosMes.xlsx")) %>%
+  select(-c(month)) %>%
+  group_by(tipo, year) %>%
+  summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
+  ungroup() %>%
   mutate(
-    fecha = as.yearmon(paste(year, month), "%Y %m"),
+    #fecha = as.yearmon(paste(year, month), "%Y %m"),
     tipo = factor(tipo),
     year = factor(year)
-  ) %>%
-  select(-c(month))
+  )
 
 
 ###################################################################
