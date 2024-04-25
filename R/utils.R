@@ -95,6 +95,15 @@ customSeparator <- function() {
   )
 }
 
+# # Función para hacer que los titulos se muestren en letras minúsculas
+# lowercaseTitle <- function(title) {
+#   HTML(paste0("<span style='text-transform: none; font-size: 14px;'>", title, "</span>", sep = ""))
+# }
+# Función para hacer que los titulos se muestren en letras minúsculas
+lowercaseTitle <- function(title) {
+  HTML(paste0("<span style='text-transform: none; '>", title, "</span>", sep = ""))
+}
+
 ##################################
 #### Helper Functions: Server #### 
 ##################################

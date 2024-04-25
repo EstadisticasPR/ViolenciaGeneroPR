@@ -49,13 +49,13 @@ ui <- fluidPage(
     
     #### Tab del Sistema de Notificación de Muertes Violentas ####
     tabPanel(
-      "Sistema de Notificación de Muertes Violentas",
+      lowercaseTitle("Sistema de Notificación de Muertes Violentas"),
       icon = icon("exclamation-triangle"),
       tabsetPanel(
         
         #### tab con datos de Homicidios por grupo de Edad ####
         tabPanel(
-          "homiEdad",
+          lowercaseTitle("Homicidios de Mujeres por Edad"),
           # Título del Tab
           titlePanel("Homicidios de mujeres por grupo de edad según el año"),
           
@@ -95,10 +95,10 @@ ui <- fluidPage(
         
         #### tab con datos de Incidentes segun el año ####
         tabPanel(
-          "inci",
+          lowercaseTitle("Tipos de Incidentes Violentos"),
           
           # Título del Tab
-          titlePanel("Incidentes Violentos: Tipo de muerte según el año"),
+          titlePanel("Incidentes Violentos: Tipo de homicidio según el año"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
@@ -135,10 +135,15 @@ ui <- fluidPage(
           ),
         ), 
         
-        # tab con datos de Tasas
+        #### tab con datos de Tasas ####
         tabPanel(
           "Tasas_snmv"
         ), 
+        
+        # # tab con Metadatos y Definiciones
+        # tabPanel(
+        #   "Metadatos y Definiciones"
+        # ),
         
         # ### xiomy
         # tabPanel(
@@ -154,14 +159,15 @@ ui <- fluidPage(
     
     #### Tab del Departamento de la Familia ####
     tabPanel(
-      "Departamento de la Familia",
+      lowercaseTitle("Departamento de la Familia"),
       icon = icon("users"),
       tabsetPanel(
         #### tab con datos de menores víctimas de maltrato (dfMalt)  ####
         tabPanel(
-          "dfMalt", 
+          #HTML("<span style='text-transform: none; font-size: 14px;'>Maltrato de Menores por Sexo</span>"), 
+          lowercaseTitle("Maltrato de Menores por Sexo"),
           # Título del Tab
-          titlePanel("Cantidad de menores que fueron víctimas de maltrato, según sexo y tipo de maltrato: Años 2018-*2022"),
+          titlePanel("Cantidad de menores que fueron víctimas de maltrato, según sexo y tipo de maltrato"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Departamento de la Familia"), tags$br(),
@@ -211,12 +217,12 @@ ui <- fluidPage(
     
     #### Tab del Departamento de Justicia ####
     tabPanel(
-      "Departamento de Justicia",
+      lowercaseTitle("Departamento de Justicia"),
       icon = icon("balance-scale"),
       tabsetPanel(
         #### tab con datos de delitos de violencia doméstica (dfDeli) ####
         tabPanel(
-          "dfDeli",
+          lowercaseTitle("dfDeli"),
           # Título del Tab
           # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
           titlePanel("Delitos a la Ley 54, casos radicados por jurisdicción y articulo de la Ley de Violencia Domestica"),  # Cambiar por el título adecuado
@@ -268,7 +274,7 @@ ui <- fluidPage(
         
         #### tab con datos del mapa de Distritos Fiscales de Puerto Rico (mapaDeli) ####
         tabPanel(
-          "mapaFisc",
+          lowercaseTitle("mapaFisc"),
           
           # Título del Tab 
           # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
@@ -283,7 +289,7 @@ ui <- fluidPage(
         
         #### tab con datos del mapa delitos de violencia doméstica (mapaDeli) ####
         tabPanel(
-          "mapaDeli",
+          lowercaseTitle("mapaDeli"),
           
           # Título del Tab 
           # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
@@ -353,12 +359,12 @@ ui <- fluidPage(
     
     #### Tab del Departamento del Trabajo y Recursos Humanos ####
     tabPanel(
-      "Departamento del Trabajo y Recursos Humanos",
+      lowercaseTitle("Departamento del Trabajo y Recursos Humanos"),
       icon = icon("briefcase"),
       tabsetPanel(
         #### tab con datos de participación laboral (dtParlab) ####
         tabPanel(
-          "parLab", 
+          lowercaseTitle("parLab"), 
           # Título del Tab
           titlePanel("Tasa de participación laboral por género y año"),
           
@@ -399,13 +405,13 @@ ui <- fluidPage(
     
     #### Tab de la Administración de Vivienda Pública ####
     tabPanel(
-      "Administración de Vivienda Pública",
+      lowercaseTitle("Administración de Vivienda Pública"),
       icon = icon("house"),
       tabsetPanel(
         
         #### tab con datos de Adminsitración de Vivienda Públicas(dfAvp) ####
         tabPanel(
-          "dfAvp", 
+          lowercaseTitle("dfAvp"), 
           # Título del Tab
           titlePanel("Total de solicitudes de vivienda pública con preferencias por violencia doméstica, Puerto Rico desde 2017 a 2023"),
           
@@ -443,7 +449,7 @@ ui <- fluidPage(
         
         #### tab para el mapa de Adminsitración de Vivienda Públicas (dfAvp) ####
         tabPanel(
-          "mapaRegiones",
+          lowercaseTitle("mapaRegiones"),
           
           # Título del Tab 
           titlePanel("Regiones de la Adminsitración de Vivienda Públicas"),
@@ -457,7 +463,7 @@ ui <- fluidPage(
         
         #### tab para el mapa de Adminsitración de Vivienda Públicas (dfAvp) ####
         tabPanel(
-          "mapaAvp",
+          lowercaseTitle("mapaAvp"),
           
           # Título del Tab
           titlePanel("Total de solicitudes de vivienda pública con preferencias por violencia doméstica, Puerto Rico desde 2017 a 2023"),
@@ -497,13 +503,13 @@ ui <- fluidPage(
     
     #### Tab del Negociado de Policía de Puerto Rico ####
     tabPanel(
-      "Negociado de Policía",
+      lowercaseTitle("Negociado de Policía"),
       icon = icon("building-shield"),
       tabsetPanel(
         
         #### tab con datos de mujeres desaparecidas (despDF) ####
         tabPanel(
-          "despDF", 
+          lowercaseTitle("despDF"), 
           # Título del Tab
           titlePanel("Cantidad de mujeres desaparecidas, localizadas y sin localizar- adultas y menores (desde enero 2020 a marzo 2023)"),
           
@@ -542,7 +548,7 @@ ui <- fluidPage(
         
         #### tab para el barplot de incidentes de violencia doméstica por edad de la víctima (vEdad) ####
         tabPanel(
-          "vEdad",
+          lowercaseTitle("vEdad"),
           
           # Título del Tab
           titlePanel("Incidentes de violencia doméstica por edad de la víctima (desde enero 2021 a abril 2023)"),
@@ -598,7 +604,7 @@ ui <- fluidPage(
         
         #### tab para el mapa de incidentes de violencia doméstica por área policiaca (inciMapa) ####
         tabPanel(
-          "inciMapa",
+          lowercaseTitle("inciMapa"),
           
           # Título del Tab
           titlePanel("Incidentes de violencia doméstica por área policíaca (desde enero de 2021 a abril de 2023)"),
@@ -637,13 +643,13 @@ ui <- fluidPage(
     
     #### Tab de la Oficina de la Procuradora de las Mujeres ####
     tabPanel(
-      "Oficina de la Procuradora de la Mujer",
+      lowercaseTitle("Oficina de la Procuradora de la Mujer"),
       icon = icon("person-dress"),
       tabsetPanel(
         
         #### tab con datos de violencia domestica (opmFemiVD) ####
         tabPanel(
-          "opmFemiVD", 
+          lowercaseTitle("opmFemiVD"), 
           # Título del Tab
           titlePanel("Feminicidios por violencia doméstica, desde 1990 a 2021"),
           
@@ -674,7 +680,7 @@ ui <- fluidPage(
         
         #### tab con datos de violencia domestica (opmCasos) ####
         tabPanel(
-          "opmCasos", 
+          lowercaseTitle("opmCasos"), 
           # Título del Tab
           titlePanel("Feminicidios por violencia doméstica, desde 1990 a 2021"),
           
@@ -713,7 +719,7 @@ ui <- fluidPage(
         
         #### tab con datos del género de las víctimas (opmVic) ####
         tabPanel(
-          "opmVic", 
+          lowercaseTitle("opmVic"), 
           # Título del Tab
           titlePanel("Identidad de género de las víctimas (a través de CRIAS). Años 2020 a *2023"),
           
@@ -752,7 +758,7 @@ ui <- fluidPage(
         
         #### tab con datos de orientaciones medio de comunicación (opmMedio) ####
         tabPanel(
-          "opmMedio", 
+          lowercaseTitle("opmMedio"), 
           # Título del Tab
           titlePanel("Orientaciones según el Medio (a través de CRIAS). Años 2020 a *2023."),
           
@@ -791,7 +797,7 @@ ui <- fluidPage(
         
         #### tab con datos de los servicios ofrecidos por mes (opmServiciosMes) ####
         tabPanel(
-          "opmServiciosMes", 
+          lowercaseTitle("opmServiciosMes"), 
           # Título del Tab
           titlePanel("Población atendida, servicios ofrecidos y seguimientos por mes. Años 2020 a *2023."),
           
@@ -835,12 +841,12 @@ ui <- fluidPage(
     
     #### Tab del Departamento de Corrección y Rehabilitación ####
     tabPanel(
-      "Departamento de Corrección y Rehabilitación",
+      lowercaseTitle("Departamento de Corrección y Rehabilitación"),
       icon = icon("door-open"),
       tabsetPanel(
         #### tab con datos del género de las víctimas (dcrCasosInv) ####
         tabPanel(
-        "dcrCasosInv", 
+        lowercaseTitle("dcrCasosInv"), 
         # Título del Tab
         titlePanel("Casos en Supervisión de Ley 54 en Programas Alternos al Confinamiento: Programas de Comunidad(desde enero 2021 hasta febrero 2023)"),
       
@@ -887,7 +893,7 @@ ui <- fluidPage(
     
     #### tab con datos personas sentenciadas al Programa de Supervisión Electrónica (dcrSentenciadas) ####
     tabPanel(
-      "dcrSentenciadas",
+      lowercaseTitle("dcrSentenciadas"),
       # Título del Tab
       titlePanel("Personas sentenciadas integradas al Programa de Supervisión Electrónica por incurrir en delitos de violencia doméstica (desde enero 2020 hasta febrero 2023)"),
 
@@ -936,13 +942,13 @@ ui <- fluidPage(
   
   #### Tab de la Administración de Tribunales ####
   tabPanel(
-    "Administración de Tribunales",
+    lowercaseTitle("Administración de Tribunales"),
     icon = icon("building-circle-exclamation"),
     tabsetPanel(
       
       #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad) ####
       tabPanel(
-        "OP_148_SoliGrupEdad", 
+        lowercaseTitle("OP_148_SoliGrupEdad"), 
         # Título del Tab
         titlePanel("Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y grupo de edad de la parte peticionaria"),
         
@@ -989,7 +995,7 @@ ui <- fluidPage(
       
       #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_Ley148_ex_parteEmitidas) ####
       tabPanel(
-        "OP_Ley148_ex_parteEmitidas", 
+        lowercaseTitle("OP_Ley148_ex_parteEmitidas"), 
         # Título del Tab
         titlePanel("Número de Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito"),
         
@@ -1037,7 +1043,7 @@ ui <- fluidPage(
       
       #### tab con datos de solicitudes de órdenes de protección archivadas (OP_LEY148Archivadas) ####
       tabPanel(
-        "OP_LEY148Archivadas", 
+        lowercaseTitle("OP_LEY148Archivadas"), 
         
         # Título del Tab
         titlePanel("Cantidad de solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual archivadas por Región Judicial"),
@@ -1086,7 +1092,7 @@ ui <- fluidPage(
       
       #### tab con datos de solicitudes de órdenes de protección denegadas (OP_LEY148Denegadas) ####
       tabPanel(
-        "OP_LEY148Denegadas", 
+        lowercaseTitle("OP_LEY148Denegadas"), 
         
         # Título del Tab
         titlePanel("Cantidad de solicitudes de órdenes de protección denegadas al amparo de la Ley 148 - Violencia Sexual denegadas por Región Judicial"),
@@ -1134,7 +1140,7 @@ ui <- fluidPage(
       
       #### tab con datos de solicitudes de órdenes de protección finales emitidas (OP_LEY148FinalEmitidas) ####
       tabPanel(
-        "OP_LEY148FinalEmitidas", 
+        lowercaseTitle("OP_LEY148FinalEmitidas"), 
         
         # Título del Tab
         titlePanel("Órdenes de protección finales emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito"),
@@ -1182,7 +1188,7 @@ ui <- fluidPage(
       
       #### tab con datos de solicitudes de órdenes de protección finales emitidas (OP_LEY148Genero) ####
       tabPanel(
-        "OP_LEY148Genero", 
+        lowercaseTitle("OP_LEY148Genero"), 
         
         # Título del Tab
         titlePanel("Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por sexo de la parte
@@ -1232,7 +1238,7 @@ ui <- fluidPage(
       
       #### tab con datos de Movimiento de Casos Criminales de Violencia Doméstica (tribCasosCrim) ####
       tabPanel(
-        "tribCasosCrim", 
+        lowercaseTitle("tribCasosCrim"), 
         
         # Título del Tab
         titlePanel("Movimiento de Casos Criminales de Violencia Doméstica en el Tribunal de Primera Instancia según la Ley Núm. 54-1989"),
@@ -1287,17 +1293,28 @@ ui <- fluidPage(
   
     #### Tab Acerca del Dashboard ####
     tabPanel(
-      "Acerca del Dashboard",
+      lowercaseTitle("Acerca del Dashboard"),
       icon = icon("info-circle"),
       tabsetPanel(
         
-        # tab de dfmalt
-        tabPanel("Transfondo_del_Proyecto"),
-        tabPanel("Fuentes"), 
-        tabPanel("Autores"),
-        
+        # tab del transfondo del proyecto
         tabPanel(
-          "Contacto",
+          lowercaseTitle("Transfondo del Proyecto")
+          ),
+        
+        # tab de las fuentes usadas en el proyecto
+        tabPanel(
+          lowercaseTitle("Fuentes")
+          ), 
+        
+        # tab de los autores del proyecto
+        tabPanel(
+          lowercaseTitle("Autores"),
+          ),
+        
+        # tab de la información de contacto del Proyecto
+        tabPanel(
+          lowercaseTitle("Contacto"),
           mainPanel(
             fluidRow(
               

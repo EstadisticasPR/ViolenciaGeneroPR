@@ -34,7 +34,7 @@ server <- function(input, output, session) {
   # Grafico de barras de homiEdad
   output$barPlot_snmv <- renderPlotly({
     p <- renderHistogram(homiEdad_filt, "año", "casos", "edad",
-                       paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
+                       paste("Homicidios de Mujeres por Grupo de Edad y Año", input$yearInput_snmv),
                        "Grupo de Edad", "Casos", colorFill = homiEdad_fill_edad)
     
     ggplotly(p, tooltip = c("x", "y", "fill"))  # Especificamos qué información mostrar en el tooltip
@@ -70,7 +70,7 @@ server <- function(input, output, session) {
   # Gráfico de barras de incidentes
   output$barPlot_snmv_inci <- renderPlotly({
     p <- renderBarPlot(inci_filt, x = "año", y = "casos", fill = "tipo",
-                       paste("Comparación de incidentes violentos a lo largo de los Años"),
+                       paste("Tendencia Anual de Tipo de Incidente Violento para Ambos Sexos"),
                        xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Incidente",
                        colorFill = inci_fill_sexo
                        )
@@ -126,7 +126,7 @@ server <- function(input, output, session) {
     #               title = paste("Distribución de Tipos de Maltrato en el Año", input$yearInput_fam),
     #               xlab = "Tipo de Maltrato", ylab = "Casos", fillLab = "Sexo")
     p <- renderBarPlot(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                       title = "Distribución de Tipos de Maltrato en el Año",
+                       title = "Cantidad de Menores Víctimas de Maltrato por Sexo y Tipo de Maltrato",
                        xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Maltrato", colorFill = dfMalt_fill_Maltrato)
     p <- p + facet_wrap(~Sexo, scales = "fixed")
     ggplotly(p, tooltip = c("x", "y", "fill"))
@@ -792,7 +792,7 @@ server <- function(input, output, session) {
   OP_148_SoliGrupEdad_fill_edad <- setColorFill(OP_148_SoliGrupEdad, "Edad")
   # Grafico de barras
   output$barPlot_OP_148_SoliGrupEdad <- renderPlotly({
-    p <- renderBarPlot(OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
+    p <- renderHistogram(OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
                        title = "Órdenes de protección solicitadas por Violencia Sexual, por región judicial y grupo de edad de la parte peticionaria",
                        xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
                        colorFill = OP_148_SoliGrupEdad_fill_edad)
