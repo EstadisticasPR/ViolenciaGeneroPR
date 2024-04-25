@@ -242,6 +242,21 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, c
   print(p)
 }
 
+renderHistogram <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1") {
+  p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    scale_fill_manual(values = colorFill) + 
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title = title, x = xlab, y = ylab, fill = fillLab)
+  
+  print(p)
+}
+
+
+
+
+
 
 
 

@@ -33,8 +33,8 @@ server <- function(input, output, session) {
   homiEdad_fill_edad <- setColorFill(homiEdad, "edad")
   # Grafico de barras de homiEdad
   output$barPlot_snmv <- renderPlotly({
-    p <- renderBarPlot(homiEdad_filt, "año", "casos", "edad",
-                       paste("Evolución de homicidios por Grupo de Edad según el Año", input$yearInput_snmv),
+    p <- renderHistogram(homiEdad_filt, "año", "casos", "edad",
+                       paste("Evolución de homicidios por Grupo de Edad en el Año", input$yearInput_snmv),
                        "Grupo de Edad", "Casos", colorFill = homiEdad_fill_edad)
     
     ggplotly(p, tooltip = c("x", "y", "fill"))  # Especificamos qué información mostrar en el tooltip
@@ -451,7 +451,7 @@ server <- function(input, output, session) {
   vEdad_fill_edad <- setColorFill(vEdad, "Edad")
   # Grafico de barras
   output$barPlot_poli_vEdad <- renderPlotly({
-    p <- renderBarPlot(vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
+    p <- renderHistogram(vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
                        paste("Incidentes de violencia doméstica por edad de la víctima"),
                        xlab = "Año", ylab = "Cantidad de Mujeres", fillLab = "Grupo de Edad",
                        colorFill = vEdad_fill_edad)
