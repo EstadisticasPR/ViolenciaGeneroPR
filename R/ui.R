@@ -45,7 +45,9 @@ ui <- fluidPage(
   
   # Titulo de la app
   navbarPage(
-    "",
+    
+    # elimina el espacio vacío del título
+    tags$style(HTML(".navbar-brand { display: none; } .navbar { min-height: 0; padding-top: 0; padding-bottom: 0; }")),
     
     #### Tab del Sistema de Notificación de Muertes Violentas ####
     tabPanel(
@@ -222,7 +224,7 @@ ui <- fluidPage(
       tabsetPanel(
         #### tab con datos de delitos de violencia doméstica (dfDeli) ####
         tabPanel(
-          lowercaseTitle("dfDeli"),
+          lowercaseTitle("Delitos Ley 54 por Jurisdicción"),
           # Título del Tab
           # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
           titlePanel("Delitos a la Ley 54, casos radicados por jurisdicción y articulo de la Ley de Violencia Domestica"),  # Cambiar por el título adecuado
@@ -237,7 +239,7 @@ ui <- fluidPage(
               
               # botón para seleccionar delito
               createDropdownCheckbox(
-                label = "Seleccione el/los Delitos(s):",
+                label = "Seleccione Artículo(s) de ley 54:",
                 choices = dfDeli$Delito,
                 selected = 2,
                 id = "just_dfDeli_delito"
@@ -272,24 +274,10 @@ ui <- fluidPage(
           )
         ),
         
-        #### tab con datos del mapa de Distritos Fiscales de Puerto Rico (mapaDeli) ####
-        tabPanel(
-          lowercaseTitle("mapaFisc"),
-          
-          # Título del Tab 
-          # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
-          titlePanel("Distritos Fiscales de Puerto Rico"),  # Cambiar por el título adecuado
-          
-          # Sección principal con los gráficos
-          mainPanel(
-            plotlyOutput("map_just_mapaFisc"),
-            #DTOutput("dataTable_just_mapaFisc")
-          )
-        ), 
         
         #### tab con datos del mapa delitos de violencia doméstica (mapaDeli) ####
         tabPanel(
-          lowercaseTitle("mapaDeli"),
+          lowercaseTitle("Mapa de Delitos Ley 54 por Jurisdicción"),
           
           # Título del Tab 
           # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
@@ -312,7 +300,7 @@ ui <- fluidPage(
               # ),
               
               # botón para seleccionar delito
-              selectInput("select_just_mapaDeli_delito", "Seleccione Delito:",
+              selectInput("select_just_mapaDeli_delito", "Seleccione Artículo a la ley 54:",
                           choices = levels(mapaDeli$Delito),
                           selected = 2),
               
@@ -338,6 +326,21 @@ ui <- fluidPage(
           )
         ), 
         
+        #### tab con datos del mapa de Distritos Fiscales de Puerto Rico (mapaDeli) ####
+        tabPanel(
+          lowercaseTitle("Metadatos y Definiciones"),
+          
+          # Título del Tab 
+          # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
+          titlePanel("Distritos Fiscales de Puerto Rico"),  # Cambiar por el título adecuado
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            plotlyOutput("map_just_mapaFisc"),
+            #DTOutput("dataTable_just_mapaFisc")
+          )
+        ), 
+        
         # Subtab con datos específicos para el segundo dfDeli de la agencia
         tabPanel(
           "convic"  # Cambiar por el nombre del segundo dfDeli
@@ -357,6 +360,8 @@ ui <- fluidPage(
       )
     ),
     
+        
+    
     #### Tab del Departamento del Trabajo y Recursos Humanos ####
     tabPanel(
       lowercaseTitle("Departamento del Trabajo y Recursos Humanos"),
@@ -364,9 +369,9 @@ ui <- fluidPage(
       tabsetPanel(
         #### tab con datos de participación laboral (dtParlab) ####
         tabPanel(
-          lowercaseTitle("parLab"), 
+          lowercaseTitle("Participación Laboral por Sexo"), 
           # Título del Tab
-          titlePanel("Tasa de participación laboral por género y año"),
+          titlePanel("Tasa de participación laboral por sexo"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Departamento del Trabajo y Recursos Humanos"), tags$br(),
@@ -411,9 +416,9 @@ ui <- fluidPage(
         
         #### tab con datos de Adminsitración de Vivienda Públicas(dfAvp) ####
         tabPanel(
-          lowercaseTitle("dfAvp"), 
+          lowercaseTitle("Viviendas Públicas Solicitadas y Aceptadas"), 
           # Título del Tab
-          titlePanel("Total de solicitudes de vivienda pública con preferencias por violencia doméstica, Puerto Rico desde 2017 a 2023"),
+          titlePanel("Total de solicitudes de vivienda pública con preferencias por violencia doméstica"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Administración de Vivienda Pública"), tags$br(),
@@ -424,7 +429,7 @@ ui <- fluidPage(
             sidebarPanel(
               # botón para seleccionar la región
               createDropdownCheckbox(
-                label = "Seleccione Region:",
+                label = "Seleccione Región de Vivienda:",
                 choices = dfAvp$región,
                 selected = dfAvp$región,
                 id = "avp_dfAvp_región"
@@ -447,26 +452,13 @@ ui <- fluidPage(
           ),
         ),
         
-        #### tab para el mapa de Adminsitración de Vivienda Públicas (dfAvp) ####
-        tabPanel(
-          lowercaseTitle("mapaRegiones"),
-          
-          # Título del Tab 
-          titlePanel("Regiones de la Adminsitración de Vivienda Públicas"),
-          
-          # Sección principal con los gráficos
-          mainPanel(
-            plotlyOutput("map_avp_mapaRegi")
-            #DTOutput("dataTable_avp_mapaRegi")
-          )
-        ), 
         
         #### tab para el mapa de Adminsitración de Vivienda Públicas (dfAvp) ####
         tabPanel(
-          lowercaseTitle("mapaAvp"),
+          lowercaseTitle("Mapa de Viviendas Públicas Solicitadas y Aceptadas"),
           
           # Título del Tab
-          titlePanel("Total de solicitudes de vivienda pública con preferencias por violencia doméstica, Puerto Rico desde 2017 a 2023"),
+          titlePanel("Total de solicitudes de vivienda pública con preferencias por violencia doméstica"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Administración de Vivienda Pública"), tags$br(),
@@ -475,7 +467,6 @@ ui <- fluidPage(
           # Menu sidebar con widgets
           sidebarLayout(
             sidebarPanel(
-              
               
               # botón para seleccionar el año
               selectInput("select_avp_mapaAvp_año", "Seleccione Año:",
@@ -498,6 +489,21 @@ ui <- fluidPage(
             )
           )
         ), 
+        
+        #### tab para el mapa de Adminsitración de Vivienda Públicas (dfAvp) ####
+        tabPanel(
+          lowercaseTitle("Metadatos y Definiciones"),
+          
+          # Título del Tab 
+          titlePanel("Regiones de la Adminsitración de Vivienda Públicas"),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            plotlyOutput("map_avp_mapaRegi")
+            #DTOutput("dataTable_avp_mapaRegi")
+          )
+        )
+        
       )
     ),
     
@@ -509,9 +515,9 @@ ui <- fluidPage(
         
         #### tab con datos de mujeres desaparecidas (despDF) ####
         tabPanel(
-          lowercaseTitle("despDF"), 
+          lowercaseTitle("Mujeres Desaparecidas y Localizadas"), 
           # Título del Tab
-          titlePanel("Cantidad de mujeres desaparecidas, localizadas y sin localizar- adultas y menores (desde enero 2020 a marzo 2023)"),
+          titlePanel("Cantidad de Mujeres Desaparecidas y Localizadas - Adultas y Menores "),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
@@ -523,7 +529,7 @@ ui <- fluidPage(
               
               # botón para seleccionar la Categoría
               createDropdownCheckbox(
-                label = "Seleccione Categoría:",
+                label = "Seleccione el Estado de la Víctima:",
                 choices = despDF$Categoria,
                 selected = despDF$Categoria,
                 id = "poli_despDF_categoría"
@@ -548,10 +554,10 @@ ui <- fluidPage(
         
         #### tab para el barplot de incidentes de violencia doméstica por edad de la víctima (vEdad) ####
         tabPanel(
-          lowercaseTitle("vEdad"),
+          lowercaseTitle("Violencia Doméstica por Edad"),
           
           # Título del Tab
-          titlePanel("Incidentes de violencia doméstica por edad de la víctima (desde enero 2021 a abril 2023)"),
+          titlePanel("Incidentes de violencia doméstica por edad de la víctima"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
@@ -1378,7 +1384,7 @@ ui <- fluidPage(
     #     )
     #   )
     # )
-    
+  
   )
 )
 

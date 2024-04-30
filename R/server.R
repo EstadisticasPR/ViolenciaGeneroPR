@@ -183,9 +183,9 @@ server <- function(input, output, session) {
   #crear el grafico de barras
   output$barPlot_just <- renderPlotly({
     p <- renderBarPlot(dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
-                       title = "Distribución de Casos por Distrito Fiscal",
+                       title = "Casos de Delitos según Artículo de la Ley 54 por Jurisdicción Fiscal",
                        xlab = "Año", ylab = "Número de Casos",
-                       fillLab = "Delito Cometido", colorFill = dfDeli_fill_Delito)
+                       fillLab = "Artículo de ley 54", colorFill = dfDeli_fill_Delito)
     p <- p + facet_wrap(~`FISCALIA DISTRITO`)
     ggplotly(p, tooltip = c("x", "y", "fill"))
   })
@@ -244,7 +244,7 @@ server <- function(input, output, session) {
   output$map_just_mapaDeli <- renderPlotly({
     p <- renderMap(
       data = mapaDeli_filt, fill = Casos,
-      title = paste0("Distribución de Delitos por ", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año),
+      title = paste0("Casos de Delitos según el Artículo de ", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año),
       group = GROUP,
       fill_lab = "Delito Cometido",
       light_color = "pink",
@@ -299,7 +299,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_trab_parLab <- renderPlotly({
     p <- renderBarPlot(parLab_filt, x = "Año", y = "Tasa", fill = "Sexo",
-                       paste("Tasa de participación laboral según el año natural y el sexo"),
+                       paste("Tendencia de participación laboral según el sexo"),
                        xlab = "Año", ylab = "Tasa de participación", fillLab = "Sexo", 
                        colorFill = parLab_fill_sexo)
 
@@ -342,7 +342,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_avp_dfAvp <- renderPlotly({
     p <- renderBarPlot(dfAvp_filt, x = "año", y = "cantidad", fill = "status",
-                       paste("Total de solicitudes de vivienda pública con preferencias por violencia doméstica, Puerto Rico desde 2017 a 2023"),
+                       paste("Total de Viviendas Públicas Solicitadas y Aceptadas por Violencia Doméstica"),
                        xlab = "Año", ylab = "Cantidad de viviendas públicas", fillLab = "Estado de la Vivienda",
                        colorFill = dfAvp_fill_status)
 
@@ -409,7 +409,7 @@ server <- function(input, output, session) {
   output$barPlot_poli_despDF <- renderPlotly({
     p <- renderBarPlot(despDF_filt, x = "Año", y = "Casos", fill = "Categoria",
                        paste("Cantidad de mujeres desaparecidas, localizadas y sin localizar"),
-                       xlab = "Año", ylab = "Cantidad de Mujeres", fillLab = "Estado de la Mujer",
+                       xlab = "Año", ylab = "Cantidad de Víctimas", fillLab = "Estado de la Víctima",
                        colorFill = despDF_fill_categoria)
     
     ggplotly(p, 
