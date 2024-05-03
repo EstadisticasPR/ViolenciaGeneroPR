@@ -550,7 +550,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_opm_opmCasos <- renderPlotly({
     p <- renderBarPlot(opmCasos_filt, x = "year", y = "cantidad", fill = "tipo",
-                       paste("Tendencias Mensuales de Violencia Doméstica por Año"),
+                       paste("Población atendida según razón para consulta"),
                        xlab = "Año", ylab = "Cantidad de Asesinatos", fillLab = "Tipo de Violencia",
                        colorFill = opm_fill_tipo)
     
@@ -624,8 +624,8 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_opm_opmMedio <- renderPlotly({
     p <- renderBarPlot(opmMedio_filt, x = "año", y = "`personas atendidas`", fill = "`Medio de orientación`",
-                       title = "Orientaciones según el Medio",
-                       xlab = "Año", ylab = "Cantidad de Personas Orientadas", fillLab = "`Medio de Orientación`",
+                       title = "Orientaciones según el Medio de Comunicación",
+                       xlab = "Año", ylab = "Cantidad de Personas Orientadas", fillLab = "Medio de Orientación",
                        colorFill = opmMedio_fill_medio)
     
     ggplotly(p, 
@@ -662,7 +662,7 @@ server <- function(input, output, session) {
   output$barPlot_opm_opmServiciosMes <- renderPlotly({
     p <- renderBarPlot(opmServiciosMes_filt, x = "year", y = "cantidad", fill = "tipo",
                        title = "Población atendida, servicios ofrecidos y seguimientos",
-                       xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "`Medio de Orientación`",
+                       xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Tipo de Servicio",
                        colorFill = opmServiciosMes_fill_tipo)
     
     ggplotly(p, 
@@ -707,7 +707,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_dcr_dcrCasosInv <- renderPlotly({
     p <- renderBarPlot(dcrCasosInv_filt, x = "year", y = "cantidad", fill = "tipo",
-                       title = "Casos en Supervisión",
+                       title = "Casos de Supervisión de Ley 54 en Programas Alternos de Comunidad",
                        xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Estado de la Investigación",
                        colorFill = dcrCasosInv_fill_tipo)
     
@@ -748,7 +748,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_dcr_dcrSentenciadas <- renderPlotly({
     p <- renderBarPlot(dcrSentenciadas_filt, x = "year", y = "cantidad", fill = "tipo",
-                       title = "Personas sentenciadas por incurrir en delitos de violencia doméstica",
+                       title = "Personas Sentenciadas en Programa de Supervisión Electrónica por Delitos de Violencia Doméstica",
                        xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", fillLab = "Estado del Caso",
                        colorFill = dcrSentenciadas_fill_tipo)
     

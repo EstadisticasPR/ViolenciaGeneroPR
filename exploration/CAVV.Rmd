@@ -1,0 +1,63 @@
+---
+title: 'Visualizaciones Preliminares: CAVV'
+author: "Félix A Báez Santiago"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Imports
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(readxl)
+library(zoo)
+library(kableExtra)
+# función para encontrar el filepath automáticamente 
+library(here)
+
+
+cavv <- here("data", "Prevencion_de_violencia_de_genero_CAVV", "/")
+cavv
+```
+
+```{r}
+safekitsDF <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
+           sheet = "Data") %>%
+  mutate(
+    `Total de Kits` = `Total con querella` + `Total sin querella`
+  ) %>%
+  pivot_longer(
+    !Año,
+    names_to = "Kits",
+    values_to = "Total"
+  ) %>%
+  mutate(
+    Kits = factor(Kits, 
+                  levels = c(
+                    "Total con querella", "Total sin querella", "Total de Kits"
+                  ))
+  )
+```
+```{r}
+renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
+                          barWidth = 1, xGap = 0.1) {
+  p <- ggplot(data, aes_string(x = x, y = y, fill = fill)) +
+    geom_bar(stat = "identity", position = position_dodge2(width = barWidth, padding = xGap)) +
+    scale_fill_manual(values = colorFill) +
+    scale_y_continuous(labels = scales::comma_format(big.mark = ",", decimal.mark = ".")) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title = title, x = xlab, y = ylab, fill = fillLab)
+
+  print(p)
+}
+
+# Colores de las edades
+safekitsDF_fill_Kits <- setColorFill(safekitsDF, "Kits")
+renderBarPlot(safekitsDF, x = "Año", y = "Total", fill = "Kits", title = "Tendencia Anual del Equipo de Recolecta de Evidencia en Casos de Violencia Sexual", xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Estado de Querella", colorFill = safekitsDF_fill_Kits)
+```
+
+

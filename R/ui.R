@@ -655,7 +655,7 @@ ui <- fluidPage(
         
         #### tab con datos de violencia domestica (opmFemiVD) ####
         tabPanel(
-          lowercaseTitle("opmFemiVD"), 
+          lowercaseTitle("Feminicidios por Violencia Doméstica"), 
           # Título del Tab
           titlePanel("Feminicidios por violencia doméstica, desde 1990 a 2021"),
           
@@ -686,9 +686,9 @@ ui <- fluidPage(
         
         #### tab con datos de violencia domestica (opmCasos) ####
         tabPanel(
-          lowercaseTitle("opmCasos"), 
+          lowercaseTitle("Casos Según Razón para Consulta"), 
           # Título del Tab
-          titlePanel("Feminicidios por violencia doméstica, desde 1990 a 2021"),
+          titlePanel("Población atendida según razón para consulta"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
@@ -708,7 +708,7 @@ ui <- fluidPage(
               customSeparator(),
               # botón para seleccionar el tipo de violencia
               createDropdownCheckbox(
-                label = "Seleccione tipo de Violencia:",
+                label = "Seleccione Razón para Consulta:",
                 choices = opmCasos$tipo,
                 selected = opmCasos$tipo,
                 id = "opm_opmCasos_tipo"
@@ -725,9 +725,9 @@ ui <- fluidPage(
         
         #### tab con datos del género de las víctimas (opmVic) ####
         tabPanel(
-          lowercaseTitle("opmVic"), 
+          lowercaseTitle("Género de las Víctimas Atendidas"), 
           # Título del Tab
-          titlePanel("Identidad de género de las víctimas (a través de CRIAS). Años 2020 a *2023"),
+          titlePanel("Identidad de género de las víctimas atendidas"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
@@ -747,7 +747,7 @@ ui <- fluidPage(
               customSeparator(),
               # botón para seleccionar el género de las victimas
               createDropdownCheckbox(
-                label = "Seleccione el Género(s):",
+                label = "Seleccione Género(s):",
                 choices = opmVic$género,
                 selected = opmVic$género,
                 id = "opm_opmVic_género"
@@ -764,9 +764,9 @@ ui <- fluidPage(
         
         #### tab con datos de orientaciones medio de comunicación (opmMedio) ####
         tabPanel(
-          lowercaseTitle("opmMedio"), 
+          lowercaseTitle("Medio de Orientación a las Víctimas"), 
           # Título del Tab
-          titlePanel("Orientaciones según el Medio (a través de CRIAS). Años 2020 a *2023."),
+          titlePanel("Orientaciones según el Medio de Comunicación"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
@@ -803,9 +803,9 @@ ui <- fluidPage(
         
         #### tab con datos de los servicios ofrecidos por mes (opmServiciosMes) ####
         tabPanel(
-          lowercaseTitle("opmServiciosMes"), 
+          lowercaseTitle("Servicios y Alcanze de la OPM"), 
           # Título del Tab
-          titlePanel("Población atendida, servicios ofrecidos y seguimientos por mes. Años 2020 a *2023."),
+          titlePanel("Población atendida, servicios ofrecidos y seguimientos"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
@@ -852,9 +852,9 @@ ui <- fluidPage(
       tabsetPanel(
         #### tab con datos del género de las víctimas (dcrCasosInv) ####
         tabPanel(
-        lowercaseTitle("dcrCasosInv"), 
+        lowercaseTitle("Supervisión Ley 54: Programas Comunitarios"), 
         # Título del Tab
-        titlePanel("Casos en Supervisión de Ley 54 en Programas Alternos al Confinamiento: Programas de Comunidad(desde enero 2021 hasta febrero 2023)"),
+        titlePanel("Casos en Supervisión de Ley 54 en Programas Alternos al Confinamiento: Programas de Comunidad"),
       
         # Fuente de Datos, Actualización
         tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
@@ -899,9 +899,9 @@ ui <- fluidPage(
     
     #### tab con datos personas sentenciadas al Programa de Supervisión Electrónica (dcrSentenciadas) ####
     tabPanel(
-      lowercaseTitle("dcrSentenciadas"),
+      lowercaseTitle("Sentencias por Violencia Doméstica"),
       # Título del Tab
-      titlePanel("Personas sentenciadas integradas al Programa de Supervisión Electrónica por incurrir en delitos de violencia doméstica (desde enero 2020 hasta febrero 2023)"),
+      titlePanel("Personas Sentenciadas en Programa de Supervisión Electrónica por Delitos de Violencia Doméstica"),
 
       # Fuente de Datos, Actualización
       tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
@@ -921,7 +921,7 @@ ui <- fluidPage(
           customSeparator(),
           # botón para seleccionar el tipo de investigación
           createDropdownCheckbox(
-            label = "Seleccione el tipo de Investigación:",
+            label = "Seleccione el estado de Caso:",
             choices = dcrSentenciadas$tipo,
             selected = dcrSentenciadas$tipo,
             id = "dcr_dcrSentenciadas_tipo"
@@ -1294,7 +1294,44 @@ ui <- fluidPage(
     )
   ),
     
+  tabPanel(
+    lowercaseTitle("Centro Ayuda a Víctimas de Violación"),
+    icon = icon("building-circle-exclamation"),
+    tabsetPanel(
       
+      tabPanel(
+        lowercaseTitle("cavv"), 
+        # Título del Tab
+        titlePanel("Tendencia Anual del Equipo de Recolecta de Evidencia en Casos de Violencia Sexual"),
+        
+        # Fuente de Datos, Actualización
+        tags$span("Fuente: NEEDED"), tags$br(),
+        tags$span("Actualizado: NEEDED"), tags$br(),
+        
+        # Menu sidebar con widgets
+        sidebarLayout(
+          sidebarPanel(
+            
+            # botón para seleccionar el año
+            createDropdownCheckbox(
+              label = "Seleccione Año(s):",
+              choices = safekitsDF$Año,
+              selected = safekitsDF$Año,
+              id = "cavv_safekitsDF_Año"
+            )
+            
+            
+          ),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            plotlyOutput("barPlot_safekitsDF"),
+            DTOutput("dataTable_safekitsDF")
+          )
+        )
+      )
+    )    
+  ),
       
   
     #### Tab Acerca del Dashboard ####
