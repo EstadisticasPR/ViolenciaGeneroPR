@@ -813,6 +813,28 @@ tribCasosCrim <- full_join(
   )
 
 
+
+#########################################
+#### Procesamiento de datos del CAVV ####
+#########################################
+cavv <- here("data", "Prevencion_de_violencia_de_genero_CAVV", "/")
+#### safekitsDF ####
+safekitsDF <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
+                         sheet = "Data") %>%
+  mutate(
+    `Total de Kits` = `Total con querella` + `Total sin querella`
+  ) %>%
+  pivot_longer(
+    !Año,
+    names_to = "Kits",
+    values_to = "Total"
+  ) %>%
+  mutate(
+    Kits = factor(Kits, 
+                  levels = c(
+                    "Total con querella", "Total sin querella", "Total de Kits"
+                  ))
+  )
 ########################################
 ##### Actualizaciones de los Datos #####
 ########################################
