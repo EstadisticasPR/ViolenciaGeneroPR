@@ -1293,14 +1293,14 @@ ui <- fluidPage(
   
     )
   ),
-    
+  #### Tab del Centro de Ayuda a Víctimas de Violación ####
   tabPanel(
     lowercaseTitle("Centro Ayuda a Víctimas de Violación"),
     icon = icon("building-circle-exclamation"),
     tabsetPanel(
       
       tabPanel(
-        lowercaseTitle("cavv"), 
+        lowercaseTitle("Tendencia Anual del Equipo Recolecta de Violencia Sexual"), 
         # Título del Tab
         titlePanel("Tendencia Anual del Equipo de Recolecta de Evidencia en Casos de Violencia Sexual"),
         
@@ -1318,9 +1318,15 @@ ui <- fluidPage(
               choices = safekitsDF$Año,
               selected = safekitsDF$Año,
               id = "cavv_safekitsDF_Año"
+            ),
+            customSeparator(),
+            # botón para seleccionar el estado de querella
+            createDropdownCheckbox(
+              label = "Seleccione Estado de Querella:",
+              choices = safekitsDF$Kits,
+              selected = safekitsDF$Kits,
+              id = "cavv_safekitsDF_Kits"
             )
-            
-            
           ),
           
           # Sección principal con los gráficos

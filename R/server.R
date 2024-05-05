@@ -1069,4 +1069,44 @@ server <- function(input, output, session) {
   output$dataTable_tribCasosCrim <- renderDT({
     renderDataTable(tribCasosCrim_filt())
   })
+  
+  ########## Tab del Centro de Ayuda a Víctimas de Violación ##########
+  #### (safekitsDF) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año y el estado de la querella
+  safekitsDF_filt <- reactive({
+    filter(safekitsDF,
+           Año %in% input$checkGroup_cavv_safekitsDF_Año,
+           Kits %in% input$checkGroup_cavv_safekitsDF_Kits
+    )
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el año
+  observeEvent(input$deselectAll_cavv_safekitsDF_Año, {
+    updateCheckboxGroup(session, "checkGroup_cavv_safekitsDF_Año", input, safekitsDF$Año)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el estado de querella
+  observeEvent(input$deselectAll_cavv_safekitsDF_Kits, {
+    updateCheckboxGroup(session, "checkGroup_cavv_safekitsDF_Kits", input, safekitsDF$Kits)
+  })
+  
+  # Colores de los estados de Querella
+  safekitsDF_fill_Kits <- setColorFill(safekitsDF, "Kits")
+  
+  # Grafico de barras
+  output$barPlot_safekitsDF <- renderPlotly({
+    p <- renderBarPlot(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits", 
+                       title = "Tendencia Anual del Equipo de Recolecta de Evidencia en Casos de Violencia Sexual", 
+                       xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Estado de Querella", 
+                       colorFill = safekitsDF_fill_Kits)
+    ggplotly(p, 
+             tooltip = c("fill", "x", "y"))
+  })
+  
+  
+  # Data Table 
+  output$dataTable_safekitsDF <- renderDT({
+    renderDataTable(safekitsDF_filt())
+  })
 }

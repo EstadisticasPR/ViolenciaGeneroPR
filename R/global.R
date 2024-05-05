@@ -833,7 +833,8 @@ safekitsDF <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
     Kits = factor(Kits, 
                   levels = c(
                     "Total con querella", "Total sin querella", "Total de Kits"
-                  ))
+                  )),
+    Año = factor(Año)
   )
 ########################################
 ##### Actualizaciones de los Datos #####
