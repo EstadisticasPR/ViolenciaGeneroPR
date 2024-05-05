@@ -72,20 +72,42 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
 #' @examples
 #' embedImage("logo_IEPR", "www/iepr_logo.png", "https://estadisticas.pr/", "estadisticas.pr")
 #' embedImage("logo_PARE", "www/logo_PARE.png", "https://parelaviolencia.pr.gov/", "PARE.gov")
-embedImage <- function(ID, img_src, link_href, link_alt) {
+# embedImage <- function(ID, size = "20",img_src, link_href, link_alt) {
+#   tags$li(
+#     style = 'display: inline-block; margin-right: 20px; vertical-align: middle;',
+#     div(
+#       id = ID,
+#       tags$a(
+#         tags$figure(
+#           img(src = img_src, height = 60, alt = link_alt, deleteFile = FALSE)
+#         ),
+#         href = link_href
+#       )
+#     )
+#   )
+# }
+embedImage <- function(ID, img_src, link_href, link_alt, size = "60") {
   tags$li(
     style = 'display: inline-block; margin-right: 20px; vertical-align: middle;',
     div(
       id = ID,
       tags$a(
         tags$figure(
-          img(src = img_src, height = 60, alt = link_alt, deleteFile = FALSE)
+          img(src = img_src, height = size, alt = link_alt, deleteFile = FALSE)
         ),
         href = link_href
       )
     )
   )
 }
+
+# Función para especificar el tamaño de los titulos de secciones
+sectionTitle <- function(title, font_size = "20px") {
+  HTML(paste("<b style='font-size:", font_size, ";'>", title, "</b>", sep = ""))
+}
+
+
+
 
 # Función para crear separador personalizado
 customSeparator <- function() {
