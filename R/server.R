@@ -793,7 +793,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_OP_148_SoliGrupEdad <- renderPlotly({
     p <- renderHistogram(OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
-                       title = "Órdenes de protección solicitadas por Violencia Sexual, por región judicial y grupo de edad de la parte peticionaria",
+                       title = "Solicitudes de órdenes de protección por Ley 148 según Región Judicial y edad de la parte solicitante",
                        xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
                        colorFill = OP_148_SoliGrupEdad_fill_edad)
     
@@ -837,7 +837,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_OP_Ley148_ex_parteEmitidas <- renderPlotly({
     p <- renderBarPlot(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                       title = "Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito",
+                       title = "Órdenes de Protección Ex Parte Emitidias bajo Ley 148 según Región Judicial y Delito Cometido",
                        xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                        colorFill = OP_Ley148_ex_parteEmitidas_fill_delito)
     

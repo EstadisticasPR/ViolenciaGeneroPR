@@ -142,10 +142,19 @@ ui <- fluidPage(
           "Tasas_snmv"
         ), 
         
-        # # tab con Metadatos y Definiciones
-        # tabPanel(
-        #   "Metadatos y Definiciones"
-        # ),
+        #### tab de Definiciones y Metadatos ####
+        tabPanel(
+          lowercaseTitle("Definiciones y Metadatos"),
+                    br(),
+                    tags$ul(
+                      tags$li("Año : Año fiscal que comienza en mes de julio. "),
+                      tags$li("Estudio : recopilar, explorar y presentar los datos"),
+                      tags$li("Muestra : conjunto de datos e información que podés recolectar u obtener, por medio de la estadística, sobre una población."),
+                      tags$li("Pérdidas por eventos : Resultado negativo que se ha producido durante un período."),
+                      tags$li("Recurso adiccionales : Pregunta misceláneas. ")
+                      
+                    )
+        ),
         
         # ### xiomy
         # tabPanel(
@@ -326,25 +335,96 @@ ui <- fluidPage(
           )
         ), 
         
-        #### tab con datos del mapa de Distritos Fiscales de Puerto Rico (mapaDeli) ####
-        tabPanel(
-          lowercaseTitle("Metadatos y Definiciones"),
-          
-          # Título del Tab 
-          # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
-          titlePanel("Distritos Fiscales de Puerto Rico"),  # Cambiar por el título adecuado
-          
-          # Sección principal con los gráficos
-          mainPanel(
-            plotlyOutput("map_just_mapaFisc"),
-            #DTOutput("dataTable_just_mapaFisc")
-          )
-        ), 
         
         # Subtab con datos específicos para el segundo dfDeli de la agencia
         tabPanel(
           "convic"  # Cambiar por el nombre del segundo dfDeli
           # ... Estructura similar a la anterior para el segundo dfDeli
+        ),
+        
+        #### tab de Definiciones y Metadatos ####
+        tabPanel(
+          lowercaseTitle("Definiciones y Metadatos"),
+          br(),
+          tags$ul(sectionTitle("Artículos de la Ley 54:", "20px")),
+          tags$ul(
+            tags$li(HTML("<b>Incumplimiento de órdenes de protección (Artículo 2.8):</b> Cualquier violación a sabiendas de una orden de protección expedida.")),
+            tags$li(HTML("<b>Maltrato (Artículo 3.1):</b> Toda persona que empleare fuerza física o violencia psicológica,
+intimidación o persecución en la persona de su cónyuge, ex cónyuge, o la persona con
+quien cohabita o haya cohabitado, o la persona con quien sostuviere o haya sostenido una
+relación consensual, o la persona con quien haya procreado un hijo o hija,
+independientemente del sexo, estado civil, orientación sexual, identidad de género o
+estatus migratorio de cualquiera de las personas involucradas en la relación, para causarle
+daño físico a su persona, a los bienes apreciados por ésta, excepto aquéllos que
+pertenecen privativamente al ofensor, o a la persona de otro o para causarle grave daño
+emocional, incurrirá en delito grave de cuarto grado en su mitad superior.")),
+            tags$li(HTML("
+<b>Maltrato Agravado (Artículo 3.2):</b><br>
+Se impondrá pena correspondiente a delito grave de tercer grado en su mitad inferior cuando en la persona del cónyuge, ex cónyuge o de la persona con quien se cohabita o se haya cohabitado, o con quien se sostiene o haya sostenido una relación consensual, o con quien se haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, se incurriere en maltrato según tipificado en esta Ley, mediando una o más de las circunstancias siguientes:<br>
+<ul>
+  <li>a. Se penetrare en la morada de la persona o en el lugar donde esté albergada y se cometiere allí maltrato, en el caso de cónyuges o cohabitantes, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, cuando éstos estuvieren separados o mediare una orden de protección ordenando el desalojo de la residencia a una de las partes; o</li>
+  <li>b. cuando se infiriere grave daño corporal a la persona; o</li>
+  <li>c. cuando se cometiere con arma mortífera en circunstancias que no revistiesen la intención de matar o mutilar; o</li>
+  <li>d. cuando se cometiere en la presencia de menores de edad; o</li>
+  <li>e. cuando se cometiere luego de mediar una orden de protección o resolución contra la persona acusada expedida en auxilio de la víctima del maltrato; o</li>
+  <li>f. se indujere, incitare u obligare a la persona a drogarse con sustancias controladas, o cualquier otra sustancia o medio que altere la voluntad de la persona o a intoxicarse con bebidas embriagantes; o</li>
+  <li>g. Cuando se cometiere y simultáneamente se incurriere en maltrato de un menor según definido en la Ley Núm. 177 de 1 de agosto de 2003.</li>
+  <li>h. Si a la víctima se le obliga o induce mediante maltrato, violencia física o sicológica a participar o Involucrarse en una relación sexual no deseada con terceras personas.</li>
+  <li>i. Cuando se cometiere contra una mujer embarazada.</li>
+  <li>j. Cuando se cometiere contra una persona menor de dieciséis (16) años y la persona agresora sea de dieciocho (18) años o más.</li>
+</ul>
+"))
+            
+            ,
+            tags$li(HTML("<b>Maltrato Por Amenaza (Artículo 3.3):</b> Toda persona que amenaza con causarle daño a su cónyuge, ex cónyuge, a
+la persona con quien cohabita o con quien haya cohabitado o con quien sostiene o haya
+sostenido una relación consensual, o la persona con quien haya procreado un hijo o hija,
+independientemente del sexo, estado civil, orientación sexual, identidad de género o
+estatus migratorio de cualquiera de las personas involucradas en la relación, a los bienes
+apreciados por ésta, excepto aquéllos que pertenecen privativamente al ofensor, o a la
+persona de otro, incurrirá en delito grave de cuarto grado en su mitad superior.")),
+            tags$li(HTML("<b>Maltrato Mediante Restricción de la Libertad (Artículo 3.4):</b> Maltrato mediante restricción de la libertad. Toda persona que utilice
+violencia o intimidación en la persona de su cónyuge, ex cónyuge, de la persona con
+quien cohabita o haya cohabitado, o con quien sostiene o haya sostenido una relación
+consensual, o la persona con quien haya procreado un hijo o hija, independientemente del
+sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de
+cualquiera de las personas involucradas en la relación, o que utilice pretexto de que
+padece o de que una de las personas antes mencionadas padece de enfermedad o defecto
+mental, para restringir su libertad con el conocimiento de la víctima, incurrirá en delito
+grave de tercer grado en su mitad inferior.")),
+            
+            tags$li(HTML(
+              "<b>Agresión Sexual Conyugal (Artículo 3.5): </b> Se impondrá pena de reclusión, según se
+dispone más adelante, a toda persona que incurra en una relación sexual no consentida
+con su cónyuge o ex cónyuge, o con la persona con quien cohabite o haya cohabitado, o
+con quien sostuviere o haya sostenido una relación consensual, o la persona con quien
+haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación
+sexual, identidad de género o estatus migratorio de cualquiera de las personas
+involucradas en la relación, en cualesquiera de las circunstancias siguientes:
+<ul>          
+  <li>a. Si se ha compelido a incurrir en relación sexual mediante el empleo de fuerza,
+violencia, intimidación o amenaza de grave e inmediato daño corporal; o
+<li>b. Si se ha anulado o disminuido sustancialmente, sin su conocimiento o sin su
+consentimiento, su capacidad de consentir, a través de medios hipnóticos,
+narcóticos, deprimentes o estimulantes o sustancias o medios similares; o
+<li>c. Si por enfermedad o incapacidad mental, temporal o permanente, la víctima está
+incapacitada para comprender la naturaleza del acto en el momento de su
+realización;
+<li>d. Si se le obliga o induce mediante maltrato, violencia física o psicológica a
+participar o involucrarse en una relación sexual no deseada con terceras personas. ")),
+            
+          ),
+br(),
+tags$ul(sectionTitle("Fiscalías de Puerto Rico:")),
+embedImage("Fiscalias_PR", "www/Fiscalias_PR.png", 
+           "https://www.justicia.pr.gov/secretarias-y-oficinas/oficina-del-jefe-de-los-fiscales/listado-de-fiscalias/",
+           "https://www.justicia.pr.gov/", size = "250"
+           ),
+# Sección principal con los gráficos
+mainPanel(
+  plotlyOutput("map_just_mapaFisc"),
+  #DTOutput("dataTable_just_mapaFisc")
+)
         ),
         
         # Subtab con datos específicos para el tercer dfDeli de la agencia
@@ -492,7 +572,7 @@ ui <- fluidPage(
         
         #### tab para el mapa de Adminsitración de Vivienda Públicas (dfAvp) ####
         tabPanel(
-          lowercaseTitle("Metadatos y Definiciones"),
+          lowercaseTitle("Definiciones y Metadatos"),
           
           # Título del Tab 
           titlePanel("Regiones de la Adminsitración de Vivienda Públicas"),
@@ -644,6 +724,17 @@ ui <- fluidPage(
             )
           )
         ), 
+        
+        #### tab de Definiciones y Metadatos ####
+        tabPanel(
+          lowercaseTitle("Definiciones y Metadatos"),
+          br(),
+          tags$ul(sectionTitle("Regiones Policíacas:", "20px")),
+          embedImage("RegionesPoliciácas", "www/Regiones_Policiacas.png", 
+                     "https://www.policia.pr.gov/",
+                     "https://www.policia.pr.gov/", size = "250"
+          )
+        )
       )
     ),
     
@@ -954,9 +1045,9 @@ ui <- fluidPage(
       
       #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad) ####
       tabPanel(
-        lowercaseTitle("OP_148_SoliGrupEdad"), 
+        lowercaseTitle("Órdenes de Protección Solicitadas por Edad y Región"), 
         # Título del Tab
-        titlePanel("Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y grupo de edad de la parte peticionaria"),
+        titlePanel("Órdenes de Protección Solicitadas por Violencia Sexual bajo Ley 148, según Grupo de Edad y Región Judicial"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
@@ -976,7 +1067,7 @@ ui <- fluidPage(
             customSeparator(),
             # botón para seleccionar el grupo de edad
             createDropdownCheckbox(
-              label = "Seleccione el grupo de edad:",
+              label = "Seleccione grupo(s) de edad:",
               choices = OP_148_SoliGrupEdad$Edad,
               selected = OP_148_SoliGrupEdad$Edad,
               id = "trib_OP_148_SoliGrupEdad_Edad"
@@ -1001,9 +1092,9 @@ ui <- fluidPage(
       
       #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_Ley148_ex_parteEmitidas) ####
       tabPanel(
-        lowercaseTitle("OP_Ley148_ex_parteEmitidas"), 
+        lowercaseTitle("Órdenes de Protección Ex Parte Emitidas por Delito Cometido y Región"), 
         # Título del Tab
-        titlePanel("Número de Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito"),
+        titlePanel("Órdenes de Protección Ex Parte Emitidas bajo Ley 148 según Región Judicial y Delito Cometido"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
@@ -1049,10 +1140,10 @@ ui <- fluidPage(
       
       #### tab con datos de solicitudes de órdenes de protección archivadas (OP_LEY148Archivadas) ####
       tabPanel(
-        lowercaseTitle("OP_LEY148Archivadas"), 
+        lowercaseTitle("Órdenes de Protección Ex Parte Archivadas por Razón del Archivo y Región"), 
         
         # Título del Tab
-        titlePanel("Cantidad de solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual archivadas por Región Judicial"),
+        titlePanel("Órdenes de Protección Ex Parte bajo Ley 148 Archivadas por Razón del Archivo Región Judicial"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
@@ -1098,11 +1189,11 @@ ui <- fluidPage(
       
       #### tab con datos de solicitudes de órdenes de protección denegadas (OP_LEY148Denegadas) ####
       tabPanel(
-        lowercaseTitle("OP_LEY148Denegadas"), 
-        
+        lowercaseTitle("Órdenes de Protección Denegadas por Razón del Archivo y Región"), 
+        # Órdenes de Protección Ex Parte Archivadas por Razón del Archivo y Región
         # Título del Tab
-        titlePanel("Cantidad de solicitudes de órdenes de protección denegadas al amparo de la Ley 148 - Violencia Sexual denegadas por Región Judicial"),
-        
+        titlePanel("Ordenes de Protección por Violencia Sexual bajo Ley 148 Denegadas por Razón de Archivo y Región Judicial"),
+
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
         tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
@@ -1146,10 +1237,9 @@ ui <- fluidPage(
       
       #### tab con datos de solicitudes de órdenes de protección finales emitidas (OP_LEY148FinalEmitidas) ####
       tabPanel(
-        lowercaseTitle("OP_LEY148FinalEmitidas"), 
-        
+        lowercaseTitle("Órdenes de Protección Emitidas por Delito Cometido y Región"), 
         # Título del Tab
-        titlePanel("Órdenes de protección finales emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito"),
+        titlePanel("Órdenes de Protección Emitidas bajo Ley 148 por Delito Cometido y Región Judicial"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
@@ -1169,7 +1259,7 @@ ui <- fluidPage(
             customSeparator(),
             # botón para seleccionar la razón de archivado
             createDropdownCheckbox(
-              label = "Seleccione Delito(s):",
+              label = "Seleccione Delito(s) Cometido:",
               choices = OP_LEY148FinalEmitidas$Delito,
               selected = OP_LEY148FinalEmitidas$Delito,
               id = "trib_OP_LEY148FinalEmitidas_Delito"
@@ -1194,11 +1284,10 @@ ui <- fluidPage(
       
       #### tab con datos de solicitudes de órdenes de protección finales emitidas (OP_LEY148Genero) ####
       tabPanel(
-        lowercaseTitle("OP_LEY148Genero"), 
+        lowercaseTitle("Órdenes de Protección Emitidas por Parte y Sexo"), 
         
         # Título del Tab
-        titlePanel("Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por sexo de la parte
-"),
+        titlePanel("Órdenes de Protección Emitidas bajo Ley 148, por Sexo y la Parte"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
@@ -1244,10 +1333,10 @@ ui <- fluidPage(
       
       #### tab con datos de Movimiento de Casos Criminales de Violencia Doméstica (tribCasosCrim) ####
       tabPanel(
-        lowercaseTitle("tribCasosCrim"), 
+        lowercaseTitle("Movimiento de Casos en Tribunal de Primera Instancia por Ley 54"), 
         
         # Título del Tab
-        titlePanel("Movimiento de Casos Criminales de Violencia Doméstica en el Tribunal de Primera Instancia según la Ley Núm. 54-1989"),
+        titlePanel("Movimiento de Casos Criminales de Violencia Doméstica en el Tribunal de Primera Instancia según la Ley Núm. 54"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
