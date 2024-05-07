@@ -57,7 +57,7 @@ ui <- fluidPage(
         
         #### tab con datos de Homicidios por grupo de Edad ####
         tabPanel(
-          lowercaseTitle("Homicidios de Mujeres por Edad"),
+          lowercaseTitle("Homicidios de mujeres por edad"),
           # Título del Tab
           titlePanel("Homicidios de mujeres por grupo de edad según el año"),
           
@@ -97,10 +97,10 @@ ui <- fluidPage(
         
         #### tab con datos de Incidentes segun el año ####
         tabPanel(
-          lowercaseTitle("Tipos de Incidentes Violentos"),
+          lowercaseTitle("Tipos de incidentes violentos"),
           
           # Título del Tab
-          titlePanel("Incidentes Violentos: Tipo de homicidio según el año"),
+          titlePanel("Número de incidentes violentos por tipo para ambos sexos"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
@@ -176,9 +176,9 @@ ui <- fluidPage(
         #### tab con datos de menores víctimas de maltrato (dfMalt)  ####
         tabPanel(
           #HTML("<span style='text-transform: none; font-size: 14px;'>Maltrato de Menores por Sexo</span>"), 
-          lowercaseTitle("Maltrato de Menores por Sexo"),
+          lowercaseTitle("Maltrato de menores por sexo"),
           # Título del Tab
-          titlePanel("Cantidad de menores que fueron víctimas de maltrato, según sexo y tipo de maltrato"),
+          titlePanel("Cantidad de menores que fueron víctimas de maltrato por sexo y tipo de maltrato"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Departamento de la Familia"), tags$br(),
@@ -222,6 +222,12 @@ ui <- fluidPage(
             )
           ),
           tags$span("NOTA IMPORTANTE: Las cantidades podrían representar conteos duplicados del o la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son parte de uno o múltiples referidos. Este conteo es conocido por el Departamento de la Familia como el pareo de menores-reportado. Estos datos están en proceso de revisión por el Instituto de Estadísticas de Puerto Rico. *Nota: Datos parciales y preliminares del año 2022. Están disponibles hasta noviembre de 2022."),
+        ),
+        
+        #### tab de Definiciones y Metadatos ####
+        tabPanel(
+          lowercaseTitle("Definiciones y Metadatos"),
+          
         )
       )
     ),
@@ -233,10 +239,10 @@ ui <- fluidPage(
       tabsetPanel(
         #### tab con datos de delitos de violencia doméstica (dfDeli) ####
         tabPanel(
-          lowercaseTitle("Delitos Ley 54 por Jurisdicción"),
+          lowercaseTitle("Delitos Ley 54 por Distrito"),
           # Título del Tab
           # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
-          titlePanel("Delitos a la Ley 54, casos radicados por jurisdicción y articulo de la Ley de Violencia Domestica"),  # Cambiar por el título adecuado
+          titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"),  # Cambiar por el título adecuado
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Departamento de Justicia" ), tags$br(),
@@ -286,11 +292,11 @@ ui <- fluidPage(
         
         #### tab con datos del mapa delitos de violencia doméstica (mapaDeli) ####
         tabPanel(
-          lowercaseTitle("Mapa de Delitos Ley 54 por Jurisdicción"),
+          lowercaseTitle("Mapa de delitos Ley 54 por Distrito"),
           
           # Título del Tab 
           # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
-          titlePanel("Delitos a la Ley 54, casos radicados por jurisdicción y articulo de la Ley de Violencia Domestica"),  # Cambiar por el título adecuado
+          titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"),  # Cambiar por el título adecuado
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Departamento de Justicia" ), tags$br(),
@@ -309,7 +315,7 @@ ui <- fluidPage(
               # ),
               
               # botón para seleccionar delito
-              selectInput("select_just_mapaDeli_delito", "Seleccione Artículo a la ley 54:",
+              selectInput("select_just_mapaDeli_delito", "Seleccione Artículo de la Ley 54:",
                           choices = levels(mapaDeli$Delito),
                           selected = 2),
               
@@ -484,6 +490,12 @@ mainPanel(
               DTOutput("dataTable_trab_parLab")
             )
           ),
+        ),
+        
+        #### tab de Definiciones y Metadatos ####
+        tabPanel(
+          lowercaseTitle("Definiciones y Metadatos"),
+          
         )
       )
     ),
@@ -496,9 +508,9 @@ mainPanel(
         
         #### tab con datos de Adminsitración de Vivienda Públicas(dfAvp) ####
         tabPanel(
-          lowercaseTitle("Viviendas Públicas Solicitadas y Aceptadas"), 
+          lowercaseTitle("Viviendas Públicas Solicitadas y Asignadas"), 
           # Título del Tab
-          titlePanel("Total de solicitudes de vivienda pública con preferencias por violencia doméstica"),
+          titlePanel("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región de la Administración de Vivienda Pública"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Administración de Vivienda Pública"), tags$br(),
@@ -533,12 +545,12 @@ mainPanel(
         ),
         
         
-        #### tab para el mapa de Adminsitración de Vivienda Públicas (dfAvp) ####
+        #### tab para el mapa de Adminsitración de Vivienda Públicas (mapaAvp) ####
         tabPanel(
-          lowercaseTitle("Mapa de Viviendas Públicas Solicitadas y Aceptadas"),
+          lowercaseTitle("Mapa de Viviendas Públicas Solicitadas y Asignadas"),
           
           # Título del Tab
-          titlePanel("Total de solicitudes de vivienda pública con preferencias por violencia doméstica"),
+          titlePanel("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región de la Administración de Vivienda Pública"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Administración de Vivienda Pública"), tags$br(),
@@ -570,7 +582,7 @@ mainPanel(
           )
         ), 
         
-        #### tab para el mapa de Adminsitración de Vivienda Públicas (dfAvp) ####
+        #### tab para el Definiciones y Metadatos ####
         tabPanel(
           lowercaseTitle("Definiciones y Metadatos"),
           
@@ -595,9 +607,9 @@ mainPanel(
         
         #### tab con datos de mujeres desaparecidas (despDF) ####
         tabPanel(
-          lowercaseTitle("Mujeres Desaparecidas y Localizadas"), 
+          lowercaseTitle("Mujeres desaparecidas y localizadas"), 
           # Título del Tab
-          titlePanel("Cantidad de Mujeres Desaparecidas y Localizadas - Adultas y Menores "),
+          titlePanel("Cantidad de mujeres desaparecidas y localizadas - adultas y menores"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
@@ -609,7 +621,7 @@ mainPanel(
               
               # botón para seleccionar la Categoría
               createDropdownCheckbox(
-                label = "Seleccione el Estado de la Víctima:",
+                label = "Seleccione el estado de la víctima:",
                 choices = despDF$Categoria,
                 selected = despDF$Categoria,
                 id = "poli_despDF_categoría"
@@ -617,7 +629,7 @@ mainPanel(
               
               # botón para seleccionar el año
               createDropdownCheckbox(
-                label = "Seleccione Año(s):",
+                label = "Seleccione año(s):",
                 choices = despDF$Año,
                 selected = despDF$Año,
                 id = "poli_despDF_año"
@@ -779,7 +791,7 @@ mainPanel(
         tabPanel(
           lowercaseTitle("Casos Según Razón para Consulta"), 
           # Título del Tab
-          titlePanel("Población atendida según razón para consulta"),
+          titlePanel("Población atendida mediante el programa CRIAS según razón para consulta"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
@@ -818,7 +830,7 @@ mainPanel(
         tabPanel(
           lowercaseTitle("Género de las Víctimas Atendidas"), 
           # Título del Tab
-          titlePanel("Identidad de género de las víctimas atendidas"),
+          titlePanel("Identidad de género de víctimas asistidas por el programa CRIAS"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
@@ -857,7 +869,7 @@ mainPanel(
         tabPanel(
           lowercaseTitle("Medio de Orientación a las Víctimas"), 
           # Título del Tab
-          titlePanel("Orientaciones según el Medio de Comunicación"),
+          titlePanel("Orientaciones ofrecidas mediante el programa CRIAS"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
@@ -896,7 +908,7 @@ mainPanel(
         tabPanel(
           lowercaseTitle("Servicios y Alcanze de la OPM"), 
           # Título del Tab
-          titlePanel("Población atendida, servicios ofrecidos y seguimientos"),
+          titlePanel("Población atendida, servicios ofrecidos y seguimientos mediante el programa CRIAS"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
@@ -929,6 +941,12 @@ mainPanel(
               DTOutput("dataTable_opm_opmServiciosMes")
             )
           ),
+        ),
+        
+        #### tab de Definiciones y Metadatos ####
+        tabPanel(
+          lowercaseTitle("Definiciones y Metadatos"),
+          
         )
         
       ),
@@ -945,7 +963,7 @@ mainPanel(
         tabPanel(
         lowercaseTitle("Supervisión Ley 54: Programas Comunitarios"), 
         # Título del Tab
-        titlePanel("Casos en Supervisión de Ley 54 en Programas Alternos al Confinamiento: Programas de Comunidad"),
+        titlePanel("Casos en supervisión de ley 54 en programas alternos al confinamiento por estado de investigación: Programas de Comunidad"),
       
         # Fuente de Datos, Actualización
         tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
@@ -992,7 +1010,7 @@ mainPanel(
     tabPanel(
       lowercaseTitle("Sentencias por Violencia Doméstica"),
       # Título del Tab
-      titlePanel("Personas Sentenciadas en Programa de Supervisión Electrónica por Delitos de Violencia Doméstica"),
+      titlePanel("Personas sentenciadas en programa de supervisión electrónica por delitos de violencia doméstica por estado del caso"),
 
       # Fuente de Datos, Actualización
       tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
@@ -1033,6 +1051,11 @@ mainPanel(
           DTOutput("dataTable_dcr_dcrSentenciadas")
         )
       )
+    ),
+    #### tab de Definiciones y Metadatos ####
+    tabPanel(
+      lowercaseTitle("Definiciones y Metadatos"),
+      
     )
   )
     ),
@@ -1075,7 +1098,7 @@ mainPanel(
             customSeparator(),
             # botón para seleccionar el distrito fiscal
             createDropdownCheckbox(
-              label = "Seleccione el Distrito Fiscal:",
+              label = "Seleccione Región Judicial:",
               choices = OP_148_SoliGrupEdad$Región,
               selected = OP_148_SoliGrupEdad$Región,
               id = "trib_OP_148_SoliGrupEdad_Región"
@@ -1114,7 +1137,7 @@ mainPanel(
             customSeparator(),
             # botón para seleccionar el delito
             createDropdownCheckbox(
-              label = "Seleccione Delito(s):",
+              label = "Seleccione Delito(s) cometido:",
               choices = OP_Ley148_ex_parteEmitidas$Delito,
               selected = OP_Ley148_ex_parteEmitidas$Delito,
               id = "trib_OP_Ley148_ex_parteEmitidas_Delito"
@@ -1122,7 +1145,7 @@ mainPanel(
             customSeparator(),
             # botón para seleccionar la región fiscal
             createDropdownCheckbox(
-              label = "Seleccione Distrito(s) Fiscal:",
+              label = "Seleccione Región Judicial:",
               choices = OP_Ley148_ex_parteEmitidas$Región,
               selected = OP_Ley148_ex_parteEmitidas$Región,
               id = "trib_OP_Ley148_ex_parteEmitidas_Región"
@@ -1140,10 +1163,10 @@ mainPanel(
       
       #### tab con datos de solicitudes de órdenes de protección archivadas (OP_LEY148Archivadas) ####
       tabPanel(
-        lowercaseTitle("Órdenes de Protección Ex Parte Archivadas por Razón del Archivo y Región"), 
+        lowercaseTitle("Órdenes de protección ex parte archivadas por razón del archivo y región"), 
         
         # Título del Tab
-        titlePanel("Órdenes de Protección Ex Parte bajo Ley 148 Archivadas por Razón del Archivo Región Judicial"),
+        titlePanel("Órdenes de protección ex parte bajo Ley 148 archivadas por razón del Archivo y Región Judicial"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
@@ -1189,10 +1212,10 @@ mainPanel(
       
       #### tab con datos de solicitudes de órdenes de protección denegadas (OP_LEY148Denegadas) ####
       tabPanel(
-        lowercaseTitle("Órdenes de Protección Denegadas por Razón del Archivo y Región"), 
+        lowercaseTitle("Órdenes de protección denegadas por razón del archivo y región"), 
         # Órdenes de Protección Ex Parte Archivadas por Razón del Archivo y Región
         # Título del Tab
-        titlePanel("Ordenes de Protección por Violencia Sexual bajo Ley 148 Denegadas por Razón de Archivo y Región Judicial"),
+        titlePanel("Ordenes de protección denegadas por violencia sexual bajo Ley 148 por razón de archivo y Región Judicial"),
 
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
@@ -1204,7 +1227,7 @@ mainPanel(
             
             # botón para seleccionar el año fiscal
             createDropdownCheckbox(
-              label = "Seleccione Año(s) Fiscal:",
+              label = "Seleccione Año(s) fiscal:",
               choices = OP_LEY148Denegadas$AñoFiscal,
               selected = OP_LEY148Denegadas$AñoFiscal,
               id = "trib_OP_LEY148Denegadas_AñoFiscal"
@@ -1212,7 +1235,7 @@ mainPanel(
             customSeparator(),
             # botón para seleccionar la razón de archivado
             createDropdownCheckbox(
-              label = "Seleccione Razón(s):",
+              label = "Seleccione razón(s):",
               choices = OP_LEY148Denegadas$Razón,
               selected = OP_LEY148Denegadas$Razón,
               id = "trib_OP_LEY148Denegadas_Razón"
@@ -1220,7 +1243,7 @@ mainPanel(
             customSeparator(),
             # botón para seleccionar la región fiscal
             createDropdownCheckbox(
-              label = "Seleccione Distrito(s) Fiscal:",
+              label = "Seleccione región judicial:",
               choices = OP_LEY148Denegadas$Región,
               selected = OP_LEY148Denegadas$Región,
               id = "trib_OP_LEY148Denegadas_Región"
@@ -1239,7 +1262,7 @@ mainPanel(
       tabPanel(
         lowercaseTitle("Órdenes de Protección Emitidas por Delito Cometido y Región"), 
         # Título del Tab
-        titlePanel("Órdenes de Protección Emitidas bajo Ley 148 por Delito Cometido y Región Judicial"),
+        titlePanel("Órdenes de protección emitidas bajo ley 148 por delito cometido y Región Judicial"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
@@ -1267,7 +1290,7 @@ mainPanel(
             customSeparator(),
             # botón para seleccionar la región fiscal
             createDropdownCheckbox(
-              label = "Seleccione Distrito(s) Fiscal:",
+              label = "Seleccione Región Judicial:",
               choices = OP_LEY148FinalEmitidas$Región,
               selected = OP_LEY148FinalEmitidas$Región,
               id = "trib_OP_LEY148FinalEmitidas_Región"
@@ -1336,7 +1359,7 @@ mainPanel(
         lowercaseTitle("Movimiento de Casos en Tribunal de Primera Instancia por Ley 54"), 
         
         # Título del Tab
-        titlePanel("Movimiento de Casos Criminales de Violencia Doméstica en el Tribunal de Primera Instancia según la Ley Núm. 54"),
+        titlePanel("Movimiento de casos criminales de violencia doméstica en el tribunal de primera instancia según la ley Núm. 54 por delito cometido"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
@@ -1377,9 +1400,13 @@ mainPanel(
             DTOutput("dataTable_tribCasosCrim")
           )
         ),
+      ),
+      
+      #### tab de Definiciones y Metadatos ####
+      tabPanel(
+        lowercaseTitle("Definiciones y Metadatos"),
+        
       )
-  
-  
     )
   ),
   #### Tab del Centro de Ayuda a Víctimas de Violación ####
@@ -1391,11 +1418,11 @@ mainPanel(
       tabPanel(
         lowercaseTitle("Tendencia Anual del Equipo Recolecta de Violencia Sexual"), 
         # Título del Tab
-        titlePanel("Tendencia Anual del Equipo de Recolecta de Evidencia en Casos de Violencia Sexual"),
+        titlePanel("Tendencia anual del equipo de recolecta de evidencia en casos de violencia sexual por estado de querella"),
         
         # Fuente de Datos, Actualización
-        tags$span("Fuente: NEEDED"), tags$br(),
-        tags$span("Actualizado: NEEDED"), tags$br(),
+        tags$span("Fuente: Centro de Ayuda a Victimas de Violación, Departamento de Salud"), tags$br(),
+        tags$span("Actualizado:", actualizacion_caav), tags$br(),
         
         # Menu sidebar con widgets
         sidebarLayout(
@@ -1424,6 +1451,12 @@ mainPanel(
             DTOutput("dataTable_safekitsDF")
           )
         )
+      ),
+      
+      #### tab de Definiciones y Metadatos ####
+      tabPanel(
+        lowercaseTitle("Definiciones y Metadatos"),
+        
       )
     )    
   ),
@@ -1448,7 +1481,75 @@ mainPanel(
         # tab de los autores del proyecto
         tabPanel(
           lowercaseTitle("Autores"),
+          div(
+            authorTag(
+              nombre = 'Félix A. Báez Santiago',
+              email = 'felix.baez@estadisticas.pr',
+              puesto = 'Programador Estadístico',
+              grados = 'BS Ciencia de Datos, Iowa State University'
+            ),
+            
+            authorTag(
+              nombre = 'Dr. Orville M. Disdier Flores',
+              email = 'orville.disdier@estadisticas.pr',
+              puesto = 'Director Ejecutivo',
+              grados = c(
+                'Ed.D Liderazgo Educativo, Universidad del Turabo',
+                'MS Epidemiología, Universidad de Puerto Rico',
+                'BS Ciencias Naturales, Universidad de Puerto Rico'
+              )
+            ), 
+            authorTag(
+              nombre = 'Manuel Mangual Martínez',
+              email = 'manuel.mangual@estadisticas.pr',
+              puesto = 'Supervisor del Proyecto Prevención, Apoyo, Rescate y Educación de la Violencia de Género',
+              grados = c('MS Investigación y Evaluación de la Salud, Universidad de Puerto Rico',
+                        'BS Biología, Universidad de Puerto Rico')
+            ),
+            authorTag(
+              nombre = 'Frankie Rodríguez Rivera',
+              email = 'frankie.rodriguez@estadisticas.pr',
+              puesto = 'Analista de Datos',
+              grados = c('MS Administración de Agencias Públicas, Universidad del Turabo',
+                         'BS Trabajo Social, Universidad Interamericana')
+            ),
+            authorTag(
+              nombre = 'Mario Font Martín',
+              email = 'mario.font@estadisticas.pr',
+              puesto = 'Gerente de Proyectos Estadísticos',
+              grados = c('MS Planificación, Universidad de Puerto Rico',
+                         'BA Administración de Empresas, Universidad de Puerto Rico')
+            ),
+            
+            authorTag(
+              nombre = 'Mariluz Bezares Salinas',
+              email = 'mariluz.bezares@estadisticas.pr',
+              puesto = 'Gerente de Proyectos Estadísticos',
+              grados = c('MS Ciencias en Demografía, Universidad de Puerto Rico',
+                         'BA Ciencias Sociales - Geografía, Universidad de Puerto Rico')
+            ),
+            
+            authorTag(
+              nombre = 'Raúl Figueroa Rodríguez',
+              email = 'raul.figueroa@estadisticas.pr',
+              puesto = 'Gerente de Proyectos Estadísticos NVDRS',
+              grados = c('MS Demografía, Universidad de Puerto Rico',
+                         'BS Ciencias Naturales, Universidad de Puerto Rico')
+            ),
+            
+            authorTag(
+              nombre = 'Jacobo Orenstein Cardona',
+              email = 'jacobo.orenstein@estadisticas.pr',
+              puesto = 'Ayudante Ejecutivo',
+              grados = c(
+                'BA Filosofía, Centre Sèvres – Paris',
+                'BS Química, MIT',
+                'BA Historia, MIT'
+              )
+            ), 
+          )
           ),
+
         
         # tab de la información de contacto del Proyecto
         tabPanel(

@@ -883,3 +883,6 @@ actualizacion_tribunalesA <- "02/21/2023"
 
 # Fecha actualizacion Movimiento Casos
 actualizacion_tribunalesB <- "02/21/2023"
+
+# fecha actualización de los SAFE kits
+actualizacion_caav <- "04/25/2024"
