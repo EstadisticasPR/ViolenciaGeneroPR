@@ -66,3 +66,72 @@ tags$ul(
   sectionTitle("Artículos de la Ley 54:", "20px")
 )
 
+###########
+
+tabPanel(
+  lowercaseTitle("Definiciones y Metadatos"),
+  br(),
+  ### FRANKIE: para cada título de sección escríbelo adentro de lo siguiente: tags$ul(sectionTitle("título", "20px")),
+  tags$ul(sectionTitle("Artículos de la Ley 54:", "20px")),
+  tags$ul(
+    ########### FRANKIE cuando algo se escribe adentro de un tags$li(HTML()) eso crea un item aparte
+    ### FRANKIE: Cuando algo se pone entre <b> y </b> se renderiza en negritas
+    tags$li(HTML("<b>Incumplimiento de órdenes de protección (Artículo 2.8):</b> Cualquier violación a sabiendas de una orden de protección expedida.")),
+    tags$li(HTML("<b>Maltrato (Artículo 3.1):</b> Toda persona que empleare fuerza física ...")),
+    tags$li(HTML("<b>Maltrato Agravado (Artículo 3.2):</b><br>
+
+######## FRANKIE: aqui hay un <ul> y </ul>. Esto crea una lista de items donde los <li> vienen siendo cada bullet point individualmente
+<ul>
+  <li>a. bullet 1; o</li>
+  <li>b. bullet 2; o</li>
+  <li>c. bullet 3; o</li>
+</ul>
+"))
+    
+    ,
+
+    
+    tags$li(HTML(
+      "<b>Agresión Sexual Conyugal (Artículo 3.5): </b> DEFINICION :
+<ul>          
+  <li>a. bullet 1; 
+<li>b. bullet 2; 
+<li>c. bullet 3;")),
+    
+  ),
+  br(),
+  ### FRANKIE: para cada título de sección escríbelo adentro de lo siguiente: tags$ul(sectionTitle("título", "20px")),
+  tags$ul(sectionTitle("Fiscalías de Puerto Rico:")),
+  
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

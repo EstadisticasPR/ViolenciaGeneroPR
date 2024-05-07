@@ -64,7 +64,6 @@ ui <- fluidPage(
           # Fuente de Datos, Actualización
           tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
           tags$span(paste0("Actualizado: ", actualizacion_snmvB)),
-          tags$span("Nota: Los datos del año 2020 son preliminares"),
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -105,7 +104,6 @@ ui <- fluidPage(
           # Fuente de Datos, Actualización
           tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
           tags$span(paste0("Actualizado: ", actualizacion_snmvA)),
-          tags$span("Nota: Los datos del año 2020 son preliminares"),
           
           sidebarLayout(
             sidebarPanel(
