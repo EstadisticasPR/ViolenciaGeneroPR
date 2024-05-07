@@ -59,7 +59,8 @@ ui <- fluidPage(
         tabPanel(
           lowercaseTitle("Homicidios de mujeres por edad"),
           # Título del Tab
-          titlePanel("Homicidios de mujeres por grupo de edad según el año"),
+          titulo_homiEdad <- "Homicidios de mujeres por grupo de edad según el año",
+          titlePanel(titulo_homiEdad),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
@@ -147,11 +148,7 @@ ui <- fluidPage(
           lowercaseTitle("Definiciones y Metadatos"),
                     br(),
                     tags$ul(
-                      tags$li("Año : Año fiscal que comienza en mes de julio. "),
-                      tags$li("Estudio : recopilar, explorar y presentar los datos"),
-                      tags$li("Muestra : conjunto de datos e información que podés recolectar u obtener, por medio de la estadística, sobre una población."),
-                      tags$li("Pérdidas por eventos : Resultado negativo que se ha producido durante un período."),
-                      tags$li("Recurso adiccionales : Pregunta misceláneas. ")
+                      tags$li(HTML("<b>Violencia:</b> El uso intencional de la fuerza o el poder físico, de hecho, o como amenaza, contra uno mismo, otra persona o un grupo o comunidad, que cause o tenga gran probabilidad de causar lesiones, muerte, daños psicológicos, trastornos del desarrollo o privaciones.")),
                       
                     )
         ),
