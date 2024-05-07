@@ -66,6 +66,7 @@ tags$ul(
   sectionTitle("Artículos de la Ley 54:", "20px")
 )
 
+<<<<<<< HEAD
 ###########
 
 tabPanel(
@@ -135,3 +136,30 @@ tabPanel(
 
 
 
+=======
+authorTag <- function(nombre, email, puesto, bachillerato = NULL, maestria = NULL){
+  tags$html(
+    h2(nombre),
+    tags$b('Email'),
+    p(email),
+    tags$b('Puesto'),
+    p(puesto),
+    tags$b('Grados Académicos'),
+    p(maestria),
+    p(bachillerato),
+    tags$hr()
+  )
+}
+
+# Utilizar la función con los datos proporcionados
+autor_info <- authorTag(
+  nombre = 'Manuel Mangual Martínez',
+  email = 'manuel.mangual@estadisticas.pr',
+  puesto = 'Especialista en Community Health Research, Supervisor proyecto índice de agricultura',
+  maestria = 'MS Investigación y Evaluación de la Salud, Universidad de Puerto Rico',
+  bachillerato = 'BS Biología, Universidad de Puerto Rico'
+)
+
+# Imprimir la información generada
+print(autor_info)
+>>>>>>> fb615283673775f5d86d980f3e2d5110ddcd77b4

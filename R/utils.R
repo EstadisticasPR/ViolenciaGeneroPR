@@ -122,6 +122,20 @@ lowercaseTitle <- function(title) {
   HTML(paste0("<span style='text-transform: none; '>", title, "</span>", sep = ""))
 }
 
+# Función para crear sección de autores
+authorTag <- function(nombre, email, puesto, grados){
+  tags$html(
+    h2(nombre),
+    tags$b('Email'),
+    p(email),
+    tags$b('Puesto'),
+    p(puesto),
+    tags$b('Grados Académicos'),
+    lapply(grados, p),
+    tags$hr()
+  )
+}
+
 ##################################
 #### Helper Functions: Server #### 
 ##################################

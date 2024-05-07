@@ -42,7 +42,8 @@ myApp <- function() {
     "DT",
     "shinyWidgets",
     "sf",
-    "roxygen2"
+    "roxygen2",
+    "htmltools"
   )
   
   # Instalar los paquetes si no están instalados

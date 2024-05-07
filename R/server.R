@@ -34,8 +34,8 @@ server <- function(input, output, session) {
   # Grafico de barras de homiEdad
   output$barPlot_snmv <- renderPlotly({
     p <- renderHistogram(homiEdad_filt, "año", "casos", "edad",
-                       paste("Homicidios de Mujeres por Grupo de Edad y Año", input$yearInput_snmv),
-                       "Grupo de Edad", "Casos", colorFill = homiEdad_fill_edad)
+                       paste("Homicidios de mujeres por grupo de edad y año", input$yearInput_snmv),
+                       "Año", "Número de casos", fillLab = "Grupo de edad", colorFill = homiEdad_fill_edad)
     
     ggplotly(p, tooltip = c("x", "y", "fill"))  # Especificamos qué información mostrar en el tooltip
   })
@@ -70,8 +70,8 @@ server <- function(input, output, session) {
   # Gráfico de barras de incidentes
   output$barPlot_snmv_inci <- renderPlotly({
     p <- renderBarPlot(inci_filt, x = "año", y = "casos", fill = "tipo",
-                       paste("Tendencia Anual de Tipo de Incidente Violento para Ambos Sexos"),
-                       xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Incidente",
+                       paste("Número de incidentes violentos por tipo para ambos sexos"),
+                       xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de incidente",
                        colorFill = inci_fill_sexo
                        )
     
@@ -126,8 +126,8 @@ server <- function(input, output, session) {
     #               title = paste("Distribución de Tipos de Maltrato en el Año", input$yearInput_fam),
     #               xlab = "Tipo de Maltrato", ylab = "Casos", fillLab = "Sexo")
     p <- renderBarPlot(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                       title = "Cantidad de Menores Víctimas de Maltrato por Sexo y Tipo de Maltrato",
-                       xlab = "Año", ylab = "Número de Casos", fillLab = "Tipo de Maltrato", colorFill = dfMalt_fill_Maltrato)
+                       title = "Cantidad de menores víctimas por sexo y tipo de maltrato",
+                       xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de maltrato", colorFill = dfMalt_fill_Maltrato)
     p <- p + facet_wrap(~Sexo, scales = "fixed")
     ggplotly(p, tooltip = c("x", "y", "fill"))
   })
@@ -183,9 +183,9 @@ server <- function(input, output, session) {
   #crear el grafico de barras
   output$barPlot_just <- renderPlotly({
     p <- renderBarPlot(dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
-                       title = "Casos de Delitos según Artículo de la Ley 54 por Jurisdicción Fiscal",
-                       xlab = "Año", ylab = "Número de Casos",
-                       fillLab = "Artículo de ley 54", colorFill = dfDeli_fill_Delito)
+                       title = "Casos de delitos por Distrito Fiscal según Artículo de la Ley 54",
+                       xlab = "Año", ylab = "Número de casos",
+                       fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito)
     p <- p + facet_wrap(~`FISCALIA DISTRITO`)
     ggplotly(p, tooltip = c("x", "y", "fill"))
   })
@@ -244,9 +244,10 @@ server <- function(input, output, session) {
   output$map_just_mapaDeli <- renderPlotly({
     p <- renderMap(
       data = mapaDeli_filt, fill = Casos,
-      title = paste0("Casos de Delitos según el Artículo de ", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año),
+      # Casos de delitos por Distrito Fiscal según Artículo de la Ley 54
+      title = paste0("Casos de delitos por Distrito Fiscal según el Artículo de ", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año),
       group = GROUP,
-      fill_lab = "Delito Cometido",
+      fill_lab = "Número de casos",
       light_color = "pink",
       dark_color = "darkred"
     )
@@ -299,7 +300,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_trab_parLab <- renderPlotly({
     p <- renderBarPlot(parLab_filt, x = "Año", y = "Tasa", fill = "Sexo",
-                       paste("Tendencia de participación laboral según el sexo"),
+                       paste("Tasa de participación laboral según el sexo"),
                        xlab = "Año", ylab = "Tasa de participación", fillLab = "Sexo", 
                        colorFill = parLab_fill_sexo)
 
@@ -342,8 +343,8 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_avp_dfAvp <- renderPlotly({
     p <- renderBarPlot(dfAvp_filt, x = "año", y = "cantidad", fill = "status",
-                       paste("Total de Viviendas Públicas Solicitadas y Aceptadas por Violencia Doméstica"),
-                       xlab = "Año", ylab = "Cantidad de viviendas públicas", fillLab = "Estado de la Vivienda",
+                       paste("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región"),
+                       xlab = "Año", ylab = "Cantidad de viviendas públicas", fillLab = "Estado de la vivienda",
                        colorFill = dfAvp_fill_status)
 
     ggplotly(p + facet_wrap(~región), 
@@ -363,7 +364,7 @@ server <- function(input, output, session) {
   output$map_avp_mapaAvp <- renderPlotly({
     p <- renderMap(
       data = mapaAvp_filt, fill = cantidad,
-      title = paste0("Total de solicitudes de vivienda pública con preferencias por violencia doméstica en el año ", input$select_avp_mapaAvp_año),
+      title = paste0("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región en el año ", input$select_avp_mapaAvp_año),
       group = GROUP,
       fill_lab = "Número de Viviendas",
       light_color = "lightgreen",
@@ -409,7 +410,7 @@ server <- function(input, output, session) {
   output$barPlot_poli_despDF <- renderPlotly({
     p <- renderBarPlot(despDF_filt, x = "Año", y = "Casos", fill = "Categoria",
                        paste("Cantidad de mujeres desaparecidas, localizadas y sin localizar"),
-                       xlab = "Año", ylab = "Cantidad de Víctimas", fillLab = "Estado de la Víctima",
+                       xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Estado de la víctima",
                        colorFill = despDF_fill_categoria)
     
     ggplotly(p, 
@@ -453,7 +454,7 @@ server <- function(input, output, session) {
   output$barPlot_poli_vEdad <- renderPlotly({
     p <- renderHistogram(vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
                        paste("Incidentes de violencia doméstica por edad de la víctima"),
-                       xlab = "Año", ylab = "Cantidad de Mujeres", fillLab = "Grupo de Edad",
+                       xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Grupo de edad",
                        colorFill = vEdad_fill_edad)
     
     ggplotly(p + facet_wrap(~Sexo), 
@@ -550,8 +551,8 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_opm_opmCasos <- renderPlotly({
     p <- renderBarPlot(opmCasos_filt, x = "year", y = "cantidad", fill = "tipo",
-                       paste("Población atendida según razón para consulta"),
-                       xlab = "Año", ylab = "Cantidad de Asesinatos", fillLab = "Tipo de Violencia",
+                       paste("Población atendida mediante el programa CRIAS según razón para consulta"),
+                       xlab = "Año", ylab = "Cantidad de personas atendidas", fillLab = "Razón para consulta",
                        colorFill = opm_fill_tipo)
     
     ggplotly(p, 
@@ -587,8 +588,8 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_opm_opmVic <- renderPlotly({
     p <- renderBarPlot(opmVic_filt, x = "año", y = "víctimas", fill = "género",
-                       paste("Identidad de género de las víctimas"),
-                       xlab = "Año", ylab = "Cantidad de Víctimas", fillLab = "Género de la Víctima",
+                       paste("Identidad de género de víctimas asistidas por el programa CRIAS"),
+                       xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Género de la víctima",
                        colorFill = opmVic_fill_género)
     
     ggplotly(p, 
@@ -624,8 +625,8 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_opm_opmMedio <- renderPlotly({
     p <- renderBarPlot(opmMedio_filt, x = "año", y = "`personas atendidas`", fill = "`Medio de orientación`",
-                       title = "Orientaciones según el Medio de Comunicación",
-                       xlab = "Año", ylab = "Cantidad de Personas Orientadas", fillLab = "Medio de Orientación",
+                       title = "Población atendida, servicios ofrecidos y seguimientos mediante el programa CRIAS",
+                       xlab = "Año", ylab = "Cantidad de personas orientadas", fillLab = "Medio de orientación",
                        colorFill = opmMedio_fill_medio)
     
     ggplotly(p, 
@@ -707,8 +708,8 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_dcr_dcrCasosInv <- renderPlotly({
     p <- renderBarPlot(dcrCasosInv_filt, x = "year", y = "cantidad", fill = "tipo",
-                       title = "Casos de Supervisión de Ley 54 en Programas Alternos de Comunidad",
-                       xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Estado de la Investigación",
+                       title = "Casos en supervisión de Ley 54 en programas alternos de comunidad por estado de investigación",
+                       xlab = "Año", ylab = "Cantidad de servicios ofrecidos", fillLab = "Estado de investigación",
                        colorFill = dcrCasosInv_fill_tipo)
     
     ggplotly(p + facet_wrap(~sexo), 
@@ -748,8 +749,8 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_dcr_dcrSentenciadas <- renderPlotly({
     p <- renderBarPlot(dcrSentenciadas_filt, x = "year", y = "cantidad", fill = "tipo",
-                       title = "Personas Sentenciadas en Programa de Supervisión Electrónica por Delitos de Violencia Doméstica",
-                       xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", fillLab = "Estado del Caso",
+                       title = "Personas sentenciadas en programa de supervisión Electrónica por delitos de violencia doméstica por estado del",
+                       xlab = "Año", ylab = "Cantidad de personas sentenciadas", fillLab = "Estado del Caso",
                        colorFill = dcrSentenciadas_fill_tipo)
     
     ggplotly(p, 
@@ -762,7 +763,7 @@ server <- function(input, output, session) {
     renderDataTable(dcrSentenciadas_filt())
   })
   ########## Tab de la Administración de Tribunales ##########
-  #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad) ####
+  #### tab con datos de Ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el grupo de edad y el distrito fiscal
   OP_148_SoliGrupEdad_filt <- reactive({
@@ -837,8 +838,8 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_OP_Ley148_ex_parteEmitidas <- renderPlotly({
     p <- renderBarPlot(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                       title = "Órdenes de Protección Ex Parte Emitidias bajo Ley 148 según Región Judicial y Delito Cometido",
-                       xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
+                       title = "Órdenes de protección ex parte emitidas bajo Ley 148 según Región Judicial y delito cometido",
+                       xlab = "Año fiscal", ylab = "Órdenes de protección emitidas", fillLab = "Delito cometido",
                        colorFill = OP_Ley148_ex_parteEmitidas_fill_delito)
     
     ggplotly(p + facet_wrap(~Región), 
@@ -881,8 +882,8 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_OP_LEY148Archivadas <- renderPlotly({
     p <- renderBarPlot(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-                       title = "Órdenes de protección archivadas - Violencia Sexual, por Región Judicial",
-                       xlab = "Año Fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
+                       title = "Órdenes de protección archivadas - violencia sexual, por Región Judicial",
+                       xlab = "Año fiscal", ylab = "Órdenes de protección archivadas", fillLab = "Razón de archivo",
                        colorFill = OP_LEY148Archivadas_fill_Razón)
     
     ggplotly(p + facet_wrap(~Región), 
@@ -925,8 +926,8 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_OP_LEY148Denegadas <- renderPlotly({
     p <- renderBarPlot(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                       title = "Solicitudes Denegadas de Órdenes de Protección bajo la Ley 148 por Región Judicial en Casos de Violencia Sexual",
-                       xlab = "Año Fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
+                       title = "Solicitudes denegadas de órdenes de protección bajo la Ley 148 por Región Judicial",
+                       xlab = "Año fiscal", ylab = "Órdenes de protección denegadas", fillLab = "Razón de archivo",
                        colorFill = OP_LEY148Denegadas_fill_Razón)
     
     ggplotly(p + facet_wrap(~Región), 
@@ -969,7 +970,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_OP_LEY148FinalEmitidas <- renderPlotly({
     p <- renderBarPlot(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                       title = "Órdenes de Protección Final emitidas según la Ley 148 en Casos de Violencia Sexual, por Región Judicial y Tipo de Delito",
+                       title = "Órdenes de protección final emitidas según la Ley 148 en Casos de Violencia Sexual, por Región Judicial y Tipo de Delito",
                        xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                        colorFill = OP_LEY148FinalEmitidas_fill_Delito)
     
@@ -1013,8 +1014,8 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_OP_LEY148Genero <- renderPlotly({
     p <- renderBarPlot(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte",
-                       title = "",
-                       xlab = "Año Fiscal", ylab = "Solicitudes de Órdenes de Protección", fillLab = "Parte",
+                       title = "Órdenes de Protección Emitidas bajo Ley 148, por Sexo y la Parte",
+                       xlab = "Año fiscal", ylab = "Solicitudes de órdenes de protección", fillLab = "Parte",
                        colorFill = OP_LEY148Genero_fill_Parte)
     
     ggplotly(p + facet_wrap(~Sexo), 
@@ -1057,7 +1058,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_tribCasosCrim <- renderPlotly({
     p <- renderBarPlot(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
-                       title = "",
+                       title = "Movimiento de casos en tribunal de primera instancia por ley 54 por delito cometido",
                        xlab = "Año Fiscal", ylab = "Solicitudes de Órdenes de Protección", fillLab = "Delito Cometido",
                        colorFill = tribCasosCrim_fill_Delito)
     
@@ -1097,8 +1098,8 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_safekitsDF <- renderPlotly({
     p <- renderBarPlot(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits", 
-                       title = "Tendencia Anual del Equipo de Recolecta de Evidencia en Casos de Violencia Sexual", 
-                       xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Estado de Querella", 
+                       title = "Tendencia anual del equipo de recolecta de evidencia en casos de violencia sexual por estado de querella", 
+                       xlab = "Año", ylab = "Total de kits distribuidos", fillLab = "Estado de querella", 
                        colorFill = safekitsDF_fill_Kits)
     ggplotly(p, 
              tooltip = c("fill", "x", "y"))
