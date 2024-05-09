@@ -59,13 +59,12 @@ ui <- fluidPage(
         tabPanel(
           lowercaseTitle("Homicidios de mujeres por edad"),
           # Título del Tab
-          titulo_homiEdad <- "Homicidios de mujeres por grupo de edad según el año",
-          titlePanel(titulo_homiEdad),
+          titlePanel("Homicidios de mujeres por grupo de edad según el año"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
           tags$span(paste0("Actualizado: ", actualizacion_snmvB)),
-          tags$span("Nota: Los datos del año 2020 son preliminares"),
+          
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -106,7 +105,7 @@ ui <- fluidPage(
           # Fuente de Datos, Actualización
           tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
           tags$span(paste0("Actualizado: ", actualizacion_snmvA)),
-          tags$span("Nota: Los datos del año 2020 son preliminares"),
+          
           
           sidebarLayout(
             sidebarPanel(
@@ -139,17 +138,26 @@ ui <- fluidPage(
         ), 
         
         #### tab con datos de Tasas ####
-        tabPanel(
-          "Tasas_snmv"
-        ), 
+        # tabPanel(
+        #   "Tasas_snmv"
+        # ), 
         
         #### tab de Definiciones y Metadatos ####
         tabPanel(
           lowercaseTitle("Definiciones y Metadatos"),
                     br(),
+                    tags$ul(sectionTitle("Sistema de Notificación de Muertes Violentas:", "20px")),
                     tags$ul(
                       tags$li(HTML("<b>Violencia:</b> El uso intencional de la fuerza o el poder físico, de hecho, o como amenaza, contra uno mismo, otra persona o un grupo o comunidad, que cause o tenga gran probabilidad de causar lesiones, muerte, daños psicológicos, trastornos del desarrollo o privaciones.")),
-                      
+                      tags$li(HTML("<b>Muertes violentas :</b> PRVDRS define una muerte violenta como: Suicidio (incluyendo terrorismo), Homicidio (incluyendo terrorismo), Intervención legal (excluyendo terrorismo, ejecuciones por pena de muerte, o actos de guerra), Eventos con intención no Determinada, Heridas por arma de fuego no intencional.")), 
+                      tags$li(HTML("<b>Homicidio:</b> Es un delito de resultado por el cual la conducta intencionada de un sujeto provoca la muerte de otro.")), 
+                      tags$li(HTML("<b>Suicidio Único:</b> Se refiere a un acto en el cual una persona termina deliberadamente con su propia vida, sin la participación o implicación de otras personas en el proceso. Este término implica que el individuo toma la decisión y ejecuta el acto suicida de manera independiente, sin ningún intento de causar la muerte de otras personas o de involucrar a terceros en el evento. ")), 
+                      tags$li(HTML("<b>Homicidio múltiple:</b>Se refiere a un acto en el cual una persona causa la muerte de múltiples individuos en un solo incidente.")), 
+                      tags$li(HTML("<b>Homicidio seguido de suicidio:</b> Se refiere a un acto en el cual una persona causa la muerte de otra(s) y luego se quita la vida. Este tipo de incidente implica dos acciones distintas pero relacionadas: primero, el homicida comete el acto de matar a otra persona, y luego, la misma persona toma su propia vida.")), 
+                      tags$li(HTML("<b>Homicidio único:</b> Se refiere a un acto en el cual una persona causa la muerte de otra en un evento específico. ")), 
+                      tags$li(HTML("<b>Homicidio(s) seguido de suicidio(s), (más de dos víctimas):</b> Se refiere a un acto extremadamente trágico en el cual una o más personas causan la muerte de múltiples individuos antes de acabar con sus propias vidas en un solo evento")), 
+                      tags$li(HTML("<b>Muerte accidental por arma de fuego:</b> Evento en el cual una persona pierde la vida como resultado involuntario de la manipulación, manejo o uso incorrecto de un arma de fuego. Este tipo de incidente ocurre cuando un individuo dispara un arma de manera accidental, ya sea debido a un descuido, falta de conocimiento sobre el funcionamiento seguro del arma, o por la manipulación indebida de la misma. ")), 
+                      tags$li(HTML("<b>Muerte no determinada:</b> Caso en el cual las circunstancias que rodean el fallecimiento de una persona no pueden ser claramente establecidas o comprendidas mediante la evidencia disponible en el momento de la investigación. Este término se utiliza cuando no hay suficiente información o evidencia forense para determinar con certeza si la muerte fue el resultado de causas naturales, accidentales, suicidas u homicidas."))
                     )
         ),
         
@@ -224,7 +232,25 @@ ui <- fluidPage(
         #### tab de Definiciones y Metadatos ####
         tabPanel(
           lowercaseTitle("Definiciones y Metadatos"),
-          
+          br(),
+          tags$ul(sectionTitle("Departamento de la Familia:", "20px")),
+          tags$ul(
+            tags$li(HTML("<b>Menores:</b> Individuos que se encuentran bajo la edad legal de mayoría de edad en un contexto específico, lo que generalmente implica que aún no han alcanzado la edad en la que se les considera plenamente responsables de sus acciones según la ley.")),
+            tags$li(HTML("<b>Maltrato a Menores:</b> Toda acción u omisión intencional del padre, de la madre o persona responsable del o de la menor que ocasione o ponga en riesgo de sufrir un daño o perjuicio a su salud e integridad física, mental o emocional.")), 
+            tags$li(HTML("<b>Abuso Sexual:</b> Incurrir en conducta sexual en presencia de un o una menor o que se utilice, voluntaria o involuntariamente, para ejecutar conducta sexual dirigida a satisfacer los deseos sexuales. También se considera cualquier acto que, de procesarse por la vía criminal, configuraría cualesquiera de varios delitos de índole sexual, tales como agresión sexual, actos lascivos, comercio de personas para actos sexuales, exposiciones obscenas, proposición obscena, producción de pornografía infantil, entre otros delitos reconocidos en el Código Penal de Puerto Rico.")), 
+            tags$li(HTML("<b>Explotación:</b> Conducta obscena o utilización de una persona menor de edad para ejecutar conducta obscena. explotación de una persona menor de edad o que se permita que otra persona lo explote, incluyendo –pero sin limitarse– a utilizarla para ejecutar conducta obscena, con el fin de lucrarse o de recibir algún otro beneficio.")), 
+            tags$li(HTML("<b>Maltrato Físico:</b> Se refiere a cualquier trauma, lesión o condición no accidental, causada en un episodio o varios, incluyendo la falta de alimentos que, de no ser atendida, pone en riesgo la vida y salud de la persona menor de edad.")), 
+            tags$li(HTML("<b>Negligencia:</b> Es un tipo de maltrato que consiste en no cumplir con la obligación de proveer a las personas menores de edad de manera adecuada los alimentos, ropa, albergue, educación, atención a su salud, poca supervisión, no visitar, ni mantener contacto con el o la menor o incurrir en alguna de las razones reconocidas en el Código Civil de Puerto Rico para que una persona sea privada de patria potestad entre otros.")), 
+            tags$li(HTML("<b>Negligencia Educativa: </b> La negligencia institucional es cuando a una persona menor de edad, que está en un hogar de crianza, centro de cuidado sustituto o en una institución pública o privada, de cuido, educación, tratamiento o detención, se le cause daño o se ponga en riesgo de sufrir daño a su salud e integridad física, mental o emocional, incluyendo –pero sin limitarse– a abuso sexual. La negligencia institucional, ya sea conocida o que se sospeche que ocurre, o que ocurre como resultado de la política, prácticas y condiciones imperantes en la institución, la puede cometer:
+            <ul>          
+            <li>a. operador u operadora de un hogar de crianza; 
+            <li>b. cualquier empleado, empleada, funcionario o funcionaria que ofrezca servicios de cuido o que tenga bajo su control o custodia a una persona menor de edad para su cuido, educación, tratamiento o detención;"
+            )),
+            tags$li(HTML("<b>Negligencia Emocional:</b> Se define como causar menoscabo o afectar la capacidad intelectual o emocional de la persona menor de edad dentro de lo que se considera normal para su edad y entorno cultural.")), 
+            tags$li(HTML("<b>Negligencia Médica:</b> Situaciones en las que los proveedores de atención médica, como médicos, enfermeras u otros profesionales de la salud, no brindan el nivel adecuado de atención y cuidado a pacientes menores de edad, lo que resulta en daños físicos, emocionales o psicológicos para el paciente. Esto puede incluir errores en el diagnóstico, tratamiento inapropiado, falta de seguimiento adecuado, o cualquier otro acto u omisión que pueda considerarse una violación del estándar de cuidado aceptado en la práctica médica.")), 
+            tags$li(HTML("<b>Trata Humana:</b> Se define como la captación, traslado, transporte, acogida o recepción de una persona utilizando la violencia, amenaza, engaño, rapto, fuerza, abuso de poder, abuso de una situación de vulnerabilidad u otros elementos de coacción, con el fin de someterla a explotación y lucrarse con su actividad. ")), 
+            
+          )
         )
       )
     ),
@@ -340,10 +366,10 @@ ui <- fluidPage(
         
         
         # Subtab con datos específicos para el segundo dfDeli de la agencia
-        tabPanel(
-          "convic"  # Cambiar por el nombre del segundo dfDeli
-          # ... Estructura similar a la anterior para el segundo dfDeli
-        ),
+        # tabPanel(
+        #   "convic"  # Cambiar por el nombre del segundo dfDeli
+        #   # ... Estructura similar a la anterior para el segundo dfDeli
+        # ),
         
         #### tab de Definiciones y Metadatos ####
         tabPanel(
@@ -446,56 +472,56 @@ mainPanel(
         
     
     #### Tab del Departamento del Trabajo y Recursos Humanos ####
-    tabPanel(
-      lowercaseTitle("Departamento del Trabajo y Recursos Humanos"),
-      icon = icon("briefcase"),
-      tabsetPanel(
-        #### tab con datos de participación laboral (dtParlab) ####
-        tabPanel(
-          lowercaseTitle("Participación Laboral por Sexo"), 
-          # Título del Tab
-          titlePanel("Tasa de participación laboral por sexo"),
-          
-          # Fuente de Datos, Actualización
-          tags$span("Fuente: Departamento del Trabajo y Recursos Humanos"), tags$br(),
-          tags$span("Actualizado:", actualizacion_trabajo), tags$br(),
-          
-          # Menu sidebar con widgets
-          sidebarLayout(
-            sidebarPanel(
-              
-              # botón para seleccionar el año
-              createDropdownCheckbox(
-                label = "Seleccione Año(s):",
-                choices = parLab$Año,
-                selected = parLab$Año,
-                id = "trab_parLab_año"
-              ),
-              
-              # botón para seleccionar el sexo
-              createDropdownCheckbox(
-                label = "Seleccione Sexo(s):",
-                choices = parLab$Sexo,
-                selected = parLab$Sexo,
-                id = "trab_parLab_sexo"
-              ),
-            ),
-            
-            # Sección principal con los gráficos
-            mainPanel(
-              plotlyOutput("barPlot_trab_parLab"),
-              DTOutput("dataTable_trab_parLab")
-            )
-          ),
-        ),
-        
-        #### tab de Definiciones y Metadatos ####
-        tabPanel(
-          lowercaseTitle("Definiciones y Metadatos"),
-          
-        )
-      )
-    ),
+    # tabPanel(
+    #   lowercaseTitle("Departamento del Trabajo y Recursos Humanos"),
+    #   icon = icon("briefcase"),
+    #   tabsetPanel(
+    #     #### tab con datos de participación laboral (dtParlab) ####
+    #     tabPanel(
+    #       lowercaseTitle("Participación Laboral por Sexo"), 
+    #       # Título del Tab
+    #       titlePanel("Tasa de participación laboral por sexo"),
+    #       
+    #       # Fuente de Datos, Actualización
+    #       tags$span("Fuente: Departamento del Trabajo y Recursos Humanos"), tags$br(),
+    #       tags$span("Actualizado:", actualizacion_trabajo), tags$br(),
+    #       
+    #       # Menu sidebar con widgets
+    #       sidebarLayout(
+    #         sidebarPanel(
+    #           
+    #           # botón para seleccionar el año
+    #           createDropdownCheckbox(
+    #             label = "Seleccione Año(s):",
+    #             choices = parLab$Año,
+    #             selected = parLab$Año,
+    #             id = "trab_parLab_año"
+    #           ),
+    #           
+    #           # botón para seleccionar el sexo
+    #           createDropdownCheckbox(
+    #             label = "Seleccione Sexo(s):",
+    #             choices = parLab$Sexo,
+    #             selected = parLab$Sexo,
+    #             id = "trab_parLab_sexo"
+    #           ),
+    #         ),
+    #         
+    #         # Sección principal con los gráficos
+    #         mainPanel(
+    #           plotlyOutput("barPlot_trab_parLab"),
+    #           DTOutput("dataTable_trab_parLab")
+    #         )
+    #       ),
+    #     ),
+    #     
+    #     #### tab de Definiciones y Metadatos ####
+    #     tabPanel(
+    #       lowercaseTitle("Definiciones y Metadatos"),
+    #       
+    #     )
+    #   )
+    # ),
     
     #### Tab de la Administración de Vivienda Pública ####
     tabPanel(
@@ -586,13 +612,16 @@ mainPanel(
           # Título del Tab 
           titlePanel("Regiones de la Adminsitración de Vivienda Públicas"),
           
+          tags$ul(sectionTitle("Regiones de Vivienda Pública:")),
+          embedImage("RegionesVivienda", "www/RegionesVivienda.png", 
+                     "https://www.avp.pr.gov/regiones-directorio.aspx",
+                     "https://www.avp.pr.gov/regiones-directorio.aspx", size = "250"
+          ),
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("map_avp_mapaRegi")
-            #DTOutput("dataTable_avp_mapaRegi")
           )
         )
-        
       )
     ),
     
@@ -1160,10 +1189,10 @@ mainPanel(
       
       #### tab con datos de solicitudes de órdenes de protección archivadas (OP_LEY148Archivadas) ####
       tabPanel(
-        lowercaseTitle("Órdenes de protección ex parte archivadas por razón del archivo y región"), 
+        lowercaseTitle("Órdenes de protección ex parte archivadas por razón y región"), 
         
         # Título del Tab
-        titlePanel("Órdenes de protección ex parte bajo Ley 148 archivadas por razón del Archivo y Región Judicial"),
+        titlePanel("Órdenes de protección ex parte bajo Ley 148 archivadas por razón y Región Judicial"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),

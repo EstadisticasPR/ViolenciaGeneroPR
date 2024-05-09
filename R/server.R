@@ -278,39 +278,40 @@ server <- function(input, output, session) {
   ########## Server del Departamento del Trabajo y Recursos Humanos ##########
   #### Tab de Participación Laboral (parLab) ####
   
+  
   # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de incidente
-  parLab_filt <- reactive({
-    filter(parLab,
-           Año %in% input$checkGroup_trab_parLab_año,
-           Sexo %in% input$checkGroup_trab_parLab_sexo)
-  })
-  
-  ### funcion para el boton de deseleccionar/seleccionar del botón de año
-  observeEvent(input$deselectAll_trab_parLab_año, {
-    updateCheckboxGroup(session, "checkGroup_trab_parLab_año", input, parLab$Año)
-  })
-  
-  ### funcion para el boton de deseleccionar/seleccionar del botón de sexo
-  observeEvent(input$deselectAll_trab_parLab_sexo, {
-    updateCheckboxGroup(session, "checkGroup_trab_parLab_sexo", input, parLab$Sexo)
-  })
-  
-  # Colores de las edades
-  parLab_fill_sexo <- setColorFill(parLab, "Sexo")
-  # Grafico de barras
-  output$barPlot_trab_parLab <- renderPlotly({
-    p <- renderBarPlot(parLab_filt, x = "Año", y = "Tasa", fill = "Sexo",
-                       paste("Tasa de participación laboral según el sexo"),
-                       xlab = "Año", ylab = "Tasa de participación", fillLab = "Sexo", 
-                       colorFill = parLab_fill_sexo)
-
-    ggplotly(p, tooltip = c("fill", "x", "y"))
-  })
-  
-  # Data Table del SNMV
-  output$dataTable_trab_parLab <- renderDT({
-    renderDataTable(parLab_filt())
-  })
+  # parLab_filt <- reactive({
+  #   filter(parLab,
+  #          Año %in% input$checkGroup_trab_parLab_año,
+  #          Sexo %in% input$checkGroup_trab_parLab_sexo)
+  # })
+  # 
+  # ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  # observeEvent(input$deselectAll_trab_parLab_año, {
+  #   updateCheckboxGroup(session, "checkGroup_trab_parLab_año", input, parLab$Año)
+  # })
+  # 
+  # ### funcion para el boton de deseleccionar/seleccionar del botón de sexo
+  # observeEvent(input$deselectAll_trab_parLab_sexo, {
+  #   updateCheckboxGroup(session, "checkGroup_trab_parLab_sexo", input, parLab$Sexo)
+  # })
+  # 
+  # # Colores de las edades
+  # parLab_fill_sexo <- setColorFill(parLab, "Sexo")
+  # # Grafico de barras
+  # output$barPlot_trab_parLab <- renderPlotly({
+  #   p <- renderBarPlot(parLab_filt, x = "Año", y = "Tasa", fill = "Sexo",
+  #                      paste("Tasa de participación laboral según el sexo"),
+  #                      xlab = "Año", ylab = "Tasa de participación", fillLab = "Sexo", 
+  #                      colorFill = parLab_fill_sexo)
+  # 
+  #   ggplotly(p, tooltip = c("fill", "x", "y"))
+  # })
+  # 
+  # # Data Table del SNMV
+  # output$dataTable_trab_parLab <- renderDT({
+  #   renderDataTable(parLab_filt())
+  # })
   
   ########## Tab de la Administración de Vivienda Pública ##########
   #### Tab de Administración de Vivienda Pública (dfAvp) ####
@@ -708,7 +709,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_dcr_dcrCasosInv <- renderPlotly({
     p <- renderBarPlot(dcrCasosInv_filt, x = "year", y = "cantidad", fill = "tipo",
-                       title = "Casos en supervisión de Ley 54 en programas alternos de comunidad por estado de investigación",
+                       title = "Estado de investigación de casos de supervisión de Ley 54: Programas Alternos de Comunidad",
                        xlab = "Año", ylab = "Cantidad de servicios ofrecidos", fillLab = "Estado de investigación",
                        colorFill = dcrCasosInv_fill_tipo)
     
@@ -970,7 +971,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_OP_LEY148FinalEmitidas <- renderPlotly({
     p <- renderBarPlot(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                       title = "Órdenes de protección final emitidas según la Ley 148 en Casos de Violencia Sexual, por Región Judicial y Tipo de Delito",
+                       title = "Órdenes de protección emitidas según la Ley 148 en Casos de Violencia Sexual, por Región Judicial y Tipo de Delito",
                        xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                        colorFill = OP_LEY148FinalEmitidas_fill_Delito)
     
