@@ -1,0 +1,13 @@
+name: ViolenciaGeneroPR
+title:
+username: felbasa822
+account: felbasa822
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11967547
+bundleId: 8600882
+url: https://felbasa822.shinyapps.io/ViolenciaGeneroPR/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .gitattributes|.github/workflows/r.yml|.Rbuildignore|DESCRIPTION|README.md|exploration

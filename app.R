@@ -43,7 +43,10 @@ myApp <- function() {
     "shinyWidgets",
     "sf",
     "roxygen2",
-    "htmltools"
+    "htmltools",
+    "shinymanager",
+    "packrat",
+    "rsconnect"
   )
   
   # Instalar los paquetes si no están instalados

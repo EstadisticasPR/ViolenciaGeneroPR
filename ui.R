@@ -1,8 +1,10 @@
 # User Interface 
-cat("Loading User Interface from ui_helpers.R...\n")
+cat("Loading User Interface from ui.R...\n")
+source("global.R")
 # Importar funciones auxiliares de ui_helpers.R
-addResourcePath("www", "R/www/")
-ui <- fluidPage(
+#addResourcePath("www", "R/www/")
+ui <- secure_app(
+  fluidPage(
   ### El theme (colores) de la app ###
   theme = shinytheme("sandstone"),
   
@@ -13,10 +15,10 @@ ui <- fluidPage(
       
       tags$ul(
         ### Foto con enlace a la página de IEPR ###
-        embedImage("logo_IEPR", "www/iepr_logo.png", "https://estadisticas.pr/", "estadisticas.pr"),
+        embedImage("logo_IEPR", "iepr_logo.png", "https://estadisticas.pr/", "estadisticas.pr"),
         
         ### Foto con enlace a la página de PARE ###
-        embedImage("logo_PARE", "www/logo_PARE.png", "https://parelaviolencia.pr.gov/", "PARE.gov"),
+        embedImage("logo_PARE", "logo_PARE.png", "https://parelaviolencia.pr.gov/", "PARE.gov"),
         
         ### Título de la App ###
         tags$li(
@@ -63,7 +65,8 @@ ui <- fluidPage(
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
-          tags$span(paste0("Actualizado: ", actualizacion_snmvB)),
+          #tags$span(paste0("Actualización Datos: ", actualizacion_snmvB)),
+          #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
           
           
           # Menu sidebar con widgets
@@ -104,7 +107,9 @@ ui <- fluidPage(
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
-          tags$span(paste0("Actualizado: ", actualizacion_snmvA)),
+          #tags$span(paste0("Actualización Datos: ", actualizacion_snmvA)),
+          #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
+          
           
           
           sidebarLayout(
@@ -187,7 +192,8 @@ ui <- fluidPage(
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Departamento de la Familia"), tags$br(),
-          tags$span("Actualizado:", actualizacion_familia), tags$br(),
+          #tags$span("Actualización Datos: ", actualizacion_familia), tags$br(),
+          #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -244,7 +250,8 @@ ui <- fluidPage(
             tags$li(HTML("<b>Negligencia Educativa: </b> La negligencia institucional es cuando a una persona menor de edad, que está en un hogar de crianza, centro de cuidado sustituto o en una institución pública o privada, de cuido, educación, tratamiento o detención, se le cause daño o se ponga en riesgo de sufrir daño a su salud e integridad física, mental o emocional, incluyendo –pero sin limitarse– a abuso sexual. La negligencia institucional, ya sea conocida o que se sospeche que ocurre, o que ocurre como resultado de la política, prácticas y condiciones imperantes en la institución, la puede cometer:
             <ul>          
             <li>a. operador u operadora de un hogar de crianza; 
-            <li>b. cualquier empleado, empleada, funcionario o funcionaria que ofrezca servicios de cuido o que tenga bajo su control o custodia a una persona menor de edad para su cuido, educación, tratamiento o detención;"
+            <li>b. cualquier empleado, empleada, funcionario o funcionaria que ofrezca servicios de cuido o que tenga bajo su control o custodia a una persona menor de edad para su cuido, educación, tratamiento o detención;
+            </ul>"
             )),
             tags$li(HTML("<b>Negligencia Emocional:</b> Se define como causar menoscabo o afectar la capacidad intelectual o emocional de la persona menor de edad dentro de lo que se considera normal para su edad y entorno cultural.")), 
             tags$li(HTML("<b>Negligencia Médica:</b> Situaciones en las que los proveedores de atención médica, como médicos, enfermeras u otros profesionales de la salud, no brindan el nivel adecuado de atención y cuidado a pacientes menores de edad, lo que resulta en daños físicos, emocionales o psicológicos para el paciente. Esto puede incluir errores en el diagnóstico, tratamiento inapropiado, falta de seguimiento adecuado, o cualquier otro acto u omisión que pueda considerarse una violación del estándar de cuidado aceptado en la práctica médica.")), 
@@ -268,8 +275,9 @@ ui <- fluidPage(
           titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"),  # Cambiar por el título adecuado
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Departamento de Justicia" ), tags$br(),
-          tags$span(paste0("Actualizado: ", actualizacion_justiciaA)), tags$br(),
+          tags$span("Fuente: Departamento de Justicia" ),
+          #tags$span(paste0("Actualización Datos:   ", actualizacion_justiciaA)), 
+          #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -322,8 +330,9 @@ ui <- fluidPage(
           titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"),  # Cambiar por el título adecuado
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Departamento de Justicia" ), tags$br(),
-          tags$span(paste0("Actualizado: ", actualizacion_justiciaA)), tags$br(),
+          tags$span("Fuente: Departamento de Justicia" ), 
+          #tags$span(paste0("Actualización Datos: ", actualizacion_justiciaA)),
+          #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)), 
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -440,12 +449,13 @@ narcóticos, deprimentes o estimulantes o sustancias o medios similares; o
 incapacitada para comprender la naturaleza del acto en el momento de su
 realización;
 <li>d. Si se le obliga o induce mediante maltrato, violencia física o psicológica a
-participar o involucrarse en una relación sexual no deseada con terceras personas. ")),
+participar o involucrarse en una relación sexual no deseada con terceras personas.
+              </ul>")),
             
           ),
 br(),
 tags$ul(sectionTitle("Fiscalías de Puerto Rico:")),
-embedImage("Fiscalias_PR", "www/Fiscalias_PR.png", 
+embedImage("Fiscalias_PR", "Fiscalias_PR.png", 
            "https://www.justicia.pr.gov/secretarias-y-oficinas/oficina-del-jefe-de-los-fiscales/listado-de-fiscalias/",
            "https://www.justicia.pr.gov/", size = "250"
            ),
@@ -469,8 +479,6 @@ mainPanel(
       )
     ),
     
-        
-    
     #### Tab del Departamento del Trabajo y Recursos Humanos ####
     # tabPanel(
     #   lowercaseTitle("Departamento del Trabajo y Recursos Humanos"),
@@ -484,7 +492,7 @@ mainPanel(
     #       
     #       # Fuente de Datos, Actualización
     #       tags$span("Fuente: Departamento del Trabajo y Recursos Humanos"), tags$br(),
-    #       tags$span("Actualizado:", actualizacion_trabajo), tags$br(),
+    #       #tags$span("Actualización Datos:  ", actualizacion_trabajo), tags$br(),
     #       
     #       # Menu sidebar con widgets
     #       sidebarLayout(
@@ -537,7 +545,8 @@ mainPanel(
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Administración de Vivienda Pública"), tags$br(),
-          tags$span("Actualizado:", actualizacion_vivienda), tags$br(),
+          #tags$span("Actualización Datos: ", actualizacion_vivienda), tags$br(),
+          #tags$span(paste0("Actualización Sistema:   ", actualizacion_sistema)), 
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -576,8 +585,9 @@ mainPanel(
           titlePanel("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región de la Administración de Vivienda Pública"),
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Administración de Vivienda Pública"), tags$br(),
-          tags$span("Actualizado:", actualizacion_vivienda), tags$br(),
+          tags$span("Fuente: Administración de Vivienda Pública"),
+          #tags$span("Actualización Datos:  ", actualizacion_vivienda), 
+          #tags$span("Actualización Sistema:  ", actualizacion_sistema), 
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -612,14 +622,19 @@ mainPanel(
           # Título del Tab 
           titlePanel("Regiones de la Adminsitración de Vivienda Públicas"),
           
+          
+          tags$li(HTML("<b>Vivienda Pública:</b> Vivienda que es proporcionada, administrada o subsidiada por el gobierno o entidades gubernamentales con el objetivo de brindar alojamiento a personas o familias que tienen dificultades para acceder a una vivienda adecuada en el mercado privado debido a limitaciones económicas o sociales. Estas viviendas suelen estar dirigidas a personas de bajos ingresos, familias en situación de pobreza, personas sin hogar, o aquellos que enfrentan otras formas de vulnerabilidad social.")),
+          tags$li(HTML("<b>Violencia Doméstica:</b> Cuando una persona emplea fuerza física o violencia psicológica, intimidación o persecución en contra de su pareja o expareja. Esto, para causarle daño físico a su persona, a sus bienes, a otra persona o a un animal de servicio o mascota o para causarle grave daño emocional. Para que se considere violencia doméstica es necesario que exista o haya existido una relación afectiva entre las partes. Es decir, se da cuando la persona agresora es cónyuge, excónyuge, una persona con quien vive o ha vivido, con quien sostiene o haya sostenido una relación consensual o una persona con quien se haya procreado una hija o un hijo. ")), 
+          tags$li(HTML("<b>Región:</b> Se refiere a una división geográfica o área delimitada que comparte características similares, ya sea geográficas, culturales, económicas, políticas o administrativas. Subdivisión territorial establecida por las autoridades gubernamentales para propósitos de administración y gestión local. Estas divisiones pueden variar en tamaño y alcance dependiendo del país y su estructura administrativa.")), 
+          
           tags$ul(sectionTitle("Regiones de Vivienda Pública:")),
-          embedImage("RegionesVivienda", "www/RegionesVivienda.png", 
+          embedImage("RegionesVivienda", "RegionesVivienda.png", 
                      "https://www.avp.pr.gov/regiones-directorio.aspx",
                      "https://www.avp.pr.gov/regiones-directorio.aspx", size = "250"
           ),
           # Sección principal con los gráficos
           mainPanel(
-            plotlyOutput("map_avp_mapaRegi")
+            #plotlyOutput("map_avp_mapaRegi")
           )
         )
       )
@@ -639,7 +654,7 @@ mainPanel(
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
-          tags$span("Actualizado:", actualizacion_policiaB), tags$br(),
+          #tags$span("Actualización Datos:  ", actualizacion_policiaB), tags$br(),
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -679,7 +694,7 @@ mainPanel(
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
-          tags$span("Actualizado:", actualizacion_policiaA), tags$br(),
+          #tags$span("Actualización Datos:  ", actualizacion_policiaA), tags$br(),
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -727,48 +742,60 @@ mainPanel(
         ), 
         
         #### tab para el mapa de incidentes de violencia doméstica por área policiaca (inciMapa) ####
-        tabPanel(
-          lowercaseTitle("inciMapa"),
-          
-          # Título del Tab
-          titlePanel("Incidentes de violencia doméstica por área policíaca (desde enero de 2021 a abril de 2023)"),
-          
-          # Fuente de Datos, Actualización
-          tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
-          tags$span("Actualizado:", actualizacion_policiaA), tags$br(),
-          
-          # Menu sidebar con widgets
-          sidebarLayout(
-            sidebarPanel(
-              
-              # botón para seleccionar año
-              selectInput("select_poli_inciMapa_año", "Seleccione Año:",
-                          choices = levels(inciMapa$Año),
-                          selected = 1),
-              
-              # createDropdownCheckbox(
-              #   label = "Seleccionar Año:",
-              #   choices = mapaDeli$Año,
-              #   selected = NULL,
-              #   id = "just_mapaDeli_año"
-              # ),
-              
-            ),
-            
-            # Sección principal con los gráficos
-            mainPanel(
-              plotlyOutput("map_poli_inciMapa")
-              #DTOutput("dataTable_poli_inciMapa")
-            )
-          )
-        ), 
+        # tabPanel(
+        #   lowercaseTitle("inciMapa"),
+        #   
+        #   # Título del Tab
+        #   titlePanel("Incidentes de violencia doméstica por área policíaca (desde enero de 2021 a abril de 2023)"),
+        #   
+        #   # Fuente de Datos, Actualización
+        #   tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
+        #   #tags$span("Actualización Datos:  ", actualizacion_policiaA), tags$br(),
+        #   
+        #   # Menu sidebar con widgets
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       
+        #       # botón para seleccionar año
+        #       selectInput("select_poli_inciMapa_año", "Seleccione Año:",
+        #                   choices = levels(inciMapa$Año),
+        #                   selected = 1),
+        #       
+        #       # createDropdownCheckbox(
+        #       #   label = "Seleccionar Año:",
+        #       #   choices = mapaDeli$Año,
+        #       #   selected = NULL,
+        #       #   id = "just_mapaDeli_año"
+        #       # ),
+        #       
+        #     ),
+        #     
+        #     # Sección principal con los gráficos
+        #     mainPanel(
+        #       plotlyOutput("map_poli_inciMapa")
+        #       #DTOutput("dataTable_poli_inciMapa")
+        #     )
+        #   )
+        # ), 
         
         #### tab de Definiciones y Metadatos ####
         tabPanel(
           lowercaseTitle("Definiciones y Metadatos"),
           br(),
+          tags$ul(sectionTitle("Negociado de Policía:", "20px")),
+          tags$li(HTML("<b>Adultas Desaparecidas:</b> Mujeres adultas cuya ubicación y paradero son desconocidos y no pueden ser determinados por sus familiares, amigos, o autoridades competentes. Esta situación puede surgir por una variedad de razones, que van desde accidentes, secuestros, desastres naturales, hasta decisiones voluntarias de la persona de abandonar su entorno sin dejar rastro.")), 
+          tags$li(HTML("<b>Adultas Localizadas:</b> Mujeres adultas cuyo paradero ha sido identificado y confirmado después de que se les haya reportado como desaparecidas. ")), 
+          tags$li(HTML("<b>Adultas Sin Localizar:</b> Mujeres adultas cuyo paradero no ha sido identificado ni confirmado después de haber sido reportadas como desaparecidas. Estas personas pueden haber sido vistas por última vez en circunstancias desconocidas, y su ubicación actual sigue siendo un misterio.")), 
+          tags$li(HTML("<b>Menores Desaparecidas:</b> Menores femeninas cuya ubicación y paradero son desconocidos y no pueden ser determinados por sus familiares, amigos, o autoridades competentes. Esta situación puede surgir por una variedad de razones, que van desde accidentes, secuestros, desastres naturales, hasta decisiones voluntarias de la persona de abandonar su entorno sin dejar rastro.  ")), 
+          tags$li(HTML("<b>Menores Localizadas:</b> Menores femeninas cuyo paradero ha sido identificado y confirmado después de que se les haya reportado como desaparecidos. ")), 
+          tags$li(HTML("<b>Menores sin Localizar:</b> Menores femeninas cuyo paradero no ha sido identificado ni confirmado después de haber sido reportados como desaparecidos. Estas personas pueden haber sido vistas por última vez en circunstancias desconocidas, y su ubicación actual sigue siendo un misterio.")), 
+          tags$li(HTML("<b>Incidencia:</b> Se refiere al número de incidentes o delitos que han sido reportados o registrados por las fuerzas policiales durante un período de tiempo específico en una determinada área geográfica. Esta métrica es utilizada por las autoridades policiales y otros organismos encargados de hacer cumplir la ley para medir y analizar la cantidad y el tipo de delitos que ocurren en una comunidad o jurisdicción particular. ")), 
+          tags$li(HTML("<b>Violencia doméstica:</b> Cuando una persona emplea fuerza física o violencia psicológica, intimidación o persecución en contra de su pareja o expareja. Esto, para causarle daño físico a su persona, a sus bienes, a otra persona o a un animal de servicio o mascota o para causarle grave daño emocional. Para que se considere violencia doméstica es necesario que exista o haya existido una relación afectiva entre las partes. Es decir, se da cuando la persona agresora es cónyuge, ex cónyuge, una persona con quien vive o ha vivido, con quien sostiene o haya sostenido una relación consensual o una persona con quien se haya procreado una hija o un hijo. ")), 
+          tags$li(HTML("<b>Víctima:</b> Persona que ha sufrido daño físico, emocional, psicológico o financiero como resultado de un acto delictivo, un accidente, un desastre natural, o cualquier otro evento traumático.")), 
+          tags$li(HTML("<b>Región Policiaca:</b> Región o zona geográfica específica que está asignada a un cuerpo de policía o agencia de aplicación de la ley para llevar a cabo funciones de vigilancia, patrullaje y protección del orden público. Estas áreas son delimitadas y definidas por las autoridades policiales con el objetivo de organizar y distribuir eficazmente los recursos policiales para atender las necesidades de seguridad y aplicación de la ley en una comunidad o jurisdicción determinada.")), 
+          
           tags$ul(sectionTitle("Regiones Policíacas:", "20px")),
-          embedImage("RegionesPoliciácas", "www/Regiones_Policiacas.png", 
+          embedImage("RegionesPoliciácas", "Regiones_Policiacas.png", 
                      "https://www.policia.pr.gov/",
                      "https://www.policia.pr.gov/", size = "250"
           )
@@ -786,11 +813,11 @@ mainPanel(
         tabPanel(
           lowercaseTitle("Feminicidios por Violencia Doméstica"), 
           # Título del Tab
-          titlePanel("Feminicidios por violencia doméstica, desde 1990 a 2021"),
+          titlePanel("Tasa de asesinatos de mujeres por violencia doméstica, desde 1990 a 2021"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-          tags$span("Actualizado:", actualizacion_opmA), tags$br(),
+          #tags$span("Actualización Datos:  ", actualizacion_opmA), tags$br(),
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -821,7 +848,7 @@ mainPanel(
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-          tags$span("Actualizado:", actualizacion_opmA), tags$br(),
+          #tags$span("Actualización Datos:  ", actualizacion_opmA), tags$br(),
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -860,7 +887,7 @@ mainPanel(
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-          tags$span("Actualizado:", actualizacion_opmB), tags$br(),
+          #tags$span("Actualización Datos:  ", actualizacion_opmB), tags$br(),
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -899,7 +926,7 @@ mainPanel(
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-          tags$span("Actualizado:", actualizacion_opmB), tags$br(),
+          #tags$span("Actualización Datos:  ", actualizacion_opmB), tags$br(),
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -938,7 +965,7 @@ mainPanel(
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-          tags$span("Actualizado:", actualizacion_opmB), tags$br(),
+          #tags$span("Actualización Datos:  ", actualizacion_opmB), tags$br(),
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -972,8 +999,34 @@ mainPanel(
         #### tab de Definiciones y Metadatos ####
         tabPanel(
           lowercaseTitle("Definiciones y Metadatos"),
+          br(),
+          tags$ul(sectionTitle("Oficina de la Procuradora de la Mujer:", "20px")),
           
-        )
+          tags$li(HTML(
+            "<b>Feminicidios: </b> Es el crimen que consiste en matar intencionalmente a mujeres por el hecho de ser mujeres o de identificarse como tales. Las definiciones más amplias incluyen cualquier asesinato de mujeres o niñas, o el asesinato involuntario o indirecto de mujeres o niñas, «tal como demuestran algunos casos de violencia doméstica que podrían provocar la muerte de mujeres». El concepto «adquirió importancia en el marco del movimiento feminista de la década de 1970 cuando surge la expresión ‘femicidio’ como alternativa al término neutro ‘homicidio’, con el fin de reconocer y visibilizar la opresión, la desigualdad y la violencia sistemática» contra las mujeres que, en su forma más extrema, culmina en la muerte. El femicidio puede presentarse bajo diferentes formas e incluye los siguientes actos:
+            <ul>          
+            <li>a. Femicidio íntimo, perpetrado por una pareja actual o anterior, generalmente durante o después de una relación ya violenta (por ejemplo, de violencia doméstica o violencia sexual);
+            <li>b. el llamado crimen de honor (o asesinato de o por honor); 
+            <li>c. el femicidio relacionado con la dote, que ocurre en un contexto de conflicto entre las familias de dos cónyuges recién casados, y es generalmente cometido por la familia política que cuestiona sobre todo el importe de la dote;
+            <li>d. el femicidio no íntimo, cometido por un agresor que no tiene una relación íntima con la víctima, que está muy difundido en algunas partes de América Latina y que, por lo general, está precedido de actos de violencia sexual o tortura.;
+            </ul>
+            ")),
+                    
+          tags$li(HTML("<b>Tendencia:</b> Dirección o patrón observado en datos o eventos que muestra una inclinación hacia cierto resultado o comportamiento a lo largo del tiempo.")), 
+          tags$li(HTML("<b>Acecho (A):</b> Es una persona, en la mayoría de las ocasiones mujer que sufre o es sometida a un patrón o la repetición de una conducta mediante la cual se mantiene de manera constante o repetida una vigilancia, proximidad física o visual sobre una persona específica. ")), 
+          tags$li(HTML("<b>Agresión sexual (AS):</b> Cualquier acto que degrada o daña el cuerpo y/o la sexualidad de la víctima y que por tanto atenta contra su libertad, dignidad e integridad física. Es una expresión de abuso de poder que implica la supremacía masculina sobre la mujer, al denigrar y concebirla como objeto.")), 
+          tags$li(HTML("<b>Discrimen de género (DG):</b> Hace referencia a «toda distinción, exclusión o restricción» que se realice en función del género de una persona con el objetivo o resultado de menoscabar o anular el reconocimiento, goce o ejercicio de sus derechos humanos. A menudo es consecuencia de los mitos y estereotipos de género tales como: las mujeres son las más aptas para ocuparse de la educación de los hijos, cocinar o limpiar, o para realizar trabajos de secretaría, enseñanza o enfermería, mientras que los hombres son líderes, buenos en economía y comercio. Esto ha dado lugar a un acceso desigual al mercado laboral, así como a un salario desigual para puestos similares, al sostenerse que las mujeres tienen peores resultados que los hombres en determinados ámbitos y, con ello, a una discriminación por género. ")), 
+          tags$li(HTML("<b>Violencia doméstica (VD):</b> Definición que ofrece la Ley Núm. 54 de 1989 que sigue vigente en Puerto Rico. Violencia doméstica significa un patrón constante de empleo de fuerza física o violencia psicológica, intimidación o persecución contra una persona por parte de su cónyuge, ex cónyuge, una persona con quien cohabita o haya cohabitado, con quien sostiene o haya sostenido una relación consensual o una persona con quien se haya procreado una hija o hijo, para causarle daño físico a su persona, sus bienes u otra persona o para causarle grave daño emocional. La Ley Núm. 54 incluyó además como delito la agresión sexual entre personas que cohabitan o matrimonios como violencia doméstica. ")), 
+          tags$li(HTML("<b>Violencia en cita (VC):</b> Violencia cometida por una persona que está o ha estado en una relación social de carácter romántico o íntimo con la víctima. La existencia de dicha relación se determinará con base en la declaración de la parte informante y teniendo en cuenta la duración de la relación, el tipo de relación y la frecuencia de interacción entre las personas involucradas en la relación. A los efectos de esta definición: La violencia en el noviazgo incluye, pero no se limita a, abuso sexual o físico o la amenaza de tal abuso. La violencia en el noviazgo no incluye actos cubiertos por la definición de violencia doméstica.")), 
+          tags$li(HTML("<b>Orientaciones:</b> Direcciones o inclinaciones hacia las que se dirige o enfoca algo.")),
+          tags$li(HTML("<b>CRIAS:</b> Centro de Respuesta Integrada de Apoyo y Servicios para la Mujer. La misma surgió de la necesidad imperante de trabajar con el problema de la desigualdad que existe contra las mujeres y trabajar particularmente con la violencia doméstica desde una perspectiva dirigida hacia la validación, orientación y coordinación de servicios de apoyo. El Centro CRIAS establece las bases para un modelo de prevención, intervención y fiscalización de los diferentes tipos de violencia que nos permite levantar información de las víctimas sobrevivientes participantes, obtener análisis de experiencias personales y manejo de actitudes ante el problema. En el mismo, se ofrecen servicios de orientación, coordinación de servicios y referidos a mujeres víctimas/sobrevivientes de violencia doméstica, agresión sexual, acecho y otras manifestaciones de violencia por razón de género. ")),
+          tags$li(HTML("<b>Identidad de género:</b> Se refiere a la manera en que una persona se identifica, cómo se reconoce o se expresa sobre sí misma, en cuanto al género que puede corresponder o no a su sexo biológico o asignado en su nacimiento.")),
+          tags$li(HTML("<b>:</b> Término utilizado para describir características, atributos o cualidades asociadas tradicionalmente con los hombres o lo que se considera típicamente propio del género masculino.")),
+          tags$li(HTML("<b>Masculino:</b> Término utilizado para describir características, atributos o cualidades asociadas tradicionalmente con los hombres o lo que se considera típicamente propio del género masculino. ")),
+          tags$li(HTML("<b>Femenino:</b> Se refiere a características, atributos o cualidades asociadas tradicionalmente con las mujeres o lo que se considera típicamente propio del género femenino. ")),
+          tags$li(HTML("<b>Trans:</b> Abreviatura comúnmente utilizada para referirse a personas que son transgénero o que tienen una identidad de género diferente de aquella que se les asignó al nacer. Las personas transgénero pueden identificarse como hombre, mujer, ambos, ninguno o con un género diferente al binario tradicional de hombre y mujer.")),
+          
+          )
         
       ),
     ),
@@ -993,7 +1046,7 @@ mainPanel(
       
         # Fuente de Datos, Actualización
         tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
-        tags$span("Actualizado:", actualizacion_correcion), tags$br(),
+        #tags$span("Actualización Datos:  ", actualizacion_correcion), tags$br(),
       
         # Menu sidebar con widgets
         sidebarLayout(
@@ -1040,7 +1093,7 @@ mainPanel(
 
       # Fuente de Datos, Actualización
       tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
-      tags$span("Actualizado:", actualizacion_correcion), tags$br(),
+      #tags$span("Actualización Datos:  ", actualizacion_correcion), tags$br(),
 
       # Menu sidebar con widgets
       sidebarLayout(
@@ -1081,6 +1134,16 @@ mainPanel(
     #### tab de Definiciones y Metadatos ####
     tabPanel(
       lowercaseTitle("Definiciones y Metadatos"),
+      br(),
+      tags$ul(sectionTitle("Departamento de Corrección y Rehabilitación:", "20px")),
+      
+      tags$li(HTML("<b>Ley 54:</b> Ley Núm. 54-1989, conocida como la “Ley para la Prevención e Intervención con la Violencia Doméstica”, según enmendada, establece la violencia doméstica como delito y lo define como el empleo de fuerza física o violencia psicológica, intimidación o persecución en contra de su pareja o expareja. Esto, para causarle daño físico a su persona, a sus bienes o a otra persona o para causarle grave daño emocional.")),
+      tags$li(HTML("<b>Programas de Comunidad:</b> Son programas de tratamientos establecidos para que las personas convictas cumplan parte de su sentencia fuera de la institución penal. Su finalidad es promover que los convictos que estén capacitados para reintegrarse a la sociedad puedan hacerlo como parte de su rehabilitación moral y social ")),
+      tags$li(HTML("<b>Investigaciones realizadas:</b> Proceso sistemático y metódico de recopilación, análisis y evaluación de información con el objetivo de obtener conclusiones, resolver problemas o generar conocimiento en un campo específico.  ")),
+      tags$li(HTML("<b>Personas sentenciadas:</b> Pronunciamiento que hace el juez o la jueza sobre la pena que se le impone a una persona acusada luego de que se determina que es culpable de cometer un delito. ")),
+      tags$li(HTML("<b>Programa de Supervisión Electrónica:</b> El Programa de Monitoreo Electrónico cuenta con la Unidad Especializada de Monitoreo Electrónico (Unidad) compuesta por Oficiales Correccionales, la cual tiene la responsabilidad de supervisar y monitorear a los participantes pertenecientes al programa. Esta supervisión conlleva el verificar y atender las alertas que se activan a través del sistema de transmisión electrónica, activar el protocolo, solicitar apoyo inter agencial, avisar a la víctima y administrar pruebas toxicológicas, entre otras. ")),
+      
+      
       
     )
   )
@@ -1096,11 +1159,11 @@ mainPanel(
       tabPanel(
         lowercaseTitle("Órdenes de Protección Solicitadas por Edad y Región"), 
         # Título del Tab
-        titlePanel("Órdenes de Protección Solicitadas por Violencia Sexual bajo Ley 148, según Grupo de Edad y Región Judicial"),
+        titlePanel("Órdenes de Protección Solicitadas por Violencia Sexual bajo Ley 148, según Grupo de Edad, Región Judicial y año fiscal"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
         sidebarLayout(
@@ -1143,11 +1206,11 @@ mainPanel(
       tabPanel(
         lowercaseTitle("Órdenes de Protección Ex Parte Emitidas por Delito Cometido y Región"), 
         # Título del Tab
-        titlePanel("Órdenes de Protección Ex Parte Emitidas bajo Ley 148 según Región Judicial y Delito Cometido"),
+        titlePanel("Órdenes de Protección Ex Parte Emitidas bajo Ley 148 según Región Judicial, Delito Cometido y año fiscal"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
         sidebarLayout(
@@ -1192,11 +1255,11 @@ mainPanel(
         lowercaseTitle("Órdenes de protección ex parte archivadas por razón y región"), 
         
         # Título del Tab
-        titlePanel("Órdenes de protección ex parte bajo Ley 148 archivadas por razón y Región Judicial"),
+        titlePanel("Órdenes de protección ex parte bajo Ley 148 archivadas por razón, Región Judicial y año fiscal"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
         sidebarLayout(
@@ -1241,11 +1304,11 @@ mainPanel(
         lowercaseTitle("Órdenes de protección denegadas por razón del archivo y región"), 
         # Órdenes de Protección Ex Parte Archivadas por Razón del Archivo y Región
         # Título del Tab
-        titlePanel("Ordenes de protección denegadas por violencia sexual bajo Ley 148 por razón de archivo y Región Judicial"),
+        titlePanel("Ordenes de protección denegadas por violencia sexual bajo Ley 148 por razón de archivo, Región Judicial y año fiscal"),
 
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
         sidebarLayout(
@@ -1288,11 +1351,11 @@ mainPanel(
       tabPanel(
         lowercaseTitle("Órdenes de Protección Emitidas por Delito Cometido y Región"), 
         # Título del Tab
-        titlePanel("Órdenes de protección emitidas bajo ley 148 por delito cometido y Región Judicial"),
+        titlePanel("Órdenes de protección emitidas bajo ley 148 por delito cometido, Región Judicial y año fiscal"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
         sidebarLayout(
@@ -1336,11 +1399,11 @@ mainPanel(
         lowercaseTitle("Órdenes de Protección Emitidas por Parte y Sexo"), 
         
         # Título del Tab
-        titlePanel("Órdenes de Protección Emitidas bajo Ley 148, por Sexo y la Parte"),
+        titlePanel("Órdenes de Protección Emitidas bajo Ley 148, por Sexo, la Parte y año fiscal"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
         sidebarLayout(
@@ -1385,11 +1448,11 @@ mainPanel(
         lowercaseTitle("Movimiento de Casos en Tribunal de Primera Instancia por Ley 54"), 
         
         # Título del Tab
-        titlePanel("Movimiento de casos criminales de violencia doméstica en el tribunal de primera instancia según la ley Núm. 54 por delito cometido"),
+        titlePanel("Movimiento de casos criminales de violencia doméstica en el tribunal de primera instancia según la ley Núm. 54 por delito cometido y año fiscal"),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        tags$span("Actualizado:", actualizacion_tribunalesB), tags$br(),
+        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
         sidebarLayout(
@@ -1431,6 +1494,19 @@ mainPanel(
       #### tab de Definiciones y Metadatos ####
       tabPanel(
         lowercaseTitle("Definiciones y Metadatos"),
+        br(),
+        tags$ul(sectionTitle("Administración de Tribunales:", "20px")),
+        tags$li(HTML("<b>Organización:</b> Poder Judicial de Puerto Rico, Oficina de Administración de los Tribunales, Directoria de Operaciones, Oficina de Estadísticas. ")),
+        tags$li(HTML("<b>Orden de Protección:</b> Es un remedio civil expedido por escrito bajo el sello de un Tribunal, en la cual se dictan las medidas a una persona agresora para que ésta se abstenga de incurrir o llevar a cabo determinados actos o conducta constitutivos de violencia doméstica. ")),
+        tags$li(HTML("<b>Solicitudes de órdenes de protección:</b> Se define como todas las peticiones de orden de protección realizadas en el periodo de tiempo de interés en la región judicial especificada.")),
+        tags$li(HTML("<b>Ley 148:</b> Conocida como la “Ley para la Protección de las Víctimas de Violencia Sexual en Puerto Rico”, según enmendada, establece los mecanismos para la expedición de órdenes de protección para víctimas de los delitos de agresión sexual, actos lascivos, acoso sexual e incesto. ")),
+        tags$li(HTML("<b>Ley 54:</b> La Ley Núm. 54-1989, conocida como la “Ley para la Prevención e Intervención con la Violencia Doméstica”, según enmendada, establece la violencia doméstica como delito y lo define como el empleo de fuerza física o violencia psicológica, intimidación o persecución en contra de su pareja o expareja. Esto, para causarle daño físico a su persona, a sus bienes o a otra persona o para causarle grave daño emocional")),
+        tags$li(HTML("<b>Violencia Sexual:</b> Cualquier acto que degrada o daña el cuerpo y/o la sexualidad de la víctima y que por tanto atenta contra su libertad, dignidad e integridad física. Es una expresión de abuso de poder que implica la supremacía masculina sobre la mujer, al denigrar y concebirla como objeto.")),
+        tags$li(HTML("<b>Región Judicial:</b> Se refiere a la región judicial a la que corresponden los datos informados. El Tribunal de Primera Instancia se distribuye territorialmente en trece regiones judiciales. Cada región judicial está compuesta por un centro judicial y sus respectivas salas superiores y municipales. ")),
+        tags$li(HTML("<b>Peticionaria:</b> Persona que solicita una orden de protección. ")),
+        tags$li(HTML("<b>Sexo:</b> Indica si la persona que solicita la orden de protección, en el periodo de tiempo de interés en la región judicial especificada, se identifica como hombre o mujer. ")),
+        tags$li(HTML("<b>Año Fiscal:</b> Período de 12 meses comprendido entre el 1ro de julio de un año y el 30 de junio del año siguiente, y que se usa como el calendario presupuestario de las agencias públicas. ")),
+        tags$li(HTML("<b>Órdenes de protección ex parte:</b> Es una orden emitida por el Tribunal de Primera Instancia luego de escuchar a la parte peticionaria (persona que solicita la orden) y hacer una determinación provisional sobre los hechos. ")),
         
       )
     )
@@ -1444,11 +1520,11 @@ mainPanel(
       tabPanel(
         lowercaseTitle("Tendencia Anual del Equipo Recolecta de Violencia Sexual"), 
         # Título del Tab
-        titlePanel("Tendencia anual del equipo de recolecta de evidencia en casos de violencia sexual por estado de querella"),
+        titlePanel(HTML("Tendencia anual del equipo de recolecta de evidencia de <i>Rape Kits</i> en casos de violencia sexual por estado de querella")),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Centro de Ayuda a Victimas de Violación, Departamento de Salud"), tags$br(),
-        tags$span("Actualizado:", actualizacion_caav), tags$br(),
+        #tags$span("Actualización Datos:  ", actualizacion_caav), tags$br(),
         
         # Menu sidebar con widgets
         sidebarLayout(
@@ -1482,8 +1558,32 @@ mainPanel(
       #### tab de Definiciones y Metadatos ####
       tabPanel(
         lowercaseTitle("Definiciones y Metadatos"),
+        br(),
+        tags$ul(sectionTitle("Centro de Ayuda a Víctimas de Violación:", "20px")),
+        tags$li(HTML("<b>Violencia Sexual:</b> Cualquier acto que degrada o daña el cuerpo y/o la sexualidad de la víctima y que por tanto atenta contra su libertad, dignidad e integridad física. Es una expresión de abuso de poder que implica la supremacía masculina sobre la mujer, al denigrar y concebirla como objeto.")),
+        tags$li(HTML(
+          "<b>Agresión Sexual: </b> El Código Penal de Puerto Rico define el delito de agresión sexual como llevar a cabo, o provocar que otra persona lleve a cabo, un acto orogenital o una penetración sexual (vaginal o anal, ya sea esta genital, digital o instrumental) en cualquiera de estas circunstancias:
+          <ul>          
+          <li>a. si a la víctima se le disminuyó, sin esta consentir o sin saberlo, su capacidad de consentir mediante algún medio hipnótico, narcótico, deprimente o estimulante.; 
+          <li>b. si a la víctima se le obligó al acto por medio de fuerza física, violencia o intimidación.; 
+          <li>c. si al momento del acto la víctima no tenía capacidad para consentir y la persona agresora lo sabía.; 
+          <li>d. si la víctima consintió porque se le engañó sobre la identidad de la persona agresora y creía que era otra persona.; 
+          <li>e. si la víctima no ha cumplido 16 años de edad.; 
+          <li>f. si por enfermedad o incapacidad mental la víctima no puede comprender el acto en el momento en que ocurre.;
+          </ul>
+          ")),
+        tags$li(HTML("<b>Actos Lascivos:</b> El Código Penal de Puerto Rico define el delito de actos lascivos como aquel en el cual, sin intentar consumar el delito de agresión sexual, se someta a otra persona a un acto que tienda a despertar, excitar o satisfacer la pasión o deseos sexuales de la persona imputada.")),
+        tags$li(HTML("<b>Kits:</b> Equipo utilizado por profesionales de la salud para la recuperación de evidencia forense en casos de violencia sexual. Consiste en una caja que contiene instrucciones y materiales que facilitan la recoleccion de evidencia. También conocido como <i>Sexual Assault Kit</i> o, por sus siglas en inglés, <i>SAK</i>. ")),
+        tags$li(HTML("<b>Kit con Querella:</b> Kit de recolección de evidencia forense que se acompaña con la querella radicada por la víctima sobreviviente de violencia sexual. Cuenta con un número otorgado por el NPPR.")),
+        tags$li(HTML("<b>Kit sin Querella:</b> Kit de recolección de evidencia forense que no se acompaña con una querella, pues la víctima sobreviviente de violencia sexual no ha radicado querella en el NPPR.")),
+        tags$li(HTML("<b>Querella:</b> Mecanismo que tiene disponible una persona para reportar a la policía un incidente que entiende debe ser investigado por ésta. El incidente puede tratarse de uno que involucre un delito, una infracción, una persona desaparecida, entre otros.")), 
+        tags$li(HTML("<b>Tendencia:</b> Dirección o patrón observado en datos o eventos que muestra una inclinación hacia cierto resultado o comportamiento a lo largo del tiempo.")),
+        tags$li(HTML("<b>Evidencia:</b> Se refiere a cualquier información, datos, pruebas o testimonios que respaldan una afirmación, teoría o argumento. En diferentes contextos, la evidencia puede ser utilizada para respaldar conclusiones científicas, legales, filosóficas o incluso personales. La calidad y fiabilidad de la evidencia pueden variar según la fuente, el método de recopilación y el contexto en el que se utilice. En general, se busca que la evidencia sea objetiva, verificable y relevante para el tema en cuestión."))
+        )
         
-      )
+        
+        
+    
     )    
   ),
       
@@ -1494,15 +1594,15 @@ mainPanel(
       icon = icon("info-circle"),
       tabsetPanel(
         
-        # tab del transfondo del proyecto
-        tabPanel(
-          lowercaseTitle("Transfondo del Proyecto")
-          ),
-        
-        # tab de las fuentes usadas en el proyecto
-        tabPanel(
-          lowercaseTitle("Fuentes")
-          ), 
+        # # tab del transfondo del proyecto
+        # tabPanel(
+        #   lowercaseTitle("Transfondo del Proyecto")
+        #   ),
+        # 
+        # # tab de las fuentes usadas en el proyecto
+        # tabPanel(
+        #   lowercaseTitle("Fuentes")
+        #   ), 
         
         # tab de los autores del proyecto
         tabPanel(
@@ -1516,35 +1616,19 @@ mainPanel(
             ),
             
             authorTag(
-              nombre = 'Dr. Orville M. Disdier Flores',
-              email = 'orville.disdier@estadisticas.pr',
-              puesto = 'Director Ejecutivo',
-              grados = c(
-                'Ed.D Liderazgo Educativo, Universidad del Turabo',
-                'MS Epidemiología, Universidad de Puerto Rico',
-                'BS Ciencias Naturales, Universidad de Puerto Rico'
-              )
-            ), 
-            authorTag(
               nombre = 'Manuel Mangual Martínez',
               email = 'manuel.mangual@estadisticas.pr',
               puesto = 'Supervisor del Proyecto Prevención, Apoyo, Rescate y Educación de la Violencia de Género',
               grados = c('MS Investigación y Evaluación de la Salud, Universidad de Puerto Rico',
-                        'BS Biología, Universidad de Puerto Rico')
+                         'BS Biología, Universidad de Puerto Rico')
             ),
+            
             authorTag(
               nombre = 'Frankie Rodríguez Rivera',
               email = 'frankie.rodriguez@estadisticas.pr',
               puesto = 'Analista de Datos',
               grados = c('MS Administración de Agencias Públicas, Universidad del Turabo',
                          'BS Trabajo Social, Universidad Interamericana')
-            ),
-            authorTag(
-              nombre = 'Mario Font Martín',
-              email = 'mario.font@estadisticas.pr',
-              puesto = 'Gerente de Proyectos Estadísticos',
-              grados = c('MS Planificación, Universidad de Puerto Rico',
-                         'BA Administración de Empresas, Universidad de Puerto Rico')
             ),
             
             authorTag(
@@ -1556,6 +1640,28 @@ mainPanel(
             ),
             
             authorTag(
+              nombre = 'Jacobo Orenstein Cardona',
+              email = 'jacobo.orenstein@estadisticas.pr',
+              puesto = 'Ayudante Ejecutivo',
+              grados = c(
+                'BA Filosofía, Centre Sèvres',
+                'BS Química, Massachusetts Institute of Technology',
+                'BA Historia, Massachusetts Institute of Technology'
+              )
+            ),
+            
+            authorTag(
+              nombre = 'Idania R. Rodriguez-Ayuso',
+              email = 'idania.ayuso@estadisticas.pr',
+              puesto = 'Especialista en Proyectos Estadísticos y Epidemiológicos',
+              grados = c(
+                'PhD Salud Pública con concentración en Epidemiología, Walden University',
+                "MS Epidemiología, Universidad de Puerto Rico",
+                'BS Biología, Universidad de Puerto Rico'
+              )
+            ),
+            
+            authorTag(
               nombre = 'Raúl Figueroa Rodríguez',
               email = 'raul.figueroa@estadisticas.pr',
               puesto = 'Gerente de Proyectos Estadísticos NVDRS',
@@ -1564,15 +1670,23 @@ mainPanel(
             ),
             
             authorTag(
-              nombre = 'Jacobo Orenstein Cardona',
-              email = 'jacobo.orenstein@estadisticas.pr',
-              puesto = 'Ayudante Ejecutivo',
+              nombre = 'Dr. Orville M. Disdier Flores',
+              email = 'orville.disdier@estadisticas.pr',
+              puesto = 'Director Ejecutivo',
               grados = c(
-                'BA Filosofía, Centre Sèvres – Paris',
-                'BS Química, MIT',
-                'BA Historia, MIT'
+                'Ed.D Liderazgo Educativo, Universidad del Turabo',
+                'MS Epidemiología, Universidad de Puerto Rico',
+                'BS Ciencias Naturales, Universidad de Puerto Rico'
               )
             ), 
+            
+            authorTag(
+              nombre = 'Mario Font Martín',
+              email = 'mario.font@estadisticas.pr',
+              puesto = 'Gerente de Proyectos Estadísticos',
+              grados = c('MS Planificación, Universidad de Puerto Rico',
+                         'BA Administración de Empresas, Universidad de Puerto Rico')
+            ),
           )
           ),
 
@@ -1601,9 +1715,9 @@ mainPanel(
               column(3),
               column(3,
                      br(),
-                     a(img(src='www/IEPRlocal.png',height=200),
+                     a(img(src='IEPRlocal.png',height=200),
                        href="https://www.google.com/maps/place/Instituto+de+Estad%C3%ADsticas+de+Puerto+Rico/@18.4279999,-66.056444,17.5z/data=!4m5!3m4!1s0x8c0368a432af0b3d:0x274ac1c656b89f89!8m2!3d18.4275192!4d-66.0562994"),
-                     a(img(src='www/IEPRmap.png',height=200),
+                     a(img(src='IEPRmap.png',height=200),
                        href='https://www.google.com/maps/place/Instituto+de+Estad%C3%ADsticas+de+Puerto+Rico/@18.4279999,-66.056444,17.5z/data=!4m5!3m4!1s0x8c0368a432af0b3d:0x274ac1c656b89f89!8m2!3d18.4275192!4d-66.0562994'))
             )
             
@@ -1646,4 +1760,4 @@ mainPanel(
   
   )
 )
-
+)

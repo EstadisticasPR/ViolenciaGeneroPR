@@ -508,9 +508,9 @@ server <- function(input, output, session) {
   #despDF_fill_categoria <- setColorFill(despDF, "Categoria")
   # Grafico de barras
   output$barPlot_opm_opmFemiVD <- renderPlotly({
-    p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "`Cantidad de asesinatos`", group = "1",
-                        color = "1", title = "Tendencia de Asesinatos a lo largo de los Años",
-                        xlab = "Año", ylab = "Cantidad de Asesinatos")
+    p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "`Tasa (x100,000 mujeres)`", group = "1",
+                        color = "1", title = "Tasa de Asesinatos a lo largo de los Años",
+                        xlab = "Año", ylab = "Tasa de Asesinatos por 100,000 mujeres")
     # p <- ggplot(opmFemiVD_filt(), aes(x = Año, y = `Cantidad de asesinatos`, group = 1)) +
     #   geom_line(color = "blue", linewidth = 1) +
     #   geom_point(color = "red", size = 2) +
@@ -749,10 +749,14 @@ server <- function(input, output, session) {
   dcrSentenciadas_fill_tipo <- setColorFill(dcrSentenciadas, "tipo")
   # Grafico de barras
   output$barPlot_dcr_dcrSentenciadas <- renderPlotly({
-    p <- renderBarPlot(dcrSentenciadas_filt, x = "year", y = "cantidad", fill = "tipo",
-                       title = "Personas sentenciadas en programa de supervisión Electrónica por delitos de violencia doméstica por estado del",
-                       xlab = "Año", ylab = "Cantidad de personas sentenciadas", fillLab = "Estado del Caso",
-                       colorFill = dcrSentenciadas_fill_tipo)
+    p <- ggplot(dcrSentenciadas_filt(), aes(x = fecha, y = cantidad, fill = tipo)) +
+      geom_bar(stat = "identity", position = position_dodge2(width = 1, padding = 0.1)) +
+      scale_fill_manual(values = dcrSentenciadas_fill_tipo) +
+      scale_y_continuous(labels = scales::comma_format(big.mark = ",", decimal.mark = ".")) +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 10))) + 
+      labs(title = "Personas sentenciadas en programa de supervisión Electrónica por delitos de violencia doméstica por estado del caso",
+           x = "Año", y = "Cantidad de personas sentenciadas", fill = "Estado del Caso")
     
     ggplotly(p, 
              tooltip = c("fill", "x", "y"))
@@ -1099,7 +1103,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_safekitsDF <- renderPlotly({
     p <- renderBarPlot(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits", 
-                       title = "Tendencia anual del equipo de recolecta de evidencia en casos de violencia sexual por estado de querella", 
+                       title = HTML("Tendencia anual del equipo de <i>Rape Kits</i> en casos de violencia sexual por estado de querella"), 
                        xlab = "Año", ylab = "Total de kits distribuidos", fillLab = "Estado de querella", 
                        colorFill = safekitsDF_fill_Kits)
     ggplotly(p, 
@@ -1110,5 +1114,14 @@ server <- function(input, output, session) {
   # Data Table 
   output$dataTable_safekitsDF <- renderDT({
     renderDataTable(safekitsDF_filt())
+  })
+  
+  #### Lógica para el web hosting en Shiny.io ####
+  res_auth <- secure_server(
+    check_credentials = check_credentials(credentials)
+  )
+  
+  output$auth_output <- renderText({
+    reactiveValuesToList(res_auth)
   })
 }
