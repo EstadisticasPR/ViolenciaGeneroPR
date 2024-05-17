@@ -65,9 +65,13 @@ ui <- secure_app(
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
+
           #tags$span(paste0("Actualización Datos: ", actualizacion_snmvB)),
           #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
           
+
+          tags$span(paste0("Actualizado: ", actualizacion_snmvB)),
+
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -107,10 +111,14 @@ ui <- secure_app(
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
+
           #tags$span(paste0("Actualización Datos: ", actualizacion_snmvA)),
           #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
           
           
+
+          tags$span(paste0("Actualizado: ", actualizacion_snmvA)),
+
           
           sidebarLayout(
             sidebarPanel(
