@@ -3,7 +3,8 @@ cat("Loading User Interface from ui.R...\n")
 source("global.R")
 # Importar funciones auxiliares de ui_helpers.R
 #addResourcePath("www", "R/www/")
-ui <- secure_app(
+ui <- 
+  #secure_app(
   fluidPage(
   ### El theme (colores) de la app ###
   theme = shinytheme("sandstone"),
@@ -642,7 +643,7 @@ mainPanel(
           ),
           # Sección principal con los gráficos
           mainPanel(
-            #plotlyOutput("map_avp_mapaRegi")
+            plotlyOutput("map_avp_mapaRegi")
           )
         )
       )
@@ -1768,4 +1769,4 @@ mainPanel(
   
   )
 )
-)
+# )
