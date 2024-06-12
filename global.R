@@ -44,14 +44,14 @@ source("utils.R")
 # )
 # 
 # # Instalar los paquetes si no están instalados
-# # not_installed <- setdiff(packages, installed.packages()[,"Package"])
-# # if (length(not_installed) > 0) {
-# #   install.packages(not_installed)
-# # }
+# not_installed <- setdiff(packages, installed.packages()[,"Package"])
+# if (length(not_installed) > 0) {
+#   install.packages(not_installed)
+# }
 # 
 # # Cargar paquetes
 # lapply(packages, function(pkg) {
-#   library(pkg)
+#   library(packages)
 # })
 
 # cargando el dataset starwars para testing
