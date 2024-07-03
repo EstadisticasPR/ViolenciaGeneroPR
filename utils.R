@@ -250,25 +250,46 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
 #' # Ejemplo de uso:
 #' renderBarPlot(homiEdad, "x", "y", "fill", "Title", "X Label", "Y Label")
 #' 
+# renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
+#                           barWidth = 1, xGap = 0.1) {
+#   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
+#     geom_bar(stat = "identity", position = position_dodge2(width = barWidth, padding = xGap)) +
+#     scale_fill_manual(values = colorFill) +
+#     scale_y_continuous(labels = scales::comma_format(big.mark = ",", decimal.mark = ".")) +
+#     theme_minimal() +
+#     theme(axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 10))) + # ajuste de posición vertical
+#     labs(title = title, x = xlab, y = ylab, fill = fillLab)
+# 
+#   print(p)
+# }
 renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
                           barWidth = 1, xGap = 0.1) {
+  upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2) 
+  
   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
     geom_bar(stat = "identity", position = position_dodge2(width = barWidth, padding = xGap)) +
     scale_fill_manual(values = colorFill) +
-    scale_y_continuous(labels = scales::comma_format(big.mark = ",", decimal.mark = ".")) +
+    scale_y_continuous( labels = scales::comma_format(big.mark = ",", decimal.mark = ".")) +
+    coord_cartesian(ylim = c(0, upper_y_limit)) +
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 10))) + # ajuste de posición vertical
     labs(title = title, x = xlab, y = ylab, fill = fillLab)
-
+  
   print(p)
 }
 
 
+
+
+
+
 renderHistogram <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1") {
+  upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2) 
   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
     geom_bar(stat = "identity", position = "dodge") +
     scale_fill_manual(values = colorFill) + 
     scale_y_continuous(labels = scales::comma_format(big.mark = ",", decimal.mark = ".")) +
+    coord_cartesian(ylim = c(0, upper_y_limit)) +
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     labs(title = title, x = xlab, y = ylab, fill = fillLab)

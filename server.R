@@ -35,7 +35,7 @@ server <- function(input, output, session) {
   output$barPlot_snmv <- renderPlotly({
     p <- renderHistogram(homiEdad_filt, "año", "casos", "edad",
                        paste("Homicidios de mujeres por grupo de edad y año", input$yearInput_snmv),
-                       "Año", "Número de casos", fillLab = "Grupo de edad", colorFill = homiEdad_fill_edad)
+                       "Año", "Cantidad de víctimas", fillLab = "Grupo de edad", colorFill = homiEdad_fill_edad)
     
     ggplotly(p, tooltip = c("x", "y", "fill"))  # Especificamos qué información mostrar en el tooltip
   })
@@ -184,7 +184,7 @@ server <- function(input, output, session) {
   output$barPlot_just <- renderPlotly({
     p <- renderBarPlot(dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
                        title = "Casos de delitos por Distrito Fiscal según Artículo de la Ley 54",
-                       xlab = "Año", ylab = "Número de casos",
+                       xlab = "Año", ylab = "Cantidad de víctimas",
                        fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito)
     p <- p + facet_wrap(~`FISCALIA DISTRITO`)
     ggplotly(p, tooltip = c("x", "y", "fill"))
@@ -410,7 +410,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_poli_despDF <- renderPlotly({
     p <- renderBarPlot(despDF_filt, x = "Año", y = "Casos", fill = "Categoria",
-                       paste("Cantidad de mujeres desaparecidas, localizadas y sin localizar"),
+                       paste("Cantidad de mujeres desaparecidas por estatus (localizadas y por localizar)"),
                        xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Estado de la víctima",
                        colorFill = despDF_fill_categoria)
     
@@ -1103,7 +1103,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_safekitsDF <- renderPlotly({
     p <- renderBarPlot(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits", 
-                       title = HTML("Tendencia anual del equipo de <i>Rape Kits</i> en casos de violencia sexual por estado de querella"), 
+                       title = HTML("Tendencia anual del equipo de <i>SAFE Kits</i> en casos de violencia sexual por estado de querella"), 
                        xlab = "Año", ylab = "Total de kits distribuidos", fillLab = "Estado de querella", 
                        colorFill = safekitsDF_fill_Kits)
     ggplotly(p, 

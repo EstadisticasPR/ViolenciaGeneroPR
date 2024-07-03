@@ -170,6 +170,20 @@ dfMalt <- bind_rows(
   ) %>%
   distinct() 
 
+# Crear el dataset filtrado y sumarizado de negligencia
+negligencia_sum <- dfMalt %>%
+  filter(grepl("Negligencia", Maltrato, ignore.case = TRUE)) %>%
+  group_by(Año, Sexo) %>%
+  summarise(total_casos = sum(Casos)) %>%
+  mutate(Maltrato = "Negligencia") %>%
+  rename(Casos = total_casos)
+
+# Añadir el dataset de negligencia al dataset original
+dfMalt <- dfMalt %>%
+  filter(!grepl("Negligencia", Maltrato, ignore.case = TRUE)) %>% # Eliminar las filas de negligencia existentes
+  bind_rows(negligencia_sum) %>% # Unir el dataset original con el dataset de negligencia 
+  mutate(Maltrato = factor(Maltrato))
+
 ###############################################################
 ##### Procesamiento de datos del Departamento de Justicia #####
 ###############################################################
@@ -389,6 +403,12 @@ vEdad <- bind_rows(vEdad2021, vEdad2022, vEdad2023) %>%
     Año = factor(Año),
     Sexo = factor(Sexo)
   )
+
+# vEdad %>%
+#   group_by(Sexo, Año) %>%
+#   summarise(
+#     TotalCasos = sum(Casos)
+#   )
 
 #### inciDF ####
 inci2021 <- read_excel(paste0(poli, "NPPRincidentes_2021.xlsx")) %>% 

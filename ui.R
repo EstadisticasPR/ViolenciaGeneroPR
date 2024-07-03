@@ -255,6 +255,7 @@ ui <-
             tags$li(HTML("<b>Abuso Sexual:</b> Incurrir en conducta sexual en presencia de un o una menor o que se utilice, voluntaria o involuntariamente, para ejecutar conducta sexual dirigida a satisfacer los deseos sexuales. También se considera cualquier acto que, de procesarse por la vía criminal, configuraría cualesquiera de varios delitos de índole sexual, tales como agresión sexual, actos lascivos, comercio de personas para actos sexuales, exposiciones obscenas, proposición obscena, producción de pornografía infantil, entre otros delitos reconocidos en el Código Penal de Puerto Rico.")), 
             tags$li(HTML("<b>Explotación:</b> Conducta obscena o utilización de una persona menor de edad para ejecutar conducta obscena. explotación de una persona menor de edad o que se permita que otra persona lo explote, incluyendo –pero sin limitarse– a utilizarla para ejecutar conducta obscena, con el fin de lucrarse o de recibir algún otro beneficio.")), 
             tags$li(HTML("<b>Maltrato Físico:</b> Se refiere a cualquier trauma, lesión o condición no accidental, causada en un episodio o varios, incluyendo la falta de alimentos que, de no ser atendida, pone en riesgo la vida y salud de la persona menor de edad.")), 
+            tags$li(HTML("La categoría <b>Negligencia:</b> en este dataset incluye las siguientes subcategorías de negligencia")),
             tags$li(HTML("<b>Negligencia:</b> Es un tipo de maltrato que consiste en no cumplir con la obligación de proveer a las personas menores de edad de manera adecuada los alimentos, ropa, albergue, educación, atención a su salud, poca supervisión, no visitar, ni mantener contacto con el o la menor o incurrir en alguna de las razones reconocidas en el Código Civil de Puerto Rico para que una persona sea privada de patria potestad entre otros.")), 
             tags$li(HTML("<b>Negligencia Educativa: </b> La negligencia institucional es cuando a una persona menor de edad, que está en un hogar de crianza, centro de cuidado sustituto o en una institución pública o privada, de cuido, educación, tratamiento o detención, se le cause daño o se ponga en riesgo de sufrir daño a su salud e integridad física, mental o emocional, incluyendo –pero sin limitarse– a abuso sexual. La negligencia institucional, ya sea conocida o que se sospeche que ocurre, o que ocurre como resultado de la política, prácticas y condiciones imperantes en la institución, la puede cometer:
             <ul>          
@@ -822,7 +823,7 @@ mainPanel(
         tabPanel(
           lowercaseTitle("Feminicidios por Violencia Doméstica"), 
           # Título del Tab
-          titlePanel("Tasa de asesinatos de mujeres por violencia doméstica, desde 1990 a 2021"),
+          titlePanel("Tasa de asesinatos de mujeres por violencia doméstica, desde 1990 a 2021 (Tasa x100,000 mujeres)"),
           
           # Fuente de Datos, Actualización
           tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
@@ -1529,7 +1530,7 @@ mainPanel(
       tabPanel(
         lowercaseTitle("Tendencia Anual del Equipo Recolecta de Violencia Sexual"), 
         # Título del Tab
-        titlePanel(HTML("Tendencia anual del equipo de recolecta de evidencia de <i>Rape Kits</i> en casos de violencia sexual por estado de querella")),
+        titlePanel(HTML("Tendencia anual del equipo de recolecta de evidencia de <i>SAFE Kits</i> en casos de violencia sexual por estado de querella")),
         
         # Fuente de Datos, Actualización
         tags$span("Fuente: Centro de Ayuda a Victimas de Violación, Departamento de Salud"), tags$br(),
@@ -1649,28 +1650,6 @@ mainPanel(
             ),
             
             authorTag(
-              nombre = 'Jacobo Orenstein Cardona',
-              email = 'jacobo.orenstein@estadisticas.pr',
-              puesto = 'Ayudante Ejecutivo',
-              grados = c(
-                'BA Filosofía, Centre Sèvres',
-                'BS Química, Massachusetts Institute of Technology',
-                'BA Historia, Massachusetts Institute of Technology'
-              )
-            ),
-            
-            authorTag(
-              nombre = 'Idania R. Rodriguez-Ayuso',
-              email = 'idania.ayuso@estadisticas.pr',
-              puesto = 'Especialista en Proyectos Estadísticos y Epidemiológicos',
-              grados = c(
-                'PhD Salud Pública con concentración en Epidemiología, Walden University',
-                "MS Epidemiología, Universidad de Puerto Rico",
-                'BS Biología, Universidad de Puerto Rico'
-              )
-            ),
-            
-            authorTag(
               nombre = 'Raúl Figueroa Rodríguez',
               email = 'raul.figueroa@estadisticas.pr',
               puesto = 'Gerente de Proyectos Estadísticos NVDRS',
@@ -1688,14 +1667,6 @@ mainPanel(
                 'BS Ciencias Naturales, Universidad de Puerto Rico'
               )
             ), 
-            
-            authorTag(
-              nombre = 'Mario Font Martín',
-              email = 'mario.font@estadisticas.pr',
-              puesto = 'Gerente de Proyectos Estadísticos',
-              grados = c('MS Planificación, Universidad de Puerto Rico',
-                         'BA Administración de Empresas, Universidad de Puerto Rico')
-            ),
           )
           ),
 

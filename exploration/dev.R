@@ -107,59 +107,58 @@ tabPanel(
 )
 
 
+########
+renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
+                          barWidth = 1, xGap = 0.1) {
+  # Calculate the maximum y-value
+  # max_y <- max(data[[y]], na.rm = TRUE)
+  # max_y <- max(data %>% pull(!!sym(y)), na.rm = TRUE)
+  max_y <- max(eval(parse(text = paste0("data$", y))), na.rm = TRUE)
+  print(paste("max y: ", max_y))
 
+  # Set the upper y-limit to be slightly higher than the max value (e.g., 10% higher)
+  upper_y_limit <- max_y * 1.1
+  print(paste("upper y: ", upper_y_limit))
 
+  p <- ggplot(data, aes_string(x = x, y = y, fill = fill)) +
+    geom_bar(stat = "identity", position = position_dodge2(width = barWidth, padding = xGap)) +
+    scale_fill_manual(values = colorFill) +
+    scale_y_continuous(labels = scales::comma_format(big.mark = ",", decimal.mark = "."),
+                       limits = c(0, max_y)) +
+    coord_cartesian(ylim = c(0, upper_y_limit), expand = TRUE) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 10))) + # ajuste de posición vertical
+    labs(title = title, x = xlab, y = ylab, fill = fillLab)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
-authorTag <- function(nombre, email, puesto, bachillerato = NULL, maestria = NULL){
-  tags$html(
-    h2(nombre),
-    tags$b('Email'),
-    p(email),
-    tags$b('Puesto'),
-    p(puesto),
-    tags$b('Grados Académicos'),
-    p(maestria),
-    p(bachillerato),
-    tags$hr()
-  )
+  print(p)
 }
 
-# Utilizar la función con los datos proporcionados
-autor_info <- authorTag(
-  nombre = 'Manuel Mangual Martínez',
-  email = 'manuel.mangual@estadisticas.pr',
-  puesto = 'Especialista en Community Health Research, Supervisor proyecto índice de agricultura',
-  maestria = 'MS Investigación y Evaluación de la Salud, Universidad de Puerto Rico',
-  bachillerato = 'BS Biología, Universidad de Puerto Rico'
-)
 
-# Imprimir la información generada
-print(autor_info)
->>>>>>> fb615283673775f5d86d980f3e2d5110ddcd77b4
+
+
+opm_fill_tipo <- setColorFill(opmCasos, "tipo")
+renderBarPlot(opmCasos, x = "year", y = "cantidad", fill = "tipo",
+              paste("Población atendida mediante el programa CRIAS según razón para consulta"),
+              xlab = "Año", ylab = "Cantidad de personas atendidas", fillLab = "Razón para consulta",
+              colorFill = opm_fill_tipo)
+
+# Colores del status
+opmMedio_fill_medio <- setColorFill(opmMedio, "Medio de orientación")
+
+renderBarPlot(opmMedio, x = "año", y = "personas atendidas", fill = "`Medio de orientación`",
+              title = "Población atendida, servicios ofrecidos y seguimientos mediante el programa CRIAS",
+              xlab = "Año", ylab = "Cantidad de personas orientadas", fillLab = "Medio de orientación",
+              colorFill = opmMedio_fill_medio)
+
+
+data = opmMedio
+x = "año"
+y = pepe = "`personas atendidas`"
+fill = "`Medio de orientación`"
+title = "Población atendida, servicios ofrecidos y seguimientos mediante el programa CRIAS"
+xlab = "Año"
+ylab = "Cantidad de personas orientadas"
+fillLab = "Medio de orientación"
+colorFill = opmMedio_fill_medio
+barWidth = 1
+xGap = 0.1
