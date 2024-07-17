@@ -433,6 +433,44 @@ renderMapGroup <- function(data, fill, title, fill_lab = fill) {
   print(p)
 }
 
+
+# Función para crear cards de definiciones y metadatos
+
+#' Generate HTML Definition Cards
+#'
+#' This function creates HTML definition cards from a list of definitions.
+#'
+#' @param definitions A list of definitions where each element is a list containing two elements: `word` and `definition`.
+#'
+#' @return A tagList of HTML div elements styled as definition cards.
+#' @import htmltools
+#' @export
+#'
+#' @examples
+#' definitions <- list(
+#'   list(word = "Cat", definition = "A small domesticated carnivorous mammal."),
+#'   list(word = "Dog", definition = "A domesticated carnivorous mammal.")
+#' )
+#' definitionCards(definitions)
+definitionCards <- function(definitions) {
+  card_list <- lapply(definitions, function(def) {
+    background_color <- "#F2F2F3"
+    tags$div(
+      style = paste("background-color:", background_color, ";
+                    padding: 15px;
+                    margin: 10px;
+                    border-radius: 10px;"),
+      tags$h2(style = "font-weight: bold; margin: 0; padding: 0; font-size: 20px;", def$word),
+      tags$p(style = "margin: 0; padding-top: 5px; font-size: 14px;", def$definition)
+    )
+  })
+  do.call(tagList, card_list)
+}
+
+
+
+
+
 #' Genera una paleta de colores para los niveles de una variable categórica.
 #' 
 #' Esta función toma un dataframe y el nombre de una variable categórica, 
