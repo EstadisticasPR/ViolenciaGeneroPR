@@ -716,7 +716,7 @@ ui <-
           
           tags$ul(style = "list-style-type: none; text-align: center;",
                   sectionTitle("Regiones Policíacas", "24px")),
-          embedImage("RegionesPoliciácas", "Regiones_Policiacas.png", 
+          embedImage("RegionesPoliciácas", "RegionesPoliciacas.png", 
                      "https://www.policia.pr.gov/",
                      "https://www.policia.pr.gov/", size = "250"
           )
