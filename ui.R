@@ -1456,7 +1456,7 @@ ui <-
   
     #### Tab Acerca del Dashboard ####
     tabPanel(
-      lowercaseTitle("Acerca del Dashboard"),
+      lowercaseTitle("Acerca"),
       icon = icon("info-circle"),
       tabsetPanel(
         
