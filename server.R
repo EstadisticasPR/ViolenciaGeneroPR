@@ -97,9 +97,17 @@ server <- function(input, output, session) {
     list(word = "Violencia", definition = "El uso intencional de la fuerza o el poder físico, de hecho, o como amenaza, contra uno mismo, otra persona o un grupo o comunidad, que cause o tenga gran probabilidad de causar lesiones, muerte, daños psicológicos, trastornos del desarrollo o privaciones.")
   )
   
-  output$definitionCards_snmv <- renderUI({
-    definitionCards(definitions_snmv)
+  # Convert list to data frame
+  definitions_df_snmv <- do.call(rbind, lapply(definitions_snmv, as.data.frame))
+  
+  # Rename columns
+  colnames(definitions_df_snmv) <- c("Concepto", "Definición")
+  
+  # Use the function
+  output$dataTable_Def_snmv <- renderDT({
+    renderDataTable_Definitions(definitions_df_snmv)
   })
+  
   
   ########## Server del Departamento de la Familia ##########
   #### Tab de Maltrato (dfMalt) ####
@@ -172,8 +180,15 @@ server <- function(input, output, session) {
     list(word = "Trata Humana", definition = "Se define como la captación, traslado, transporte, acogida o recepción de una persona utilizando la violencia, amenaza, engaño, rapto, fuerza, abuso de poder, abuso de una situación de vulnerabilidad u otros elementos de coacción, con el fin de someterla a explotación y lucrarse con su actividad.")
   )
   
-  output$definitionCards_fam <- renderUI({
-    definitionCards(definitions_fam)
+  # Convert list to data frame
+  definitions_df_fam <- do.call(rbind, lapply(definitions_fam, as.data.frame))
+  
+  # Rename columns
+  colnames(definitions_df_fam) <- c("Concepto", "Definición")
+  
+  # Use the function
+  output$dataTable_Def_fam <- renderDT({
+    renderDataTable_Definitions(definitions_df_fam)
   })
   
   ########## Server del Departamento de Justicia ##########
@@ -334,8 +349,15 @@ server <- function(input, output, session) {
     list(word = "Maltrato Por Amenaza (Artículo 3.3)", definition = "Toda persona que amenaza con causarle daño a su cónyuge, ex cónyuge, a la persona con quien cohabita o con quien haya cohabitado o con quien sostiene o haya sostenido una relación consensual, o la persona con quien haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, a los bienes apreciados por ésta, excepto aquéllos que pertenecen privativamente al ofensor, o a la persona de otro, incurrirá en delito grave de cuarto grado en su mitad superior.")
   )
   
-  output$definitionCards_just <- renderUI({
-    definitionCards(definitions_just)
+  # Convert list to data frame
+  definitions_df_just <- do.call(rbind, lapply(definitions_just, as.data.frame))
+  
+  # Rename columns
+  colnames(definitions_df_just) <- c("Concepto", "Definición")
+  
+  # Use the function
+  output$dataTable_Def_just <- renderDT({
+    renderDataTable_Definitions(definitions_df_just)
   })
   
   ########## Server de Prueba ##########
@@ -474,8 +496,15 @@ server <- function(input, output, session) {
     list(word = "Violencia Doméstica", definition = "Cuando una persona emplea fuerza física o violencia psicológica, intimidación o persecución en contra de su pareja o expareja. Esto, para causarle daño físico a su persona, a sus bienes, a otra persona o a un animal de servicio o mascota o para causarle grave daño emocional. Para que se considere violencia doméstica es necesario que exista o haya existido una relación afectiva entre las partes. Es decir, se da cuando la persona agresora es cónyuge, excónyuge, una persona con quien vive o ha vivido, con quien sostiene o haya sostenido una relación consensual o una persona con quien se haya procreado una hija o un hijo.")
   )
   
-  output$definitionCards_avp <- renderUI({
-    definitionCards(definitions_avp)
+  # Convert list to data frame
+  definitions_df_avp <- do.call(rbind, lapply(definitions_avp, as.data.frame))
+  
+  # Rename columns
+  colnames(definitions_df_avp) <- c("Concepto", "Definición")
+  
+  # Use the function
+  output$dataTable_Def_avp <- renderDT({
+    renderDataTable_Definitions(definitions_df_avp)
   })
   
   ########## Tab del Negociado de Policia ##########
@@ -597,8 +626,15 @@ server <- function(input, output, session) {
     list(word = "Víctima", definition = "Persona que ha sufrido daño físico, emocional, psicológico o financiero como resultado de un acto delictivo, un accidente, un desastre natural, o cualquier otro evento traumático.")
   )
   
-  output$definitionCards_poli <- renderUI({
-    definitionCards(definitions_poli)
+  # Convert list to data frame
+  definitions_df_poli <- do.call(rbind, lapply(definitions_poli, as.data.frame))
+  
+  # Rename columns
+  colnames(definitions_df_poli) <- c("Concepto", "Definición")
+  
+  # Use the function
+  output$dataTable_Def_poli <- renderDT({
+    renderDataTable_Definitions(definitions_df_poli)
   })
 
   ########## Tab de la Oficina de la Procuradora de las Mujeres ##########
@@ -793,6 +829,7 @@ server <- function(input, output, session) {
     list(word = "Agresión sexual (AS)", definition = "Cualquier acto que degrada o daña el cuerpo y/o la sexualidad de la víctima y que por tanto atenta contra su libertad, dignidad e integridad física. Es una expresión de abuso de poder que implica la supremacía masculina sobre la mujer, al denigrar y concebirla como objeto."),
     list(word = "CRIAS", definition = "Centro de Respuesta Integrada de Apoyo y Servicios para la Mujer. La misma surgió de la necesidad imperante de trabajar con el problema de la desigualdad que existe contra las mujeres y trabajar particularmente con la violencia doméstica desde una perspectiva dirigida hacia la validación, orientación y coordinación de servicios de apoyo. El Centro CRIAS establece las bases para un modelo de prevención, intervención y fiscalización de los diferentes tipos de violencia que nos permite levantar información de las víctimas sobrevivientes participantes, obtener análisis de experiencias personales y manejo de actitudes ante el problema. En el mismo, se ofrecen servicios de orientación, coordinación de servicios y referidos a mujeres víctimas/sobrevivientes de violencia doméstica, agresión sexual, acecho y otras manifestaciones de violencia por razón de género."),
     list(word = "Discrimen de género (DG)", definition = "Hace referencia a «toda distinción, exclusión o restricción» que se realice en función del género de una persona con el objetivo o resultado de menoscabar o anular el reconocimiento, goce o ejercicio de sus derechos humanos. A menudo es consecuencia de los mitos y estereotipos de género tales como: las mujeres son las más aptas para ocuparse de la educación de los hijos, cocinar o limpiar, o para realizar trabajos de secretaría, enseñanza o enfermería, mientras que los hombres son líderes, buenos en economía y comercio. Esto ha dado lugar a un acceso desigual al mercado laboral, así como a un salario desigual para puestos similares, al sostenerse que las mujeres tienen peores resultados que los hombres en determinados ámbitos y, con ello, a una discriminación por género."),
+    list(word = "Femenino", definition = "Se refiere a características, atributos o cualidades asociadas tradicionalmente con las mujeres o lo que se considera típicamente propio del género femenino."),
     list(word = "Feminicidios", definition = HTML("Es el crimen que consiste en matar intencionalmente a mujeres por el hecho de ser mujeres o de identificarse como tales. Las definiciones más amplias incluyen cualquier asesinato de mujeres o niñas, o el asesinato involuntario o indirecto de mujeres o niñas, «tal como demuestran algunos casos de violencia doméstica que podrían provocar la muerte de mujeres». El concepto «adquirió importancia en el marco del movimiento feminista de la década de 1970 cuando surge la expresión ‘femicidio’ como alternativa al término neutro ‘homicidio’, con el fin de reconocer y visibilizar la opresión, la desigualdad y la violencia sistemática» contra las mujeres que, en su forma más extrema, culmina en la muerte. El femicidio puede presentarse bajo diferentes formas e incluye los siguientes actos:
             <ul>          
             <li> Femicidio íntimo, perpetrado por una pareja actual o anterior, generalmente durante o después de una relación ya violenta (por ejemplo, de violencia doméstica o violencia sexual);
@@ -800,7 +837,6 @@ server <- function(input, output, session) {
             <li> El femicidio relacionado con la dote, que ocurre en un contexto de conflicto entre las familias de dos cónyuges recién casados, y es generalmente cometido por la familia política que cuestiona sobre todo el importe de la dote;
             <li> El femicidio no íntimo, cometido por un agresor que no tiene una relación íntima con la víctima, que está muy difundido en algunas partes de América Latina y que, por lo general, está precedido de actos de violencia sexual o tortura.;
             </ul>")),
-    list(word = "Femenino", definition = "Se refiere a características, atributos o cualidades asociadas tradicionalmente con las mujeres o lo que se considera típicamente propio del género femenino."),
     list(word = "Identidad de género", definition = "Se refiere a la manera en que una persona se identifica, cómo se reconoce o se expresa sobre sí misma, en cuanto al género que puede corresponder o no a su sexo biológico o asignado en su nacimiento."),
     list(word = "Masculino", definition = "Término utilizado para describir características, atributos o cualidades asociadas tradicionalmente con los hombres o lo que se considera típicamente propio del género masculino."),
     list(word = "Orientaciones", definition = "Direcciones o inclinaciones hacia las que se dirige o enfoca algo."),
@@ -810,8 +846,16 @@ server <- function(input, output, session) {
     list(word = "Violencia en cita (VC)", definition = "Violencia cometida por una persona que está o ha estado en una relación social de carácter romántico o íntimo con la víctima. La existencia de dicha relación se determinará con base en la declaración de la parte informante y teniendo en cuenta la duración de la relación, el tipo de relación y la frecuencia de interacción entre las personas involucradas en la relación. A los efectos de esta definición: La violencia en el noviazgo incluye, pero no se limita a, abuso sexual o físico o la amenaza de tal abuso. La violencia en el noviazgo no incluye actos cubiertos por la definición de violencia doméstica.")
   )
   
-  output$definitionCards_opm <- renderUI({
-    definitionCards(definitions_opm)
+  
+  # Convert list to data frame
+  definitions_df_opm <- do.call(rbind, lapply(definitions_opm, as.data.frame))
+  
+  # Rename columns
+  colnames(definitions_df_opm) <- c("Concepto", "Definición")
+  
+  # Use the function
+  output$dataTable_Def_opm <- renderDT({
+    renderDataTable_Definitions(definitions_df_opm)
   })
   
   ########## Tab del Departamento de Correción y Rehabilitación ##########
@@ -913,8 +957,15 @@ server <- function(input, output, session) {
     list(word = "Programa de Supervisión Electrónica", definition = "El Programa de Monitoreo Electrónico cuenta con la Unidad Especializada de Monitoreo Electrónico (Unidad) compuesta por Oficiales Correccionales, la cual tiene la responsabilidad de supervisar y monitorear a los participantes pertenecientes al programa. Esta supervisión conlleva el verificar y atender las alertas que se activan a través del sistema de transmisión electrónica, activar el protocolo, solicitar apoyo inter agencial, avisar a la víctima y administrar pruebas toxicológicas, entre otras.")
   )
   
-  output$definitionCards_dcr <- renderUI({
-    definitionCards(definitions_dcr)
+  # Convert list to data frame
+  definitions_df_dcr <- do.call(rbind, lapply(definitions_dcr, as.data.frame))
+  
+  # Rename columns
+  colnames(definitions_df_dcr) <- c("Concepto", "Definición")
+  
+  # Use the function
+  output$dataTable_Def_dcr <- renderDT({
+    renderDataTable_Definitions(definitions_df_dcr)
   })
   
   ########## Tab de la Administración de Tribunales ##########
@@ -1241,8 +1292,15 @@ server <- function(input, output, session) {
     list(word = "Violencia Sexual", definition = "Cualquier acto que degrada o daña el cuerpo y/o la sexualidad de la víctima y que por tanto atenta contra su libertad, dignidad e integridad física. Es una expresión de abuso de poder que implica la supremacía masculina sobre la mujer, al denigrar y concebirla como objeto.")
   )
   
-  output$definitionCards_trib <- renderUI({
-    definitionCards(definitions_trib)
+  # Convert list to data frame
+  definitions_df_trib <- do.call(rbind, lapply(definitions_trib, as.data.frame))
+  
+  # Rename columns
+  colnames(definitions_df_trib) <- c("Concepto", "Definición")
+  
+  # Use the function
+  output$dataTable_Def_trib <- renderDT({
+    renderDataTable_Definitions(definitions_df_trib)
   })
   
   ########## Tab del Centro de Ayuda a Víctimas de Violación ##########
@@ -1306,10 +1364,16 @@ server <- function(input, output, session) {
     list(word = "Violencia Sexual", definition = "Cualquier acto que degrada o daña el cuerpo y/o la sexualidad de la víctima y que por tanto atenta contra su libertad, dignidad e integridad física. Es una expresión de abuso de poder que implica la supremacía masculina sobre la mujer, al denigrar y concebirla como objeto.")
   )
   
-  output$definitionCards_cavv <- renderUI({
-    definitionCards(definitions_cavv)
+  # Convert list to data frame
+  definitions_df_cavv <- do.call(rbind, lapply(definitions_cavv, as.data.frame))
+  
+  # Rename columns
+  colnames(definitions_df_cavv) <- c("Concepto", "Definición")
+  
+  # Use the function
+  output$dataTable_Def_cavv <- renderDT({
+    renderDataTable_Definitions(definitions_df_cavv)
   })
-
   
   #### Lógica para el web hosting en Shiny.io ####
   res_auth <- secure_server(
