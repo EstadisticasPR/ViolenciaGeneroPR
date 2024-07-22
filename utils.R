@@ -366,6 +366,98 @@ renderDataTable <- function(filtered_data) {
   )
 }
 
+
+#' Renderizar Tabla de Definiciones con Botones de Exportación
+#'
+#' Crea una tabla de datos interactiva con botones de exportación para copiar, CSV, Excel y PDF. La tabla permite búsqueda, paginación y incluye opciones para diversas configuraciones de visualización.
+#'
+#' @param filtered_data Un data frame o tibble que contiene los datos a ser mostrados en la tabla de datos.
+#'
+#' @return Un objeto de tipo DataTable con opciones de exportación y configuraciones personalizadas.
+#'
+#' @details
+#' La función utiliza la función `datatable` del paquete `DT` para renderizar la tabla de datos con las siguientes características:
+#' \itemize{
+#'   \item La tabla está paginada con 10 entradas por página, con opciones para ajustar el número de entradas mostradas.
+#'   \item Se proporcionan botones de exportación para copiar, CSV, Excel y PDF.
+#'   \item El botón PDF exporta la tabla con un título y mensaje personalizados, y el botón Excel incluye un nombre de archivo y título personalizados.
+#'   \item La DataTable permite el desplazamiento horizontal, la búsqueda y el ordenamiento.
+#'   \item La tabla utiliza JavaScript para callbacks personalizados de dibujo para ajustar la apariencia de los botones de exportación y mantener los números de índice de fila.
+#' }
+#'
+#' @examples
+#' # Ejemplo de uso con un data frame de muestra
+#' datos_muestra <- data.frame(
+#'   Concepto = c("Concepto 1", "Concepto 2"),
+#'   Definicion = c("Definición 1", "Definición 2")
+#' )
+#' renderDataTable_Definitions(datos_muestra)
+#'
+#' @import DT
+#' @importFrom htmltools HTML
+#' @importFrom JS JS
+#' @export
+
+
+renderDataTable_Definitions <- function(filtered_data) {
+  datatable(
+    filtered_data,
+    extensions = c('Buttons'),
+    options = list(
+      pageLength = 10,
+      lengthMenu = c(10, nrow(filtered_data) / 2, nrow(filtered_data)),
+      scrollX = TRUE,
+      paging = TRUE,
+      searching = TRUE,
+      fixedColumns = TRUE,
+      autoWidth = FALSE,
+      ordering = TRUE,
+      dom = 'Bfrtip', 
+      buttons = list(
+        list(
+          extend = 'copy',
+          text = 'Copy'
+        ),
+        list(
+          extend = 'csv',
+          text = 'CSV',
+          filename = 'Definiciones_y_Metadatos'
+        ),
+        list(
+          extend = 'excel',
+          text = 'Excel',
+          filename = 'Definiciones_y_Metadatos', # Custom filename
+          title = 'Definiciones y Metadatos'    # Title in Excel
+        ),
+        list(
+          extend = 'pdf',
+          text = 'PDF',
+          title = 'Definiciones y Metadatos',
+          messageTop = 'Sistema de Compilación y Manejo de Estadísticas de Violencia de Género',
+          orientation = 'portrait',
+          pageSize = 'A4'
+        )
+      ),
+      drawCallback = JS(
+        "function(settings) {",
+        "var api = this.api();",
+        "api.rows({ search: 'applied' }).every(function (rowIdx) {",
+        "var dataIndex = rowIdx + 1;",
+        "api.cell(rowIdx, 0).data(dataIndex);", 
+        "});",
+        "$(this.api().table().container()).find('.dt-buttons').css({'margin-top': '20px', 'padding-bottom': '10px'});",
+        "}"
+      ),
+      columnDefs = list(
+        list(targets = 0, orderable = FALSE) # Disable ordering for the index column
+      )
+    ),
+    class = 'display compact' 
+  )
+}
+
+
+
 #' Renderiza un mapa utilizando ggplot2 en el UI del ShinyApp
 #' 
 #' Esta función toma un conjunto de datos y diversos parámetros para generar un mapa utilizando ggplot2.

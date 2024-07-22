@@ -163,10 +163,9 @@ ui <-
           tags$ul(style = "list-style-type: none; text-align: center;",
                   sectionTitle("Sistema de Notificación de Muertes Violentas", "24px")),
           fluidRow(
-            column(12, uiOutput("definitionCards_snmv"))
+            column(12, DTOutput("dataTable_Def_snmv"))
           )
         )
-
         
         # ### xiomy
         # tabPanel(
@@ -244,7 +243,7 @@ ui <-
           tags$ul(style = "list-style-type: none; text-align: center;",
                   sectionTitle("Departamento de la Familia", "24px")),
           fluidRow(
-            column(12, uiOutput("definitionCards_fam"))
+            column(12, DTOutput("dataTable_Def_fam"))
           )
         )
       )
@@ -375,7 +374,7 @@ ui <-
           tags$ul(style = "list-style-type: none; text-align: center;",
                   sectionTitle("Artículos de la Ley 54", "24px")),
           fluidRow(
-            column(12, uiOutput("definitionCards_just"))
+            column(12, DTOutput("dataTable_Def_just"))
           ),
           
           br(),
@@ -549,7 +548,7 @@ ui <-
           tags$ul(style = "list-style-type: none; text-align: center; padding: 5px; padding-top: 15px;",
                   sectionTitle("Regiones de la Adminsitración de Vivienda Públicas", "24px")),
           fluidRow(
-            column(12, uiOutput("definitionCards_avp"))
+            column(12, DTOutput("dataTable_Def_avp"))
           ),
           
           tags$ul(style = "list-style-type: none; text-align: center;",
@@ -711,7 +710,7 @@ ui <-
           tags$ul(style = "list-style-type: none; text-align: center;",
                   sectionTitle("Negociado de Policía", "24px")),
           fluidRow(
-            column(12, uiOutput("definitionCards_poli"))
+            column(12, DTOutput("dataTable_Def_poli"))
           ),
           
           tags$ul(style = "list-style-type: none; text-align: center;",
@@ -924,7 +923,7 @@ ui <-
           tags$ul(style = "list-style-type: none; text-align: center;",
                   sectionTitle("Oficina de la Procuradora de la Mujer", "24px")),
           fluidRow(
-            column(12, uiOutput("definitionCards_opm"))
+            column(12, DTOutput("dataTable_Def_opm"))
           )
         )
       )
@@ -1037,7 +1036,7 @@ ui <-
       tags$ul(style = "list-style-type: none; text-align: center;",
               sectionTitle("Departamento de Corrección y Rehabilitación", "24px")),
       fluidRow(
-        column(12, uiOutput("definitionCards_dcr"))
+        column(12, DTOutput("dataTable_Def_dcr"))
           )
         )
       )
@@ -1392,7 +1391,7 @@ ui <-
         tags$ul(style = "list-style-type: none; text-align: center;",
                 sectionTitle("Administración de Tribunales", "24px")),
         fluidRow(
-          column(12, uiOutput("definitionCards_trib"))
+          column(12, DTOutput("dataTable_Def_trib"))
         )
       )
     )
@@ -1448,7 +1447,7 @@ ui <-
         tags$ul(style = "list-style-type: none; text-align: center;",
                 sectionTitle("Centro de Ayuda a Víctimas de Violación", "24px")),
         fluidRow(
-          column(12, uiOutput("definitionCards_cavv"))
+          column(12, DTOutput("dataTable_Def_cavv"))
         )
       )
     )    
