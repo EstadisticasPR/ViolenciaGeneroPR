@@ -1482,6 +1482,16 @@ ui <-
             ),
             
             authorTag(
+              nombre = 'Génesis N. Pérez González',
+              email = 'genesis.perez@estadisticas.pr',
+              puesto = 'Programadora Estadística',
+              grados = c(
+                'BS Ciencia de Datos, Universidad de Puerto Rico Humacao',
+                'BS Matemáticas Computacionales, Universidad de Puerto Rico Humacao'
+              )
+            ),
+            
+            authorTag(
               nombre = 'Manuel Mangual Martínez',
               email = 'manuel.mangual@estadisticas.pr',
               puesto = 'Supervisor del Proyecto Prevención, Apoyo, Rescate y Educación de la Violencia de Género',
