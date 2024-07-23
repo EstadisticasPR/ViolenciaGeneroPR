@@ -350,7 +350,7 @@ renderBoxPlot <- function(data, x, y, color, title, xlab, ylab, colorlab = color
 renderDataTable <- function(filtered_data) {
   datatable(
     filtered_data,
-    extensions = c('Buttons'), # Asegúrate de incluir la extensión 'Buttons'
+    extensions = c('Buttons'),
     options = list(
       pageLength = 5,
       lengthMenu = c(5, nrow(filtered_data) / 2, nrow(filtered_data)),
@@ -361,10 +361,17 @@ renderDataTable <- function(filtered_data) {
       autoWidth = FALSE,
       ordering = TRUE,
       dom = 'lftpB',
-      buttons = c('copy', 'csv', 'excel')
+      buttons = c('copy', 'csv', 'excel'),
+      initComplete = JS(
+        "function(settings, json) {",
+        "$(this.api().table().container()).find('.dt-buttons').css({'padding-top': '10px', 'padding-bottom': '10px'});",
+        "$(this.api().table().container()).find('.dataTables_paginate').css('padding-top', '10px');",
+        "}"
+      )
     )
   )
 }
+
 
 
 #' Renderizar Tabla de Definiciones con Botones de Exportación
@@ -442,10 +449,13 @@ renderDataTable_Definitions <- function(filtered_data) {
         "function(settings) {",
         "var api = this.api();",
         "api.rows({ search: 'applied' }).every(function (rowIdx) {",
-        "var dataIndex = rowIdx + 1;",
-        "api.cell(rowIdx, 0).data(dataIndex);", 
+        "  var dataIndex = rowIdx + 1;",
+        "  api.cell(rowIdx, 0).data(dataIndex);", 
         "});",
-        "$(this.api().table().container()).find('.dt-buttons').css({'margin-top': '20px', 'padding-bottom': '10px'});",
+        "$(this.api().table().container()).find('.dt-buttons').css({'margin-top': '10px', 'padding-bottom': '10px'});",
+        "$(this.api().table().container()).find('.dataTables_filter').css('padding-top', '10px');",
+        "$(this.api().table().container()).find('.dataTables_paginate').css({'padding-top': '10px', 'padding-bottom': '10px'});",
+        "$(this.api().table().container()).find('.dataTables_info').css('padding-top', '20px');",
         "}"
       ),
       columnDefs = list(
