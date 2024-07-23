@@ -267,7 +267,7 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, c
   upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2) 
   
   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
-    geom_bar(stat = "identity", position = position_dodge2(width = barWidth, padding = xGap)) +
+    geom_bar(stat = "identity", position = position_dodge2(width = barWidth, padding = xGap), width = 0.7) +
     scale_fill_manual(values = colorFill) +
     scale_y_continuous( labels = scales::comma_format(big.mark = ",", decimal.mark = ".")) +
     coord_cartesian(ylim = c(0, upper_y_limit)) +
@@ -286,7 +286,7 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, c
 renderHistogram <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1") {
   upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2) 
   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
-    geom_bar(stat = "identity", position = "dodge") +
+    geom_bar(stat = "identity", position = "dodge", width = 0.6) +
     scale_fill_manual(values = colorFill) + 
     scale_y_continuous(labels = scales::comma_format(big.mark = ",", decimal.mark = ".")) +
     coord_cartesian(ylim = c(0, upper_y_limit)) +

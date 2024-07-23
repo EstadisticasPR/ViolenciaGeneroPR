@@ -1,4 +1,0 @@
-* linguist-vendored
-*.r linguist-vendored=false
-*.txt text
-*.jpg binary
