@@ -272,7 +272,11 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, c
     scale_y_continuous( labels = scales::comma_format(big.mark = ",", decimal.mark = ".")) +
     coord_cartesian(ylim = c(0, upper_y_limit)) +
     theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 10))) + # ajuste de posición vertical
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 10)),
+      panel.border = element_rect(colour = "black", fill = NA, size = 1),  # Adds a border around the plot panel
+      plot.margin = margin(10, 10, 10, 10)  # Adjusts the margin around the plot
+      ) + # ajuste de posición vertical
     labs(title = title, x = xlab, y = ylab, fill = fillLab)
   
   print(p)
@@ -291,7 +295,11 @@ renderHistogram <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill,
     scale_y_continuous(labels = scales::comma_format(big.mark = ",", decimal.mark = ".")) +
     coord_cartesian(ylim = c(0, upper_y_limit)) +
     theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      panel.border = element_rect(colour = "black", fill = NA, size = 1),  # Adds a border around the plot panel
+      plot.margin = margin(10, 10, 10, 10)  # Adjusts the margin around the plot
+      ) +
     labs(title = title, x = xlab, y = ylab, fill = fillLab)
   
   print(p)
@@ -514,7 +522,9 @@ renderMap <- function(data, fill, title, group, fill_lab = fill,
       legend.position = "bottom",
       axis.text = element_blank(),
       axis.ticks = element_blank(),
-      panel.grid = element_blank()
+      panel.grid = element_blank(),
+      panel.border = element_rect(colour = "black", fill = NA, size = 1),  # Adds a border around the plot panel
+      plot.margin = margin(10, 10, 10, 10)  # Adjusts the margin around the plot
     )
   print(p)
 }
