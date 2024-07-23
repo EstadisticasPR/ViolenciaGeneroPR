@@ -98,7 +98,8 @@ ui <-
             mainPanel(
               #plotlyOutput("linePlot_snmv"),
               plotlyOutput("barPlot_snmv"),
-              DTOutput("dataTable_snmv")
+              DTOutput("dataTable_snmv"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           )
         ),
@@ -146,7 +147,8 @@ ui <-
             # Sección principal con los gráficos y datatable
             mainPanel(
               plotlyOutput("barPlot_snmv_inci"),
-              DTOutput("dataTable_snmv_inci")
+              DTOutput("dataTable_snmv_inci"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           ),
         ), 
@@ -230,10 +232,12 @@ ui <-
               # aglomerar masculino y femenino
               #plotlyOutput("linePlot_fam"),
               plotlyOutput("barPlot_fam"),
-              DTOutput("dataTable_fam")
+              DTOutput("dataTable_fam"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           ),
           tags$span("NOTA IMPORTANTE: Las cantidades podrían representar conteos duplicados del o la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son parte de uno o múltiples referidos. Este conteo es conocido por el Departamento de la Familia como el pareo de menores-reportado. Estos datos están en proceso de revisión por el Instituto de Estadísticas de Puerto Rico. *Nota: Datos parciales y preliminares del año 2022. Están disponibles hasta noviembre de 2022."),
+          tags$div(style = "padding-bottom: 10px;"),
         ),
         
         #### tab de Definiciones y Metadatos ####
@@ -302,7 +306,8 @@ ui <-
               #plotlyOutput("map_just"),
               #plotlyOutput("facet_bartest"),
               # plotOutput("deliPlot_just"),
-              DTOutput("dataTable_just")
+              DTOutput("dataTable_just"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           )
         ),
@@ -355,7 +360,8 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("map_just_mapaDeli"),
-              DTOutput("dataTable_just_mapaDeli")
+              DTOutput("dataTable_just_mapaDeli"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           )
         ), 
@@ -496,7 +502,8 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_avp_dfAvp"),
-              DTOutput("dataTable_avp_dfAvp")
+              DTOutput("dataTable_avp_dfAvp"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           ),
         ),
@@ -535,7 +542,8 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("map_avp_mapaAvp"),
-              DTOutput("dataTable_avp_mapaAvp")
+              DTOutput("dataTable_avp_mapaAvp"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           )
         ), 
@@ -605,7 +613,8 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_poli_despDF"),
-              DTOutput("dataTable_poli_despDF")
+              DTOutput("dataTable_poli_despDF"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           ),
         ),
@@ -661,7 +670,8 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_poli_vEdad"),
-              DTOutput("dataTable_poli_vEdad")
+              DTOutput("dataTable_poli_vEdad"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           )
         ), 
@@ -755,7 +765,8 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_opm_opmFemiVD"),
-              DTOutput("dataTable_opm_opmFemiVD")
+              DTOutput("dataTable_opm_opmFemiVD"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           ),
         ),
@@ -794,7 +805,8 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_opm_opmCasos"),
-              DTOutput("dataTable_opm_opmCasos")
+              DTOutput("dataTable_opm_opmCasos"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           ),
         ),
@@ -833,7 +845,8 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_opm_opmVic"),
-              DTOutput("dataTable_opm_opmVic")
+              DTOutput("dataTable_opm_opmVic"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           ),
         ),
@@ -872,7 +885,8 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_opm_opmMedio"),
-              DTOutput("dataTable_opm_opmMedio")
+              DTOutput("dataTable_opm_opmMedio"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           ),
         ),
@@ -911,7 +925,8 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_opm_opmServiciosMes"),
-              DTOutput("dataTable_opm_opmServiciosMes")
+              DTOutput("dataTable_opm_opmServiciosMes"),
+              tags$div(style = "padding-bottom: 10px;")
             )
           ),
         ),
@@ -978,7 +993,8 @@ ui <-
         # Sección principal con los gráficos
         mainPanel(
           plotlyOutput("barPlot_dcr_dcrCasosInv"),
-          DTOutput("dataTable_dcr_dcrCasosInv")
+          DTOutput("dataTable_dcr_dcrCasosInv"),
+          tags$div(style = "padding-bottom: 10px;")
         )
       ),
     ),
@@ -1025,7 +1041,8 @@ ui <-
         # Sección principal con los gráficos
         mainPanel(
           plotlyOutput("barPlot_dcr_dcrSentenciadas"),
-          DTOutput("dataTable_dcr_dcrSentenciadas")
+          DTOutput("dataTable_dcr_dcrSentenciadas"),
+          tags$div(style = "padding-bottom: 10px;")
         )
       )
     ),
@@ -1090,7 +1107,8 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_148_SoliGrupEdad"),
-            DTOutput("dataTable_OP_148_SoliGrupEdad")
+            DTOutput("dataTable_OP_148_SoliGrupEdad"),
+            tags$div(style = "padding-bottom: 10px;")
           )
         ),
       ),
@@ -1138,7 +1156,8 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_Ley148_ex_parteEmitidas"),
-            DTOutput("dataTable_OP_Ley148_ex_parteEmitidas")
+            DTOutput("dataTable_OP_Ley148_ex_parteEmitidas"),
+            tags$div(style = "padding-bottom: 10px;")
           )
         ),
       ),
@@ -1187,7 +1206,8 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_LEY148Archivadas"),
-            DTOutput("dataTable_OP_LEY148Archivadas")
+            DTOutput("dataTable_OP_LEY148Archivadas"),
+            tags$div(style = "padding-bottom: 10px;")
           )
         ),
       ),
@@ -1235,7 +1255,8 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_LEY148Denegadas"),
-            DTOutput("dataTable_OP_LEY148Denegadas")
+            DTOutput("dataTable_OP_LEY148Denegadas"),
+            tags$div(style = "padding-bottom: 10px;")
           )
         ),
       ),
@@ -1282,7 +1303,8 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_LEY148FinalEmitidas"),
-            DTOutput("dataTable_OP_LEY148FinalEmitidas")
+            DTOutput("dataTable_OP_LEY148FinalEmitidas"),
+            tags$div(style = "padding-bottom: 10px;")
           )
         ),
       ),
@@ -1330,7 +1352,8 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_LEY148Genero"),
-            DTOutput("dataTable_OP_LEY148Genero")
+            DTOutput("dataTable_OP_LEY148Genero"),
+            tags$div(style = "padding-bottom: 10px;")
           )
         ),
       ),
@@ -1379,7 +1402,8 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_tribCasosCrim"),
-            DTOutput("dataTable_tribCasosCrim")
+            DTOutput("dataTable_tribCasosCrim"),
+            tags$div(style = "padding-bottom: 10px;")
           )
         ),
       ),
@@ -1435,7 +1459,8 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_safekitsDF"),
-            DTOutput("dataTable_safekitsDF")
+            DTOutput("dataTable_safekitsDF"),
+            tags$div(style = "padding-bottom: 10px;")
           )
         )
       ),
