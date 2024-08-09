@@ -219,16 +219,6 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
   
   print(p)
 }
-# renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color) {
-#   p <- ggplot(data(), aes(x = x, y = y, group = group, color = color)) +
-#     geom_line(linewidth = 1.3) +  
-#     geom_point(size = 1.5, color = "black") +      
-#     theme_minimal() +
-#     labs(title = title, x = xlab, y = ylab, color = colorlab) +
-#     theme(axis.text.x = element_text(angle = 45, hjust = 1))
-#   
-#   print(p)
-# }
 
 #' Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
 #' 
@@ -282,11 +272,6 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, c
   print(p)
 }
 
-
-
-
-
-
 renderHistogram <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1") {
   upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2) 
   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
@@ -304,12 +289,6 @@ renderHistogram <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill,
   
   print(p)
 }
-
-
-
-
-
-
 
 
 #' Renderiza un gráfico de caja utilizando ggplot2 en el UI de Shiny.
@@ -412,8 +391,6 @@ renderDataTable <- function(filtered_data) {
 #' @importFrom htmltools HTML
 #' @importFrom JS JS
 #' @export
-
-
 renderDataTable_Definitions <- function(filtered_data) {
   datatable(
     filtered_data,
@@ -580,9 +557,6 @@ definitionCards <- function(definitions) {
 }
 
 
-
-
-
 #' Genera una paleta de colores para los niveles de una variable categórica.
 #' 
 #' Esta función toma un dataframe y el nombre de una variable categórica, 
@@ -607,8 +581,6 @@ definitionCards <- function(definitions) {
 #   
 #   return(my_colors)
 # }
-library(RColorBrewer)
-
 setColorFill <- function(df, variable) {
   # Obtener los niveles únicos de la variable
   unique_levels <- unique(df[[variable]])
@@ -636,31 +608,3 @@ setColorFill <- function(df, variable) {
 
 
 
-###########################
-
-# Función para renderizar gráficos de distribución
-renderDistributionPlot <- function(data, x, y, fill, title, xlab, ylab) {
-  ggplot(data, aes_string(x = x, y = y, fill = fill)) +
-    geom_bar(stat = "identity", width = 0.7) +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    coord_flip() +
-    labs(title = title, x = xlab, y = ylab, fill = fill)
-}
-
-# Función para renderizar gráficos de puntos
-renderPointPlot <- function(data, x, y, title, xlab, ylab) {
-  ggplot(data, aes_string(x = x, y = y)) +
-    geom_bar(stat = "identity", width = 0.7) +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    coord_flip() +
-    labs(title = title, x = xlab, y = ylab)
-}
-
-# Función para observar cambios en la selección del año
-observeYearSelection <- function(inputId, session, selectedYear) {
-  observeEvent(input[[inputId]], {
-    updateSelectInput(session, inputId, selected = selectedYear)
-  })
-}

@@ -1375,12 +1375,4 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_cavv)
   })
   
-  #### Lógica para el web hosting en Shiny.io ####
-  res_auth <- secure_server(
-    check_credentials = check_credentials(credentials)
-  )
-  
-  output$auth_output <- renderText({
-    reactiveValuesToList(res_auth)
-  })
 }
