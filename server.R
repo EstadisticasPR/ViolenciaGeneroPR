@@ -1375,4 +1375,32 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_cavv)
   })
   
+  #### tab con informacion de COntacto ####
+  observeEvent(input$send, {
+    req(input$email)  # Ensure the email input is not empty
+    req(input$message)  # Ensure the message input is not empty
+    
+    tryCatch({
+      send.mail(
+        from = input$email,  # Use user's email as sender
+        to = "preguntas@estadisticas.pr",  # Replace with the recipient email
+        subject = paste("Mensaje de", input$name),
+        body = paste("Nombre:", input$name, "\nCorreo Electrónico:", input$email, "\n\nMensaje:\n", input$message),
+        smtp = list(
+          host.name = "smtp.your-email.com",  # Replace with your SMTP host
+          port = 465,  # Replace with your SMTP port
+          user.name = "your-smtp-username",  # Replace with your SMTP username
+          passwd = "your-smtp-password",  # Replace with your SMTP password
+          ssl = TRUE
+        ),
+        authenticate = TRUE,
+        send = TRUE
+      )
+      
+      output$response <- renderText("Mensaje enviado con éxito.")
+    }, error = function(e) {
+      output$response <- renderText(paste("Error al enviar el mensaje:", e$message))
+    })
+  })
+  
 }
