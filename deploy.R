@@ -1,7 +1,7 @@
 # Authenticate
-rsconnect::setAccountInfo(name='proyectosestadisticosiepr', 
-                          token='BEABB8A60DD899C508F752F523FCCBA6', 
-                          secret='Nwqn/uXs5WyrCF6e+PhnQr68qA8V1WIj7uIdpPV7')
+rsconnect::setAccountInfo(name = Sys.getenv("SHINY_ACC_NAME"), 
+                          token = Sys.getenv("TOKEN"), 
+                          secret = Sys.getenv("SECRET"))
 # Deploy
 rsconnect::deployApp(appFiles = c("ui.R", "server.R", "data",
                        "global.R", "utils.R", "www"), 
