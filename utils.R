@@ -220,56 +220,71 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
   print(p)
 }
 
-#' Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
-#' 
-#' Esta función toma un conjunto de datos `data` y diversos parámetros para generar
-#' un gráfico de barras con ggplot2. 
-#' 
-#' @param data Conjunto de datos a utilizar en el gráfico.
-#' @param x Variable para el eje x.
-#' @param y Variable para el eje y.
-#' @param fill Variable para asignar colores de relleno a las barras.
-#' @param title Título del gráfico.
-#' @param xlab Etiqueta del eje x.
-#' @param ylab Etiqueta del eje y.
-#' @param fillLab Etiqueta para la leyenda de colores de relleno.
-#' 
-#' @return No retorna un valor, pero imprime el gráfico generado en la consola.
-#' 
-#' @examples
-#' # Ejemplo de uso:
-#' renderBarPlot(homiEdad, "x", "y", "fill", "Title", "X Label", "Y Label")
-#' 
-# renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
-#                           barWidth = 1, xGap = 0.1) {
-#   p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
-#     geom_bar(stat = "identity", position = position_dodge2(width = barWidth, padding = xGap)) +
-#     scale_fill_manual(values = colorFill) +
-#     scale_y_continuous(labels = scales::comma_format(big.mark = ",", decimal.mark = ".")) +
-#     theme_minimal() +
-#     theme(axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 10))) + # ajuste de posición vertical
-#     labs(title = title, x = xlab, y = ylab, fill = fillLab)
-# 
-#   print(p)
-# }
-renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
-                          barWidth = 1, xGap = 0.1) {
-  upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2) 
-  
-  p <- ggplot(data(), aes_string(x = x, y = y, fill = fill)) +
-    geom_bar(stat = "identity", position = position_dodge2(width = barWidth, padding = xGap), width = 0.7) +
-    scale_fill_manual(values = colorFill) +
-    scale_y_continuous( labels = scales::comma_format(big.mark = ",", decimal.mark = ".")) +
-    coord_cartesian(ylim = c(0, upper_y_limit)) +
+
+# Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
+# Crea un gráfico vacio indicando al usuario que debe seleccionar las variables a visualizar
+create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
+  data_df <- data()
+  ggplot(data_df, aes_string(x = x, y = y)) +
+    geom_blank() +  # Add blank geom to ensure plot structure
+    labs(title = title, x = xlab, y = ylab) +
     theme_minimal() +
     theme(
-      axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 10)),
-      panel.border = element_rect(colour = "black", fill = NA, size = 1),  # Adds a border around the plot panel
-      plot.margin = margin(10, 10, 10, 10)  # Adjusts the margin around the plot
-      ) + # ajuste de posición vertical
-    labs(title = title, x = xlab, y = ylab, fill = fillLab)
+      axis.text.x = element_blank(),
+      axis.ticks = element_blank(),  # Remove axis ticks
+      axis.text.y = element_blank(),  # Remove y-axis text
+      axis.title.x = element_text(size = 12, margin = margin(t = 10)),  # Keep x-axis label
+      axis.title.y = element_text(size = 12, margin = margin(r = 10)),  # Keep y-axis label
+      plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+      panel.border = element_rect(colour = "black", fill = NA, size = 1),
+      plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+    ) +
+    annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 6, hjust = 0.5, vjust = 0.5)
+}
+
+
+
+# Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
+# Crea un gráfico de barras con ggplot2 basado en el conjunto de datos y parámetros proporcionados.
+renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
+                          emptyMessage, barWidth = 1, xGap = 0.1) {
   
-  print(p)
+  data_df <- data()  # Evaluate the reactive data once
+  
+  if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]]) || is.null(data_df[[y]]) || is.null(data_df[[fill]])) {
+    # If there are no data or x/y variables are null, display an empty plot with axes and a message
+    p <- create_empty_plot_with_message(data, x, y, fill, title, xlab, ylab,emptyMessage)
+    
+    return(p)
+  } else {
+    
+    upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2) 
+    
+    p <- ggplot(data_df, aes_string(x = x, y = y, fill = fill)) +
+      geom_bar(stat = "identity",
+               position = position_dodge2(width = barWidth, padding = xGap),
+               width = 0.7,
+               aes(
+                 text = paste(
+                   paste0("<b>", ylab, ":</b> ", after_stat(y)), "<br>",
+                   paste0("<b>", fillLab, ":</b> ", after_stat(fill)), "<br>"
+                 )
+               )) +
+      scale_fill_manual(values = colorFill) +
+      scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+                         expand = expansion(mult = c(0, 0.1))) +
+      coord_cartesian(ylim = c(0, upper_y_limit)) +
+      labs(title = title, x = xlab, y = ylab, fill = fillLab) +
+      theme_minimal() +
+      theme(
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1),
+        plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+      )
+    
+    return(p)
+  }
 }
 
 renderHistogram <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1") {
@@ -289,6 +304,28 @@ renderHistogram <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill,
   
   print(p)
 }
+
+# Convertir un objeto ggplot a plotly y ajustar la leyenda.
+# Esta función transforma un gráfico ggplot en un gráfico interactivo plotly y configura el tooltip.
+convert_to_plotly <- function(p, tooltip_value) {
+  # Convert ggplot object to plotly object
+  p_plotly <- ggplotly(p, tooltip = tooltip_value)
+  
+  # Adjust layout to position the legend on the left side and center it vertically
+  p_plotly <- p_plotly %>% layout(
+    legend = list(
+      x = 1.05,  # X position for legend (left side)
+      y = 0.5,  # Y position for legend (centered vertically)
+      xanchor = "left",  # Anchor the legend to the left
+      yanchor = "middle"
+    )
+  )
+  
+  return(p_plotly)
+}
+
+
+
 
 
 #' Renderiza un gráfico de caja utilizando ggplot2 en el UI de Shiny.
