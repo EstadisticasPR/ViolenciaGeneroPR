@@ -853,7 +853,7 @@ ui <-
         
         #### tab con datos de orientaciones medio de comunicación (opmMedio) ####
         tabPanel(
-          lowercaseTitle("Medio de Orientación a las Víctimas"), 
+          lowercaseTitle("Medio de Orientación a las Víctimas"),
           # Título del Tab
           titlePanel("Orientaciones ofrecidas mediante el programa CRIAS"),
           
