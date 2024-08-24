@@ -67,6 +67,24 @@ server <- function(input, output, session) {
     renderDataTable(homiEdad_filt())
   })
   
+  # Crear Card con Fuentes
+  output$dataTableUI_snmv <- renderUI({
+    if (input$showTable_snmv) {
+      hyperlinks <- c("https://stacks.cdc.gov/view/cdc/149761",
+                      "https://estadisticas.pr/")
+      texts <- c("Sistema Nacional de Notificación de Muertes Violentas",
+                 "Instituto de Estadísticas de Puerto Rico")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_snmv"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+
+  
   #### Tab de Tipo de Muerte (inci) ####
   
   # Filtro para el dataset según los valores de año y el tipo de incidente
@@ -123,6 +141,25 @@ server <- function(input, output, session) {
   output$dataTable_snmv_inci <- renderDT({
     renderDataTable(inci_filt())
   })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_snmv_inci <- renderUI({
+    if (input$showTable_snmv_inci) {
+      hyperlinks <- c("https://stacks.cdc.gov/view/cdc/149761",
+                      "https://estadisticas.pr/")
+      texts <- c("Sistema Nacional de Notificación de Muertes Violentas",
+                 "Instituto de Estadísticas de Puerto Rico")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_snmv_inci"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   
   #### Tab de Definiciones ####
   definitions_snmv <- list(
@@ -223,6 +260,23 @@ server <- function(input, output, session) {
   output$dataTable_fam <- renderDT({
     renderDataTable(dfMalt_filt())
   })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_fam <- renderUI({
+    if (input$showTable_fam) {
+      hyperlinks <- c("https://www.familia.pr.gov/")
+      texts <- c("Departamento de la Familia")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_fam"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   #### Tab de Definiciones ####
   definitions_fam <- list(
     list(word = "Abuso Sexual", definition = "Incurrir en conducta sexual en presencia de un o una menor o que se utilice, voluntaria o involuntariamente, para ejecutar conducta sexual dirigida a satisfacer los deseos sexuales. También se considera cualquier acto que, de procesarse por la vía criminal, configuraría cualesquiera de varios delitos de índole sexual, tales como agresión sexual, actos lascivos, comercio de personas para actos sexuales, exposiciones obscenas, proposición obscena, producción de pornografía infantil, entre otros delitos reconocidos en el Código Penal de Puerto Rico."),
@@ -347,6 +401,24 @@ server <- function(input, output, session) {
     renderDataTable(dfDeli_filt())
   })
   
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_just <- renderUI({
+    if (input$showTable_just) {
+      hyperlinks <- c("https://www.justicia.pr.gov/")
+      texts <- c("Departamento de Justicia")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_just"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
+  
   #### Tab del Mapa de  Delitos por Distritos Fiscales (mapaDeli) ####
   
   # Filtrar el conjunto de datos según el año, delito o distrito seleccionado
@@ -398,6 +470,16 @@ server <- function(input, output, session) {
                         fill_lab = "Distrito Fiscal")
     ggplotly(p, tooltip = c("fill"))
   })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_just_mapaFisc <- renderUI({
+    hyperlinks <- c("https://www.justicia.pr.gov/")
+    texts <- c("Departamento de Justicia")
+    createFuenteDiv(hyperlinks, texts)
+    
+  })
+  
+  
   
   #### Tab de Definiciones ####
   definitions_just <- list(
@@ -584,9 +666,40 @@ server <- function(input, output, session) {
     renderDataTable(dfAvp)
   })
   
+  # Crear Card con Fuentes
+  output$dataTableUI_avp_dfAvp <- renderUI({
+    if (input$showTable_avp_dfAvp) {
+      hyperlinks <- c("https://www.avp.pr.gov/")
+      texts <- c("Administración de Vivienda Pública")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_avp_dfAvp"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   # Data Table para el mapa de dfAvp
   output$dataTable_avp_mapaAvp <- renderDT({
     renderDataTable(mapaAvp_filt())
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_avp_mapaAvp <- renderUI({
+    if (input$showTable_avp_mapaAvp) {
+      hyperlinks <- c("https://www.avp.pr.gov/")
+      texts <- c("Administración de Vivienda Pública")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_avp_mapaAvp"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
   })
   
   
@@ -666,6 +779,22 @@ server <- function(input, output, session) {
     renderDataTable(despDF_filt())
   })
   
+  # Crear Card con Fuentes
+  output$dataTableUI_poli_despDF <- renderUI({
+    if (input$showTable_poli_despDF) {
+      hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
+      texts <- c("Negociado de Policía de Puerto Rico")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_poli_despDF"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   
   #### Tab con datos de victimas por edad (vEdad) ####
   # Filtrar el conjunto de datos según los valores seleccionados del el grupo de edad y año 
@@ -732,6 +861,22 @@ server <- function(input, output, session) {
   output$dataTable_poli_vEdad <- renderDT({
     renderDataTable(vEdad_filt())
   })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_poli_vEdad  <- renderUI({
+    if (input$showTable_poli_vEdad ) {
+      hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
+      texts <- c("Negociado de Policía de Puerto Rico")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_poli_vEdad"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
   
   #### tab con datos de incidentes de violencia doméstica (inciDF) ####
   # Filtrar el conjunto de datos según los valores seleccionados del el grupo de edad y año 
@@ -819,6 +964,21 @@ server <- function(input, output, session) {
     renderDataTable(opmFemiVD_filt())
   })
   
+  # Crear Card con Fuentes
+  output$dataTableUI_opm_opmFemiVD  <- renderUI({
+    if (input$showTable_opm_opmFemiVD) {
+      hyperlinks <- c("https://www.mujer.pr.gov/")
+      texts <- c("Oficina de la Procuradora de las Mujeres")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_opm_opmFemiVD"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
   #### tab con datos de casos de violencia (opmCasos) ####
   # Filtrar el conjunto de datos según los valores seleccionados del año y la categoria de evento
   opmCasos_filt <- reactive({
@@ -874,6 +1034,23 @@ server <- function(input, output, session) {
   output$dataTable_opm_opmCasos <- renderDT({
     renderDataTable(opmCasos_filt())
   })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_opm_opmCasos  <- renderUI({
+    if (input$showTable_opm_opmCasos) {
+      hyperlinks <- c("https://www.mujer.pr.gov/")
+      texts <- c("Oficina de la Procuradora de las Mujeres")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_opm_opmCasos"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   #### tab con datos del género de las víctimas (opmVic) ####
   # Filtrar el conjunto de datos según los valores seleccionados del año y el género de la víctima
   opmVic_filt <- reactive({
@@ -930,6 +1107,20 @@ server <- function(input, output, session) {
     renderDataTable(opmVic_filt())
   })
   
+  # Crear Card con Fuentes
+  output$dataTableUI_opm_opmVic  <- renderUI({
+    if (input$showTable_opm_opmVic) {
+      hyperlinks <- c("https://www.mujer.pr.gov/")
+      texts <- c("Oficina de la Procuradora de las Mujeres")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_opm_opmVic"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
   
   ##### tab con datos del género de las víctimas (opmMedio) ####
   # Filtrar el conjunto de datos según los valores seleccionados del año y el género de la víctima
@@ -992,6 +1183,22 @@ server <- function(input, output, session) {
     renderDataTable(opmMedio_filt())
   })
   
+  # Crear Card con Fuentes
+  output$dataTableUI_opm_opmMedio  <- renderUI({
+    if (input$showTable_opm_opmMedio) {
+      hyperlinks <- c("https://www.mujer.pr.gov/")
+      texts <- c("Oficina de la Procuradora de las Mujeres")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_opm_opmMedio"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   #### tab con datos de los servicios ofrecidos (opmServiciosMes) ####
   # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de servicio
   opmServiciosMes_filt <- reactive({
@@ -1045,6 +1252,21 @@ server <- function(input, output, session) {
   # Data Table para opmServiciosMes
   output$dataTable_opm_opmServiciosMes <- renderDT({
     renderDataTable(opmServiciosMes_filt())
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_opm_opmServiciosMes  <- renderUI({
+    if (input$showTable_opm_opmServiciosMes) {
+      hyperlinks <- c("https://www.mujer.pr.gov/")
+      texts <- c("Oficina de la Procuradora de las Mujeres")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_opm_opmServiciosMes"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
   })
   
   #### Tab de Definiciones ####
@@ -1150,6 +1372,21 @@ server <- function(input, output, session) {
     renderDataTable(dcrCasosInv_filt())
   })
   
+  # Crear Card con Fuentes
+  output$dataTableUI_dcr_dcrCasosInv  <- renderUI({
+    if (input$showTable_dcr_dcrCasosInv) {
+      hyperlinks <- c("https://dcr.pr.gov/")
+      texts <- c("Departamento de Corrección y Rehabilitación")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_dcr_dcrCasosInv"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
   
   
   #### tab con datos de personas sentenciadas integradas a Supervisión Electrónica (dcrSentenciadas) ####
@@ -1229,6 +1466,23 @@ server <- function(input, output, session) {
   output$dataTable_dcr_dcrSentenciadas <- renderDT({
     renderDataTable(dcrSentenciadas_filt())
   })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_dcr_dcrSentenciadas  <- renderUI({
+    if (input$showTable_dcr_dcrSentenciadas) {
+      hyperlinks <- c("https://dcr.pr.gov/")
+      texts <- c("Departamento de Corrección y Rehabilitación")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_dcr_dcrSentenciadas"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   #### Tab de Definiciones ####
   definitions_dcr <- list(
     list(word = "Investigaciones realizadas", definition = "Proceso sistemático y metódico de recopilación, análisis y evaluación de información con el objetivo de obtener conclusiones, resolver problemas o generar conocimiento en un campo específico."),
@@ -1315,6 +1569,22 @@ server <- function(input, output, session) {
     renderDataTable(OP_148_SoliGrupEdad_filt())
   })
   
+  # Crear Card con Fuentes
+  output$dataTableUI_OP_148_SoliGrupEdad  <- renderUI({
+    if (input$showTable_OP_148_SoliGrupEdad) {
+      hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+      texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_OP_148_SoliGrupEdad"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   #### (OP_Ley148_ex_parteEmitidas) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el delito cometido y la región fiscal
@@ -1379,6 +1649,23 @@ server <- function(input, output, session) {
   output$dataTable_OP_Ley148_ex_parteEmitidas <- renderDT({
     renderDataTable(OP_Ley148_ex_parteEmitidas_filt())
   })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_OP_Ley148_ex_parteEmitidas  <- renderUI({
+    if (input$showTable_OP_Ley148_ex_parteEmitidas) {
+      hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+      texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_OP_Ley148_ex_parteEmitidas"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   
   #### (OP_LEY148Archivadas) ####
   
@@ -1446,6 +1733,22 @@ server <- function(input, output, session) {
     renderDataTable(OP_LEY148Archivadas_filt())
   })
   
+  # Crear Card con Fuentes
+  output$dataTableUI_OP_LEY148Archivadas  <- renderUI({
+    if (input$showTable_OP_LEY148Archivadas) {
+      hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+      texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_OP_LEY148Archivadas"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   #### (OP_LEY148Denegadas) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, la razón de archivado y la región fiscal
@@ -1510,6 +1813,23 @@ server <- function(input, output, session) {
   output$dataTable_OP_LEY148Denegadas <- renderDT({
     renderDataTable(OP_LEY148Denegadas_filt())
   })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_OP_LEY148Denegadas  <- renderUI({
+    if (input$showTable_OP_LEY148Denegadas) {
+      hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+      texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_OP_LEY148Denegadas"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   #### (OP_LEY148FinalEmitidas) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el delito cometido y la región fiscal
@@ -1574,6 +1894,23 @@ server <- function(input, output, session) {
   output$dataTable_OP_LEY148FinalEmitidas <- renderDT({
     renderDataTable(OP_LEY148FinalEmitidas_filt())
   })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_OP_LEY148FinalEmitidas  <- renderUI({
+    if (input$showTable_OP_LEY148FinalEmitidas) {
+      hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+      texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_OP_LEY148FinalEmitidas"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   #### (OP_LEY148Genero) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, la parte peticionaria y el sexo de la parte
@@ -1637,6 +1974,23 @@ server <- function(input, output, session) {
   output$dataTable_OP_LEY148Genero <- renderDT({
     renderDataTable(OP_LEY148Genero_filt())
   })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_OP_LEY148Genero  <- renderUI({
+    if (input$showTable_OP_LEY148Genero) {
+      hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+      texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_OP_LEY148Genero"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   #### (tribCasosCrim) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el delito cometido y el estado del caso
@@ -1700,6 +2054,21 @@ server <- function(input, output, session) {
   # Data Table 
   output$dataTable_tribCasosCrim <- renderDT({
     renderDataTable(tribCasosCrim_filt())
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_tribCasosCrim  <- renderUI({
+    if (input$showTable_tribCasosCrim) {
+      hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+      texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_tribCasosCrim"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
   })
   
   #### Tab de Definiciones ####
@@ -1787,6 +2156,24 @@ server <- function(input, output, session) {
   output$dataTable_safekitsDF <- renderDT({
     renderDataTable(safekitsDF_filt())
   })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_safekitsDF  <- renderUI({
+    if (input$showTable_safekitsDF) {
+      hyperlinks <- c("https://www.salud.pr.gov/CMS/104",
+                      "https://www.salud.pr.gov/")
+      texts <- c("Centro de Ayuda a Victimas de Violación", 
+                 "Departamento de Salud")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+        DTOutput("dataTable_safekitsDF"),
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
   
   #### Tab de Definiciones ####
   definitions_cavv <- list(

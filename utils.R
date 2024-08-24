@@ -45,7 +45,7 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
       ),
       actionButton(paste0("deselectAll_", id), "(De)seleccionar todo")
     ),
-    style = "display: inline-block; padding-right: 20px;",
+    style = "display: inline-block; padding: 5px;",
     tags$style(HTML('
       .btn {
         background-color: lightgrey !important;
@@ -86,6 +86,45 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
 #     )
 #   )
 # }
+
+# Crear un checkbox para mostrar u ocultar los datos.
+showDataCheckbox <- function(inputId, label = lowercaseTitle("Mostrar Datos"), value = FALSE) {
+  div(
+    style = "margin-left: 10px; background-color: #3e3f3a; border-radius: 5px; width: 150px; height: 48px; display: flex; align-items: center; justify-content: center;",
+    tags$style(HTML('
+      .custom-checkbox {
+        color: white;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .custom-checkbox:hover {
+        width: 150px; 
+        height: 48px;
+        border-radius: 5px;
+        background-color: #2c2c2a; /* Darker background color on hover */
+        color: #b0dce4; /* Change text color on hover */
+      }
+      .custom-checkbox input[type="checkbox"] {
+        padding-top: 0px;
+        color: white;
+        margin-right: 5px;
+      }
+      .custom-checkbox label {
+        padding-top: 15px;
+        margin: 0; /* Ensure no margin around the label */
+      }
+    ')),
+    div(
+      class = "custom-checkbox",
+      checkboxInput(inputId, tags$b(label), value = value)
+    )
+  )
+}
+
+
+
 embedImage <- function(ID, img_src, link_href, link_alt, size = "60") {
   tags$li(
     style = 'display: inline-block; margin-right: 20px; vertical-align: middle;',
@@ -105,8 +144,6 @@ embedImage <- function(ID, img_src, link_href, link_alt, size = "60") {
 sectionTitle <- function(title, font_size = "20px") {
   HTML(paste("<b style='font-size:", font_size, ";'>", title, "</b>", sep = ""))
 }
-
-
 
 
 # Función para crear separador personalizado
@@ -325,7 +362,35 @@ convert_to_plotly <- function(p, tooltip_value) {
 }
 
 
-
+# Crear un div con enlaces a fuentes y textos asociados.
+# Genera un div que muestra una lista de enlaces con textos, precedida por "Fuentes: ".
+createFuenteDiv <- function(hyperlinks, fuenteTexts) {
+  # Ensure the length of both lists are the same
+  if (length(hyperlinks) != length(fuenteTexts)) {
+    stop("The length of hyperlinks and fuenteTexts must be the same.")
+  }
+  
+  # Create a single string with hyperlinks and text
+  combined <- sapply(seq_along(hyperlinks), function(i) {
+    paste0(tags$a(href = hyperlinks[i], fuenteTexts[i], style = "color: white; text-decoration: none;"))
+  })
+  
+  # Join combined strings with commas and a space
+  combined_text <- paste(combined, collapse = ", ")
+  
+  # Create the div card with "Fuentes: " before the references
+  tags$div(
+    style = "background-color: #3e3f3a; padding: 10px; border-radius: 5px; margin-top: 10px; text-align: center;",
+    tags$span(
+      "Fuentes: ",
+      style = "color: white; font-weight: bold;"
+    ),
+    tags$span(
+      HTML(combined_text),
+      style = "color: white;"
+    )
+  )
+}
 
 
 #' Renderiza un gráfico de caja utilizando ggplot2 en el UI de Shiny.
