@@ -444,10 +444,13 @@ renderDataTable <- function(filtered_data) {
       pageLength = 5,
       lengthMenu = c(5, nrow(filtered_data) / 2, nrow(filtered_data)),
       scrollX = TRUE,
+      fixedColumns = list(leftColumns = 1),
+      #fixedColumns = TRUE,
       paging = TRUE,
       searching = TRUE,
-      fixedColumns = TRUE,
       autoWidth = FALSE,
+      #autoWidth = TRUE,
+      destroy = TRUE,
       ordering = TRUE,
       dom = 'lftpB',
       buttons = c('copy', 'csv', 'excel'),
@@ -460,7 +463,6 @@ renderDataTable <- function(filtered_data) {
     )
   )
 }
-
 
 
 #' Renderizar Tabla de Definiciones con Botones de Exportación

@@ -77,8 +77,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_snmv"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_snmv")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -152,8 +161,18 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_snmv_inci"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+  
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_snmv_inci")
+          )
+        ),
+        
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -269,8 +288,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_fam"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_fam")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -410,8 +438,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_just"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_just")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -674,8 +711,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_avp_dfAvp"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_avp_dfAvp")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -695,8 +741,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_avp_mapaAvp"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_avp_mapaAvp")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -787,8 +842,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_poli_despDF"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_poli_despDF")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -870,8 +934,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_poli_vEdad"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_poli_vEdad")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -972,8 +1045,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_opm_opmFemiVD"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_opm_opmFemiVD")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -1043,8 +1125,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_opm_opmCasos"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_opm_opmCasos")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -1115,8 +1206,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_opm_opmVic"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_opm_opmVic")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -1191,8 +1291,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_opm_opmMedio"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_opm_opmMedio")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -1262,8 +1371,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_opm_opmServiciosMes"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_opm_opmServiciosMes")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -1380,8 +1498,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_dcr_dcrCasosInv"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_dcr_dcrCasosInv")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -1475,8 +1602,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_dcr_dcrSentenciadas"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_dcr_dcrSentenciadas")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -1577,8 +1713,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_OP_148_SoliGrupEdad"),
+        style = "padding: 10px; width: 98%; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+       
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_OP_148_SoliGrupEdad")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -1651,19 +1796,29 @@ server <- function(input, output, session) {
   })
   
   # Crear Card con Fuentes
-  output$dataTableUI_OP_Ley148_ex_parteEmitidas  <- renderUI({
+  output$dataTableUI_OP_Ley148_ex_parteEmitidas <- renderUI({
     if (input$showTable_OP_Ley148_ex_parteEmitidas) {
       hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
       texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_OP_Ley148_ex_parteEmitidas"),
+        style = "padding: 10px; width: 90%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_OP_Ley148_ex_parteEmitidas")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
   })
+  
   
   
   
@@ -1741,8 +1896,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_OP_LEY148Archivadas"),
+        style = "padding: 10px; width: 75%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_OP_LEY148Archivadas")
+          )
+        ),
+     
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -1822,8 +1986,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_OP_LEY148Denegadas"),
+        style = "padding: 10px; width: 85%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_OP_LEY148Denegadas")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -1903,8 +2076,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_OP_LEY148FinalEmitidas"),
+        style = "padding: 10px; width: 87%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_OP_LEY148FinalEmitidas")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -1983,8 +2165,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_OP_LEY148Genero"),
+        style = "padding: 10px; width: 90%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_OP_LEY148Genero")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -2064,8 +2255,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_tribCasosCrim"),
+        style = "padding: 10px; width: 90%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_tribCasosCrim")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -2167,8 +2367,17 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-        DTOutput("dataTable_safekitsDF"),
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            DTOutput("dataTable_safekitsDF")
+          )
+        ),
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
@@ -2207,7 +2416,7 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_cavv)
   })
   
-  #### tab con informacion de COntacto ####
+  #### tab con informacion de Contacto ####
   observeEvent(input$send, {
     req(input$email)  # Ensure the email input is not empty
     req(input$message)  # Ensure the message input is not empty
