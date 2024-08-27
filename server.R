@@ -64,7 +64,7 @@ server <- function(input, output, session) {
 
   # Data Table de homiEdad
   output$dataTable_snmv <- renderDT({
-    renderDataTable(homiEdad_filt())
+    renderDataTable(homiEdad_filt(), "Datos: Homicidios por Grupo de Edad")
   })
   
   # Crear Card con Fuentes
@@ -148,7 +148,7 @@ server <- function(input, output, session) {
   
   # Data Table del SNMV
   output$dataTable_snmv_inci <- renderDT({
-    renderDataTable(inci_filt())
+    renderDataTable(inci_filt(), "Datos: Incidentes Violentos")
   })
   
   # Crear Card con Fuentes
@@ -277,7 +277,7 @@ server <- function(input, output, session) {
   
   # Data Table del DeptFam
   output$dataTable_fam <- renderDT({
-    renderDataTable(dfMalt_filt())
+    renderDataTable(dfMalt_filt(), "Datos: Menores victimas de maltrato")
   })
   
   # Crear Card con Fuentes
@@ -426,7 +426,7 @@ server <- function(input, output, session) {
   
   # Data table del DeptJust
   output$dataTable_just <- renderDT({
-    renderDataTable(dfDeli_filt())
+    renderDataTable(dfDeli_filt(), "Datos: Delitos según Artículo de la Ley 54")
   })
   
   
@@ -700,7 +700,7 @@ server <- function(input, output, session) {
   
   # Data Table para la gráfica de barras de dfAvp
   output$dataTable_avp_dfAvp <- renderDT({
-    renderDataTable(dfAvp)
+    renderDataTable(dfAvp, "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica")
   })
   
   # Crear Card con Fuentes
@@ -730,7 +730,7 @@ server <- function(input, output, session) {
   
   # Data Table para el mapa de dfAvp
   output$dataTable_avp_mapaAvp <- renderDT({
-    renderDataTable(mapaAvp_filt())
+    renderDataTable(mapaAvp_filt(), "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica")
   })
   
   # Crear Card con Fuentes
@@ -831,7 +831,7 @@ server <- function(input, output, session) {
   
   # Data Table para el mapa de despDF
   output$dataTable_poli_despDF <- renderDT({
-    renderDataTable(despDF_filt())
+    renderDataTable(despDF_filt(), "Datos: Mujeres desaparecidad y localizadas")
   })
   
   # Crear Card con Fuentes
@@ -923,7 +923,7 @@ server <- function(input, output, session) {
   
   # Data Table para el mapa de despDF
   output$dataTable_poli_vEdad <- renderDT({
-    renderDataTable(vEdad_filt())
+    renderDataTable(vEdad_filt(), "Datos: Incidentes de violencia doméstica")
   })
   
   # Crear Card con Fuentes
@@ -1034,7 +1034,7 @@ server <- function(input, output, session) {
   
   # Data Table para el mapa de despDF
   output$dataTable_opm_opmFemiVD <- renderDT({
-    renderDataTable(opmFemiVD_filt())
+    renderDataTable(opmFemiVD_filt(), "Datos: Tasa de asesinatos de mujeres por violencia doméstica")
   })
   
   # Crear Card con Fuentes
@@ -1114,7 +1114,7 @@ server <- function(input, output, session) {
   
   # Data Table para el mapa de despDF
   output$dataTable_opm_opmCasos <- renderDT({
-    renderDataTable(opmCasos_filt())
+    renderDataTable(opmCasos_filt(), "Datos: Población atendida mediante el programa CRIAS")
   })
   
   # Crear Card con Fuentes
@@ -1195,7 +1195,7 @@ server <- function(input, output, session) {
   
   # Data Table para el mapa de despDF
   output$dataTable_opm_opmVic <- renderDT({
-    renderDataTable(opmVic_filt())
+    renderDataTable(opmVic_filt(), "Datos: Identidad de género de víctimas asistidas por el programa CRIAS")
   })
   
   # Crear Card con Fuentes
@@ -1280,7 +1280,7 @@ server <- function(input, output, session) {
 
   # Data Table para opmMedio
   output$dataTable_opm_opmMedio <- renderDT({
-    renderDataTable(opmMedio_filt())
+    renderDataTable(opmMedio_filt(), "Datos: Orientaciones ofrecidas mediante el programa CRIAS")
   })
   
   # Crear Card con Fuentes
@@ -1360,7 +1360,7 @@ server <- function(input, output, session) {
   
   # Data Table para opmServiciosMes
   output$dataTable_opm_opmServiciosMes <- renderDT({
-    renderDataTable(opmServiciosMes_filt())
+    renderDataTable(opmServiciosMes_filt(), "Datos: Servicios ofrecidos por el programa CRIAS")
   })
   
   # Crear Card con Fuentes
@@ -1487,7 +1487,7 @@ server <- function(input, output, session) {
   
   # Data Table para dcrCasosInv
   output$dataTable_dcr_dcrCasosInv <- renderDT({
-    renderDataTable(dcrCasosInv_filt())
+    renderDataTable(dcrCasosInv_filt(), "Datos: Casos en supervisión de ley 54")
   })
   
   # Crear Card con Fuentes
@@ -1591,7 +1591,7 @@ server <- function(input, output, session) {
   
   # Data Table para dcrSentenciadas
   output$dataTable_dcr_dcrSentenciadas <- renderDT({
-    renderDataTable(dcrSentenciadas_filt())
+    renderDataTable(dcrSentenciadas_filt(), "Datos: Programa de supervisión electrónica por delitos de violencia doméstica")
   })
   
   # Crear Card con Fuentes
@@ -1702,7 +1702,7 @@ server <- function(input, output, session) {
   
   # Data Table para dcrCasosInv
   output$dataTable_OP_148_SoliGrupEdad <- renderDT({
-    renderDataTable(OP_148_SoliGrupEdad_filt())
+    renderDataTable(OP_148_SoliGrupEdad_filt(), "Datos: Órdenes de Protección Solicitadas por Violencia Sexual")
   })
   
   # Crear Card con Fuentes
@@ -1792,7 +1792,7 @@ server <- function(input, output, session) {
 
   # Data Table para dcrCasosInv
   output$dataTable_OP_Ley148_ex_parteEmitidas <- renderDT({
-    renderDataTable(OP_Ley148_ex_parteEmitidas_filt())
+    renderDataTable(OP_Ley148_ex_parteEmitidas_filt(), "Datos: Órdenes de Protección Ex Parte Emitidas bajo Ley 148")
   })
   
   # Crear Card con Fuentes
@@ -1885,7 +1885,7 @@ server <- function(input, output, session) {
   
   # Data Table 
   output$dataTable_OP_LEY148Archivadas <- renderDT({
-    renderDataTable(OP_LEY148Archivadas_filt())
+    renderDataTable(OP_LEY148Archivadas_filt(), "Datos: Órdenes de Protección Ex Parte archivadas bajo Ley 148")
   })
   
   # Crear Card con Fuentes
@@ -1975,7 +1975,7 @@ server <- function(input, output, session) {
   
   # Data Table 
   output$dataTable_OP_LEY148Denegadas <- renderDT({
-    renderDataTable(OP_LEY148Denegadas_filt())
+    renderDataTable(OP_LEY148Denegadas_filt(), "Datos: Ordenes de protección denegadas por violencia sexual bajo Ley 148")
   })
   
   # Crear Card con Fuentes
@@ -2065,7 +2065,7 @@ server <- function(input, output, session) {
   
   # Data Table 
   output$dataTable_OP_LEY148FinalEmitidas <- renderDT({
-    renderDataTable(OP_LEY148FinalEmitidas_filt())
+    renderDataTable(OP_LEY148FinalEmitidas_filt(), "Datos: Órdenes de protección emitidas bajo ley 148")
   })
   
   # Crear Card con Fuentes
@@ -2154,7 +2154,7 @@ server <- function(input, output, session) {
   
   # Data Table 
   output$dataTable_OP_LEY148Genero <- renderDT({
-    renderDataTable(OP_LEY148Genero_filt())
+    renderDataTable(OP_LEY148Genero_filt(), "Datos: Órdenes de Protección Emitidas bajo Ley 148")
   })
   
   # Crear Card con Fuentes
@@ -2185,6 +2185,95 @@ server <- function(input, output, session) {
   #### (tribCasosCrim) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el delito cometido y el estado del caso
+  # tribCasosCrim_filt <- reactive({
+  #   filter(tribCasosCrim,
+  #          AñoFiscal %in% input$checkGroup_trib_tribCasosCrim_AñoFiscal,
+  #          Delito %in% input$checkGroup_trib_tribCasosCrim_Delito,
+  #          Casos %in% input$checkGroup_trib_tribCasosCrim_Casos
+  #   )
+  # })
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+  # observeEvent(input$deselectAll_trib_tribCasosCrim_AñoFiscal, {
+  #   updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_AñoFiscal", input, tribCasosCrim$AñoFiscal)
+  # })
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar el delito cometido
+  # observeEvent(input$deselectAll_trib_tribCasosCrim_Delito, {
+  #   updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Delito", input, tribCasosCrim$Delito)
+  # })
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar el Estado del Caso
+  # observeEvent(input$deselectAll_trib_tribCasosCrim_Casos, {
+  #   updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Casos", input, tribCasosCrim$Casos)
+  # })
+  # 
+  # # Colores de los delitos cometidos
+  # tribCasosCrim_fill_Delito <- setColorFill(tribCasosCrim, "Delito")
+  # 
+  # # Grafico de barras
+  # output$barPlot_tribCasosCrim <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_año <- length(input$checkGroup_trib_tribCasosCrim_AñoFiscal) > 0
+  #   has_delito <- length(input$checkGroup_trib_tribCasosCrim_Delito) > 0
+  #   has_casos <- length(input$checkGroup_trib_tribCasosCrim_Casos) > 0
+  #   
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_año || !has_delito || !has_casos) {
+  #     message <- "Seleccione Delito(s), Estado del caso y Año(s) a visualizar"
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- renderBarPlot(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
+  #                        title = "Movimiento de casos en tribunal de primera instancia por ley 54 por delito cometido",
+  #                        xlab = "Año Fiscal", ylab = "Solicitudes de Órdenes de Protección", fillLab = "Delito Cometido",
+  #                        colorFill = tribCasosCrim_fill_Delito,
+  #                        emptyMessage = "Seleccione Delito(s), Estado del caso y Año(s) a visualizar")
+  #     p <- p + facet_wrap(~Casos)
+  #     p <- convert_to_plotly(p, tooltip = "text")
+  #     
+  #     return(p)
+  #   }
+  #   
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
+  #                                                title = "Movimiento de casos en tribunal de primera instancia por ley 54 por delito cometido",
+  #                                                xlab = "Año Fiscal", ylab = "Solicitudes de Órdenes de Protección", message)
+  #   ggplotly(empty_plot)
+  # })
+  # 
+  # 
+  # # Data Table 
+  # output$dataTable_tribCasosCrim <- renderDT({
+  #   renderDataTable(tribCasosCrim_filt(), "Datos: Movimiento de casos criminales de violencia doméstica en 
+  #                   el tribunal de primera instancia según la ley Núm. 54")
+  # })
+  # 
+  # 
+  # # Crear Card con Fuentes
+  # output$dataTableUI_tribCasosCrim  <- renderUI({
+  #   if (input$showTable_tribCasosCrim) {
+  #     hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+  #     texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+  #     
+  #     tags$div(
+  #       class = "card",
+  #       style = "padding: 10px; width: 90%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+  #       
+  #       # Contenedor centrado para la tabla
+  #       div(
+  #         style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+  #         div(
+  #           style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+  #           DTOutput("dataTable_tribCasosCrim")
+  #         )
+  #       ),
+  #       
+  #       createFuenteDiv(hyperlinks, texts)
+  #     )
+  #   }
+  # })
+  # 
+  
   tribCasosCrim_filt <- reactive({
     filter(tribCasosCrim,
            AñoFiscal %in% input$checkGroup_trib_tribCasosCrim_AñoFiscal,
@@ -2194,21 +2283,21 @@ server <- function(input, output, session) {
   })
   
   ### funcion para el botón de deseleccionar/seleccionar el año fiscal
-  observeEvent(input$deselectAll_trib_tribCasosCrim_AñoFiscal, {
+  observeEvent(input$deselectAll_trib_tribCasosCrim_Casos, {
     updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_AñoFiscal", input, tribCasosCrim$AñoFiscal)
   })
   
-  ### funcion para el botón de deseleccionar/seleccionar el delito cometido
-  observeEvent(input$deselectAll_trib_tribCasosCrim_Delito, {
+  ### funcion para el botón de deseleccionar/seleccionar la parte peticionaria
+  observeEvent(input$deselectAll_trib_tribCasosCrim_Casos, {
     updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Delito", input, tribCasosCrim$Delito)
   })
   
-  ### funcion para el botón de deseleccionar/seleccionar el Estado del Caso
+  ### funcion para el botón de deseleccionar/seleccionar el sexo de la parte
   observeEvent(input$deselectAll_trib_tribCasosCrim_Casos, {
     updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Casos", input, tribCasosCrim$Casos)
   })
   
-  # Colores de los delitos cometidos
+  # Colores de las partes
   tribCasosCrim_fill_Delito <- setColorFill(tribCasosCrim, "Delito")
   
   # Grafico de barras
@@ -2240,15 +2329,14 @@ server <- function(input, output, session) {
                                                  xlab = "Año Fiscal", ylab = "Solicitudes de Órdenes de Protección", message)
     ggplotly(empty_plot)
   })
-
   
   # Data Table 
   output$dataTable_tribCasosCrim <- renderDT({
-    renderDataTable(tribCasosCrim_filt())
+    renderDataTable(tribCasosCrim_filt(), "Datos: Ordenes de Protección según delito cometido")
   })
   
   # Crear Card con Fuentes
-  output$dataTableUI_tribCasosCrim  <- renderUI({
+  output$dataTableUI_tribCasosCrim <- renderUI({
     if (input$showTable_tribCasosCrim) {
       hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
       texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
@@ -2270,6 +2358,8 @@ server <- function(input, output, session) {
       )
     }
   })
+  
+  
   
   #### Tab de Definiciones ####
   definitions_trib <- list(
@@ -2354,7 +2444,7 @@ server <- function(input, output, session) {
   
   # Data Table 
   output$dataTable_safekitsDF <- renderDT({
-    renderDataTable(safekitsDF_filt())
+    renderDataTable(safekitsDF_filt(), "Datos: Tendencia anual del equipo de recolecta de evidencia de SAFE Kits en casos de violencia sexual")
   })
   
   # Crear Card con Fuentes

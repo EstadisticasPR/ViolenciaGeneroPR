@@ -436,7 +436,7 @@ renderBoxPlot <- function(data, x, y, color, title, xlab, ylab, colorlab = color
 #' # Ejemplo de uso:
 #' renderDataTable(filtered_data)
 #' 
-renderDataTable <- function(filtered_data) {
+renderDataTable <- function(filtered_data, title = " ", font_size = "18px") {
   datatable(
     filtered_data,
     extensions = c('Buttons'),
@@ -445,20 +445,31 @@ renderDataTable <- function(filtered_data) {
       lengthMenu = c(5, nrow(filtered_data) / 2, nrow(filtered_data)),
       scrollX = TRUE,
       fixedColumns = list(leftColumns = 1),
-      #fixedColumns = TRUE,
       paging = TRUE,
       searching = TRUE,
       autoWidth = FALSE,
-      #autoWidth = TRUE,
       destroy = TRUE,
       ordering = TRUE,
-      dom = 'lftpB',
-      buttons = c('copy', 'csv', 'excel'),
+      dom = 'Bfrtip',
+      buttons = list(
+        list(
+          extend = 'collection',
+          buttons = c('copy', 'csv', 'excel'),
+          text = 'Descargar Datos'
+        )
+      ),
       initComplete = JS(
-        "function(settings, json) {",
-        "$(this.api().table().container()).find('.dt-buttons').css({'padding-top': '10px', 'padding-bottom': '10px'});",
-        "$(this.api().table().container()).find('.dataTables_paginate').css('padding-top', '10px');",
-        "}"
+        sprintf(
+          "function(settings, json) {
+            var container = $(this.api().table().container());
+            container.prepend('<h3 class=\"custom-title\">%s</h3>');
+            container.find('.dt-buttons').css({'padding-top': '10px', 'padding-bottom': '10px'});
+            container.find('.dataTables_paginate').css('padding-top', '10px');
+            container.find('.dataTables_filter').css('padding-top', '10px');
+            container.find('.custom-title').css({'text-align': 'center', 'margin-bottom': '10px', 'font-size': '%s', 'font-weight': 'bold'});
+          }",
+          title, font_size
+        )
       )
     )
   )
