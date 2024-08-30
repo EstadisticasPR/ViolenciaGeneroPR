@@ -65,7 +65,7 @@ ui <-
           titlePanel("Homicidios de mujeres por grupo de edad según el año"),
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
+          #tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
 
           #tags$span(paste0("Actualización Datos: ", actualizacion_snmvB)),
           #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
@@ -154,7 +154,7 @@ ui <-
           titlePanel("Número de incidentes violentos por tipo para ambos sexos"),
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
+          #tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
 
           #tags$span(paste0("Actualización Datos: ", actualizacion_snmvA)),
           #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
@@ -279,7 +279,7 @@ ui <-
           titlePanel("Cantidad de menores que fueron víctimas de maltrato por sexo y tipo de maltrato"),
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Departamento de la Familia"), tags$br(),
+          #tags$span("Fuente: Departamento de la Familia"), tags$br(),
           #tags$span("Actualización Datos: ", actualizacion_familia), tags$br(),
           #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
           
@@ -401,7 +401,7 @@ ui <-
           titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"),  # Cambiar por el título adecuado
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Departamento de Justicia" ),
+          #tags$span("Fuente: Departamento de Justicia" ),
           #tags$span(paste0("Actualización Datos:   ", actualizacion_justiciaA)), 
           #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
           
@@ -507,7 +507,7 @@ ui <-
           titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"),  # Cambiar por el título adecuado
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Departamento de Justicia" ), 
+          #tags$span("Fuente: Departamento de Justicia" ), 
           #tags$span(paste0("Actualización Datos: ", actualizacion_justiciaA)),
           #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)), 
           
@@ -663,7 +663,7 @@ ui <-
           titlePanel("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región de la Administración de Vivienda Pública"),
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Administración de Vivienda Pública"), tags$br(),
+          #tags$span("Fuente: Administración de Vivienda Pública"), tags$br(),
           #tags$span("Actualización Datos: ", actualizacion_vivienda), tags$br(),
           #tags$span(paste0("Actualización Sistema:   ", actualizacion_sistema)), 
           
@@ -750,7 +750,7 @@ ui <-
           titlePanel("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región de la Administración de Vivienda Pública"),
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Administración de Vivienda Pública"),
+          #tags$span("Fuente: Administración de Vivienda Pública"),
           #tags$span("Actualización Datos:  ", actualizacion_vivienda), 
           #tags$span("Actualización Sistema:  ", actualizacion_sistema), 
           
@@ -821,7 +821,7 @@ ui <-
           titlePanel("Cantidad de mujeres desaparecidas y localizadas - adultas y menores"),
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
+          #tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
           #tags$span("Actualización Datos:  ", actualizacion_policiaB), tags$br(),
           
           # Menu sidebar con widgets
@@ -905,7 +905,7 @@ ui <-
           titlePanel("Incidentes de violencia doméstica por edad de la víctima"),
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
+          #tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
           #tags$span("Actualización Datos:  ", actualizacion_policiaA), tags$br(),
           
           # Menu sidebar con widgets
@@ -1073,7 +1073,7 @@ ui <-
           titlePanel("Tasa de asesinatos de mujeres por violencia doméstica, desde 1990 a 2021 (Tasa x100,000 mujeres)"),
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
+          #tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
           #tags$span("Actualización Datos:  ", actualizacion_opmA), tags$br(),
           
           # Menu sidebar con widgets
@@ -1133,7 +1133,7 @@ ui <-
           titlePanel("Población atendida mediante el programa CRIAS según razón para consulta"),
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
+          #tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
           #tags$span("Actualización Datos:  ", actualizacion_opmA), tags$br(),
           
           # Menu sidebar con widgets
@@ -1215,7 +1215,7 @@ ui <-
           titlePanel("Identidad de género de víctimas asistidas por el programa CRIAS"),
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
+          #tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
           #tags$span("Actualización Datos:  ", actualizacion_opmB), tags$br(),
           
           # Menu sidebar con widgets
@@ -1297,7 +1297,7 @@ ui <-
           titlePanel("Orientaciones ofrecidas mediante el programa CRIAS"),
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
+          #tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
           #tags$span("Actualización Datos:  ", actualizacion_opmB), tags$br(),
           
           # Menu sidebar con widgets
@@ -1380,7 +1380,7 @@ ui <-
           titlePanel("Población atendida, servicios ofrecidos y seguimientos mediante el programa CRIAS"),
           
           # Fuente de Datos, Actualización
-          tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
+          #tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
           #tags$span("Actualización Datos:  ", actualizacion_opmB), tags$br(),
           
           # Menu sidebar con widgets
@@ -1482,7 +1482,7 @@ ui <-
         titlePanel("Casos en supervisión de ley 54 en programas alternos al confinamiento por estado de investigación: Programas de Comunidad"),
       
         # Fuente de Datos, Actualización
-        tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
+        #tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
         #tags$span("Actualización Datos:  ", actualizacion_correcion), tags$br(),
       
         # Menu sidebar con widgets
@@ -1579,7 +1579,7 @@ ui <-
       titlePanel("Personas sentenciadas en programa de supervisión electrónica por delitos de violencia doméstica por estado del caso"),
 
       # Fuente de Datos, Actualización
-      tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
+      #tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
       #tags$span("Actualización Datos:  ", actualizacion_correcion), tags$br(),
 
       # Menu sidebar con widgets
@@ -1686,7 +1686,7 @@ ui <-
         titlePanel("Órdenes de Protección Solicitadas por Violencia Sexual bajo Ley 148, según Grupo de Edad, Región Judicial y año fiscal"),
         
         # Fuente de Datos, Actualización
-        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
         #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
@@ -1783,7 +1783,7 @@ ui <-
         titlePanel("Órdenes de Protección Ex Parte Emitidas bajo Ley 148 según Región Judicial, Delito Cometido y año fiscal"),
         
         # Fuente de Datos, Actualización
-        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
         #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
@@ -1882,7 +1882,7 @@ ui <-
         titlePanel("Órdenes de protección ex parte bajo Ley 148 archivadas por razón, Región Judicial y año fiscal"),
         
         # Fuente de Datos, Actualización
-        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
         #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
@@ -1980,7 +1980,7 @@ ui <-
         titlePanel("Ordenes de protección denegadas por violencia sexual bajo Ley 148 por razón de archivo, Región Judicial y año fiscal"),
 
         # Fuente de Datos, Actualización
-        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
         #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
@@ -2077,7 +2077,7 @@ ui <-
         titlePanel("Órdenes de protección emitidas bajo ley 148 por delito cometido, Región Judicial y año fiscal"),
         
         # Fuente de Datos, Actualización
-        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
         #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
@@ -2176,7 +2176,7 @@ ui <-
         titlePanel("Órdenes de Protección Emitidas bajo Ley 148, por Sexo, la Parte y año fiscal"),
         
         # Fuente de Datos, Actualización
-        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
         #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
@@ -2275,7 +2275,7 @@ ui <-
         titlePanel("Movimiento de casos criminales de violencia doméstica en el tribunal de primera instancia según la ley Núm. 54 por delito cometido y año fiscal"),
         
         # Fuente de Datos, Actualización
-        tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
+        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
         #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
         
         # Menu sidebar con widgets
@@ -2388,7 +2388,7 @@ ui <-
         titlePanel(HTML("Tendencia anual del equipo de recolecta de evidencia de <i>SAFE Kits</i> en casos de violencia sexual por estado de querella")),
         
         # Fuente de Datos, Actualización
-        tags$span("Fuente: Centro de Ayuda a Victimas de Violación, Departamento de Salud"), tags$br(),
+        #tags$span("Fuente: Centro de Ayuda a Victimas de Violación, Departamento de Salud"), tags$br(),
         #tags$span("Actualización Datos:  ", actualizacion_caav), tags$br(),
         
         # Menu sidebar con widgets

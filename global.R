@@ -447,10 +447,19 @@ inciMapa <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
 opm <- here::here("data", "Oficina_de_procuradora_de_mujeres", "/")
 
 #### opmFemiVD ####
+# opmFemiVD <- read_excel(paste0(opm, "opmFemiVD.xlsx")) %>%
+#   mutate(
+#     Año = factor(Año)
+#   )
+
 opmFemiVD <- read_excel(paste0(opm, "opmFemiVD.xlsx")) %>%
-  mutate(
-    Año = factor(Año)
+  mutate(Año = factor(Año)) %>%
+  rename(
+    Asesinatos = `Cantidad de asesinatos`,
+    Tasa = `Tasa (x100,000 mujeres)`
+    # Continúa con los nombres que desees cambiar
   )
+
 
 #### opmCasos ####
 #meses <- c("1" = "enero", "2" = "febrero", "3" = "marzo",  "4" = "abril", "5" = "mayo", "6" = "junio", "7" = "julio", "8" = "agosto", "9" = "septiembre","10" = "octubre", "11" = "noviembre", "12" = "diciembre")

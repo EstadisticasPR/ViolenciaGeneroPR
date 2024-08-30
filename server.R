@@ -1017,9 +1017,10 @@ server <- function(input, output, session) {
   #despDF_fill_categoria <- setColorFill(despDF, "Categoria")
   # Grafico de barras
   output$barPlot_opm_opmFemiVD <- renderPlotly({
-    p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "`Tasa (x100,000 mujeres)`", group = "1",
-                        color = "1", title = "Tasa de Asesinatos a lo largo de los Años",
-                        xlab = "Año", ylab = "Tasa de Asesinatos por 100,000 mujeres")
+    p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "Tasa", group = "1",
+                        color = "1", title = "Tasa de Asesinatos de mujeres por violencia doméstica:\n Desglose Anual",
+                        xlab = "Año", ylab = "Tasa en base a 100 mil mujeres",
+                        emptyMessage = "Seleccione los Año(s) que desea visualizar")
     # p <- ggplot(opmFemiVD_filt(), aes(x = Año, y = `Cantidad de asesinatos`, group = 1)) +
     #   geom_line(color = "blue", linewidth = 1) +
     #   geom_point(color = "red", size = 2) +
@@ -1027,8 +1028,7 @@ server <- function(input, output, session) {
     #   labs(title = "Tendencia de Asesinatos a lo largo de los Años", x = "Año", y = "Cantidad de Asesinatos") +
     #   theme_minimal()
     
-    ggplotly(p, 
-             tooltip = c("fill", "x", "y"))
+    ggplotly(p, tooltip = "text")
   })
   
   
@@ -2424,7 +2424,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits", 
-                         title = HTML("Tendencia anual del equipo de <i>SAFE Kits</i> en casos de violencia sexual por estado de querella"), 
+                         title = HTML("Tendencia anual del equipo de <i>SAFE Kits</i> en casos de violencia sexual"), 
                          xlab = "Año", ylab = "Total de kits distribuidos", fillLab = "Estado de querella", 
                          colorFill = safekitsDF_fill_Kits,
                          emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
