@@ -499,6 +499,7 @@ renderBoxPlot <- function(data, x, y, color, title, xlab, ylab, colorlab = color
 #' # Ejemplo de uso:
 #' renderDataTable(filtered_data)
 #' 
+
 renderDataTable <- function(filtered_data, title = " ", font_size = "18px") {
   datatable(
     filtered_data,
@@ -573,6 +574,7 @@ renderDataTable_Definitions <- function(filtered_data) {
   datatable(
     filtered_data,
     extensions = c('Buttons'),
+    escape = c(FALSE, TRUE),
     options = list(
       pageLength = 10,
       lengthMenu = c(10, nrow(filtered_data) / 2, nrow(filtered_data)),

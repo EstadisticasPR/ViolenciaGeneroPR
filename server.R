@@ -314,6 +314,7 @@ server <- function(input, output, session) {
     list(word = "Menores", definition = "Individuos que se encuentran bajo la edad legal de mayoría de edad en un contexto específico, lo que generalmente implica que aún no han alcanzado la edad en la que se les considera plenamente responsables de sus acciones según la ley."),
     list(word = "Negligencia", definition = "Es un tipo de maltrato que consiste en no cumplir con la obligación de proveer a las personas menores de edad de manera adecuada los alimentos, ropa, albergue, educación, atención a su salud, poca supervisión, no visitar, ni mantener contacto con el o la menor o incurrir en alguna de las razones reconocidas en el Código Civil de Puerto Rico para que una persona sea privada de patria potestad entre otros."),
     list(word = "Negligencia Educativa", definition = HTML("La negligencia institucional es cuando a una persona menor de edad, que está en un hogar de crianza, centro de cuidado sustituto o en una institución pública o privada, de cuido, educación, tratamiento o detención, se le cause daño o se ponga en riesgo de sufrir daño a su salud e integridad física, mental o emocional, incluyendo –pero sin limitarse– a abuso sexual. La negligencia institucional, ya sea conocida o que se sospeche que ocurre, o que ocurre como resultado de la política, prácticas y condiciones imperantes en la institución, la puede cometer:<ul>          
+            <br>
             <li> Operador u operadora de un hogar de crianza; 
             <li> Cualquier empleado, empleada, funcionario o funcionaria que ofrezca servicios de cuido o que tenga bajo su control o custodia a una persona menor de edad para su cuido, educación, tratamiento o detención;
             </ul>")),
@@ -524,7 +525,8 @@ server <- function(input, output, session) {
     con su cónyuge o ex cónyuge, o con la persona con quien cohabite o haya cohabitado, o con quien sostuviere o haya sostenido una relación consensual, o la persona con quien 
     haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas 
     involucradas en la relación, en cualesquiera de las circunstancias siguientes:
-              <ul>          
+              <ul>    
+              <br>
                 <li> Si se ha compelido a incurrir en relación sexual mediante el empleo de fuerza, violencia, intimidación o amenaza de grave e inmediato daño corporal; o
                 <li> Si se ha anulado o disminuido sustancialmente, sin su conocimiento o sin su consentimiento, su capacidad de consentir, a través de medios hipnóticos, narcóticos, deprimentes o estimulantes o sustancias o medios similares; o
                 <li> Si por enfermedad o incapacidad mental, temporal o permanente, la víctima está incapacitada para comprender la naturaleza del acto en el momento de su realización;
@@ -534,6 +536,7 @@ server <- function(input, output, session) {
     list(word = "Maltrato (Artículo 3.1)", definition = "Toda persona que empleare fuerza física o violencia psicológica,intimidación o persecución en la persona de su cónyuge, ex cónyuge, o la persona con quien cohabita o haya cohabitado, o la persona con quien sostuviere o haya sostenido una relación consensual, o la persona con quien haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, para causarle daño físico a su persona, a los bienes apreciados por ésta, excepto aquéllos que pertenecen privativamente al ofensor, o a la persona de otro o para causarle grave daño emocional, incurrirá en delito grave de cuarto grado en su mitad superior."),
     list(word = "Maltrato Agravado (Artículo 3.2)", definition = HTML("Se impondrá pena correspondiente a delito grave de tercer grado en su mitad inferior cuando en la persona del cónyuge, ex cónyuge o de la persona con quien se cohabita o se haya cohabitado, o con quien se sostiene o haya sostenido una relación consensual, o con quien se haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, se incurriere en maltrato según tipificado en esta Ley, mediando una o más de las circunstancias siguientes:<br>
     <ul>
+    <br>
       <li> Se penetrare en la morada de la persona o en el lugar donde esté albergada y se cometiere allí maltrato, en el caso de cónyuges o cohabitantes, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, cuando éstos estuvieren separados o mediare una orden de protección ordenando el desalojo de la residencia a una de las partes; o</li>
       <li> cuando se infiriere grave daño corporal a la persona; o</li>
       <li> cuando se cometiere con arma mortífera en circunstancias que no revistiesen la intención de matar o mutilar; o</li>
@@ -1395,7 +1398,8 @@ server <- function(input, output, session) {
     list(word = "Discrimen de género (DG)", definition = "Hace referencia a «toda distinción, exclusión o restricción» que se realice en función del género de una persona con el objetivo o resultado de menoscabar o anular el reconocimiento, goce o ejercicio de sus derechos humanos. A menudo es consecuencia de los mitos y estereotipos de género tales como: las mujeres son las más aptas para ocuparse de la educación de los hijos, cocinar o limpiar, o para realizar trabajos de secretaría, enseñanza o enfermería, mientras que los hombres son líderes, buenos en economía y comercio. Esto ha dado lugar a un acceso desigual al mercado laboral, así como a un salario desigual para puestos similares, al sostenerse que las mujeres tienen peores resultados que los hombres en determinados ámbitos y, con ello, a una discriminación por género."),
     list(word = "Femenino", definition = "Se refiere a características, atributos o cualidades asociadas tradicionalmente con las mujeres o lo que se considera típicamente propio del género femenino."),
     list(word = "Feminicidios", definition = HTML("Es el crimen que consiste en matar intencionalmente a mujeres por el hecho de ser mujeres o de identificarse como tales. Las definiciones más amplias incluyen cualquier asesinato de mujeres o niñas, o el asesinato involuntario o indirecto de mujeres o niñas, «tal como demuestran algunos casos de violencia doméstica que podrían provocar la muerte de mujeres». El concepto «adquirió importancia en el marco del movimiento feminista de la década de 1970 cuando surge la expresión ‘femicidio’ como alternativa al término neutro ‘homicidio’, con el fin de reconocer y visibilizar la opresión, la desigualdad y la violencia sistemática» contra las mujeres que, en su forma más extrema, culmina en la muerte. El femicidio puede presentarse bajo diferentes formas e incluye los siguientes actos:
-            <ul>          
+            <ul>   
+            <br>
             <li> Femicidio íntimo, perpetrado por una pareja actual o anterior, generalmente durante o después de una relación ya violenta (por ejemplo, de violencia doméstica o violencia sexual);
             <li> El llamado crimen de honor (o asesinato de o por honor); 
             <li> El femicidio relacionado con la dote, que ocurre en un contexto de conflicto entre las familias de dos cónyuges recién casados, y es generalmente cometido por la familia política que cuestiona sobre todo el importe de la dote;
@@ -2478,7 +2482,8 @@ server <- function(input, output, session) {
   definitions_cavv <- list(
     list(word = "Actos Lascivos", definition = "El Código Penal de Puerto Rico define el delito de actos lascivos como aquel en el cual, sin intentar consumar el delito de agresión sexual, se someta a otra persona a un acto que tienda a despertar, excitar o satisfacer la pasión o deseos sexuales de la persona imputada."),
     list(word = "Agresión Sexual", definition = HTML("El Código Penal de Puerto Rico define el delito de agresión sexual como llevar a cabo, o provocar que otra persona lleve a cabo, un acto orogenital o una penetración sexual (vaginal o anal, ya sea esta genital, digital o instrumental) en cualquiera de estas circunstancias:
-          <ul>          
+          <ul>      
+          <br>
           <li> Si a la víctima se le disminuyó, sin esta consentir o sin saberlo, su capacidad de consentir mediante algún medio hipnótico, narcótico, deprimente o estimulante.; 
           <li> Si a la víctima se le obligó al acto por medio de fuerza física, violencia o intimidación.; 
           <li> Si al momento del acto la víctima no tenía capacidad para consentir y la persona agresora lo sabía.; 
