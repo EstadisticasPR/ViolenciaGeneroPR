@@ -246,16 +246,79 @@ updateCheckboxGroup <- function(session, inputId, input, data) {
 #   
 #   print(p)
 # }
-renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color) {
-  p <- ggplot(data(), aes_string(x = x, y = y, group = group, color = color)) +
-    geom_line(color = "blue", size = 1) +
-    geom_point(color = "red", size = 2) +
-    labs(title = title, x = xlab, y = ylab, color = colorlab) +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  
-  print(p)
+
+
+# renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color) {
+#   p <- ggplot(data(), aes_string(x = x, y = y, group = group, color = color)) +
+#     geom_line(color = "blue", size = 1) +
+#     geom_point(color = "red", size = 2) +
+#     labs(title = title, x = xlab, y = ylab, color = colorlab) +
+#     theme_minimal() +
+#     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# 
+#   print(p)
+# }
+
+# Renderiza un gráfico de lineas utilizando ggplot2 en el UI de Shiny.
+renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, emptyMessage) {
+
+  data_df <- data()  # Evaluar los datos reactivos una vez
+
+  if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]])) {
+    # Si no hay datos o las variables x/y son nulas, mostrar una gráfica vacía con ejes y un mensaje
+    p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
+      geom_blank() +  # Añadir geom_blank para garantizar la estructura de la gráfica
+      labs(title = title, x = xlab, y = ylab) +
+      theme_minimal() +
+      theme(
+        axis.text.x = element_blank(),
+        axis.ticks = element_blank(),  # Quitar ticks de los ejes
+        axis.text.y = element_blank(),  # Quitar texto del eje y
+        axis.title.x = element_text(size = 12, margin = margin(t = 10)),  # Mantener etiqueta del eje x
+        axis.title.y = element_text(size = 12, margin = margin(r = 10)),  # Mantener etiqueta del eje y
+        plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1),
+        plot.margin = margin(t = 45, r = 10, b = 10, l = 10)
+      ) +
+      annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 6, hjust = 0.5, vjust = 0.5)
+
+    return(p)
+
+  } else {
+
+    # Calculate the tick interval based on the range of y values
+    y_max <- max(data_df[[y]], na.rm = TRUE)
+    y_interval <- pretty(c(0, y_max), n = 5)[2]  # Get the interval size for the y-axis
+    upper_y_limit <- ceiling(y_max / y_interval) * y_interval  # Round up to the next interval
+
+
+    p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
+      geom_line(color = "#2f2e7d", size = 1) +  # Línea de color skyblue
+      geom_point(color = "#adcc4e", size = 2,
+                 aes(
+                   text =
+                     paste0("<b>", xlab, ":</b> ", .data[[x]],
+                            "<br><b>", ylab, ":</b> ", .data[[y]]
+                     )
+                 )
+      ) +
+      expand_limits(y = 0) +  # Asegurar que el eje y comience en 0
+      labs(title = title, x = xlab, y = ylab, color = colorlab) +
+      scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+                         expand = expansion(mult = c(0, 0.1))) +
+      coord_cartesian(ylim = c(0, upper_y_limit)) +
+      theme_minimal() +
+      theme(
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1),
+        plot.margin = margin(t = 45, r = 10, b = 10, l = 10)
+      )
+
+    return(p)
+  }
 }
+
 
 
 # Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
