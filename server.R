@@ -1315,7 +1315,8 @@ server <- function(input, output, session) {
   # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de servicio
   opmServiciosMes_filt <- reactive({
     filter(opmServiciosMes,
-           year %in% input$checkGroup_opm_opmServiciosMes_año
+           year %in% input$checkGroup_opm_opmServiciosMes_año,
+           tipo %in% input$checkGroup_opm_opmServiciosMes_tipo
     )
   })
   
