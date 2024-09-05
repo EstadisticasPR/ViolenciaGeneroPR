@@ -85,6 +85,9 @@ homiEdad <- read_excel(paste0(snmv, "/svmvHomiEdad.xlsx")) %>%
   mutate(
     edad = factor(edad, levels = unique(edad)),
     año = factor(año)
+  ) %>%
+  relocate(
+    año, edad, casos
   )
 
 # Definir una paleta de colores personalizada
@@ -109,6 +112,9 @@ inci <- read_excel(file.path(snmv, "svmvIncidentes.xlsx")) %>%
   ) %>%
   rename(
     tipo = `Tipo de Incidente`
+  ) %>%
+  relocate(
+    año, tipo, casos
   )
 
 #############################################################
@@ -164,7 +170,10 @@ dfMalt <- bind_rows(
   rename(
      Maltrato = `Tipo de Maltrato`
   ) %>%
-  distinct() 
+  distinct() %>%
+  relocate(
+    Año, Maltrato, Sexo, Casos
+  )
 
 # Crear el dataset filtrado y sumarizado de negligencia
 negligencia_sum <- dfMalt %>%
@@ -224,11 +233,17 @@ dfDeli <- bind_rows(
                     "Art3.3" = "Maltrato por Amenaza",
                     "Art3.4" = "Maltrato por Restricción de Libertad",
                     "Art2.8" = "Incumplimiento de la Órden de Protección")
+  ) %>%
+  relocate(
+    Año, `FISCALIA DISTRITO`, Delito, Casos
   )
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
 mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
-  merge(dfDeli, by.x = "GROUP", by.y = "FISCALIA DISTRITO")
+  merge(dfDeli, by.x = "GROUP", by.y = "FISCALIA DISTRITO") %>%
+  relocate(
+    Año, GROUP, Delito, geometry,Casos
+  )
 
 ###############################################################################
 #### Procesamiento de datos el Departamento del Trabajo y Recursos Humanos ####
@@ -245,6 +260,9 @@ parLab <- read_excel(paste0(dtra, "dtpartlab.xlsx")) %>%
   mutate(
     Año = factor(Año),
     Sexo = factor(Sexo)
+  ) %>%
+  relocate(
+    Año, Sexo, Tasa
   )
 
 ##########################################################################
@@ -273,6 +291,9 @@ dfAvp <- left_join(avpSolicitadas, avpAsignadas, by = c("región", "año")) %>%
   ) %>%
   filter(
     año != "*2023"
+  ) %>%
+  relocate(
+    año, región, status, cantidad
   )
 
 # Convertir el año a numérico para eliminar el asterisco y convertirlo a int
@@ -280,7 +301,10 @@ dfAvp$año <- as.factor(sub("\\*", "", dfAvp$año))
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
 mapaAvp <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
-  merge(dfAvp, by.x = "GROUP", by.y = "región")
+  merge(dfAvp, by.x = "GROUP", by.y = "región") %>%
+  relocate(
+    año, GROUP, status, geometry, cantidad 
+  )
 
 ############################################################################
 #### Procesamiento de datos Departamento de Corrección y Rehabilitación ####
@@ -299,20 +323,23 @@ dcrCasosInv <- read_excel(paste0(dcr, "dcrCasosInv.xlsx")) %>%
     year = factor(year),
     sexo = factor(sexo),
     tipo = factor(tipo)
+  ) %>%
+  relocate(
+    year, sexo, tipo, cantidad
   )
 
 #### dcrSentenciadas ####
-dcrSentenciadas <- read_excel(paste0(dcr, "dcrSentenciadas.xlsx"))  %>%
-  select(-c(mes)) %>%
-  group_by(tipo, year) %>%
-  summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
-  ungroup() %>%
-  mutate(
-    # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
-    #fecha = as.yearmon(paste(year, mes), "%Y %m")
-    tipo = factor(tipo),
-    year = factor(year)
-  )
+# dcrSentenciadas <- read_excel(paste0(dcr, "dcrSentenciadas.xlsx"))  %>%
+#   select(-c(mes)) %>%
+#   group_by(tipo, year) %>%
+#   summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
+#   ungroup() %>%
+#   mutate(
+#     # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
+#     #fecha = as.yearmon(paste(year, mes), "%Y %m")
+#     tipo = factor(tipo),
+#     year = factor(year)
+#   )
 
 dcrSentenciadas <- read_excel(paste0(dcr, "dcrSentenciadas.xlsx"))  %>%
   mutate(
@@ -323,7 +350,11 @@ dcrSentenciadas <- read_excel(paste0(dcr, "dcrSentenciadas.xlsx"))  %>%
   ) 
 # Combinar mes y año en una nueva columna
 dcrSentenciadas$fecha <- as.Date(paste0(dcrSentenciadas$year, "-", dcrSentenciadas$mes, "-01"))
-
+dcrSentenciadas <- dcrSentenciadas %>%
+  select(
+    year, fecha, tipo, cantidad
+  )
+  
 
 #########################################################
 #### Procesamiento de datos del Negociado de Policía ####
@@ -357,6 +388,9 @@ despDF <- bind_rows(
   mutate(
     Año = factor(Año),
     Categoria = factor(Categoria)
+  ) %>%
+  select(
+    Año, Categoria, Casos
   )
 
 # despDF <- bind_rows(
@@ -398,6 +432,9 @@ vEdad <- bind_rows(vEdad2021, vEdad2022, vEdad2023) %>%
     Edad = factor(Edad),
     Año = factor(Año),
     Sexo = factor(Sexo)
+  ) %>%
+  select(
+    Año, Edad, Sexo, Casos
   )
 
 # vEdad %>%
@@ -435,7 +472,10 @@ inciDF <- bind_rows(inci2021, inci2022, inci2023) %>%
     Meses_Numéricos = match(Meses, Mes),
     Fecha = as.yearmon(paste(Año, Meses_Numéricos), "%Y %m")
   ) %>%
-  select(-c(Meses_Numéricos, Mes, Meses))
+  select(-c(Meses_Numéricos, Mes, Meses)) %>%
+  relocate(
+    Año, `Áreas Policiacas`, Población, Casos
+  )
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
 inciMapa <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
@@ -458,8 +498,7 @@ opmFemiVD <- read_excel(paste0(opm, "opmFemiVD.xlsx")) %>%
     Asesinatos = `Cantidad de asesinatos`,
     Tasa = `Tasa (x100,000 mujeres)`
     # Continúa con los nombres que desees cambiar
-  )
-
+  ) 
 
 #### opmCasos ####
 #meses <- c("1" = "enero", "2" = "febrero", "3" = "marzo",  "4" = "abril", "5" = "mayo", "6" = "junio", "7" = "julio", "8" = "agosto", "9" = "septiembre","10" = "octubre", "11" = "noviembre", "12" = "diciembre")
@@ -473,6 +512,9 @@ opmCasos <-  read_excel(paste0(opm, "opmPartMes.xlsx")) %>%
     tipo = factor(tipo, 
                   levels = c("Acecho (A)", "Agresión sexual (AS)", "Discrimen de género (DG)",
                              "Violencia doméstica (VD)", "Violencia en cita (VC)", "Otras"))
+  ) %>%
+  relocate(
+    year, tipo, cantidad
   )
 
 #### opmVic ####
@@ -483,6 +525,9 @@ opmVic <- read_excel(paste0(opm, "opmVicGraf.xlsx")) %>%
     género = factor(género,
                     levels = c("Femenino", "Masculino", "Trans", "No informó")),
     año = factor(año)
+  ) %>%
+  relocate(
+    año, género, víctimas
   )
 
 #### opmMedio ####
@@ -493,7 +538,11 @@ opmMedio <- read_excel(paste0(opm, "opmMedio.xlsx")) %>%
   mutate(
     `Medio de orientación` = factor(`Medio de orientación`),
     año = factor(año)
+  ) %>%
+  relocate(
+    año, `Medio de orientación`, `personas atendidas`
   )
+
 
 #### opmServiciosMes ####
 opmServiciosMes <-  read_excel(paste0(opm, "opmServiciosMes.xlsx")) %>%
@@ -505,6 +554,9 @@ opmServiciosMes <-  read_excel(paste0(opm, "opmServiciosMes.xlsx")) %>%
     #fecha = as.yearmon(paste(year, month), "%Y %m"),
     tipo = factor(tipo),
     year = factor(year)
+  ) %>%
+  relocate(
+    year, tipo, cantidad
   )
 
 
@@ -553,7 +605,10 @@ casosCrimLey148 <- full_join(casosCrimLey148_20, casosCrimLey148_21) %>%
     AñoFiscal = factor(AñoFiscal),
     Status = factor(Status), 
     Delito = factor(Delito)
-    )
+    ) %>%
+  relocate(
+    AñoFiscal, Status, Delito, Casos
+  )
 
 #### OP_148_SoliGrupEdad ####
 
@@ -603,7 +658,11 @@ OP_148_SoliGrupEdad <- full_join(
                          ifelse(AñoFiscal == "2021-2022", "2021", AñoFiscal)),
     AñoFiscal = factor(AñoFiscal),
     Región = factor(Región)
+  ) %>%
+  relocate(
+    AñoFiscal, Región, Edad, Solicitudes
   )
+
 
 #### OP_Ley148_ex_parteEmitidas ####
 # Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
@@ -624,7 +683,7 @@ OP_Ley148_ex_parteEmitidas2020_21 <- read_excel(paste0(trib, "OP_Ley148_ex_parte
   ) %>%
   filter(
     Delito != "Total"
-  )
+  ) 
 
 # datos de solicitudes de órdenes de protección en el 2021-2022
 OP_Ley148_ex_parteEmitidas2021_22 <- read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas2021_22.xlsx")) %>%
@@ -639,7 +698,7 @@ OP_Ley148_ex_parteEmitidas2021_22 <- read_excel(paste0(trib, "OP_Ley148_ex_parte
   ) %>%
   filter(
     Delito != "Total"
-  )
+  ) 
 
 # dataset unido
 OP_Ley148_ex_parteEmitidas <- full_join(
@@ -654,6 +713,9 @@ OP_Ley148_ex_parteEmitidas <- full_join(
   ) %>%
   filter(
     Región != "Total"
+  ) %>%
+  relocate(
+    AñoFiscal, Delito, Región, ÓrdenesEmitidas
   )
 
 #### OP_LEY148Archivadas ####
@@ -705,6 +767,9 @@ OP_LEY148Archivadas <- full_join(
   ) %>%
   filter(
     Región != "Total"
+  ) %>%
+  relocate(
+    AñoFiscal, Razón, Región, ÓrdenesArchivadas
   )
 
 #### OP_LEY148Denegadas ####
@@ -758,6 +823,9 @@ OP_LEY148Denegadas <- full_join(
       TRUE ~ as.character(AñoFiscal)
     ),
     AñoFiscal = factor(AñoFiscal)
+  ) %>%
+  relocate(
+    AñoFiscal, Razón, Región, ÓrdenesDenegadas
   )
 
 #### OP_LEY148FinalEmitidas ####
@@ -812,7 +880,10 @@ OP_LEY148FinalEmitidas <- full_join(
       TRUE ~ as.character(AñoFiscal)
     ),
     AñoFiscal = factor(AñoFiscal)
-  )
+  ) %>%
+  relocate(
+    AñoFiscal, Delito, Región, ÓrdenesEmitidas
+  ) 
 
 #### OP_LEY148Genero ####
 
@@ -857,6 +928,9 @@ OP_LEY148Genero <- full_join(
       TRUE ~ as.character(AñoFiscal)
     ),
     AñoFiscal = factor(AñoFiscal)
+  ) %>%
+  relocate(
+    AñoFiscal, Parte, Sexo, Solicitudes
   )
 
 
@@ -933,6 +1007,9 @@ tribCasosCrim <- full_join(
       TRUE ~ as.character(AñoFiscal)
     ),
     AñoFiscal = factor(AñoFiscal)
+  ) %>%
+  relocate(
+    AñoFiscal, Delito, Casos, Cantidad
   )
 
 
