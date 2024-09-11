@@ -106,7 +106,7 @@ ui <-
                     style = "text-align: center; display: inline-block;",  # Styling container for the button
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>Grupo(s) de Edad:"),
-                      choices = homiEdad$edad,
+                      choices = homiEdad$Edad,
                       selected = 8,
                       id = "snmv_homiEdad_edad"
                     )
@@ -121,7 +121,7 @@ ui <-
                       style = "flex: 0.7; display: flex; justify-content: center;",
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
-                        choices = homiEdad$año,
+                        choices = homiEdad$Año,
                         selected = NULL,
                         id = "snmv_homiEdad_año"
                       )
@@ -198,7 +198,7 @@ ui <-
                     # botón para seleccionar tipo de incidente
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>Tipo(s) de Incidente:"),
-                      choices = inci$tipo,
+                      choices = inci$Incidente,
                       selected = 7,
                       id = "snmv_inci_tipo"
                     )
@@ -214,7 +214,7 @@ ui <-
                       # botón para seleccionar año
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
-                        choices = inci$año,
+                        choices = inci$Año,
                         selected = NULL,
                         id = "snmv_inci_año"
                       )
@@ -453,7 +453,7 @@ ui <-
                     ),
                     createDropdownCheckbox(
                       label = HTML("Seleccionar<br>Distrito(s):"),
-                      choices = dfDeli$`FISCALIA DISTRITO`,
+                      choices = dfDeli$Distrito,
                       selected = NULL,
                       id = "just_dfDeli_distrito"
                     )
@@ -700,8 +700,8 @@ ui <-
                     # botón para seleccionar la región
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>Región de Vivienda:"),
-                      choices = dfAvp$región,
-                      selected = dfAvp$región,
+                      choices = dfAvp$Región,
+                      selected = dfAvp$Región,
                       id = "avp_dfAvp_región"
                     )
                   )
@@ -716,8 +716,8 @@ ui <-
                       # botón para seleccionar el año
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
-                        choices = dfAvp$año,
-                        selected = dfAvp$año,
+                        choices = dfAvp$Año,
+                        selected = dfAvp$Año,
                         id = "avp_dfAvp_año"
                       )
                     ),
@@ -760,7 +760,7 @@ ui <-
               
               # Botón para seleccionar el año
               selectInput("select_avp_mapaAvp_año", "Seleccione Año:",
-                          choices = levels(mapaAvp$año),
+                          choices = levels(mapaAvp$Año),
                           selected = 1),
               
               # Centrar el checkbox y la tabla
@@ -858,8 +858,8 @@ ui <-
                     # botón para seleccionar la Categoría
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>el estado de la víctima:"),
-                      choices = despDF$Categoria,
-                      selected = despDF$Categoria,
+                      choices = despDF$Estado,
+                      selected = despDF$Estado,
                       id = "poli_despDF_categoría"
                     )
                   )
@@ -1169,8 +1169,8 @@ ui <-
                     # botón para seleccionar el tipo de violencia
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>Razón para Consulta:"),
-                      choices = opmCasos$tipo,
-                      selected = opmCasos$tipo,
+                      choices = opmCasos$Razón,
+                      selected = opmCasos$Razón,
                       id = "opm_opmCasos_tipo"
                     )
                   )
@@ -1184,8 +1184,8 @@ ui <-
                       style = "flex: 0.1; display: flex; justify-content: center;",
                       createDropdownCheckbox(
                       label = "Seleccione Año(s):",
-                      choices = opmCasos$year,
-                      selected = opmCasos$year,
+                      choices = opmCasos$Año,
+                      selected = opmCasos$Año,
                       id = "opm_opmCasos_año"
                      )
                     ),
@@ -1251,8 +1251,8 @@ ui <-
                     # botón para seleccionar el género de las victimas
                     createDropdownCheckbox(
                       label = "Seleccione Género(s):",
-                      choices = opmVic$género,
-                      selected = opmVic$género,
+                      choices = opmVic$Género,
+                      selected = opmVic$Género,
                       id = "opm_opmVic_género"
                     )
                   )
@@ -1266,8 +1266,8 @@ ui <-
                       style = "flex: 0.1; display: flex; justify-content: center;",
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
-                        choices = opmVic$año,
-                        selected = opmVic$año,
+                        choices = opmVic$Año,
+                        selected = opmVic$Año,
                         id = "opm_opmVic_año"
                       )
                     ),
@@ -1333,8 +1333,8 @@ ui <-
                     # botón para seleccionar el medio de orientación
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>el Medio de Orientación:"),
-                      choices = opmMedio$`Medio de orientación`,
-                      selected = opmMedio$`Medio de orientación`,
+                      choices = opmMedio$Orientación,
+                      selected = opmMedio$Orientación,
                       id = "opm_opmMedio_medio"
                     )
                   )
@@ -1349,8 +1349,8 @@ ui <-
                       # botón para seleccionar el año
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
-                        choices = opmMedio$año,
-                        selected = opmMedio$año,
+                        choices = opmMedio$Año,
+                        selected = opmMedio$Año,
                         id = "opm_opmMedio_año"
                       )
                     ),
@@ -1416,8 +1416,8 @@ ui <-
                     # botón para seleccionar el género de las victimas
                     createDropdownCheckbox(
                       label = HTML("Seleccione <br>el tipo de servicio:"),
-                      choices = opmServiciosMes$tipo,
-                      selected = opmServiciosMes$tipo,
+                      choices = opmServiciosMes$Servicio,
+                      selected = opmServiciosMes$Servicio,
                       id = "opm_opmServiciosMes_tipo"
                     )
                   )
@@ -1432,8 +1432,8 @@ ui <-
                       # botón para seleccionar el año
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
-                        choices = opmServiciosMes$year,
-                        selected = opmServiciosMes$year,
+                        choices = opmServiciosMes$Año,
+                        selected = opmServiciosMes$Año,
                         id = "opm_opmServiciosMes_año"
                       )
                     ),
@@ -1526,15 +1526,15 @@ ui <-
                 # botón para seleccionar el sexo
                 createDropdownCheckbox(
                   label = "Seleccione el sexo:",
-                  choices = dcrCasosInv$sexo,
+                  choices = dcrCasosInv$Sexo,
                   selected = 1,
                   id = "dcr_dcrCasosInv_sexo"
                 ),
                 # botón para seleccionar el tipo de investigación 
                 createDropdownCheckbox(
                   label = HTML("Seleccione  el<br> estado de Investigación:"),
-                  choices = dcrCasosInv$tipo,
-                  selected = dcrCasosInv$tipo,
+                  choices = dcrCasosInv$Estado,
+                  selected = dcrCasosInv$Estado,
                   id = "dcr_dcrCasosInv_tipo"
                 )
               )
@@ -1549,8 +1549,8 @@ ui <-
                   # botón para seleccionar el año
                   createDropdownCheckbox(
                     label = "Seleccione Año(s):",
-                    choices = dcrCasosInv$year,
-                    selected = dcrCasosInv$year,
+                    choices = dcrCasosInv$Año,
+                    selected = dcrCasosInv$Año,
                     id = "dcr_dcrCasosInv_year"
                   )
                 ),
@@ -1623,8 +1623,8 @@ ui <-
                 # botón para seleccionar el tipo de investigación
                 createDropdownCheckbox(
                   label = "Seleccione el estado de Caso:",
-                  choices = dcrSentenciadas$tipo,
-                  selected = dcrSentenciadas$tipo,
+                  choices = dcrSentenciadas$Estado,
+                  selected = dcrSentenciadas$Estado,
                   id = "dcr_dcrSentenciadas_tipo"
                 )
               )
@@ -1639,8 +1639,8 @@ ui <-
                   # botón para seleccionar el año
                   createDropdownCheckbox(
                     label = "Seleccione Año(s):",
-                    choices = dcrSentenciadas$year,
-                    selected = dcrSentenciadas$year,
+                    choices = dcrSentenciadas$Año,
+                    selected = dcrSentenciadas$Año,
                     id = "dcr_dcrSentenciadas_year"
                   )
                 ),
