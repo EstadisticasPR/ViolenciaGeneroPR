@@ -81,19 +81,21 @@ homiEdad <- read_excel(paste0(snmv, "/svmvHomiEdad.xlsx")) %>%
   select(-Total) %>%
   filter(!grepl("Total", `Grupo de edad`) & `Grupo de edad` != "Desconocido") %>%
   pivot_longer(!`Grupo de edad`, names_to = "año", values_to = "casos") %>%
-  rename(edad = `Grupo de edad`) %>%
+  rename(Edad = `Grupo de edad`) %>%
+  rename(Año = año) %>%
+  rename(Casos = casos) %>%
   mutate(
-    edad = factor(edad, levels = unique(edad)),
-    año = factor(año)
+    Edad = factor(Edad, levels = unique(Edad)),
+    Año = factor(Año)
   ) %>%
   relocate(
-    año, edad, casos
+    Año, Edad, Casos
   )
 
 # Definir una paleta de colores personalizada
 colores_homiEdad <- setNames(
-  unique(homiEdad$edad), 
-  scales::hue_pal()(length(unique(homiEdad$edad)))
+  unique(homiEdad$Edad), 
+  scales::hue_pal()(length(unique(homiEdad$Edad)))
 )
 
 # importar los datos de incidentes violentos segun tipo de muerte según el año, desde 2017-2020
@@ -110,11 +112,11 @@ inci <- read_excel(file.path(snmv, "svmvIncidentes.xlsx")) %>%
     `Tipo de Incidente` = factor(`Tipo de Incidente`),
     año = factor(año)
   ) %>%
-  rename(
-    tipo = `Tipo de Incidente`
-  ) %>%
+  rename(Incidente = `Tipo de Incidente`) %>%
+  rename(Año = año) %>%
+  rename(Casos = casos) %>%
   relocate(
-    año, tipo, casos
+    Año, Incidente, Casos
   )
 
 #############################################################
@@ -234,13 +236,14 @@ dfDeli <- bind_rows(
                     "Art3.4" = "Maltrato por Restricción de Libertad",
                     "Art2.8" = "Incumplimiento de la Órden de Protección")
   ) %>%
+  rename(Distrito = `FISCALIA DISTRITO`) %>%
   relocate(
-    Año, `FISCALIA DISTRITO`, Delito, Casos
+    Año, Distrito, Delito, Casos
   )
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
 mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
-  merge(dfDeli, by.x = "GROUP", by.y = "FISCALIA DISTRITO") %>%
+  merge(dfDeli, by.x = "GROUP", by.y = "Distrito") %>%
   relocate(
     Año, GROUP, Delito, geometry,Casos
   )
@@ -292,18 +295,23 @@ dfAvp <- left_join(avpSolicitadas, avpAsignadas, by = c("región", "año")) %>%
   filter(
     año != "*2023"
   ) %>%
+  rename(Año = año) %>%
+  rename(Región = región) %>%
+  rename(Estado = status) %>%
+  rename(Cantidad = cantidad) %>%
   relocate(
-    año, región, status, cantidad
+    Año, Región, Estado, Cantidad
   )
 
 # Convertir el año a numérico para eliminar el asterisco y convertirlo a int
-dfAvp$año <- as.factor(sub("\\*", "", dfAvp$año))
+dfAvp$Año <- as.factor(sub("\\*", "", dfAvp$Año))
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
 mapaAvp <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
-  merge(dfAvp, by.x = "GROUP", by.y = "región") %>%
+  merge(dfAvp, by.x = "GROUP", by.y = "Región") %>%
+  rename(Región = GROUP) %>%
   relocate(
-    año, GROUP, status, geometry, cantidad 
+    Año, Región, Estado, geometry, Cantidad 
   )
 
 ############################################################################
@@ -324,8 +332,12 @@ dcrCasosInv <- read_excel(paste0(dcr, "dcrCasosInv.xlsx")) %>%
     sexo = factor(sexo),
     tipo = factor(tipo)
   ) %>%
+  rename(Año = year) %>%
+  rename(Sexo = sexo) %>%
+  rename(Estado = tipo) %>%
+  rename(Cantidad = cantidad) %>%
   relocate(
-    year, sexo, tipo, cantidad
+    Año, Sexo, Estado, Cantidad
   )
 
 #### dcrSentenciadas ####
@@ -351,8 +363,12 @@ dcrSentenciadas <- read_excel(paste0(dcr, "dcrSentenciadas.xlsx"))  %>%
 # Combinar mes y año en una nueva columna
 dcrSentenciadas$fecha <- as.Date(paste0(dcrSentenciadas$year, "-", dcrSentenciadas$mes, "-01"))
 dcrSentenciadas <- dcrSentenciadas %>%
+  rename(Año = year) %>%
+  rename(Fecha = fecha) %>%
+  rename(Estado = tipo) %>%
+  rename(Cantidad = cantidad) %>%
   select(
-    year, fecha, tipo, cantidad
+    Año, Fecha, Estado, Cantidad
   )
   
 
@@ -387,10 +403,10 @@ despDF <- bind_rows(
   ungroup() %>%
   mutate(
     Año = factor(Año),
-    Categoria = factor(Categoria)
+    Estado = factor(Categoria)
   ) %>%
   select(
-    Año, Categoria, Casos
+    Año, Estado, Casos
   )
 
 # despDF <- bind_rows(
@@ -513,8 +529,11 @@ opmCasos <-  read_excel(paste0(opm, "opmPartMes.xlsx")) %>%
                   levels = c("Acecho (A)", "Agresión sexual (AS)", "Discrimen de género (DG)",
                              "Violencia doméstica (VD)", "Violencia en cita (VC)", "Otras"))
   ) %>%
+  rename(Año = year) %>%
+  rename(Razón = tipo) %>%
+  rename(Cantidad = cantidad) %>%
   relocate(
-    year, tipo, cantidad
+    Año, Razón, Cantidad
   )
 
 #### opmVic ####
@@ -526,8 +545,11 @@ opmVic <- read_excel(paste0(opm, "opmVicGraf.xlsx")) %>%
                     levels = c("Femenino", "Masculino", "Trans", "No informó")),
     año = factor(año)
   ) %>%
+  rename(Año = año) %>%
+  rename(Género = género) %>%
+  rename(Víctimas = víctimas) %>%
   relocate(
-    año, género, víctimas
+    Año, Género, Víctimas
   )
 
 #### opmMedio ####
@@ -539,8 +561,11 @@ opmMedio <- read_excel(paste0(opm, "opmMedio.xlsx")) %>%
     `Medio de orientación` = factor(`Medio de orientación`),
     año = factor(año)
   ) %>%
+  rename(Año = año) %>%
+  rename(Orientación = `Medio de orientación`) %>%
+  rename(Cantidad = `personas atendidas`) %>%
   relocate(
-    año, `Medio de orientación`, `personas atendidas`
+    Año, Orientación, Cantidad
   )
 
 
@@ -555,8 +580,11 @@ opmServiciosMes <-  read_excel(paste0(opm, "opmServiciosMes.xlsx")) %>%
     tipo = factor(tipo),
     year = factor(year)
   ) %>%
+  rename(Año = year) %>%
+  rename(Servicio = tipo) %>%
+  rename(Cantidad = cantidad) %>%
   relocate(
-    year, tipo, cantidad
+    Año, Servicio, Cantidad
   )
 
 

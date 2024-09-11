@@ -8,18 +8,18 @@ server <- function(input, output, session) {
   # Filtro para el dataset según los valores de año y edad
   homiEdad_filt <- reactive({
     filter(homiEdad, 
-           año %in% input$checkGroup_snmv_homiEdad_año,
-           edad %in% input$checkGroup_snmv_homiEdad_edad)
+           Año %in% input$checkGroup_snmv_homiEdad_año,
+           Edad %in% input$checkGroup_snmv_homiEdad_edad)
   })
   
   ### lógica para el boton de deseleccionar/seleccionar edad
   observeEvent(input$deselectAll_snmv_homiEdad_edad, {
-    updateCheckboxGroup(session, "checkGroup_snmv_homiEdad_edad", input, homiEdad$edad)
+    updateCheckboxGroup(session, "checkGroup_snmv_homiEdad_edad", input, homiEdad$Edad)
   })
   
   ### lógica para el boton de deseleccionar/seleccionar año
   observeEvent(input$deselectAll_snmv_homiEdad_año, {
-    updateCheckboxGroup(session, "checkGroup_snmv_homiEdad_año", input, homiEdad$año)
+    updateCheckboxGroup(session, "checkGroup_snmv_homiEdad_año", input, homiEdad$Año)
   })
   
   # Grafico lineal del SNMV
@@ -30,7 +30,7 @@ server <- function(input, output, session) {
   # })
   
   # Colores de las edades
-  homiEdad_fill_edad <- setColorFill(homiEdad, "edad")
+  homiEdad_fill_edad <- setColorFill(homiEdad, "Edad")
   
   # Grafico de barras de homiEdad
   output$barPlot_snmv <- renderPlotly({
@@ -43,9 +43,9 @@ server <- function(input, output, session) {
       message <- "Seleccione Grupo de edad y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(homiEdad_filt, "año", "casos", "edad",
+      p <- renderBarPlot(homiEdad_filt, "Año", "Casos", "Edad",
                          paste("Homicidios de mujeres por grupo de edad y año", input$yearInput_snmv),
-                         "Año", "Cantidad de víctimas", fillLab = "Grupo de edad", colorFill = homiEdad_fill_edad, 
+                         "Año", "Cantidad de víctimas", fillLab = "Grupo de Edad", colorFill = homiEdad_fill_edad, 
                          emptyMessage = "Seleccione Grupo de edad y Año(s) a visualizar",barWidth = 0, xGap = 0)
      
       p <- convert_to_plotly(p, tooltip = "text")
@@ -54,17 +54,20 @@ server <- function(input, output, session) {
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(homiEdad_filt, "año", "casos", "edad",
+    empty_plot <- create_empty_plot_with_message(homiEdad_filt, "Año", "Casos", "Edad",
                                                  paste("Homicidios de mujeres por grupo de edad y año", input$yearInput_snmv),
                                                  "Año", "Cantidad de víctimas", message)
     ggplotly(empty_plot)
   })
   
-  
+  homiEdad_filt_rename <- reactive({
+    homiEdad_filt() %>% 
+      rename(`Grupo de Edad` = Edad)  
+  })
 
   # Data Table de homiEdad
   output$dataTable_snmv <- renderDT({
-    renderDataTable(homiEdad_filt(), "Datos: Homicidios por Grupo de Edad")
+    renderDataTable(homiEdad_filt_rename(), "Datos: Homicidios por Grupo de Edad")
   })
   
   # Crear Card con Fuentes
@@ -99,35 +102,35 @@ server <- function(input, output, session) {
   # Filtro para el dataset según los valores de año y el tipo de incidente
   inci_filt <- reactive({
     filter(inci,
-           tipo %in% input$checkGroup_snmv_inci_tipo,
-           año %in% input$checkGroup_snmv_inci_año)
+           Incidente %in% input$checkGroup_snmv_inci_tipo,
+           Año %in% input$checkGroup_snmv_inci_año)
   })
   
   ### lógica para el botón de deseleccionar/seleccionar tipo de incidente
   observeEvent(input$deselectAll_snmv_inci_tipo, {
-    updateCheckboxGroup(session, "checkGroup_snmv_inci_tipo", input, inci$tipo)
+    updateCheckboxGroup(session, "checkGroup_snmv_inci_tipo", input, inci$Incidente)
   })
   
   ### lógica para el botón de deseleccionar/seleccionar el año
   observeEvent(input$deselectAll_snmv_inci_año, {
-    updateCheckboxGroup(session, "checkGroup_snmv_inci_año", input, inci$año)
+    updateCheckboxGroup(session, "checkGroup_snmv_inci_año", input, inci$Año)
   })
   
   # colores de los tipos de incidentes
-  inci_fill_sexo <- setColorFill(inci, "tipo")
+  inci_fill_sexo <- setColorFill(inci, "Incidente")
   
   # Gráfico de barras de incidentes
   output$barPlot_snmv_inci <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
-    has_tipo <- length(input$checkGroup_snmv_inci_tipo) > 0
+    has_incidente <- length(input$checkGroup_snmv_inci_tipo) > 0
     has_año <- length(input$checkGroup_snmv_inci_año) > 0
     
     # Crear mensaje si faltan opciones seleccionadas
-    if (!has_tipo || !has_año ) {
+    if (!has_incidente || !has_año ) {
       message <- "Seleccione Tipo(s) de Incidente y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(inci_filt, x = "año", y = "casos", fill = "tipo",
+      p <- renderBarPlot(inci_filt, x = "Año", y = "Casos", fill = "Incidente",
                          paste("Número de incidentes violentos por tipo para ambos sexos"),
                          xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de incidente",
                          colorFill = inci_fill_sexo, 
@@ -139,16 +142,20 @@ server <- function(input, output, session) {
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(inci_filt, x = "año", y = "casos", fill = "tipo",
+    empty_plot <- create_empty_plot_with_message(inci_filt, x = "Año", y = "Casos", fill = "Incidente",
                                                  paste("Número de incidentes violentos por tipo para ambos sexos"),
                                                  xlab = "Año", ylab = "Número de casos", message)
     ggplotly(empty_plot)
   })
 
+  inci_filt_rename <- reactive({
+    inci_filt() %>% 
+      rename(`Tipo de Incidente` = Incidente)  
+  })
   
   # Data Table del SNMV
   output$dataTable_snmv_inci <- renderDT({
-    renderDataTable(inci_filt(), "Datos: Incidentes Violentos")
+    renderDataTable(inci_filt_rename(), "Datos: Incidentes Violentos")
   })
   
   # Crear Card con Fuentes
@@ -274,10 +281,15 @@ server <- function(input, output, session) {
     ggplotly(empty_plot)
   })
   
+  dfMalt_filt_rename <- reactive({
+    dfMalt_filt() %>% 
+      rename(`Tipo de Maltrato` = Maltrato)  
+  })
+  
   
   # Data Table del DeptFam
   output$dataTable_fam <- renderDT({
-    renderDataTable(dfMalt_filt(), "Datos: Menores victimas de maltrato")
+    renderDataTable(dfMalt_filt_rename(), "Datos: Menores victimas de maltrato")
   })
   
   # Crear Card con Fuentes
@@ -342,7 +354,7 @@ server <- function(input, output, session) {
     filter(dfDeli, 
            Año %in% input$checkGroup_just_dfDeli_año,
            Delito %in% input$checkGroup_just_dfDeli_delito,
-           `FISCALIA DISTRITO` %in% input$checkGroup_just_dfDeli_distrito)
+           Distrito %in% input$checkGroup_just_dfDeli_distrito)
   })
   
   # funcion para el boton de deseleccionar/seleccionar el delito
@@ -357,7 +369,7 @@ server <- function(input, output, session) {
   
   # funcion para el boton de deseleccionar/seleccionar el distrito fiscal
   observeEvent(input$deselectAll_just_dfDeli_distrito, {
-    updateCheckboxGroup(session, "checkGroup_just_dfDeli_distrito", input, dfDeli$`FISCALIA DISTRITO`)
+    updateCheckboxGroup(session, "checkGroup_just_dfDeli_distrito", input, dfDeli$Distrito)
   })
   
   # crear gráfico de caja
@@ -395,7 +407,7 @@ server <- function(input, output, session) {
                          xlab = "Año", ylab = "Cantidad de víctimas",
                          fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito,
                          emptyMessage = "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)")
-      p <- p + facet_wrap(~`FISCALIA DISTRITO`)
+      p <- p + facet_wrap(~Distrito)
       p <- convert_to_plotly(p, tooltip = "text")
       
       return(p)
@@ -473,7 +485,7 @@ server <- function(input, output, session) {
   
   # funcion para el boton de deseleccionar/seleccionar el año
   observeEvent(input$deselectAll_just_mapaDeli_año, {
-    updateCheckboxGroup(session, "checkGroup_just_mapaDeli_año", input, mapaDeli$año)
+    updateCheckboxGroup(session, "checkGroup_just_mapaDeli_año", input, mapaDeli$Año)
   })
   
   # output$map_just_mapaDeli <- renderPlotly({
@@ -624,28 +636,28 @@ server <- function(input, output, session) {
   # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de incidente
   dfAvp_filt <- reactive({
     filter(dfAvp,
-           región %in% input$checkGroup_avp_dfAvp_región,
-           año %in% input$checkGroup_avp_dfAvp_año)
+           Región %in% input$checkGroup_avp_dfAvp_región,
+           Año %in% input$checkGroup_avp_dfAvp_año)
   })
   
   # Filtrar el conjunto de datos según el año, delito o distrito seleccionado
   mapaAvp_filt <- reactive({
     filter(mapaAvp, 
-           año %in% input$select_avp_mapaAvp_año)
+           Año %in% input$select_avp_mapaAvp_año)
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de región
   observeEvent(input$deselectAll_avp_dfAvp_región, {
-    updateCheckboxGroup(session, "checkGroup_avp_dfAvp_región", input, dfAvp$región)
+    updateCheckboxGroup(session, "checkGroup_avp_dfAvp_región", input, dfAvp$Región)
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
   observeEvent(input$deselectAll_avp_dfAvp_año, {
-    updateCheckboxGroup(session, "checkGroup_avp_dfAvp_año", input, dfAvp$año)
+    updateCheckboxGroup(session, "checkGroup_avp_dfAvp_año", input, dfAvp$Año)
   })
   
   # Colores del status
-  dfAvp_fill_status <- setColorFill(dfAvp, "status")
+  dfAvp_fill_status <- setColorFill(dfAvp, "Estado")
   
   
   # Grafico de barras
@@ -659,19 +671,19 @@ server <- function(input, output, session) {
       message <- "Seleccione Región de Vivienda y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(dfAvp_filt, x = "año", y = "cantidad", fill = "status",
+      p <- renderBarPlot(dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
                          paste("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región"),
                          xlab = "Año", ylab = "Cantidad de viviendas públicas", fillLab = "Estado de la vivienda",
                          colorFill = dfAvp_fill_status,
                          emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
-      p <- p + facet_wrap(~región)
+      p <- p + facet_wrap(~Región)
       p <- convert_to_plotly(p, tooltip = "text")
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = dfAvp_filt, x = "año", y = "cantidad", fill = "status",
+    empty_plot <- create_empty_plot_with_message(data = dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
                                                  paste("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región"),
                                                  xlab = "Año", ylab = "Cantidad de viviendas públicas", message)
     ggplotly(empty_plot)
@@ -681,7 +693,7 @@ server <- function(input, output, session) {
   # mapa de las regiones de vivienda
   output$map_avp_mapaRegi <- renderPlotly({
     p <- renderMapGroup(
-      data = mapaAvp, fill = GROUP,
+      data = mapaAvp, fill = Región,
       title = "Regiones de Vivienda ",
       fill_lab = "Region"
     )
@@ -690,20 +702,25 @@ server <- function(input, output, session) {
   
   output$map_avp_mapaAvp <- renderPlotly({
     p <- renderMap(
-      data = mapaAvp_filt, fill = cantidad,
+      data = mapaAvp_filt, fill = Cantidad,
       title = paste0("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región en el año ", input$select_avp_mapaAvp_año),
-      group = GROUP,
+      group = Región,
       fill_lab = "Número de Viviendas",
       light_color = "lightgreen",
       dark_color = "darkgreen"
     )
-    ggplotly(p + facet_wrap(~status),
+    ggplotly(p + facet_wrap(~Estado),
              tooltip = c("all"))
+  })
+  
+  dfAvp_rename <- reactive({
+    dfAvp %>% 
+      rename(`Región de Vivienda` = Región)
   })
   
   # Data Table para la gráfica de barras de dfAvp
   output$dataTable_avp_dfAvp <- renderDT({
-    renderDataTable(dfAvp, "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica")
+    renderDataTable(dfAvp_rename(), "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica")
   })
   
   # Crear Card con Fuentes
@@ -730,10 +747,14 @@ server <- function(input, output, session) {
     }
   })
   
+  mapaAvp_filt_noGeom <- reactive({
+    st_drop_geometry(mapaAvp_filt())%>% 
+      rename(`Región de Vivienda` = Región)
+  })
   
   # Data Table para el mapa de dfAvp
   output$dataTable_avp_mapaAvp <- renderDT({
-    renderDataTable(mapaAvp_filt(), "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica")
+    renderDataTable(mapaAvp_filt_noGeom(), "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica")
   })
   
   # Crear Card con Fuentes
@@ -785,13 +806,13 @@ server <- function(input, output, session) {
   # Filtrar el conjunto de datos según los valores seleccionados del año y la categoria de evento
   despDF_filt <- reactive({
     filter(despDF,
-           Categoria %in% input$checkGroup_poli_despDF_categoría,
+           Estado %in% input$checkGroup_poli_despDF_categoría,
            Año %in% input$checkGroup_poli_despDF_año)
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de categoria
   observeEvent(input$deselectAll_poli_despDF_categoría, {
-    updateCheckboxGroup(session, "checkGroup_poli_despDF_categoría", input, despDF$Categoria)
+    updateCheckboxGroup(session, "checkGroup_poli_despDF_categoría", input, despDF$Estado)
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
@@ -800,7 +821,7 @@ server <- function(input, output, session) {
   })
   
   # Colores del status
-  despDF_fill_categoria <- setColorFill(despDF, "Categoria")
+  despDF_fill_categoria <- setColorFill(despDF, "Estado")
   
   # Grafico de barras
   
@@ -814,7 +835,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Estado de la Víctima y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(despDF_filt, x = "Año", y = "Casos", fill = "Categoria",
+      p <- renderBarPlot(despDF_filt, x = "Año", y = "Casos", fill = "Estado",
                          paste("Cantidad de mujeres desaparecidas por estatus (localizadas y por localizar)"),
                          xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Estado de la víctima",
                          colorFill = despDF_fill_categoria,
@@ -825,16 +846,20 @@ server <- function(input, output, session) {
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = despDF_filt, x = "Año", y = "Casos", fill = "Categoria",
+    empty_plot <- create_empty_plot_with_message(data = despDF_filt, x = "Año", y = "Casos", fill = "Estado",
                                                  paste("Cantidad de mujeres desaparecidas por estatus (localizadas y por localizar)"),
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     ggplotly(empty_plot)
   })
   
+  despDF_filt_rename <- reactive({
+    despDF_filt() %>% 
+      rename(`Estado de la Víctima` = Estado)
+  })
   
   # Data Table para el mapa de despDF
   output$dataTable_poli_despDF <- renderDT({
-    renderDataTable(despDF_filt(), "Datos: Mujeres desaparecidad y localizadas")
+    renderDataTable(despDF_filt_rename(), "Datos: Mujeres desaparecidad y localizadas")
   })
   
   # Crear Card con Fuentes
@@ -1022,7 +1047,7 @@ server <- function(input, output, session) {
   output$barPlot_opm_opmFemiVD <- renderPlotly({
     p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "Tasa", group = "1",
                         color = "1", title = "Tasa de Asesinatos de mujeres por violencia doméstica:\n Desglose Anual",
-                        xlab = "Año", ylab = "Tasa en base a 100 mil mujeres",
+                        xlab = "Año", ylab = "Tasa por cada 100 mil mujeres",
                         emptyMessage = "Seleccione los Año(s) que desea visualizar")
     # p <- ggplot(opmFemiVD_filt(), aes(x = Año, y = `Cantidad de asesinatos`, group = 1)) +
     #   geom_line(color = "blue", linewidth = 1) +
@@ -1068,23 +1093,23 @@ server <- function(input, output, session) {
   # Filtrar el conjunto de datos según los valores seleccionados del año y la categoria de evento
   opmCasos_filt <- reactive({
     filter(opmCasos,
-           year %in% input$checkGroup_opm_opmCasos_año,
-           tipo %in% input$checkGroup_opm_opmCasos_tipo
+           Año %in% input$checkGroup_opm_opmCasos_año,
+           Razón %in% input$checkGroup_opm_opmCasos_tipo
     )
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
   observeEvent(input$deselectAll_opm_opmCasos_año, {
-    updateCheckboxGroup(session, "checkGroup_opm_opmCasos_año", input, opmCasos$year)
+    updateCheckboxGroup(session, "checkGroup_opm_opmCasos_año", input, opmCasos$Año)
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de tipo de violencia
   observeEvent(input$deselectAll_opm_opmCasos_tipo, {
-    updateCheckboxGroup(session, "checkGroup_opm_opmCasos_tipo", input, opmCasos$tipo)
+    updateCheckboxGroup(session, "checkGroup_opm_opmCasos_tipo", input, opmCasos$Razón)
   })
   
   # Colores del status
-  opm_fill_tipo <- setColorFill(opmCasos, "tipo")
+  opm_fill_tipo <- setColorFill(opmCasos, "Razón")
   
   # Grafico de barras
   output$barPlot_opm_opmCasos <- renderPlotly({
@@ -1097,7 +1122,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Razón de la consulta y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(opmCasos_filt, x = "year", y = "cantidad", fill = "tipo",
+      p <- renderBarPlot(opmCasos_filt, x = "Año", y = "Cantidad", fill = "Razón",
                          paste("Población atendida mediante el programa CRIAS según razón para consulta"),
                          xlab = "Año", ylab = "Cantidad de personas atendidas", fillLab = "Razón para consulta",
                          colorFill = opm_fill_tipo,
@@ -1108,16 +1133,21 @@ server <- function(input, output, session) {
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = opmCasos_filt, x = "year", y = "cantidad", fill = "tipo",
+    empty_plot <- create_empty_plot_with_message(data = opmCasos_filt, x = "Año", y = "Cantidad", fill = "Razón",
                                                  paste("Población atendida mediante el programa CRIAS según razón para consulta"),
                                                  xlab = "Año", ylab = "Cantidad de personas atendidas", message)
     ggplotly(empty_plot)
   })
   
+  opmCasos_filt_rename <- reactive({
+    opmCasos_filt() %>% 
+      rename(`Razón para Consulta` = Razón) %>% 
+      rename(`Personas Atendidas` = Cantidad)
+  })
   
   # Data Table para el mapa de despDF
   output$dataTable_opm_opmCasos <- renderDT({
-    renderDataTable(opmCasos_filt(), "Datos: Población atendida mediante el programa CRIAS")
+    renderDataTable(opmCasos_filt_rename(), "Datos: Población atendida mediante el programa CRIAS")
   })
   
   # Crear Card con Fuentes
@@ -1149,23 +1179,23 @@ server <- function(input, output, session) {
   # Filtrar el conjunto de datos según los valores seleccionados del año y el género de la víctima
   opmVic_filt <- reactive({
     filter(opmVic,
-           año %in% input$checkGroup_opm_opmVic_año,
-           género %in% input$checkGroup_opm_opmVic_género
+           Año %in% input$checkGroup_opm_opmVic_año,
+           Género %in% input$checkGroup_opm_opmVic_género
     )
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
   observeEvent(input$deselectAll_opm_opmVic_año, {
-    updateCheckboxGroup(session, "checkGroup_opm_opmVic_año", input, opmVic$año)
+    updateCheckboxGroup(session, "checkGroup_opm_opmVic_año", input, opmVic$Año)
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón del género de la víctima
   observeEvent(input$deselectAll_opm_opmVic_género, {
-    updateCheckboxGroup(session, "checkGroup_opm_opmVic_género", input, opmVic$género)
+    updateCheckboxGroup(session, "checkGroup_opm_opmVic_género", input, opmVic$Género)
   })
   
   # Colores del status
-  opmVic_fill_género <- setColorFill(opmVic, "género")
+  opmVic_fill_género <- setColorFill(opmVic, "Género")
   
   # Grafico de barras
   output$barPlot_opm_opmVic <- renderPlotly({
@@ -1178,7 +1208,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Género y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(opmVic_filt, x = "año", y = "víctimas", fill = "género",
+      p <- renderBarPlot(opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
                          paste("Identidad de género de víctimas asistidas por el programa CRIAS"),
                          xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Género de la víctima",
                          colorFill = opmVic_fill_género,
@@ -1189,7 +1219,7 @@ server <- function(input, output, session) {
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = opmVic_filt, x = "año", y = "víctimas", fill = "género",
+    empty_plot <- create_empty_plot_with_message(data = opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
                                                  paste("Identidad de género de víctimas asistidas por el programa CRIAS"),
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     ggplotly(empty_plot)
@@ -1227,31 +1257,26 @@ server <- function(input, output, session) {
   
   ##### tab con datos del género de las víctimas (opmMedio) ####
   # Filtrar el conjunto de datos según los valores seleccionados del año y el género de la víctima
-  opmMedio <- opmMedio %>%
-    rename(
-      personas_atendidas = `personas atendidas`,
-      medio_orientacion = `Medio de orientación`
-    )
   
   opmMedio_filt <- reactive({
     filter(opmMedio,
-           año %in% input$checkGroup_opm_opmMedio_año,
-           medio_orientacion %in% input$checkGroup_opm_opmMedio_medio
+           Año %in% input$checkGroup_opm_opmMedio_año,
+           Orientación %in% input$checkGroup_opm_opmMedio_medio
     )
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
   observeEvent(input$deselectAll_opm_opmMedio_año, {
-    updateCheckboxGroup(session, "checkGroup_opm_opmMedio_año", input, opmMedio$año)
+    updateCheckboxGroup(session, "checkGroup_opm_opmMedio_año", input, opmMedio$Año)
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón del medio de orientación
   observeEvent(input$deselectAll_opm_opmMedio_medio, {
-    updateCheckboxGroup(session, "checkGroup_opm_opmMedio_medio", input, opmMedio$medio_orientacion)
+    updateCheckboxGroup(session, "checkGroup_opm_opmMedio_medio", input, opmMedio$Orientación)
   })
   
   # Colores del status
-  opmMedio_fill_medio <- setColorFill(opmMedio, "medio_orientacion")
+  opmMedio_fill_medio <- setColorFill(opmMedio, "Orientación")
   
   # Grafico de barras
   output$barPlot_opm_opmMedio <- renderPlotly({
@@ -1264,7 +1289,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Medio de Orientación y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(opmMedio_filt, x = "año", y = "personas_atendidas", fill = "medio_orientacion",
+      p <- renderBarPlot(opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
                          title = "Población atendida, servicios ofrecidos y seguimientos mediante el programa CRIAS",
                          xlab = "Año", ylab = "Cantidad de personas orientadas", fillLab = "Medio de orientación",
                          colorFill = opmMedio_fill_medio,
@@ -1275,15 +1300,21 @@ server <- function(input, output, session) {
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = opmMedio_filt, x = "año", y = "personas_atendidas", fill = "medio_orientacion",
+    empty_plot <- create_empty_plot_with_message(data = opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
                                                  title = "Población atendida, servicios ofrecidos y seguimientos mediante el programa CRIAS",
                                                  xlab = "Año", ylab = "Cantidad de personas orientadas", message)
     ggplotly(empty_plot)
   })
+  
+  opmMedio_filt_rename <- reactive({
+    opmMedio_filt() %>% 
+      rename(`Medio de Orientación` = Orientación) %>% 
+      rename(`Personas Orientadas` = Cantidad)
+  })
 
   # Data Table para opmMedio
   output$dataTable_opm_opmMedio <- renderDT({
-    renderDataTable(opmMedio_filt(), "Datos: Orientaciones ofrecidas mediante el programa CRIAS")
+    renderDataTable(opmMedio_filt_rename(), "Datos: Orientaciones ofrecidas mediante el programa CRIAS")
   })
   
   # Crear Card con Fuentes
@@ -1315,23 +1346,23 @@ server <- function(input, output, session) {
   # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de servicio
   opmServiciosMes_filt <- reactive({
     filter(opmServiciosMes,
-           year %in% input$checkGroup_opm_opmServiciosMes_año,
-           tipo %in% input$checkGroup_opm_opmServiciosMes_tipo
+           Año %in% input$checkGroup_opm_opmServiciosMes_año,
+           Servicio %in% input$checkGroup_opm_opmServiciosMes_tipo
     )
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
   observeEvent(input$deselectAll_opm_opmServiciosMes_año, {
-    updateCheckboxGroup(session, "checkGroup_opm_opmServiciosMes_año", input, opmServiciosMes$year)
+    updateCheckboxGroup(session, "checkGroup_opm_opmServiciosMes_año", input, opmServiciosMes$Año)
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de tipo de servicio
   observeEvent(input$deselectAll_opm_opmServiciosMes_tipo, {
-    updateCheckboxGroup(session, "checkGroup_opm_opmServiciosMes_tipo", input, opmServiciosMes$tipo)
+    updateCheckboxGroup(session, "checkGroup_opm_opmServiciosMes_tipo", input, opmServiciosMes$Servicio)
   })
   
   # Colores del status
-  opmServiciosMes_fill_tipo <- setColorFill(opmServiciosMes, "tipo")
+  opmServiciosMes_fill_tipo <- setColorFill(opmServiciosMes, "Servicio")
   
   # Grafico de barras
   output$barPlot_opm_opmServiciosMes <- renderPlotly({
@@ -1344,7 +1375,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Tipo de servicio y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(opmServiciosMes_filt, x = "year", y = "cantidad", fill = "tipo",
+      p <- renderBarPlot(opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
                          title = "Población atendida, servicios ofrecidos y seguimientos",
                          xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Tipo de Servicio",
                          colorFill = opmServiciosMes_fill_tipo,
@@ -1355,16 +1386,22 @@ server <- function(input, output, session) {
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = opmServiciosMes_filt, x = "year", y = "cantidad", fill = "tipo",
+    empty_plot <- create_empty_plot_with_message(data = opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
                                                  title = "Población atendida, servicios ofrecidos y seguimientos",
                                                  xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", message)
     ggplotly(empty_plot)
   })
 
+  opmServiciosMes_filt_rename <- reactive({
+    opmServiciosMes_filt() %>% 
+      rename(`Tipo de Servicio` = Servicio) %>% 
+      rename(`Servicios Ofrecidos` = Cantidad)
+  })
+  
   
   # Data Table para opmServiciosMes
   output$dataTable_opm_opmServiciosMes <- renderDT({
-    renderDataTable(opmServiciosMes_filt(), "Datos: Servicios ofrecidos por el programa CRIAS")
+    renderDataTable(opmServiciosMes_filt_rename(), "Datos: Servicios ofrecidos por el programa CRIAS")
   })
   
   # Crear Card con Fuentes
@@ -1433,29 +1470,29 @@ server <- function(input, output, session) {
   # Filtrar el conjunto de datos según los valores seleccionados del año, el tipo de servicio y el sexo
   dcrCasosInv_filt <- reactive({
     filter(dcrCasosInv,
-           year %in% input$checkGroup_dcr_dcrCasosInv_year,
-           tipo %in% input$checkGroup_dcr_dcrCasosInv_tipo,
-           sexo %in% input$checkGroup_dcr_dcrCasosInv_sexo
+           Año %in% input$checkGroup_dcr_dcrCasosInv_year,
+           Estado %in% input$checkGroup_dcr_dcrCasosInv_tipo,
+           Sexo %in% input$checkGroup_dcr_dcrCasosInv_sexo
     )
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
   observeEvent(input$deselectAll_dcr_dcrCasosInv_year, {
-    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_year", input, dcrCasosInv$year)
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_year", input, dcrCasosInv$Año)
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón del estado de investigación
   observeEvent(input$deselectAll_dcr_dcrCasosInv_tipo, {
-    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_tipo", input, dcrCasosInv$tipo)
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_tipo", input, dcrCasosInv$Estado)
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de sexo
   observeEvent(input$deselectAll_dcr_dcrCasosInv_sexo, {
-    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_sexo", input, dcrCasosInv$sexo)
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_sexo", input, dcrCasosInv$Sexo)
   })
   
   # Colores del status
-  dcrCasosInv_fill_tipo <- setColorFill(dcrCasosInv, "tipo")
+  dcrCasosInv_fill_tipo <- setColorFill(dcrCasosInv, "Estado")
   
   # Grafico de barras
   output$barPlot_dcr_dcrCasosInv <- renderPlotly({
@@ -1469,30 +1506,33 @@ server <- function(input, output, session) {
       message <- "Seleccione Estado de la investigación, Sexo y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(dcrCasosInv_filt, x = "year", y = "cantidad", fill = "tipo",
+      p <- renderBarPlot(dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
                          title = "Casos de supervisión de Ley 54: Programas Alternos de Comunidad",
                          xlab = "Año", ylab = "Cantidad de servicios ofrecidos", fillLab = "Estado de investigación",
                          colorFill = dcrCasosInv_fill_tipo,
                          emptyMessage = "Seleccione Estado de la investigación, Sexo y Año(s) a visualizar")
-      p <- p + facet_wrap(~sexo)
+      p <- p + facet_wrap(~Sexo)
       p <- convert_to_plotly(p, tooltip = "text")
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = dcrCasosInv_filt, x = "year", y = "cantidad", fill = "tipo",
+    empty_plot <- create_empty_plot_with_message(data = dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
                                                  title = "Casos de supervisión de Ley 54: Programas Alternos de Comunidad",
                                                  xlab = "Año", ylab = "Cantidad de servicios ofrecidos", message)
     ggplotly(empty_plot)
   })
   
 
-  
+  dcrCasosInv_filt_rename <- reactive({
+    dcrCasosInv_filt() %>% 
+      rename(`Estado de Investigación` = Estado) 
+  })
   
   # Data Table para dcrCasosInv
   output$dataTable_dcr_dcrCasosInv <- renderDT({
-    renderDataTable(dcrCasosInv_filt(), "Datos: Casos en supervisión de ley 54")
+    renderDataTable(dcrCasosInv_filt_rename(), "Datos: Casos en supervisión de ley 54")
   })
   
   # Crear Card con Fuentes
@@ -1526,23 +1566,23 @@ server <- function(input, output, session) {
   # Filtrar el conjunto de datos según los valores seleccionados del año y el estado del caso
   dcrSentenciadas_filt <- reactive({
     filter(dcrSentenciadas,
-           year %in% input$checkGroup_dcr_dcrSentenciadas_year,
-           tipo %in% input$checkGroup_dcr_dcrSentenciadas_tipo
+           Año %in% input$checkGroup_dcr_dcrSentenciadas_year,
+           Estado %in% input$checkGroup_dcr_dcrSentenciadas_tipo
     )
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
   observeEvent(input$deselectAll_dcr_dcrSentenciadas_year, {
-    updateCheckboxGroup(session, "checkGroup_dcr_dcrSentenciadas_year", input, dcrSentenciadas$year)
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrSentenciadas_year", input, dcrSentenciadas$Año)
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón del estado de caso 
   observeEvent(input$deselectAll_dcr_dcrSentenciadas_tipo, {
-    updateCheckboxGroup(session, "checkGroup_dcr_dcrSentenciadas_tipo", input, dcrSentenciadas$tipo)
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrSentenciadas_tipo", input, dcrSentenciadas$Estado)
   })
   
   # Colores del status
-  dcrSentenciadas_fill_tipo <- setColorFill(dcrSentenciadas, "tipo")
+  dcrSentenciadas_fill_tipo <- setColorFill(dcrSentenciadas, "Estado")
   
   # Grafico de barras
   output$barPlot_dcr_dcrSentenciadas <- renderPlotly({
@@ -1554,10 +1594,10 @@ server <- function(input, output, session) {
     if (!has_año || !has_tipo) {
       message <- "Seleccione Estado del caso y Año(s) a visualizar"
     } else {
-      upper_y_limit <- ceiling(max(eval(parse(text = "dcrSentenciadas_filt()$cantidad")), na.rm = TRUE) * 1.2)
+      upper_y_limit <- ceiling(max(eval(parse(text = "dcrSentenciadas_filt()$Cantidad")), na.rm = TRUE) * 1.2)
       
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- ggplot(dcrSentenciadas_filt(), aes(x = fecha, y = cantidad, fill = tipo)) +
+      p <- ggplot(dcrSentenciadas_filt(), aes(x = Fecha, y = Cantidad, fill = Estado)) +
         geom_bar(stat = "identity",
                  position = position_dodge2(width = 1, padding = 0.1),
                  aes(
@@ -1570,14 +1610,14 @@ server <- function(input, output, session) {
         scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
                            expand = expansion(mult = c(0, 0.1))) +
         theme_minimal() +
-        labs(title = "Personas sentenciadas en programa de supervisión Electrónica por delitos de violencia doméstica",
+        labs(title = "Personas sentenciadas en programa de supervisión \nElectrónica por delitos de violencia doméstica",
              x = "Año", y = "Cantidad de personas sentenciadas", fill = "Estado del Caso") +
         coord_cartesian(ylim = c(0, upper_y_limit)) +
         theme(
           axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 10)),
           plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
           panel.border = element_rect(colour = "black", fill = NA, size = 1),
-          plot.margin = margin(t = 10, r = 10, b = 10, l = 10))  
+          plot.margin = margin(t = 45, r = 10, b = 10, l = 10))  
         
       p <- convert_to_plotly(p, tooltip = "text")
       
@@ -1585,18 +1625,21 @@ server <- function(input, output, session) {
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = dcrSentenciadas_filt, x = "fecha", y = "cantidad", fill = "tipo",
-                                                 title = "Personas sentenciadas en programa de supervisión Electrónica por delitos de violencia doméstica por estado del caso",
+    empty_plot <- create_empty_plot_with_message(data = dcrSentenciadas_filt, x = "Fecha", y = "Cantidad", fill = "Estado",
+                                                 title = "Personas sentenciadas en programa de supervisión \nElectrónica por delitos de violencia doméstica por estado del caso",
                                                  xlab = "Año", ylab = "Cantidad de personas sentenciadas", message)
     ggplotly(empty_plot)
   })
   
-  
+  dcrSentenciadas_filt_rename <- reactive({
+    dcrSentenciadas_filt() %>% 
+      rename(`Estado del Caso` = Estado) 
+  })
 
   
   # Data Table para dcrSentenciadas
   output$dataTable_dcr_dcrSentenciadas <- renderDT({
-    renderDataTable(dcrSentenciadas_filt(), "Datos: Programa de supervisión electrónica por delitos de violencia doméstica")
+    renderDataTable(dcrSentenciadas_filt_rename(), "Datos: Programa de supervisión electrónica por delitos de violencia doméstica")
   })
   
   # Crear Card con Fuentes
@@ -1704,10 +1747,16 @@ server <- function(input, output, session) {
     ggplotly(empty_plot)
   })
   
+  OP_148_SoliGrupEdad_filt_rename <- reactive({
+    OP_148_SoliGrupEdad_filt() %>% 
+      rename(`Año Fiscal` = AñoFiscal)  %>% 
+      rename(`Región Judicial` = Región)
+  })
+  
   
   # Data Table para dcrCasosInv
   output$dataTable_OP_148_SoliGrupEdad <- renderDT({
-    renderDataTable(OP_148_SoliGrupEdad_filt(), "Datos: Órdenes de Protección Solicitadas por Violencia Sexual")
+    renderDataTable(OP_148_SoliGrupEdad_filt_rename(), "Datos: Órdenes de Protección Solicitadas por Violencia Sexual")
   })
   
   # Crear Card con Fuentes
@@ -1794,10 +1843,18 @@ server <- function(input, output, session) {
     ggplotly(empty_plot)
   })
   
-
+  OP_Ley148_ex_parteEmitidas_filt_rename <- reactive({
+    OP_Ley148_ex_parteEmitidas_filt() %>%  
+      rename(`Año Fiscal` = AñoFiscal)  %>% 
+      rename(`Órdenes Emitidas` = ÓrdenesEmitidas) %>% 
+      rename(`Región Judicial` = Región) %>% 
+      rename(`Delito Cometido` = Delito)
+  })
+  
+  
   # Data Table para dcrCasosInv
   output$dataTable_OP_Ley148_ex_parteEmitidas <- renderDT({
-    renderDataTable(OP_Ley148_ex_parteEmitidas_filt(), "Datos: Órdenes de Protección Ex Parte Emitidas bajo Ley 148")
+    renderDataTable(OP_Ley148_ex_parteEmitidas_filt_rename(), "Datos: Órdenes de Protección Ex Parte Emitidas bajo Ley 148")
   })
   
   # Crear Card con Fuentes
@@ -1888,9 +1945,17 @@ server <- function(input, output, session) {
   })
 
   
+  OP_LEY148Archivadas_filt_rename <- reactive({
+    OP_LEY148Archivadas_filt() %>% 
+      rename(`Año Fiscal` = AñoFiscal)  %>% 
+      rename(`Distrito Fiscal` = Región) %>% 
+      rename(`Órdenes Archivadas` = ÓrdenesArchivadas)%>% 
+      rename(`Razón de Archivo` = Razón)
+  })
+  
   # Data Table 
   output$dataTable_OP_LEY148Archivadas <- renderDT({
-    renderDataTable(OP_LEY148Archivadas_filt(), "Datos: Órdenes de Protección Ex Parte archivadas bajo Ley 148")
+    renderDataTable(OP_LEY148Archivadas_filt_rename(), "Datos: Órdenes de Protección Ex Parte archivadas bajo Ley 148")
   })
   
   # Crear Card con Fuentes
@@ -1978,9 +2043,18 @@ server <- function(input, output, session) {
     ggplotly(empty_plot)
   })
   
+  OP_LEY148Denegadas_filt_rename <- reactive({
+    OP_LEY148Denegadas_filt() %>% 
+      rename(`Año Fiscal` = AñoFiscal)  %>% 
+      rename(`Región Judicial` = Región) %>% 
+      rename(`Órdenes Denegadas` = ÓrdenesDenegadas)%>% 
+      rename(`Razón de Archivo` = Razón)
+  })
+  
+  
   # Data Table 
   output$dataTable_OP_LEY148Denegadas <- renderDT({
-    renderDataTable(OP_LEY148Denegadas_filt(), "Datos: Ordenes de protección denegadas por violencia sexual bajo Ley 148")
+    renderDataTable(OP_LEY148Denegadas_filt_rename(), "Datos: Ordenes de protección denegadas por violencia sexual bajo Ley 148")
   })
   
   # Crear Card con Fuentes
@@ -2067,10 +2141,18 @@ server <- function(input, output, session) {
     ggplotly(empty_plot)
   })
 
+  OP_LEY148FinalEmitidas_filt_rename <- reactive({
+    OP_LEY148FinalEmitidas_filt() %>% 
+      rename(`Año Fiscal` = AñoFiscal)  %>% 
+      rename(`Región Judicial` = Región) %>% 
+      rename(`Órdenes Emitidas` = ÓrdenesEmitidas)%>% 
+      rename(`Delito Cometido` = Delito)
+  })
+  
   
   # Data Table 
   output$dataTable_OP_LEY148FinalEmitidas <- renderDT({
-    renderDataTable(OP_LEY148FinalEmitidas_filt(), "Datos: Órdenes de protección emitidas bajo ley 148")
+    renderDataTable(OP_LEY148FinalEmitidas_filt_rename(), "Datos: Órdenes de protección emitidas bajo ley 148")
   })
   
   # Crear Card con Fuentes
@@ -2157,9 +2239,14 @@ server <- function(input, output, session) {
     ggplotly(empty_plot)
   })
   
+  OP_LEY148Genero_filt_rename <- reactive({
+    OP_LEY148Genero_filt() %>% 
+      rename(`Año Fiscal` = AñoFiscal) 
+  })
+  
   # Data Table 
   output$dataTable_OP_LEY148Genero <- renderDT({
-    renderDataTable(OP_LEY148Genero_filt(), "Datos: Órdenes de Protección Emitidas bajo Ley 148")
+    renderDataTable(OP_LEY148Genero_filt_rename(), "Datos: Órdenes de Protección Emitidas bajo Ley 148")
   })
   
   # Crear Card con Fuentes
@@ -2335,9 +2422,17 @@ server <- function(input, output, session) {
     ggplotly(empty_plot)
   })
   
+  
+  tribCasosCrim_filt_rename <- reactive({
+    tribCasosCrim_filt() %>% 
+      rename(`Año Fiscal` = AñoFiscal) %>% 
+      rename(`Estado del Caso` = Casos)%>% 
+      rename(`Delito Cometido` = Delito)
+  })
+  
   # Data Table 
   output$dataTable_tribCasosCrim <- renderDT({
-    renderDataTable(tribCasosCrim_filt(), "Datos: Ordenes de Protección según delito cometido")
+    renderDataTable(tribCasosCrim_filt_rename(), "Datos: Ordenes de Protección según delito cometido")
   })
   
   # Crear Card con Fuentes
@@ -2447,9 +2542,16 @@ server <- function(input, output, session) {
   })
 
   
+  safekitsDF_filt_rename <- reactive({
+    safekitsDF_filt() %>%  # Assuming safekitsDF_filt() is your reactive dataframe
+      rename(`SAFE Kits` = Kits) %>%  # Rename the Kits column to SAFE_Kits
+      rename(`Total Distribuidos` = Total)
+  })
+  
+  
   # Data Table 
   output$dataTable_safekitsDF <- renderDT({
-    renderDataTable(safekitsDF_filt(), "Datos: Tendencia anual del equipo de recolecta de evidencia de SAFE Kits en casos de violencia sexual")
+    renderDataTable(safekitsDF_filt_rename(), "Datos: Tendencia anual del equipo de recolecta de evidencia de SAFE Kits en casos de violencia sexual")
   })
   
   # Crear Card con Fuentes
