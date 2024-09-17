@@ -3,14 +3,13 @@ cat("Loading helper functions from utils.R...\n")
 #### Helper Functions: UI  ####
 ###############################
 
-# Crear un dropdownButton con checkboxGroupInput
-# Esta función crea un dropdownButton con un checkboxGroupInput dentro,
-# estilizado con inline-block.
 
+# Esta función genera un elemento de selección de checkboxes en un botón desplegable dentro de una interfaz de Shiny.
+# Permite a los usuarios seleccionar o deseleccionar todas las opciones de la lista de manera interactiva.
 createDropdownCheckbox <- function(label, choices, selected, id) {
   choices <- levels(choices)
   if (is.null(selected)) {
-    selected <- choices  # Seleccionar todos los elementos
+    selected <- choices  
   } else {
     selected <- choices[selected]
   }
@@ -44,8 +43,7 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
   )
 }
 
-# Crea una imagen con enlace a una página web
-# Esta función crea una imagen con un enlace a una página web especificada.
+# Crea un elemento de lista con una imagen que enlaza a una página web especificada.
 embedImage <- function(ID, img_src, link_href, link_alt, size = "60") {
   tags$li(
     style = 'display: inline-block; margin-right: 20px; vertical-align: middle;',
@@ -133,11 +131,10 @@ authorTag <- function(nombre, email, puesto, grados){
 #### Helper Functions: Server #### 
 ##################################
 
-#' Actualiza un grupo de checkbox en el UI de Shiny.
+
 # Esta función toma como entrada el `session`, el `inputId` correspondiente al grupo
 # de checkbox, el objeto `input` y el conjunto de datos `data`. Dependiendo de si el
 # grupo de checkbox está vacío o no, la función llena o vacía el grupo respectivamente.
-
 updateCheckboxGroup <- function(session, inputId, input, data) {
   
   if (is.null(input[[inputId]])) {
@@ -166,15 +163,15 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
   if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]])) {
     # Si no hay datos o las variables x/y son nulas, mostrar una gráfica vacía con ejes y un mensaje
     p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
-      geom_blank() +  # Añadir geom_blank para garantizar la estructura de la gráfica
+      geom_blank() +  
       labs(title = title, x = xlab, y = ylab) +
       theme_minimal() +
       theme(
         axis.text.x = element_blank(),
-        axis.ticks = element_blank(),  # Quitar ticks de los ejes
-        axis.text.y = element_blank(),  # Quitar texto del eje y
-        axis.title.x = element_text(size = 12, margin = margin(t = 10)),  # Mantener etiqueta del eje x
-        axis.title.y = element_text(size = 12, margin = margin(r = 10)),  # Mantener etiqueta del eje y
+        axis.ticks = element_blank(), 
+        axis.text.y = element_blank(), 
+        axis.title.x = element_text(size = 12, margin = margin(t = 10)),  
+        axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
         plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
         panel.border = element_rect(colour = "black", fill = NA, size = 1),
         plot.margin = margin(t = 45, r = 10, b = 10, l = 10)
@@ -184,15 +181,14 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
     return(p)
 
   } else {
-
-    # Calculate the tick interval based on the range of y values
+    # Calcular rango del eje de y
     y_max <- max(data_df[[y]], na.rm = TRUE)
-    y_interval <- pretty(c(0, y_max), n = 5)[2]  # Get the interval size for the y-axis
-    upper_y_limit <- ceiling(y_max / y_interval) * y_interval  # Round up to the next interval
+    y_interval <- pretty(c(0, y_max), n = 5)[2]  
+    upper_y_limit <- ceiling(y_max / y_interval) * y_interval  
 
 
     p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
-      geom_line(color = "#2f2e7d", size = 1) +  # Línea de color skyblue
+      geom_line(color = "#2f2e7d", size = 1) +  
       geom_point(color = "#adcc4e", size = 2,
                  aes(
                    text =
@@ -218,20 +214,19 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
   }
 }
 
-# Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
 # Crea un gráfico vacio indicando al usuario que debe seleccionar las variables a visualizar
 create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
   data_df <- data()
   ggplot(data_df, aes_string(x = x, y = y)) +
-    geom_blank() +  # Add blank geom to ensure plot structure
+    geom_blank() +  
     labs(title = title, x = xlab, y = ylab) +
     theme_minimal() +
     theme(
       axis.text.x = element_blank(),
-      axis.ticks = element_blank(),  # Remove axis ticks
-      axis.text.y = element_blank(),  # Remove y-axis text
-      axis.title.x = element_text(size = 12, margin = margin(t = 10)),  # Keep x-axis label
-      axis.title.y = element_text(size = 12, margin = margin(r = 10)),  # Keep y-axis label
+      axis.ticks = element_blank(),  
+      axis.text.y = element_blank(),
+      axis.title.x = element_text(size = 12, margin = margin(t = 10)), 
+      axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
       plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
       panel.border = element_rect(colour = "black", fill = NA, size = 1),
       plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
@@ -240,7 +235,6 @@ create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, 
 }
 
 # Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
-# Crea un gráfico de barras con ggplot2 basado en el conjunto de datos y parámetros proporcionados.
 renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
                           emptyMessage, barWidth = 1, xGap = 0.1) {
   
@@ -282,19 +276,113 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, c
   }
 }
 
+# Renderiza un gráfico de barras apiladas 
+renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
+                          emptyMessage, barWidth = 0.4, xGap = 0.1) {  
+  
+  data_df <- data()  # Evalúa los datos reactivos una vez
+  
+  if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]]) || is.null(data_df[[y]]) || is.null(data_df[[fill]])) {
+    # Si no hay datos o las variables x/y son nulas, muestra un gráfico vacío con un mensaje
+    p <- create_empty_plot_with_message(data, x, y, fill, title, xlab, ylab, emptyMessage)
+    
+    return(p)
+  } else {
+    
+    # Filtrar solo las filas para apilar barras (sin el total de kits)
+    apiladas_df <- data_df %>%
+      filter(Kits %in% c("Total con querella", "Total sin querella"))
+    
+    upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2)
+    
+    p <- ggplot(apiladas_df, aes_string(x = x, y = y, fill = fill)) +
+      geom_bar(stat = "identity",
+               position = position_stack(reverse = TRUE),  # Invierte el apilado
+               width = barWidth,  
+               aes(
+                 text = paste(
+                   paste0("<b>", ylab, ":</b> ", after_stat(y)), "<br>",
+                   paste0("<b>", fillLab, ":</b> ", after_stat(fill)), "<br>"
+                 )
+               )) +
+      scale_fill_manual(values = colorFill) +
+      scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+                         expand = expansion(mult = c(0, 0.1))) +
+      coord_cartesian(ylim = c(0, upper_y_limit)) +
+      labs(title = title, x = xlab, y = ylab, fill = fillLab) +
+      theme_minimal() +
+      theme(
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1),
+        plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+      )
+    
+    return(p)
+  }
+}
 
-# Convertir un objeto ggplot a plotly y ajustar la leyenda.
-# Esta función transforma un gráfico ggplot en un gráfico interactivo plotly y configura el tooltip.
+# Renderiza un gráfico de barras apiladas con etiquetas de totales justo encima de las barras
+renderBarPlot_stack2 <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
+                          emptyMessage, barWidth = 0.4, xGap = 0.1) {
+  
+  data_df <- data()  # Evalúa los datos reactivos una vez
+  
+  if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]]) || is.null(data_df[[y]]) || is.null(data_df[[fill]])) {
+    # Si no hay datos o las variables x/y son nulas, muestra un gráfico vacío con un mensaje
+    p <- create_empty_plot_with_message(data, x, y, fill, title, xlab, ylab, emptyMessage)
+    return(p)
+  } else {
+    # Filtrar solo las filas para apilar barras (sin el total de kits)
+    apiladas_df <- data_df %>%
+      filter(Kits %in% c("Total con querella", "Total sin querella"))
+    
+    # Filtrar los totales para poner las etiquetas de total encima
+    totales_df <- data_df %>%
+      filter(Kits == "Total de Kits")
+    
+    # Crear el gráfico de barras apiladas
+    p <- ggplot(apiladas_df, aes_string(x = x, y = y, fill = fill)) +
+      geom_bar(stat = "identity",
+               position = position_stack(reverse = TRUE),  
+               width = barWidth,  
+               aes(
+                 text = paste(
+                   paste0("<b>", ylab, ":</b> ", after_stat(y)), "<br>",
+                   paste0("<b>", fillLab, ":</b> ", after_stat(fill)), "<br>"
+                 )
+               )) +
+      # Agregar los totales encima de cada barra
+      geom_text(data = totales_df, aes_string(x = x, y = y, label = y),
+                position = position_stack(vjust = 1.04),  # Etiquetas justo encima de la última barra
+                size = 4, color = "black") +  
+      scale_fill_manual(values = colorFill) +
+      scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+                         expand = expansion(mult = c(0, 0.1))) +
+      coord_cartesian(ylim = c(0, ceiling(max(totales_df[[y]], na.rm = TRUE) * 1.2))) +  # Límite superior basado en los totales
+      labs(title = title, x = xlab, y = ylab, fill = fillLab) +
+      theme_minimal() +
+      theme(
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1),
+        plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+      )
+    
+    return(p)
+  }
+}
+
+# Transforma un gráfico ggplot en un gráfico interactivo plotly y configura el tooltip.
 convert_to_plotly <- function(p, tooltip_value) {
-  # Convert ggplot object to plotly object
+  # Convertir a grafico de plotly
   p_plotly <- ggplotly(p, tooltip = tooltip_value)
   
-  # Adjust layout to position the legend on the left side and center it vertically
   p_plotly <- p_plotly %>% layout(
     legend = list(
-      x = 1.05,  # X position for legend (left side)
-      y = 0.5,  # Y position for legend (centered vertically)
-      xanchor = "left",  # Anchor the legend to the left
+      x = 1.05,  
+      y = 0.5,  
+      xanchor = "left", 
       yanchor = "middle"
     )
   )
@@ -302,24 +390,21 @@ convert_to_plotly <- function(p, tooltip_value) {
   return(p_plotly)
 }
 
-
-# Crear un div con enlaces a fuentes y textos asociados.
-# Genera un div que muestra una lista de enlaces con textos, precedida por "Fuentes: ".
+# Genera un div que muestra una lista de enlaces con las Fuentes
 createFuenteDiv <- function(hyperlinks, fuenteTexts) {
-  # Ensure the length of both lists are the same
   if (length(hyperlinks) != length(fuenteTexts)) {
     stop("The length of hyperlinks and fuenteTexts must be the same.")
   }
   
-  # Create a single string with hyperlinks and text
+  # Crear un string con hyperlinks y texto
   combined <- sapply(seq_along(hyperlinks), function(i) {
     paste0(tags$a(href = hyperlinks[i], fuenteTexts[i], style = "color: white; text-decoration: none;"))
   })
   
-  # Join combined strings with commas and a space
+  # Join de los strings con comas
   combined_text <- paste(combined, collapse = ", ")
   
-  # Create the div card with "Fuentes: " before the references
+  # Crear div con "Fuentes: "
   tags$div(
     style = "background-color: #3e3f3a; padding: 10px; border-radius: 5px; margin-top: 10px; text-align: center;",
     tags$span(
@@ -333,11 +418,7 @@ createFuenteDiv <- function(hyperlinks, fuenteTexts) {
   )
 }
 
-
 # Renderiza un gráfico de caja utilizando ggplot2 en el UI de Shiny.
-# Esta función toma un conjunto de datos `data` y diversos parámetros para generar
-# un gráfico de caja con ggplot2. 
-
 renderBoxPlot <- function(data, x, y, color, title, xlab, ylab, colorlab = color) {
   p <- ggplot(data, aes(x = x, y = y)) +
     geom_boxplot() +
@@ -348,10 +429,7 @@ renderBoxPlot <- function(data, x, y, color, title, xlab, ylab, colorlab = color
   print(p)
 }
 
-# Renderiza una tabla de datos utilizando el paquete DT en el UI de Shiny.
-# Esta función toma un conjunto de datos `filtered_data` y utiliza la librería DT
-# para renderizar una tabla interactiva en el UI de Shiny.
-
+# Renderiza una tabla de datos utilizando el paquete DT en el UI de Shiny. Utilizada para presentar los datos
 renderDataTable <- function(filtered_data, title = " ", font_size = "18px") {
   datatable(
     filtered_data,
@@ -393,9 +471,6 @@ renderDataTable <- function(filtered_data, title = " ", font_size = "18px") {
 
 
 # Renderizar Tabla de Definiciones con Botones de Exportación
-# Crea una tabla de datos interactiva con botones de exportación para copiar, CSV, Excel y PDF. 
-# La tabla permite búsqueda, paginación y incluye opciones para diversas configuraciones de visualización.
-
 renderDataTable_Definitions <- function(filtered_data) {
   datatable(
     filtered_data,
@@ -432,7 +507,7 @@ renderDataTable_Definitions <- function(filtered_data) {
         "}"
       ),
       columnDefs = list(
-        list(targets = 0, orderable = FALSE) # Disable ordering for the index column
+        list(targets = 0, orderable = FALSE)
       )
     ),
     class = 'display compact' 
@@ -442,8 +517,6 @@ renderDataTable_Definitions <- function(filtered_data) {
 
 
 # Renderiza un mapa utilizando ggplot2 en el UI del ShinyApp
-# Esta función toma un conjunto de datos y diversos parámetros para generar un mapa utilizando ggplot2.
-
 renderMap <- function(data, fill, title, group, fill_lab = fill, 
                       light_color = "lightblue", dark_color = "darkblue") {
   p <- ggplot(data()) +
@@ -456,12 +529,11 @@ renderMap <- function(data, fill, title, group, fill_lab = fill,
       axis.text = element_blank(),
       axis.ticks = element_blank(),
       panel.grid = element_blank(),
-      panel.border = element_rect(colour = "black", fill = NA, size = 1),  # Adds a border around the plot panel
-      plot.margin = margin(10, 10, 10, 10)  # Adjusts the margin around the plot
+      panel.border = element_rect(colour = "black", fill = NA, size = 1),  
+      plot.margin = margin(10, 10, 10, 10)
     )
   print(p)
 }
-
 
 renderMapGroup <- function(data, fill, title, fill_lab = fill) {
   p <- ggplot(data) +
@@ -479,9 +551,7 @@ renderMapGroup <- function(data, fill, title, fill_lab = fill) {
 }
 
 
-# Función para crear cards de definiciones y metadatos
-# Generate HTML Definition Cards
-
+# Función para crear cards de definiciones y metadatos (Actualmente no se esta utilizando esta funcion)
 definitionCards <- function(definitions) {
   card_list <- lapply(definitions, function(def) {
     background_color <- "#F2F2F3"
@@ -499,9 +569,8 @@ definitionCards <- function(definitions) {
 
 
 # Genera una paleta de colores para los niveles de una variable categórica.
-# Esta función toma un dataframe y el nombre de una variable categórica, 
-# y devuelve una paleta de colores con un color único para cada nivel de la variable.
-
+# Esta función toma un dataframe y el nombre de una variable categórica, y devuelve una paleta de colores con un 
+# color único para cada nivel de la variable.
 setColorFill <- function(df, variable) {
   # Obtener los niveles únicos de la variable
   unique_levels <- unique(df[[variable]])
