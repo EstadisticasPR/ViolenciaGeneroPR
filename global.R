@@ -16,6 +16,7 @@ library(RColorBrewer)
 library(rsconnect)
 library(sf)
 library(zoo)
+library(writexl)
 source("utils.R")
 
 # packages <- c(
@@ -36,7 +37,8 @@ source("utils.R")
 #   "htmltools",
 #   "shinymanager",
 #   "packrat",
-#   "rsconnect"
+#   "rsconnect",
+#   "writexl"
 # )
 # 
 # # Instalar los paquetes si no están instalados
@@ -56,7 +58,8 @@ source("utils.R")
 ##################################################################
 ##### convert_mixed_columns se usa para manejar missing data #####
 ##################################################################
-# funcion para convertir columna con varios tipos de datos a numerico
+##################################################################################
+#### Funcion para convertir columna con varios tipos de datos a numerico #####
 convert_mixed_columns <- function(data) {
   mixed_columns <- sapply(data, function(col) any(is.character(col) & !is.na(as.numeric(col))))
   mixed_columns_names <- names(mixed_columns)[mixed_columns]
@@ -71,6 +74,19 @@ convert_mixed_columns <- function(data) {
   return(data)
 }
 ##################################################################################
+##################################################################
+#### Funcion para guardar dataframes por agencias #####
+guardarDatos <- function(dataframes, nombres_sheets, nombre_archivo) {
+  # Añadir la extensión .xlsx al nombre proporcionado
+  nombre_archivo <- paste0(nombre_archivo, ".xlsx")
+  
+  # Guardar los dataframes en diferentes hojas del mismo archivo Excel
+  writexl::write_xlsx(setNames(dataframes, nombres_sheets), nombre_archivo)
+  
+  # Mensaje de confirmación
+  message("Archivo guardado como: ", nombre_archivo, " con ", length(dataframes), " hojas.")
+}
+##################################################################
 #### Procesamiento de datos del Sistema de Notificacion de Muertes Violentas #####
 ##################################################################################
 # path para Sistema_de_Notificacion_de_Muertes_Violentas
@@ -84,7 +100,9 @@ homiEdad <- read_excel(paste0(snmv, "/svmvHomiEdad.xlsx")) %>%
   rename(Edad = `Grupo de edad`) %>%
   rename(Año = año) %>%
   rename(Casos = casos) %>%
+  replace_na(list(Casos = 0)) %>%
   mutate(
+    Edad = str_replace(Edad, "^Menos de 15 años$", "menos de 15 años"),
     Edad = factor(Edad, levels = unique(Edad)),
     Año = factor(Año)
   ) %>%
@@ -115,9 +133,20 @@ inci <- read_excel(file.path(snmv, "svmvIncidentes.xlsx")) %>%
   rename(Incidente = `Tipo de Incidente`) %>%
   rename(Año = año) %>%
   rename(Casos = casos) %>%
+  replace_na(list(Casos = 0)) %>%
   relocate(
     Año, Incidente, Casos
   )
+
+#### Guardar datos procesados de Sistema de Notificacion de Muertes Violentas ####
+# dataframes <- list(homiEdad, inci) # Lista de dataframes (por ejemplo: homiEdad y inci)
+# 
+# # Lista de nombres de hojas correspondientes a los dataframes
+# nombres_sheets <- list("homicidios_mujeres_edadV", "incidentes_violentos")
+# 
+# # Uso de la función
+# guardarDatos(dataframes, nombres_sheets, "sistema_notificacion_muertes_violentas")
+
 
 #############################################################
 #### Procesamiento de datos del Departamento de Familia #####
@@ -172,6 +201,7 @@ dfMalt <- bind_rows(
   rename(
      Maltrato = `Tipo de Maltrato`
   ) %>%
+  replace_na(list(Casos = 0)) %>%
   distinct() %>%
   relocate(
     Año, Maltrato, Sexo, Casos
@@ -190,6 +220,16 @@ dfMalt <- dfMalt %>%
   filter(!grepl("Negligencia", Maltrato, ignore.case = TRUE)) %>% # Eliminar las filas de negligencia existentes
   bind_rows(negligencia_sum) %>% # Unir el dataset original con el dataset de negligencia 
   mutate(Maltrato = factor(Maltrato))
+
+
+#### Guardar datos procesados de Departamento de Familia ####
+# dataframes <- list(dfMalt) # Lista de dataframes (por ejemplo: homiEdad y inci)
+# 
+# # Lista de nombres de hojas correspondientes a los dataframes
+# nombres_sheets <- list("maltrato_menores_victimas")
+# 
+# # Uso de la función
+# guardarDatos(dataframes, nombres_sheets, "departamento_familia")
 
 ###############################################################
 ##### Procesamiento de datos del Departamento de Justicia #####
@@ -236,17 +276,28 @@ dfDeli <- bind_rows(
                     "Art3.4" = "Maltrato por Restricción de Libertad",
                     "Art2.8" = "Incumplimiento de la Órden de Protección")
   ) %>%
+  replace_na(list(Casos = 0)) %>%
   rename(Distrito = `FISCALIA DISTRITO`) %>%
   relocate(
     Año, Distrito, Delito, Casos
   )
 
-# Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
+# Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar 
+# los datos de delitos con los datos geográficos de los distritos fiscales
 mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
   merge(dfDeli, by.x = "GROUP", by.y = "Distrito") %>%
   relocate(
     Año, GROUP, Delito, geometry,Casos
   )
+
+#### Guardar datos procesados de Departamento de Justicia ####
+# dataframes <- list(dfDeli) # Lista de dataframes (por ejemplo: homiEdad y inci)
+# 
+# # Lista de nombres de hojas correspondientes a los dataframes
+# nombres_sheets <- list("delitos_articuloLey54")
+# 
+# # Uso de la función
+# guardarDatos(dataframes, nombres_sheets, "departamento_justicia")
 
 ###############################################################################
 #### Procesamiento de datos el Departamento del Trabajo y Recursos Humanos ####
@@ -299,6 +350,7 @@ dfAvp <- left_join(avpSolicitadas, avpAsignadas, by = c("región", "año")) %>%
   rename(Región = región) %>%
   rename(Estado = status) %>%
   rename(Cantidad = cantidad) %>%
+  replace_na(list(Cantidad = 0)) %>%
   relocate(
     Año, Región, Estado, Cantidad
   )
@@ -306,13 +358,23 @@ dfAvp <- left_join(avpSolicitadas, avpAsignadas, by = c("región", "año")) %>%
 # Convertir el año a numérico para eliminar el asterisco y convertirlo a int
 dfAvp$Año <- as.factor(sub("\\*", "", dfAvp$Año))
 
-# Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
+# Crear un dataframe con las coordenadas de las fiscalías policiacas y 
+# combinar los datos de delitos con los datos geográficos de los distritos fiscales
 mapaAvp <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
   merge(dfAvp, by.x = "GROUP", by.y = "Región") %>%
   rename(Región = GROUP) %>%
   relocate(
     Año, Región, Estado, geometry, Cantidad 
   )
+
+#### Guardar datos procesados de Administración de Vivienda Pública ####
+# dataframes <- list(dfAvp) # Lista de dataframes (por ejemplo: homiEdad y inci)
+# 
+# # Lista de nombres de hojas correspondientes a los dataframes
+# nombres_sheets <- list("viviendasPublicas_porViolenciaDomestica")
+# 
+# # Uso de la función
+# guardarDatos(dataframes, nombres_sheets, "administracion_vivienda_publica")
 
 ############################################################################
 #### Procesamiento de datos Departamento de Corrección y Rehabilitación ####
@@ -322,7 +384,6 @@ dcr <- here::here("data", "Departamento_de_correccion_y_rehabilitacion", "/")
 #### dcrCasosInv ####
 # importando el dataset de Casos en Supervisión de Ley 54
 dcrCasosInv <- read_excel(paste0(dcr, "dcrCasosInv.xlsx")) %>%
-  #filter(sexo != "Total") %>%
   select(-c(mes)) %>%
   group_by(tipo, year, sexo) %>%
   summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
@@ -336,27 +397,15 @@ dcrCasosInv <- read_excel(paste0(dcr, "dcrCasosInv.xlsx")) %>%
   rename(Sexo = sexo) %>%
   rename(Estado = tipo) %>%
   rename(Cantidad = cantidad) %>%
+  replace_na(list(Cantidad = 0)) %>%
   relocate(
     Año, Sexo, Estado, Cantidad
   )
 
 #### dcrSentenciadas ####
-# dcrSentenciadas <- read_excel(paste0(dcr, "dcrSentenciadas.xlsx"))  %>%
-#   select(-c(mes)) %>%
-#   group_by(tipo, year) %>%
-#   summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
-#   ungroup() %>%
-#   mutate(
-#     # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
-#     #fecha = as.yearmon(paste(year, mes), "%Y %m")
-#     tipo = factor(tipo),
-#     year = factor(year)
-#   )
 
 dcrSentenciadas <- read_excel(paste0(dcr, "dcrSentenciadas.xlsx"))  %>%
   mutate(
-    # la función as.yearmon convierte el año y mes a una sola fecha para poderla visualizar apropiadamente, la función es parte del paquete zoo
-    #fecha = as.yearmon(paste(year, mes), "%Y %m")
     tipo = factor(tipo),
     year = factor(year)
   ) 
@@ -367,10 +416,20 @@ dcrSentenciadas <- dcrSentenciadas %>%
   rename(Fecha = fecha) %>%
   rename(Estado = tipo) %>%
   rename(Cantidad = cantidad) %>%
+  replace_na(list(Cantidad = 0)) %>%
   select(
     Año, Fecha, Estado, Cantidad
   )
-  
+
+#### Guardar datos procesados de Departamento de Corrección y Rehabilitación ####
+# dataframes <- list(dcrCasosInv, dcrSentenciadas) # Lista de dataframes (por ejemplo: homiEdad y inci)
+# 
+# # Lista de nombres de hojas correspondientes a los dataframes
+# nombres_sheets <- list("casos_supervision_ley54", "casos_sentenciados_violencia_domestica")
+# 
+# # Uso de la función
+# guardarDatos(dataframes, nombres_sheets, "departamento_correcion")
+
 
 #########################################################
 #### Procesamiento de datos del Negociado de Policía ####
@@ -405,26 +464,10 @@ despDF <- bind_rows(
     Año = factor(Año),
     Estado = factor(Categoria)
   ) %>%
+  replace_na(list(Casos = 0)) %>%
   select(
     Año, Estado, Casos
   )
-
-# despDF <- bind_rows(
-#   list(desp2020, desp2021, desp2022, desp2023)
-# ) %>%
-#   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
-#   filter(!grepl("Total", Meses)) %>%
-#   group_by(Categoria) %>%
-#   mutate(
-#     Meses = factor(Meses, levels = meses),
-#     Meses_Numéricos = match(Meses, meses) ,
-#     Fecha = as.yearmon(paste(Año, Meses_Numéricos), "%Y %m"),
-#     Categoria = factor(Categoria),
-#     Año = factor(Año)
-#   ) %>%
-#   ungroup() %>%
-#   select(-Meses_Numéricos)
-
 
 #### vEdad ####
 vEdad2021 <- read_excel(paste0(poli, "npprVDedad2021.xlsx")) %>% 
@@ -445,19 +488,17 @@ vEdad <- bind_rows(vEdad2021, vEdad2022, vEdad2023) %>%
     !c(Edad, Año), names_to = "Sexo", values_to = "Casos"
   ) %>%
   mutate(
-    Edad = factor(Edad),
+    Edad = str_replace_all(Edad, c("^< 16$" = "menos de 16 años", "^65 o más$" = "65 años o más")),
+    Edad = factor(Edad, levels = c("menos de 16 años", "16-17", "18-19", "20-24", "25-29", "30-34",
+                                   "35-39","40-44","45-49","50-54","55-59","60-64","65 años o más",
+                                   "Desconocida")),
     Año = factor(Año),
     Sexo = factor(Sexo)
   ) %>%
+  replace_na(list(Casos = 0)) %>%
   select(
     Año, Edad, Sexo, Casos
   )
-
-# vEdad %>%
-#   group_by(Sexo, Año) %>%
-#   summarise(
-#     TotalCasos = sum(Casos)
-#   )
 
 #### inciDF ####
 inci2021 <- read_excel(paste0(poli, "NPPRincidentes_2021.xlsx")) %>% 
@@ -488,14 +529,26 @@ inciDF <- bind_rows(inci2021, inci2022, inci2023) %>%
     Meses_Numéricos = match(Meses, Mes),
     Fecha = as.yearmon(paste(Año, Meses_Numéricos), "%Y %m")
   ) %>%
+  replace_na(list(Casos = 0)) %>%
   select(-c(Meses_Numéricos, Mes, Meses)) %>%
   relocate(
     Año, `Áreas Policiacas`, Población, Casos
   )
 
-# Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar los datos de delitos con los datos geográficos de los distritos fiscales
+# Crear un dataframe con las coordenadas de las fiscalías policiacas y 
+# combinar los datos de delitos con los datos geográficos de los distritos fiscales
 inciMapa <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
   merge(inciDF, by.x = "GROUP", by.y = "Áreas Policiacas")
+
+#### Guardar datos procesados de Negociado de Policía ####
+# dataframes <- list(despDF, vEdad) # Lista de dataframes (por ejemplo: homiEdad y inci)
+# 
+# # Lista de nombres de hojas correspondientes a los dataframes
+# nombres_sheets <- list("mujeres_desaparecidas_localizadas", "victimas_violencia_domestica")
+# 
+# # Uso de la función
+# guardarDatos(dataframes, nombres_sheets, "negociado_policia")
+# 
 
 ###############################################################################
 #### Procesamiento de datos de la Oficina de la Procuradora de las Mujeres ####
@@ -503,11 +556,6 @@ inciMapa <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
 opm <- here::here("data", "Oficina_de_procuradora_de_mujeres", "/")
 
 #### opmFemiVD ####
-# opmFemiVD <- read_excel(paste0(opm, "opmFemiVD.xlsx")) %>%
-#   mutate(
-#     Año = factor(Año)
-#   )
-
 opmFemiVD <- read_excel(paste0(opm, "opmFemiVD.xlsx")) %>%
   mutate(Año = factor(Año)) %>%
   rename(
@@ -517,7 +565,6 @@ opmFemiVD <- read_excel(paste0(opm, "opmFemiVD.xlsx")) %>%
   ) 
 
 #### opmCasos ####
-#meses <- c("1" = "enero", "2" = "febrero", "3" = "marzo",  "4" = "abril", "5" = "mayo", "6" = "junio", "7" = "julio", "8" = "agosto", "9" = "septiembre","10" = "octubre", "11" = "noviembre", "12" = "diciembre")
 opmCasos <-  read_excel(paste0(opm, "opmPartMes.xlsx")) %>%
   select(-c(month)) %>%
   group_by(tipo, year) %>%
@@ -532,6 +579,7 @@ opmCasos <-  read_excel(paste0(opm, "opmPartMes.xlsx")) %>%
   rename(Año = year) %>%
   rename(Razón = tipo) %>%
   rename(Cantidad = cantidad) %>%
+  replace_na(list(Cantidad = 0)) %>%
   relocate(
     Año, Razón, Cantidad
   )
@@ -548,6 +596,7 @@ opmVic <- read_excel(paste0(opm, "opmVicGraf.xlsx")) %>%
   rename(Año = año) %>%
   rename(Género = género) %>%
   rename(Víctimas = víctimas) %>%
+  replace_na(list(Víctimas = 0)) %>%
   relocate(
     Año, Género, Víctimas
   )
@@ -564,6 +613,7 @@ opmMedio <- read_excel(paste0(opm, "opmMedio.xlsx")) %>%
   rename(Año = año) %>%
   rename(Orientación = `Medio de orientación`) %>%
   rename(Cantidad = `personas atendidas`) %>%
+  replace_na(list(Cantidad = 0)) %>%
   relocate(
     Año, Orientación, Cantidad
   )
@@ -576,17 +626,28 @@ opmServiciosMes <-  read_excel(paste0(opm, "opmServiciosMes.xlsx")) %>%
   summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
   ungroup() %>%
   mutate(
-    #fecha = as.yearmon(paste(year, month), "%Y %m"),
     tipo = factor(tipo),
     year = factor(year)
   ) %>%
   rename(Año = year) %>%
   rename(Servicio = tipo) %>%
   rename(Cantidad = cantidad) %>%
+  replace_na(list(Cantidad = 0)) %>%
   relocate(
     Año, Servicio, Cantidad
   )
 
+#### Guardar datos procesados de Oficina de la Procuradora de las Mujeres ####
+# dataframes <- list(opmFemiVD, opmCasos, opmVic, opmMedio, opmServiciosMes) # Lista de dataframes (por ejemplo: homiEdad y inci)
+# 
+# # Lista de nombres de hojas correspondientes a los dataframes
+# nombres_sheets <- list("tasa_asesinatos_mujeres_violencia_domestica", "personas_atendidas_programaCRIAS",
+#                        "identidad_genero_victimas_atendidas_CRIAS", "orientaciones_ofrecidas_programaCRIAS",
+#                        "servicio_alcance_programaCRIAS")
+# 
+# # Uso de la función
+# guardarDatos(dataframes, nombres_sheets, "oficina_procuradora_mujeres")
+# 
 
 ###################################################################
 #### Procesamiento de datos de la Administración de Tribunales ####
@@ -595,7 +656,8 @@ opmServiciosMes <-  read_excel(paste0(opm, "opmServiciosMes.xlsx")) %>%
 trib <- here::here("data", "administracion_de_tribunales", "/")
 
 #### casosCrimLey148 ####
-## Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y grupo de edad de la parte peticionaria
+## Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual,
+## por Región Judicial y grupo de edad de la parte peticionaria
 
 # importando datos del año fiscal 2020-2021
 ## faltan datos
@@ -634,15 +696,17 @@ casosCrimLey148 <- full_join(casosCrimLey148_20, casosCrimLey148_21) %>%
     Status = factor(Status), 
     Delito = factor(Delito)
     ) %>%
+  replace_na(list(Casos = 0)) %>%
   relocate(
     AñoFiscal, Status, Delito, Casos
   )
 
 #### OP_148_SoliGrupEdad ####
 
-# Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y grupo de edad de la parte peticionaria
+# Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, 
+# por Región Judicial y grupo de edad de la parte peticionaria
 
-new_names <- c("Total", "<20", "21-29", "30-39", "40-49", "50-59", ">60", "No Indica")
+new_names <- c("Total", "menos de 20 años", "21-29", "30-39", "40-49", "50-59", "60 años o más", "No Indica")
 
 # datos de solicitudes de órdenes de protección en el 2020-2021
 OP_148_SoliGrupEdad2020_21 <- read_excel(paste0(trib, "OP_148_SoliGrupEdad2020_21.xlsx")) %>%
@@ -687,6 +751,7 @@ OP_148_SoliGrupEdad <- full_join(
     AñoFiscal = factor(AñoFiscal),
     Región = factor(Región)
   ) %>%
+  replace_na(list(Solicitudes = 0)) %>%
   relocate(
     AñoFiscal, Región, Edad, Solicitudes
   )
@@ -742,6 +807,7 @@ OP_Ley148_ex_parteEmitidas <- full_join(
   filter(
     Región != "Total"
   ) %>%
+  replace_na(list(ÓrdenesEmitidas = 0)) %>%
   relocate(
     AñoFiscal, Delito, Región, ÓrdenesEmitidas
   )
@@ -796,6 +862,7 @@ OP_LEY148Archivadas <- full_join(
   filter(
     Región != "Total"
   ) %>%
+  replace_na(list(ÓrdenesArchivadas = 0)) %>%
   relocate(
     AñoFiscal, Razón, Región, ÓrdenesArchivadas
   )
@@ -852,6 +919,7 @@ OP_LEY148Denegadas <- full_join(
     ),
     AñoFiscal = factor(AñoFiscal)
   ) %>%
+  replace_na(list(ÓrdenesDenegadas = 0)) %>%
   relocate(
     AñoFiscal, Razón, Región, ÓrdenesDenegadas
   )
@@ -909,13 +977,12 @@ OP_LEY148FinalEmitidas <- full_join(
     ),
     AñoFiscal = factor(AñoFiscal)
   ) %>%
+  replace_na(list(ÓrdenesEmitidas = 0)) %>%
   relocate(
     AñoFiscal, Delito, Región, ÓrdenesEmitidas
   ) 
 
 #### OP_LEY148Genero ####
-
-
 # Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por sexo de la parte
 
 OP_LEY148Genero2020_21 <- read_excel(paste0(trib, "OP_LEY148Genero2020_21.xlsx")) %>%
@@ -957,6 +1024,7 @@ OP_LEY148Genero <- full_join(
     ),
     AñoFiscal = factor(AñoFiscal)
   ) %>%
+  replace_na(list(Solicitudes = 0)) %>%
   relocate(
     AñoFiscal, Parte, Sexo, Solicitudes
   )
@@ -1036,10 +1104,24 @@ tribCasosCrim <- full_join(
     ),
     AñoFiscal = factor(AñoFiscal)
   ) %>%
+  replace_na(list(Cantidad = 0)) %>%
   relocate(
     AñoFiscal, Delito, Casos, Cantidad
   )
 
+#### Guardar datos procesados de Administración de Tribunales ####
+# dataframes <- list(OP_148_SoliGrupEdad, OP_Ley148_ex_parteEmitidas,
+#                    OP_LEY148Archivadas, OP_LEY148Denegadas, 
+#                    OP_LEY148FinalEmitidas, OP_LEY148Genero, tribCasosCrim) # Lista de dataframes 
+# 
+# # Lista de nombres de hojas correspondientes a los dataframes
+# nombres_sheets <- list("ordenes_proteccion_solicitadas", "ordenes_proteccion_exparteEmitidas",
+#                        "ordenes_proteccion_exparteArchivadas", "ordenes_proteccion_denegadas",
+#                        "ordenes_proteccion_emitidas", "ordenes_proteccion_emitidas_genero",
+#                        "delitos_casos_tribunal")
+# 
+# # Uso de la función
+# guardarDatos(dataframes, nombres_sheets, "administracion_tribunales")
 
 
 #########################################
@@ -1064,6 +1146,17 @@ safekitsDF <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
                   )),
     Año = factor(Año)
   )
+
+#### Guardar datos procesados de CAVV ####
+# dataframes <- list(safekitsDF) # Lista de dataframes 
+# 
+# # Lista de nombres de hojas correspondientes a los dataframes
+# nombres_sheets <- list("safe_kits")
+# 
+# # Uso de la función
+# guardarDatos(dataframes, nombres_sheets, "centro_ayuda_victimas_violacion")
+
+
 ########################################
 ##### Actualizaciones de los Datos #####
 ########################################

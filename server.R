@@ -22,13 +22,6 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_snmv_homiEdad_año", input, homiEdad$Año)
   })
   
-  # Grafico lineal del SNMV
-  # output$linePlot_snmv <- renderPlotly({
-  #   p <- renderLinePlot(homiEdad_filt, "año", "casos", "edad", "edad",
-  #                       "Evolución de Casos por Grupo de Edad y Año", "Año", "Casos")
-  #   ggplotly(p, tooltip = c("x", "y", "color"))
-  # })
-  
   # Colores de las edades
   homiEdad_fill_edad <- setColorFill(homiEdad, "Edad")
   
@@ -84,9 +77,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",
             DTOutput("dataTable_snmv")
           )
         ),
@@ -172,9 +165,9 @@ server <- function(input, output, session) {
   
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_snmv_inci")
           )
         ),
@@ -201,13 +194,13 @@ server <- function(input, output, session) {
     list(word = "Violencia", definition = "El uso intencional de la fuerza o el poder físico, de hecho, o como amenaza, contra uno mismo, otra persona o un grupo o comunidad, que cause o tenga gran probabilidad de causar lesiones, muerte, daños psicológicos, trastornos del desarrollo o privaciones.")
   )
   
-  # Convert list to data frame
+  # Convertir lista a dataframe
   definitions_df_snmv <- do.call(rbind, lapply(definitions_snmv, as.data.frame))
   
-  # Rename columns
+  # Renombrar las columnas
   colnames(definitions_df_snmv) <- c("Concepto", "Definición")
   
-  # Use the function
+  # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_snmv <- renderDT({
     renderDataTable_Definitions(definitions_df_snmv)
   })
@@ -224,7 +217,6 @@ server <- function(input, output, session) {
            Sexo %in% input$checkGroup_fam_dfMalt_sexo)
   })
   
-  # I was here
   # funcion para el boton de deseleccionar/seleccionar tipo de maltrato
   observeEvent(input$deselectAll_fam_dfMalt_tipo, {
     updateCheckboxGroup(session, "checkGroup_fam_dfMalt_tipo", input, dfMalt$Maltrato)
@@ -240,18 +232,10 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_fam_dfMalt_sexo", input, dfMalt$Sexo)
   })
   
-  # crear gráfico lineal
-  # output$linePlot_fam <- renderPlotly({
-  #   p <- renderLinePlot(dfMalt_filt, "Año", "Casos", "Maltrato", "Maltrato",
-  #                  "Casos de Maltrato por Año y Tipo", "Año", "Casos")
-  #   p <- p + facet_wrap(~Sexo)
-  #   ggplotly(p, tooltip = c("x", "y", "color"))
-  # })
-  
   # Colores de las edades
   dfMalt_fill_Maltrato <- setColorFill(dfMalt, "Maltrato")
   
-  # crear gráfico de barras
+  # Crear gráfico de barras
   output$barPlot_fam <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
     has_año <- length(input$checkGroup_fam_dfMalt_año) > 0
@@ -304,9 +288,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_fam")
           )
         ),
@@ -335,13 +319,13 @@ server <- function(input, output, session) {
     list(word = "Trata Humana", definition = "Se define como la captación, traslado, transporte, acogida o recepción de una persona utilizando la violencia, amenaza, engaño, rapto, fuerza, abuso de poder, abuso de una situación de vulnerabilidad u otros elementos de coacción, con el fin de someterla a explotación y lucrarse con su actividad.")
   )
   
-  # Convert list to data frame
+  # Convertir lista a dataframe
   definitions_df_fam <- do.call(rbind, lapply(definitions_fam, as.data.frame))
   
-  # Rename columns
+  # Renombrar las columnas
   colnames(definitions_df_fam) <- c("Concepto", "Definición")
   
-  # Use the function
+  # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_fam <- renderDT({
     renderDataTable_Definitions(definitions_df_fam)
   })
@@ -371,21 +355,6 @@ server <- function(input, output, session) {
   observeEvent(input$deselectAll_just_dfDeli_distrito, {
     updateCheckboxGroup(session, "checkGroup_just_dfDeli_distrito", input, dfDeli$Distrito)
   })
-  
-  # crear gráfico de caja
-  # output$boxPlot_just <- renderPlotly({
-  #   renderBoxPlot(
-  #     data = dfDeli_filt(),
-  #     x = "Año",
-  #     y = "Casos",
-  #     color = "FISCALIA DISTRITO",
-  #     title = "Distribución de Casos por Delito",
-  #     xlab = "Año",
-  #     ylab = "Casos"
-  #   )
-  #   p <- p + facet_wrap(~Delito)
-  #   ggplotly(p)
-  # })
   
   # Colores de las edades
   dfDeli_fill_Delito <- setColorFill(dfDeli, "Delito")
@@ -420,23 +389,6 @@ server <- function(input, output, session) {
     ggplotly(empty_plot)
   })
   
-  
-  # output$deliPlot_just <- renderPlot({
-  #   filtered_data <- subset(dfDeli, Año == input$yearInput_just & Delito == input$checkGroup_just)
-  #   
-  #   p <- ggplot(filtered_data, aes(x = `FISCALIA DISTRITO`, y = Casos, fill = `FISCALIA DISTRITO`)) +
-  #     geom_bar(stat = "identity", width = 0.7) +
-  #     labs(
-  #       title = paste("Distribución de Casos por Distrito para el Delito", input$checkGroup_just, "en el", input$yearInput_just),
-  #       x = "Fiscalía Distrito",
-  #       y = "Casos",
-  #       fill = "Distrito Fiscal"
-  #     ) +
-  #     theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  #   
-  #   print(p)
-  # })
-  
   # Data table del DeptJust
   output$dataTable_just <- renderDT({
     renderDataTable(dfDeli_filt(), "Datos: Delitos según Artículo de la Ley 54")
@@ -455,9 +407,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_just")
           )
         ),
@@ -487,17 +439,6 @@ server <- function(input, output, session) {
   observeEvent(input$deselectAll_just_mapaDeli_año, {
     updateCheckboxGroup(session, "checkGroup_just_mapaDeli_año", input, mapaDeli$Año)
   })
-  
-  # output$map_just_mapaDeli <- renderPlotly({
-  #   p <- renderMap(
-  #     data = mapaDeli_filt, fill = Casos,
-  #     title = paste0("Distribución de Delitos por ", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año),
-  #     fill_lab = "Delito Cometido",
-  #     light_color = "pink",
-  #     dark_color = "darkred"
-  #   )
-  #   ggplotly(p, tooltip = c("all"))
-  # })
   
   output$map_just_mapaDeli <- renderPlotly({
     p <- renderMap(
@@ -564,29 +505,16 @@ server <- function(input, output, session) {
     list(word = "Maltrato Por Amenaza (Artículo 3.3)", definition = "Toda persona que amenaza con causarle daño a su cónyuge, ex cónyuge, a la persona con quien cohabita o con quien haya cohabitado o con quien sostiene o haya sostenido una relación consensual, o la persona con quien haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, a los bienes apreciados por ésta, excepto aquéllos que pertenecen privativamente al ofensor, o a la persona de otro, incurrirá en delito grave de cuarto grado en su mitad superior.")
   )
   
-  # Convert list to data frame
+  # Convertir lista a dataframe
   definitions_df_just <- do.call(rbind, lapply(definitions_just, as.data.frame))
   
-  # Rename columns
+  # Renombrar las columnas
   colnames(definitions_df_just) <- c("Concepto", "Definición")
   
-  # Use the function
+  # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_just <- renderDT({
     renderDataTable_Definitions(definitions_df_just)
   })
-  
-  ########## Server de Prueba ##########
-  # Data table del DeptJust
-  
-  output$dataTable_test <- renderDT({
-    renderDataTable(starwars)
-  })
-  
-  ## tab 2
-  output$dataTable_test2 <- renderDT({
-    renderDataTable(dfMalt)
-  })
-  
   
   ########## Server del Departamento del Trabajo y Recursos Humanos ##########
   #### Tab de Participación Laboral (parLab) ####
@@ -735,9 +663,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_avp_dfAvp")
           )
         ),
@@ -769,9 +697,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_avp_mapaAvp")
           )
         ),
@@ -790,13 +718,13 @@ server <- function(input, output, session) {
     list(word = "Violencia Doméstica", definition = "Cuando una persona emplea fuerza física o violencia psicológica, intimidación o persecución en contra de su pareja o expareja. Esto, para causarle daño físico a su persona, a sus bienes, a otra persona o a un animal de servicio o mascota o para causarle grave daño emocional. Para que se considere violencia doméstica es necesario que exista o haya existido una relación afectiva entre las partes. Es decir, se da cuando la persona agresora es cónyuge, excónyuge, una persona con quien vive o ha vivido, con quien sostiene o haya sostenido una relación consensual o una persona con quien se haya procreado una hija o un hijo.")
   )
   
-  # Convert list to data frame
+  # Convertir lista a dtaframe
   definitions_df_avp <- do.call(rbind, lapply(definitions_avp, as.data.frame))
   
-  # Rename columns
+  # Renombrar columnas
   colnames(definitions_df_avp) <- c("Concepto", "Definición")
   
-  # Use the function
+  # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_avp <- renderDT({
     renderDataTable_Definitions(definitions_df_avp)
   })
@@ -874,9 +802,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
             DTOutput("dataTable_poli_despDF")
           )
         ),
@@ -966,9 +894,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_poli_vEdad")
           )
         ),
@@ -999,10 +927,7 @@ server <- function(input, output, session) {
     ggplotly(p, tooltip = c("all"))
   })
   
-  # Data Table para el mapa de despDF
-  # output$dataTable_poli_inciMapa <- renderDT({
-  #   renderDataTable(inciMapa_filt())
-  # })
+
   #### Tab de Definiciones ####
   definitions_poli <- list(
     list(word = "Adultas Desaparecidas", definition = "Mujeres adultas cuya ubicación y paradero son desconocidos y no pueden ser determinados por familiares, amigos, o autoridades competentes. Puede surgir por razones como accidentes, secuestros, desastres naturales, o decisiones voluntarias de abandonar su entorno sin dejar rastro."),
@@ -1017,13 +942,13 @@ server <- function(input, output, session) {
     list(word = "Víctima", definition = "Persona que ha sufrido daño físico, emocional, psicológico o financiero como resultado de un acto delictivo, un accidente, un desastre natural, o cualquier otro evento traumático.")
   )
   
-  # Convert list to data frame
+  # Convertir lista a dataframe
   definitions_df_poli <- do.call(rbind, lapply(definitions_poli, as.data.frame))
   
-  # Rename columns
+  # Renombrar columnas
   colnames(definitions_df_poli) <- c("Concepto", "Definición")
   
-  # Use the function
+  # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_poli <- renderDT({
     renderDataTable_Definitions(definitions_df_poli)
   })
@@ -1041,20 +966,12 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_opm_opmFemiVD_año", input, opmFemiVD$Año)
   })
   
-  # Colores del status
-  #despDF_fill_categoria <- setColorFill(despDF, "Categoria")
   # Grafico de barras
   output$barPlot_opm_opmFemiVD <- renderPlotly({
     p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "Tasa", group = "1",
                         color = "1", title = "Tasa de Asesinatos de mujeres por violencia doméstica:\n Desglose Anual",
                         xlab = "Año", ylab = "Tasa por cada 100 mil mujeres",
                         emptyMessage = "Seleccione los Año(s) que desea visualizar")
-    # p <- ggplot(opmFemiVD_filt(), aes(x = Año, y = `Cantidad de asesinatos`, group = 1)) +
-    #   geom_line(color = "blue", linewidth = 1) +
-    #   geom_point(color = "red", size = 2) +
-    #   #geom_smooth(method = "lm", se = FALSE, color = "green" ) +  # Añade líneas de tendencia lineal
-    #   labs(title = "Tendencia de Asesinatos a lo largo de los Años", x = "Año", y = "Cantidad de Asesinatos") +
-    #   theme_minimal()
     
     ggplotly(p, tooltip = "text")
   })
@@ -1077,9 +994,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_opm_opmFemiVD")
           )
         ),
@@ -1162,9 +1079,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_opm_opmCasos")
           )
         ),
@@ -1243,9 +1160,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_opm_opmVic")
           )
         ),
@@ -1329,9 +1246,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_opm_opmMedio")
           )
         ),
@@ -1416,9 +1333,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
             DTOutput("dataTable_opm_opmServiciosMes")
           )
         ),
@@ -1453,13 +1370,13 @@ server <- function(input, output, session) {
   )
   
   
-  # Convert list to data frame
+  # Convertir lista a dataframe
   definitions_df_opm <- do.call(rbind, lapply(definitions_opm, as.data.frame))
   
-  # Rename columns
+  # Renombrar columnas
   colnames(definitions_df_opm) <- c("Concepto", "Definición")
   
-  # Use the function
+  # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_opm <- renderDT({
     renderDataTable_Definitions(definitions_df_opm)
   })
@@ -1547,9 +1464,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
             DTOutput("dataTable_dcr_dcrCasosInv")
           )
         ),
@@ -1654,9 +1571,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_dcr_dcrSentenciadas")
           )
         ),
@@ -1676,13 +1593,13 @@ server <- function(input, output, session) {
     list(word = "Programa de Supervisión Electrónica", definition = "El Programa de Monitoreo Electrónico cuenta con la Unidad Especializada de Monitoreo Electrónico (Unidad) compuesta por Oficiales Correccionales, la cual tiene la responsabilidad de supervisar y monitorear a los participantes pertenecientes al programa. Esta supervisión conlleva el verificar y atender las alertas que se activan a través del sistema de transmisión electrónica, activar el protocolo, solicitar apoyo inter agencial, avisar a la víctima y administrar pruebas toxicológicas, entre otras.")
   )
   
-  # Convert list to data frame
+  # Convertir lista a dataframe
   definitions_df_dcr <- do.call(rbind, lapply(definitions_dcr, as.data.frame))
   
-  # Rename columns
+  # Renombrar columnas
   colnames(definitions_df_dcr) <- c("Concepto", "Definición")
   
-  # Use the function
+  # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_dcr <- renderDT({
     renderDataTable_Definitions(definitions_df_dcr)
   })
@@ -1771,9 +1688,9 @@ server <- function(input, output, session) {
        
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_OP_148_SoliGrupEdad")
           )
         ),
@@ -1869,9 +1786,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
             DTOutput("dataTable_OP_Ley148_ex_parteEmitidas")
           )
         ),
@@ -1970,9 +1887,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_OP_LEY148Archivadas")
           )
         ),
@@ -2069,9 +1986,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_OP_LEY148Denegadas")
           )
         ),
@@ -2167,9 +2084,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
             DTOutput("dataTable_OP_LEY148FinalEmitidas")
           )
         ),
@@ -2261,9 +2178,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
             DTOutput("dataTable_OP_LEY148Genero")
           )
         ),
@@ -2275,97 +2192,6 @@ server <- function(input, output, session) {
   
   
   #### (tribCasosCrim) ####
-  
-  # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el delito cometido y el estado del caso
-  # tribCasosCrim_filt <- reactive({
-  #   filter(tribCasosCrim,
-  #          AñoFiscal %in% input$checkGroup_trib_tribCasosCrim_AñoFiscal,
-  #          Delito %in% input$checkGroup_trib_tribCasosCrim_Delito,
-  #          Casos %in% input$checkGroup_trib_tribCasosCrim_Casos
-  #   )
-  # })
-  # 
-  # ### funcion para el botón de deseleccionar/seleccionar el año fiscal
-  # observeEvent(input$deselectAll_trib_tribCasosCrim_AñoFiscal, {
-  #   updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_AñoFiscal", input, tribCasosCrim$AñoFiscal)
-  # })
-  # 
-  # ### funcion para el botón de deseleccionar/seleccionar el delito cometido
-  # observeEvent(input$deselectAll_trib_tribCasosCrim_Delito, {
-  #   updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Delito", input, tribCasosCrim$Delito)
-  # })
-  # 
-  # ### funcion para el botón de deseleccionar/seleccionar el Estado del Caso
-  # observeEvent(input$deselectAll_trib_tribCasosCrim_Casos, {
-  #   updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Casos", input, tribCasosCrim$Casos)
-  # })
-  # 
-  # # Colores de los delitos cometidos
-  # tribCasosCrim_fill_Delito <- setColorFill(tribCasosCrim, "Delito")
-  # 
-  # # Grafico de barras
-  # output$barPlot_tribCasosCrim <- renderPlotly({
-  #   # Verificar si hay opciones seleccionadas en cada grupo
-  #   has_año <- length(input$checkGroup_trib_tribCasosCrim_AñoFiscal) > 0
-  #   has_delito <- length(input$checkGroup_trib_tribCasosCrim_Delito) > 0
-  #   has_casos <- length(input$checkGroup_trib_tribCasosCrim_Casos) > 0
-  #   
-  #   # Crear mensaje si faltan opciones seleccionadas
-  #   if (!has_año || !has_delito || !has_casos) {
-  #     message <- "Seleccione Delito(s), Estado del caso y Año(s) a visualizar"
-  #   } else {
-  #     # Si todas las opciones están seleccionadas, crear la gráfica
-  #     p <- renderBarPlot(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
-  #                        title = "Movimiento de casos en tribunal de primera instancia por ley 54 por delito cometido",
-  #                        xlab = "Año Fiscal", ylab = "Solicitudes de Órdenes de Protección", fillLab = "Delito Cometido",
-  #                        colorFill = tribCasosCrim_fill_Delito,
-  #                        emptyMessage = "Seleccione Delito(s), Estado del caso y Año(s) a visualizar")
-  #     p <- p + facet_wrap(~Casos)
-  #     p <- convert_to_plotly(p, tooltip = "text")
-  #     
-  #     return(p)
-  #   }
-  #   
-  #   # Crear la gráfica vacía con mensaje
-  #   empty_plot <- create_empty_plot_with_message(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
-  #                                                title = "Movimiento de casos en tribunal de primera instancia por ley 54 por delito cometido",
-  #                                                xlab = "Año Fiscal", ylab = "Solicitudes de Órdenes de Protección", message)
-  #   ggplotly(empty_plot)
-  # })
-  # 
-  # 
-  # # Data Table 
-  # output$dataTable_tribCasosCrim <- renderDT({
-  #   renderDataTable(tribCasosCrim_filt(), "Datos: Movimiento de casos criminales de violencia doméstica en 
-  #                   el tribunal de primera instancia según la ley Núm. 54")
-  # })
-  # 
-  # 
-  # # Crear Card con Fuentes
-  # output$dataTableUI_tribCasosCrim  <- renderUI({
-  #   if (input$showTable_tribCasosCrim) {
-  #     hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
-  #     texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
-  #     
-  #     tags$div(
-  #       class = "card",
-  #       style = "padding: 10px; width: 90%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
-  #       
-  #       # Contenedor centrado para la tabla
-  #       div(
-  #         style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
-  #         div(
-  #           style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
-  #           DTOutput("dataTable_tribCasosCrim")
-  #         )
-  #       ),
-  #       
-  #       createFuenteDiv(hyperlinks, texts)
-  #     )
-  #   }
-  # })
-  # 
-  
   tribCasosCrim_filt <- reactive({
     filter(tribCasosCrim,
            AñoFiscal %in% input$checkGroup_trib_tribCasosCrim_AñoFiscal,
@@ -2447,9 +2273,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
             DTOutput("dataTable_tribCasosCrim")
           )
         ),
@@ -2476,13 +2302,13 @@ server <- function(input, output, session) {
     list(word = "Violencia Sexual", definition = "Cualquier acto que degrada o daña el cuerpo y/o la sexualidad de la víctima y que por tanto atenta contra su libertad, dignidad e integridad física. Es una expresión de abuso de poder que implica la supremacía masculina sobre la mujer, al denigrar y concebirla como objeto.")
   )
   
-  # Convert list to data frame
+  # Convertir lista a dataframe
   definitions_df_trib <- do.call(rbind, lapply(definitions_trib, as.data.frame))
   
-  # Rename columns
+  # Renombrar columnas
   colnames(definitions_df_trib) <- c("Concepto", "Definición")
   
-  # Use the function
+  # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_trib <- renderDT({
     renderDataTable_Definitions(definitions_df_trib)
   })
@@ -2574,8 +2400,8 @@ server <- function(input, output, session) {
 
   
   safekitsDF_filt_rename <- reactive({
-    safekitsDF_filt() %>%  # Assuming safekitsDF_filt() is your reactive dataframe
-      rename(`SAFE Kits` = Kits) %>%  # Rename the Kits column to SAFE_Kits
+    safekitsDF_filt() %>%  
+      rename(`SAFE Kits` = Kits) %>%  
       rename(`Total Distribuidos` = Total)
   })
   
@@ -2599,9 +2425,9 @@ server <- function(input, output, session) {
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  # Centra el contenedor de la tabla
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  # Control de scroll y ancho máximo
+            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
             DTOutput("dataTable_safekitsDF")
           )
         ),
@@ -2634,33 +2460,33 @@ server <- function(input, output, session) {
     list(word = "Violencia Sexual", definition = "Cualquier acto que degrada o daña el cuerpo y/o la sexualidad de la víctima y que por tanto atenta contra su libertad, dignidad e integridad física. Es una expresión de abuso de poder que implica la supremacía masculina sobre la mujer, al denigrar y concebirla como objeto.")
   )
   
-  # Convert list to data frame
+  # Convertir lista a dataframe
   definitions_df_cavv <- do.call(rbind, lapply(definitions_cavv, as.data.frame))
   
-  # Rename columns
+  # Renombrar columnas
   colnames(definitions_df_cavv) <- c("Concepto", "Definición")
   
-  # Use the function
+  # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_cavv <- renderDT({
     renderDataTable_Definitions(definitions_df_cavv)
   })
   
   #### tab con informacion de Contacto ####
   observeEvent(input$send, {
-    req(input$email)  # Ensure the email input is not empty
-    req(input$message)  # Ensure the message input is not empty
+    req(input$email)  # Asegurar que el input del email no este vacio
+    req(input$message)  # Asegurar que mensaje no este vacio
     
     tryCatch({
       send.mail(
-        from = input$email,  # Use user's email as sender
-        to = "preguntas@estadisticas.pr",  # Replace with the recipient email
+        from = input$email,  # email del usuario
+        to = "preguntas@estadisticas.pr",  # remplazar 
         subject = paste("Mensaje de", input$name),
         body = paste("Nombre:", input$name, "\nCorreo Electrónico:", input$email, "\n\nMensaje:\n", input$message),
         smtp = list(
-          host.name = "smtp.your-email.com",  # Replace with your SMTP host
-          port = 465,  # Replace with your SMTP port
-          user.name = "your-smtp-username",  # Replace with your SMTP username
-          passwd = "your-smtp-password",  # Replace with your SMTP password
+          host.name = "smtp.your-email.com",  # Replazar con el SMTP host del email del instituto
+          port = 465,  # Replazar con el SMTP port del email del instituto
+          user.name = "your-smtp-username",  # Replazar con el SMTP username del email del instituto
+          passwd = "your-smtp-password",  # Replazar con el SMTP password del email del instituto
           ssl = TRUE
         ),
         authenticate = TRUE,

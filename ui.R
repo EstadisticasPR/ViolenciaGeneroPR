@@ -65,45 +65,19 @@ ui <-
           titlePanel("Homicidios de mujeres por grupo de edad según el año"),
           
           # Fuente de Datos, Actualización
-          #tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
-
-          #tags$span(paste0("Actualización Datos: ", actualizacion_snmvB)),
-          #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
-          
-
           tags$span(paste0("Actualizado: ", actualizacion_snmvB)),
 
           
           # Menu sidebar con widgets
-          # sidebarLayout(
-          #   sidebarPanel(
-          #     
-          #     # botón checkbox para seleccionar grupos de edad 
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Grupo(s) de Edad:",
-          #       choices = homiEdad$edad,
-          #       selected = 8,
-          #       id = "snmv_homiEdad_edad"
-          #     ),
-          #     # botón checkbox para seleccionar año
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Año(s):",
-          #       choices = homiEdad$año,
-          #       selected = NULL,
-          #       id = "snmv_homiEdad_año"
-          #     ),
-          #   ),
-            
-            
             sidebarLayout(
               sidebarPanel(
                 style = "display: flex; flex-direction: column; align-items: center;",
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                   div(
-                    style = "text-align: center; display: inline-block;",  # Styling container for the button
+                    style = "text-align: center; display: inline-block;", 
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>Grupo(s) de Edad:"),
                       choices = homiEdad$Edad,
@@ -130,12 +104,10 @@ ui <-
                   )
                 ),
                 
-                
                 # Output UI para la tabla de datos
                 uiOutput("dataTableUI_snmv")
                 
               ),
-            
             
             # Sección principal con los gráficos
             mainPanel(
@@ -154,37 +126,7 @@ ui <-
           titlePanel("Número de incidentes violentos por tipo para ambos sexos"),
           
           # Fuente de Datos, Actualización
-          #tags$span("Fuente: Instituto de Estadísticas, Sistema de Notificación de Muertes Violentas"), tags$br(),
-
-          #tags$span(paste0("Actualización Datos: ", actualizacion_snmvA)),
-          #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
-          
-          
-
           tags$span(paste0("Actualizado: ", actualizacion_snmvA)),
-
-          
-          # sidebarLayout(
-          #   sidebarPanel(
-          #     
-          #     # botón para seleccionar tipo de incidente
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Tipo(s) de Incidente:",
-          #       choices = inci$tipo,
-          #       selected = 7,
-          #       id = "snmv_inci_tipo"
-          #     ),
-          #     
-          #     # botón para seleccionar año
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Año(s):",
-          #       choices = inci$año,
-          #       selected = NULL,
-          #       id = "snmv_inci_año"
-          #     ),
-          #     
-          #     hr()
-          #   ),
             
             sidebarLayout(
               sidebarPanel(
@@ -192,9 +134,9 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                   div(
-                    style = "text-align: center; display: inline-block;",  # Styling container for the button
+                    style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar tipo de incidente
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>Tipo(s) de Incidente:"),
@@ -238,11 +180,7 @@ ui <-
           ),
         ), 
         
-        #### tab con datos de Tasas ####
-        # tabPanel(
-        #   "Tasas_snmv"
-        # ), 
-        
+     
         #### tab de Definiciones y Metadatos ####
         tabPanel(
           lowercaseTitle("Definiciones y Metadatos"),
@@ -253,16 +191,6 @@ ui <-
             column(12, DTOutput("dataTable_Def_snmv"))
           )
         )
-        
-        # ### xiomy
-        # tabPanel(
-        #   "Xiomy",  # Cambiar por el nombre del tercer dfDeli
-        #   # ... Estructura similar a la anterior para el tercer dfDeli
-        #   tags$div(
-        #     tags$h2("xiomara"),
-        #     tags$img(src = "xiomy.jpg", height = 1000, width = 1000)
-        #   )
-        # ),
       )
     ),
     
@@ -273,44 +201,9 @@ ui <-
       tabsetPanel(
         #### tab con datos de menores víctimas de maltrato (dfMalt)  ####
         tabPanel(
-          #HTML("<span style='text-transform: none; font-size: 14px;'>Maltrato de Menores por Sexo</span>"), 
           lowercaseTitle("Maltrato de menores por sexo"),
           # Título del Tab
           titlePanel("Cantidad de menores que fueron víctimas de maltrato por sexo y tipo de maltrato"),
-          
-          # Fuente de Datos, Actualización
-          #tags$span("Fuente: Departamento de la Familia"), tags$br(),
-          #tags$span("Actualización Datos: ", actualizacion_familia), tags$br(),
-          #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
-          
-          # Menu sidebar con widgets
-          # sidebarLayout(
-          #   sidebarPanel(
-          #     
-          #     # botón para seleccionar tipo de maltrato
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Tipo(s) de Maltrato:",
-          #       choices = dfMalt$Maltrato,
-          #       selected = 1,
-          #       id = "fam_dfMalt_tipo"
-          #     ),
-          #     
-          #     # botón para seleccionar año
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Año(s):",
-          #       choices = dfMalt$Año,
-          #       selected = NULL,
-          #       id = "fam_dfMalt_año"
-          #     ),
-          #     customSeparator(),
-          #     # botón para seleccionar sexo
-          #     createDropdownCheckbox(
-          #       label = "Seleccione sexo de las víctimas:",
-          #       choices = dfMalt$Sexo,
-          #       selected = 1,
-          #       id = "fam_dfMalt_sexo"
-          #     ),
-          #   ),
             
           sidebarLayout(
               sidebarPanel(
@@ -318,9 +211,9 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                   div(
-                    style = "text-align: center; display: inline-block;",  # Styling container for the button
+                    style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar tipo de maltrato
                     createDropdownCheckbox(
                       label = HTML("Seleccione <br>Tipo(s) de Maltrato:"),
@@ -365,8 +258,6 @@ ui <-
             
             # Sección principal con los gráficos
             mainPanel(
-              # aglomerar masculino y femenino
-              #plotlyOutput("linePlot_fam"),
               plotlyOutput("barPlot_fam"),
               tags$div(style = "padding-bottom: 10px;")
             )
@@ -397,53 +288,17 @@ ui <-
         tabPanel(
           lowercaseTitle("Delitos Ley 54 por Distrito"),
           # Título del Tab
-          # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
-          titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"),  # Cambiar por el título adecuado
-          
-          # Fuente de Datos, Actualización
-          #tags$span("Fuente: Departamento de Justicia" ),
-          #tags$span(paste0("Actualización Datos:   ", actualizacion_justiciaA)), 
-          #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)),
-          
-          # Menu sidebar con widgets
-          # sidebarLayout(
-          #   sidebarPanel(
-          #     
-          #     # botón para seleccionar delito
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Artículo(s) de ley 54:",
-          #       choices = dfDeli$Delito,
-          #       selected = 2,
-          #       id = "just_dfDeli_delito"
-          #     ),
-          #     
-          #     # botón para seleccionar año
-          #     createDropdownCheckbox(
-          #       label = "Seleccionar Año:",
-          #       choices = dfDeli$Año,
-          #       selected = NULL,
-          #       id = "just_dfDeli_año"
-          #     ),
-          #     customSeparator(),
-          #     # botón para seleccionar distrito
-          #     createDropdownCheckbox(
-          #       label = "Seleccionar Distrito(s):",
-          #       choices = dfDeli$`FISCALIA DISTRITO`,
-          #       selected = NULL,
-          #       id = "just_dfDeli_distrito"
-          #     ),
-          #     
-          #   ),
-          #   
+          titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"),  
+        
             sidebarLayout(
               sidebarPanel(
                 style = "display: flex; flex-direction: column; align-items: center;",
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                   div(
-                    style = "text-align: center; display: inline-block;",  # Styling container for the button
+                    style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar tipo de maltrato
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>Artículo(s) de ley 54:"),
@@ -487,11 +342,7 @@ ui <-
             
             # Sección principal con los gráficos
             mainPanel(
-              #plotlyOutput("boxPlot_just"),
               plotlyOutput("barPlot_just"),
-              #plotlyOutput("map_just"),
-              #plotlyOutput("facet_bartest"),
-              # plotOutput("deliPlot_just"),
               tags$div(style = "padding-bottom: 10px;")
             )
           )
@@ -503,37 +354,15 @@ ui <-
           lowercaseTitle("Mapa de delitos Ley 54 por Distrito"),
           
           # Título del Tab 
-          # pregunta si es Distrito Fiscal se llama Jurisdicción Fiscal y si los Casos se le llaman Delitos
-          titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"),  # Cambiar por el título adecuado
-          
-          # Fuente de Datos, Actualización
-          #tags$span("Fuente: Departamento de Justicia" ), 
-          #tags$span(paste0("Actualización Datos: ", actualizacion_justiciaA)),
-          #tags$span(paste0("Actualización Sistema: ", actualizacion_sistema)), 
+          titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"), 
           
           # Menu sidebar con widgets
           sidebarLayout(
             sidebarPanel(
-              
-              # botón para seleccionar delito
-              # createDropdownCheckbox(
-              #   label = "Seleccione el/los Delitos(s):",
-              #   choices = mapaDeli$Delito,
-              #   selected = 2,
-              #   id = "just_mapaDeli_delito"
-              # ),
-              
               # botón para seleccionar delito
               selectInput("select_just_mapaDeli_delito", "Seleccione Artículo de la Ley 54:",
                           choices = levels(mapaDeli$Delito),
                           selected = 2),
-              
-              # createDropdownCheckbox(
-              #   label = "Seleccionar Año:",
-              #   choices = mapaDeli$Año,
-              #   selected = NULL,
-              #   id = "just_mapaDeli_año"
-              # ),
               
               # botón para seleccionar año
               selectInput("select_just_mapaDeli_año", "Seleccione Año:",
@@ -542,8 +371,6 @@ ui <-
               
               # Output UI para la tabla de datos
               uiOutput("dataTableUI_just_mapaFisc")
-              
-              
             ),
             
             # Sección principal con los gráficos
@@ -553,13 +380,6 @@ ui <-
             )
           )
         ), 
-        
-        
-        # Subtab con datos específicos para el segundo dfDeli de la agencia
-        # tabPanel(
-        #   "convic"  # Cambiar por el nombre del segundo dfDeli
-        #   # ... Estructura similar a la anterior para el segundo dfDeli
-        # ),
         
         #### tab de Definiciones y Metadatos ####
         tabPanel(
@@ -581,20 +401,8 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("map_just_mapaFisc"),
-            #DTOutput("dataTable_just_mapaFisc")
           )
         ),
-        
-        # Subtab con datos específicos para el tercer dfDeli de la agencia
-        # ### yeiza
-        # tabPanel(
-        #   "Yeiza",  # Cambiar por el nombre del tercer dfDeli
-        #   # ... Estructura similar a la anterior para el tercer dfDeli
-        #   tags$div(
-        #     tags$h2("yeyeyey"),
-        #     tags$img(src = "yeiza.jpg", height = 1000, width = 1000)
-        #   )
-        # ),
       )
     ),
     
@@ -661,42 +469,16 @@ ui <-
           lowercaseTitle("Viviendas Públicas Solicitadas y Asignadas"), 
           # Título del Tab
           titlePanel("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región de la Administración de Vivienda Pública"),
-          
-          # Fuente de Datos, Actualización
-          #tags$span("Fuente: Administración de Vivienda Pública"), tags$br(),
-          #tags$span("Actualización Datos: ", actualizacion_vivienda), tags$br(),
-          #tags$span(paste0("Actualización Sistema:   ", actualizacion_sistema)), 
-          
-          # Menu sidebar con widgets
-          # sidebarLayout(
-          #   sidebarPanel(
-          #     # botón para seleccionar la región
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Región de Vivienda:",
-          #       choices = dfAvp$región,
-          #       selected = dfAvp$región,
-          #       id = "avp_dfAvp_región"
-          #     ),
-          #     
-          #     # botón para seleccionar el año
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Año(s):",
-          #       choices = dfAvp$año,
-          #       selected = dfAvp$año,
-          #       id = "avp_dfAvp_año"
-          #     ),
-          #   ),
-          #   
-            
+        
             sidebarLayout(
               sidebarPanel(
                 style = "display: flex; flex-direction: column; align-items: center;",
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                   div(
-                    style = "text-align: center; display: inline-block;",  # Styling container for the button
+                    style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar la región
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>Región de Vivienda:"),
@@ -731,8 +513,6 @@ ui <-
                 
               ),
             
-            
-            
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_avp_dfAvp"),
@@ -748,11 +528,6 @@ ui <-
           
           # Título del Tab
           titlePanel("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región de la Administración de Vivienda Pública"),
-          
-          # Fuente de Datos, Actualización
-          #tags$span("Fuente: Administración de Vivienda Pública"),
-          #tags$span("Actualización Datos:  ", actualizacion_vivienda), 
-          #tags$span("Actualización Sistema:  ", actualizacion_sistema), 
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -820,41 +595,15 @@ ui <-
           # Título del Tab
           titlePanel("Cantidad de mujeres desaparecidas y localizadas - adultas y menores"),
           
-          # Fuente de Datos, Actualización
-          #tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
-          #tags$span("Actualización Datos:  ", actualizacion_policiaB), tags$br(),
-          
-          # Menu sidebar con widgets
-          # sidebarLayout(
-          #   sidebarPanel(
-          #     
-          #     # botón para seleccionar la Categoría
-          #     createDropdownCheckbox(
-          #       label = "Seleccione el estado de la víctima:",
-          #       choices = despDF$Categoria,
-          #       selected = despDF$Categoria,
-          #       id = "poli_despDF_categoría"
-          #     ),
-          #     
-          #     # botón para seleccionar el año
-          #     createDropdownCheckbox(
-          #       label = "Seleccione año(s):",
-          #       choices = despDF$Año,
-          #       selected = despDF$Año,
-          #       id = "poli_despDF_año"
-          #     ),
-          #   ),
-            
-            
             sidebarLayout(
               sidebarPanel(
                 style = "display: flex; flex-direction: column; align-items: center;",
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                   div(
-                    style = "text-align: center; display: inline-block;",  # Styling container for the button
+                    style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar la Categoría
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>el estado de la víctima:"),
@@ -904,57 +653,15 @@ ui <-
           # Título del Tab
           titlePanel("Incidentes de violencia doméstica por edad de la víctima"),
           
-          # Fuente de Datos, Actualización
-          #tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
-          #tags$span("Actualización Datos:  ", actualizacion_policiaA), tags$br(),
-          
-          # Menu sidebar con widgets
-          # sidebarLayout(
-          #   sidebarPanel(
-          #     
-          #     # botón para seleccionar el año
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Grupo(s) de Edad:",
-          #       choices = vEdad$Edad,
-          #       selected = vEdad$Edad,
-          #       id = "poli_vEdad_edad"
-          #     ),
-          #     customSeparator(),
-          #     # botón para seleccionar el sexo
-          #     createDropdownCheckbox(
-          #       label = "Seleccione sexo de las víctimas:",
-          #       choices = vEdad$Sexo,
-          #       selected = vEdad$Sexo[1],
-          #       id = "poli_vEdad_sexo"
-          #     ),
-          #     customSeparator(),
-          #     # botón para seleccionar el año
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Año(s):",
-          #       choices = vEdad$Año,
-          #       selected = vEdad$Año,
-          #       id = "poli_vEdad_año"
-          #     ),
-          #     
-          #     # createDropdownCheckbox(
-          #     #   label = "Seleccionar Año:",
-          #     #   choices = mapaDeli$Año,
-          #     #   selected = NULL,
-          #     #   id = "just_mapaDeli_año"
-          #     # ),
-          #     
-          #   ),
-            
-            
             sidebarLayout(
               sidebarPanel(
                 style = "display: flex; flex-direction: column; align-items: center;",
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                   div(
-                    style = "text-align: center; display: inline-block;",  # Styling container for the button
+                    style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar edad
                     createDropdownCheckbox(
                       label = HTML("Seleccione <br>Grupo(s) de Edad:"),
@@ -1071,24 +778,6 @@ ui <-
           lowercaseTitle("Feminicidios por Violencia Doméstica"), 
           # Título del Tab
           titlePanel("Tasa de asesinatos de mujeres por violencia doméstica, desde 1990 a 2021 (Tasa x100,000 mujeres)"),
-          
-          # Fuente de Datos, Actualización
-          #tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-          #tags$span("Actualización Datos:  ", actualizacion_opmA), tags$br(),
-          
-          # Menu sidebar con widgets
-          # sidebarLayout(
-          #   sidebarPanel(
-          #     
-          #     # botón para seleccionar el año
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Año(s):",
-          #       choices = opmFemiVD$Año,
-          #       selected = opmFemiVD$Año,
-          #       id = "opm_opmFemiVD_año"
-          #     ),
-          #   ),
-            
             
             sidebarLayout(
               sidebarPanel(
@@ -1132,40 +821,15 @@ ui <-
           # Título del Tab
           titlePanel("Población atendida mediante el programa CRIAS según razón para consulta"),
           
-          # Fuente de Datos, Actualización
-          #tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-          #tags$span("Actualización Datos:  ", actualizacion_opmA), tags$br(),
-          
-          # Menu sidebar con widgets
-          # sidebarLayout(
-          #   sidebarPanel(
-          #     
-          #     # botón para seleccionar el año
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Año(s):",
-          #       choices = opmCasos$year,
-          #       selected = opmCasos$year,
-          #       id = "opm_opmCasos_año"
-          #     ),
-          #     customSeparator(),
-          #     # botón para seleccionar el tipo de violencia
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Razón para Consulta:",
-          #       choices = opmCasos$tipo,
-          #       selected = opmCasos$tipo,
-          #       id = "opm_opmCasos_tipo"
-          #     ),
-          #   ),
-            
             sidebarLayout(
               sidebarPanel(
                 style = "display: flex; flex-direction: column; align-items: center;",
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                   div(
-                    style = "text-align: center; display: inline-block;",  # Styling container for the button
+                    style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar el tipo de violencia
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>Razón para Consulta:"),
@@ -1197,9 +861,7 @@ ui <-
                 uiOutput("dataTableUI_opm_opmCasos")
                 
               ),
-            
-            
-            
+              
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_opm_opmCasos"),
@@ -1213,31 +875,6 @@ ui <-
           lowercaseTitle("Género de las Víctimas Atendidas"), 
           # Título del Tab
           titlePanel("Identidad de género de víctimas asistidas por el programa CRIAS"),
-          
-          # Fuente de Datos, Actualización
-          #tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-          #tags$span("Actualización Datos:  ", actualizacion_opmB), tags$br(),
-          
-          # Menu sidebar con widgets
-          # sidebarLayout(
-          #   sidebarPanel(
-          #     
-          #     # botón para seleccionar el año
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Año(s):",
-          #       choices = opmVic$año,
-          #       selected = opmVic$año,
-          #       id = "opm_opmVic_año"
-          #     ),
-          #     customSeparator(),
-          #     # botón para seleccionar el género de las victimas
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Género(s):",
-          #       choices = opmVic$género,
-          #       selected = opmVic$género,
-          #       id = "opm_opmVic_género"
-          #     ),
-          #   ),
             
             sidebarLayout(
               sidebarPanel(
@@ -1245,9 +882,9 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                   div(
-                    style = "text-align: center; display: inline-block;",  # Styling container for the button
+                    style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar el género de las victimas
                     createDropdownCheckbox(
                       label = "Seleccione Género(s):",
@@ -1280,8 +917,6 @@ ui <-
                 
               ),
             
-            
-            
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_opm_opmVic"),
@@ -1296,40 +931,15 @@ ui <-
           # Título del Tab
           titlePanel("Orientaciones ofrecidas mediante el programa CRIAS"),
           
-          # Fuente de Datos, Actualización
-          #tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-          #tags$span("Actualización Datos:  ", actualizacion_opmB), tags$br(),
-          
-          # Menu sidebar con widgets
-          # sidebarLayout(
-          #   sidebarPanel(
-          #     
-          #     # botón para seleccionar el año
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Año(s):",
-          #       choices = opmMedio$año,
-          #       selected = opmMedio$año,
-          #       id = "opm_opmMedio_año"
-          #     ),
-          #     customSeparator(),
-          #     # botón para seleccionar el medio de orientación
-          #     createDropdownCheckbox(
-          #       label = "Seleccione el Medio de Orientación:",
-          #       choices = opmMedio$`Medio de orientación`,
-          #       selected = opmMedio$`Medio de orientación`,
-          #       id = "opm_opmMedio_medio"
-          #     ),
-          #   ),
-            
             sidebarLayout(
               sidebarPanel(
                 style = "display: flex; flex-direction: column; align-items: center;",
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                   div(
-                    style = "text-align: center; display: inline-block;",  # Styling container for the button
+                    style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar el medio de orientación
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>el Medio de Orientación:"),
@@ -1362,8 +972,6 @@ ui <-
                 uiOutput("dataTableUI_opm_opmMedio")
                 
               ),
-              
-            
             
             # Sección principal con los gráficos
             mainPanel(
@@ -1379,40 +987,15 @@ ui <-
           # Título del Tab
           titlePanel("Población atendida, servicios ofrecidos y seguimientos mediante el programa CRIAS"),
           
-          # Fuente de Datos, Actualización
-          #tags$span("Fuente: Oficina de la Procuradora de las Mujeres"), tags$br(),
-          #tags$span("Actualización Datos:  ", actualizacion_opmB), tags$br(),
-          
-          # Menu sidebar con widgets
-          # sidebarLayout(
-          #   sidebarPanel(
-          #     
-          #     # botón para seleccionar el año
-          #     createDropdownCheckbox(
-          #       label = "Seleccione Año(s):",
-          #       choices = opmServiciosMes$year,
-          #       selected = opmServiciosMes$year,
-          #       id = "opm_opmServiciosMes_año"
-          #     ),
-          #     customSeparator(),
-          #     # botón para seleccionar el género de las victimas
-          #     createDropdownCheckbox(
-          #       label = "Seleccione el tipo de servicio:",
-          #       choices = opmServiciosMes$tipo,
-          #       selected = opmServiciosMes$tipo,
-          #       id = "opm_opmServiciosMes_tipo"
-          #     ),
-          #   ),
-            
             sidebarLayout(
               sidebarPanel(
                 style = "display: flex; flex-direction: column; align-items: center;",
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                   div(
-                    style = "text-align: center; display: inline-block;",  # Styling container for the button
+                    style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar el género de las victimas
                     createDropdownCheckbox(
                       label = HTML("Seleccione <br>el tipo de servicio:"),
@@ -1446,7 +1029,6 @@ ui <-
                 
               ),
             
-            
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_opm_opmServiciosMes"),
@@ -1468,8 +1050,6 @@ ui <-
       )
     ),
     
-    
-    
     #### Tab del Departamento de Corrección y Rehabilitación ####
     tabPanel(
       lowercaseTitle("Departamento de Corrección y Rehabilitación"),
@@ -1481,48 +1061,15 @@ ui <-
         # Título del Tab
         titlePanel("Casos en supervisión de ley 54 en programas alternos al confinamiento por estado de investigación: Programas de Comunidad"),
       
-        # Fuente de Datos, Actualización
-        #tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
-        #tags$span("Actualización Datos:  ", actualizacion_correcion), tags$br(),
-      
-        # Menu sidebar con widgets
-        # sidebarLayout(
-        #   sidebarPanel(
-        #   
-        #     # botón para seleccionar el año
-        #   createDropdownCheckbox(
-        #     label = "Seleccione Año(s):",
-        #     choices = dcrCasosInv$year,
-        #     selected = dcrCasosInv$year,
-        #     id = "dcr_dcrCasosInv_year"
-        #   ),
-        #   customSeparator(),
-        #   # botón para seleccionar el sexo
-        #   createDropdownCheckbox(
-        #     label = "Seleccione el sexo:",
-        #     choices = dcrCasosInv$sexo,
-        #     selected = 1,
-        #     id = "dcr_dcrCasosInv_sexo"
-        #   ),
-        #   customSeparator(),
-        #   # botón para seleccionar el tipo de investigación 
-        #   createDropdownCheckbox(
-        #     label = "Seleccione el estado de Investigación:",
-        #     choices = dcrCasosInv$tipo,
-        #     selected = dcrCasosInv$tipo,
-        #     id = "dcr_dcrCasosInv_tipo"
-        #   ),
-        # ),
-        
         sidebarLayout(
           sidebarPanel(
             style = "display: flex; flex-direction: column; align-items: center;",
             
             # # seleccionar valor de la variable
             div(
-              style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+              style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
               div(
-                style = "text-align: center; display: inline-block;",  # Styling container for the button
+                style = "text-align: center; display: inline-block;", 
                 # botón para seleccionar el sexo
                 createDropdownCheckbox(
                   label = "Seleccione el sexo:",
@@ -1563,7 +1110,6 @@ ui <-
             
           ),
         
-        
         # Sección principal con los gráficos
         mainPanel(
           plotlyOutput("barPlot_dcr_dcrCasosInv"),
@@ -1577,39 +1123,6 @@ ui <-
       lowercaseTitle("Sentencias por Violencia Doméstica"),
       # Título del Tab
       titlePanel("Personas sentenciadas en programa de supervisión electrónica por delitos de violencia doméstica por estado del caso"),
-
-      # Fuente de Datos, Actualización
-      #tags$span("Fuente: Departamento de Corrección y Rehabilitación"), tags$br(),
-      #tags$span("Actualización Datos:  ", actualizacion_correcion), tags$br(),
-
-      # Menu sidebar con widgets
-      # sidebarLayout(
-      #   sidebarPanel(
-      # 
-      #     # botón para seleccionar el año
-      #     createDropdownCheckbox(
-      #       label = "Seleccione Año(s):",
-      #       choices = dcrSentenciadas$year,
-      #       selected = dcrSentenciadas$year,
-      #       id = "dcr_dcrSentenciadas_year"
-      #     ),
-      #     customSeparator(),
-      #     # botón para seleccionar el tipo de investigación
-      #     createDropdownCheckbox(
-      #       label = "Seleccione el estado de Caso:",
-      #       choices = dcrSentenciadas$tipo,
-      #       selected = dcrSentenciadas$tipo,
-      #       id = "dcr_dcrSentenciadas_tipo"
-      #     ),
-      #     customSeparator(),
-      #     # # botón para seleccionar el sexo
-      #     # createDropdownCheckbox(
-      #     #   label = "Seleccione el sexo:",
-      #     #   choices = dcrSentenciadas,
-      #     #   selected = dcrCasosInv$sexo,
-      #     #   id = "dcr_dcrCasosInv_sexo"
-      #     # ),
-      #   ),
         
         sidebarLayout(
           sidebarPanel(
@@ -1617,9 +1130,9 @@ ui <-
             
             # # seleccionar valor de la variable
             div(
-              style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+              style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
               div(
-                style = "text-align: center; display: inline-block;",  # Styling container for the button
+                style = "text-align: center; display: inline-block;", 
                 # botón para seleccionar el tipo de investigación
                 createDropdownCheckbox(
                   label = "Seleccione el estado de Caso:",
@@ -1684,39 +1197,6 @@ ui <-
         lowercaseTitle("Órdenes de Protección Solicitadas por Edad y Región"), 
         # Título del Tab
         titlePanel("Órdenes de Protección Solicitadas por Violencia Sexual bajo Ley 148, según Grupo de Edad, Región Judicial y año fiscal"),
-        
-        # Fuente de Datos, Actualización
-        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
-        
-        # Menu sidebar con widgets
-        # sidebarLayout(
-        #   sidebarPanel(
-        #     
-        #     # botón para seleccionar el año
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Año(s) Fiscal:",
-        #       choices = OP_148_SoliGrupEdad$AñoFiscal,
-        #       selected = OP_148_SoliGrupEdad$AñoFiscal,
-        #       id = "trib_OP_148_SoliGrupEdad_AñoFiscal"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar el grupo de edad
-        #     createDropdownCheckbox(
-        #       label = "Seleccione grupo(s) de edad:",
-        #       choices = OP_148_SoliGrupEdad$Edad,
-        #       selected = OP_148_SoliGrupEdad$Edad,
-        #       id = "trib_OP_148_SoliGrupEdad_Edad"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar el distrito fiscal
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Región Judicial:",
-        #       choices = OP_148_SoliGrupEdad$Región,
-        #       selected = OP_148_SoliGrupEdad$Región,
-        #       id = "trib_OP_148_SoliGrupEdad_Región"
-        #     ),
-        #   ),
           
           sidebarLayout(
             sidebarPanel(
@@ -1724,9 +1204,9 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                 div(
-                  style = "text-align: center; display: inline-block;",  # Styling container for the button
+                  style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar el grupo de edad
                   createDropdownCheckbox(
                     label = HTML("Seleccione<br> grupo(s) de edad:"),
@@ -1767,7 +1247,6 @@ ui <-
               
             ),
           
-          
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_148_SoliGrupEdad"),
@@ -1782,49 +1261,15 @@ ui <-
         # Título del Tab
         titlePanel("Órdenes de Protección Ex Parte Emitidas bajo Ley 148 según Región Judicial, Delito Cometido y año fiscal"),
         
-        # Fuente de Datos, Actualización
-        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
-        
-        # Menu sidebar con widgets
-        # sidebarLayout(
-        #   sidebarPanel(
-        #     
-        #     # botón para seleccionar el año fiscal
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Año(s) Fiscal:",
-        #       choices = OP_Ley148_ex_parteEmitidas$AñoFiscal,
-        #       selected = OP_Ley148_ex_parteEmitidas$AñoFiscal,
-        #       id = "trib_OP_Ley148_ex_parteEmitidas_AñoFiscal"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar el delito
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Delito(s) cometido:",
-        #       choices = OP_Ley148_ex_parteEmitidas$Delito,
-        #       selected = OP_Ley148_ex_parteEmitidas$Delito,
-        #       id = "trib_OP_Ley148_ex_parteEmitidas_Delito"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar la región fiscal
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Región Judicial:",
-        #       choices = OP_Ley148_ex_parteEmitidas$Región,
-        #       selected = OP_Ley148_ex_parteEmitidas$Región,
-        #       id = "trib_OP_Ley148_ex_parteEmitidas_Región"
-        #     ),
-        #     
-        #   ),
-          
           sidebarLayout(
             sidebarPanel(
               style = "display: flex; flex-direction: column; align-items: center;",
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                 div(
-                  style = "text-align: center; display: inline-block;",  # Styling container for the button
+                  style = "text-align: center; display: inline-block;",
                   # botón para seleccionar el delito
                   createDropdownCheckbox(
                     label = HTML("Seleccione <br> Delito(s) cometido:"),
@@ -1865,7 +1310,6 @@ ui <-
               
             ),
           
-          
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_Ley148_ex_parteEmitidas"),
@@ -1880,40 +1324,6 @@ ui <-
         
         # Título del Tab
         titlePanel("Órdenes de protección ex parte bajo Ley 148 archivadas por razón, Región Judicial y año fiscal"),
-        
-        # Fuente de Datos, Actualización
-        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
-        
-        # Menu sidebar con widgets
-        # sidebarLayout(
-        #   sidebarPanel(
-        #     
-        #     # botón para seleccionar el año fiscal
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Año(s) Fiscal:",
-        #       choices = OP_LEY148Archivadas$AñoFiscal,
-        #       selected = OP_LEY148Archivadas$AñoFiscal,
-        #       id = "trib_OP_LEY148Archivadas_AñoFiscal"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar la razón de archivado
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Razón(s):",
-        #       choices = OP_LEY148Archivadas$Razón,
-        #       selected = OP_LEY148Archivadas$Razón,
-        #       id = "trib_OP_LEY148Archivadas_Razón"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar la región fiscal
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Distrito(s) Fiscal:",
-        #       choices = OP_LEY148Archivadas$Región,
-        #       selected = OP_LEY148Archivadas$Región,
-        #       id = "trib_OP_LEY148Archivadas_Región"
-        #     ),
-        #     
-        #   ),
           
           sidebarLayout(
             sidebarPanel(
@@ -1921,9 +1331,9 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                 div(
-                  style = "text-align: center; display: inline-block;",  # Styling container for the button
+                  style = "text-align: center; display: inline-block;", 
                   # botón para seleccionar la razón de archivado
                   createDropdownCheckbox(
                     label = "Seleccione Razón(s):",
@@ -1975,52 +1385,18 @@ ui <-
       #### tab con datos de solicitudes de órdenes de protección denegadas (OP_LEY148Denegadas) ####
       tabPanel(
         lowercaseTitle("Órdenes de protección denegadas por razón del archivo y región"), 
-        # Órdenes de Protección Ex Parte Archivadas por Razón del Archivo y Región
         # Título del Tab
         titlePanel("Ordenes de protección denegadas por violencia sexual bajo Ley 148 por razón de archivo, Región Judicial y año fiscal"),
 
-        # Fuente de Datos, Actualización
-        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
-        
-        # Menu sidebar con widgets
-        # sidebarLayout(
-        #   sidebarPanel(
-        #     
-        #     # botón para seleccionar el año fiscal
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Año(s) fiscal:",
-        #       choices = OP_LEY148Denegadas$AñoFiscal,
-        #       selected = OP_LEY148Denegadas$AñoFiscal,
-        #       id = "trib_OP_LEY148Denegadas_AñoFiscal"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar la razón de archivado
-        #     createDropdownCheckbox(
-        #       label = "Seleccione razón(s):",
-        #       choices = OP_LEY148Denegadas$Razón,
-        #       selected = OP_LEY148Denegadas$Razón,
-        #       id = "trib_OP_LEY148Denegadas_Razón"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar la región fiscal
-        #     createDropdownCheckbox(
-        #       label = "Seleccione región judicial:",
-        #       choices = OP_LEY148Denegadas$Región,
-        #       selected = OP_LEY148Denegadas$Región,
-        #       id = "trib_OP_LEY148Denegadas_Región"
-        #     ),
-        #   ),
-          
           sidebarLayout(
             sidebarPanel(
               style = "display: flex; flex-direction: column; align-items: center;",
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                 div(
-                  style = "text-align: center; display: inline-block;",  # Styling container for the button
+                  style = "text-align: center; display: inline-block;", 
                   # botón para seleccionar la razón de archivado
                   createDropdownCheckbox(
                     label = "Seleccione razón(s):",
@@ -2075,39 +1451,6 @@ ui <-
         lowercaseTitle("Órdenes de Protección Emitidas por Delito Cometido y Región"), 
         # Título del Tab
         titlePanel("Órdenes de protección emitidas bajo ley 148 por delito cometido, Región Judicial y año fiscal"),
-        
-        # Fuente de Datos, Actualización
-        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
-        
-        # Menu sidebar con widgets
-        # sidebarLayout(
-        #   sidebarPanel(
-        #     
-        #     # botón para seleccionar el año fiscal
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Año(s) Fiscal:",
-        #       choices = OP_LEY148FinalEmitidas$AñoFiscal,
-        #       selected = OP_LEY148FinalEmitidas$AñoFiscal,
-        #       id = "trib_OP_LEY148FinalEmitidas_AñoFiscal"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar la razón de archivado
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Delito(s) Cometido:",
-        #       choices = OP_LEY148FinalEmitidas$Delito,
-        #       selected = OP_LEY148FinalEmitidas$Delito,
-        #       id = "trib_OP_LEY148FinalEmitidas_Delito"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar la región fiscal
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Región Judicial:",
-        #       choices = OP_LEY148FinalEmitidas$Región,
-        #       selected = OP_LEY148FinalEmitidas$Región,
-        #       id = "trib_OP_LEY148FinalEmitidas_Región"
-        #     ),
-        #   ),
           
           sidebarLayout(
             sidebarPanel(
@@ -2115,9 +1458,9 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                 div(
-                  style = "text-align: center; display: inline-block;",  # Styling container for the button
+                  style = "text-align: center; display: inline-block;", 
                   # botón para seleccionar la razón de archivado
                   createDropdownCheckbox(
                     label = HTML("Seleccione <br> Delito(s) Cometido:"),
@@ -2175,48 +1518,15 @@ ui <-
         # Título del Tab
         titlePanel("Órdenes de Protección Emitidas bajo Ley 148, por Sexo, la Parte y año fiscal"),
         
-        # Fuente de Datos, Actualización
-        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
-        
-        # Menu sidebar con widgets
-        # sidebarLayout(
-        #   sidebarPanel(
-        #     
-        #     # botón para seleccionar el año fiscal
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Año(s) Fiscal:",
-        #       choices = OP_LEY148Genero$AñoFiscal,
-        #       selected = OP_LEY148Genero$AñoFiscal,
-        #       id = "trib_OP_LEY148Genero_AñoFiscal"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar la parte
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Parte(s):",
-        #       choices = OP_LEY148Genero$Parte,
-        #       selected = OP_LEY148Genero$Parte,
-        #       id = "trib_OP_LEY148Genero_Parte"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar el sexo de la parte
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Sexo:",
-        #       choices = OP_LEY148Genero$Sexo,
-        #       selected = OP_LEY148Genero$Sexo,
-        #       id = "trib_OP_LEY148Genero_Sexo"
-        #     ),
-        #   ),
-          
           sidebarLayout(
             sidebarPanel(
               style = "display: flex; flex-direction: column; align-items: center;",
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                 div(
-                  style = "text-align: center; display: inline-block;",  # Styling container for the button
+                  style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar la parte
                   createDropdownCheckbox(
                     label = "Seleccione Parte(s):",
@@ -2257,7 +1567,6 @@ ui <-
               
             ),
           
-          
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_LEY148Genero"),
@@ -2273,49 +1582,16 @@ ui <-
         
         # Título del Tab
         titlePanel("Movimiento de casos criminales de violencia doméstica en el tribunal de primera instancia según la ley Núm. 54 por delito cometido y año fiscal"),
-        
-        # Fuente de Datos, Actualización
-        #tags$span("Fuente: Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas"), tags$br(),
-        #tags$span("Actualización Datos:  ", actualizacion_tribunalesB), tags$br(),
-        
-        # Menu sidebar con widgets
-        # sidebarLayout(
-        #   sidebarPanel(
-        #     
-        #     # botón para seleccionar el año fiscal
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Año(s) Fiscal:",
-        #       choices = tribCasosCrim$AñoFiscal,
-        #       selected = tribCasosCrim$AñoFiscal,
-        #       id = "trib_tribCasosCrim_AñoFiscal"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar el Delito
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Delito(s):",
-        #       choices = tribCasosCrim$Delito,
-        #       selected = tribCasosCrim$Delito,
-        #       id = "trib_tribCasosCrim_Delito"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar el estado del caso
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Estado del Caso:",
-        #       choices = tribCasosCrim$Casos,
-        #       selected = 1,
-        #       id = "trib_tribCasosCrim_Casos"
-        #     ),
-        #   ),
-          
+      
           sidebarLayout(
             sidebarPanel(
               style = "display: flex; flex-direction: column; align-items: center;",
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                 div(
-                  style = "text-align: center; display: inline-block;",  # Styling container for the button
+                  style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar el Delito
                   createDropdownCheckbox(
                     label = "Seleccione Delito(s):",
@@ -2386,31 +1662,6 @@ ui <-
         lowercaseTitle("Tendencia Anual del Equipo Recolecta de Violencia Sexual"), 
         # Título del Tab
         titlePanel(HTML("Tendencia anual del equipo de recolecta de evidencia de <i>SAFE Kits</i> en casos de violencia sexual por estado de querella")),
-        
-        # Fuente de Datos, Actualización
-        #tags$span("Fuente: Centro de Ayuda a Victimas de Violación, Departamento de Salud"), tags$br(),
-        #tags$span("Actualización Datos:  ", actualizacion_caav), tags$br(),
-        
-        # Menu sidebar con widgets
-        # sidebarLayout(
-        #   sidebarPanel(
-        #     
-        #     # botón para seleccionar el año
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Año(s):",
-        #       choices = safekitsDF$Año,
-        #       selected = safekitsDF$Año,
-        #       id = "cavv_safekitsDF_Año"
-        #     ),
-        #     customSeparator(),
-        #     # botón para seleccionar el estado de querella
-        #     createDropdownCheckbox(
-        #       label = "Seleccione Estado de Querella:",
-        #       choices = safekitsDF$Kits,
-        #       selected = safekitsDF$Kits,
-        #       id = "cavv_safekitsDF_Kits"
-        #     )
-        #   ),
           
           sidebarLayout(
             sidebarPanel(
@@ -2418,9 +1669,9 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  # Centering container
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                 div(
-                  style = "text-align: center; display: inline-block;",  # Styling container for the button
+                  style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar el estado de querella
                   createDropdownCheckbox(
                     label = "Seleccione Estado de Querella:",
@@ -2454,7 +1705,6 @@ ui <-
               
             ),
           
-          
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_safekitsDF"),
@@ -2482,16 +1732,6 @@ ui <-
       lowercaseTitle("Acerca"),
       icon = icon("info-circle"),
       tabsetPanel(
-        
-        # # tab del transfondo del proyecto
-        # tabPanel(
-        #   lowercaseTitle("Transfondo del Proyecto")
-        #   ),
-        # 
-        # # tab de las fuentes usadas en el proyecto
-        # tabPanel(
-        #   lowercaseTitle("Fuentes")
-        #   ), 
         
         # tab de los autores del proyecto
         tabPanel(
@@ -2618,7 +1858,7 @@ ui <-
                        class = "card",
                        style = "padding: 30px; background-color: lightgrey; border-radius: 5px; margin-top: 10px;width: 400px; height: 470px; display: flex; flex-direction: column; justify-content: space-between;",
                        div(
-                         style = "flex-grow: 1; overflow: auto;",  # Allows content to scroll if it overflows
+                         style = "flex-grow: 1; overflow: auto;",  
                          h3("Enviar un mensaje",style="margin-top: 0px; text-align: center;"),
                          div(style = "width: 100%; margin-bottom: 10px;",
                              textInput("name", "Nombre", placeholder = "Ingrese su nombre")
@@ -2642,39 +1882,6 @@ ui <-
         
       )
     ),
-    
-    #### Tab de prueba ####
-    # tabPanel(
-    #   "test",
-    #   icon = icon("exclamation-triangle"),
-    #   sidebarLayout(
-    #     div(sidebarPanel(
-    #       selectInput("yearInput_xiom", "Seleccionar xiom:", choices = unique(homiEdad$año)),
-    #       selectInput("yearInput_yeiz", "Seleccionar yeiza:", choices = unique(homiEdad$año))
-    #     )
-    #     ),
-    #     
-    #     mainPanel(
-    #       tabsetPanel(
-    #         tabPanel(
-    #           "Homicidios por grupo de Edad",
-    #           uiOutput("yearInput_xiom"),
-    #           uiOutput("yearInput_yeiz")
-    #         ),
-    #         
-    #         # tab con datos de Incidentes
-    #         # tabPanel("Incidentes_snmv",
-    #         #          uiOutput("yearInput_yeiz")),
-    #         # 
-    #         # # tab con datos de Tasas
-    #         # tabPanel("Tasas_snmv",
-    #         #          uiOutput("yearInput_xiom")
-    #         #          )
-    #       )
-    #     )
-    #   )
-    # )
   
   )
 )
-# )
