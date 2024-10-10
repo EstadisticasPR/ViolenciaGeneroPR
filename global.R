@@ -86,6 +86,23 @@ guardarDatos <- function(dataframes, nombres_sheets, nombre_archivo) {
   # Mensaje de confirmación
   message("Archivo guardado como: ", nombre_archivo, " con ", length(dataframes), " hojas.")
 }
+
+guardarDatos_Polygons <- function(dataframe, nombre_archivo) {
+  # Asegurarse de que el dataframe es de tipo 'sf'
+  if (!inherits(dataframe, "sf")) {
+    stop("El dataframe proporcionado no es un objeto espacial (sf).")
+  }
+  
+  # Añadir la extensión .shp al nombre del archivo
+  nombre_shapefile <- paste0(nombre_archivo, ".shp")
+  
+  # Guardar el dataframe espacial como un Shapefile
+  st_write(dataframe, nombre_shapefile, delete_layer = TRUE)
+  
+  # Mensaje de confirmación
+  message("Shapefile guardado como: ", nombre_shapefile)
+}
+
 ##################################################################
 #### Procesamiento de datos del Sistema de Notificacion de Muertes Violentas #####
 ##################################################################################
@@ -294,10 +311,13 @@ mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
 # dataframes <- list(dfDeli) # Lista de dataframes (por ejemplo: homiEdad y inci)
 # 
 # # Lista de nombres de hojas correspondientes a los dataframes
-# nombres_sheets <- list("delitos_articuloLey54")
+# nombres_sheets <- list("delitos_ArticuloLey54")
 # 
 # # Uso de la función
 # guardarDatos(dataframes, nombres_sheets, "departamento_justicia")
+
+# Uso de la función
+# guardarDatos_Polygons(mapaDeli, "departamento_justicia_distritosfiscales")
 
 ###############################################################################
 #### Procesamiento de datos el Departamento del Trabajo y Recursos Humanos ####

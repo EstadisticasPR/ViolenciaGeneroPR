@@ -124,7 +124,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(inci_filt, x = "Año", y = "Casos", fill = "Incidente",
-                         paste("Número de incidentes violentos por tipo para ambos sexos"),
+                         paste("Incidentes violentos ocurridos para ambos sexos"),
                          xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de Incidente",
                          colorFill = inci_fill_sexo, 
                          emptyMessage = "Seleccione Tipo(s) de Incidente y Año(s) a visualizar")
@@ -136,7 +136,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(inci_filt, x = "Año", y = "Casos", fill = "Incidente",
-                                                 paste("Número de incidentes violentos por tipo para ambos sexos"),
+                                                 paste("Incidentes violentos ocurridos para ambos sexos"),
                                                  xlab = "Año", ylab = "Número de casos", message)
     ggplotly(empty_plot)
   })
@@ -248,7 +248,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                         title = "Cantidad de menores víctimas por sexo y tipo de maltrato",
+                         title = "Casos de menores víctimas de maltrato por sexo y tipo de maltrato",
                          xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de Maltrato", 
                          colorFill = dfMalt_fill_Maltrato, 
                          emptyMessage = "Seleccione Tipo(s) de maltrato, Año(s) y Sexo de la víctima")
@@ -260,7 +260,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                         title = "Cantidad de menores víctimas por sexo y tipo de maltrato",
+                         title = "Casos de menores víctimas de maltrato por sexo y tipo de maltrato",
                          xlab = "Año", ylab = "Número de casos", message)
     ggplotly(empty_plot)
   })
@@ -1207,7 +1207,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
-                         title = "Población atendida, servicios ofrecidos y seguimientos mediante el programa CRIAS",
+                         title = "Orientaciones ofrecidas mediante el programa CRIAS",
                          xlab = "Año", ylab = "Cantidad de Personas Orientadas", fillLab = "Medio de Orientación",
                          colorFill = opmMedio_fill_medio,
                          emptyMessage = "Seleccione Medio de Orientación y Año(s) a visualizar")
@@ -1218,7 +1218,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
-                                                 title = "Población atendida, servicios ofrecidos y seguimientos mediante el programa CRIAS",
+                                                 title = "Orientaciones ofrecidas mediante el programa CRIAS",
                                                  xlab = "Año", ylab = "Cantidad de Personas Orientadas", message)
     ggplotly(empty_plot)
   })

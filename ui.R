@@ -65,7 +65,7 @@ ui <-
           titlePanel("Homicidios de mujeres por grupo de edad según el año"),
           
           # Fuente de Datos, Actualización
-          tags$span(paste0("Actualizado: ", actualizacion_snmvB)),
+          #tags$span(paste0("Actualizado: ", actualizacion_snmvB)),
 
           
           # Menu sidebar con widgets
@@ -113,7 +113,23 @@ ui <-
             mainPanel(
               #plotlyOutput("linePlot_snmv"),
               plotlyOutput("barPlot_snmv"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a los 
+                    Homicidios de mujeres por grupo de edad desde el año 2017 a 2021",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           )
         ),
@@ -126,7 +142,7 @@ ui <-
           titlePanel("Número de incidentes violentos por tipo para ambos sexos"),
           
           # Fuente de Datos, Actualización
-          tags$span(paste0("Actualizado: ", actualizacion_snmvA)),
+          #tags$span(paste0("Actualizado: ", actualizacion_snmvA)),
             
             sidebarLayout(
               sidebarPanel(
@@ -175,7 +191,23 @@ ui <-
             # Sección principal con los gráficos y datatable
             mainPanel(
               plotlyOutput("barPlot_snmv_inci"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a la cantidad de 
+                    incidentes violentos (según su tipo) desde el año 2017 a 2021",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           ),
         ), 
@@ -259,11 +291,31 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_fam"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Las cantidades podrían representar conteos duplicados del o 
+                    la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son 
+                    parte de uno o múltiples referidos. Este conteo es conocido por el Departamento 
+                    de la Familia como el pareo de menores-reportado. Estos datos están en proceso de
+                    revisión por el Instituto de Estadísticas de Puerto Rico. Datos parciales
+                    y preliminares del año 2022. Están disponibles hasta noviembre de 2022.",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           ),
-          tags$span("NOTA IMPORTANTE: Las cantidades podrían representar conteos duplicados del o la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son parte de uno o múltiples referidos. Este conteo es conocido por el Departamento de la Familia como el pareo de menores-reportado. Estos datos están en proceso de revisión por el Instituto de Estadísticas de Puerto Rico. *Nota: Datos parciales y preliminares del año 2022. Están disponibles hasta noviembre de 2022."),
-          tags$div(style = "padding-bottom: 10px;"),
+          # tags$span("NOTA IMPORTANTE: Las cantidades podrían representar conteos duplicados del o la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son parte de uno o múltiples referidos. Este conteo es conocido por el Departamento de la Familia como el pareo de menores-reportado. Estos datos están en proceso de revisión por el Instituto de Estadísticas de Puerto Rico. *Nota: Datos parciales y preliminares del año 2022. Están disponibles hasta noviembre de 2022."),
+          # tags$div(style = "padding-bottom: 10px;"),
         ),
         
         #### tab de Definiciones y Metadatos ####
@@ -343,7 +395,24 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_just"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden al
+                    Número de casos radicados por Distrito Fiscal y Artículo 
+                    de la Ley 54 desde el año 2020 a 2023",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           )
         ),
@@ -376,7 +445,24 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("map_just_mapaDeli"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en este mapa corresponden al
+                    Número de casos radicados por Distrito Fiscal y Artículo 
+                    de la Ley 54 desde el año 2020 a 2023",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           )
         ), 
@@ -516,7 +602,25 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_avp_dfAvp"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden al
+                    Total de viviendas públicas solicitadas y asignadas por
+                    violencia doméstica por región de la Administración de Vivienda Pública
+                    desde el año 2017 al 2023",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           ),
         ),
@@ -553,7 +657,25 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("map_avp_mapaAvp"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en este mapa corresponden al
+                    Total de viviendas públicas solicitadas y asignadas por
+                    violencia doméstica por región de la Administración de Vivienda Pública
+                    desde el año 2017 al 2023",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           )
         ), 
@@ -641,7 +763,24 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_poli_despDF"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a la
+                    Cantidad de mujeres desaparecidas y localizadas (adultas y menores)
+                    desde el año 2020 al 2023",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           ),
         ),
@@ -705,7 +844,24 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_poli_vEdad"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a los
+                    Incidentes de violencia doméstica (por edad de la víctima)
+                    desde el año 2021 al 2023",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           )
         ), 
@@ -810,7 +966,24 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_opm_opmFemiVD"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a
+                    la Tasa de asesinatos de mujeres por violencia doméstica, 
+                    desde 1990 a 2021 (Tasa x100,000 mujeres)",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           ),
         ),
@@ -865,7 +1038,24 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_opm_opmCasos"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a
+                    la Población atendida mediante el programa CRIAS según 
+                    razón para consulta",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           ),
         ),
@@ -920,7 +1110,23 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_opm_opmVic"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a
+                    la Identidad de género de víctimas asistidas por el programa CRIAS",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           ),
         ),
@@ -976,7 +1182,23 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_opm_opmMedio"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a
+                    las Orientaciones ofrecidas mediante el programa CRIAS",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           ),
         ),
@@ -1032,7 +1254,24 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               plotlyOutput("barPlot_opm_opmServiciosMes"),
-              tags$div(style = "padding-bottom: 10px;")
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a
+                    la Población atendida, servicios ofrecidos y seguimientos
+                    mediante el programa CRIAS",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
             )
           ),
         ),
@@ -1113,7 +1352,25 @@ ui <-
         # Sección principal con los gráficos
         mainPanel(
           plotlyOutput("barPlot_dcr_dcrCasosInv"),
-          tags$div(style = "padding-bottom: 10px;")
+          tags$div(style = "padding-bottom: 10px;"),
+          tags$div(
+            style = "padding-bottom: 10px;",
+            div(
+              class = "card",
+              style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+              h4(
+                strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+              ),
+              p(
+                "Los datos representados en esta gráfica corresponden a
+                 los Casos en supervisión de ley 54 en programas alternos
+                al confinamiento (por estado de investigación): Programas de Comunidad
+                desde el año 2021 al 2023",
+                
+                style = "font-size: 16px;padding: 0px;" 
+              )
+            )
+          )
         )
       ),
     ),
@@ -1169,7 +1426,25 @@ ui <-
         # Sección principal con los gráficos
         mainPanel(
           plotlyOutput("barPlot_dcr_dcrSentenciadas"),
-          tags$div(style = "padding-bottom: 10px;")
+          tags$div(style = "padding-bottom: 10px;"),
+          tags$div(
+            style = "padding-bottom: 10px;",
+            div(
+              class = "card",
+              style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+              h4(
+                strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+              ),
+              p(
+                "Los datos representados en esta gráfica corresponden a
+                 las Personas sentenciadas en programa de supervisión 
+                electrónica por delitos de violencia doméstica por estado del caso 
+                desde el año 2020 al 2023",
+                
+                style = "font-size: 16px;padding: 0px;" 
+              )
+            )
+          )
         )
       )
     ),
@@ -1250,7 +1525,25 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_148_SoliGrupEdad"),
-            tags$div(style = "padding-bottom: 10px;")
+            tags$div(style = "padding-bottom: 10px;"),
+            tags$div(
+              style = "padding-bottom: 10px;",
+              div(
+                class = "card",
+                style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                h4(
+                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                ),
+                p(
+                  "Los datos representados en esta gráfica corresponden a
+                 las Órdenes de Protección Solicitadas por Violencia Sexual
+                  bajo Ley 148, según Grupo de Edad, Región Judicial y año 
+                  fiscal (2020 y 2021)",
+                  
+                  style = "font-size: 16px;padding: 0px;" 
+                )
+              )
+            )
           )
         ),
       ),
@@ -1313,7 +1606,24 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_Ley148_ex_parteEmitidas"),
-            tags$div(style = "padding-bottom: 10px;")
+            tags$div(style = "padding-bottom: 10px;"),
+            tags$div(
+              style = "padding-bottom: 10px;",
+              div(
+                class = "card",
+                style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                h4(
+                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                ),
+                p(
+                  "Los datos representados en esta gráfica corresponden a
+                  las Órdenes de Protección Ex Parte Emitidas bajo Ley 148
+                  según Región Judicial, Delito Cometido y año fiscal (2020 y 2021)",
+                  
+                  style = "font-size: 16px;padding: 0px;" 
+                )
+              )
+            )
           )
         ),
       ),
@@ -1377,7 +1687,24 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_LEY148Archivadas"),
-            tags$div(style = "padding-bottom: 10px;")
+            tags$div(style = "padding-bottom: 10px;"),
+            tags$div(
+              style = "padding-bottom: 10px;",
+              div(
+                class = "card",
+                style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                h4(
+                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                ),
+                p(
+                  "Los datos representados en esta gráfica corresponden a
+                  las Órdenes de protección ex parte bajo Ley 148 archivadas
+                  por razón, Región Judicial y año fiscal (2020 y 2021)",
+                  
+                  style = "font-size: 16px;padding: 0px;" 
+                )
+              )
+            )
           )
         ),
       ),
@@ -1441,7 +1768,25 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_LEY148Denegadas"),
-            tags$div(style = "padding-bottom: 10px;")
+            tags$div(style = "padding-bottom: 10px;"),
+            tags$div(
+              style = "padding-bottom: 10px;",
+              div(
+                class = "card",
+                style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                h4(
+                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                ),
+                p(
+                  "Los datos representados en esta gráfica corresponden a
+                  las Ordenes de protección denegadas por violencia sexual
+                  bajo Ley 148 por razón de archivo, Región Judicial y año
+                  fiscal (2021 y 2022)",
+                  
+                  style = "font-size: 16px;padding: 0px;" 
+                )
+              )
+            )
           )
         ),
       ),
@@ -1506,7 +1851,24 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_LEY148FinalEmitidas"),
-            tags$div(style = "padding-bottom: 10px;")
+            tags$div(style = "padding-bottom: 10px;"),
+            tags$div(
+              style = "padding-bottom: 10px;",
+              div(
+                class = "card",
+                style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                h4(
+                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                ),
+                p(
+                  "Los datos representados en esta gráfica corresponden a
+                  las Órdenes de protección emitidas bajo ley 148 por delito
+                  cometido, Región Judicial y año fiscal (2020 y 2021)",
+                  
+                  style = "font-size: 16px;padding: 0px;" 
+                )
+              )
+            )
           )
         ),
       ),
@@ -1570,7 +1932,24 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_OP_LEY148Genero"),
-            tags$div(style = "padding-bottom: 10px;")
+            tags$div(style = "padding-bottom: 10px;"),
+            tags$div(
+              style = "padding-bottom: 10px;",
+              div(
+                class = "card",
+                style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                h4(
+                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                ),
+                p(
+                  "Los datos representados en esta gráfica corresponden a
+                  las Órdenes de Protección Emitidas bajo Ley 148, 
+                  por Sexo, la Parte y año fiscal (2020 y 2021)",
+                  
+                  style = "font-size: 16px;padding: 0px;" 
+                )
+              )
+            )
           )
         ),
       ),
@@ -1635,7 +2014,25 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_tribCasosCrim"),
-            tags$div(style = "padding-bottom: 10px;")
+            tags$div(style = "padding-bottom: 10px;"),
+            tags$div(
+              style = "padding-bottom: 10px;",
+              div(
+                class = "card",
+                style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                h4(
+                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                ),
+                p(
+                  "Los datos representados en esta gráfica corresponden al
+                  Movimiento de casos criminales de violencia doméstica en 
+                  el tribunal de primera instancia según la ley Núm. 54 
+                  por delito cometido y año fiscal(2019 al 2021)",
+                  
+                  style = "font-size: 16px;padding: 0px;" 
+                )
+              )
+            )
           )
         ),
       ),
@@ -1708,7 +2105,25 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             plotlyOutput("barPlot_safekitsDF"),
-            tags$div(style = "padding-bottom: 10px;")
+            tags$div(style = "padding-bottom: 10px;"),
+            tags$div(
+              style = "padding-bottom: 10px;",
+              div(
+                class = "card",
+                style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                h4(
+                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                ),
+                p(
+                  "Los datos representados en esta gráfica corresponden a la
+                  Tendencia anual del equipo de recolecta de evidencia de 
+                  SAFE Kits en casos de violencia sexual por estado de querella 
+                  desde el año 2019 al 2023",
+                  
+                  style = "font-size: 16px;padding: 0px;" 
+                )
+              )
+            )
           )
         )
       ),
