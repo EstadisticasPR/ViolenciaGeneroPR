@@ -75,7 +75,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+                  style = "width: 100%; display: flex; justify-content: center;", 
                   div(
                     style = "text-align: center; display: inline-block;", 
                     createDropdownCheckbox(
@@ -150,7 +150,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+                  style = "width: 100%; display: flex; justify-content: center;", 
                   div(
                     style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar tipo de incidente
@@ -243,7 +243,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+                  style = "width: 100%; display: flex; justify-content: center;", 
                   div(
                     style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar tipo de maltrato
@@ -348,7 +348,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+                  style = "width: 100%; display: flex; justify-content: center;", 
                   div(
                     style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar tipo de maltrato
@@ -562,7 +562,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+                  style = "width: 100%; display: flex; justify-content: center;", 
                   div(
                     style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar la región
@@ -723,7 +723,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                  style = "width: 100%; display: flex; justify-content: center;",  
                   div(
                     style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar la Categoría
@@ -798,7 +798,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                  style = "width: 100%; display: flex; justify-content: center;",  
                   div(
                     style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar edad
@@ -1000,7 +1000,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                  style = "width: 100%; display: flex; justify-content: center;",  
                   div(
                     style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar el tipo de violencia
@@ -1072,7 +1072,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+                  style = "width: 100%; display: flex; justify-content: center;", 
                   div(
                     style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar el género de las victimas
@@ -1143,7 +1143,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                  style = "width: 100%; display: flex; justify-content: center;",  
                   div(
                     style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar el medio de orientación
@@ -1215,7 +1215,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                  style = "width: 100%; display: flex; justify-content: center;",  
                   div(
                     style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar el género de las victimas
@@ -1306,7 +1306,7 @@ ui <-
             
             # # seleccionar valor de la variable
             div(
-              style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+              style = "width: 100%; display: flex; justify-content: center;", 
               div(
                 style = "text-align: center; display: inline-block;", 
                 # botón para seleccionar el sexo
@@ -1387,7 +1387,7 @@ ui <-
             
             # # seleccionar valor de la variable
             div(
-              style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+              style = "width: 100%; display: flex; justify-content: center;",  
               div(
                 style = "text-align: center; display: inline-block;", 
                 # botón para seleccionar el tipo de investigación
@@ -1479,7 +1479,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                style = "width: 100%; display: flex; justify-content: center; ",  
                 div(
                   style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar el grupo de edad
@@ -1560,7 +1560,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+                style = "width: 100%; display: flex; justify-content: center;", 
                 div(
                   style = "text-align: center; display: inline-block;",
                   # botón para seleccionar el delito
@@ -1641,7 +1641,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                style = "width: 100%; display: flex; justify-content: center;",  
                 div(
                   style = "text-align: center; display: inline-block;", 
                   # botón para seleccionar la razón de archivado
@@ -1721,7 +1721,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                style = "width: 100%; display: flex; justify-content: center;",  
                 div(
                   style = "text-align: center; display: inline-block;", 
                   # botón para seleccionar la razón de archivado
@@ -1803,7 +1803,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+                style = "width: 100%; display: flex; justify-content: center;", 
                 div(
                   style = "text-align: center; display: inline-block;", 
                   # botón para seleccionar la razón de archivado
@@ -1886,7 +1886,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                style = "width: 100%; display: flex; justify-content: center;",  
                 div(
                   style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar la parte
@@ -1968,7 +1968,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+                style = "width: 100%; display: flex; justify-content: center;", 
                 div(
                   style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar el Delito
@@ -2066,7 +2066,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                style = "width: 100%; display: flex; justify-content: center;",  
                 div(
                   style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar el estado de querella
