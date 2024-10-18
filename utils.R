@@ -649,6 +649,7 @@ renderDataTable_Definitions <- function(filtered_data) {
   datatable(
     filtered_data,
     extensions = c('Buttons'),
+    escape = c(FALSE, TRUE),
     options = list(
       pageLength = 10,
       lengthMenu = c(10, nrow(filtered_data) / 2, nrow(filtered_data)),
