@@ -36,8 +36,15 @@ server <- function(input, output, session) {
       message <- "Seleccione Grupo de edad y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
+     
+      # p <- renderBarPlot(homiEdad_filt, "Año", "Casos", "Edad",
+      #                    paste("Homicidios de Mujeres por grupo de Edad y Año", input$yearInput_snmv),
+      #                    "Año", "Cantidad de víctimas", fillLab = "Grupo de Edad", colorFill = homiEdad_fill_edad, 
+      #                    emptyMessage = "Seleccione Grupo de edad y Año(s) a visualizar",barWidth = 0, xGap = 0)
+      
+      par(mar = c(1, 10, 3, 4))
       p <- renderBarPlot(homiEdad_filt, "Año", "Casos", "Edad",
-                         paste("Homicidios de mujeres por grupo de edad y año", input$yearInput_snmv),
+                         title = "Homicidios de Mujeres por grupo de Edad y Año",
                          "Año", "Cantidad de víctimas", fillLab = "Grupo de Edad", colorFill = homiEdad_fill_edad, 
                          emptyMessage = "Seleccione Grupo de edad y Año(s) a visualizar",barWidth = 0, xGap = 0)
      
@@ -48,7 +55,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(homiEdad_filt, "Año", "Casos", "Edad",
-                                                 paste("Homicidios de mujeres por grupo de edad y año", input$yearInput_snmv),
+                                                 paste("Homicidios de Mujeres por grupo de Edad y Año", input$yearInput_snmv),
                                                  "Año", "Cantidad de víctimas", message)
     ggplotly(empty_plot)
   })
@@ -124,11 +131,10 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(inci_filt, x = "Año", y = "Casos", fill = "Incidente",
-                         paste("Incidentes violentos ocurridos para ambos sexos"),
+                         paste("Incidentes Violentos ocurridos para ambos Sexos"),
                          xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de Incidente",
                          colorFill = inci_fill_sexo, 
                          emptyMessage = "Seleccione Tipo(s) de Incidente y Año(s) a visualizar")
-      
       p <- convert_to_plotly(p, tooltip = "text")
       
       return(p)
@@ -136,7 +142,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(inci_filt, x = "Año", y = "Casos", fill = "Incidente",
-                                                 paste("Incidentes violentos ocurridos para ambos sexos"),
+                                                 paste("Incidentes Violentos ocurridos para ambos Sexos"),
                                                  xlab = "Año", ylab = "Número de casos", message)
     ggplotly(empty_plot)
   })
@@ -248,7 +254,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                         title = "Casos de menores víctimas de maltrato por sexo y tipo de maltrato",
+                         title = "Casos Anuales de maltrato infantil por Sexo y Tipo",
                          xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de Maltrato", 
                          colorFill = dfMalt_fill_Maltrato, 
                          emptyMessage = "Seleccione Tipo(s) de maltrato, Año(s) y Sexo de la víctima")
@@ -260,7 +266,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                         title = "Casos de menores víctimas de maltrato por sexo y tipo de maltrato",
+                         title = "Casos Anuales de maltrato infantil por Sexo y Tipo",
                          xlab = "Año", ylab = "Número de casos", message)
     ggplotly(empty_plot)
   })
@@ -372,7 +378,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
-                         title = "Casos de delitos por Distrito Fiscal según Artículo de la Ley 54",
+                         title = "Radicación Anual de Casos por Distrito Fiscal según Ley 54",
                          xlab = "Año", ylab = "Cantidad de víctimas",
                          fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito,
                          emptyMessage = "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)")
@@ -600,7 +606,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                         paste("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región"),
+                         paste("Viviendas Públicas Solicitadas y Asignadas Anualmente por Violencia Doméstica según Región."),
                          xlab = "Año", ylab = "Cantidad de viviendas públicas", fillLab = "Estado de la Vivienda",
                          colorFill = dfAvp_fill_status,
                          emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
@@ -612,7 +618,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                                                 paste("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región"),
+                                                 paste("Viviendas Públicas Solicitadas y Asignadas Anualmente por Violencia Doméstica según Región."),
                                                  xlab = "Año", ylab = "Cantidad de viviendas públicas", message)
     ggplotly(empty_plot)
   })
@@ -764,7 +770,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(despDF_filt, x = "Año", y = "Casos", fill = "Estado",
-                         paste("Cantidad de mujeres desaparecidas por estatus (localizadas y por localizar)"),
+                         paste("Mujeres Desaparecidas: Localizadas y por Localizar"),
                          xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Estado de la Víctima",
                          colorFill = despDF_fill_categoria,
                          emptyMessage = "Seleccione Estado de la Víctima y Año(s) a visualizar")
@@ -775,7 +781,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = despDF_filt, x = "Año", y = "Casos", fill = "Estado",
-                                                 paste("Cantidad de mujeres desaparecidas por estatus (localizadas y por localizar)"),
+                                                 paste("Mujeres Desaparecidas: Localizadas y por Localizar"),
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     ggplotly(empty_plot)
   })
@@ -858,7 +864,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
-                         paste("Incidentes de violencia doméstica por edad de la víctima"),
+                         paste("Incidencia de Violencia Doméstica por Edad de la Víctima"),
                          xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Grupo de Edad",
                          colorFill = vEdad_fill_edad,
                          emptyMessage = "Seleccione Grupo(s) de Edad, Sexo de la Víctima y Año(s) a visualizar",barWidth = 0, xGap = 0)
@@ -870,7 +876,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
-                                                 paste("Incidentes de violencia doméstica por edad de la víctima"),
+                                                 paste("Incidencia de Violencia Doméstica por Edad de la Víctima"),
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     ggplotly(empty_plot)
   })
@@ -969,7 +975,7 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_opm_opmFemiVD <- renderPlotly({
     p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "Tasa", group = "1",
-                        color = "1", title = "Tasa de Asesinatos de mujeres por violencia doméstica:\n Desglose Anual",
+                        color = "1", title = "Tasa Anual de Asesinatos de Mujeres \n por Violencia Doméstica",
                         xlab = "Año", ylab = "Tasa por cada 100 mil mujeres",
                         emptyMessage = "Seleccione los Año(s) que desea visualizar")
     
@@ -1040,7 +1046,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(opmCasos_filt, x = "Año", y = "Cantidad", fill = "Razón",
-                         paste("Población atendida mediante el programa CRIAS según razón para consulta"),
+                         paste("Población Atendida por el Programa CRIAS: Razón de Consulta."),
                          xlab = "Año", ylab = "Cantidad de Personas Atendidas", fillLab = "Razón para Consulta",
                          colorFill = opm_fill_tipo,
                          emptyMessage = "Seleccione Razón de la consulta y Año(s) a visualizar")
@@ -1051,7 +1057,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmCasos_filt, x = "Año", y = "Cantidad", fill = "Razón",
-                                                 paste("Población atendida mediante el programa CRIAS según razón para consulta"),
+                                                 paste("Población Atendida por el Programa CRIAS: Razón de Consulta"),
                                                  xlab = "Año", ylab = "Cantidad de Personas Atendidas", message)
     ggplotly(empty_plot)
   })
@@ -1126,7 +1132,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
-                         paste("Identidad de género de víctimas asistidas por el programa CRIAS"),
+                         paste("Identidad de Género de Víctimas asistidas por el Programa CRIAS"),
                          xlab = "Año", ylab = "Cantidad de Víctimas", fillLab = "Género de la Víctima",
                          colorFill = opmVic_fill_género,
                          emptyMessage = "Seleccione Género y Año(s) a visualizar")
@@ -1137,7 +1143,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
-                                                 paste("Identidad de género de víctimas asistidas por el programa CRIAS"),
+                                                 paste("Identidad de Género de Víctimas asistidas por el Programa CRIAS"),
                                                  xlab = "Año", ylab = "Cantidad de Víctimas", message)
     ggplotly(empty_plot)
   })
@@ -1207,7 +1213,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
-                         title = "Orientaciones ofrecidas mediante el programa CRIAS",
+                         title = "Orientaciones brindadas por el Programa CRIAS",
                          xlab = "Año", ylab = "Cantidad de Personas Orientadas", fillLab = "Medio de Orientación",
                          colorFill = opmMedio_fill_medio,
                          emptyMessage = "Seleccione Medio de Orientación y Año(s) a visualizar")
@@ -1218,7 +1224,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
-                                                 title = "Orientaciones ofrecidas mediante el programa CRIAS",
+                                                 title = "Orientaciones brindadas por el Programa CRIAS",
                                                  xlab = "Año", ylab = "Cantidad de Personas Orientadas", message)
     ggplotly(empty_plot)
   })
@@ -1293,7 +1299,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
-                         title = "Población atendida, servicios ofrecidos y seguimientos",
+                         title = "Atención, Servicios y Seguimiento mediante el Programa CRIAS",
                          xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Tipo de Servicio",
                          colorFill = opmServiciosMes_fill_tipo,
                          emptyMessage = "Seleccione Tipo de servicio y Año(s) a visualizar")
@@ -1304,7 +1310,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
-                                                 title = "Población atendida, servicios ofrecidos y seguimientos",
+                                                 title = "Atención, Servicios y Seguimiento mediante el Programa CRIAS",
                                                  xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", message)
     ggplotly(empty_plot)
   })
@@ -1424,7 +1430,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                         title = "Casos de supervisión de Ley 54: Programas Alternos de Comunidad",
+                         title = "Casos en Supervisión de Ley 54: Programas Alternativos al Confinamiento",
                          xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Estado de Investigación",
                          colorFill = dcrCasosInv_fill_tipo,
                          emptyMessage = "Seleccione Estado de la investigación, Sexo y Año(s) a visualizar")
@@ -1436,7 +1442,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                                                 title = "Casos de supervisión de Ley 54: Programas Alternos de Comunidad",
+                                                 title = "Casos en Supervisión de Ley 54: Programas Alternativos al Confinamiento",
                                                  xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", message)
     ggplotly(empty_plot)
   })
@@ -1527,7 +1533,7 @@ server <- function(input, output, session) {
         scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
                            expand = expansion(mult = c(0, 0.1))) +
         theme_minimal() +
-        labs(title = "Personas sentenciadas en programa de supervisión \nElectrónica por delitos de violencia doméstica",
+        labs(title = "Sentenciados por Violencia Doméstica bajo \nSupervisión Electrónica",
              x = "Año", y = "Cantidad de Personas Sentenciadas", fill = "Estado del Caso") +
         coord_cartesian(ylim = c(0, upper_y_limit)) +
         theme(
@@ -1543,7 +1549,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dcrSentenciadas_filt, x = "Fecha", y = "Cantidad", fill = "Estado",
-                                                 title = "Personas sentenciadas en programa de supervisión \nElectrónica por delitos de violencia doméstica por estado del caso",
+                                                 title = "Sentenciados por Violencia Doméstica bajo \nSupervisión Electrónica",
                                                  xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", message)
     ggplotly(empty_plot)
   })
@@ -1647,7 +1653,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
-                         title = "Solicitudes de órdenes de protección por Ley 148 según Región Judicial y edad de la parte solicitante",
+                         title = "Solicitudes de Órdenes de Protección bajo Ley 148 según Región Judicial y Edad",
                          xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
                          colorFill = OP_148_SoliGrupEdad_fill_edad,
                          emptyMessage = "Seleccione Grupo(s) de Edad, Región Judicial y Año(s) a visualizar")
@@ -1659,7 +1665,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
-                                                 title = "Solicitudes de órdenes de protección por Ley 148 según Región Judicial y edad de la parte solicitante",
+                                                 title = "Solicitudes de Órdenes de Protección bajo Ley 148, según Región Judicial y Edad",
                                                  xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", message)
     ggplotly(empty_plot)
   })
@@ -1743,7 +1749,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                         title = "Órdenes de protección ex parte emitidas bajo Ley 148 según Región Judicial y delito cometido",
+                         title = "Órdenes de Protección Ex Parte emitidas bajo Ley 148, según Región Judicial y delito cometido",
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                          colorFill = OP_Ley148_ex_parteEmitidas_fill_delito,
                          emptyMessage = "Seleccione Delito(s), Región Judicial y Año(s) a visualizar")
@@ -1755,7 +1761,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                                                 title = "Órdenes de protección ex parte emitidas bajo Ley 148 según Región Judicial y delito cometido",
+                                                 title = "Órdenes de Protección Ex Parte emitidas bajo Ley 148, según Región Judicial y delito cometido",
                                                  xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", message)
     ggplotly(empty_plot)
   })
@@ -1844,7 +1850,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-                         title = "Órdenes de protección archivadas - violencia sexual, por Región Judicial",
+                         title = "Órdenes de Protección Ex Parte Archivadas bajo Ley 148 según Región Judicial",
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
                          colorFill = OP_LEY148Archivadas_fill_Razón,
                          emptyMessage = "Seleccione Razón, Distrito Fiscal y Año(s) a visualizar")
@@ -1856,7 +1862,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-                                                 title = "Órdenes de protección archivadas - violencia sexual, por Región Judicial",
+                                                 title = "Órdenes de Protección Ex Parte Archivadas bajo Ley 148 según Región Judicial",
                                                  xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", message)
     ggplotly(empty_plot)
   })
@@ -1943,7 +1949,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                         title = "Solicitudes denegadas de órdenes de protección bajo la Ley 148 por Región Judicial",
+                         title = "Órdenes de protección denegadas bajo Ley 148 por Razón de Archivo según Región Judicial",
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
                          colorFill = OP_LEY148Denegadas_fill_Razón,
                          emptyMessage = "Seleccione Razón, Región Judicial y Año(s) a visualizar")
@@ -1955,7 +1961,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                                                 title = "Solicitudes denegadas de órdenes de protección bajo la Ley 148 por Región Judicial",
+                                                 title = "Órdenes de protección denegadas bajo Ley 148 por Razón de Archivo según Región Judicial",
                                                  xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", message)
     ggplotly(empty_plot)
   })
@@ -2041,7 +2047,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                         title = "Órdenes de protección emitidas según la Ley 148 en Casos de Violencia Sexual, por Región Judicial y Tipo de Delito",
+                         title = "Órdenes de protección emitidas bajo Ley 148, según Región Judicial y Tipo de Delito",
                          xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                          colorFill = OP_LEY148FinalEmitidas_fill_Delito,
                          emptyMessage = "Seleccione Delito(s), Región Judicial y Año(s) a visualizar")
@@ -2053,7 +2059,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                                                 title = "Órdenes de protección emitidas según la Ley 148 en Casos de Violencia Sexual, por Región Judicial y Tipo de Delito",
+                                                 title = "Órdenes de protección emitidas bajo Ley 148, según Región Judicial y Tipo de Delito",
                                                  xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", message)
     ggplotly(empty_plot)
   })
@@ -2139,7 +2145,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte",
-                         title = "Órdenes de Protección Emitidas bajo Ley 148, por Sexo y la Parte",
+                         title = "Órdenes de Protección Emitidas bajo Ley 148, según la Parte",
                          xlab = "Año fiscal", ylab = "Solicitudes de Ordenes de Protección", fillLab = "Parte",
                          colorFill = OP_LEY148Genero_fill_Parte,
                          emptyMessage = "Seleccione Parte(s), Sexo y Año(s) a visualizar")
@@ -2151,7 +2157,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte",
-                                                 title = "Órdenes de Protección Emitidas bajo Ley 148, por Sexo y la Parte",
+                                                 title = "Órdenes de Protección Emitidas bajo Ley 148, según la Parte",
                                                  xlab = "Año fiscal", ylab = "Solicitudes de Ordenes de Protección", message)
     ggplotly(empty_plot)
   })
@@ -2231,7 +2237,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
-                         title = "Movimiento de casos en tribunal de primera instancia por ley 54 por delito cometido",
+                         title = "Movimiento Anual de Casos de Violencia Doméstica en el Tribunal según Ley 54",
                          xlab = "Año Fiscal", ylab = "Solicitudes de Órdenes de Protección", fillLab = "Delito Cometido",
                          colorFill = tribCasosCrim_fill_Delito,
                          emptyMessage = "Seleccione Delito(s), Estado del caso y Año(s) a visualizar")
@@ -2243,7 +2249,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
-                                                 title = "Movimiento de casos en tribunal de primera instancia por ley 54 por delito cometido",
+                                                 title = "Movimiento Anual de Casos de Violencia Doméstica en el Tribunal según Ley 54",
                                                  xlab = "Año Fiscal", ylab = "Solicitudes de Órdenes de Protección", message)
     ggplotly(empty_plot)
   })
@@ -2370,7 +2376,7 @@ server <- function(input, output, session) {
       #                    emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
       
       p <- renderBarPlot_stack(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits",
-                         title = HTML("Tendencia anual del equipo de <i>SAFE Kits</i> en casos de violencia sexual"),
+                         title = HTML("Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella"),
                          xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Estado de Querella",
                          colorFill = safekitsDF_fill_Kits,
                          emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
@@ -2392,7 +2398,7 @@ server <- function(input, output, session) {
     #                                              xlab = "Año", ylab = "Total de Kits Distribuidos", message)
     
     empty_plot <- create_empty_plot_with_message(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits", 
-                                                 title = HTML("Tendencia anual del equipo de <i>SAFE Kits</i> en casos de violencia sexual por estado de querella"), 
+                                                 title = HTML("Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella"), 
                                                  xlab = "Año", ylab = "Total de Kits Distribuidos", message)
     
     ggplotly(empty_plot)
