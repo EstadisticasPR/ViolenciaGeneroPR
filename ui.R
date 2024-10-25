@@ -15,12 +15,14 @@ ui <-
       tags$title('Instituto de Estadísticas de Puerto Rico'),
       
       tags$ul(
+        
         ### Foto con enlace a la página de IEPR ###
         embedImage("logo_IEPR", "iepr_logo.png", "https://estadisticas.pr/", "estadisticas.pr"),
         
         ### Foto con enlace a la página de PARE ###
-        embedImage("logo_PARE", "logo_PARE.png", "https://parelaviolencia.pr.gov/", "PARE.gov"),
         
+        embedImage("logo_PARE", "logo_PARE.png", "https://parelaviolencia.pr.gov/", "PARE.gov"),
+
         ### Título de la App ###
         tags$li(
           style = 'display: inline-block;margin-bottom: 12px;margin-right: 25px;',
@@ -62,7 +64,7 @@ ui <-
         tabPanel(
           lowercaseTitle("Homicidios de mujeres por edad"),
           # Título del Tab
-          titlePanel("Homicidios de mujeres por grupo de edad según el año"),
+          #titlePanel("Homicidios de mujeres por grupo de edad según el año"),
           
           # Fuente de Datos, Actualización
           #tags$span(paste0("Actualizado: ", actualizacion_snmvB)),
@@ -139,7 +141,7 @@ ui <-
           lowercaseTitle("Tipos de incidentes violentos"),
           
           # Título del Tab
-          titlePanel("Número de incidentes violentos por tipo para ambos sexos"),
+          #titlePanel("Número de incidentes violentos por tipo para ambos sexos"),
           
           # Fuente de Datos, Actualización
           #tags$span(paste0("Actualizado: ", actualizacion_snmvA)),
@@ -235,7 +237,7 @@ ui <-
         tabPanel(
           lowercaseTitle("Maltrato de menores por sexo"),
           # Título del Tab
-          titlePanel("Cantidad de menores que fueron víctimas de maltrato por sexo y tipo de maltrato"),
+          #titlePanel("Cantidad de menores que fueron víctimas de maltrato por sexo y tipo de maltrato"),
             
           sidebarLayout(
               sidebarPanel(
@@ -340,7 +342,7 @@ ui <-
         tabPanel(
           lowercaseTitle("Delitos Ley 54 por Distrito"),
           # Título del Tab
-          titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"),  
+          #titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"),  
         
             sidebarLayout(
               sidebarPanel(
@@ -423,7 +425,7 @@ ui <-
           lowercaseTitle("Mapa de delitos Ley 54 por Distrito"),
           
           # Título del Tab 
-          titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"), 
+          #titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"), 
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -554,7 +556,7 @@ ui <-
         tabPanel(
           lowercaseTitle("Viviendas Públicas Solicitadas y Asignadas"), 
           # Título del Tab
-          titlePanel("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región de la Administración de Vivienda Pública"),
+          #titlePanel("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región de la Administración de Vivienda Pública"),
         
             sidebarLayout(
               sidebarPanel(
@@ -631,7 +633,7 @@ ui <-
           lowercaseTitle("Mapa de Viviendas Públicas Solicitadas y Asignadas"),
           
           # Título del Tab
-          titlePanel("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región de la Administración de Vivienda Pública"),
+          #titlePanel("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región de la Administración de Vivienda Pública"),
           
           # Menu sidebar con widgets
           sidebarLayout(
@@ -715,7 +717,7 @@ ui <-
         tabPanel(
           lowercaseTitle("Mujeres desaparecidas y localizadas"), 
           # Título del Tab
-          titlePanel("Cantidad de mujeres desaparecidas y localizadas - adultas y menores"),
+          #titlePanel("Cantidad de mujeres desaparecidas y localizadas - adultas y menores"),
           
             sidebarLayout(
               sidebarPanel(
@@ -790,7 +792,7 @@ ui <-
           lowercaseTitle("Violencia Doméstica por Edad"),
           
           # Título del Tab
-          titlePanel("Incidentes de violencia doméstica por edad de la víctima"),
+          #titlePanel("Incidentes de violencia doméstica por edad de la víctima"),
           
             sidebarLayout(
               sidebarPanel(
@@ -933,7 +935,7 @@ ui <-
         tabPanel(
           lowercaseTitle("Feminicidios por Violencia Doméstica"), 
           # Título del Tab
-          titlePanel("Tasa de asesinatos de mujeres por violencia doméstica, desde 1990 a 2021 (Tasa x100,000 mujeres)"),
+          #titlePanel("Tasa de asesinatos de mujeres por violencia doméstica, desde 1990 a 2021 (Tasa x100,000 mujeres)"),
             
             sidebarLayout(
               sidebarPanel(
@@ -992,7 +994,7 @@ ui <-
         tabPanel(
           lowercaseTitle("Casos Según Razón para Consulta"), 
           # Título del Tab
-          titlePanel("Población atendida mediante el programa CRIAS según razón para consulta"),
+          #titlePanel("Población atendida mediante el programa CRIAS según razón para consulta"),
           
             sidebarLayout(
               sidebarPanel(
@@ -1064,7 +1066,7 @@ ui <-
         tabPanel(
           lowercaseTitle("Género de las Víctimas Atendidas"), 
           # Título del Tab
-          titlePanel("Identidad de género de víctimas asistidas por el programa CRIAS"),
+          #titlePanel("Identidad de género de víctimas asistidas por el programa CRIAS"),
             
             sidebarLayout(
               sidebarPanel(
@@ -1135,7 +1137,7 @@ ui <-
         tabPanel(
           lowercaseTitle("Medio de Orientación a las Víctimas"),
           # Título del Tab
-          titlePanel("Orientaciones ofrecidas mediante el programa CRIAS"),
+          #titlePanel("Orientaciones ofrecidas mediante el programa CRIAS"),
           
             sidebarLayout(
               sidebarPanel(
@@ -1207,7 +1209,7 @@ ui <-
         tabPanel(
           lowercaseTitle("Servicios y Alcanze de la OPM"), 
           # Título del Tab
-          titlePanel("Población atendida, servicios ofrecidos y seguimientos mediante el programa CRIAS"),
+          #titlePanel("Población atendida, servicios ofrecidos y seguimientos mediante el programa CRIAS"),
           
             sidebarLayout(
               sidebarPanel(
@@ -1298,7 +1300,7 @@ ui <-
         tabPanel(
         lowercaseTitle("Supervisión Ley 54: Programas Comunitarios"), 
         # Título del Tab
-        titlePanel("Casos en supervisión de ley 54 en programas alternos al confinamiento por estado de investigación: Programas de Comunidad"),
+        #titlePanel("Casos en supervisión de ley 54 en programas alternos al confinamiento por estado de investigación: Programas de Comunidad"),
       
         sidebarLayout(
           sidebarPanel(
@@ -1379,7 +1381,7 @@ ui <-
     tabPanel(
       lowercaseTitle("Sentencias por Violencia Doméstica"),
       # Título del Tab
-      titlePanel("Personas sentenciadas en programa de supervisión electrónica por delitos de violencia doméstica por estado del caso"),
+      #titlePanel("Personas sentenciadas en programa de supervisión electrónica por delitos de violencia doméstica por estado del caso"),
         
         sidebarLayout(
           sidebarPanel(
@@ -1471,7 +1473,7 @@ ui <-
       tabPanel(
         lowercaseTitle("Órdenes de Protección Solicitadas por Edad y Región"), 
         # Título del Tab
-        titlePanel("Órdenes de Protección Solicitadas por Violencia Sexual bajo Ley 148, según Grupo de Edad, Región Judicial y año fiscal"),
+        #titlePanel("Órdenes de Protección Solicitadas por Violencia Sexual bajo Ley 148, según Grupo de Edad, Región Judicial y año fiscal"),
           
           sidebarLayout(
             sidebarPanel(
@@ -1552,7 +1554,7 @@ ui <-
       tabPanel(
         lowercaseTitle("Órdenes de Protección Ex Parte Emitidas por Delito Cometido y Región"), 
         # Título del Tab
-        titlePanel("Órdenes de Protección Ex Parte Emitidas bajo Ley 148 según Región Judicial, Delito Cometido y año fiscal"),
+        #titlePanel("Órdenes de Protección Ex Parte Emitidas bajo Ley 148 según Región Judicial, Delito Cometido y año fiscal"),
         
           sidebarLayout(
             sidebarPanel(
@@ -1633,7 +1635,7 @@ ui <-
         lowercaseTitle("Órdenes de protección ex parte archivadas por razón y región"), 
         
         # Título del Tab
-        titlePanel("Órdenes de protección ex parte bajo Ley 148 archivadas por razón, Región Judicial y año fiscal"),
+        #titlePanel("Órdenes de protección ex parte bajo Ley 148 archivadas por razón, Región Judicial y año fiscal"),
           
           sidebarLayout(
             sidebarPanel(
@@ -1713,7 +1715,7 @@ ui <-
       tabPanel(
         lowercaseTitle("Órdenes de protección denegadas por razón del archivo y región"), 
         # Título del Tab
-        titlePanel("Ordenes de protección denegadas por violencia sexual bajo Ley 148 por razón de archivo, Región Judicial y año fiscal"),
+        #titlePanel("Ordenes de protección denegadas por violencia sexual bajo Ley 148 por razón de archivo, Región Judicial y año fiscal"),
 
           sidebarLayout(
             sidebarPanel(
@@ -1795,7 +1797,7 @@ ui <-
       tabPanel(
         lowercaseTitle("Órdenes de Protección Emitidas por Delito Cometido y Región"), 
         # Título del Tab
-        titlePanel("Órdenes de protección emitidas bajo ley 148 por delito cometido, Región Judicial y año fiscal"),
+        #titlePanel("Órdenes de protección emitidas bajo ley 148 por delito cometido, Región Judicial y año fiscal"),
           
           sidebarLayout(
             sidebarPanel(
@@ -1878,7 +1880,7 @@ ui <-
         lowercaseTitle("Órdenes de Protección Emitidas por Parte y Sexo"), 
         
         # Título del Tab
-        titlePanel("Órdenes de Protección Emitidas bajo Ley 148, por Sexo, la Parte y año fiscal"),
+        #titlePanel("Órdenes de Protección Emitidas bajo Ley 148, por Sexo, la Parte y año fiscal"),
         
           sidebarLayout(
             sidebarPanel(
@@ -1960,7 +1962,7 @@ ui <-
         lowercaseTitle("Movimiento de Casos en Tribunal de Primera Instancia por Ley 54"), 
         
         # Título del Tab
-        titlePanel("Movimiento de casos criminales de violencia doméstica en el tribunal de primera instancia según la ley Núm. 54 por delito cometido y año fiscal"),
+        #titlePanel("Movimiento de casos criminales de violencia doméstica en el tribunal de primera instancia según la ley Núm. 54 por delito cometido y año fiscal"),
       
           sidebarLayout(
             sidebarPanel(
@@ -2058,7 +2060,7 @@ ui <-
       tabPanel(
         lowercaseTitle("Tendencia Anual del Equipo Recolecta de Violencia Sexual"), 
         # Título del Tab
-        titlePanel(HTML("Tendencia anual del equipo de recolecta de evidencia de <i>SAFE Kits</i> en casos de violencia sexual por estado de querella")),
+        #titlePanel(HTML("Tendencia anual del equipo de recolecta de evidencia de <i>SAFE Kits</i> en casos de violencia sexual por estado de querella")),
           
           sidebarLayout(
             sidebarPanel(
