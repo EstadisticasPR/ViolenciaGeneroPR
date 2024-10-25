@@ -62,6 +62,7 @@ ui <-
         #### tab con datos de Homicidios por grupo de Edad ####
         tabPanel(
           lowercaseTitle("Homicidios de mujeres por edad"),
+          br(), br(),
           # Título del Tab
           #titlePanel("Homicidios de mujeres por grupo de edad según el año"),
           
@@ -138,6 +139,7 @@ ui <-
         #### tab con datos de Incidentes segun el año ####
         tabPanel(
           lowercaseTitle("Tipos de incidentes violentos"),
+          br(), br(),
           
           # Título del Tab
           #titlePanel("Número de incidentes violentos por tipo para ambos sexos"),
@@ -235,6 +237,8 @@ ui <-
         #### tab con datos de menores víctimas de maltrato (dfMalt)  ####
         tabPanel(
           lowercaseTitle("Maltrato de menores por sexo"),
+          br(), br(),
+          
           # Título del Tab
           #titlePanel("Cantidad de menores que fueron víctimas de maltrato por sexo y tipo de maltrato"),
             
@@ -340,6 +344,8 @@ ui <-
         #### tab con datos de delitos de violencia doméstica (dfDeli) ####
         tabPanel(
           lowercaseTitle("Delitos Ley 54 por Distrito"),
+          br(), br(),
+          
           # Título del Tab
           #titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"),  
         
@@ -422,6 +428,7 @@ ui <-
         #### tab con datos del mapa delitos de violencia doméstica (mapaDeli) ####
         tabPanel(
           lowercaseTitle("Mapa de delitos Ley 54 por Distrito"),
+          br(), br(),
           
           # Título del Tab 
           #titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"), 
@@ -554,6 +561,8 @@ ui <-
         #### tab con datos de Adminsitración de Vivienda Públicas(dfAvp) ####
         tabPanel(
           lowercaseTitle("Viviendas Públicas Solicitadas y Asignadas"), 
+          br(), br(),
+          
           # Título del Tab
           #titlePanel("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región de la Administración de Vivienda Pública"),
         
@@ -630,6 +639,7 @@ ui <-
         #### tab para el mapa de Adminsitración de Vivienda Públicas (mapaAvp) ####
         tabPanel(
           lowercaseTitle("Mapa de Viviendas Públicas Solicitadas y Asignadas"),
+          br(), br(),
           
           # Título del Tab
           #titlePanel("Total de viviendas públicas solicitadas y asignadas por violencia doméstica por región de la Administración de Vivienda Pública"),
@@ -715,6 +725,8 @@ ui <-
         #### tab con datos de mujeres desaparecidas (despDF) ####
         tabPanel(
           lowercaseTitle("Mujeres desaparecidas y localizadas"), 
+          br(), br(),
+          
           # Título del Tab
           #titlePanel("Cantidad de mujeres desaparecidas y localizadas - adultas y menores"),
           
@@ -789,6 +801,7 @@ ui <-
         #### tab para el barplot de incidentes de violencia doméstica por edad de la víctima (vEdad) ####
         tabPanel(
           lowercaseTitle("Violencia Doméstica por Edad"),
+          br(), br(),
           
           # Título del Tab
           #titlePanel("Incidentes de violencia doméstica por edad de la víctima"),
@@ -933,6 +946,8 @@ ui <-
         #### tab con datos de violencia domestica (opmFemiVD) ####
         tabPanel(
           lowercaseTitle("Feminicidios por Violencia Doméstica"), 
+          br(), br(),
+          
           # Título del Tab
           #titlePanel("Tasa de asesinatos de mujeres por violencia doméstica, desde 1990 a 2021 (Tasa x100,000 mujeres)"),
             
@@ -992,6 +1007,8 @@ ui <-
         #### tab con datos de violencia domestica (opmCasos) ####
         tabPanel(
           lowercaseTitle("Casos Según Razón para Consulta"), 
+          br(), br(),
+          
           # Título del Tab
           #titlePanel("Población atendida mediante el programa CRIAS según razón para consulta"),
           
@@ -1063,7 +1080,9 @@ ui <-
         
         #### tab con datos del género de las víctimas (opmVic) ####
         tabPanel(
-          lowercaseTitle("Género de las Víctimas Atendidas"), 
+          lowercaseTitle("Género de las Víctimas Atendidas"),
+          br(), br(),
+          
           # Título del Tab
           #titlePanel("Identidad de género de víctimas asistidas por el programa CRIAS"),
             
@@ -1135,6 +1154,8 @@ ui <-
         #### tab con datos de orientaciones medio de comunicación (opmMedio) ####
         tabPanel(
           lowercaseTitle("Medio de Orientación a las Víctimas"),
+          br(), br(),
+          
           # Título del Tab
           #titlePanel("Orientaciones ofrecidas mediante el programa CRIAS"),
           
@@ -1207,6 +1228,8 @@ ui <-
         #### tab con datos de los servicios ofrecidos por mes (opmServiciosMes) ####
         tabPanel(
           lowercaseTitle("Servicios y Alcanze de la OPM"), 
+          br(), br(),
+          
           # Título del Tab
           #titlePanel("Población atendida, servicios ofrecidos y seguimientos mediante el programa CRIAS"),
           
@@ -1298,6 +1321,8 @@ ui <-
         #### tab con datos del género de las víctimas (dcrCasosInv) ####
         tabPanel(
         lowercaseTitle("Supervisión Ley 54: Programas Comunitarios"), 
+        br(), br(),
+        
         # Título del Tab
         #titlePanel("Casos en supervisión de ley 54 en programas alternos al confinamiento por estado de investigación: Programas de Comunidad"),
       
@@ -1379,6 +1404,8 @@ ui <-
     #### tab con datos personas sentenciadas al Programa de Supervisión Electrónica (dcrSentenciadas) ####
     tabPanel(
       lowercaseTitle("Sentencias por Violencia Doméstica"),
+      br(), br(),
+      
       # Título del Tab
       #titlePanel("Personas sentenciadas en programa de supervisión electrónica por delitos de violencia doméstica por estado del caso"),
         
@@ -1471,6 +1498,8 @@ ui <-
       #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad) ####
       tabPanel(
         lowercaseTitle("Órdenes de Protección Solicitadas por Edad y Región"), 
+        br(), br(),
+        
         # Título del Tab
         #titlePanel("Órdenes de Protección Solicitadas por Violencia Sexual bajo Ley 148, según Grupo de Edad, Región Judicial y año fiscal"),
           
@@ -1552,6 +1581,8 @@ ui <-
       #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_Ley148_ex_parteEmitidas) ####
       tabPanel(
         lowercaseTitle("Órdenes de Protección Ex Parte Emitidas por Delito Cometido y Región"), 
+        br(), br(),
+        
         # Título del Tab
         #titlePanel("Órdenes de Protección Ex Parte Emitidas bajo Ley 148 según Región Judicial, Delito Cometido y año fiscal"),
         
@@ -1632,6 +1663,7 @@ ui <-
       #### tab con datos de solicitudes de órdenes de protección archivadas (OP_LEY148Archivadas) ####
       tabPanel(
         lowercaseTitle("Órdenes de protección ex parte archivadas por razón y región"), 
+        br(), br(),
         
         # Título del Tab
         #titlePanel("Órdenes de protección ex parte bajo Ley 148 archivadas por razón, Región Judicial y año fiscal"),
@@ -1713,6 +1745,8 @@ ui <-
       #### tab con datos de solicitudes de órdenes de protección denegadas (OP_LEY148Denegadas) ####
       tabPanel(
         lowercaseTitle("Órdenes de protección denegadas por razón del archivo y región"), 
+        br(), br(),
+        
         # Título del Tab
         #titlePanel("Ordenes de protección denegadas por violencia sexual bajo Ley 148 por razón de archivo, Región Judicial y año fiscal"),
 
@@ -1795,6 +1829,8 @@ ui <-
       #### tab con datos de solicitudes de órdenes de protección finales emitidas (OP_LEY148FinalEmitidas) ####
       tabPanel(
         lowercaseTitle("Órdenes de Protección Emitidas por Delito Cometido y Región"), 
+        br(), br(),
+        
         # Título del Tab
         #titlePanel("Órdenes de protección emitidas bajo ley 148 por delito cometido, Región Judicial y año fiscal"),
           
@@ -1877,6 +1913,7 @@ ui <-
       #### tab con datos de solicitudes de órdenes de protección finales emitidas (OP_LEY148Genero) ####
       tabPanel(
         lowercaseTitle("Órdenes de Protección Emitidas por Parte y Sexo"), 
+        br(), br(),
         
         # Título del Tab
         #titlePanel("Órdenes de Protección Emitidas bajo Ley 148, por Sexo, la Parte y año fiscal"),
@@ -1959,6 +1996,7 @@ ui <-
       #### tab con datos de Movimiento de Casos Criminales de Violencia Doméstica (tribCasosCrim) ####
       tabPanel(
         lowercaseTitle("Movimiento de Casos en Tribunal de Primera Instancia por Ley 54"), 
+        br(), br(),
         
         # Título del Tab
         #titlePanel("Movimiento de casos criminales de violencia doméstica en el tribunal de primera instancia según la ley Núm. 54 por delito cometido y año fiscal"),
@@ -2058,6 +2096,8 @@ ui <-
       
       tabPanel(
         lowercaseTitle("Tendencia Anual del Equipo Recolecta de Violencia Sexual"), 
+        br(), br(),
+        
         # Título del Tab
         #titlePanel(HTML("Tendencia anual del equipo de recolecta de evidencia de <i>SAFE Kits</i> en casos de violencia sexual por estado de querella")),
           
