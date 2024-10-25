@@ -20,9 +20,9 @@ ui <-
         embedImage("logo_IEPR", "iepr_logo.png", "https://estadisticas.pr/", "estadisticas.pr"),
         
         ### Foto con enlace a la página de PARE ###
-        
         embedImage("logo_PARE", "logo_PARE.png", "https://parelaviolencia.pr.gov/", "PARE.gov"),
-
+        style = 'padding-top: 4px;',
+        
         ### Título de la App ###
         tags$li(
           style = 'display: inline-block;margin-bottom: 12px;margin-right: 25px;',
@@ -34,12 +34,11 @@ ui <-
           )
         ),
         
-        style = 'list-style-type: none;
+      style = 'list-style-type: none;
       display: flex;
       flex-wrap: wrap;
-      margin: 0px;
       justify-content: space-between;
-      background: pink;
+      background: #8dc143;
       margin: 0px;
       padding-bottom: 10;
       border-radius: 0;'
