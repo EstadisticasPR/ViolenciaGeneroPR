@@ -324,9 +324,9 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
         axis.text.y = element_blank(), 
         axis.title.x = element_text(size = 12, margin = margin(t = 10)),  
         axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
-        plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
         panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        plot.margin = margin(t = 45, r = 10, b = 10, l = 10)
+        plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
       ) +
       annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 6, hjust = 0.5, vjust = 0.5)
 
@@ -379,9 +379,9 @@ create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, 
       axis.text.y = element_blank(),
       axis.title.x = element_text(size = 12, margin = margin(t = 10)), 
       axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
-      plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+      plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
       panel.border = element_rect(colour = "black", fill = NA, size = 1),
-      plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+      plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
     ) +
     annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 6, hjust = 0.5, vjust = 0.5)
 }
@@ -419,9 +419,9 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, c
       theme_minimal() +
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+        plot.title = element_text(hjust = 2, size = 13, colour = "black", face = "bold"),
         panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+        plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
       )
     
     return(p)
@@ -465,9 +465,9 @@ renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = f
       theme_minimal() +
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
         panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+        plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
       )
     
     return(p)
@@ -516,9 +516,9 @@ renderBarPlot_stack2 <- function(data, x, y, fill, title, xlab, ylab, fillLab = 
       theme_minimal() +
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
         panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        plot.margin = margin(t = 10, r = 10, b = 10, l = 10)
+        plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
       )
     
     return(p)
@@ -611,14 +611,14 @@ renderDataTable <- function(filtered_data, title, font_size = "18px") {
             list(
               extend = 'csv',
               exportOptions = list(
-                columns = ':visible'  # Solo exporta columnas visibles
+                columns = 'all'  # Solo exporta columnas visibles
               ),
               filename = "datos_ViolenciaGeneroPR"  # Nombre del archivo sin extensión
             ),
             list(
               extend = 'excel',
               exportOptions = list(
-                columns = ':visible'  # Solo exporta columnas visibles
+                columns = 'all'  # Solo exporta columnas visibles
               ),
               filename = "datos_ViolenciaGeneroPR"  # Nombre del archivo sin extensión
             )
@@ -709,7 +709,7 @@ renderMap <- function(data, fill, title, group, fill_lab = fill,
       axis.ticks = element_blank(),
       panel.grid = element_blank(),
       panel.border = element_rect(colour = "black", fill = NA, size = 1),  
-      plot.margin = margin(10, 10, 10, 10)
+      plot.margin = margin(60, 10, 10, 10)
     )
   print(p)
 }
