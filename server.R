@@ -42,7 +42,6 @@ server <- function(input, output, session) {
       #                    "Año", "Cantidad de víctimas", fillLab = "Grupo de Edad", colorFill = homiEdad_fill_edad, 
       #                    emptyMessage = "Seleccione Grupo de edad y Año(s) a visualizar",barWidth = 0, xGap = 0)
       
-      par(mar = c(1, 10, 3, 4))
       p <- renderBarPlot(homiEdad_filt, "Año", "Casos", "Edad",
                          title = "Homicidios de Mujeres por grupo de Edad y Año",
                          "Año", "Cantidad de víctimas", fillLab = "Grupo de Edad", colorFill = homiEdad_fill_edad, 
