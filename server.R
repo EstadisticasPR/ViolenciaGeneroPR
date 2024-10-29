@@ -65,7 +65,8 @@ server <- function(input, output, session) {
   })
 
   # Data Table de homiEdad
-  output$dataTable_snmv <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_snmv <- renderDT(server = FALSE, {
     renderDataTable(homiEdad_filt_rename(), "Datos: Homicidios por Grupo de Edad")
   })
   
@@ -152,7 +153,8 @@ server <- function(input, output, session) {
   })
   
   # Data Table del SNMV
-  output$dataTable_snmv_inci <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_snmv_inci <- renderDT(server = FALSE, {
     renderDataTable(inci_filt_rename(), "Datos: Incidentes Violentos")
   })
   
@@ -277,7 +279,8 @@ server <- function(input, output, session) {
   
   
   # Data Table del DeptFam
-  output$dataTable_fam <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_fam <- renderDT(server = FALSE, {
     renderDataTable(dfMalt_filt_rename(), "Datos: Menores victimas de maltrato")
   })
   
@@ -395,7 +398,8 @@ server <- function(input, output, session) {
   })
   
   # Data table del DeptJust
-  output$dataTable_just <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_just <- renderDT(server = FALSE, {
     renderDataTable(dfDeli_filt(), "Datos: Delitos según Artículo de la Ley 54")
   })
   
@@ -652,7 +656,8 @@ server <- function(input, output, session) {
   })
   
   # Data Table para la gráfica de barras de dfAvp
-  output$dataTable_avp_dfAvp <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_avp_dfAvp <- renderDT(server = FALSE, { 
     renderDataTable(dfAvp_rename(), "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica")
   })
   
@@ -883,7 +888,8 @@ server <- function(input, output, session) {
 
   
   # Data Table para el mapa de despDF
-  output$dataTable_poli_vEdad <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_poli_vEdad <- renderDT(server = FALSE, {
     renderDataTable(vEdad_filt(), "Datos: Incidentes de violencia doméstica")
   })
   
@@ -983,7 +989,8 @@ server <- function(input, output, session) {
   
   
   # Data Table para el mapa de despDF
-  output$dataTable_opm_opmFemiVD <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_opm_opmFemiVD <- renderDT(server = FALSE, {
     renderDataTable(opmFemiVD_filt(), "Datos: Tasa de asesinatos de mujeres por violencia doméstica")
   })
   
@@ -1235,7 +1242,8 @@ server <- function(input, output, session) {
   })
 
   # Data Table para opmMedio
-  output$dataTable_opm_opmMedio <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_opm_opmMedio <- renderDT(server = FALSE, {
     renderDataTable(opmMedio_filt_rename(), "Datos: Orientaciones ofrecidas mediante el programa CRIAS")
   })
   
@@ -1322,7 +1330,8 @@ server <- function(input, output, session) {
   
   
   # Data Table para opmServiciosMes
-  output$dataTable_opm_opmServiciosMes <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_opm_opmServiciosMes <- renderDT(server = FALSE, {
     renderDataTable(opmServiciosMes_filt_rename(), "Datos: Servicios ofrecidos por el programa CRIAS")
   })
   
@@ -1453,7 +1462,8 @@ server <- function(input, output, session) {
   })
   
   # Data Table para dcrCasosInv
-  output$dataTable_dcr_dcrCasosInv <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_dcr_dcrCasosInv <- renderDT(server = FALSE, {
     renderDataTable(dcrCasosInv_filt_rename(), "Datos: Casos en supervisión de ley 54")
   })
   
@@ -1560,7 +1570,8 @@ server <- function(input, output, session) {
 
   
   # Data Table para dcrSentenciadas
-  output$dataTable_dcr_dcrSentenciadas <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_dcr_dcrSentenciadas <- renderDT(server = FALSE, {
     renderDataTable(dcrSentenciadas_filt_rename(), "Datos: Programa de supervisión electrónica por delitos de violencia doméstica")
   })
   
@@ -1677,7 +1688,8 @@ server <- function(input, output, session) {
   
   
   # Data Table para dcrCasosInv
-  output$dataTable_OP_148_SoliGrupEdad <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_OP_148_SoliGrupEdad <- renderDT(server = FALSE, {
     renderDataTable(OP_148_SoliGrupEdad_filt_rename(), "Datos: Órdenes de Protección Solicitadas por Violencia Sexual")
   })
   
@@ -1775,7 +1787,8 @@ server <- function(input, output, session) {
   
   
   # Data Table para dcrCasosInv
-  output$dataTable_OP_Ley148_ex_parteEmitidas <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_OP_Ley148_ex_parteEmitidas <- renderDT(server = FALSE, {
     renderDataTable(OP_Ley148_ex_parteEmitidas_filt_rename(), "Datos: Órdenes de Protección Ex Parte Emitidas bajo Ley 148")
   })
   
@@ -1876,7 +1889,8 @@ server <- function(input, output, session) {
   })
   
   # Data Table 
-  output$dataTable_OP_LEY148Archivadas <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_OP_LEY148Archivadas <- renderDT(server = FALSE, {
     renderDataTable(OP_LEY148Archivadas_filt_rename(), "Datos: Órdenes de Protección Ex Parte archivadas bajo Ley 148")
   })
   
@@ -1975,7 +1989,8 @@ server <- function(input, output, session) {
   
   
   # Data Table 
-  output$dataTable_OP_LEY148Denegadas <- renderDT({
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_OP_LEY148Denegadas <- renderDT(server = FALSE, {
     renderDataTable(OP_LEY148Denegadas_filt_rename(), "Datos: Ordenes de protección denegadas por violencia sexual bajo Ley 148")
   })
   
@@ -2072,8 +2087,9 @@ server <- function(input, output, session) {
   })
   
   
-  # Data Table 
-  output$dataTable_OP_LEY148FinalEmitidas <- renderDT({
+  # Data Table
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_OP_LEY148FinalEmitidas <- renderDT(server = FALSE, {
     renderDataTable(OP_LEY148FinalEmitidas_filt_rename(), "Datos: Órdenes de protección emitidas bajo ley 148")
   })
   
@@ -2166,8 +2182,9 @@ server <- function(input, output, session) {
       rename(`Año Fiscal` = AñoFiscal) 
   })
   
-  # Data Table 
-  output$dataTable_OP_LEY148Genero <- renderDT({
+  # Data Table
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_OP_LEY148Genero <- renderDT(server = FALSE, {
     renderDataTable(OP_LEY148Genero_filt_rename(), "Datos: Órdenes de Protección Emitidas bajo Ley 148")
   })
   
@@ -2261,8 +2278,9 @@ server <- function(input, output, session) {
       rename(`Delito Cometido` = Delito)
   })
   
-  # Data Table 
-  output$dataTable_tribCasosCrim <- renderDT({
+  # Data Table
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_tribCasosCrim <- renderDT(server = FALSE, {
     renderDataTable(tribCasosCrim_filt_rename(), "Datos: Ordenes de Protección según delito cometido")
   })
   
@@ -2411,8 +2429,9 @@ server <- function(input, output, session) {
   })
   
   
-  # Data Table 
-  output$dataTable_safekitsDF <- renderDT({
+  # Data Table
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_safekitsDF <- renderDT(server = FALSE, {
     renderDataTable(safekitsDF_filt_rename(), "Datos: Tendencia anual del equipo de recolecta de evidencia de SAFE Kits en casos de violencia sexual")
   })
   

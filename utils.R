@@ -598,29 +598,39 @@ renderDataTable <- function(filtered_data, title, font_size = "18px") {
       ordering = TRUE,
       dom = 'Bfrtip',
       buttons = list(
+        #Boton para copiar la data
+        #Para poder utilizar exportOption: modifier la funcion renderDT() debe
+        #recibir como argumento server = FALSE. Ya que por defacto siempre es TRUE.
+        list(
+                extend = 'copy', 
+                title = title,        #El argumento que se recibe como titulo de la data.
+                exportOptions = list(
+                columns = ":visible",     #Solo se va a copiar las columnas visibles de la data.
+                modifier = list(page = "all") # ALL descarga toda la data seleccionada por el usuario. 
+                )
+        ),
         list(
           extend = 'collection',
           buttons = list(
             list(
-              extend = 'copy',
+              extend = 'csv', 
+              title = title,
               exportOptions = list(
-                columns = ':visible'  # Solo exporta columnas visibles, no estilos
-              ),
-              filename = "datos_ViolenciaGeneroPR"  # Nombre del archivo sin extensión
-            ),
-            list(
-              extend = 'csv',
-              exportOptions = list(
-                columns = 'all'  # Solo exporta columnas visibles
-              ),
-              filename = "datos_ViolenciaGeneroPR"  # Nombre del archivo sin extensión
+                columns = ":visible", 
+                modifier = list(page = "all") # 'all' descarga toda la data seleccionada por el usuario.
+                ),                            # 'current' descarga solo la pagina visible.
+              filename = title
+              #filename = "datos_ViolenciaGeneroPR" #Nombre del archivo sin extension
             ),
             list(
               extend = 'excel',
+              title = title,
               exportOptions = list(
-                columns = 'all'  # Solo exporta columnas visibles
+                columns = ":visible", 
+                modifier = list(page = "all") # ALL descarga toda la data seleccionada por el usuario.
               ),
-              filename = "datos_ViolenciaGeneroPR"  # Nombre del archivo sin extensión
+              filename = title
+              #filename = "datos_ViolenciaGeneroPR" #Nombre del archivo sin extension
             )
           ),
           text = 'Descargar Datos'
@@ -642,7 +652,6 @@ renderDataTable <- function(filtered_data, title, font_size = "18px") {
     )
   )
 }
-
 
 # Renderizar Tabla de Definiciones con Botones de Exportación
 renderDataTable_Definitions <- function(filtered_data) {
