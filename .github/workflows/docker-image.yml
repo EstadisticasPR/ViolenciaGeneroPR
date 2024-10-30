@@ -1,35 +1,37 @@
-name: Run on push main or master
+name: Run on push master, main
 
-# Controla cuándo se ejecuta la acción
+# Controls when the action will run. 
 on:
-  # Desencadena el workflow en eventos push a main o master
+  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main, master ]
 
-  # Permite ejecutar el workflow manualmente desde la pestaña de Actions
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Definición de los trabajos (jobs)
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # Este workflow contiene un solo job llamado "build"
+  # This workflow contains a single job called "build"
   build:
-    # Tipo de runner en el que se ejecutará el job
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Secuencia de pasos a ejecutar como parte del job
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Revisa el repositorio bajo $GITHUB_WORKSPACE para que el job pueda acceder a él
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Construye la imagen Docker y le da el nombre main
+      # build the docker image and give it the name main
       - name: Build image
         run: docker build -t main .
 
-      # Ejecuta la imagen Docker y usa los secretos de GitHub
-      - name: Execute
+        # run the docker image supply the secrets from the github secrets store.  
+      - name: execute
         run: >
           docker run 
           -e SHINY_ACC_NAME=${{ secrets.SHINY_ACC_NAME }} 
           -e TOKEN=${{ secrets.TOKEN }} 
           -e SECRET=${{ secrets.SECRET }} 
-          main
+          main 
+        
+      
