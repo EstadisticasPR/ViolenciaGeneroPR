@@ -1536,7 +1536,7 @@ ui <-
                   div(
                     style = "flex: 0.1; display: flex; justify-content: center;",
                     # botón para seleccionar el año
-                    createDropdownCheckbox(
+                    createDropdownCheckbox_añoFiscal(
                       label = "Seleccione Año(s) Fiscal:",
                       choices = OP_148_SoliGrupEdad$AñoFiscal,
                       selected = OP_148_SoliGrupEdad$AñoFiscal,
@@ -1619,7 +1619,7 @@ ui <-
                   div(
                     style = "flex: 0.1; display: flex; justify-content: center;",
                     # botón para seleccionar el año fiscal
-                    createDropdownCheckbox(
+                    createDropdownCheckbox_añoFiscal(
                       label = "Seleccione Año(s) Fiscal:",
                       choices = OP_Ley148_ex_parteEmitidas$AñoFiscal,
                       selected = OP_Ley148_ex_parteEmitidas$AñoFiscal,
@@ -1701,7 +1701,7 @@ ui <-
                   div(
                     style = "flex: 0.1; display: flex; justify-content: center;",
                     # botón para seleccionar el año fiscal
-                    createDropdownCheckbox(
+                    createDropdownCheckbox_añoFiscal(
                       label = "Seleccione Año(s) Fiscal:",
                       choices = OP_LEY148Archivadas$AñoFiscal,
                       selected = OP_LEY148Archivadas$AñoFiscal,
@@ -1784,7 +1784,7 @@ ui <-
                   div(
                     style = "flex: 0.1; display: flex; justify-content: center;",
                     # botón para seleccionar el año fiscal
-                    createDropdownCheckbox(
+                    createDropdownCheckbox_añoFiscal(
                       label = "Seleccione Año(s) fiscal:",
                       choices = OP_LEY148Denegadas$AñoFiscal,
                       selected = OP_LEY148Denegadas$AñoFiscal,
@@ -1868,7 +1868,7 @@ ui <-
                   div(
                     style = "flex: 0.1; display: flex; justify-content: center;",
                     # botón para seleccionar el año fiscal
-                    createDropdownCheckbox(
+                    createDropdownCheckbox_añoFiscal(
                       label = HTML("Seleccione <br> Año(s) Fiscal:"),
                       choices = OP_LEY148FinalEmitidas$AñoFiscal,
                       selected = OP_LEY148FinalEmitidas$AñoFiscal,
@@ -1951,7 +1951,7 @@ ui <-
                   div(
                     style = "flex: 0.1; display: flex; justify-content: center;",
                     # botón para seleccionar el año fiscal
-                    createDropdownCheckbox(
+                    createDropdownCheckbox_añoFiscal(
                       label = "Seleccione Año(s) Fiscal:",
                       choices = OP_LEY148Genero$AñoFiscal,
                       selected = OP_LEY148Genero$AñoFiscal,
@@ -2034,7 +2034,7 @@ ui <-
                   div(
                     style = "flex: 0.1; display: flex; justify-content: center;",
                     # botón para seleccionar el año fiscal
-                    createDropdownCheckbox(
+                    createDropdownCheckbox_añoFiscal(
                       label = "Seleccione Año(s) Fiscal:",
                       choices = tribCasosCrim$AñoFiscal,
                       selected = tribCasosCrim$AñoFiscal,

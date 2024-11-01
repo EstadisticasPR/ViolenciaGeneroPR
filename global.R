@@ -46,8 +46,8 @@ source("utils.R")
 # if (length(not_installed) > 0) {
 #   install.packages(not_installed)
 # }
-# 
-# # Cargar paquetes
+
+# Cargar paquetes
 # lapply(packages, function(pkg) {
 #   library(packages)
 # })

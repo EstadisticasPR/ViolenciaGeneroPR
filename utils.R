@@ -43,6 +43,95 @@ cat("Loading helper functions from utils.R...\n")
 #   )
 # }
 
+createDropdownCheckbox_añoFiscal <- function(label, choices, selected, id) {
+  # Step 1: Extract unique years and create custom labels
+  unique_years <- unique(as.character(choices))
+  formatted_choices <- setNames(
+    unique_years,
+    paste0("jul ", unique_years, " - jun ", as.numeric(unique_years) + 1)
+  )
+  
+  # Step 2: Set all unique years as selected by default if selected is NULL
+  if (is.null(selected)) {
+    selected <- unique_years  # Select all unique years
+  }
+  
+  div(
+    style = "display: flex; justify-content: center; width: 100%;",
+    dropdownButton(
+      circle = FALSE,
+      label = lowercaseTitle(label),
+      status = "default",
+      size = "default",
+      checkboxGroupInput(
+        paste0("checkGroup_", id),
+        label = "",
+        choices = formatted_choices,  # Show custom names for years
+        selected = selected
+      ),
+      actionButton(
+        paste0("deselectAll_", id), 
+        HTML(lowercaseTitle("(De)seleccionar<br>todo")),
+        style = "display: block; margin: 10px auto; width: 100%;"  # Center button in dropdown
+      )
+    ),
+    style = "display: flex; padding-right: 20px; padding-top: 10px; width: 100%;",
+    tags$style(HTML('
+      .btn {
+        font-size: 12px;
+        background-color: #3e3f3a !important;
+        color: white !important;
+        border-color: #ccc !important;
+        width: auto; /* Adjust width to content */
+        max-width: 100%; /* Limit to container */
+        box-sizing: border-box;
+      }
+      .btn-default:hover, .btn-default:focus, .btn-default:active {
+        background-color: #2c2c2a !important;
+        color: #b0dce4 !important;
+      }
+      .dropdown-menu {
+        width: 100% !important;
+        font-size: 14px;
+      }
+      .shiny-input-checkboxgroup {
+        display: flex;
+        flex-direction: column;
+      }
+      @media (max-width: 1040px) {
+        .btn {
+          font-size: 8px !important;
+          padding: 6px 4px !important;
+          max-width: 100%;
+        }
+        .dropdown-menu {
+          font-size: 8px !important;
+        }
+      }
+      @media (max-width: 768px) {
+        .btn {
+          font-size: 8px !important;
+          padding: 6px 4px !important;
+          max-width: 100%;
+        }
+        .dropdown-menu {
+          font-size: 8px !important;
+        }
+      }
+      @media (max-width: 600px) {
+        .btn {
+          font-size: 8px !important;
+          padding: 6px 4px !important;
+          max-width: 100%;
+        }
+        .dropdown-menu {
+          font-size: 8px !important;
+        }
+      }
+    '))
+  )
+}
+
 createDropdownCheckbox <- function(label, choices, selected, id) {
   choices <- levels(choices)
   if (is.null(selected)) {
