@@ -1,4 +1,23 @@
 cat("Loading helper functions from utils.R...\n")
+
+#### Helper Functions: Global ####
+cleanSheet_tribCasosCrim <- function(data, sheet_name, new_names) {
+  data %>%
+    rename_at(vars(1:11), ~ new_names) %>%      # Renombra las primeras 11 columnas
+    pivot_longer(                                # Convierte las columnas a formato largo
+      !Delito, 
+      names_to = "Casos", 
+      values_to = "Cantidad"
+    ) %>%
+    mutate(
+      AñoFiscal = factor(sheet_name)             # Añade el año fiscal como factor
+    ) %>%
+    filter(
+      !(Casos %in% c("Total"))                   # Filtra las filas con 'Total' en Casos
+    )
+}
+
+
 ###############################
 #### Helper Functions: UI  ####
 ###############################

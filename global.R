@@ -1061,57 +1061,145 @@ new_names <- c("Delito", "Pendiente Inicio", "Presentados",
                "Archivos", "Traslados", "Otros", "Total", "Pendiente Final")
 
 # datos de movimiento de casos criminales en año fiscal 2019-2020
-tribCasosCrim19 <- read_excel(paste0(trib, "tribCasosCrim19.xlsx")) %>%
-  rename_at(vars(1:11), ~ new_names) %>%
-  pivot_longer(
-    !Delito, 
-    names_to = "Casos", 
-    values_to = "Cantidad"
-  ) %>%
-  mutate(
-    AñoFiscal = factor("2019-2020")
-  ) %>%
-  filter(
-    !(Delito %in% c("2019-2020", "Total")),
-    !(Casos %in% c("2019-2020", "Total")),
-  )
+# tribCasosCrim19 <- read_excel(paste0(trib, "tribCasosCrim19.xlsx")) %>%
+#   rename_at(vars(1:11), ~ new_names) %>%
+#   pivot_longer(
+#     !Delito,
+#     names_to = "Casos",
+#     values_to = "Cantidad"
+#   ) %>%
+#   mutate(
+#     AñoFiscal = factor("2019-2020")
+#   ) %>%
+#   filter(
+#     !(Delito %in% c("2019-2020", "Total")),
+#     !(Casos %in% c("2019-2020", "Total")),
+#   )
+
+sheet_name = "2019-2020"
+tribCasosCrim19 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
+                              sheet = sheet_name) %>%
+  cleanSheet_tribCasosCrim(sheet_name, new_names)
+  # rename_at(vars(1:11), ~ new_names) %>%
+  # pivot_longer(
+  #   !Delito, 
+  #   names_to = "Casos", 
+  #   values_to = "Cantidad"
+  # ) %>%
+  # mutate(
+  #   AñoFiscal = factor("2019-2020")
+  # ) %>%
+  # filter(
+  #   !(Casos %in% c("Total")),
+  # )
 
 # datos de movimiento de casos criminales en año fiscal 2020-2021
-tribCasosCrim20 <- read_excel(paste0(trib, "tribCasosCrim20.xlsx")) %>%
-  rename_at(vars(1:11), ~ new_names) %>%
-  pivot_longer(
-    !Delito, 
-    names_to = "Casos", 
-    values_to = "Cantidad"
-  ) %>%
-  mutate(
-    AñoFiscal = factor("2020-2021")
-  ) %>%
-  filter(
-    !(Delito %in% c("2020-2021", "Total")
-    )
-  )
+# tribCasosCrim20 <- read_excel(paste0(trib, "tribCasosCrim20.xlsx")) %>%
+#   rename_at(vars(1:11), ~ new_names) %>%
+#   pivot_longer(
+#     !Delito, 
+#     names_to = "Casos", 
+#     values_to = "Cantidad"
+#   ) %>%
+#   mutate(
+#     AñoFiscal = factor("2020-2021")
+#   ) %>%
+#   filter(
+#     !(Delito %in% c("2020-2021", "Total")
+#     )
+#   )
+
+sheet_name = "2020-2021"
+tribCasosCrim20 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
+                              sheet = sheet_name) %>%
+  cleanSheet_tribCasosCrim(sheet_name, new_names)
+  # rename_at(vars(1:11), ~ new_names) %>%
+  # pivot_longer(
+  #   !Delito, 
+  #   names_to = "Casos", 
+  #   values_to = "Cantidad"
+  # ) %>%
+  # mutate(
+  #   AñoFiscal = factor("2020-2021")
+  # ) %>%
+  # filter(
+  #   !(Casos %in% c("Total")),
+  # )
+
 
 # datos de movimiento de casos criminales en año fiscal 2021-2022
-tribCasosCrim21 <- read_excel(paste0(trib, "tribCasosCrim21.xlsx")) %>%
-  rename_at(vars(1:11), ~ new_names) %>%
-  pivot_longer(
-    !Delito, 
-    names_to = "Casos", 
-    values_to = "Cantidad"
-  ) %>%
-  mutate(
-    AñoFiscal = factor("2021-2022")
-  ) %>%
-  filter(
-    !(Delito %in% c("2021-2022", "Total")
-    )
-  )
+# tribCasosCrim21 <- read_excel(paste0(trib, "tribCasosCrim21.xlsx")) %>%
+#   rename_at(vars(1:11), ~ new_names) %>%
+#   pivot_longer(
+#     !Delito, 
+#     names_to = "Casos", 
+#     values_to = "Cantidad"
+#   ) %>%
+#   mutate(
+#     AñoFiscal = factor("2021-2022")
+#   ) %>%
+#   filter(
+#     !(Delito %in% c("2021-2022", "Total")
+#     )
+#   )
+
+sheet_name = "2021-2022"
+tribCasosCrim21 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
+                              sheet = sheet_name) %>%
+  cleanSheet_tribCasosCrim(sheet_name, new_names)
+  # rename_at(vars(1:11), ~ new_names) %>%
+  # pivot_longer(
+  #   !Delito, 
+  #   names_to = "Casos", 
+  #   values_to = "Cantidad"
+  # ) %>%
+  # mutate(
+  #   AñoFiscal = factor("2021-2022")
+  # ) %>%
+  # filter(
+  #   !(Casos %in% c("Total")),
+  # )
+
+sheet_name = "2022-2023"
+tribCasosCrim22 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
+                              sheet = sheet_name) %>%
+  cleanSheet_tribCasosCrim(sheet_name, new_names)
+  # rename_at(vars(1:11), ~ new_names) %>%
+  # pivot_longer(
+  #   !Delito, 
+  #   names_to = "Casos", 
+  #   values_to = "Cantidad"
+  # ) %>%
+  # mutate(
+  #   AñoFiscal = factor("2022-2023")
+  # ) %>%
+  # filter(
+  #   !(Casos %in% c("Total")),
+  # )
+
+sheet_name = "2023-2024"
+tribCasosCrim23 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
+                              sheet = sheet_name) %>%
+  cleanSheet_tribCasosCrim(sheet_name, new_names)
+  # rename_at(vars(1:11), ~ new_names) %>%
+  # pivot_longer(
+  #   !Delito, 
+  #   names_to = "Casos", 
+  #   values_to = "Cantidad"
+  # ) %>%
+  # mutate(
+  #   AñoFiscal = factor("2023-2024")
+  # ) %>%
+  # filter(
+  #   !(Casos %in% c("Total")),
+  # )
 
 # dataset joined
 tribCasosCrim <- full_join(
   tribCasosCrim19, tribCasosCrim20) %>%
   full_join(tribCasosCrim21) %>%
+  full_join(tribCasosCrim22) %>%
+  full_join(tribCasosCrim23) %>%
   mutate(
     Delito = factor(Delito),
     Casos = factor(Casos),
@@ -1120,6 +1208,7 @@ tribCasosCrim <- full_join(
       AñoFiscal == "2020-2021" ~ "2020",
       AñoFiscal == "2021-2022" ~ "2021",
       AñoFiscal == "2022-2023" ~ "2022",
+      AñoFiscal == "2023-2024" ~ "2023",
       TRUE ~ as.character(AñoFiscal)
     ),
     AñoFiscal = factor(AñoFiscal)

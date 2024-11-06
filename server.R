@@ -2254,7 +2254,7 @@ server <- function(input, output, session) {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
                          title = "Movimiento Anual de Casos de Violencia \nDoméstica en el Tribunal según Ley 54",
-                         xlab = "Año Fiscal", ylab = "Solicitudes de Órdenes de Protección", fillLab = "Delito Cometido",
+                         xlab = "Año Fiscal", ylab = "Casos", fillLab = "Delito Cometido",
                          colorFill = tribCasosCrim_fill_Delito,
                          emptyMessage = "Seleccione Delito(s), Estado del caso y Año(s) a visualizar")
       p <- p + facet_wrap(~Casos)
@@ -2266,7 +2266,7 @@ server <- function(input, output, session) {
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
                                                  title = "Movimiento Anual de Casos de Violencia \nDoméstica en el Tribunal según Ley 54",
-                                                 xlab = "Año Fiscal", ylab = "Solicitudes de Órdenes de Protección", message)
+                                                 xlab = "Año Fiscal", ylab = "Casos", message)
     ggplotly(empty_plot)
   })
   
