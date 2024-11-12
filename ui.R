@@ -126,7 +126,7 @@ ui <-
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a los 
-                    Homicidios de mujeres por grupo de edad desde el año 2017 a 2021",
+                    homicidios de mujeres por grupo de edad desde el año 2017 al 2021.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -205,7 +205,7 @@ ui <-
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a la cantidad de 
-                    incidentes violentos (según su tipo) desde el año 2017 a 2021",
+                    incidentes violentos (según su tipo) desde el año 2017 al 2021.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -414,7 +414,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden al
                     número de casos radicados por distrito fiscal y Artículo 
-                    de la Ley 54 desde el año 2020 a 2023",
+                    de la Ley 54 desde el año 2020 al 2023.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -464,8 +464,8 @@ ui <-
                   ),
                   p(
                     "Los datos representados en este mapa corresponden al
-                    Número de casos radicados por Distrito Fiscal y Artículo 
-                    de la Ley 54 desde el año 2020 a 2023",
+                    número de casos radicados por distrito fiscal y Artículo 
+                    de la Ley 54 desde el año 2020 al 2023.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -623,9 +623,9 @@ ui <-
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden al
-                    Total de viviendas públicas solicitadas y asignadas por
+                    total de viviendas públicas solicitadas y asignadas por
                     violencia doméstica por región de la Administración de Vivienda Pública
-                    desde el año 2017 al 2023",
+                    desde el año 2017 al 2023.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -679,9 +679,9 @@ ui <-
                   ),
                   p(
                     "Los datos representados en este mapa corresponden al
-                    Total de viviendas públicas solicitadas y asignadas por
+                    total de viviendas públicas solicitadas y asignadas por
                     violencia doméstica por región de la Administración de Vivienda Pública
-                    desde el año 2017 al 2023",
+                    desde el año 2017 al 2023.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -788,7 +788,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a la
                     cantidad de mujeres desaparecidas y localizadas (adultas y menores)
-                    desde el año 2020 al 2023",
+                    desde el año 2020 al 2023.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -869,8 +869,8 @@ ui <-
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a los
-                    Incidentes de violencia doméstica (por edad de la víctima)
-                    desde el año 2021 al 2023",
+                    incidentes de violencia doméstica (por edad de la víctima)
+                    desde el año 2021 al 2023.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -994,7 +994,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a
                     la tasa de asesinatos de mujeres por violencia doméstica, 
-                    desde 1990 a 2021 (Tasa x100,000 mujeres)",
+                    desde 1990 al 2021 (Tasa x100,000 mujeres).",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1068,7 +1068,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a
                     la población atendida mediante el programa CRIAS según 
-                    razón para consulta",
+                    razón para consulta.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1141,7 +1141,7 @@ ui <-
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
-                    la Identidad de género de víctimas asistidas por el programa CRIAS",
+                    la identidad de género de víctimas asistidas por el programa CRIAS.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1215,7 +1215,7 @@ ui <-
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
-                    las Orientaciones ofrecidas mediante el programa CRIAS",
+                    las orientaciones ofrecidas mediante el programa CRIAS.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1289,8 +1289,8 @@ ui <-
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
-                    la Población atendida, servicios ofrecidos y seguimientos
-                    de casos mediante el programa CRIAS",
+                    la población atendida, servicios ofrecidos y seguimientos
+                    de casos mediante el programa CRIAS.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1391,7 +1391,7 @@ ui <-
                 "Los datos representados en esta gráfica corresponden a
                  los casos en supervisión de ley 54 en programas alternos
                 al confinamiento (por estado de investigación): Programas de Comunidad
-                desde el año 2021 al 2023",
+                desde el año 2021 al 2023.",
                 
                 style = "font-size: 16px;padding: 0px;" 
               )
@@ -1467,7 +1467,7 @@ ui <-
                 "Los datos representados en esta gráfica corresponden a
                  las personas sentenciadas en programa de supervisión 
                 electrónica por delitos de violencia doméstica por estado del caso 
-                desde el año 2020 al 2023",
+                desde el año 2020 al 2023.",
                 
                 style = "font-size: 16px;padding: 0px;" 
               )
@@ -1566,9 +1566,9 @@ ui <-
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
-                 las Órdenes de Protección Solicitadas por Violencia Sexual
-                  bajo Ley 148, según Grupo de Edad, Región Judicial y año 
-                  fiscal (2020 y 2021)",
+                 las órdenes de protección solicitadas por violencia sexual
+                  bajo la Ley 148, según grupo de edad, región judicial y año 
+                  fiscal (2020 y 2021).",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -1649,8 +1649,8 @@ ui <-
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
-                  las Órdenes de Protección Ex Parte Emitidas bajo Ley 148
-                  según Región Judicial, Delito Cometido y año fiscal (2020 y 2021)",
+                  las órdenes de protección ex parte emitidas bajo la Ley 148
+                  según región judicial, delito cometido y año fiscal (2020 y 2021).",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -1731,8 +1731,8 @@ ui <-
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
-                  las Órdenes de protección ex parte bajo Ley 148 archivadas
-                  por razón, Región Judicial y año fiscal (2020 y 2021)",
+                  las órdenes de protección ex parte bajo la Ley 148 archivadas
+                  por razón, región judicial y año fiscal (2020 y 2021).",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -1814,9 +1814,9 @@ ui <-
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
-                  las Ordenes de protección denegadas por violencia sexual
-                  bajo Ley 148 por razón de archivo, Región Judicial y año
-                  fiscal (2021 y 2022)",
+                  las órdenes de protección denegadas por violencia sexual
+                  bajo la Ley 148 por razón de archivo, región judicial y año
+                  fiscal (2021 y 2022).",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -1899,8 +1899,8 @@ ui <-
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
-                  las Órdenes de protección emitidas bajo ley 148 por delito
-                  cometido, Región Judicial y año fiscal (2020 y 2021)",
+                  las órdenes de protección emitidas bajo la Ley 148 por delito
+                  cometido, región judicial y año fiscal (2020 y 2021).",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -1981,8 +1981,8 @@ ui <-
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
-                  las Órdenes de Protección Emitidas bajo Ley 148, 
-                  por Sexo, la Parte y año fiscal (2020 y 2021)",
+                  las órdenes de protección emitidas bajo la Ley 148, 
+                  por sexo, la parte y año fiscal (2020 y 2021).",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -2064,9 +2064,9 @@ ui <-
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden al
-                  Movimiento de casos criminales de violencia doméstica en 
+                  movimiento de casos criminales de violencia doméstica en 
                   el tribunal de primera instancia según la ley Núm. 54 
-                  por delito cometido y año fiscal(2019 al 2021)",
+                  por delito cometido y año fiscal(2019 al 2021).",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -2159,7 +2159,7 @@ ui <-
                   "Los datos representados en esta gráfica corresponden a la
                   tendencia del equipo de recolecta de evidencia de los
                   SAFE Kits en casos de violencia sexual por estado de querella 
-                  desde el año 2019 al 2023",
+                  desde el año 2019 al 2023.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
