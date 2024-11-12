@@ -122,7 +122,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a los 
@@ -201,7 +201,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a la cantidad de 
@@ -303,7 +303,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Las cantidades podrían representar conteos duplicados del o 
@@ -409,11 +409,11 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden al
-                    Número de casos radicados por Distrito Fiscal y Artículo 
+                    número de casos radicados por distrito fiscal y Artículo 
                     de la Ley 54 desde el año 2020 a 2023",
                     
                     style = "font-size: 16px;padding: 0px;" 
@@ -460,7 +460,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en este mapa corresponden al
@@ -619,7 +619,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden al
@@ -675,7 +675,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en este mapa corresponden al
@@ -783,11 +783,11 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a la
-                    Cantidad de mujeres desaparecidas y localizadas (adultas y menores)
+                    cantidad de mujeres desaparecidas y localizadas (adultas y menores)
                     desde el año 2020 al 2023",
                     
                     style = "font-size: 16px;padding: 0px;" 
@@ -865,7 +865,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a los
@@ -989,11 +989,11 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
-                    la Tasa de asesinatos de mujeres por violencia doméstica, 
+                    la tasa de asesinatos de mujeres por violencia doméstica, 
                     desde 1990 a 2021 (Tasa x100,000 mujeres)",
                     
                     style = "font-size: 16px;padding: 0px;" 
@@ -1063,11 +1063,11 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
-                    la Población atendida mediante el programa CRIAS según 
+                    la población atendida mediante el programa CRIAS según 
                     razón para consulta",
                     
                     style = "font-size: 16px;padding: 0px;" 
@@ -1137,7 +1137,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
@@ -1211,7 +1211,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
@@ -1244,7 +1244,7 @@ ui <-
                     style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar el género de las victimas
                     createDropdownCheckbox(
-                      label = HTML("Seleccione <br>el tipo de servicio:"),
+                      label = HTML("Seleccione <br>el Tipo de Servicio:"),
                       choices = opmServiciosMes$Servicio,
                       selected = opmServiciosMes$Servicio,
                       id = "opm_opmServiciosMes_tipo"
@@ -1285,12 +1285,12 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
                     la Población atendida, servicios ofrecidos y seguimientos
-                    mediante el programa CRIAS",
+                    de casos mediante el programa CRIAS",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1385,11 +1385,11 @@ ui <-
               class = "card",
               style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
               h4(
-                strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
               ),
               p(
                 "Los datos representados en esta gráfica corresponden a
-                 los Casos en supervisión de ley 54 en programas alternos
+                 los casos en supervisión de ley 54 en programas alternos
                 al confinamiento (por estado de investigación): Programas de Comunidad
                 desde el año 2021 al 2023",
                 
@@ -1420,7 +1420,7 @@ ui <-
                 style = "text-align: center; display: inline-block;", 
                 # botón para seleccionar el tipo de investigación
                 createDropdownCheckbox(
-                  label = "Seleccione el estado de Caso:",
+                  label = "Seleccione el estado del Caso:",
                   choices = dcrSentenciadas$Estado,
                   selected = dcrSentenciadas$Estado,
                   id = "dcr_dcrSentenciadas_tipo"
@@ -1461,11 +1461,11 @@ ui <-
               class = "card",
               style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
               h4(
-                strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
               ),
               p(
                 "Los datos representados en esta gráfica corresponden a
-                 las Personas sentenciadas en programa de supervisión 
+                 las personas sentenciadas en programa de supervisión 
                 electrónica por delitos de violencia doméstica por estado del caso 
                 desde el año 2020 al 2023",
                 
@@ -1514,7 +1514,7 @@ ui <-
                   style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar el grupo de edad
                   createDropdownCheckbox(
-                    label = HTML("Seleccione<br> grupo(s) de edad:"),
+                    label = HTML("Seleccione<br> Grupo(s) de Edad:"),
                     choices = OP_148_SoliGrupEdad$Edad,
                     selected = OP_148_SoliGrupEdad$Edad,
                     id = "trib_OP_148_SoliGrupEdad_Edad"
@@ -1562,7 +1562,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  strong("Última actualización: 14 de octubre de 2024", style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
@@ -1597,7 +1597,7 @@ ui <-
                   style = "text-align: center; display: inline-block;",
                   # botón para seleccionar el delito
                   createDropdownCheckbox(
-                    label = HTML("Seleccione <br> Delito(s) cometido:"),
+                    label = HTML("Seleccione <br> Delito(s) Cometido:"),
                     choices = OP_Ley148_ex_parteEmitidas$Delito,
                     selected = OP_Ley148_ex_parteEmitidas$Delito,
                     id = "trib_OP_Ley148_ex_parteEmitidas_Delito"
@@ -1645,7 +1645,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  strong("Última actualización: 24 de noviembre de 2023", style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
@@ -1727,7 +1727,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  strong("Última actualización: 14 de octubre de 2024", style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
@@ -1761,7 +1761,7 @@ ui <-
                   style = "text-align: center; display: inline-block;", 
                   # botón para seleccionar la razón de archivado
                   createDropdownCheckbox(
-                    label = "Seleccione razón(s):",
+                    label = "Seleccione Razón(s):",
                     choices = OP_LEY148Denegadas$Razón,
                     selected = OP_LEY148Denegadas$Razón,
                     id = "trib_OP_LEY148Denegadas_Razón"
@@ -1769,7 +1769,7 @@ ui <-
                   customSeparator(),
                   # botón para seleccionar la región fiscal
                   createDropdownCheckbox(
-                    label = "Seleccione región judicial:",
+                    label = "Seleccione Región Judicial:",
                     choices = OP_LEY148Denegadas$Región,
                     selected = OP_LEY148Denegadas$Región,
                     id = "trib_OP_LEY148Denegadas_Región"
@@ -1810,7 +1810,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  strong("Última actualización: 14 de octubre de 2024", style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
@@ -1895,7 +1895,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  strong("Última actualización: 14 de octubre de 2024", style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
@@ -1977,7 +1977,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  strong("Última actualización: 14 de octubre de 2024", style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
@@ -2060,7 +2060,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  strong("Última actualización: 14 de octubre de 2024", style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden al
@@ -2153,11 +2153,11 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Ultima actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a la
-                  Tendencia anual del equipo de recolecta de evidencia de 
+                  tendencia del equipo de recolecta de evidencia de los
                   SAFE Kits en casos de violencia sexual por estado de querella 
                   desde el año 2019 al 2023",
                   
