@@ -1306,7 +1306,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot(opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
-                         title = "Atención, Servicios y Seguimiento \nmediante el Programa CRIAS",
+                         title = "Atención, Servicios y Seguimiento de casos \nmediante el Programa CRIAS",
                          xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Tipo de Servicio",
                          colorFill = opmServiciosMes_fill_tipo,
                          emptyMessage = "Seleccione Tipo de servicio y Año(s) a visualizar")
@@ -1317,7 +1317,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
-                                                 title = "Atención, Servicios y Seguimiento \nmediante el Programa CRIAS",
+                                                 title = "Atención, Servicios y Seguimiento de casos \nmediante el Programa CRIAS",
                                                  xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", message)
     ggplotly(empty_plot)
   })

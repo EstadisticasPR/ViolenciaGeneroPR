@@ -1,6 +1,85 @@
 cat("Loading helper functions from utils.R...\n")
 
 #### Helper Functions: Global ####
+# cleanSheet_OP_148_SoliGrupEdad <- function(data, sheet_name, new_names) {
+#   data %>%
+#     rename_at(vars(2:9), ~ new_names) %>%       # Renombra las columnas de la 2 a la 9
+#     pivot_longer(                                # Convierte las columnas a formato largo
+#       !Región, 
+#       names_to = "Edad", 
+#       values_to = "Solicitudes"
+#     ) %>%
+#     mutate(
+#       Edad = factor(Edad, levels = unique(Edad)), # Convierte Edad en factor con niveles únicos
+#       AñoFiscal = sheet_name                      # Asigna el año fiscal desde sheet_name
+#     ) %>%
+#     filter(
+#       Edad != "Total",                            # Filtra filas con 'Total' en Edad
+#       Región != "Total"                           # Filtra filas con 'Total' en Región
+#     )
+# }
+
+cleanSheet_OP_148_SoliGrupEdad <- function(data, sheet_name, new_names) {
+  data %>%
+    rename_at(vars(2:9), ~ new_names) %>%       # Renombra las columnas de la 2 a la 9
+    pivot_longer(                                # Convierte las columnas a formato largo
+      !Región, 
+      names_to = "Edad", 
+      values_to = "Solicitudes"
+    ) %>%
+    mutate(
+      Edad = as.character(Edad),                # Convierte Edad a carácter para asegurar el filtrado
+      AñoFiscal = sheet_name                     # Asigna el año fiscal desde sheet_name
+    ) %>%
+    filter(
+      Edad != "Total",                           # Filtra filas con 'Total' en Edad
+      Región != "Total"                          # Filtra filas con 'Total' en Región
+    ) %>%
+    mutate(
+      Edad = factor(Edad, levels = unique(Edad)) # Convierte Edad de nuevo a factor con niveles únicos
+    )
+}
+
+
+# cleanSheet_OP_Ley148_ex_parteEmitidas <- function(data, sheet_name, new_names) {
+#   data %>%
+#     rename_at(vars(2:6), ~ new_names) %>%
+#     pivot_longer(
+#       !Región, 
+#       names_to = "Delito", 
+#       values_to = "ÓrdenesEmitidas"
+#     ) %>%
+#     mutate(
+#       AñoFiscal = factor(sheet_name) 
+#     ) %>%
+#     filter(
+#       Delito != "Total"
+#     ) 
+# }
+
+cleanSheet_OP_Ley148_ex_parteEmitidas <- function(data, sheet_name, new_names) {
+  data %>%
+    rename_at(vars(2:6), ~ new_names) %>%       # Renombra las columnas de la 2 a la 6
+    pivot_longer(                                # Convierte las columnas a formato largo
+      !Región, 
+      names_to = "Delito", 
+      values_to = "ÓrdenesEmitidas"
+    ) %>%
+    mutate(
+      Delito = as.character(Delito),             # Convierte Delito a carácter para asegurar el filtrado
+      AñoFiscal = factor(sheet_name)             # Asigna el año fiscal desde sheet_name
+    ) %>%
+    filter(
+      Delito != "Total",                         # Filtra filas con 'Total' en Delito
+      Región != "Total"                          # Filtra filas con 'Total' en Región
+    ) %>%
+    mutate(
+      Delito = factor(Delito, levels = unique(Delito)) # Convierte Delito de nuevo a factor con niveles únicos
+    )
+}
+
+
+
 cleanSheet_tribCasosCrim <- function(data, sheet_name, new_names) {
   data %>%
     rename_at(vars(1:11), ~ new_names) %>%      # Renombra las primeras 11 columnas
