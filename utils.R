@@ -1002,5 +1002,19 @@ setColorFill <- function(df, variable) {
   return(my_fill)
 }
 
-
+# Función para calcular el numero de facetas en una grafica basado
+# en la cantidad de filas.
+plotHeight <- function(plot_height, selected_plots){
+  
+  num_selected_plots = length(selected_plots)
+  num_rows = (num_selected_plots/2)
+  
+  if(num_selected_plots > 4){
+    height = (300*num_rows)
+  } else {
+    height = plot_height
+  }
+  
+  return(height)
+}
 

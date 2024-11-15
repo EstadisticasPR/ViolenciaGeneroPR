@@ -384,8 +384,14 @@ server <- function(input, output, session) {
                          xlab = "Año", ylab = "Cantidad de víctimas",
                          fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito,
                          emptyMessage = "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)")
-      p <- p + facet_wrap(~Distrito)
-      p <- convert_to_plotly(p, tooltip = "text")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, input$checkGroup_just_dfDeli_distrito)
+      p <- p + facet_wrap(~Distrito, ncol = 2) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
       
       return(p)
     }
@@ -613,8 +619,14 @@ server <- function(input, output, session) {
                          xlab = "Año", ylab = "Cantidad de viviendas públicas", fillLab = "Estado de la Vivienda",
                          colorFill = dfAvp_fill_status,
                          emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
-      p <- p + facet_wrap(~Región)
-      p <- convert_to_plotly(p, tooltip = "text")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, input$checkGroup_avp_dfAvp_región)
+      p <- p + facet_wrap(~Región, ncol = 2) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
       
       return(p)
     }
@@ -872,8 +884,14 @@ server <- function(input, output, session) {
                          xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Grupo de Edad",
                          colorFill = vEdad_fill_edad,
                          emptyMessage = "Seleccione Grupo(s) de Edad, Sexo de la Víctima y Año(s) a visualizar",barWidth = 0, xGap = 0)
-      p <- p + facet_wrap(~Sexo)
-      p <- convert_to_plotly(p, tooltip = "text")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      #Altura predeterminada para la grafica.
+      total_height = plotHeight(plot_height, input$checkGroup_poli_vEdad_sexo)
+      p <- p + facet_wrap(~Sexo, ncol = 2)+
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(total_height)
       
       return(p)
     }
@@ -1667,8 +1685,14 @@ server <- function(input, output, session) {
                          xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
                          colorFill = OP_148_SoliGrupEdad_fill_edad,
                          emptyMessage = "Seleccione Grupo(s) de Edad, Región Judicial y Año(s) a visualizar")
-      p <- p + facet_wrap(~Región)
-      p <- convert_to_plotly(p, tooltip = "text")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, input$checkGroup_trib_OP_148_SoliGrupEdad_Región)
+      p <- p + facet_wrap(~Región, ncol = 2) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
       
       return(p)
     }
@@ -1764,8 +1788,14 @@ server <- function(input, output, session) {
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                          colorFill = OP_Ley148_ex_parteEmitidas_fill_delito,
                          emptyMessage = "Seleccione Delito(s), Región Judicial y Año(s) a visualizar")
-      p <- p + facet_wrap(~Región)
-      p <- convert_to_plotly(p, tooltip = "text")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región)
+      p <- p + facet_wrap(~Región, ncol = 2) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
       
       return(p)
     }
@@ -1866,8 +1896,14 @@ server <- function(input, output, session) {
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
                          colorFill = OP_LEY148Archivadas_fill_Razón,
                          emptyMessage = "Seleccione Razón, Distrito Fiscal y Año(s) a visualizar")
-      p <- p + facet_wrap(~Región)
-      p <- convert_to_plotly(p, tooltip = "text")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, input$checkGroup_trib_OP_LEY148Archivadas_Región)
+      p <- p + facet_wrap(~Región, ncol = 2) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
       
       return(p)
     }
@@ -1966,8 +2002,14 @@ server <- function(input, output, session) {
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
                          colorFill = OP_LEY148Denegadas_fill_Razón,
                          emptyMessage = "Seleccione Razón, Región Judicial y Año(s) a visualizar")
-      p <- p + facet_wrap(~Región)
-      p <- convert_to_plotly(p, tooltip = "text")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, input$checkGroup_trib_OP_LEY148Denegadas_Región)
+      p <- p + facet_wrap(~Región, ncol = 2) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
       
       return(p)
     }
@@ -2065,8 +2107,14 @@ server <- function(input, output, session) {
                          xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                          colorFill = OP_LEY148FinalEmitidas_fill_Delito,
                          emptyMessage = "Seleccione Delito(s), Región Judicial y Año(s) a visualizar")
-      p <- p + facet_wrap(~Región)
-      p <- convert_to_plotly(p, tooltip = "text")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, input$checkGroup_trib_OP_LEY148FinalEmitidas_Región)
+      p <- p + facet_wrap(~Región, ncol = 2) +
+      theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+            panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
       
       return(p)
     }
@@ -2164,8 +2212,14 @@ server <- function(input, output, session) {
                          xlab = "Año fiscal", ylab = "Solicitudes de Ordenes de Protección", fillLab = "Parte",
                          colorFill = OP_LEY148Genero_fill_Parte,
                          emptyMessage = "Seleccione Parte(s), Sexo y Año(s) a visualizar")
-      p <- p + facet_wrap(~Sexo)
-      p <- convert_to_plotly(p, tooltip = "text")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, input$checkGroup_trib_OP_LEY148Genero_Sexo)
+      p <- p + facet_wrap(~Sexo, ncol = 2) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
       
       return(p)
     }
@@ -2257,8 +2311,14 @@ server <- function(input, output, session) {
                          xlab = "Año Fiscal", ylab = "Casos", fillLab = "Delito Cometido",
                          colorFill = tribCasosCrim_fill_Delito,
                          emptyMessage = "Seleccione Delito(s), Estado del caso y Año(s) a visualizar")
-      p <- p + facet_wrap(~Casos)
-      p <- convert_to_plotly(p, tooltip = "text")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, input$checkGroup_trib_tribCasosCrim_Casos)
+      p <- p + facet_wrap(~Casos, ncol = 2) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
       
       return(p)
     }

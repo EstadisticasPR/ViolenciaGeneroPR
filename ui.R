@@ -9,6 +9,14 @@ ui <-
   ### El theme (colores) de la app ###
   theme = shinytheme("sandstone"),
   
+  #### HTML ####
+  tags$style(HTML("
+                    #scrollable-plot {
+                    overflow-y: scroll;
+                    height: 500px; 
+                    }
+                  ")),
+  
   #### Encabezado ####
   div(
     tags$div(
@@ -401,7 +409,9 @@ ui <-
             
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("barPlot_just"),
+              fluidRow(
+                column(12, div(plotlyOutput("barPlot_just"), id = "scrollable-plot", height = "auto"))
+                       ),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -611,7 +621,9 @@ ui <-
             
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("barPlot_avp_dfAvp"),
+              fluidRow(
+                column(12, div(plotlyOutput("barPlot_avp_dfAvp"), id = "scrollable-plot", height = "auto"))
+              ),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -1554,7 +1566,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
-            plotlyOutput("barPlot_OP_148_SoliGrupEdad"),
+            fluidRow(
+              column(12, div(plotlyOutput("barPlot_OP_148_SoliGrupEdad"), id = "scrollable-plot", height = "auto"))
+            ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
               style = "padding-bottom: 10px;",
@@ -1637,7 +1651,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
-            plotlyOutput("barPlot_OP_Ley148_ex_parteEmitidas"),
+            fluidRow(
+              column(12, div(plotlyOutput("barPlot_OP_Ley148_ex_parteEmitidas"), id = "scrollable-plot", height = "auto"))
+            ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
               style = "padding-bottom: 10px;",
@@ -1719,7 +1735,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
-            plotlyOutput("barPlot_OP_LEY148Archivadas"),
+            fluidRow(
+              column(12, div(plotlyOutput("barPlot_OP_LEY148Archivadas"), id = "scrollable-plot", height = "auto"))
+            ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
               style = "padding-bottom: 10px;",
@@ -1802,7 +1820,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
-            plotlyOutput("barPlot_OP_LEY148Denegadas"),
+            fluidRow(
+              column(12, div(plotlyOutput("barPlot_OP_LEY148Denegadas"), id = "scrollable-plot", height = "auto"))
+            ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
               style = "padding-bottom: 10px;",
@@ -1887,7 +1907,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
-            plotlyOutput("barPlot_OP_LEY148FinalEmitidas"),
+            fluidRow(
+              column(12, div(plotlyOutput("barPlot_OP_LEY148FinalEmitidas"), id = "scrollable-plot", height = "auto"))
+            ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
               style = "padding-bottom: 10px;",
@@ -1969,7 +1991,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
-            plotlyOutput("barPlot_OP_LEY148Genero"),
+            fluidRow(
+              column(12, div(plotlyOutput("barPlot_OP_LEY148Genero"), id = "scrollable-plot", height = "auto"))
+            ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
               style = "padding-bottom: 10px;",
@@ -2052,7 +2076,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
-            plotlyOutput("barPlot_tribCasosCrim"),
+            fluidRow(
+              column(12, div(plotlyOutput("barPlot_tribCasosCrim"), id = "scrollable-plot", height = "auto"))
+            ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
               style = "padding-bottom: 10px;",
