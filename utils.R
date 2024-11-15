@@ -40,23 +40,6 @@ cleanSheet_OP_148_SoliGrupEdad <- function(data, sheet_name, new_names) {
     )
 }
 
-
-# cleanSheet_OP_Ley148_ex_parteEmitidas <- function(data, sheet_name, new_names) {
-#   data %>%
-#     rename_at(vars(2:6), ~ new_names) %>%
-#     pivot_longer(
-#       !Región, 
-#       names_to = "Delito", 
-#       values_to = "ÓrdenesEmitidas"
-#     ) %>%
-#     mutate(
-#       AñoFiscal = factor(sheet_name) 
-#     ) %>%
-#     filter(
-#       Delito != "Total"
-#     ) 
-# }
-
 cleanSheet_OP_Ley148_ex_parteEmitidas <- function(data, sheet_name, new_names) {
   data %>%
     rename_at(vars(2:6), ~ new_names) %>%       # Renombra las columnas de la 2 a la 6
@@ -79,6 +62,54 @@ cleanSheet_OP_Ley148_ex_parteEmitidas <- function(data, sheet_name, new_names) {
 }
 
 
+cleanSheet_OP_LEY148Denegadas <- function(data, sheet_name, new_names) {
+  data %>%
+    rename_at(vars(3:4), ~ new_names) %>%
+    pivot_longer(
+      !Región, 
+      names_to = "Razón", 
+      values_to = "ÓrdenesDenegadas"
+    ) %>%
+    mutate(
+      AñoFiscal = factor(sheet_name)
+    ) %>%
+    filter(
+      Región != "Total",
+      Razón != "Total"
+    )
+}
+
+cleanSheet_OP_LEY148FinalEmitidas <- function(data, sheet_name, new_names) {
+  data %>%
+    rename_at(vars(2:6), ~ new_names) %>%
+    pivot_longer(
+      !Región, 
+      names_to = "Delito", 
+      values_to = "ÓrdenesEmitidas"
+    ) %>%
+    mutate(
+      AñoFiscal = factor(sheet_name)
+    ) %>%
+    filter(
+      Región != "Total",
+      Delito != "Total"
+    )
+}
+
+cleanSheet_OP_LEY148Genero <- function(data, sheet_name) {
+  data %>%
+    pivot_longer(
+      !Sexo, 
+      names_to = "Parte", 
+      values_to = "Solicitudes"
+    ) %>%
+    mutate(
+      AñoFiscal = factor(sheet_name)
+    ) %>%
+    filter(
+      Sexo != "Total"
+    )
+}
 
 cleanSheet_tribCasosCrim <- function(data, sheet_name, new_names) {
   data %>%
@@ -971,7 +1002,6 @@ setColorFill <- function(df, variable) {
   return(my_fill)
 }
 
-
 # Función para calcular el numero de facetas en una grafica basado
 # en la cantidad de filas.
 plotHeight <- function(plot_height, selected_plots){
@@ -987,5 +1017,4 @@ plotHeight <- function(plot_height, selected_plots){
   
   return(height)
 }
-
 

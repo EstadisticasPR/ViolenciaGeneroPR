@@ -1123,40 +1123,137 @@ OP_LEY148Archivadas <- full_join(
 new_names <- c("No Aplican Disposiciones Ley148", "No Prueban Elementos")
 
 # datos de solicitudes denegadas de órdenes de protección en 2022-2023
-OP_LEY148Denegadas2020_2021 <- read_excel(paste0(trib, "OP_LEY148Denegadas2020_21.xlsx")) %>%
-  rename_at(vars(3:4), ~ new_names) %>%
-  pivot_longer(
-    !Región, 
-    names_to = "Razón", 
-    values_to = "ÓrdenesDenegadas"
-  ) %>%
-  mutate(
-    AñoFiscal = factor("2022-2023")
-  ) %>%
-  filter(
-    Región != "Total",
-    Razón != "Total"
-  )
+# OP_LEY148Denegadas2020_2021 <- read_excel(paste0(trib, "OP_LEY148Denegadas2020_21.xlsx")) %>%
+#   rename_at(vars(3:4), ~ new_names) %>%
+#   pivot_longer(
+#     !Región, 
+#     names_to = "Razón", 
+#     values_to = "ÓrdenesDenegadas"
+#   ) %>%
+#   mutate(
+#     AñoFiscal = factor("2022-2023")
+#   ) %>%
+#   filter(
+#     Región != "Total",
+#     Razón != "Total"
+#   )
+
+sheet_name = "2020-2021"
+OP_LEY148Denegadas2020_21 <- read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"),
+                                                sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148Denegadas(sheet_name, new_names) 
+  # rename_at(vars(3:4), ~ new_names) %>%
+  # pivot_longer(
+  #   !Región, 
+  #   names_to = "Razón", 
+  #   values_to = "ÓrdenesDenegadas"
+  # ) %>%
+  # mutate(
+  #   AñoFiscal = factor("2020-2021")
+  # ) %>%
+  # filter(
+  #   Región != "Total",
+  #   Razón != "Total"
+  # )
 
 # datos de solicitudes denegadas de órdenes de protección en 2021-2022
-OP_LEY148Denegadas2021_22 <- read_excel(paste0(trib, "OP_LEY148Denegadas2021_22.xlsx")) %>%
-  rename_at(vars(3:4), ~ new_names) %>%
-  pivot_longer(
-    !Región, 
-    names_to = "Razón", 
-    values_to = "ÓrdenesDenegadas"
-  ) %>%
-  mutate(
-    AñoFiscal = factor("2021-2022")
-  ) %>%
-  filter(
-    Región != "Total",
-    Razón != "Total"
-  )
+# OP_LEY148Denegadas2021_22 <- read_excel(paste0(trib, "OP_LEY148Denegadas2021_22.xlsx")) %>%
+#   rename_at(vars(3:4), ~ new_names) %>%
+#   pivot_longer(
+#     !Región, 
+#     names_to = "Razón", 
+#     values_to = "ÓrdenesDenegadas"
+#   ) %>%
+#   mutate(
+#     AñoFiscal = factor("2021-2022")
+#   ) %>%
+#   filter(
+#     Región != "Total",
+#     Razón != "Total"
+#   )
+
+sheet_name = "2021-2022"
+OP_LEY148Denegadas2021_22 <- read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"),
+                                          sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148Denegadas(sheet_name, new_names)
+  # rename_at(vars(3:4), ~ new_names) %>%
+  # pivot_longer(
+  #   !Región, 
+  #   names_to = "Razón", 
+  #   values_to = "ÓrdenesDenegadas"
+  # ) %>%
+  # mutate(
+  #   AñoFiscal = factor("2021-2022")
+  # ) %>%
+  # filter(
+  #   Región != "Total",
+  #   Razón != "Total"
+  # )
+
+sheet_name = "2022-2023"
+OP_LEY148Denegadas2022_23 <- read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"),
+                                        sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148Denegadas(sheet_name, new_names) 
+  # rename_at(vars(3:4), ~ new_names) %>%
+  # pivot_longer(
+  #   !Región, 
+  #   names_to = "Razón", 
+  #   values_to = "ÓrdenesDenegadas"
+  # ) %>%
+  # mutate(
+  #   AñoFiscal = factor("2022-2023")
+  # ) %>%
+  # filter(
+  #   Región != "Total",
+  #   Razón != "Total"
+  # )
+
+sheet_name = "2023-2024"
+OP_LEY148Denegadas2023_24 <- read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"),
+                                        sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148Denegadas(sheet_name, new_names) 
+  # rename_at(vars(3:4), ~ new_names) %>%
+  # pivot_longer(
+  #   !Región, 
+  #   names_to = "Razón", 
+  #   values_to = "ÓrdenesDenegadas"
+  # ) %>%
+  # mutate(
+  #   AñoFiscal = factor("2023-2024")
+  # ) %>%
+  # filter(
+  #   Región != "Total",
+  #   Razón != "Total"
+  # )
 
 # dataset joined
-OP_LEY148Denegadas <- full_join(
-  OP_LEY148Denegadas2020_2021, OP_LEY148Denegadas2021_22) %>%
+# OP_LEY148Denegadas <- full_join(
+#   OP_LEY148Denegadas2020_2021, OP_LEY148Denegadas2021_22) %>%
+#   mutate(
+#     Región = factor(Región),
+#     Razón = factor(Razón),
+#     AñoFiscal = case_when(
+#       AñoFiscal == "2020-2021" ~ "2020",
+#       AñoFiscal == "2021-2022" ~ "2021",
+#       AñoFiscal == "2022-2023" ~ "2022",
+#       TRUE ~ as.character(AñoFiscal)
+#     ),
+#     AñoFiscal = factor(AñoFiscal)
+#   ) %>%
+#   replace_na(list(ÓrdenesDenegadas = 0)) %>%
+#   relocate(
+#     AñoFiscal, Razón, Región, ÓrdenesDenegadas
+#   )
+
+
+OP_LEY148Denegadas_list <- list(OP_LEY148Denegadas2020_21,
+                                        OP_LEY148Denegadas2021_22,
+                                        OP_LEY148Denegadas2022_23,
+                                        OP_LEY148Denegadas2023_24)
+
+# Unir todos los data frames en la lista usando full_join
+OP_LEY148Denegadas <- OP_LEY148Denegadas_list %>%
+  reduce(full_join) %>%
   mutate(
     Región = factor(Región),
     Razón = factor(Razón),
@@ -1164,6 +1261,7 @@ OP_LEY148Denegadas <- full_join(
       AñoFiscal == "2020-2021" ~ "2020",
       AñoFiscal == "2021-2022" ~ "2021",
       AñoFiscal == "2022-2023" ~ "2022",
+      AñoFiscal == "2023-2024" ~ "2023",
       TRUE ~ as.character(AñoFiscal)
     ),
     AñoFiscal = factor(AñoFiscal)
@@ -1173,6 +1271,7 @@ OP_LEY148Denegadas <- full_join(
     AñoFiscal, Razón, Región, ÓrdenesDenegadas
   )
 
+
 #### OP_LEY148FinalEmitidas ####
 
 # Órdenes de protección finales emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
@@ -1181,40 +1280,84 @@ OP_LEY148Denegadas <- full_join(
 new_names <- c("Total", "Agresión Sexual", "Acoso Sexual", "Actos Lascivos", "Incesto")
 
 # datos de solicitudes ex parte emitidas de la ley 148 en 2020-2021
-OP_LEY148FinalEmitidas2020_21 <- read_excel(paste0(trib, "OP_LEY148FinalEmitidas2020_21.xlsx")) %>%
-  rename_at(vars(2:6), ~ new_names) %>%
-  pivot_longer(
-    !Región, 
-    names_to = "Delito", 
-    values_to = "ÓrdenesEmitidas"
-  ) %>%
-  mutate(
-    AñoFiscal = factor("2020-2021")
-  ) %>%
-  filter(
-    Región != "Total",
-    Delito != "Total"
-  )
+# OP_LEY148FinalEmitidas2020_21 <- read_excel(paste0(trib, "OP_LEY148FinalEmitidas2020_21.xlsx")) %>%
+#   rename_at(vars(2:6), ~ new_names) %>%
+#   pivot_longer(
+#     !Región, 
+#     names_to = "Delito", 
+#     values_to = "ÓrdenesEmitidas"
+#   ) %>%
+#   mutate(
+#     AñoFiscal = factor("2020-2021")
+#   ) %>%
+#   filter(
+#     Región != "Total",
+#     Delito != "Total"
+#   )
+
+sheet_name = "2020-2021"
+OP_LEY148FinalEmitidas2020_21<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
+                                        sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
 
 # datos de solicitudes ex parte emitidas de la ley 148 en 2021-2022
-OP_LEY148FinalEmitidas2021_22 <- read_excel(paste0(trib, "OP_LEY148FinalEmitidas2021_22.xlsx")) %>%
-  rename_at(vars(2:6), ~ new_names) %>%
-  pivot_longer(
-    !Región, 
-    names_to = "Delito", 
-    values_to = "ÓrdenesEmitidas"
-  ) %>%
-  mutate(
-    AñoFiscal = factor("2021-2022")
-  ) %>%
-  filter(
-    Región != "Total",
-    Delito != "Total"
-  )
+# OP_LEY148FinalEmitidas2021_22 <- read_excel(paste0(trib, "OP_LEY148FinalEmitidas2021_22.xlsx")) %>%
+#   rename_at(vars(2:6), ~ new_names) %>%
+#   pivot_longer(
+#     !Región, 
+#     names_to = "Delito", 
+#     values_to = "ÓrdenesEmitidas"
+#   ) %>%
+#   mutate(
+#     AñoFiscal = factor("2021-2022")
+#   ) %>%
+#   filter(
+#     Región != "Total",
+#     Delito != "Total"
+#   )
+
+sheet_name = "2021-2022"
+OP_LEY148FinalEmitidas2021_22<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
+                                           sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
+
+sheet_name = "2022-2023"
+OP_LEY148FinalEmitidas2022_23<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
+                                           sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
+
+sheet_name = "2023-2024"
+OP_LEY148FinalEmitidas2023_24<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
+                                           sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
 
 # dataset joined
-OP_LEY148FinalEmitidas <- full_join(
-  OP_LEY148FinalEmitidas2020_21, OP_LEY148FinalEmitidas2021_22) %>%
+# OP_LEY148FinalEmitidas <- full_join(
+#   OP_LEY148FinalEmitidas2020_21, OP_LEY148FinalEmitidas2021_22) %>%
+#   mutate(
+#     Región = factor(Región),
+#     Delito = factor(Delito),
+#     AñoFiscal = case_when(
+#       AñoFiscal == "2020-2021" ~ "2020",
+#       AñoFiscal == "2021-2022" ~ "2021",
+#       AñoFiscal == "2022-2023" ~ "2022",
+#       TRUE ~ as.character(AñoFiscal)
+#     ),
+#     AñoFiscal = factor(AñoFiscal)
+#   ) %>%
+#   replace_na(list(ÓrdenesEmitidas = 0)) %>%
+#   relocate(
+#     AñoFiscal, Delito, Región, ÓrdenesEmitidas
+#   ) 
+
+OP_LEY148FinalEmitidas_list <- list(OP_LEY148FinalEmitidas2020_21,
+                                    OP_LEY148FinalEmitidas2021_22,
+                                    OP_LEY148FinalEmitidas2022_23,
+                                    OP_LEY148FinalEmitidas2023_24)
+
+# Unir todos los data frames en la lista usando full_join
+OP_LEY148FinalEmitidas <- OP_LEY148FinalEmitidas_list %>%
+  reduce(full_join) %>%
   mutate(
     Región = factor(Región),
     Delito = factor(Delito),
@@ -1222,6 +1365,7 @@ OP_LEY148FinalEmitidas <- full_join(
       AñoFiscal == "2020-2021" ~ "2020",
       AñoFiscal == "2021-2022" ~ "2021",
       AñoFiscal == "2022-2023" ~ "2022",
+      AñoFiscal == "2023-2024" ~ "2023",
       TRUE ~ as.character(AñoFiscal)
     ),
     AñoFiscal = factor(AñoFiscal)
@@ -1234,34 +1378,82 @@ OP_LEY148FinalEmitidas <- full_join(
 #### OP_LEY148Genero ####
 # Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por sexo de la parte
 
-OP_LEY148Genero2020_21 <- read_excel(paste0(trib, "OP_LEY148Genero2020_21.xlsx")) %>%
-  pivot_longer(
-    !Sexo, 
-    names_to = "Parte", 
-    values_to = "Solicitudes"
-  ) %>%
-  mutate(
-    AñoFiscal = factor("2020-2021")
-  ) %>%
-  filter(
-    Sexo != "Total"
-  )
-OP_LEY148Genero2021_22 <- read_excel(paste0(trib, "OP_LEY148Genero2021_22.xlsx")) %>%
-  pivot_longer(
-    !Sexo, 
-    names_to = "Parte", 
-    values_to = "Solicitudes"
-  ) %>%
-  mutate(
-    AñoFiscal = factor("2021-2022")
-  ) %>%
-  filter(
-    Sexo != "Total"
-  )
+# OP_LEY148Genero2020_21 <- read_excel(paste0(trib, "OP_LEY148Genero2020_21.xlsx")) %>%
+#   pivot_longer(
+#     !Sexo, 
+#     names_to = "Parte", 
+#     values_to = "Solicitudes"
+#   ) %>%
+#   mutate(
+#     AñoFiscal = factor("2020-2021")
+#   ) %>%
+#   filter(
+#     Sexo != "Total"
+#   )
+
+sheet_name = "2020-2021"
+OP_LEY148Genero2020_21<- read_excel(paste0(trib, "OP_LEY148Genero.xlsx"),
+                                           sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148Genero(sheet_name)
+
+
+# OP_LEY148Genero2021_22 <- read_excel(paste0(trib, "OP_LEY148Genero2021_22.xlsx")) %>%
+#   pivot_longer(
+#     !Sexo, 
+#     names_to = "Parte", 
+#     values_to = "Solicitudes"
+#   ) %>%
+#   mutate(
+#     AñoFiscal = factor("2021-2022")
+#   ) %>%
+#   filter(
+#     Sexo != "Total"
+#   )
+
+sheet_name = "2021-2022"
+OP_LEY148Genero2021_22<- read_excel(paste0(trib, "OP_LEY148Genero.xlsx"),
+                                    sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148Genero(sheet_name)
+
+sheet_name = "2022-2023"
+OP_LEY148Genero2022_23<- read_excel(paste0(trib, "OP_LEY148Genero.xlsx"),
+                                    sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148Genero(sheet_name)
+
+sheet_name = "2023-2024"
+OP_LEY148Genero2023_24<- read_excel(paste0(trib, "OP_LEY148Genero.xlsx"),
+                                    sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148Genero(sheet_name)
+
 
 # dataset joined
-OP_LEY148Genero <- full_join(
-  OP_LEY148Genero2020_21, OP_LEY148Genero2021_22) %>%
+# OP_LEY148Genero <- full_join(
+#   OP_LEY148Genero2020_21, OP_LEY148Genero2021_22) %>%
+#   mutate(
+#     Sexo = factor(Sexo),
+#     Parte = factor(Parte),
+#     AñoFiscal = case_when(
+#       AñoFiscal == "2020-2021" ~ "2020",
+#       AñoFiscal == "2021-2022" ~ "2021",
+#       AñoFiscal == "2022-2023" ~ "2022",
+#       TRUE ~ as.character(AñoFiscal)
+#     ),
+#     AñoFiscal = factor(AñoFiscal)
+#   ) %>%
+#   replace_na(list(Solicitudes = 0)) %>%
+#   relocate(
+#     AñoFiscal, Parte, Sexo, Solicitudes
+#   )
+
+
+OP_LEY148Genero_list <- list(OP_LEY148Genero2020_21,
+                             OP_LEY148Genero2021_22,
+                             OP_LEY148Genero2022_23,
+                             OP_LEY148Genero2023_24)
+
+# Unir todos los data frames en la lista usando full_join
+OP_LEY148Genero <- OP_LEY148Genero_list %>%
+  reduce(full_join) %>%
   mutate(
     Sexo = factor(Sexo),
     Parte = factor(Parte),
@@ -1269,6 +1461,7 @@ OP_LEY148Genero <- full_join(
       AñoFiscal == "2020-2021" ~ "2020",
       AñoFiscal == "2021-2022" ~ "2021",
       AñoFiscal == "2022-2023" ~ "2022",
+      AñoFiscal == "2023-2024" ~ "2023",
       TRUE ~ as.character(AñoFiscal)
     ),
     AñoFiscal = factor(AñoFiscal)
