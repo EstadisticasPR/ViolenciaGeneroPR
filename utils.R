@@ -19,6 +19,19 @@ cat("Loading helper functions from utils.R...\n")
 #     )
 # }
 
+cleanSheet_npprDesp <- function(data, sheet_name) {
+  total_column <- paste0("Total Año ", sheet_name)  # Crear el nombre dinámico
+  data %>%
+    mutate(Año = sheet_name) %>%
+    rename(Categoria = Mes, Total = !!sym(total_column)) # Usar el nombre dinámico
+}
+
+cleanSheet_npprVDedad <- function(data, sheet_name) {
+  data %>%
+    mutate(Año = sheet_name)
+}
+
+
 cleanSheet_OP_148_SoliGrupEdad <- function(data, sheet_name, new_names) {
   data %>%
     rename_at(vars(2:9), ~ new_names) %>%       # Renombra las columnas de la 2 a la 9

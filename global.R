@@ -465,21 +465,69 @@ poli <- here::here("data", "Negociado_de_Policia", "/")
 meses <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
 
 # importando data del 2020
-desp2020 <- read_excel(paste0(poli, "npprDesp2020.xlsx")) %>% mutate(Año = "2020") %>% rename(Categoria = Mes,Total = `Total Año 2020`)
+# desp2020 <- read_excel(paste0(poli, "npprDesp2020.xlsx")) %>% 
+#   mutate(Año = "2020") %>% 
+#   rename(Categoria = Mes,Total = `Total Año 2020`)
+
+sheet_name = "2020"
+desp2020 <- read_excel(paste0(poli, "npprDesp.xlsx"),
+                       sheet = sheet_name) %>%
+  cleanSheet_npprDesp(sheet_name)
 
 # importando data del 2021
-desp2021 <- read_excel(paste0(poli, "npprDesp2021.xlsx")) %>% mutate(Año = "2021") %>% rename(Categoria = Mes, Total = `Total Año 2021`)
+# desp2021 <- read_excel(paste0(poli, "npprDesp2021.xlsx")) %>%
+#   mutate(Año = "2021") %>%
+#   rename(Categoria = Mes, Total = `Total Año 2021`)
+
+sheet_name = "2021"
+desp2021 <- read_excel(paste0(poli, "npprDesp.xlsx"),
+                       sheet = sheet_name) %>%
+  cleanSheet_npprDesp(sheet_name)
 
 # importando data del 2022
-desp2022 <- read_excel(paste0(poli, "npprDesp2022.xlsx")) %>% mutate(Año = "2022") %>% rename(Categoria = Mes, Total = `Total Año 2022`)
+# desp2022 <- read_excel(paste0(poli, "npprDesp2022.xlsx")) %>%
+#   mutate(Año = "2022") %>%
+#   rename(Categoria = Mes, Total = `Total Año 2022`)
+
+sheet_name = "2022"
+desp2022 <- read_excel(paste0(poli, "npprDesp.xlsx"),
+                       sheet = sheet_name) %>%
+  cleanSheet_npprDesp(sheet_name)
 
 #No incluyo 2023 porque faltan datos desde abril
-desp2023 <- read_excel("data/Negociado_de_Policia/npprDesp2023.xlsx") %>% mutate(Año = "2023") %>% rename(Categoria = Mes, Total = `Total Año 2023`)
+# desp2023 <- read_excel("data/Negociado_de_Policia/npprDesp2023.xlsx") %>% mutate(Año = "2023") %>% rename(Categoria = Mes, Total = `Total Año 2023`)
+
+sheet_name = "2023"
+desp2023 <- read_excel(paste0(poli, "npprDesp.xlsx"),
+                       sheet = sheet_name) %>%
+  cleanSheet_npprDesp(sheet_name)
 
 # uniendo los datasets de 2020, 2021 y 2022
-despDF <- bind_rows(
-  list(desp2020, desp2021, desp2022, desp2023)
-) %>%
+# despDF <- bind_rows(
+#   list(desp2020, desp2021, desp2022, desp2023)
+# ) %>%
+#   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
+#   filter(!grepl("Total", Meses)) %>%
+#   group_by(Categoria, Año) %>%
+#   summarise(Casos = sum(Casos, na.rm = TRUE)) %>%
+#   ungroup() %>%
+#   mutate(
+#     Año = factor(Año),
+#     Estado = factor(Categoria)
+#   ) %>%
+#   replace_na(list(Casos = 0)) %>%
+#   select(
+#     Año, Estado, Casos
+#   )
+
+despDF_list <- list(desp2020,
+                    desp2021,
+                    desp2022,
+                    desp2023)
+
+# Unir todos los data frames en la lista usando full_join
+despDF <- despDF_list %>%
+  reduce(full_join) %>%
   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
   filter(!grepl("Total", Meses)) %>%
   group_by(Categoria, Año) %>%
@@ -495,13 +543,35 @@ despDF <- bind_rows(
   )
 
 #### vEdad ####
-vEdad2021 <- read_excel(paste0(poli, "npprVDedad2021.xlsx")) %>% 
-  mutate(Año = "2021")
-vEdad2022 <- read_excel(paste0(poli, "npprVDedad2022.xlsx")) %>% 
-  mutate(Año = "2022")
-vEdad2023 <- read_excel(paste0(poli, "npprVDedad2023.xlsx")) %>% 
-  mutate(Año = "2023")
-vEdad <- bind_rows(vEdad2021, vEdad2022, vEdad2023) %>%
+sheet_name = "2021"
+vEdad2021 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
+                       sheet = sheet_name) %>%
+  cleanSheet_npprVDedad(sheet_name)
+
+sheet_name = "2022"
+vEdad2022 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
+                        sheet = sheet_name) %>%
+  cleanSheet_npprVDedad(sheet_name)
+
+sheet_name = "2023"
+vEdad2023 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
+                        sheet = sheet_name) %>%
+  cleanSheet_npprVDedad(sheet_name)
+
+# vEdad2021 <- read_excel(paste0(poli, "npprVDedad2021.xlsx")) %>% 
+#   mutate(Año = "2021")
+# vEdad2022 <- read_excel(paste0(poli, "npprVDedad2022.xlsx")) %>% 
+#   mutate(Año = "2022")
+# vEdad2023 <- read_excel(paste0(poli, "npprVDedad2023.xlsx")) %>% 
+#   mutate(Año = "2023")
+
+vEdad_list <- list(vEdad2021,
+                    vEdad2022,
+                    vEdad2023)
+
+# Unir todos los data frames en la lista usando full_join
+vEdad <- vEdad_list %>%
+  reduce(full_join) %>%
   rename(
     Edad = `Grupos de Edad`,
     `Ambos Sexos` = Total,
