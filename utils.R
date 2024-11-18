@@ -61,6 +61,26 @@ cleanSheet_OP_Ley148_ex_parteEmitidas <- function(data, sheet_name, new_names) {
     )
 }
 
+cleanSheet_OP_LEY148Archivadas <- function(data, sheet_name, new_names) {
+  data %>%
+    rename_at(vars(2:4), ~ new_names) %>%
+    pivot_longer(
+      !Región, 
+      names_to = "Razón", 
+      values_to = "ÓrdenesArchivadas"
+    ) %>%
+    mutate(
+      Región = as.character(Región), 
+      AñoFiscal = factor(sheet_name)
+    ) %>%
+    filter(
+      Razón != "Total",
+      Región != "Total"
+    ) %>%
+    mutate(
+      Región = factor(Región, levels = unique(Región)) # Convierte Región de nuevo a factor con niveles únicos
+    )
+}
 
 cleanSheet_OP_LEY148Denegadas <- function(data, sheet_name, new_names) {
   data %>%
@@ -406,7 +426,7 @@ showDataCheckbox <- function(inputId, label = lowercaseTitle("Mostrar Datos"), v
     tags$style(HTML('
       .custom-checkbox {
         color: white;
-        font-size: 12px; /* Ajustar tamaño de fuente del texto */
+        font-size: 13px; /* Ajustar tamaño de fuente del texto */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -421,7 +441,7 @@ showDataCheckbox <- function(inputId, label = lowercaseTitle("Mostrar Datos"), v
         height: 48px;  /* Mantener el tamaño en hover */
       }
       .custom-checkbox input[type="checkbox"] {
-        padding-top: 10px; /* Ajustar padding superior del checkbox */
+        padding-top: 0px; /* Ajustar padding superior del checkbox */
         margin-top: 0px;
         margin-right: 5px; /* Separar el checkbox del texto */
         width: 18px; /* Ajustar tamaño del checkbox */
@@ -467,7 +487,7 @@ showDataCheckbox <- function(inputId, label = lowercaseTitle("Mostrar Datos"), v
 
 # Función para especificar el tamaño de los titulos de secciones
 sectionTitle <- function(title, font_size = "20px") {
-  HTML(paste("<b style='font-size:", font_size, ";'>", title, "</b>", sep = ""))
+  HTML(paste("<div style='text-align: center; font-size:", font_size, ";'><b>", title, "</b></div>", sep = ""))
 }
 
 # Función para crear separador personalizado
@@ -479,8 +499,12 @@ customSeparator <- function() {
 }
 
 # Función para hacer que los titulos se muestren en letras minúsculas
-lowercaseTitle <- function(title) {
-  HTML(paste0("<span style='text-transform: none; '>", title, "</span>", sep = ""))
+lowercaseTitle <- function(title, font_size = "15px") {
+  HTML(paste0(
+    "<span style='text-transform: none; font-size: ", font_size, ";'>",
+    title,
+    "</span>"
+  ))
 }
 
 # Función para crear sección de autores
@@ -525,6 +549,26 @@ updateCheckboxGroup <- function(session, inputId, input, data) {
   }
 }
 
+create_empty_plot_with_message_forLine <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
+  data_df <- data()
+  ggplot(data_df, aes_string(x = x, y = y)) +
+    geom_blank() +  
+    labs(title = title, x = xlab, y = ylab) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_blank(),
+      axis.ticks = element_blank(),  
+      axis.text.y = element_blank(),
+      axis.title.x = element_text(size = 12, margin = margin(t = 10)), 
+      axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
+      plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+      panel.border = element_rect(colour = "black", fill = NA, size = 1),
+      plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
+    ) +
+    annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 4, hjust = 0.5, vjust = 0.5)
+}
+
+
 # Renderiza un gráfico de lineas utilizando ggplot2 en el UI de Shiny.
 renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, emptyMessage) {
 
@@ -532,23 +576,27 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
 
   if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]])) {
     # Si no hay datos o las variables x/y son nulas, mostrar una gráfica vacía con ejes y un mensaje
-    p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
-      geom_blank() +  
-      labs(title = title, x = xlab, y = ylab) +
-      theme_minimal() +
-      theme(
-        axis.text.x = element_blank(),
-        axis.ticks = element_blank(), 
-        axis.text.y = element_blank(), 
-        axis.title.x = element_text(size = 12, margin = margin(t = 10)),  
-        axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
-        plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
-        panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
-      ) +
-      annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 6, hjust = 0.5, vjust = 0.5)
-
+    p <- create_empty_plot_with_message_forLine(data, x, y, fill, title, xlab, ylab,emptyMessage)
+    
     return(p)
+    # Si no hay datos o las variables x/y son nulas, mostrar una gráfica vacía con ejes y un mensaje
+    # p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
+    #   geom_blank() +  
+    #   labs(title = title, x = xlab, y = ylab) +
+    #   theme_minimal() +
+    #   theme(
+    #     axis.text.x = element_blank(),
+    #     axis.ticks = element_blank(), 
+    #     axis.text.y = element_blank(), 
+    #     axis.title.x = element_text(size = 12, margin = margin(t = 10)),  
+    #     axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
+    #     plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
+    #     panel.border = element_rect(colour = "black", fill = NA, size = 1),
+    #     plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
+    #   ) +
+    #   annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 6, hjust = 0.5, vjust = 0.5)
+    # 
+    # return(p)
 
   } else {
     # Calcular rango del eje de y
@@ -599,26 +647,26 @@ create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, 
       axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
       plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
       panel.border = element_rect(colour = "black", fill = NA, size = 1),
-      plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
+      plot.margin = margin(t = 100, r = 50, b = 100, l = 50)
     ) +
-    annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 6, hjust = 0.5, vjust = 0.5)
+    annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 4, hjust = 0.5, vjust = 0.5)
 }
 
-# Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
+#Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
 renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
                           emptyMessage, barWidth = 1, xGap = 0.1) {
-  
+
   data_df <- data()  # Evaluate the reactive data once
-  
+
   if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]]) || is.null(data_df[[y]]) || is.null(data_df[[fill]])) {
     # If there are no data or x/y variables are null, display an empty plot with axes and a message
     p <- create_empty_plot_with_message(data, x, y, fill, title, xlab, ylab,emptyMessage)
-    
+
     return(p)
   } else {
-    
-    upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2) 
-    
+
+    upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2)
+
     p <- ggplot(data_df, aes_string(x = x, y = y, fill = fill)) +
       geom_bar(stat = "identity",
                position = position_dodge2(width = barWidth, padding = xGap),
@@ -637,14 +685,50 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, c
       theme_minimal() +
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.title = element_text(hjust = 2, size = 13, colour = "black", face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
         panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
+        plot.margin = margin(t = 100, r = 50, b = 100, l = 50)
       )
-    
+
     return(p)
   }
 }
+
+# renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
+#                           emptyMessage, barWidth = 1, xGap = 0.1) {
+#   
+#   data_df <- data()  # Evaluate the reactive data once
+#   
+#   if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]]) || is.null(data_df[[y]]) || is.null(data_df[[fill]])) {
+#     # If there are no data or x/y variables are null, display an empty plot with axes and a message
+#     p <- create_empty_plot_with_message(data, x, y, fill, title, xlab, ylab, emptyMessage)
+#     
+#     return(p)
+#   } else {
+#     
+#     upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2) 
+#     
+#     p <- ggplot(data_df, aes_string(x = x, y = y, fill = fill)) +
+#       geom_bar(stat = "identity",
+#                position = position_dodge2(width = barWidth, padding = xGap),
+#                width = 0.7,
+#                aes(
+#                  text = paste(
+#                    paste0("<b>", ylab, ":</b> ", after_stat(y)), "<br>",
+#                    paste0("<b>", fillLab, ":</b> ", after_stat(fill)), "<br>"
+#                  )
+#                )) +
+#       scale_fill_manual(values = colorFill) +
+#       scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+#                          expand = expansion(mult = c(0, 0.1))) +
+#       coord_cartesian(ylim = c(0, upper_y_limit)) +
+#       labs(title = title, x = xlab, y = ylab, fill = fillLab) +
+#       theme_minimal()  # Usar tema básico sin estilos específicos
+#     
+#     return(p)
+#   }
+# }
+
 
 # Renderiza un gráfico de barras apiladas 
 renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
@@ -685,7 +769,7 @@ renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = f
         axis.text.x = element_text(angle = 45, hjust = 1),
         plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
         panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
+        plot.margin = margin(t = 100, r = 50, b = 100, l = 50)
       )
     
     return(p)
@@ -744,21 +828,150 @@ renderBarPlot_stack2 <- function(data, x, y, fill, title, xlab, ylab, fillLab = 
 }
 
 # Transforma un gráfico ggplot en un gráfico interactivo plotly y configura el tooltip.
-convert_to_plotly <- function(p, tooltip_value) {
-  # Convertir a grafico de plotly
-  p_plotly <- ggplotly(p, tooltip = tooltip_value)
-  
-  p_plotly <- p_plotly %>% layout(
-    legend = list(
-      x = 1.05,  
-      y = 0.5,  
-      xanchor = "left", 
+convert_to_plotly <- function(p, tooltip_value, width= "100%", height= "100%") {
+  # Obtener los títulos de los ejes y el título del gráfico desde el objeto ggplot
+  x_axis_title <- p$labels$x
+  y_axis_title <- p$labels$y
+  plot_title <- p$labels$title
+  legend_title <- p$labels$colour %||% p$labels$fill  # Usar el nombre de la leyenda de 'colour' o 'fill'
+
+  # Extraer los márgenes del objeto ggplot
+  margins <- if (!is.null(p$theme$plot.margin)) {
+    p$theme$plot.margin
+  } else {
+    margin(150, 50, 150, 50)  # Márgenes predeterminados si no están definidos en el ggplot
+  }
+
+  # Convertir márgenes de ggplot a formato compatible con plotly
+  plotly_margins <- list(
+    t = as.numeric(margins[1]),  # Top
+    r = as.numeric(margins[2]),  # Right
+    b = as.numeric(margins[3]),  # Bottom
+    l = as.numeric(margins[4])   # Left
+  )
+
+  # Ajustar los tamaños basados en el tamaño del contenedor
+  title_size <- ifelse(width < 500, 16, ifelse(width < 800, 18, 22))
+  axis_text_size <- ifelse(width < 500, 14, ifelse(width < 800, 16, 18))
+  tick_size <- ifelse(height < 400, 12, 14)
+  legend_font_size <- ifelse(width < 500, 10, 12)  # Ajuste dinámico del tamaño de fuente de la leyenda
+
+  # Definir la posición de la leyenda y tamaño basado en el tamaño del contenedor
+  if (width < 800) {
+    legend_position <- list(
+      x = 0.5,
+      y = -0.3,  # Ajuste dinámico para evitar solapamiento
+      orientation = "h",
+      xanchor = "center",
+      yanchor = "top"
+    )
+  } else {
+    legend_position <- list(
+      x = 1.05,
+      y = 0.5,
+      xanchor = "left",
       yanchor = "middle"
     )
+  }
+
+  # Convertir ggplot en un objeto plotly
+  p_plotly <- ggplotly(p, tooltip = tooltip_value)
+
+  # Ajustar el diseño para que la leyenda se acople dinámicamente
+  p_plotly <- p_plotly %>% layout(
+    autosize = TRUE,
+    title = list(
+      text = plot_title,
+      font = list(size = title_size, family = "Arial", color = "black", weight = "bold")
+    ),
+    legend = list(
+      x = legend_position$x,
+      y = legend_position$y,
+      orientation = legend_position$orientation,
+      xanchor = legend_position$xanchor,
+      yanchor = legend_position$yanchor,
+      font = list(size = legend_font_size, family = "Arial", color = "black"),
+      title = list(
+        text = paste0(legend_title, "\n"),  # Usar `\n` en lugar de `<br>`
+        font = list(size = axis_text_size, family = "Arial", color = "black", weight = "bold")
+      )
+    ),
+    margin = plotly_margins
+    # ,  # Usar los márgenes del ggplot
+    # xaxis = list(
+    #   title = list(text = x_axis_title, font = list(size = axis_text_size, family = "Arial", color = "black", weight = "bold")),
+    #   tickfont = list(size = tick_size, family = "Arial", color = "black")
+    # ),
+    # yaxis = list(
+    #   title = list(text = y_axis_title, font = list(size = axis_text_size, family = "Arial", color = "black", weight = "bold")),
+    #   tickfont = list(size = tick_size, family = "Arial", color = "black")
+    # )
   )
-  
+
+  # Ajustar las opciones de la leyenda en dispositivos pequeños
+  if (width < 800) {
+    p_plotly <- p_plotly %>% layout(
+      legend = list(
+        orientation = "h",
+        font = list(size = legend_font_size, family = "Arial", color = "black"),
+        title = list(
+          text = paste0(legend_title, "\n"),  # Cambiar a `\n` para salto de línea
+          font = list(size = axis_text_size, family = "Arial", color = "black", weight = "bold")
+        ),
+        traceorder = "normal",
+        itemwidth = 50,  # Ajuste del ancho de cada categoría
+        valign = "top"   # Alinear el texto de la leyenda en la parte superior
+      )
+    )
+  }
+
   return(p_plotly)
 }
+# 
+# convert_to_plotly <- function(p, tooltip_value, width = "100%", height = "100%") {
+#   # Obtener los títulos de los ejes y el título del gráfico desde el objeto ggplot
+#   x_axis_title <- p$labels$x
+#   y_axis_title <- p$labels$y
+#   plot_title <- p$labels$title
+#   legend_title <- p$labels$colour %||% p$labels$fill
+#   
+#   # Convertir ggplot en un objeto plotly
+#   p_plotly <- ggplotly(p, tooltip = tooltip_value)
+#   
+#   # Ajustar el diseño
+#   p_plotly <- p_plotly %>% layout(
+#     autosize = TRUE,
+#     title = list(
+#       text = plot_title,
+#       font = list(size = 18, family = "Arial", color = "black", weight = "bold")
+#     ),
+#     legend = list(
+#       x = 1.05,
+#       y = 0.5,
+#       xanchor = "left",
+#       yanchor = "middle",
+#       font = list(size = 12, family = "Arial", color = "black"),
+#       title = list(
+#         text = if (!is.null(legend_title)) paste0(legend_title, "\n") else NULL,
+#         font = list(size = 14, family = "Arial", color = "black", weight = "bold")
+#       )
+#     ),
+#     margin = list(t = 100, r = 50, b = 100, l = 50),
+#     xaxis = list(
+#       title = list(text = x_axis_title, standoff = 10),
+#       tickfont = list(size = 12, family = "Arial", color = "black"),
+#       automargin = TRUE
+#     ),
+#     yaxis = list(
+#       title = list(text = y_axis_title, standoff = 10),
+#       tickfont = list(size = 12, family = "Arial", color = "black"),
+#       automargin = TRUE
+#     )
+#   )
+#   
+#   return(p_plotly)
+# }
+
 
 # Genera un div que muestra una lista de enlaces con las Fuentes
 createFuenteDiv <- function(hyperlinks, fuenteTexts) {

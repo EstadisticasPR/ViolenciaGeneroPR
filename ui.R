@@ -85,7 +85,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center;", 
+                  style = "width: 100%; display: flex; justify-content: center;  margin-bottom: 20px;", 
                   div(
                     style = "text-align: center; display: inline-block;", 
                     createDropdownCheckbox(
@@ -122,7 +122,8 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               #plotlyOutput("linePlot_snmv"),
-              plotlyOutput("barPlot_snmv"),
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              plotlyOutput("barPlot_snmv", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -136,7 +137,7 @@ ui <-
                     "Los datos representados en esta gráfica corresponden a los 
                     homicidios de mujeres por grupo de edad desde el año 2017 al 2021.",
                     
-                    style = "font-size: 16px;padding: 0px;" 
+                    style = "font-size: 16px; padding: 0px;" 
                   )
                 )
               )
@@ -161,7 +162,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center;", 
+                  style = "width: 100%; display: flex; justify-content: center;  margin-bottom: 20px;", 
                   div(
                     style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar tipo de incidente
@@ -201,7 +202,8 @@ ui <-
             
             # Sección principal con los gráficos y datatable
             mainPanel(
-              plotlyOutput("barPlot_snmv_inci"),
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              plotlyOutput("barPlot_snmv_inci", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -215,7 +217,7 @@ ui <-
                     "Los datos representados en esta gráfica corresponden a la cantidad de 
                     incidentes violentos (según su tipo) desde el año 2017 al 2021.",
                     
-                    style = "font-size: 16px;padding: 0px;" 
+                    style = "font-size: 16px; padding: 0px;" 
                   )
                 )
               )
@@ -248,62 +250,64 @@ ui <-
           br(), br(),
           
           # Título del Tab
-          #titlePanel("Cantidad de menores que fueron víctimas de maltrato por sexo y tipo de maltrato"),
-            
+          #titlePanel("Número de casos radicados por Distrito Fiscal y Artículo de la Ley 54"),  
+          
           sidebarLayout(
-              sidebarPanel(
-                style = "display: flex; flex-direction: column; align-items: center;",
-                
-                # # seleccionar valor de la variable
+            sidebarPanel(
+              style = "display: flex; flex-direction: column; align-items: center;",
+              
+              # # seleccionar valor de la variable
+              div(
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                 div(
-                  style = "width: 100%; display: flex; justify-content: center;", 
-                  div(
-                    style = "text-align: center; display: inline-block;", 
-                    # botón para seleccionar tipo de maltrato
-                    createDropdownCheckbox(
-                      label = HTML("Seleccione <br>Tipo(s) de Maltrato:"),
-                      choices = dfMalt$Maltrato,
-                      selected = 1,
-                      id = "fam_dfMalt_tipo"
-                    ),
-                    createDropdownCheckbox(
-                      label = HTML("Seleccione <br> sexo de las víctimas:"),
-                      choices = dfMalt$Sexo,
-                      selected = 1,
-                      id = "fam_dfMalt_sexo"
-                    )
+                  style = "text-align: center; display: inline-block;",  
+                  # botón para seleccionar tipo de maltrato
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br>Tipo(s) de Maltrato:"),
+                    choices = dfMalt$Maltrato,
+                    selected = 1,
+                    id = "fam_dfMalt_tipo"
+                  ),
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br> sexo de las víctimas:"),
+                    choices = dfMalt$Sexo,
+                    selected = 1,
+                    id = "fam_dfMalt_sexo"
                   )
-                ),
-                
-                div(
-                  style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
-                  div(
-                    style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-                    div(
-                      style = "flex: 0.1; display: flex; justify-content: center;",
-                      # botón para seleccionar año
-                      createDropdownCheckbox(
-                        label = "Seleccione Año(s):",
-                        choices = dfMalt$Año,
-                        selected = NULL,
-                        id = "fam_dfMalt_año"
-                      )
-                    ),
-                    showDataCheckbox("showTable_fam")
-                  )
-                ),
-                
-                
-                # Output UI para la tabla de datos
-                uiOutput("dataTableUI_fam")
-                
+                )
               ),
-            
+              
+              div(
+                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                div(
+                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                  div(
+                    style = "flex: 0.1; display: flex; justify-content: center;",
+                    # botón para seleccionar año
+                    createDropdownCheckbox(
+                      label = "Seleccionar Año:",
+                      choices = dfMalt$Año,
+                      selected = NULL,
+                      id = "fam_dfMalt_año"
+                    )
+                  ),
+                  showDataCheckbox("showTable_fam")
+                )
+              ),
+              
+              
+              # Output UI para la tabla de datos
+              uiOutput("dataTableUI_fam")
+              
+            ),
             
             
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("barPlot_fam"),
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              fluidRow(
+                column(12, div(plotlyOutput("barPlot_fam"), id = "scrollable-plot", height = "100%"))
+              ),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -326,10 +330,97 @@ ui <-
                 )
               )
             )
-          ),
-          # tags$span("NOTA IMPORTANTE: Las cantidades podrían representar conteos duplicados del o la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son parte de uno o múltiples referidos. Este conteo es conocido por el Departamento de la Familia como el pareo de menores-reportado. Estos datos están en proceso de revisión por el Instituto de Estadísticas de Puerto Rico. *Nota: Datos parciales y preliminares del año 2022. Están disponibles hasta noviembre de 2022."),
-          # tags$div(style = "padding-bottom: 10px;"),
+          )
         ),
+        
+        
+        # 
+        # 
+        # tabPanel(
+        #   lowercaseTitle("Maltrato de menores por sexo"),
+        #   br(), br(),
+        #   
+        #   # Título del Tab
+        #   #titlePanel("Cantidad de menores que fueron víctimas de maltrato por sexo y tipo de maltrato"),
+        #     
+        #   sidebarLayout(
+        #       sidebarPanel(
+        #         style = "display: flex; flex-direction: column; align-items: center;",
+        #         
+        #         # # seleccionar valor de la variable
+        #         div(
+        #           style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+        #           div(
+        #             style = "text-align: center; display: inline-block;", 
+        #             # botón para seleccionar tipo de maltrato
+        #             createDropdownCheckbox(
+        #               label = HTML("Seleccione <br>Tipo(s) de Maltrato:"),
+        #               choices = dfMalt$Maltrato,
+        #               selected = 1,
+        #               id = "fam_dfMalt_tipo"
+        #             ),
+        #             createDropdownCheckbox(
+        #               label = HTML("Seleccione <br> sexo de las víctimas:"),
+        #               choices = dfMalt$Sexo,
+        #               selected = 1,
+        #               id = "fam_dfMalt_sexo"
+        #             )
+        #           )
+        #         ),
+        #         
+        #         div(
+        #           style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+        #           div(
+        #             style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+        #             div(
+        #               style = "flex: 0.1; display: flex; justify-content: center;",
+        #               # botón para seleccionar año
+        #               createDropdownCheckbox(
+        #                 label = "Seleccione Año(s):",
+        #                 choices = dfMalt$Año,
+        #                 selected = NULL,
+        #                 id = "fam_dfMalt_año"
+        #               )
+        #             ),
+        #             showDataCheckbox("showTable_fam")
+        #           )
+        #         ),
+        #         
+        #         # Output UI para la tabla de datos
+        #         uiOutput("dataTableUI_fam")
+        #         
+        #       ),
+        #     
+        #     # Sección principal con los gráficos
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       plotlyOutput("barPlot_fam", height = "100%"),
+        #       tags$div(style = "padding-bottom: 10px;"),
+        #       tags$div(
+        #         style = "padding-bottom: 10px;",
+        #         div(
+        #           class = "card",
+        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+        #           h4(
+        #             strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+        #           ),
+        #           p(
+        #             "Las cantidades podrían representar conteos duplicados del o 
+        #             la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son 
+        #             parte de uno o múltiples referidos. Este conteo es conocido por el Departamento 
+        #             de la Familia como el pareo de menores-reportado. Estos datos están en proceso de
+        #             revisión por el Instituto de Estadísticas de Puerto Rico. Datos parciales
+        #             y preliminares del año 2022. Están disponibles hasta noviembre de 2022.",
+        #             
+        #             style = "font-size: 16px;padding: 0px;" 
+        #           )
+        #         )
+        #       )
+        #     )
+        #   ),
+        #   # tags$span("NOTA IMPORTANTE: Las cantidades podrían representar conteos duplicados del o la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son parte de uno o múltiples referidos. Este conteo es conocido por el Departamento de la Familia como el pareo de menores-reportado. Estos datos están en proceso de revisión por el Instituto de Estadísticas de Puerto Rico. *Nota: Datos parciales y preliminares del año 2022. Están disponibles hasta noviembre de 2022."),
+        #   # tags$div(style = "padding-bottom: 10px;"),
+        # ),
         
         #### tab de Definiciones y Metadatos ####
         tabPanel(
@@ -363,7 +454,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center;", 
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                   div(
                     style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar tipo de maltrato
@@ -409,8 +500,9 @@ ui <-
             
             # Sección principal con los gráficos
             mainPanel(
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
               fluidRow(
-                column(12, div(plotlyOutput("barPlot_just"), id = "scrollable-plot", height = "auto"))
+                column(12, div(plotlyOutput("barPlot_just"), id = "scrollable-plot", height = "100%"))
                        ),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
@@ -582,7 +674,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center;", 
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                   div(
                     style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar la región
@@ -621,8 +713,9 @@ ui <-
             
             # Sección principal con los gráficos
             mainPanel(
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
               fluidRow(
-                column(12, div(plotlyOutput("barPlot_avp_dfAvp"), id = "scrollable-plot", height = "auto"))
+                column(12, div(plotlyOutput("barPlot_avp_dfAvp"), id = "scrollable-plot", height = "100%"))
               ),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
@@ -748,7 +841,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center;",  
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                   div(
                     style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar la Categoría
@@ -787,7 +880,8 @@ ui <-
             
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("barPlot_poli_despDF"),
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              plotlyOutput("barPlot_poli_despDF", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -824,7 +918,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center;",  
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                   div(
                     style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar edad
@@ -869,7 +963,8 @@ ui <-
               
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("barPlot_poli_vEdad"),
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              plotlyOutput("barPlot_poli_vEdad", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -968,7 +1063,7 @@ ui <-
                 style = "display: flex; flex-direction: column; align-items: center;",
                 
                 div(
-                  style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                  style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px; margin-bottom: 20px;",
                   div(
                     style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                     div(
@@ -993,7 +1088,8 @@ ui <-
             
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("barPlot_opm_opmFemiVD"),
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              plotlyOutput("barPlot_opm_opmFemiVD", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -1030,7 +1126,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center;",  
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                   div(
                     style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar el tipo de violencia
@@ -1067,7 +1163,8 @@ ui <-
               
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("barPlot_opm_opmCasos"),
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              plotlyOutput("barPlot_opm_opmCasos", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -1104,7 +1201,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center;", 
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                   div(
                     style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar el género de las victimas
@@ -1141,7 +1238,8 @@ ui <-
             
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("barPlot_opm_opmVic"),
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              plotlyOutput("barPlot_opm_opmVic", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -1177,7 +1275,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center;",  
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                   div(
                     style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar el medio de orientación
@@ -1215,7 +1313,8 @@ ui <-
             
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("barPlot_opm_opmMedio"),
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              plotlyOutput("barPlot_opm_opmMedio", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -1251,7 +1350,7 @@ ui <-
                 
                 # # seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center;",  
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                   div(
                     style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar el género de las victimas
@@ -1289,7 +1388,8 @@ ui <-
             
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("barPlot_opm_opmServiciosMes"),
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              plotlyOutput("barPlot_opm_opmServiciosMes", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -1344,7 +1444,7 @@ ui <-
             
             # # seleccionar valor de la variable
             div(
-              style = "width: 100%; display: flex; justify-content: center;", 
+              style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
               div(
                 style = "text-align: center; display: inline-block;", 
                 # botón para seleccionar el sexo
@@ -1389,7 +1489,8 @@ ui <-
         
         # Sección principal con los gráficos
         mainPanel(
-          plotlyOutput("barPlot_dcr_dcrCasosInv"),
+          style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+          plotlyOutput("barPlot_dcr_dcrCasosInv", height = "100%"),
           tags$div(style = "padding-bottom: 10px;"),
           tags$div(
             style = "padding-bottom: 10px;",
@@ -1427,7 +1528,7 @@ ui <-
             
             # # seleccionar valor de la variable
             div(
-              style = "width: 100%; display: flex; justify-content: center;",  
+              style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
               div(
                 style = "text-align: center; display: inline-block;", 
                 # botón para seleccionar el tipo de investigación
@@ -1465,7 +1566,8 @@ ui <-
         
         # Sección principal con los gráficos
         mainPanel(
-          plotlyOutput("barPlot_dcr_dcrSentenciadas"),
+          style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+          plotlyOutput("barPlot_dcr_dcrSentenciadas", height = "100%"),
           tags$div(style = "padding-bottom: 10px;"),
           tags$div(
             style = "padding-bottom: 10px;",
@@ -1521,7 +1623,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; ",  
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px; ",  
                 div(
                   style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar el grupo de edad
@@ -1566,8 +1668,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
+            style = "height: calc(100vh - 150px); padding-bottom: 10px;",
             fluidRow(
-              column(12, div(plotlyOutput("barPlot_OP_148_SoliGrupEdad"), id = "scrollable-plot", height = "auto"))
+              column(12, div(plotlyOutput("barPlot_OP_148_SoliGrupEdad"), id = "scrollable-plot", height = "100%"))
             ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
@@ -1606,7 +1709,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center;", 
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                 div(
                   style = "text-align: center; display: inline-block;",
                   # botón para seleccionar el delito
@@ -1651,8 +1754,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
+            style = "height: calc(100vh - 150px); padding-bottom: 10px;",
             fluidRow(
-              column(12, div(plotlyOutput("barPlot_OP_Ley148_ex_parteEmitidas"), id = "scrollable-plot", height = "auto"))
+              column(12, div(plotlyOutput("barPlot_OP_Ley148_ex_parteEmitidas"), id = "scrollable-plot", height = "100%"))
             ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
@@ -1690,7 +1794,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center;",  
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                 div(
                   style = "text-align: center; display: inline-block;", 
                   # botón para seleccionar la razón de archivado
@@ -1735,8 +1839,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
+            style = "height: calc(100vh - 150px); padding-bottom: 10px;",
             fluidRow(
-              column(12, div(plotlyOutput("barPlot_OP_LEY148Archivadas"), id = "scrollable-plot", height = "auto"))
+              column(12, div(plotlyOutput("barPlot_OP_LEY148Archivadas"), id = "scrollable-plot", height = "100%"))
             ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
@@ -1774,7 +1879,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center;",  
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                 div(
                   style = "text-align: center; display: inline-block;", 
                   # botón para seleccionar la razón de archivado
@@ -1820,8 +1925,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
+            style = "height: calc(100vh - 150px); padding-bottom: 10px;",
             fluidRow(
-              column(12, div(plotlyOutput("barPlot_OP_LEY148Denegadas"), id = "scrollable-plot", height = "auto"))
+              column(12, div(plotlyOutput("barPlot_OP_LEY148Denegadas"), id = "scrollable-plot", height = "100%"))
             ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
@@ -1860,7 +1966,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center;", 
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                 div(
                   style = "text-align: center; display: inline-block;", 
                   # botón para seleccionar la razón de archivado
@@ -1907,8 +2013,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
+            style = "height: calc(100vh - 150px); padding-bottom: 10px;",
             fluidRow(
-              column(12, div(plotlyOutput("barPlot_OP_LEY148FinalEmitidas"), id = "scrollable-plot", height = "auto"))
+              column(12, div(plotlyOutput("barPlot_OP_LEY148FinalEmitidas"), id = "scrollable-plot", height = "100%"))
             ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
@@ -1946,7 +2053,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center;",  
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                 div(
                   style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar la parte
@@ -1991,8 +2098,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
+            style = "height: calc(100vh - 150px); padding-bottom: 10px;",
             fluidRow(
-              column(12, div(plotlyOutput("barPlot_OP_LEY148Genero"), id = "scrollable-plot", height = "auto"))
+              column(12, div(plotlyOutput("barPlot_OP_LEY148Genero"), id = "scrollable-plot", height = "100%"))
             ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
@@ -2031,7 +2139,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center;", 
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                 div(
                   style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar el Delito
@@ -2076,8 +2184,9 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
+            style = "height: calc(100vh - 150px); padding-bottom: 10px;",
             fluidRow(
-              column(12, div(plotlyOutput("barPlot_tribCasosCrim"), id = "scrollable-plot", height = "auto"))
+              column(12, div(plotlyOutput("barPlot_tribCasosCrim"), id = "scrollable-plot", height = "100%"))
             ),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
@@ -2133,7 +2242,7 @@ ui <-
               
               # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center;",  
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                 div(
                   style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar el estado de querella
@@ -2171,7 +2280,8 @@ ui <-
           
           # Sección principal con los gráficos
           mainPanel(
-            plotlyOutput("barPlot_safekitsDF"),
+            style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+            plotlyOutput("barPlot_safekitsDF", height = "100%"),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
               style = "padding-bottom: 10px;",

@@ -1058,54 +1058,102 @@ OP_Ley148_ex_parteEmitidas <- OP_Ley148_ex_parteEmitidas_list %>%
 new_names <- c("Total", "Solicitud Peticionaria", "Otra Razón")
 
 # datos de solicitudes archivadas de órdenes de protección en 2020-2021
-OP_LEY148Archivadas2020_21 <- read_excel(paste0(trib, "OP_LEY148Archivadas2020_21.xlsx")) %>%
-  rename_at(vars(2:4), ~ new_names) %>%
-  pivot_longer(
-    !Región, 
-    names_to = "Razón", 
-    values_to = "ÓrdenesArchivadas"
-  ) %>%
-  mutate(
-    Región = as.character(Región), 
-    AñoFiscal = factor("2020-2021")
-  ) %>%
-  filter(
-    Razón != "Total",
-    Región != "Total"
-  ) %>%
-  mutate(
-    Región = factor(Región, levels = unique(Región)) # Convierte Región de nuevo a factor con niveles únicos
-  )
+# OP_LEY148Archivadas2020_21 <- read_excel(paste0(trib, "OP_LEY148Archivadas2020_21.xlsx")) %>%
+#   rename_at(vars(2:4), ~ new_names) %>%
+#   pivot_longer(
+#     !Región, 
+#     names_to = "Razón", 
+#     values_to = "ÓrdenesArchivadas"
+#   ) %>%
+#   mutate(
+#     Región = as.character(Región), 
+#     AñoFiscal = factor("2020-2021")
+#   ) %>%
+#   filter(
+#     Razón != "Total",
+#     Región != "Total"
+#   ) %>%
+#   mutate(
+#     Región = factor(Región, levels = unique(Región)) # Convierte Región de nuevo a factor con niveles únicos
+#   )
+
+sheet_name = "2020-2021"
+OP_LEY148Archivadas2020_21 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
+                                        sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
 
 # datos de solicitudes archivadas de órdenes de protección en 2021-2022
-OP_LEY148Archivadas2021_22 <- read_excel(paste0(trib, "OP_LEY148Archivadas2021_22.xlsx")) %>%
-  rename_at(vars(2:4), ~ new_names) %>%
-  pivot_longer(
-    !Región, 
-    names_to = "Razón", 
-    values_to = "ÓrdenesArchivadas"
-  ) %>%
-  mutate(
-    Región = as.character(Región), 
-    AñoFiscal = factor("2021-2022")
-  ) %>%
-  filter(
-    Razón != "Total",
-    Región != "Total"
-  )%>%
-  mutate(
-    Región = factor(Región, levels = unique(Región)) # Convierte Región de nuevo a factor con niveles únicos
-  )
+# OP_LEY148Archivadas2021_22 <- read_excel(paste0(trib, "OP_LEY148Archivadas2021_22.xlsx")) %>%
+#   rename_at(vars(2:4), ~ new_names) %>%
+#   pivot_longer(
+#     !Región, 
+#     names_to = "Razón", 
+#     values_to = "ÓrdenesArchivadas"
+#   ) %>%
+#   mutate(
+#     Región = as.character(Región), 
+#     AñoFiscal = factor("2021-2022")
+#   ) %>%
+#   filter(
+#     Razón != "Total",
+#     Región != "Total"
+#   )%>%
+#   mutate(
+#     Región = factor(Región, levels = unique(Región)) # Convierte Región de nuevo a factor con niveles únicos
+#   )
+
+sheet_name = "2021-2022"
+OP_LEY148Archivadas2021_22 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
+                                         sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
+
+sheet_name = "2022-2023"
+OP_LEY148Archivadas2022_23 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
+                                         sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
+
+sheet_name = "2023-2024"
+OP_LEY148Archivadas2023_24 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
+                                         sheet = sheet_name) %>%
+  cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
 
 # datos de solicitudes archivadas de órdenes de protección en juntadas
-OP_LEY148Archivadas <- full_join(
-  OP_LEY148Archivadas2020_21, OP_LEY148Archivadas2021_22) %>%
+# OP_LEY148Archivadas <- full_join(
+#   OP_LEY148Archivadas2020_21, OP_LEY148Archivadas2021_22) %>%
+#   mutate(
+#     Razón = factor(Razón, 
+#                    levels = c("Solicitud Peticionaria", "Otra Razón")),
+#     Región = factor(Región),
+#     AñoFiscal = ifelse(AñoFiscal == "2020-2021", "2020", 
+#                        ifelse(AñoFiscal == "2021-2022", "2021", AñoFiscal)),
+#     AñoFiscal = factor(AñoFiscal)
+#   ) %>%
+#   filter(
+#     Región != "Total"
+#   ) %>%
+#   replace_na(list(ÓrdenesArchivadas = 0)) %>%
+#   relocate(
+#     AñoFiscal, Razón, Región, ÓrdenesArchivadas
+#   )
+
+OP_LEY148Archivadas_list <- list(OP_LEY148Archivadas2020_21,
+                                 OP_LEY148Archivadas2021_22,
+                                 OP_LEY148Archivadas2022_23,
+                                 OP_LEY148Archivadas2023_24)
+
+OP_LEY148Archivadas <- OP_LEY148Archivadas_list %>%
+  reduce(full_join) %>%
   mutate(
     Razón = factor(Razón, 
                    levels = c("Solicitud Peticionaria", "Otra Razón")),
     Región = factor(Región),
-    AñoFiscal = ifelse(AñoFiscal == "2020-2021", "2020", 
-                       ifelse(AñoFiscal == "2021-2022", "2021", AñoFiscal)),
+    AñoFiscal = case_when(
+      AñoFiscal == "2020-2021" ~ "2020",
+      AñoFiscal == "2021-2022" ~ "2021",
+      AñoFiscal == "2022-2023" ~ "2022",
+      AñoFiscal == "2023-2024" ~ "2023",
+      TRUE ~ as.character(AñoFiscal)
+    ),
     AñoFiscal = factor(AñoFiscal)
   ) %>%
   filter(
@@ -1115,6 +1163,7 @@ OP_LEY148Archivadas <- full_join(
   relocate(
     AñoFiscal, Razón, Región, ÓrdenesArchivadas
   )
+
 
 #### OP_LEY148Denegadas ####
 
