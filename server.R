@@ -56,7 +56,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(homiEdad_filt, "Año", "Casos", "Edad",
                                                  paste("Homicidios de Mujeres por grupo de Edad y Año", input$yearInput_snmv),
                                                  "Año", "Cantidad de víctimas", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   homiEdad_filt_rename <- reactive({
@@ -144,7 +144,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(inci_filt, x = "Año", y = "Casos", fill = "Incidente",
                                                  paste("Incidentes Violentos ocurridos para ambos Sexos"),
                                                  xlab = "Año", ylab = "Número de casos", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
 
   inci_filt_rename <- reactive({
@@ -243,6 +243,35 @@ server <- function(input, output, session) {
   dfMalt_fill_Maltrato <- setColorFill(dfMalt, "Maltrato")
   
   # Crear gráfico de barras
+  # output$barPlot_fam <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_año <- length(input$checkGroup_fam_dfMalt_año) > 0
+  #   has_tipo <- length(input$checkGroup_fam_dfMalt_tipo) > 0
+  #   has_sexo <- length(input$checkGroup_fam_dfMalt_sexo) > 0
+  #   
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_año || !has_tipo || !has_sexo) {
+  #     message <- "Seleccione Tipo(s) de maltrato, Año(s) y Sexo de la víctima"
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- renderBarPlot(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
+  #                        title = "Casos Anuales de maltrato infantil por Sexo y Tipo",
+  #                        xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de Maltrato", 
+  #                        colorFill = dfMalt_fill_Maltrato, 
+  #                        emptyMessage = "Seleccione Tipo(s) de maltrato, Año(s) y Sexo de la víctima")
+  #     p <- p + facet_wrap(~Sexo, scales = "fixed")
+  #     p <- convert_to_plotly(p, tooltip = "text")
+  #     
+  #     return(p)
+  #   }
+  #   
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
+  #                        title = "Casos Anuales de maltrato infantil por Sexo y Tipo",
+  #                        xlab = "Año", ylab = "Número de casos", message)
+  #   convert_to_plotly(empty_plot, tooltip = "text")
+  # })
+  
   output$barPlot_fam <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
     has_año <- length(input$checkGroup_fam_dfMalt_año) > 0
@@ -251,32 +280,41 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_año || !has_tipo || !has_sexo) {
-      message <- "Seleccione Tipo(s) de maltrato, Año(s) y Sexo de la víctima"
+      message <- "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
+      p <- renderBarPlot(dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
                          title = "Casos Anuales de maltrato infantil por Sexo y Tipo",
                          xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de Maltrato", 
                          colorFill = dfMalt_fill_Maltrato, 
                          emptyMessage = "Seleccione Tipo(s) de maltrato, Año(s) y Sexo de la víctima")
-      p <- p + facet_wrap(~Sexo, scales = "fixed")
-      p <- convert_to_plotly(p, tooltip = "text")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, input$checkGroup_fam_dfMalt_sexo)
+      p <- p + facet_wrap(~Sexo, ncol = 3) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
       
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
+
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                         title = "Casos Anuales de maltrato infantil por Sexo y Tipo",
-                         xlab = "Año", ylab = "Número de casos", message)
-    ggplotly(empty_plot)
+                                                 title = "Casos Anuales de maltrato infantil por Sexo y Tipo",
+                                                 xlab = "Año", ylab = "Número de casos", message)
+    #ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
+  
+  
   
   dfMalt_filt_rename <- reactive({
     dfMalt_filt() %>% 
       rename(`Tipo de Maltrato` = Maltrato)  
   })
-  
   
   # Data Table del DeptFam
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
@@ -400,7 +438,8 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(data = dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
                                                  title = "Casos de delitos por Distrito Fiscal según Artículo de la Ley 54",
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
-    ggplotly(empty_plot)
+    #ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   # Data table del DeptJust
@@ -635,7 +674,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(data = dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
                                                  paste("Viviendas Públicas Solicitadas y Asignadas \nAnualmente por Violencia Doméstica según Región"),
                                                  xlab = "Año", ylab = "Cantidad de viviendas públicas", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   
@@ -799,7 +838,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(data = despDF_filt, x = "Año", y = "Casos", fill = "Estado",
                                                  paste("Mujeres Desaparecidas: \nLocalizadas y por Localizar"),
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   despDF_filt_rename <- reactive({
@@ -900,7 +939,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(data = vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
                                                  paste("Incidencia de Violencia Doméstica \npor Edad de la Víctima"),
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
 
 
@@ -1083,7 +1122,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(data = opmCasos_filt, x = "Año", y = "Cantidad", fill = "Razón",
                                                  paste("Población Atendida por el Programa CRIAS: \nRazón de Consulta"),
                                                  xlab = "Año", ylab = "Cantidad de Personas Atendidas", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   opmCasos_filt_rename <- reactive({
@@ -1169,7 +1208,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(data = opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
                                                  paste("Identidad de Género de Víctimas asistidas \npor el Programa CRIAS"),
                                                  xlab = "Año", ylab = "Cantidad de Víctimas", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   
@@ -1250,7 +1289,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(data = opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
                                                  title = "Orientaciones brindadas por el Programa CRIAS",
                                                  xlab = "Año", ylab = "Cantidad de Personas Orientadas", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   opmMedio_filt_rename <- reactive({
@@ -1337,7 +1376,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(data = opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
                                                  title = "Atención, Servicios y Seguimiento de casos \nmediante el Programa CRIAS",
                                                  xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
 
   opmServiciosMes_filt_rename <- reactive({
@@ -1470,7 +1509,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(data = dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
                                                  title = "Casos en Supervisión de Ley 54: \nProgramas Alternativos al Confinamiento",
                                                  xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
 
@@ -1578,7 +1617,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(data = dcrSentenciadas_filt, x = "Fecha", y = "Cantidad", fill = "Estado",
                                                  title = "Sentenciados por Violencia Doméstica bajo \nSupervisión Electrónica",
                                                  xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   dcrSentenciadas_filt_rename <- reactive({
@@ -1701,7 +1740,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(data = OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
                                                  title = "Solicitudes de Órdenes de Protección \nbajo Ley 148, según Región Judicial y Edad",
                                                  xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   OP_148_SoliGrupEdad_filt_rename <- reactive({
@@ -1804,7 +1843,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
                                                  title = "Órdenes de Protección Ex Parte emitidas \nbajo Ley 148, según Región Judicial y delito cometido",
                                                  xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   OP_Ley148_ex_parteEmitidas_filt_rename <- reactive({
@@ -1912,7 +1951,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
                                                  title = "Órdenes de Protección Ex Parte \nArchivadas bajo Ley 148 según Región Judicial",
                                                  xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
 
   
@@ -2018,7 +2057,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
                                                  title = "Órdenes de protección denegadas bajo \nLey 148 por Razón de Archivo según Región Judicial",
                                                  xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   OP_LEY148Denegadas_filt_rename <- reactive({
@@ -2123,7 +2162,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
                                                  title = "Órdenes de protección emitidas bajo Ley 148, \nsegún Región Judicial y Tipo de Delito",
                                                  xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
 
   OP_LEY148FinalEmitidas_filt_rename <- reactive({
@@ -2217,8 +2256,10 @@ server <- function(input, output, session) {
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
       total_height = plotHeight(plot_height, input$checkGroup_trib_OP_LEY148Genero_Sexo)
       p <- p + facet_wrap(~Sexo, ncol = 2) +
-        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
+        theme(panel.spacing.x = unit(1, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1, "lines"),#Espacio entre las facetas en y.
+              #plot.margin = margin(t = 150, r = 10, b = 150, l = 10)
+              ) 
       p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
       
       return(p)
@@ -2228,7 +2269,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte",
                                                  title = "Órdenes de Protección Emitidas bajo Ley 148, \nsegún la Parte",
                                                  xlab = "Año fiscal", ylab = "Solicitudes de Ordenes de Protección", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   OP_LEY148Genero_filt_rename <- reactive({
@@ -2327,7 +2368,7 @@ server <- function(input, output, session) {
     empty_plot <- create_empty_plot_with_message(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
                                                  title = "Movimiento Anual de Casos de Violencia \nDoméstica en el Tribunal según Ley 54",
                                                  xlab = "Año Fiscal", ylab = "Casos", message)
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   
@@ -2478,7 +2519,7 @@ server <- function(input, output, session) {
                                                  title = HTML("Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella"), 
                                                  xlab = "Año", ylab = "Total de Kits Distribuidos", message)
     
-    ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
 
   
