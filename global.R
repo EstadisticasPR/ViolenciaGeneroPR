@@ -502,6 +502,11 @@ desp2023 <- read_excel(paste0(poli, "npprDesp.xlsx"),
                        sheet = sheet_name) %>%
   cleanSheet_npprDesp(sheet_name)
 
+sheet_name = "2024"
+desp2024 <- read_excel(paste0(poli, "npprDesp.xlsx"),
+                       sheet = sheet_name) %>%
+  cleanSheet_npprDesp(sheet_name)
+
 # uniendo los datasets de 2020, 2021 y 2022
 # despDF <- bind_rows(
 #   list(desp2020, desp2021, desp2022, desp2023)
@@ -523,7 +528,8 @@ desp2023 <- read_excel(paste0(poli, "npprDesp.xlsx"),
 despDF_list <- list(desp2020,
                     desp2021,
                     desp2022,
-                    desp2023)
+                    desp2023,
+                    desp2024)
 
 # Unir todos los data frames en la lista usando full_join
 despDF <- despDF_list %>%
