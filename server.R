@@ -209,7 +209,7 @@ server <- function(input, output, session) {
   
   # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_snmv <- renderDT({
-    renderDataTable_Definitions(definitions_df_snmv)
+    renderDataTable_Definitions(definitions_df_snmv, "Sistema de Notificación de Muertes Violentas")
   })
   
   
@@ -290,13 +290,14 @@ server <- function(input, output, session) {
                          emptyMessage = "Seleccione Tipo(s) de maltrato, Año(s) y Sexo de la víctima")
       #Altura predeterminada para la grafica.
       plot_height = 500
+      numPlots = length(input$checkGroup_fam_dfMalt_sexo)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, input$checkGroup_fam_dfMalt_sexo)
+      total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Sexo, ncol = 3) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
+              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
       
-      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
 
       return(p)
     }
@@ -373,7 +374,7 @@ server <- function(input, output, session) {
   
   # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_fam <- renderDT({
-    renderDataTable_Definitions(definitions_df_fam)
+    renderDataTable_Definitions(definitions_df_fam, "Departamento de la Familia")
   })
   
   ########## Server del Departamento de Justicia ##########
@@ -424,12 +425,13 @@ server <- function(input, output, session) {
                          emptyMessage = "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)")
       #Altura predeterminada para la grafica.
       plot_height = 500
+      numPlots = length(input$checkGroup_just_dfDeli_distrito)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, input$checkGroup_just_dfDeli_distrito)
+      total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Distrito, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
+              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
     }
@@ -439,8 +441,13 @@ server <- function(input, output, session) {
                                                  title = "Casos de delitos por Distrito Fiscal según Artículo de la Ley 54",
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     #ggplotly(empty_plot)
-    convert_to_plotly(empty_plot, tooltip = "text")
+    convert_to_plotly(empty_plot, tooltip = "text", TRUE)
   })
+  
+  # #Llamada a funcion para generar la legenda
+  # output$plot_legend <- renderUI({
+  #   generateLegend("Estado de la Vivienda", dfDeli_fill_Delito)
+  # })
   
   # Data table del DeptJust
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
@@ -567,7 +574,7 @@ server <- function(input, output, session) {
   
   # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_just <- renderDT({
-    renderDataTable_Definitions(definitions_df_just)
+    renderDataTable_Definitions(definitions_df_just, "Artículos de la Ley 54")
   })
   
   ########## Server del Departamento del Trabajo y Recursos Humanos ##########
@@ -660,12 +667,13 @@ server <- function(input, output, session) {
                          emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
       #Altura predeterminada para la grafica.
       plot_height = 500
+      numPlots = length(input$checkGroup_avp_dfAvp_región)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, input$checkGroup_avp_dfAvp_región)
+      total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Región, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
+              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
     }
@@ -787,7 +795,7 @@ server <- function(input, output, session) {
   
   # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_avp <- renderDT({
-    renderDataTable_Definitions(definitions_df_avp)
+    renderDataTable_Definitions(definitions_df_avp, "Regiones de la Adminsitración de Vivienda Públicas")
   })
   
   ########## Tab del Negociado de Policia ##########
@@ -925,12 +933,13 @@ server <- function(input, output, session) {
                          emptyMessage = "Seleccione Grupo(s) de Edad, Sexo de la Víctima y Año(s) a visualizar",barWidth = 0, xGap = 0)
       #Altura predeterminada para la grafica.
       plot_height = 500
+      numPlots = length(input$checkGroup_poli_vEdad_sexo)
       #Altura predeterminada para la grafica.
-      total_height = plotHeight(plot_height, input$checkGroup_poli_vEdad_sexo)
+      total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Sexo, ncol = 2)+
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(1, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text") %>% layout(total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(total_height)
       
       return(p)
     }
@@ -1018,7 +1027,7 @@ server <- function(input, output, session) {
   
   # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_poli <- renderDT({
-    renderDataTable_Definitions(definitions_df_poli)
+    renderDataTable_Definitions(definitions_df_poli, "Negociado de Policía")
   })
 
   ########## Tab de la Oficina de la Procuradora de las Mujeres ##########
@@ -1449,7 +1458,7 @@ server <- function(input, output, session) {
   
   # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_opm <- renderDT({
-    renderDataTable_Definitions(definitions_df_opm)
+    renderDataTable_Definitions(definitions_df_opm, "Oficina de la Procuradora de la Mujer")
   })
   
   ########## Tab del Departamento de Correción y Rehabilitación ##########
@@ -1674,7 +1683,7 @@ server <- function(input, output, session) {
   
   # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_dcr <- renderDT({
-    renderDataTable_Definitions(definitions_df_dcr)
+    renderDataTable_Definitions(definitions_df_dcr, "Departamento de Corrección y Rehabilitación")
   })
   
   ########## Tab de la Administración de Tribunales ##########
@@ -1726,12 +1735,13 @@ server <- function(input, output, session) {
                          emptyMessage = "Seleccione Grupo(s) de Edad, Región Judicial y Año(s) a visualizar")
       #Altura predeterminada para la grafica.
       plot_height = 500
+      numPlots = length(input$checkGroup_trib_OP_148_SoliGrupEdad_Región)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, input$checkGroup_trib_OP_148_SoliGrupEdad_Región)
+      total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Región, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
+              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
     }
@@ -1829,12 +1839,13 @@ server <- function(input, output, session) {
                          emptyMessage = "Seleccione Delito(s), Región Judicial y Año(s) a visualizar")
       #Altura predeterminada para la grafica.
       plot_height = 500
+      numPlots = length(input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región)
+      total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Región, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
+              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
     }
@@ -1937,12 +1948,13 @@ server <- function(input, output, session) {
                          emptyMessage = "Seleccione Razón, Distrito Fiscal y Año(s) a visualizar")
       #Altura predeterminada para la grafica.
       plot_height = 500
+      numPlots = length(input$checkGroup_trib_OP_LEY148Archivadas_Región)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, input$checkGroup_trib_OP_LEY148Archivadas_Región)
+      total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Región, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
+              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
     }
@@ -2043,12 +2055,13 @@ server <- function(input, output, session) {
                          emptyMessage = "Seleccione Razón, Región Judicial y Año(s) a visualizar")
       #Altura predeterminada para la grafica.
       plot_height = 500
+      numPlots = length(input$checkGroup_trib_OP_LEY148Denegadas_Región)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, input$checkGroup_trib_OP_LEY148Denegadas_Región)
+      total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Región, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
+              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
     }
@@ -2148,12 +2161,13 @@ server <- function(input, output, session) {
                          emptyMessage = "Seleccione Delito(s), Región Judicial y Año(s) a visualizar")
       #Altura predeterminada para la grafica.
       plot_height = 500
+      numPlots = length(input$checkGroup_trib_OP_LEY148FinalEmitidas_Región)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, input$checkGroup_trib_OP_LEY148FinalEmitidas_Región)
+      total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Región, ncol = 2) +
       theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-            panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
+            panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
     }
@@ -2253,14 +2267,15 @@ server <- function(input, output, session) {
                          emptyMessage = "Seleccione Parte(s), Sexo y Año(s) a visualizar")
       #Altura predeterminada para la grafica.
       plot_height = 500
+      numPlots = length(input$checkGroup_trib_OP_LEY148Genero_Sexo)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, input$checkGroup_trib_OP_LEY148Genero_Sexo)
+      total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Sexo, ncol = 2) +
         theme(panel.spacing.x = unit(1, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(1, "lines"),#Espacio entre las facetas en y.
               #plot.margin = margin(t = 150, r = 10, b = 150, l = 10)
               ) 
-      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
     }
@@ -2354,12 +2369,13 @@ server <- function(input, output, session) {
                          emptyMessage = "Seleccione Delito(s), Estado del caso y Año(s) a visualizar")
       #Altura predeterminada para la grafica.
       plot_height = 500
+      numPlots = length(input$checkGroup_trib_tribCasosCrim_Casos)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, input$checkGroup_trib_tribCasosCrim_Casos)
+      total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Casos, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
     }
@@ -2434,7 +2450,7 @@ server <- function(input, output, session) {
   
   # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_trib <- renderDT({
-    renderDataTable_Definitions(definitions_df_trib)
+    renderDataTable_Definitions(definitions_df_trib, "Administración de Tribunales")
   })
   
   ########## Tab del Centro de Ayuda a Víctimas de Violación ##########
@@ -2593,7 +2609,7 @@ server <- function(input, output, session) {
   
   # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_cavv <- renderDT({
-    renderDataTable_Definitions(definitions_df_cavv)
+    renderDataTable_Definitions(definitions_df_cavv, "Centro de Ayuda a Víctimas de Violación")
   })
   
   #### tab con informacion de Contacto ####

@@ -841,13 +841,13 @@ renderBarPlot_stack2 <- function(data, x, y, fill, title, xlab, ylab, fillLab = 
 }
 
 # Transforma un gráfico ggplot en un gráfico interactivo plotly y configura el tooltip.
-convert_to_plotly <- function(p, tooltip_value, width= "100%", height= "100%") {
+convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, curr_num_plots = 1, width= "100%", height= "100%") {
   # Obtener los títulos de los ejes y el título del gráfico desde el objeto ggplot
   x_axis_title <- p$labels$x
   y_axis_title <- p$labels$y
   plot_title <- p$labels$title
   legend_title <- p$labels$colour %||% p$labels$fill  # Usar el nombre de la leyenda de 'colour' o 'fill'
-
+  
   # Extraer los márgenes del objeto ggplot
   margins <- if (!is.null(p$theme$plot.margin)) {
     p$theme$plot.margin
@@ -870,7 +870,7 @@ convert_to_plotly <- function(p, tooltip_value, width= "100%", height= "100%") {
   legend_font_size <- ifelse(width < 500, 10, 12)  # Ajuste dinámico del tamaño de fuente de la leyenda
 
   # Definir la posición de la leyenda y tamaño basado en el tamaño del contenedor
-  if (width < 800) {
+  if (width < 800 && isFacets == FALSE) {
     legend_position <- list(
       x = 0.5,
       y = -0.3,  # Ajuste dinámico para evitar solapamiento
@@ -878,7 +878,16 @@ convert_to_plotly <- function(p, tooltip_value, width= "100%", height= "100%") {
       xanchor = "center",
       yanchor = "top"
     )
-  } else {
+  } else if (width < 800 && isFacets) {
+    legend_position <- list(
+      x = 0.5,
+      y = caclAxisY(curr_num_plots),
+      #y = -0.03,  # Ajuste dinámico para evitar solapamiento
+      orientation = "h",
+      xanchor = "center",
+      yanchor = "top"
+    ) 
+    } else {
     legend_position <- list(
       x = 1.05,
       y = 0.5,
@@ -1046,7 +1055,8 @@ renderDataTable <- function(filtered_data, title, font_size = "18px") {
         #Para poder utilizar exportOption: modifier la funcion renderDT() debe
         #recibir como argumento server = FALSE. Ya que por defacto siempre es TRUE.
         list(
-                extend = 'copy', 
+                extend = 'copy',
+                text = 'Copiar',
                 title = title,        #El argumento que se recibe como titulo de la data.
                 exportOptions = list(
                 columns = ":visible",     #Solo se va a copiar las columnas visibles de la data.
@@ -1057,7 +1067,7 @@ renderDataTable <- function(filtered_data, title, font_size = "18px") {
           extend = 'collection',
           buttons = list(
             list(
-              extend = 'csv', 
+              extend = 'csv',
               title = title,
               exportOptions = list(
                 columns = ":visible", 
@@ -1098,7 +1108,7 @@ renderDataTable <- function(filtered_data, title, font_size = "18px") {
 }
 
 # Renderizar Tabla de Definiciones con Botones de Exportación
-renderDataTable_Definitions <- function(filtered_data) {
+renderDataTable_Definitions <- function(filtered_data, title) {
   datatable(
     filtered_data,
     extensions = c('Buttons'),
@@ -1115,13 +1125,21 @@ renderDataTable_Definitions <- function(filtered_data) {
       dom = 'Bfrtip', 
       buttons = list(
         list(
+          extend = 'copy',
+          text = 'Copiar',
+          title = title,        #El argumento que se recibe como titulo de la data.
+          exportOptions = list(
+            columns = ":visible",     #Solo se va a copiar las columnas visibles de la data.
+            modifier = list(page = "all") # ALL descarga toda la data seleccionada por el usuario. 
+          )
+        ),
+        list(
           extend = 'collection',
           text = 'Descargar Conceptos',
           buttons = list(
-            list(extend = 'copy', text = 'Copiar'),
-            list(extend = 'csv', text = 'CSV', filename = 'Definiciones_ViolenciaGeneroPR'),
-            list(extend = 'excel', text = 'Excel', filename = 'Definiciones_ViolenciaGeneroPR'),
-            list(extend = 'pdf', text = 'PDF', filename = 'Definiciones_ViolenciaGeneroPR')
+            list(extend = 'csv', text = 'CSV', title = title, filename = 'Definiciones_ViolenciaGeneroPR'),
+            list(extend = 'excel', text = 'Excel', title = title, filename = 'Definiciones_ViolenciaGeneroPR'),
+            list(extend = 'pdf', text = 'PDF', title = title, filename = 'Definiciones_ViolenciaGeneroPR')
           )
         )
       ),
@@ -1232,11 +1250,11 @@ setColorFill <- function(df, variable) {
 # en la cantidad de filas.
 plotHeight <- function(plot_height, selected_plots){
   
-  num_selected_plots = length(selected_plots)
+  num_selected_plots = selected_plots
   num_rows = (num_selected_plots/2)
   
   if(num_selected_plots > 4){
-    height = (300*num_rows)
+    height = (350*num_rows)
   } else {
     height = plot_height
   }
@@ -1244,3 +1262,23 @@ plotHeight <- function(plot_height, selected_plots){
   return(height)
 }
 
+#Funcion para calcular la posicion de la leyenda en Y
+#Esto cada vez que una fila en las graficas de facetas se elimina
+caclAxisY <- function(current_rows){
+  
+  num_rows = ceiling(current_rows/2)
+  
+  if (num_rows == 2 || num_rows == 1) {
+    y = -0.2
+  } else if (num_rows == 3) {
+    y = -0.07
+  } else if (num_rows == 4) {
+    y = -0.05
+  } else if (num_rows == 5) {
+    y = -0.04
+  } else {
+    y = -0.03
+  }
+  
+  return(y)
+}
