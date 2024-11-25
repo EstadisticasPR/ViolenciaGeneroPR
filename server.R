@@ -2429,17 +2429,41 @@ server <- function(input, output, session) {
   
   #### Tab de Definiciones ####
   definitions_trib <- list(
-    list(word = "Año Fiscal", definition = "Período de 12 meses comprendido entre el 1ro de julio de un año y el 30 de junio del año siguiente, y que se usa como el calendario presupuestario de las agencias públicas."),
-    list(word = "Ley 148", definition = "Conocida como la “Ley para la Protección de las Víctimas de Violencia Sexual en Puerto Rico”, según enmendada, establece los mecanismos para la expedición de órdenes de protección para víctimas de los delitos de agresión sexual, actos lascivos, acoso sexual e incesto."),
-    list(word = "Ley 54", definition = "La Ley Núm. 54-1989, conocida como la “Ley para la Prevención e Intervención con la Violencia Doméstica”, según enmendada, establece la violencia doméstica como delito y lo define como el empleo de fuerza física o violencia psicológica, intimidación o persecución en contra de su pareja o expareja. Esto, para causarle daño físico a su persona, a sus bienes o a otra persona o para causarle grave daño emocional"),
-    list(word = "Organización", definition = "Poder Judicial de Puerto Rico, Oficina de Administración de los Tribunales, Directoria de Operaciones, Oficina de Estadísticas."),
-    list(word = "Orden de Protección", definition = "Es un remedio civil expedido por escrito bajo el sello de un Tribunal, en la cual se dictan las medidas a una persona agresora para que ésta se abstenga de incurrir o llevar a cabo determinados actos o conducta constitutivos de violencia doméstica."),
-    list(word = "Órdenes de protección ex parte", definition = "Es una orden emitida por el Tribunal de Primera Instancia luego de escuchar a la parte peticionaria (persona que solicita la orden) y hacer una determinación provisional sobre los hechos."),
+    list(word = "Año Fiscal", definition = "Período de 12 meses comprendido entre el 1ro de julio de un año y el 30
+         de junio del año siguiente, y que se usa como el calendario presupuestario de las agencias públicas. Los datos 
+         para cada año fiscal se identifican con el año en que finaliza el mismo, por ejemplo, para los datos del año 
+         fiscal 2020-2021, los datos son presentados como año fiscal 2021."),
+    list(word = "Ley 148", definition = "Conocida como la “Ley para la Protección de las Víctimas de Violencia Sexual
+         en Puerto Rico”, según enmendada, establece los mecanismos para la expedición de órdenes de protección para
+         víctimas de los delitos de agresión sexual, actos lascivos, acoso sexual e incesto."),
+    list(word = "Ley 54", definition = HTML("La Ley Núm. 54-1989, conocida como la “Ley para la Prevención e Intervención
+         con la Violencia Doméstica”, según enmendada, establece la violencia doméstica como delito y lo define como
+         el empleo de fuerza física o violencia psicológica, intimidación o persecución en contra de su pareja o expareja.
+         Esto, para causarle daño físico a su persona, a sus bienes o a otra persona o para causarle grave daño emocional.
+         Para leer y descargar la Ley 54 en su totalidad, puede utilizar el siguiente enlace: 
+         <a href='https://www.justicia.pr.gov/wp-content/uploads/2021/07/Ley-para-la-Prevenci%C3%B3n-e-Intervenci%C3%B3n-con-la-Violencia-Dom%C3%A9stica.pdf'
+                                            target='_blank' style='color: #884e9f;'>Descargar Ley 54</a>."
+           )
+         ),
+    list(word = "Organización", definition = "Poder Judicial de Puerto Rico, Oficina de Administración de los Tribunales,
+         Directoria de Operaciones, Oficina de Estadísticas."),
+    list(word = "Orden de Protección", definition = "Es un remedio civil expedido por escrito bajo el sello de un Tribunal,
+         en la cual se dictan las medidas a una persona agresora para que ésta se abstenga de incurrir o llevar a cabo 
+         determinados actos o conducta constitutivos de violencia doméstica."),
+    list(word = "Órdenes de protección ex parte", definition = "Es una orden emitida por el Tribunal de Primera Instancia 
+         luego de escuchar a la parte peticionaria (persona que solicita la orden) y hacer una determinación provisional 
+         sobre los hechos."),
     list(word = "Peticionaria", definition = "Persona que solicita una orden de protección."),
-    list(word = "Región Judicial", definition = "Se refiere a la región judicial a la que corresponden los datos informados. El Tribunal de Primera Instancia se distribuye territorialmente en trece regiones judiciales. Cada región judicial está compuesta por un centro judicial y sus respectivas salas superiores y municipales."),
-    list(word = "Sexo", definition = "Indica si la persona que solicita la orden de protección, en el periodo de tiempo de interés en la región judicial especificada, se identifica como hombre o mujer."),
-    list(word = "Solicitudes de órdenes de protección", definition = "Se define como todas las peticiones de orden de protección realizadas en el periodo de tiempo de interés en la región judicial especificada."),
-    list(word = "Violencia Sexual", definition = "Cualquier acto que degrada o daña el cuerpo y/o la sexualidad de la víctima y que por tanto atenta contra su libertad, dignidad e integridad física. Es una expresión de abuso de poder que implica la supremacía masculina sobre la mujer, al denigrar y concebirla como objeto.")
+    list(word = "Región Judicial", definition = "Se refiere a la región judicial a la que corresponden los datos informados.
+         El Tribunal de Primera Instancia se distribuye territorialmente en trece regiones judiciales. Cada región judicial
+         está compuesta por un centro judicial y sus respectivas salas superiores y municipales."),
+    list(word = "Sexo", definition = "Indica si la persona que solicita la orden de protección, en el periodo de tiempo de
+         interés en la región judicial especificada, se identifica como hombre o mujer."),
+    list(word = "Solicitudes de órdenes de protección", definition = "Se define como todas las peticiones de orden de protección
+         realizadas en el periodo de tiempo de interés en la región judicial especificada."),
+    list(word = "Violencia Sexual", definition = "Cualquier acto que degrada o daña el cuerpo y/o la sexualidad de la víctima
+         y que por tanto atenta contra su libertad, dignidad e integridad física. Es una expresión de abuso de poder que implica
+         la supremacía masculina sobre la mujer, al denigrar y concebirla como objeto.")
   )
   
   # Convertir lista a dataframe

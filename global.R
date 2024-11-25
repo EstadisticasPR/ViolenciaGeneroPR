@@ -857,10 +857,10 @@ casosCrimLey148 <- casosCrimLey148_list %>%
   reduce(full_join) %>%
   mutate(
     AñoFiscal = case_when(
-      AñoFiscal == "2020-2021" ~ "2020",
-      AñoFiscal == "2021-2022" ~ "2021",
-      AñoFiscal == "2022-2023" ~ "2022",
-      AñoFiscal == "2023-2024" ~ "2023",
+      AñoFiscal == "2020-2021" ~ "2021",
+      AñoFiscal == "2021-2022" ~ "2022",
+      AñoFiscal == "2022-2023" ~ "2023",
+      AñoFiscal == "2023-2024" ~ "2024",
       TRUE ~ AñoFiscal
     ),
     AñoFiscal = factor(AñoFiscal),
@@ -995,10 +995,10 @@ OP_148_SoliGrupEdad <- OP_148_SoliGrupEdad_list %>%
   reduce(full_join) %>%
   mutate(
     AñoFiscal = case_when(
-      AñoFiscal == "2020-2021" ~ "2020",
-      AñoFiscal == "2021-2022" ~ "2021",
-      AñoFiscal == "2022-2023" ~ "2022",
-      AñoFiscal == "2023-2024" ~ "2023",
+      AñoFiscal == "2020-2021" ~ "2021",
+      AñoFiscal == "2021-2022" ~ "2022",
+      AñoFiscal == "2022-2023" ~ "2023",
+      AñoFiscal == "2023-2024" ~ "2024",
       TRUE ~ AñoFiscal
     ),
     AñoFiscal = factor(AñoFiscal),
@@ -1094,9 +1094,9 @@ OP_Ley148_ex_parteEmitidas <- OP_Ley148_ex_parteEmitidas_list %>%
     Región = factor(Región),
     Delito = factor(Delito),
     AñoFiscal = case_when(
-      AñoFiscal == "2020-2021" ~ "2020",
-      AñoFiscal == "2021-2022" ~ "2021",
-      AñoFiscal == "2022-2023" ~ "2022",
+      AñoFiscal == "2020-2021" ~ "2021",
+      AñoFiscal == "2021-2022" ~ "2022",
+      AñoFiscal == "2022-2023" ~ "2023",
       TRUE ~ AñoFiscal
     ),
     AñoFiscal = factor(AñoFiscal)
@@ -1224,10 +1224,10 @@ OP_LEY148Archivadas <- OP_LEY148Archivadas_list %>%
                    levels = c("Solicitud Peticionaria", "Otra Razón")),
     Región = factor(Región),
     AñoFiscal = case_when(
-      AñoFiscal == "2020-2021" ~ "2020",
-      AñoFiscal == "2021-2022" ~ "2021",
-      AñoFiscal == "2022-2023" ~ "2022",
-      AñoFiscal == "2023-2024" ~ "2023",
+      AñoFiscal == "2020-2021" ~ "2021",
+      AñoFiscal == "2021-2022" ~ "2022",
+      AñoFiscal == "2022-2023" ~ "2023",
+      AñoFiscal == "2023-2024" ~ "2024",
       TRUE ~ as.character(AñoFiscal)
     ),
     AñoFiscal = factor(AñoFiscal)
@@ -1383,10 +1383,10 @@ OP_LEY148Denegadas <- OP_LEY148Denegadas_list %>%
     Región = factor(Región),
     Razón = factor(Razón),
     AñoFiscal = case_when(
-      AñoFiscal == "2020-2021" ~ "2020",
-      AñoFiscal == "2021-2022" ~ "2021",
-      AñoFiscal == "2022-2023" ~ "2022",
-      AñoFiscal == "2023-2024" ~ "2023",
+      AñoFiscal == "2020-2021" ~ "2021",
+      AñoFiscal == "2021-2022" ~ "2022",
+      AñoFiscal == "2022-2023" ~ "2023",
+      AñoFiscal == "2023-2024" ~ "2024",
       TRUE ~ as.character(AñoFiscal)
     ),
     AñoFiscal = factor(AñoFiscal)
@@ -1487,10 +1487,10 @@ OP_LEY148FinalEmitidas <- OP_LEY148FinalEmitidas_list %>%
     Región = factor(Región),
     Delito = factor(Delito),
     AñoFiscal = case_when(
-      AñoFiscal == "2020-2021" ~ "2020",
-      AñoFiscal == "2021-2022" ~ "2021",
-      AñoFiscal == "2022-2023" ~ "2022",
-      AñoFiscal == "2023-2024" ~ "2023",
+      AñoFiscal == "2020-2021" ~ "2021",
+      AñoFiscal == "2021-2022" ~ "2022",
+      AñoFiscal == "2022-2023" ~ "2023",
+      AñoFiscal == "2023-2024" ~ "2024",
       TRUE ~ as.character(AñoFiscal)
     ),
     AñoFiscal = factor(AñoFiscal)
@@ -1583,10 +1583,10 @@ OP_LEY148Genero <- OP_LEY148Genero_list %>%
     Sexo = factor(Sexo),
     Parte = factor(Parte),
     AñoFiscal = case_when(
-      AñoFiscal == "2020-2021" ~ "2020",
-      AñoFiscal == "2021-2022" ~ "2021",
-      AñoFiscal == "2022-2023" ~ "2022",
-      AñoFiscal == "2023-2024" ~ "2023",
+      AñoFiscal == "2020-2021" ~ "2021",
+      AñoFiscal == "2021-2022" ~ "2022",
+      AñoFiscal == "2022-2023" ~ "2023",
+      AñoFiscal == "2023-2024" ~ "2024",
       TRUE ~ as.character(AñoFiscal)
     ),
     AñoFiscal = factor(AñoFiscal)
@@ -1753,11 +1753,11 @@ tribCasosCrim <- full_join(
                                      "Presentados","Traslados","Otros"),
                    ordered = TRUE),
     AñoFiscal = case_when(
-      AñoFiscal == "2019-2020" ~ "2019",
-      AñoFiscal == "2020-2021" ~ "2020",
-      AñoFiscal == "2021-2022" ~ "2021",
-      AñoFiscal == "2022-2023" ~ "2022",
-      AñoFiscal == "2023-2024" ~ "2023",
+      AñoFiscal == "2019-2020" ~ "2020",
+      AñoFiscal == "2020-2021" ~ "2021",
+      AñoFiscal == "2021-2022" ~ "2022",
+      AñoFiscal == "2022-2023" ~ "2023",
+      AñoFiscal == "2023-2024" ~ "2024",
       TRUE ~ as.character(AñoFiscal)
     ),
     AñoFiscal = factor(AñoFiscal)

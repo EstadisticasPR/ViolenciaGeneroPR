@@ -131,11 +131,11 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 15 de noviembre de 2024", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a los 
-                    homicidios de mujeres por grupo de edad desde el año 2017 al 2021.",
+                    homicidios de mujeres por grupo de edad desde el año 2017 al 2022.",
                     
                     style = "font-size: 16px; padding: 0px;" 
                   )
@@ -211,11 +211,11 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 15 de noviembre de 2024", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a la cantidad de 
-                    incidentes violentos (según su tipo) desde el año 2017 al 2021.",
+                    incidentes violentos (según su tipo) desde el año 2017 al 2022.",
                     
                     style = "font-size: 16px; padding: 0px;" 
                   )
@@ -889,12 +889,12 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 20 de septiembre de 2024", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a la
                     cantidad de mujeres desaparecidas y localizadas (adultas y menores)
-                    desde el año 2020 al 2023.",
+                    desde el año 2020 al 2024.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -972,12 +972,12 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong("Última actualización: 20 de septiembre de 2024", style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a los
                     incidentes de violencia doméstica (por edad de la víctima)
-                    desde el año 2021 al 2023.",
+                    desde el año 2021 al 2024.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1685,7 +1685,10 @@ ui <-
                   "Los datos representados en esta gráfica corresponden a
                  las órdenes de protección solicitadas por violencia sexual
                   bajo la Ley 148, según grupo de edad, región judicial y año 
-                  fiscal (2020 y 2021).",
+                  fiscal. Los datos para cada año fiscal se identifican con el
+                  año en que finaliza el mismo, por ejemplo, para los datos
+                  del año fiscal 2020-2021, los datos son presentados como 
+                  año fiscal 2021.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -1770,7 +1773,11 @@ ui <-
                 p(
                   "Los datos representados en esta gráfica corresponden a
                   las órdenes de protección ex parte emitidas bajo la Ley 148
-                  según región judicial, delito cometido y año fiscal (2020 y 2021).",
+                  según región judicial, delito cometido y año fiscal.
+                  Los datos para cada año fiscal se identifican con el
+                  año en que finaliza el mismo, por ejemplo, para los datos
+                  del año fiscal 2020-2021, los datos son presentados como 
+                  año fiscal 2021.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -1855,7 +1862,11 @@ ui <-
                 p(
                   "Los datos representados en esta gráfica corresponden a
                   las órdenes de protección ex parte bajo la Ley 148 archivadas
-                  por razón, región judicial y año fiscal (2020 y 2021).",
+                  por razón, región judicial y año fiscal.
+                  Los datos para cada año fiscal se identifican con el
+                  año en que finaliza el mismo, por ejemplo, para los datos
+                  del año fiscal 2020-2021, los datos son presentados como 
+                  año fiscal 2021.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -1940,9 +1951,12 @@ ui <-
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
-                  las órdenes de protección denegadas por violencia sexual
+                  las órdenes de protección por violencia sexual denegadas
                   bajo la Ley 148 por razón de archivo, región judicial y año
-                  fiscal (2021 y 2022).",
+                  fiscal.Los datos para cada año fiscal se identifican con el
+                  año en que finaliza el mismo, por ejemplo, para los datos
+                  del año fiscal 2020-2021, los datos son presentados como 
+                  año fiscal 2021.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -2029,7 +2043,10 @@ ui <-
                 p(
                   "Los datos representados en esta gráfica corresponden a
                   las órdenes de protección emitidas bajo la Ley 148 por delito
-                  cometido, región judicial y año fiscal (2020 y 2021).",
+                  cometido, región judicial y año fiscal.Los datos para cada 
+                  año fiscal se identifican con el año en que finaliza
+                  el mismo, por ejemplo, para los datos del año fiscal 2020-2021
+                  , los datos son presentados como año fiscal 2021.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -2114,7 +2131,10 @@ ui <-
                 p(
                   "Los datos representados en esta gráfica corresponden a
                   las órdenes de protección emitidas bajo la Ley 148, 
-                  por sexo, la parte y año fiscal (2020 y 2021).",
+                  por sexo, la parte y año fiscal. Los datos para cada año
+                  fiscal se identifican con el año en que finaliza el mismo,
+                  por ejemplo, para los datos del año fiscal 2020-2021, 
+                  los datos son presentados como año fiscal 2021.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -2201,7 +2221,10 @@ ui <-
                   "Los datos representados en esta gráfica corresponden al
                   movimiento de casos criminales de violencia doméstica en 
                   el tribunal de primera instancia según la ley Núm. 54 
-                  por delito cometido y año fiscal(2019 al 2021).",
+                  por delito cometido y año fiscal. Los datos para cada año 
+                  fiscal se identifican con el año en que finaliza el mismo,
+                  por ejemplo, para los datos del año fiscal 2020-2021, 
+                  los datos son presentados como año fiscal 2021.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )

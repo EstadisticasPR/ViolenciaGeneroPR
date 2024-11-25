@@ -949,6 +949,7 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, curr_num_plots
 
   return(p_plotly)
 }
+
 # 
 # convert_to_plotly <- function(p, tooltip_value, width = "100%", height = "100%") {
 #   # Obtener los títulos de los ejes y el título del gráfico desde el objeto ggplot
