@@ -18,6 +18,7 @@ library(rsconnect)
 library(sf)
 library(zoo)
 library(writexl)
+library(scales)
 source("utils.R")
 
 # packages <- c(
@@ -436,14 +437,31 @@ dcrSentenciadas <- read_excel(paste0(dcr, "dcrSentenciadas.xlsx"))  %>%
   ) 
 # Combinar mes y año en una nueva columna
 dcrSentenciadas$fecha <- as.Date(paste0(dcrSentenciadas$year, "-", dcrSentenciadas$mes, "-01"))
+# dcrSentenciadas <- dcrSentenciadas %>%
+#   rename(Año = year) %>%
+#   rename(Mes = mes) %>%
+#   rename(Fecha = fecha) %>%
+#   rename(Estado = tipo) %>%
+#   rename(Cantidad = cantidad) %>%
+#   replace_na(list(Cantidad = 0)) %>%
+#   select(
+#     Mes, Año, Fecha, Estado, Cantidad
+#   )
+
+# Convertir los valores de mes de numérico a nombre del mes en español
+meses_es <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+              "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
+
 dcrSentenciadas <- dcrSentenciadas %>%
+  mutate(mes = factor(mes, levels = 1:12, labels = meses_es)) %>%
   rename(Año = year) %>%
+  rename(Mes = mes) %>%
   rename(Fecha = fecha) %>%
   rename(Estado = tipo) %>%
   rename(Cantidad = cantidad) %>%
   replace_na(list(Cantidad = 0)) %>%
   select(
-    Año, Fecha, Estado, Cantidad
+    Mes, Año, Fecha, Estado, Cantidad
   )
 
 #### Guardar datos procesados de Departamento de Corrección y Rehabilitación ####
