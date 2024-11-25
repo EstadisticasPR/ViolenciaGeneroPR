@@ -1181,7 +1181,8 @@ renderMap <- function(data, fill, title, group, fill_lab = fill,
       axis.ticks = element_blank(),
       panel.grid = element_blank(),
       panel.border = element_rect(colour = "black", fill = NA, size = 1),  
-      plot.margin = margin(60, 10, 10, 10)
+      plot.margin = margin(60, 10, 10, 10),
+      plot.title = element_text(hjust = 0.5)
     )
   print(p)
 }
@@ -1196,7 +1197,8 @@ renderMapGroup <- function(data, fill, title, fill_lab = fill) {
       legend.position = "bottom",
       axis.text = element_blank(),
       axis.ticks = element_blank(),
-      panel.grid = element_blank()
+      panel.grid = element_blank(),
+      plot.title = element_text(hjust = 0.5)
     )
   print(p)
 }
@@ -1222,30 +1224,81 @@ definitionCards <- function(definitions) {
 # Genera una paleta de colores para los niveles de una variable categórica.
 # Esta función toma un dataframe y el nombre de una variable categórica, y devuelve una paleta de colores con un 
 # color único para cada nivel de la variable.
+# setColorFill <- function(df, variable) {
+#   # Obtener los niveles únicos de la variable
+#   unique_levels <- unique(df[[variable]])
+#   
+#   # Elegir una paleta de colores apropiada para el número de niveles únicos
+#   num_colors <- length(unique_levels)
+#   if (num_colors <= 8) {
+#     palette <- brewer.pal(n = num_colors, name = "Set1")
+#   } else {
+#     palette <- rainbow(num_colors)
+#   }
+#   
+#   # Generar una lista de patrones para los colores
+#   patterns <- c("#CC6677", "#E69F00", "#88CCEE", "#B8E186", "#332288", "#D55E00", 
+#                 "#F0E442", "#CC79A7", "#661100", "#888888", "#117733", "#000000")
+#   # Asignar patrones y colores a cada nivel único
+#   my_fill <- rep("black", length(unique_levels))
+#   names(my_fill) <- unique_levels
+#   for (i in 1:length(unique_levels)) {
+#     my_fill[i] <- ifelse(i <= length(patterns), patterns[i], palette[i])
+#   }
+#   
+#   return(my_fill)
+# }
+
+
+
 setColorFill <- function(df, variable) {
   # Obtener los niveles únicos de la variable
   unique_levels <- unique(df[[variable]])
-  
-  # Elegir una paleta de colores apropiada para el número de niveles únicos
   num_colors <- length(unique_levels)
-  if (num_colors <= 8) {
-    palette <- brewer.pal(n = num_colors, name = "Set1")
+  
+  # Colores base de la página web
+  base_colors <- c("#8bc344", "#884e9f", "#2f2e7d", "#e84924", "#d5dc30", "#5eb7df", "#3e3f3a")
+  
+  # Expandir la paleta manteniendo armonía con los colores base
+  if (num_colors > length(base_colors)) {
+    extended_palette <- colorRampPalette(base_colors)(num_colors)
   } else {
-    palette <- rainbow(num_colors)
+    extended_palette <- base_colors[1:num_colors]
   }
   
-  # Generar una lista de patrones para los colores
-  patterns <- c("#CC6677", "#E69F00", "#88CCEE", "#B8E186", "#332288", "#D55E00", 
-                "#F0E442", "#CC79A7", "#661100", "#888888", "#117733", "#000000")
-  # Asignar patrones y colores a cada nivel único
-  my_fill <- rep("black", length(unique_levels))
-  names(my_fill) <- unique_levels
-  for (i in 1:length(unique_levels)) {
-    my_fill[i] <- ifelse(i <= length(patterns), patterns[i], palette[i])
+  # Convertir colores a LAB para calcular distancias perceptuales
+  colors_rgb <- col2rgb(extended_palette)
+  colors_lab <- convertColor(t(colors_rgb / 255), from = "sRGB", to = "Lab")
+  
+  # Función para calcular la distancia entre colores
+  color_distance <- function(c1, c2) {
+    sqrt(sum((c1 - c2) ^ 2))
   }
   
+  # Eliminar colores demasiado similares (distancia perceptual < 10)
+  unique_colors <- list(colors_lab[1, ])
+  final_colors <- extended_palette[1]
+  
+  for (i in 2:nrow(colors_lab)) {
+    distances <- sapply(unique_colors, color_distance, c2 = colors_lab[i, ])
+    if (all(distances >= 15)) { # Distancia mínima para diferenciación
+      unique_colors <- append(unique_colors, list(colors_lab[i, ]))
+      final_colors <- c(final_colors, extended_palette[i])
+    }
+  }
+  
+  # Asegurar que haya suficientes colores; si no, se interpolan nuevos
+  if (length(final_colors) < num_colors) {
+    warning("Algunos colores eran muy similares. Generando colores adicionales.")
+    final_colors <- colorRampPalette(final_colors)(num_colors)
+  }
+  
+  # Asignar colores a cada nivel único
+  my_fill <- setNames(final_colors, unique_levels)
   return(my_fill)
 }
+
+
 
 # Función para calcular el numero de facetas en una grafica basado
 # en la cantidad de filas.

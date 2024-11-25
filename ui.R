@@ -1533,7 +1533,7 @@ ui <-
                 style = "text-align: center; display: inline-block;", 
                 # botón para seleccionar el tipo de investigación
                 createDropdownCheckbox(
-                  label = "Seleccione el estado del Caso:",
+                  label = "Seleccione el estado del caso:",
                   choices = dcrSentenciadas$Estado,
                   selected = dcrSentenciadas$Estado,
                   id = "dcr_dcrSentenciadas_tipo"

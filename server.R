@@ -508,8 +508,8 @@ server <- function(input, output, session) {
       title = paste0("Casos de delitos por Distrito Fiscal según el Artículo de \n", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año),
       group = GROUP,
       fill_lab = "Número de casos",
-      light_color = "pink",
-      dark_color = "darkred"
+      light_color = "#E0BBE4",
+      dark_color = "#5A189A"
     )
     ggplotly(p, tooltip = c("all"))
   })
@@ -702,8 +702,8 @@ server <- function(input, output, session) {
       title = paste0("Total de viviendas públicas solicitadas y asignadas \npor violencia doméstica por región en el año ", input$select_avp_mapaAvp_año),
       group = Región,
       fill_lab = "Número de Viviendas",
-      light_color = "lightgreen",
-      dark_color = "darkgreen"
+      light_color = "#E0BBE4",
+      dark_color = "#5A189A"
     )
     ggplotly(p + facet_wrap(~Estado),
              tooltip = c("all"))
@@ -1580,9 +1580,59 @@ server <- function(input, output, session) {
   })
   
   # Colores del status
-  dcrSentenciadas_fill_tipo <- setColorFill(dcrSentenciadas, "Estado")
+  dcrSentenciadas_fill_tipo <- setColorFill(dcrSentenciadas, "Mes")
+  #dcrSentenciadas_fill_tipo <- setColorFill(dcrSentenciadas, "Estado")
   
-  # Grafico de barras
+  # # Grafico de barras
+  # output$barPlot_dcr_dcrSentenciadas <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_año <- length(input$checkGroup_dcr_dcrSentenciadas_year) > 0
+  #   has_tipo <- length(input$checkGroup_dcr_dcrSentenciadas_tipo) > 0
+  #   
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_año || !has_tipo) {
+  #     message <- "Seleccione Estado del caso y Año(s) a visualizar"
+  #   } else {
+  #     upper_y_limit <- ceiling(max(eval(parse(text = "dcrSentenciadas_filt()$Cantidad")), na.rm = TRUE) * 1.2)
+  #     
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- ggplot(dcrSentenciadas_filt(), aes(x = Fecha, y = Cantidad, fill = Estado)) +
+  #       geom_bar(stat = "identity",
+  #                position = position_dodge2(width = 1, padding = 0.1),
+  #                aes(
+  #                  text = paste(
+  #                    paste0("<b>", "Cantidad de Personas Sentenciadas", ":</b> ", after_stat(y)), "<br>",
+  #                    paste0("<b>", "Estado del Caso", ":</b> ", after_stat(fill)), "<br>"
+  #                  )
+  #                )) +
+  #       scale_fill_manual(values = dcrSentenciadas_fill_tipo) +
+  #       scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+  #                          expand = expansion(mult = c(0, 0.1))) +
+  #       theme_minimal() +
+  #       labs(title = "Sentenciados por Violencia Doméstica bajo \nSupervisión Electrónica",
+  #            x = "Año", y = "Cantidad de Personas Sentenciadas", fill = "Estado del Caso") +
+  #       coord_cartesian(ylim = c(0, upper_y_limit)) +
+  #       theme(
+  #         axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 10)),
+  #         plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+  #         panel.border = element_rect(colour = "black", fill = NA, size = 1),
+  #         plot.margin = margin(t = 45, r = 10, b = 10, l = 10))  
+  #       
+  #     p <- convert_to_plotly(p, tooltip = "text")
+  #     
+  #     return(p)
+  #   }
+  #   
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(data = dcrSentenciadas_filt, x = "Fecha", y = "Cantidad", fill = "Estado",
+  #                                                title = "Sentenciados por Violencia Doméstica bajo \nSupervisión Electrónica",
+  #                                                xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", message)
+  #   convert_to_plotly(empty_plot, tooltip = "text")
+  # })
+  # 
+  # 
+  # 
+  
   output$barPlot_dcr_dcrSentenciadas <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
     has_año <- length(input$checkGroup_dcr_dcrSentenciadas_year) > 0
@@ -1592,40 +1642,31 @@ server <- function(input, output, session) {
     if (!has_año || !has_tipo) {
       message <- "Seleccione Estado del caso y Año(s) a visualizar"
     } else {
-      upper_y_limit <- ceiling(max(eval(parse(text = "dcrSentenciadas_filt()$Cantidad")), na.rm = TRUE) * 1.2)
-      
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- ggplot(dcrSentenciadas_filt(), aes(x = Fecha, y = Cantidad, fill = Estado)) +
-        geom_bar(stat = "identity",
-                 position = position_dodge2(width = 1, padding = 0.1),
-                 aes(
-                   text = paste(
-                     paste0("<b>", "Cantidad de Personas Sentenciadas", ":</b> ", after_stat(y)), "<br>",
-                     paste0("<b>", "Estado del Caso", ":</b> ", after_stat(fill)), "<br>"
-                   )
-                 )) +
-        scale_fill_manual(values = dcrSentenciadas_fill_tipo) +
-        scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
-                           expand = expansion(mult = c(0, 0.1))) +
-        theme_minimal() +
-        labs(title = "Sentenciados por Violencia Doméstica bajo \nSupervisión Electrónica",
-             x = "Año", y = "Cantidad de Personas Sentenciadas", fill = "Estado del Caso") +
-        coord_cartesian(ylim = c(0, upper_y_limit)) +
-        theme(
-          axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 10)),
-          plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
-          panel.border = element_rect(colour = "black", fill = NA, size = 1),
-          plot.margin = margin(t = 45, r = 10, b = 10, l = 10))  
-        
-      p <- convert_to_plotly(p, tooltip = "text")
+      p <- renderBarPlot(dcrSentenciadas_filt, x = "Año", y = "Cantidad", fill = "Mes",
+                         title = "Sentenciados por Violencia Doméstica bajo \nSupervisión Electrónica",
+                         xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", fillLab = "Mes", 
+                         colorFill = dcrSentenciadas_fill_tipo, 
+                         emptyMessage = "Seleccione Estado del caso y Año(s) a visualizar")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      numPlots = length(input$checkGroup_dcr_dcrSentenciadas_tipo)
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, numPlots)
+      p <- p + facet_wrap(~Estado, ncol = 3) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = dcrSentenciadas_filt, x = "Fecha", y = "Cantidad", fill = "Estado",
+    empty_plot <- create_empty_plot_with_message(data = dcrSentenciadas_filt, x = "Año", y = "Cantidad", fill = "Mes",
                                                  title = "Sentenciados por Violencia Doméstica bajo \nSupervisión Electrónica",
                                                  xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", message)
+    #ggplotly(empty_plot)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
   
