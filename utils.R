@@ -1250,6 +1250,55 @@ definitionCards <- function(definitions) {
 # }
 
 
+# 
+# setColorFill <- function(df, variable) {
+#   # Obtener los niveles únicos de la variable
+#   unique_levels <- unique(df[[variable]])
+#   num_colors <- length(unique_levels)
+#   
+#   # Colores base de la página web
+#   base_colors <- c("#8bc344", "#884e9f", "#2f2e7d", "#e84924", "#d5dc30", "#5eb7df", "#3e3f3a")
+#   
+#   # Expandir la paleta manteniendo armonía con los colores base
+#   if (num_colors > length(base_colors)) {
+#     extended_palette <- colorRampPalette(base_colors)(num_colors)
+#   } else {
+#     extended_palette <- base_colors[1:num_colors]
+#   }
+#   
+#   # Convertir colores a LAB para calcular distancias perceptuales
+#   colors_rgb <- col2rgb(extended_palette)
+#   colors_lab <- convertColor(t(colors_rgb / 255), from = "sRGB", to = "Lab")
+#   
+#   # Función para calcular la distancia entre colores
+#   color_distance <- function(c1, c2) {
+#     sqrt(sum((c1 - c2) ^ 2))
+#   }
+#   
+#   # Eliminar colores demasiado similares (distancia perceptual < 10)
+#   unique_colors <- list(colors_lab[1, ])
+#   final_colors <- extended_palette[1]
+#   
+#   for (i in 2:nrow(colors_lab)) {
+#     distances <- sapply(unique_colors, color_distance, c2 = colors_lab[i, ])
+#     if (all(distances >= 15)) { # Distancia mínima para diferenciación
+#       unique_colors <- append(unique_colors, list(colors_lab[i, ]))
+#       final_colors <- c(final_colors, extended_palette[i])
+#     }
+#   }
+#   
+#   # Asegurar que haya suficientes colores; si no, se interpolan nuevos
+#   if (length(final_colors) < num_colors) {
+#     warning("Algunos colores eran muy similares. Generando colores adicionales.")
+#     final_colors <- colorRampPalette(final_colors)(num_colors)
+#   }
+#   
+#   # Asignar colores a cada nivel único
+#   my_fill <- setNames(final_colors, unique_levels)
+#   return(my_fill)
+# }
+
+library(grDevices) # Para colorRampPalette y col2rgb
 
 setColorFill <- function(df, variable) {
   # Obtener los niveles únicos de la variable
@@ -1260,22 +1309,20 @@ setColorFill <- function(df, variable) {
   base_colors <- c("#8bc344", "#884e9f", "#2f2e7d", "#e84924", "#d5dc30", "#5eb7df", "#3e3f3a")
   
   # Expandir la paleta manteniendo armonía con los colores base
-  if (num_colors > length(base_colors)) {
-    extended_palette <- colorRampPalette(base_colors)(num_colors)
+  extended_palette <- if (num_colors > length(base_colors)) {
+    colorRampPalette(base_colors)(num_colors)
   } else {
-    extended_palette <- base_colors[1:num_colors]
+    base_colors[1:num_colors]
   }
   
-  # Convertir colores a LAB para calcular distancias perceptuales
-  colors_rgb <- col2rgb(extended_palette)
-  colors_lab <- convertColor(t(colors_rgb / 255), from = "sRGB", to = "Lab")
+  # Convertir colores a espacio LAB para calcular distancias perceptuales
+  colors_rgb <- col2rgb(extended_palette) / 255 # Normalizar a rango 0-1
+  colors_lab <- convertColor(t(colors_rgb), from = "sRGB", to = "Lab")
   
   # Función para calcular la distancia entre colores
-  color_distance <- function(c1, c2) {
-    sqrt(sum((c1 - c2) ^ 2))
-  }
+  color_distance <- function(c1, c2) sqrt(sum((c1 - c2) ^ 2))
   
-  # Eliminar colores demasiado similares (distancia perceptual < 10)
+  # Filtrar colores que sean muy similares (distancia perceptual < 15)
   unique_colors <- list(colors_lab[1, ])
   final_colors <- extended_palette[1]
   
@@ -1287,7 +1334,7 @@ setColorFill <- function(df, variable) {
     }
   }
   
-  # Asegurar que haya suficientes colores; si no, se interpolan nuevos
+  # Asegurar que haya suficientes colores; si no, generar variaciones adicionales
   if (length(final_colors) < num_colors) {
     warning("Algunos colores eran muy similares. Generando colores adicionales.")
     final_colors <- colorRampPalette(final_colors)(num_colors)
@@ -1297,7 +1344,6 @@ setColorFill <- function(df, variable) {
   my_fill <- setNames(final_colors, unique_levels)
   return(my_fill)
 }
-
 
 
 # Función para calcular el numero de facetas en una grafica basado
