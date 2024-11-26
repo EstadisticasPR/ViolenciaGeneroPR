@@ -515,13 +515,13 @@ server <- function(input, output, session) {
   })
   
   #### Tab del Mapa de Distritos Fiscales ####
-  output$map_just_mapaFisc <- renderPlotly({
-    p <- renderMapGroup(data = mapaDeli, 
-                        fill = GROUP, 
-                        title = "",
-                        fill_lab = "Distrito Fiscal")
-    ggplotly(p, tooltip = c("fill"))
-  })
+  # output$map_just_mapaFisc <- renderPlotly({
+  #   p <- renderMapGroup(data = mapaDeli, 
+  #                       fill = GROUP, 
+  #                       title = "",
+  #                       fill_lab = "Distrito Fiscal")
+  #   ggplotly(p, tooltip = c("fill"))
+  # })
   
   # Crear Card con Fuentes
   output$dataTableUI_just_mapaFisc <- renderUI({
@@ -686,15 +686,7 @@ server <- function(input, output, session) {
   })
   
   
-  # mapa de las regiones de vivienda
-  output$map_avp_mapaRegi <- renderPlotly({
-    p <- renderMapGroup(
-      data = mapaAvp, fill = Región,
-      title = "Regiones de Vivienda ",
-      fill_lab = "Region"
-    )
-    ggplotly(p, tooltip = c("all"))
-  })
+
   
   output$map_avp_mapaAvp <- renderPlotly({
     p <- renderMap(
@@ -792,6 +784,16 @@ server <- function(input, output, session) {
   
   # Renombrar columnas
   colnames(definitions_df_avp) <- c("Concepto", "Definición")
+  
+  # mapa de las regiones de vivienda
+  # output$map_avp_mapaRegi <- renderPlotly({
+  #   p <- renderMapGroup(
+  #     data = mapaAvp, fill = Región,
+  #     title = "Regiones de Vivienda ",
+  #     fill_lab = "Region"
+  #   )
+  #   ggplotly(p, tooltip = c("all"))
+  # })
   
   # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_avp <- renderDT({
