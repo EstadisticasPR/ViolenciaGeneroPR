@@ -382,20 +382,27 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
 }
 
 # Crea un elemento de lista con una imagen que enlaza a una página web especificada.
-embedImage <- function(ID, img_src, link_href, link_alt, size = "60") {
+embedImage <- function(ID, img_src, link_href, link_alt, size = "60", padding_bottom = "0px") {
   tags$li(
     style = 'display: inline-block; margin-right: 20px; vertical-align: middle;',
     div(
       id = ID,
       tags$a(
         tags$figure(
-          img(src = img_src, height = size, alt = link_alt, deleteFile = FALSE)
+          img(
+            src = img_src, 
+            height = size, 
+            alt = link_alt, 
+            deleteFile = FALSE, 
+            style = paste0("padding-bottom: ", padding_bottom, ";")
+          )
         ),
         href = link_href
       )
     )
   )
 }
+
 
 # Crear un checkbox para mostrar u ocultar los datos.
 # showDataCheckbox <- function(inputId, label = lowercaseTitle("Mostrar Datos"), value = FALSE) {
@@ -1298,7 +1305,6 @@ definitionCards <- function(definitions) {
 #   return(my_fill)
 # }
 
-library(grDevices) # Para colorRampPalette y col2rgb
 
 setColorFill <- function(df, variable) {
   # Obtener los niveles únicos de la variable

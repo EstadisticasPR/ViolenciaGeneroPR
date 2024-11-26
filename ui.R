@@ -587,17 +587,27 @@ ui <-
             column(12, DTOutput("dataTable_Def_just"))
           ),
           
-          br(),
-          tags$ul(style = "list-style-type: none; text-align: center;",
-                  sectionTitle("Fiscalías de Puerto Rico")),
-          embedImage("Fiscalias_PR", "Fiscalias_PR.png", 
-                     "https://www.justicia.pr.gov/secretarias-y-oficinas/oficina-del-jefe-de-los-fiscales/listado-de-fiscalias/",
-                     "https://www.justicia.pr.gov/", size = "250"
-                     ),
-          # Sección principal con los gráficos
-          mainPanel(
-            plotlyOutput("map_just_mapaFisc"),
+          tags$div(
+            style = "display: flex; justify-content: center; align-items: center; text-align: center;",
+            tags$ul(
+              style = "list-style-type: none; padding: 0; margin: 0;",
+              sectionTitle("Fiscalías de Puerto Rico", "24px"),
+              br(),
+              embedImage(
+                "Fiscalias_PR", 
+                "Fiscalias_PR.png", 
+                "https://www.justicia.pr.gov/secretarias-y-oficinas/oficina-del-jefe-de-los-fiscales/listado-de-fiscalias/",
+                "https://www.justicia.pr.gov/", 
+                size = "250",
+                padding_bottom = "20px"
+              )
+            )
           )
+          # ,
+          # # Sección principal con los gráficos
+          # mainPanel(
+          #   plotlyOutput("map_just_mapaFisc"),
+          # )
         ),
       )
     ),
@@ -807,16 +817,34 @@ ui <-
             column(12, DTOutput("dataTable_Def_avp"))
           ),
           
-          tags$ul(style = "list-style-type: none; text-align: center;",
-                  sectionTitle("Regiones de Vivienda Pública", "24px")),
-          embedImage("RegionesVivienda", "RegionesVivienda.png", 
-                     "https://www.avp.pr.gov/regiones-directorio.aspx",
-                     "https://www.avp.pr.gov/regiones-directorio.aspx", size = "250"
-          ),
-          # Sección principal con los gráficos
-          mainPanel(
-            plotlyOutput("map_avp_mapaRegi")
+          # tags$ul(style = "list-style-type: none; text-align: center;",
+          #         sectionTitle("Regiones de Vivienda Pública", "24px")),
+          # embedImage("RegionesVivienda", "RegionesVivienda.png", 
+          #            "https://www.avp.pr.gov/regiones-directorio.aspx",
+          #            "https://www.avp.pr.gov/regiones-directorio.aspx", size = "250"
+          # )
+          
+          tags$div(
+            style = "display: flex; justify-content: center; align-items: center; text-align: center;",
+            tags$ul(
+              style = "list-style-type: none; padding: 0; margin: 0;",
+              sectionTitle("Regiones de Vivienda Pública", "24px"),
+              br(),
+              embedImage(
+                "RegionesVivienda", "RegionesVivienda.png", 
+                "https://www.avp.pr.gov/regiones-directorio.aspx",
+                "https://www.avp.pr.gov/regiones-directorio.aspx", size = "250",
+                padding_bottom = "20px"
+              )
+            )
           )
+          
+          
+          # ,
+          # # Sección principal con los gráficos
+          # mainPanel(
+          #   plotlyOutput("map_avp_mapaRegi")
+          # )
         )
       )
     ),
@@ -1034,12 +1062,23 @@ ui <-
             column(12, DTOutput("dataTable_Def_poli"))
           ),
           
-          tags$ul(style = "list-style-type: none; text-align: center;",
-                  sectionTitle("Regiones Policíacas", "24px")),
-          embedImage("RegionesPoliciácas", "RegionesPoliciacas.png", 
-                     "https://www.policia.pr.gov/",
-                     "https://www.policia.pr.gov/", size = "250"
+          
+          tags$div(
+            style = "display: flex; justify-content: center; align-items: center; text-align: center;",
+            tags$ul(
+              style = "list-style-type: none; padding: 0; margin: 0;",
+              sectionTitle("Regiones Policíacas", "24px"),
+              br(),
+              embedImage(
+                "RegionesPoliciácas", "RegionesPoliciacas.png", 
+                "https://www.policia.pr.gov/",
+                "https://www.policia.pr.gov/", size = "250",
+                padding_bottom = "20px"
+              )
+            )
           )
+          
+          
         )
       )
     ),
