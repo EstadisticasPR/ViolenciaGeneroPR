@@ -304,7 +304,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                                                 title = "Casos Anuales de maltrato infantil por Sexo y Tipo",
+                                                 title = "",
                                                  xlab = "Año", ylab = "Número de casos", message)
     #ggplotly(empty_plot)
     convert_to_plotly(empty_plot, tooltip = "text")
@@ -443,7 +443,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
-                                                 title = "Casos de delitos por Distrito Fiscal según Artículo de la Ley 54",
+                                                 title = "",
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     #ggplotly(empty_plot)
     convert_to_plotly(empty_plot, tooltip = "text", TRUE)
@@ -685,7 +685,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                                                 paste("Viviendas Públicas Solicitadas y Asignadas \nAnualmente por Violencia Doméstica según Región"),
+                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de viviendas públicas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -958,7 +958,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
-                                                 paste("Incidencia de Violencia Doméstica \npor Edad de la Víctima"),
+                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -1680,7 +1680,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dcrSentenciadas_filt, x = "Año", y = "Cantidad", fill = "Mes",
-                                                 title = "Sentenciados por Violencia Doméstica bajo \nSupervisión Electrónica",
+                                                 title = "",
                                                  xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", message)
     #ggplotly(empty_plot)
     convert_to_plotly(empty_plot, tooltip = "text")
@@ -1810,7 +1810,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
-                                                 title = "Solicitudes de Órdenes de Protección \nbajo Ley 148, según Región Judicial y Edad",
+                                                 title = "",
                                                  xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -1920,7 +1920,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                                                 title = "Órdenes de Protección Ex Parte emitidas \nbajo Ley 148, según Región Judicial y delito cometido",
+                                                 title = "",
                                                  xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -2034,7 +2034,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-                                                 title = "Órdenes de Protección Ex Parte \nArchivadas bajo Ley 148 según Región Judicial",
+                                                 title = "",
                                                  xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -2146,7 +2146,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                                                 title = "Órdenes de protección denegadas bajo \nLey 148 por Razón de Archivo según Región Judicial",
+                                                 title = "",
                                                  xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -2257,7 +2257,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                                                 title = "Órdenes de protección emitidas bajo Ley 148, \nsegún Región Judicial y Tipo de Delito",
+                                                 title = "",
                                                  xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -2370,7 +2370,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte",
-                                                 title = "Órdenes de Protección Emitidas bajo Ley 148, \nsegún la Parte",
+                                                 title = "",
                                                  xlab = "Año fiscal", ylab = "Solicitudes de Ordenes de Protección", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -2475,7 +2475,7 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
-                                                 title = "Movimiento Anual de Casos de Violencia \nDoméstica en el Tribunal según Ley 54",
+                                                 title = "",
                                                  xlab = "Año Fiscal", ylab = "Casos", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
