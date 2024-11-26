@@ -283,7 +283,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
+      p <- renderBarPlot_facets(dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
                          title = "Casos Anuales de maltrato infantil por Sexo y Tipo",
                          xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de Maltrato", 
                          colorFill = dfMalt_fill_Maltrato, 
@@ -297,19 +297,23 @@ server <- function(input, output, session) {
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
       
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE) %>% layout(height = total_height)
 
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                                                 title = "Casos Anuales de maltrato infantil por Sexo y Tipo",
+    empty_plot <- create_empty_plot_with_message(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato", title = "",
                                                  xlab = "Año", ylab = "Número de casos", message)
     #ggplotly(empty_plot)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
   
+  #Titulo de la Grafica
+  output$plot_title1 <- renderUI({
+    title <- "Casos Anuales de maltrato infantil por Sexo y Tipo"
+  })
+  #----
   
   
   dfMalt_filt_rename <- reactive({
@@ -418,7 +422,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
+      p <- renderBarPlot_facets(dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
                          title = "Radicación Anual de Casos por Distrito Fiscal según Ley 54",
                          xlab = "Año", ylab = "Cantidad de víctimas",
                          fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito,
@@ -431,23 +435,22 @@ server <- function(input, output, session) {
       p <- p + facet_wrap(~Distrito, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE) %>% layout(height = total_height)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
-                                                 title = "Casos de delitos por Distrito Fiscal según Artículo de la Ley 54",
+    empty_plot <- create_empty_plot_with_message(data = dfDeli_filt, x = "Año", y = "Casos", fill = "Delito", title = "",
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     #ggplotly(empty_plot)
     convert_to_plotly(empty_plot, tooltip = "text", TRUE)
   })
   
-  # #Llamada a funcion para generar la legenda
-  # output$plot_legend <- renderUI({
-  #   generateLegend("Estado de la Vivienda", dfDeli_fill_Delito)
-  # })
+  #Llamada a funcion para generar la legenda
+  output$plot_title2 <- renderUI({
+    title <- "Radicación Anual de Casos por Distrito Fiscal según Ley 54"
+  })
   
   # Data table del DeptJust
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
@@ -660,7 +663,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Región de Vivienda y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
+      p <- renderBarPlot_facets(dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
                          paste("Viviendas Públicas Solicitadas y Asignadas \nAnualmente por Violencia Doméstica según Región"),
                          xlab = "Año", ylab = "Cantidad de viviendas públicas", fillLab = "Estado de la Vivienda",
                          colorFill = dfAvp_fill_status,
@@ -673,17 +676,23 @@ server <- function(input, output, session) {
       p <- p + facet_wrap(~Región, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE) %>% layout(height = total_height)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                                                 paste("Viviendas Públicas Solicitadas y Asignadas \nAnualmente por Violencia Doméstica según Región"),
+    empty_plot <- create_empty_plot_with_message(data = dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado", title = "",
                                                  xlab = "Año", ylab = "Cantidad de viviendas públicas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
+  
+  #Titulo de la Grafica
+  output$plot_title3 <- renderUI({
+    title <- "Viviendas Públicas Solicitadas y Asignadas \nAnualmente por Violencia Doméstica según Región"
+  })
+  #----
+  
   
   
   # mapa de las regiones de vivienda
@@ -926,7 +935,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Grupo(s) de Edad, Sexo de la Víctima y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
+      p <- renderBarPlot_facets(vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
                          paste("Incidencia de Violencia Doméstica \npor Edad de la Víctima"),
                          xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Grupo de Edad",
                          colorFill = vEdad_fill_edad,
@@ -939,19 +948,22 @@ server <- function(input, output, session) {
       p <- p + facet_wrap(~Sexo, ncol = 2)+
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(1, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE) %>% layout(total_height)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
-                                                 paste("Incidencia de Violencia Doméstica \npor Edad de la Víctima"),
+    empty_plot <- create_empty_plot_with_message(data = vEdad_filt, x = "Año", y = "Casos", fill = "Edad", title = "",
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
 
-
+  #Titulo de la Grafica
+  output$plot_title4 <- renderUI({
+    title <- "Incidencia de Violencia Doméstica por Edad de la Víctima"
+  })
+  #----
   
   # Data Table para el mapa de despDF
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
@@ -1728,7 +1740,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Grupo(s) de Edad, Región Judicial y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
+      p <- renderBarPlot_facets(OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
                          title = "Solicitudes de Órdenes de Protección \nbajo Ley 148 según Región Judicial y Edad",
                          xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
                          colorFill = OP_148_SoliGrupEdad_fill_edad,
@@ -1741,17 +1753,23 @@ server <- function(input, output, session) {
       p <- p + facet_wrap(~Región, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE) %>% layout(height = total_height)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
-                                                 title = "Solicitudes de Órdenes de Protección \nbajo Ley 148, según Región Judicial y Edad",
+    empty_plot <- create_empty_plot_with_message(data = OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad", title = "",
                                                  xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
+  
+  
+  #Titulo de la Grafica
+  output$plot_title5 <- renderUI({
+    title <- "Solicitudes de Órdenes de Protección bajo Ley 148 según Región Judicial y Edad"
+  })
+  
   
   OP_148_SoliGrupEdad_filt_rename <- reactive({
     OP_148_SoliGrupEdad_filt() %>% 
@@ -1832,7 +1850,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Delito(s), Región Judicial y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+      p <- renderBarPlot_facets(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
                          title = "Órdenes de Protección Ex Parte emitidas \nbajo Ley 148, según Región Judicial y delito cometido",
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                          colorFill = OP_Ley148_ex_parteEmitidas_fill_delito,
@@ -1845,17 +1863,22 @@ server <- function(input, output, session) {
       p <- p + facet_wrap(~Región, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE) %>% layout(height = total_height)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                                                 title = "Órdenes de Protección Ex Parte emitidas \nbajo Ley 148, según Región Judicial y delito cometido",
+    empty_plot <- create_empty_plot_with_message(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito", title = "",
                                                  xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
+  
+  #Titulo de la Grafica
+  output$plot_title6 <- renderUI({
+    title <- "Órdenes de Protección Ex Parte emitidas bajo Ley 148, según Región Judicial y delito cometido"
+  })
+  
   
   OP_Ley148_ex_parteEmitidas_filt_rename <- reactive({
     OP_Ley148_ex_parteEmitidas_filt() %>%  
@@ -1941,7 +1964,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Razón, Distrito Fiscal y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
+      p <- renderBarPlot_facets(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
                          title = "Órdenes de Protección Ex Parte \nArchivadas bajo Ley 148 según Región Judicial",
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
                          colorFill = OP_LEY148Archivadas_fill_Razón,
@@ -1954,18 +1977,22 @@ server <- function(input, output, session) {
       p <- p + facet_wrap(~Región, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE) %>% layout(height = total_height)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-                                                 title = "Órdenes de Protección Ex Parte \nArchivadas bajo Ley 148 según Región Judicial",
+    empty_plot <- create_empty_plot_with_message(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón", title = "",
                                                  xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
 
+  #Titulo de la Grafica
+  output$plot_title8 <- renderUI({
+    title <- "Órdenes de Protección Ex Parte Archivadas bajo Ley 148 según Región Judicial"
+  })
+  
   
   OP_LEY148Archivadas_filt_rename <- reactive({
     OP_LEY148Archivadas_filt() %>% 
@@ -2048,7 +2075,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Razón, Región Judicial y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
+      p <- renderBarPlot_facets(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
                          title = "Órdenes de protección denegadas bajo \nLey 148 por Razón de Archivo según Región Judicial",
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
                          colorFill = OP_LEY148Denegadas_fill_Razón,
@@ -2061,16 +2088,20 @@ server <- function(input, output, session) {
       p <- p + facet_wrap(~Región, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE) %>% layout(height = total_height)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                                                 title = "Órdenes de protección denegadas bajo \nLey 148 por Razón de Archivo según Región Judicial",
+    empty_plot <- create_empty_plot_with_message(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón", title = "",
                                                  xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title7 <- renderUI({
+    title <- "Órdenes de protección denegadas bajo Ley 148 por Razón de Archivo según Región Judicial"
   })
   
   OP_LEY148Denegadas_filt_rename <- reactive({
@@ -2154,7 +2185,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Delito(s), Región Judicial y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+      p <- renderBarPlot_facets(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
                          title = "Órdenes de protección emitidas bajo Ley 148, \nsegún Región Judicial y Tipo de Delito",
                          xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                          colorFill = OP_LEY148FinalEmitidas_fill_Delito,
@@ -2167,16 +2198,20 @@ server <- function(input, output, session) {
       p <- p + facet_wrap(~Región, ncol = 2) +
       theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
             panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE) %>% layout(height = total_height)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                                                 title = "Órdenes de protección emitidas bajo Ley 148, \nsegún Región Judicial y Tipo de Delito",
+    empty_plot <- create_empty_plot_with_message(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito", title = "",
                                                  xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title9 <- renderUI({
+    title <- "Órdenes de protección emitidas bajo Ley 148, según Región Judicial y Tipo de Delito"
   })
 
   OP_LEY148FinalEmitidas_filt_rename <- reactive({
@@ -2260,7 +2295,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Parte(s), Sexo y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte",
+      p <- renderBarPlot_facets(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte",
                          title = "Órdenes de Protección Emitidas bajo Ley 148, \nsegún la Parte",
                          xlab = "Año fiscal", ylab = "Solicitudes de Ordenes de Protección", fillLab = "Parte",
                          colorFill = OP_LEY148Genero_fill_Parte,
@@ -2275,16 +2310,20 @@ server <- function(input, output, session) {
               panel.spacing.y = unit(1, "lines"),#Espacio entre las facetas en y.
               #plot.margin = margin(t = 150, r = 10, b = 150, l = 10)
               ) 
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE) %>% layout(height = total_height)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte",
-                                                 title = "Órdenes de Protección Emitidas bajo Ley 148, \nsegún la Parte",
+    empty_plot <- create_empty_plot_with_message(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte", title = "",
                                                  xlab = "Año fiscal", ylab = "Solicitudes de Ordenes de Protección", message)
     convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title10 <- renderUI({
+    title <- "Órdenes de Protección Emitidas bajo Ley 148, según la Parte"
   })
   
   OP_LEY148Genero_filt_rename <- reactive({
@@ -2362,7 +2401,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Delito(s), Estado del caso y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
+      p <- renderBarPlot_facets(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
                          title = "Movimiento Anual de Casos de Violencia \nDoméstica en el Tribunal según Ley 54",
                          xlab = "Año Fiscal", ylab = "Casos", fillLab = "Delito Cometido",
                          colorFill = tribCasosCrim_fill_Delito,
@@ -2375,16 +2414,21 @@ server <- function(input, output, session) {
       p <- p + facet_wrap(~Casos, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE) %>% layout(height = total_height) # Title for legend
+                                                            
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
-                                                 title = "Movimiento Anual de Casos de Violencia \nDoméstica en el Tribunal según Ley 54",
+    empty_plot <- create_empty_plot_with_message(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito", title = "",
                                                  xlab = "Año Fiscal", ylab = "Casos", message)
     convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title11 <- renderUI({
+    title <- "Movimiento Anual de Casos de Violencia Doméstica en el Tribunal según Ley 54"
   })
   
   
