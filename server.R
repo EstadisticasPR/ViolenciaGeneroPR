@@ -2459,7 +2459,7 @@ server <- function(input, output, session) {
                          title = "Movimiento Anual de Casos de Violencia \nDoméstica en el Tribunal según Ley 54",
                          xlab = "Año Fiscal", ylab = "Casos", fillLab = "Delito Cometido",
                          colorFill = tribCasosCrim_fill_Delito,
-                         emptyMessage = "Seleccione Delito(s), Estado del caso y Año(s) a visualizar")
+                         emptyMessage = "Seleccione Delito(s), Estado del caso y Año(s) a visualizar", barWidth = 0, xGap = 0)
       #Altura predeterminada para la grafica.
       plot_height = 500
       numPlots = length(input$checkGroup_trib_tribCasosCrim_Casos)
@@ -2468,7 +2468,10 @@ server <- function(input, output, session) {
       p <- p + facet_wrap(~Casos, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height,
+                                                                             legend = list(           
+                                                                               font = list(size = 8.6) #Tamaño de letra para los elementos de la legenda.
+                                                                             ))
       
       return(p)
     }
