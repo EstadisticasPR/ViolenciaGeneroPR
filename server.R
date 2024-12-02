@@ -533,6 +533,12 @@ server <- function(input, output, session) {
     ggplotly(p, tooltip = c("all"))
   })
   
+  #Titulo de la Grafica
+  output$plot_title23 <- renderUI({
+    title <- paste0("Casos de delitos por Distrito Fiscal según el Artículo de \n", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año)
+  })
+  #----
+  
   #### Tab del Mapa de Distritos Fiscales ####
   # output$map_just_mapaFisc <- renderPlotly({
   #   p <- renderMapGroup(data = mapaDeli, 
@@ -724,6 +730,12 @@ server <- function(input, output, session) {
     ggplotly(p + facet_wrap(~Estado),
              tooltip = c("all"))
   })
+  
+  #Titulo de la Grafica
+  output$plot_title24 <- renderUI({
+    title <- paste0("Total de viviendas públicas solicitadas y asignadas \npor violencia doméstica por región en el año ", input$select_avp_mapaAvp_año)
+  })
+  #----
   
   dfAvp_rename <- reactive({
     dfAvp %>% 
@@ -971,7 +983,7 @@ server <- function(input, output, session) {
       p <- p + facet_wrap(~Sexo, ncol = 2)+
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(1, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(total_height)
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
     }
@@ -1039,6 +1051,7 @@ server <- function(input, output, session) {
     )
     ggplotly(p, tooltip = c("all"))
   })
+  
   
 
   #### Tab de Definiciones ####

@@ -749,7 +749,7 @@ renderBarPlot_facets <- function(data, x, y, fill, title, xlab, ylab, fillLab = 
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1),
         panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        plot.margin = margin(t = 100, r = 50, b = 100, l = 50)
+        plot.margin = margin(t = 105, r = 50, b = 100, l = 50)
       )
     
     return(p)
@@ -1224,7 +1224,8 @@ renderMap <- function(data, fill, title, group, fill_lab = fill,
                       light_color = "lightblue", dark_color = "darkblue") {
   p <- ggplot(data()) +
     geom_sf(aes(fill = {{fill}}, group = {{group}})) +  # Incluye group como aesthetic mapping
-    labs(title = title, fill = fill_lab) +
+    # labs(title = title, fill = fill_lab) +
+    labs(fill = fill_lab) +
     scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
     theme_minimal() +
     theme(
@@ -1233,8 +1234,8 @@ renderMap <- function(data, fill, title, group, fill_lab = fill,
       axis.ticks = element_blank(),
       panel.grid = element_blank(),
       panel.border = element_rect(colour = "black", fill = NA, size = 1),  
-      plot.margin = margin(60, 10, 10, 10),
-      plot.title = element_text(hjust = 0.5)
+      plot.margin = margin(20, 10, 10, 10),
+      # plot.title = element_text(hjust = 0.5)
     )
   print(p)
 }

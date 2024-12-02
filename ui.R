@@ -579,7 +579,13 @@ ui <-
             
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("map_just_mapaDeli"),
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title23")),
+                           plotlyOutput("map_just_mapaDeli"),  height = "100%"))
+              ),
+              #plotlyOutput("map_just_mapaDeli"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -810,7 +816,13 @@ ui <-
             
             # Sección principal con los gráficos
             mainPanel(
-              plotlyOutput("map_avp_mapaAvp"),
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title24")),
+                           plotlyOutput("map_avp_mapaAvp"),  height = "100%"))
+              ),
+              #plotlyOutput("map_avp_mapaAvp"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
