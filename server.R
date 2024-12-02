@@ -533,11 +533,10 @@ server <- function(input, output, session) {
     ggplotly(p, tooltip = c("all"))
   })
   
-  #Titulo de la Grafica
+    #Titulo de la Grafica
   output$plot_title23 <- renderUI({
     title <- paste0("Casos de delitos por Distrito Fiscal según el Artículo de \n", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año)
   })
-  #----
   
   #### Tab del Mapa de Distritos Fiscales ####
   # output$map_just_mapaFisc <- renderPlotly({
@@ -731,11 +730,11 @@ server <- function(input, output, session) {
              tooltip = c("all"))
   })
   
+  
   #Titulo de la Grafica
   output$plot_title24 <- renderUI({
     title <- paste0("Total de viviendas públicas solicitadas y asignadas \npor violencia doméstica por región en el año ", input$select_avp_mapaAvp_año)
   })
-  #----
   
   dfAvp_rename <- reactive({
     dfAvp %>% 
@@ -1051,7 +1050,6 @@ server <- function(input, output, session) {
     )
     ggplotly(p, tooltip = c("all"))
   })
-  
   
 
   #### Tab de Definiciones ####
@@ -2772,7 +2770,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title22 <- renderUI({
-    title <- "Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella"
+    title <- HTML("Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella")
   })
   #----
 
