@@ -749,7 +749,7 @@ renderBarPlot_facets <- function(data, x, y, fill, title, xlab, ylab, fillLab = 
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1),
         panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        plot.margin = margin(t = 50, r = 50, b = 100, l = 50)
+        plot.margin = margin(t = 100, r = 50, b = 100, l = 50)
       )
     
     return(p)
@@ -1409,6 +1409,7 @@ plotHeight <- function(plot_height, selected_plots){
   } else {
     height = plot_height
   }
+  print(height)
   
   return(height)
 }

@@ -13,13 +13,14 @@ ui <-
   tags$style(HTML("
                     #scrollable-plot {
                     overflow-y: scroll;
-                    height: 500px; 
+                    height: 500px;
                     }
                     #plot-title {
                     family: Arial; 
                     color: black;
                     text-align: center;
                     font-size: 16px;
+                    margin-bottom: 1px;
                     }
                   ")),
   
@@ -129,7 +130,13 @@ ui <-
             mainPanel(
               #plotlyOutput("linePlot_snmv"),
               style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              plotlyOutput("barPlot_snmv", height = "100%"),
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title13")),
+                           plotlyOutput("barPlot_snmv"),  height = "100%"))
+              ),
+              #plotlyOutput("barPlot_snmv", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -209,7 +216,13 @@ ui <-
             # Sección principal con los gráficos y datatable
             mainPanel(
               style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              plotlyOutput("barPlot_snmv_inci", height = "100%"),
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title14")),
+                           plotlyOutput("barPlot_snmv_inci"),  height = "100%"))
+              ),
+              #plotlyOutput("barPlot_snmv_inci", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -924,7 +937,13 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              plotlyOutput("barPlot_poli_despDF", height = "100%"),
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title15")),
+                           plotlyOutput("barPlot_poli_despDF"),  height = "100%"))
+              ),
+              #plotlyOutput("barPlot_poli_despDF", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -1148,7 +1167,13 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              plotlyOutput("barPlot_opm_opmFemiVD", height = "100%"),
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title16")),
+                           plotlyOutput("barPlot_opm_opmFemiVD"),  height = "100%"))
+              ),
+              #plotlyOutput("barPlot_opm_opmFemiVD", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -1223,7 +1248,13 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              plotlyOutput("barPlot_opm_opmCasos", height = "100%"),
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title17")),
+                           plotlyOutput("barPlot_opm_opmCasos"),  height = "100%"))
+              ),
+              #plotlyOutput("barPlot_opm_opmCasos", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -1298,7 +1329,13 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              plotlyOutput("barPlot_opm_opmVic", height = "100%"),
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title18")),
+                           plotlyOutput("barPlot_opm_opmVic"),  height = "100%"))
+              ),
+              #plotlyOutput("barPlot_opm_opmVic", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -1373,7 +1410,13 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              plotlyOutput("barPlot_opm_opmMedio", height = "100%"),
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title19")),
+                           plotlyOutput("barPlot_opm_opmMedio"),  height = "100%"))
+              ),
+              #plotlyOutput("barPlot_opm_opmMedio", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -1448,7 +1491,13 @@ ui <-
             # Sección principal con los gráficos
             mainPanel(
               style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              plotlyOutput("barPlot_opm_opmServiciosMes", height = "100%"),
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title20")),
+                           plotlyOutput("barPlot_opm_opmServiciosMes"),  height = "100%"))
+              ),
+              #plotlyOutput("barPlot_opm_opmServiciosMes", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
@@ -1549,7 +1598,13 @@ ui <-
         # Sección principal con los gráficos
         mainPanel(
           style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-          plotlyOutput("barPlot_dcr_dcrCasosInv", height = "100%"),
+          fluidRow(
+            column(12, 
+                   div(id = "scrollable-plot", 
+                       div(id = "plot-title", uiOutput("plot_title21")),
+                       plotlyOutput("barPlot_dcr_dcrCasosInv"),  height = "100%"))
+          ),
+          #plotlyOutput("barPlot_dcr_dcrCasosInv", height = "100%"),
           tags$div(style = "padding-bottom: 10px;"),
           tags$div(
             style = "padding-bottom: 10px;",
@@ -2389,7 +2444,13 @@ ui <-
           # Sección principal con los gráficos
           mainPanel(
             style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-            plotlyOutput("barPlot_safekitsDF", height = "100%"),
+            fluidRow(
+              column(12, 
+                     div(id = "scrollable-plot", 
+                         div(id = "plot-title", uiOutput("plot_title22")),
+                         plotlyOutput("barPlot_safekitsDF"),  height = "100%"))
+            ),
+            #plotlyOutput("barPlot_safekitsDF", height = "100%"),
             tags$div(style = "padding-bottom: 10px;"),
             tags$div(
               style = "padding-bottom: 10px;",
