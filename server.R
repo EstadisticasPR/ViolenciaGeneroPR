@@ -2759,7 +2759,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title22 <- renderUI({
-    title <- "Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella"
+    title <- HTML("Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella")
   })
   #----
 
