@@ -42,22 +42,29 @@ server <- function(input, output, session) {
       #                    "Año", "Cantidad de víctimas", fillLab = "Grupo de Edad", colorFill = homiEdad_fill_edad, 
       #                    emptyMessage = "Seleccione Grupo de edad y Año(s) a visualizar",barWidth = 0, xGap = 0)
       
-      p <- renderBarPlot(homiEdad_filt, "Año", "Casos", "Edad",
+      p <- renderBarPlot_facets(homiEdad_filt, "Año", "Casos", "Edad",
                          title = "Homicidios de Mujeres por grupo de Edad y Año",
                          "Año", "Cantidad de víctimas", fillLab = "Grupo de Edad", colorFill = homiEdad_fill_edad, 
                          emptyMessage = "Seleccione Grupo de edad y Año(s) a visualizar",barWidth = 0, xGap = 0)
-     
-      p <- convert_to_plotly(p, tooltip = "text")
+ 
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(homiEdad_filt, "Año", "Casos", "Edad",
-                                                 paste("Homicidios de Mujeres por grupo de Edad y Año", input$yearInput_snmv),
+                                                 paste("", input$yearInput_snmv),
                                                  "Año", "Cantidad de víctimas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
+  
+  #------------------------------------------
+  #Titulo de la Grafica
+  output$plot_title13 <- renderUI({
+    title <- "Homicidios de Mujeres por grupo de Edad y Año"
+  })
+  #----
   
   homiEdad_filt_rename <- reactive({
     homiEdad_filt() %>% 
@@ -130,22 +137,29 @@ server <- function(input, output, session) {
       message <- "Seleccione Tipo(s) de Incidente y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(inci_filt, x = "Año", y = "Casos", fill = "Incidente",
+      p <- renderBarPlot_facets(inci_filt, x = "Año", y = "Casos", fill = "Incidente",
                          paste("Incidentes Violentos ocurridos para ambos Sexos"),
                          xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de Incidente",
                          colorFill = inci_fill_sexo, 
                          emptyMessage = "Seleccione Tipo(s) de Incidente y Año(s) a visualizar")
-      p <- convert_to_plotly(p, tooltip = "text")
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(inci_filt, x = "Año", y = "Casos", fill = "Incidente",
-                                                 paste("Incidentes Violentos ocurridos para ambos Sexos"),
+                                                 paste(""),
                                                  xlab = "Año", ylab = "Número de casos", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
+  
+  #------------------------------------------
+  #Titulo de la Grafica
+  output$plot_title14 <- renderUI({
+    title <- "Incidentes Violentos ocurridos para ambos Sexos"
+  })
+  #----
 
   inci_filt_rename <- reactive({
     inci_filt() %>% 
@@ -844,22 +858,28 @@ server <- function(input, output, session) {
       message <- "Seleccione Estado de la Víctima y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(despDF_filt, x = "Año", y = "Casos", fill = "Estado",
+      p <- renderBarPlot_facets(despDF_filt, x = "Año", y = "Casos", fill = "Estado",
                          paste("Mujeres Desaparecidas: \nLocalizadas y por Localizar"),
                          xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Estado de la Víctima",
                          colorFill = despDF_fill_categoria,
                          emptyMessage = "Seleccione Estado de la Víctima y Año(s) a visualizar")
-      p <- convert_to_plotly(p, tooltip = "text")
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = despDF_filt, x = "Año", y = "Casos", fill = "Estado",
-                                                 paste("Mujeres Desaparecidas: \nLocalizadas y por Localizar"),
+                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
+  
+  #Titulo de la Grafica
+  output$plot_title15 <- renderUI({
+    title <- "Mujeres Desaparecidas: Localizadas y por Localizar"
+  })
+  #----
   
   despDF_filt_rename <- reactive({
     despDF_filt() %>% 
@@ -1061,14 +1081,23 @@ server <- function(input, output, session) {
   
   # Grafico de barras
   output$barPlot_opm_opmFemiVD <- renderPlotly({
+  #   p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "Tasa", group = "1",
+  #                       color = "1", title = "Tasa Anual de Asesinatos de Mujeres \n por Violencia Doméstica",
+  #                       xlab = "Año", ylab = "Tasa por cada 100 mil mujeres",
+  #                       emptyMessage = "Seleccione los Año(s) que desea visualizar")
     p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "Tasa", group = "1",
-                        color = "1", title = "Tasa Anual de Asesinatos de Mujeres \n por Violencia Doméstica",
+                        color = "1", title = "",
                         xlab = "Año", ylab = "Tasa por cada 100 mil mujeres",
                         emptyMessage = "Seleccione los Año(s) que desea visualizar")
     
     ggplotly(p, tooltip = "text")
   })
   
+  #Titulo de la Grafica
+  output$plot_title16 <- renderUI({
+    title <- "Tasa Anual de Asesinatos de Mujeres por Violencia Doméstica"
+  })
+  #----
   
   # Data Table para el mapa de despDF
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
@@ -1133,22 +1162,28 @@ server <- function(input, output, session) {
       message <- "Seleccione Razón de la consulta y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(opmCasos_filt, x = "Año", y = "Cantidad", fill = "Razón",
+      p <- renderBarPlot_facets(opmCasos_filt, x = "Año", y = "Cantidad", fill = "Razón",
                          paste("Población Atendida por el Programa CRIAS: \nRazón de Consulta"),
                          xlab = "Año", ylab = "Cantidad de Personas Atendidas", fillLab = "Razón para Consulta",
                          colorFill = opm_fill_tipo,
                          emptyMessage = "Seleccione Razón de la consulta y Año(s) a visualizar")
-      p <- convert_to_plotly(p, tooltip = "text")
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmCasos_filt, x = "Año", y = "Cantidad", fill = "Razón",
-                                                 paste("Población Atendida por el Programa CRIAS: \nRazón de Consulta"),
+                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de Personas Atendidas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
+  
+  #Titulo de la Grafica
+  output$plot_title17 <- renderUI({
+    title <- "Población Atendida por el Programa CRIAS: Razón de Consulta"
+  })
+  #----
   
   opmCasos_filt_rename <- reactive({
     opmCasos_filt() %>% 
@@ -1218,24 +1253,37 @@ server <- function(input, output, session) {
     if (!has_año || !has_genero) {
       message <- "Seleccione Género y Año(s) a visualizar"
     } else {
+      
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
+      # p <- renderBarPlot(opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
+      #                    paste("Identidad de Género de Víctimas asistidas \npor el Programa CRIAS"),
+      #                    xlab = "Año", ylab = "Cantidad de Víctimas", fillLab = "Género de la Víctima",
+      #                    colorFill = opmVic_fill_género,
+      #                    emptyMessage = "Seleccione Género y Año(s) a visualizar")
+      # p <- convert_to_plotly(p, tooltip = "text")
+      
+      p <- renderBarPlot_facets(opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
                          paste("Identidad de Género de Víctimas asistidas \npor el Programa CRIAS"),
                          xlab = "Año", ylab = "Cantidad de Víctimas", fillLab = "Género de la Víctima",
                          colorFill = opmVic_fill_género,
                          emptyMessage = "Seleccione Género y Año(s) a visualizar")
-      p <- convert_to_plotly(p, tooltip = "text")
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
-                                                 paste("Identidad de Género de Víctimas asistidas \npor el Programa CRIAS"),
+                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de Víctimas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
   
+  #Titulo de la Grafica
+  output$plot_title18 <- renderUI({
+    title <- "Identidad de Género de Víctimas asistidas por el Programa CRIAS"
+  })
+  #----
   
   # Data Table para el mapa de despDF
   output$dataTable_opm_opmVic <- renderDT({
@@ -1300,22 +1348,35 @@ server <- function(input, output, session) {
       message <- "Seleccione Medio de Orientación y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
+      # p <- renderBarPlot(opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
+      #                    title = "Orientaciones brindadas por el Programa CRIAS",
+      #                    xlab = "Año", ylab = "Cantidad de Personas Orientadas", fillLab = "Medio de Orientación",
+      #                    colorFill = opmMedio_fill_medio,
+      #                    emptyMessage = "Seleccione Medio de Orientación y Año(s) a visualizar")
+      # p <- convert_to_plotly(p, tooltip = "text")
+      
+      p <- renderBarPlot_facets(opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
                          title = "Orientaciones brindadas por el Programa CRIAS",
                          xlab = "Año", ylab = "Cantidad de Personas Orientadas", fillLab = "Medio de Orientación",
                          colorFill = opmMedio_fill_medio,
                          emptyMessage = "Seleccione Medio de Orientación y Año(s) a visualizar")
-      p <- convert_to_plotly(p, tooltip = "text")
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
-                                                 title = "Orientaciones brindadas por el Programa CRIAS",
+                                                 title = "",
                                                  xlab = "Año", ylab = "Cantidad de Personas Orientadas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
+  
+  #Titulo de la Grafica
+  output$plot_title19 <- renderUI({
+    title <- "Orientaciones brindadas por el Programa CRIAS"
+  })
+  #----
   
   opmMedio_filt_rename <- reactive({
     opmMedio_filt() %>% 
@@ -1387,22 +1448,35 @@ server <- function(input, output, session) {
       message <- "Seleccione Tipo de servicio y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
+      # p <- renderBarPlot(opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
+      #                    title = "Atención, Servicios y Seguimiento de casos \nmediante el Programa CRIAS",
+      #                    xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Tipo de Servicio",
+      #                    colorFill = opmServiciosMes_fill_tipo,
+      #                    emptyMessage = "Seleccione Tipo de servicio y Año(s) a visualizar")
+      # p <- convert_to_plotly(p, tooltip = "text")
+      
+      p <- renderBarPlot_facets(opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
                          title = "Atención, Servicios y Seguimiento de casos \nmediante el Programa CRIAS",
                          xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Tipo de Servicio",
                          colorFill = opmServiciosMes_fill_tipo,
                          emptyMessage = "Seleccione Tipo de servicio y Año(s) a visualizar")
-      p <- convert_to_plotly(p, tooltip = "text")
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
-                                                 title = "Atención, Servicios y Seguimiento de casos \nmediante el Programa CRIAS",
+                                                 title = "",
                                                  xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
+  
+  #Titulo de la Grafica
+  output$plot_title20 <- renderUI({
+    title <- "Atención, Servicios y Seguimiento de casos mediante el Programa CRIAS"
+  })
+  #----
 
   opmServiciosMes_filt_rename <- reactive({
     opmServiciosMes_filt() %>% 
@@ -1519,24 +1593,37 @@ server <- function(input, output, session) {
       message <- "Seleccione Estado de la investigación, Sexo y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot(dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
+      p <- renderBarPlot_facets(dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
                          title = "Casos en Supervisión de Ley 54: \nProgramas Alternativos al Confinamiento",
                          xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Estado de Investigación",
                          colorFill = dcrCasosInv_fill_tipo,
                          emptyMessage = "Seleccione Estado de la investigación, Sexo y Año(s) a visualizar")
-      p <- p + facet_wrap(~Sexo)
-      p <- convert_to_plotly(p, tooltip = "text")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      numPlots = length(input$checkGroup_dcr_dcrSentenciadas_tipo)
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, numPlots)
+      p <- p + facet_wrap(~Sexo, ncol = 3) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
     }
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                                                 title = "Casos en Supervisión de Ley 54: \nProgramas Alternativos al Confinamiento",
+                                                 title = "",
                                                  xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
   
+  #Titulo de la Grafica
+  output$plot_title21 <- renderUI({
+    title <- "Casos en Supervisión de Ley 54: Programas Alternativos al Confinamiento"
+  })
+  #----
 
   dcrCasosInv_filt_rename <- reactive({
     dcrCasosInv_filt() %>% 
@@ -2633,11 +2720,19 @@ server <- function(input, output, session) {
       #                    colorFill = safekitsDF_fill_Kits,
       #                    emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
       
+      #---Comentada en Deciembre-2-2024-----
+      # p <- renderBarPlot_stack(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits",
+      #                    title = HTML("Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella"),
+      #                    xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Estado de Querella",
+      #                    colorFill = safekitsDF_fill_Kits,
+      #                    emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
+      #--------
+      
       p <- renderBarPlot_stack(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits",
-                         title = HTML("Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella"),
-                         xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Estado de Querella",
-                         colorFill = safekitsDF_fill_Kits,
-                         emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
+                               title = HTML(""),
+                               xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Estado de Querella",
+                               colorFill = safekitsDF_fill_Kits,
+                               emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
       
       # p <- renderBarPlot_stack2(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits",
       #                          title = HTML("Tendencia anual del equipo de <i>SAFE Kits</i> en casos de violencia sexual"),
@@ -2645,7 +2740,7 @@ server <- function(input, output, session) {
       #                          colorFill = safekitsDF_fill_Kits,
       #                          emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
       
-      p <- convert_to_plotly(p, tooltip = "text")
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
       
       return(p)
     }
@@ -2656,11 +2751,17 @@ server <- function(input, output, session) {
     #                                              xlab = "Año", ylab = "Total de Kits Distribuidos", message)
     
     empty_plot <- create_empty_plot_with_message(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits", 
-                                                 title = HTML("Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella"), 
+                                                 title = HTML(""), 
                                                  xlab = "Año", ylab = "Total de Kits Distribuidos", message)
     
     convert_to_plotly(empty_plot, tooltip = "text")
   })
+  
+  #Titulo de la Grafica
+  output$plot_title22 <- renderUI({
+    title <- "Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella"
+  })
+  #----
 
   
   safekitsDF_filt_rename <- reactive({
