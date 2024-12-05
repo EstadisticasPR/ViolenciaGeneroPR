@@ -240,13 +240,15 @@ createDropdownCheckbox_añoFiscal <- function(label, choices, selected, id) {
     style = "display: flex; padding-right: 20px; padding-top: 10px; width: 100%;",
     tags$style(HTML('
       .btn {
-        font-size: 12px;
+        font-size: 12px !important; /* Tamaño general del botón */
         background-color: #3e3f3a !important;
         color: white !important;
         border-color: #ccc !important;
-        width: auto; /* Adjust width to content */
-        max-width: 100%; /* Limit to container */
-        box-sizing: border-box;
+        max-width: 100%; /* Máximo 100% del contenedor */
+        box-sizing: border-box; /* Incluir padding en el tamaño total */
+      }
+      .btn > span { 
+        font-size: 10px !important; /* Tamaño del título del botón */
       }
       .btn-default:hover, .btn-default:focus, .btn-default:active {
         background-color: #2c2c2a !important;
@@ -254,46 +256,130 @@ createDropdownCheckbox_añoFiscal <- function(label, choices, selected, id) {
       }
       .dropdown-menu {
         width: 100% !important;
-        font-size: 14px;
+        font-size: 8px !important; /* Tamaño de texto dentro del dropdown */
       }
       .shiny-input-checkboxgroup {
         display: flex;
         flex-direction: column;
       }
-      @media (max-width: 1040px) {
+      @media (max-width: 1040px) { /* Teléfonos y tabletas medianas */
         .btn {
-          font-size: 8px !important;
+          font-size: 10px !important; /* Tamaño general para dispositivos pequeños */
           padding: 6px 4px !important;
           max-width: 100%;
         }
+        .btn > span { 
+          font-size: 10px !important; /* Mantener el título pequeño */
+        }
         .dropdown-menu {
-          font-size: 8px !important;
+          font-size: 10px !important;
         }
       }
-      @media (max-width: 768px) {
+      @media (min-width: 1041px) { /* Computadoras (pantallas grandes) */
         .btn {
-          font-size: 8px !important;
-          padding: 6px 4px !important;
+          font-size: 12px !important; /* Tamaño general para dispositivos grandes */
+          padding: 8px 6px !important;
           max-width: 100%;
         }
-        .dropdown-menu {
-          font-size: 8px !important;
-        }
-      }
-      @media (max-width: 600px) {
-        .btn {
-          font-size: 8px !important;
-          padding: 6px 4px !important;
-          max-width: 100%;
+        .btn > span { 
+          font-size: 11px !important; /* Título del botón sigue siendo pequeño */
         }
         .dropdown-menu {
-          font-size: 8px !important;
+          font-size: 12px !important;
         }
       }
     '))
   )
 }
 
+#' createDropdownCheckbox <- function(label, choices, selected, id) {
+#'   choices <- levels(choices)
+#'   if (is.null(selected)) {
+#'     selected <- choices  # Seleccionar todos los elementos
+#'   } else {
+#'     selected <- choices[selected]
+#'   }
+#' 
+#'   div(
+#'     style = "display: flex; justify-content: center; width: 100%;",
+#'     dropdownButton(
+#'       circle = FALSE,
+#'       label = lowercaseTitle(label),
+#'       status = "default",
+#'       size = "default",
+#'       checkboxGroupInput(
+#'         paste0("checkGroup_", id),
+#'         label = "",
+#'         choices = choices,
+#'         selected = selected
+#'       ),
+#'       actionButton(
+#'         paste0("deselectAll_", id),
+#'         HTML(lowercaseTitle("(De)seleccionar<br>todo")),
+#'         style = "display: block; margin: 10px auto; width: 100%;"  # Centrar el botón dentro del dropdown
+#'       )
+#'     ),
+#'     style = "display: flex; padding-right: 20px; padding-top: 10px; width: 100%;",
+#'     tags$style(HTML('
+#'       .btn {
+#'         font-size: 10px;
+#'         background-color: #3e3f3a !important;
+#'         color: white !important;
+#'         border-color: #ccc !important;
+#'         width: auto; /* Cambiar a auto para que se adapte al contenido */
+#'         max-width: 100%; /* Máximo 100% del contenedor */
+#'         box-sizing: border-box; /* Incluir padding en el tamaño total */
+#'       }
+#'       .btn-default:hover, .btn-default:focus, .btn-default:active {
+#'         background-color: #2c2c2a !important;
+#'         color: #b0dce4 !important;
+#'       }
+#'       .dropdown-menu {
+#'         width: 100% !important;
+#'         font-size: 12px;
+#' 
+#'       }
+#'       .shiny-input-checkboxgroup {
+#' 
+#'         display: flex;
+#'         flex-direction: column;
+#' 
+#'       }
+#'       @media (max-width: 1040px) { /* Adaptación para tabletas con ancho menor a 1040px */
+#'         .btn {
+#'           font-size: 6px !important;
+#'           padding: 6px 4px !important;
+#'           max-width: 100%; /* Asegurar que no se expanda más del contenedor */
+#'         }
+#'         .dropdown-menu {
+#'           font-size: 8px !important;
+#'         }
+#'       }
+#'       @media (max-width: 768px) { /* Adaptación para dispositivos medianos */
+#'         .btn {
+#'           font-size: 6px !important;
+#'           padding: 6px 4px !important;
+#'           max-width: 100%;
+#'         }
+#'         .dropdown-menu {
+#'           font-size: 6px !important;
+#'         }
+#'       }
+#'       @media (max-width: 600px) { /* Adaptación para teléfonos */
+#'         .btn {
+#'           font-size: 6px !important;
+#'           padding: 6px 4px !important;
+#'           max-width: 100%;
+#'         }
+#'         .dropdown-menu {
+#'           font-size: 6px !important;
+#'         }
+#'       }
+#'     '))
+#'   )
+#' }
+#' 
+#' 
 createDropdownCheckbox <- function(label, choices, selected, id) {
   choices <- levels(choices)
   if (is.null(selected)) {
@@ -316,7 +402,7 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
         selected = selected
       ),
       actionButton(
-        paste0("deselectAll_", id), 
+        paste0("deselectAll_", id),
         HTML(lowercaseTitle("(De)seleccionar<br>todo")),
         style = "display: block; margin: 10px auto; width: 100%;"  # Centrar el botón dentro del dropdown
       )
@@ -324,13 +410,15 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
     style = "display: flex; padding-right: 20px; padding-top: 10px; width: 100%;",
     tags$style(HTML('
       .btn {
-        font-size: 12px;
+        font-size: 12px !important; /* Tamaño general del botón */
         background-color: #3e3f3a !important;
         color: white !important;
         border-color: #ccc !important;
-        width: auto; /* Cambiar a auto para que se adapte al contenido */
         max-width: 100%; /* Máximo 100% del contenedor */
         box-sizing: border-box; /* Incluir padding en el tamaño total */
+      }
+      .btn > span { 
+        font-size: 10px !important; /* Tamaño del título del botón */
       }
       .btn-default:hover, .btn-default:focus, .btn-default:active {
         background-color: #2c2c2a !important;
@@ -338,48 +426,44 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
       }
       .dropdown-menu {
         width: 100% !important;
-        font-size: 14px;
-        
+        font-size: 8px !important; /* Tamaño de texto dentro del dropdown */
       }
       .shiny-input-checkboxgroup {
-        
         display: flex;
         flex-direction: column;
-        
       }
-      @media (max-width: 1040px) { /* Adaptación para tabletas con ancho menor a 1040px */
+      @media (max-width: 1040px) { /* Teléfonos y tabletas medianas */
         .btn {
-          font-size: 8px !important;
-          padding: 6px 4px !important;
-          max-width: 100%; /* Asegurar que no se expanda más del contenedor */
-        }
-        .dropdown-menu {
-          font-size: 8px !important;
-        }
-      }
-      @media (max-width: 768px) { /* Adaptación para dispositivos medianos */
-        .btn {
-          font-size: 8px !important;
+          font-size: 10px !important; /* Tamaño general para dispositivos pequeños */
           padding: 6px 4px !important;
           max-width: 100%;
         }
+        .btn > span { 
+          font-size: 10px !important; /* Mantener el título pequeño */
+        }
         .dropdown-menu {
-          font-size: 8px !important;
+          font-size: 10px !important;
         }
       }
-      @media (max-width: 600px) { /* Adaptación para teléfonos */
+      @media (min-width: 1041px) { /* Computadoras (pantallas grandes) */
         .btn {
-          font-size: 8px !important;
-          padding: 6px 4px !important;
+          font-size: 12px !important; /* Tamaño general para dispositivos grandes */
+          padding: 8px 6px !important;
           max-width: 100%;
         }
+        .btn > span { 
+          font-size: 11px !important; /* Título del botón sigue siendo pequeño */
+        }
         .dropdown-menu {
-          font-size: 8px !important;
+          font-size: 12px !important;
         }
       }
     '))
   )
 }
+
+
+
 
 # Crea un elemento de lista con una imagen que enlaza a una página web especificada.
 embedImage <- function(ID, img_src, link_href, link_alt, size = "60", padding_bottom = "0px") {
@@ -440,36 +524,101 @@ embedImage <- function(ID, img_src, link_href, link_alt, size = "60", padding_bo
 #   )
 # }
 
-showDataCheckbox <- function(inputId, label = lowercaseTitle("Mostrar Datos"), value = FALSE) {
+#' showDataCheckbox <- function(inputId, label = lowercaseTitle("Mostrar Datos"), value = FALSE) {
+#'   div(
+#'     style = "background-color: #3e3f3a; border-radius: 5px; width: 150px; height: 48px; display: flex; align-items: center; justify-content: center; margin-top: 13px;",
+#'     tags$style(HTML('
+#'       .custom-checkbox {
+#'         color: white;
+#'         font-size: 13px; /* Ajustar tamaño de fuente del texto */
+#'         display: flex;
+#'         align-items: center;
+#'         justify-content: center;
+#'         width: 150px;  /* Mantener el mismo tamaño del contenedor */
+#'         height: 48px;  /* Mantener el mismo tamaño del contenedor */
+#'         border-radius: 5px; /* Asegurar que el borde se mantenga */
+#'       }
+#'       .custom-checkbox:hover {
+#'         background-color: #2c2c2a; /* Cambiar color de fondo en hover */
+#'         color: #b0dce4; /* Cambiar color del texto en hover */
+#'         width: 150px;  /* Mantener el tamaño en hover */
+#'         height: 48px;  /* Mantener el tamaño en hover */
+#'       }
+#'       .custom-checkbox input[type="checkbox"] {
+#'         padding-top: 0px; /* Ajustar padding superior del checkbox */
+#'         margin-top: 0px;
+#'         margin-right: 5px; /* Separar el checkbox del texto */
+#'         width: 18px; /* Ajustar tamaño del checkbox */
+#'         height: 18px; /* Ajustar tamaño del checkbox */
+#'       }
+#'       .custom-checkbox label {
+#'         margin: 0; /* Asegurarse de que no haya margen alrededor del label */
+#'         padding-top: 15px; /* Aplicar padding-top al texto */
+#'       }
+#'       .custom-checkbox label::before {
+#'         display: none; /* Eliminar el diseño predeterminado del checkbox */
+#'       }
+#' 
+#'       /* Estilos para pantallas pequeñas */
+#'       @media (max-width: 768px) {
+#'         .custom-checkbox {
+#'           font-size: 8px; /* Reducir tamaño de fuente en pantallas medianas */
+#'           width: 97%; /* Ajustar el ancho en pantallas medianas */
+#'         }
+#'         .custom-checkbox:hover {
+#'           width: 97%; /* Mantener el mismo tamaño en hover en pantallas medianas */
+#'         }
+#'       }
+#'       @media (max-width: 600px) {
+#'         .custom-checkbox {
+#'           font-size: 8px; /* Reducir tamaño de fuente en pantallas pequeñas */
+#'           padding: 8px 6px;
+#'           width: 97%; /* Ajustar el ancho en pantallas pequeñas */
+#'         }
+#'         .custom-checkbox:hover {
+#'           width: 97%; /* Mantener el mismo tamaño en hover en pantallas pequeñas */
+#'         }
+#'       }
+#'     ')),
+#'     div(
+#'       class = "custom-checkbox",
+#'       checkboxInput(inputId, tags$b(label), value = value)
+#'     )
+#'   )
+#' }
+#' 
+
+showDataCheckbox <- function(inputId, label = lowercaseTitle_mostrarDatos("Mostrar Datos"), value = FALSE) {
   div(
-    style = "background-color: #3e3f3a; border-radius: 5px; width: 150px; height: 48px; display: flex; align-items: center; justify-content: center; margin-top: 13px;",
+    style = "background-color: #3e3f3a; border-radius: 5px; width: 100px; height: 43px; display: flex; align-items: center; justify-content: center; margin-top: 13px;",
     tags$style(HTML('
       .custom-checkbox {
         color: white;
-        font-size: 13px; /* Ajustar tamaño de fuente del texto */
+        font-size: 13px; /* Ajustar tamaño de fuente general */
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 150px;  /* Mantener el mismo tamaño del contenedor */
-        height: 48px;  /* Mantener el mismo tamaño del contenedor */
+        width: 100px;  /* Mantener el mismo tamaño del contenedor */
+        height: 43px;  /* Mantener el mismo tamaño del contenedor */
         border-radius: 5px; /* Asegurar que el borde se mantenga */
       }
       .custom-checkbox:hover {
         background-color: #2c2c2a; /* Cambiar color de fondo en hover */
         color: #b0dce4; /* Cambiar color del texto en hover */
-        width: 150px;  /* Mantener el tamaño en hover */
-        height: 48px;  /* Mantener el tamaño en hover */
+        width: 100px;  /* Mantener el tamaño en hover */
+        height: 43px;  /* Mantener el tamaño en hover */
       }
       .custom-checkbox input[type="checkbox"] {
         padding-top: 0px; /* Ajustar padding superior del checkbox */
         margin-top: 0px;
         margin-right: 5px; /* Separar el checkbox del texto */
-        width: 18px; /* Ajustar tamaño del checkbox */
-        height: 18px; /* Ajustar tamaño del checkbox */
+        width: 16px; /* Ajustar tamaño del checkbox */
+        height: 16px; /* Ajustar tamaño del checkbox */
       }
       .custom-checkbox label {
         margin: 0; /* Asegurarse de que no haya margen alrededor del label */
         padding-top: 15px; /* Aplicar padding-top al texto */
+        font-size: 8px; /* Ajustar el tamaño del texto del título */
       }
       .custom-checkbox label::before {
         display: none; /* Eliminar el diseño predeterminado del checkbox */
@@ -481,6 +630,9 @@ showDataCheckbox <- function(inputId, label = lowercaseTitle("Mostrar Datos"), v
           font-size: 8px; /* Reducir tamaño de fuente en pantallas medianas */
           width: 97%; /* Ajustar el ancho en pantallas medianas */
         }
+        .custom-checkbox label {
+          font-size: 10px !important; /* Mantener el texto pequeño */
+        }
         .custom-checkbox:hover {
           width: 97%; /* Mantener el mismo tamaño en hover en pantallas medianas */
         }
@@ -490,6 +642,9 @@ showDataCheckbox <- function(inputId, label = lowercaseTitle("Mostrar Datos"), v
           font-size: 8px; /* Reducir tamaño de fuente en pantallas pequeñas */
           padding: 8px 6px;
           width: 97%; /* Ajustar el ancho en pantallas pequeñas */
+        }
+        .custom-checkbox label {
+          font-size: 10px !important; /* Asegurar consistencia en el tamaño del texto */
         }
         .custom-checkbox:hover {
           width: 97%; /* Mantener el mismo tamaño en hover en pantallas pequeñas */
@@ -520,6 +675,15 @@ customSeparator <- function() {
 
 # Función para hacer que los titulos se muestren en letras minúsculas
 lowercaseTitle <- function(title, font_size = "15px") {
+  HTML(paste0(
+    "<span style='text-transform: none; font-size: ", font_size, ";'>",
+    title,
+    "</span>"
+  ))
+}
+
+# Función para hacer que los titulos se muestren en letras minúsculas
+lowercaseTitle_mostrarDatos <- function(title, font_size = "11px") {
   HTML(paste0(
     "<span style='text-transform: none; font-size: ", font_size, ";'>",
     title,
