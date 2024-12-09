@@ -2528,6 +2528,13 @@ ui <-
             ),
             
             authorTag(
+              nombre = 'Aisha M. Cruz De Jesús',
+              email = 'aisha.cruz@estadisticas.pr',
+              puesto = 'Programadora Estadística',
+              grados = 'BS Ciencia de Computos, Universidad de Puerto Rico Arecibo'
+            ),
+            
+            authorTag(
               nombre = 'Manuel Mangual Martínez',
               email = 'manuel.mangual@estadisticas.pr',
               puesto = 'Supervisor del Proyecto Prevención, Apoyo, Rescate y Educación de la Violencia de Género',
