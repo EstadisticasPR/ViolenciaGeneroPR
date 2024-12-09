@@ -1082,7 +1082,7 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1, 
 
   # Ajustar los tamaños basados en el tamaño del contenedor
   title_size <- ifelse(width < 500, 16, ifelse(width < 800, 18, 22))
-  axis_text_size <- ifelse(width < 500, 14, ifelse(width < 800, 16, 18))
+  axis_text_size <- ifelse(width < 500, 13, ifelse(width < 800, 15, 18))
   tick_size <- ifelse(height < 400, 12, 14)
   legend_font_size <- ifelse(width < 500, 10, 12)  # Ajuste dinámico del tamaño de fuente de la leyenda
 
@@ -1153,8 +1153,9 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1, 
         orientation = "h",
         font = list(size = legend_font_size, family = "Arial", color = "black"),
         title = list(
-          text = paste0(legend_title, "\n"),  # Cambiar a `\n` para salto de línea
-          font = list(size = axis_text_size, family = "Arial", color = "black", weight = "bold")
+          text = paste0("     <b>",legend_title, "</b>", "\n"),  # Cambiar a `\n` para salto de línea
+          font = list(size = axis_text_size, family = "Arial", color = "black"),
+          side = "top"
         ),
         traceorder = "normal",
         itemwidth = 50,  # Ajuste del ancho de cada categoría
