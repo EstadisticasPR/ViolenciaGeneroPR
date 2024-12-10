@@ -981,8 +981,8 @@ server <- function(input, output, session) {
       #Altura predeterminada para la grafica.
       total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Sexo, ncol = 2)+
-        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(1, "lines")) #Espacio entre las facetas en y.
+        theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
       p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
