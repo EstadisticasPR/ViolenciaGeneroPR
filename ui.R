@@ -1180,11 +1180,12 @@ ui <-
             mainPanel(
               style = "height: calc(100vh - 150px); padding-bottom: 10px;",
               fluidRow(
-                column(12, 
-                       div(id = "scrollable-plot", 
+                column(12,
+                       div(id = "scrollable-plot",
                            div(id = "plot-title", uiOutput("plot_title16")),
-                           plotlyOutput("barPlot_opm_opmFemiVD"),  height = "100%"))
+                           plotlyOutput("linePlot_opm_opmFemiVD"),  height = "100%"))
               ),
+
               #plotlyOutput("barPlot_opm_opmFemiVD", height = "100%"),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
@@ -1205,6 +1206,7 @@ ui <-
                 )
               )
             )
+            
           ),
         ),
         
@@ -2531,7 +2533,7 @@ ui <-
               nombre = 'Aisha M. Cruz De Jesús',
               email = 'aisha.cruz@estadisticas.pr',
               puesto = 'Programadora Estadística',
-              grados = 'BS Ciencia de Computos, Universidad de Puerto Rico Arecibo'
+              grados = 'BS Ciencias de Computos, Universidad de Puerto Rico Arecibo'
             ),
             
             authorTag(
