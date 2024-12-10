@@ -733,64 +733,137 @@ updateCheckboxGroup <- function(session, inputId, input, data) {
   }
 }
 
+# create_empty_plot_with_message_forLine <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
+#   data_df <- data()
+#   ggplot(data_df, aes_string(x = x, y = y)) +
+#     geom_blank() +  
+#     labs(title = title, x = xlab, y = ylab) +
+#     theme_minimal() +
+#     theme(
+#       axis.text.x = element_blank(),
+#       axis.ticks = element_blank(),  
+#       axis.text.y = element_blank(),
+#       axis.title.x = element_text(size = 12, margin = margin(t = 10)), 
+#       axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
+#       plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+#       panel.border = element_rect(colour = "black", fill = NA, size = 1),
+#       plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
+#     ) +
+#     annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 4, hjust = 0.5, vjust = 0.5)
+# }
+
 create_empty_plot_with_message_forLine <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
   data_df <- data()
-  ggplot(data_df, aes_string(x = x, y = y)) +
-    geom_blank() +  
+  
+  # Crear el gráfico base
+  base_plot <- ggplot(data_df, aes_string(x = x, y = y)) +
+    geom_blank() +
     labs(title = title, x = xlab, y = ylab) +
     theme_minimal() +
     theme(
       axis.text.x = element_blank(),
-      axis.ticks = element_blank(),  
+      axis.ticks = element_blank(),
       axis.text.y = element_blank(),
-      axis.title.x = element_text(size = 12, margin = margin(t = 10)), 
-      axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
+      axis.title.x = element_text(size = 12, margin = margin(t = 10)),
+      axis.title.y = element_text(size = 12, margin = margin(r = 10)),
       plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
       panel.border = element_rect(colour = "black", fill = NA, size = 1),
       plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
-    ) +
-    annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 4, hjust = 0.5, vjust = 0.5)
+    )
+  
+  # Obtener las dimensiones de la trama
+  plot_data <- ggplot_build(base_plot)
+  panel_width <- diff(plot_data$layout$panel_params[[1]]$x.range)
+  panel_height <- diff(plot_data$layout$panel_params[[1]]$y.range)
+  
+  # Calcular el tamaño del texto en función de las dimensiones del panel
+  text_size <- min(panel_width, panel_height) * 1.75
+  
+  # Agregar el texto dinámico al gráfico
+  base_plot +
+    annotate(
+      "text", x = 0.5, y = 0.5, label = emptyMessage,
+      size = text_size, hjust = 0.5, vjust = 0.5
+    )
 }
 
-
 # Renderiza un gráfico de lineas utilizando ggplot2 en el UI de Shiny.
+# renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, emptyMessage) {
+# 
+#   data_df <- data()  # Evaluar los datos reactivos una vez
+# 
+#   if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]])) {
+#     # Si no hay datos o las variables x/y son nulas, mostrar una gráfica vacía con ejes y un mensaje
+#     p <- create_empty_plot_with_message_forLine(data, x, y, fill, title, xlab, ylab,emptyMessage)
+#     
+#     return(p)
+#     # Si no hay datos o las variables x/y son nulas, mostrar una gráfica vacía con ejes y un mensaje
+#     # p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
+#     #   geom_blank() +  
+#     #   labs(title = title, x = xlab, y = ylab) +
+#     #   theme_minimal() +
+#     #   theme(
+#     #     axis.text.x = element_blank(),
+#     #     axis.ticks = element_blank(), 
+#     #     axis.text.y = element_blank(), 
+#     #     axis.title.x = element_text(size = 12, margin = margin(t = 10)),  
+#     #     axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
+#     #     plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
+#     #     panel.border = element_rect(colour = "black", fill = NA, size = 1),
+#     #     plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
+#     #   ) +
+#     #   annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 6, hjust = 0.5, vjust = 0.5)
+#     # 
+#     # return(p)
+# 
+#   } else {
+#     # Calcular rango del eje de y
+#     y_max <- max(data_df[[y]], na.rm = TRUE)
+#     y_interval <- pretty(c(0, y_max), n = 5)[2]  
+#     upper_y_limit <- ceiling(y_max / y_interval) * y_interval  
+# 
+# 
+#     p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
+#       geom_line(color = "#2f2e7d", size = 1) +  
+#       geom_point(color = "#adcc4e", size = 2,
+#                  aes(
+#                    text =
+#                      paste0("<b>", xlab, ":</b> ", .data[[x]],
+#                             "<br><b>", ylab, ":</b> ", .data[[y]]
+#                      )
+#                  )
+#       ) +
+#       expand_limits(y = 0) +  # Asegurar que el eje y comience en 0
+#       labs(title = title, x = xlab, y = ylab, color = colorlab) +
+#       scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+#                          expand = expansion(mult = c(0, 0.1))) +
+#       coord_cartesian(ylim = c(0, upper_y_limit)) +
+#       theme_minimal() +
+#       theme(
+#         axis.text.x = element_text(angle = 45, hjust = 1),
+#         plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+#         panel.border = element_rect(colour = "black", fill = NA, size = 1),
+#         plot.margin = margin(t = 45, r = 10, b = 10, l = 10)
+#       )
+# 
+#     return(p)
+#   }
+# }
+
 renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, emptyMessage) {
-
   data_df <- data()  # Evaluar los datos reactivos una vez
-
+  
   if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]])) {
-    # Si no hay datos o las variables x/y son nulas, mostrar una gráfica vacía con ejes y un mensaje
-    p <- create_empty_plot_with_message_forLine(data, x, y, fill, title, xlab, ylab,emptyMessage)
-    
+    # Mostrar una gráfica vacía con un mensaje si no hay datos
+    p <- create_empty_plot_with_message_forLine(data, x, y, fill, title, xlab, ylab, emptyMessage)
     return(p)
-    # Si no hay datos o las variables x/y son nulas, mostrar una gráfica vacía con ejes y un mensaje
-    # p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
-    #   geom_blank() +  
-    #   labs(title = title, x = xlab, y = ylab) +
-    #   theme_minimal() +
-    #   theme(
-    #     axis.text.x = element_blank(),
-    #     axis.ticks = element_blank(), 
-    #     axis.text.y = element_blank(), 
-    #     axis.title.x = element_text(size = 12, margin = margin(t = 10)),  
-    #     axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
-    #     plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
-    #     panel.border = element_rect(colour = "black", fill = NA, size = 1),
-    #     plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
-    #   ) +
-    #   annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 6, hjust = 0.5, vjust = 0.5)
-    # 
-    # return(p)
-
   } else {
-    # Calcular rango del eje de y
-    y_max <- max(data_df[[y]], na.rm = TRUE)
-    y_interval <- pretty(c(0, y_max), n = 5)[2]  
-    upper_y_limit <- ceiling(y_max / y_interval) * y_interval  
-
-
+    # Filtrar los niveles del factor Año para que solo incluya cada 5 años
+    x_levels <- levels(data_df[[x]])
+    x_labels <- ifelse(as.numeric(x_levels) %% 5 == 0, x_levels, "")  # Mostrar etiquetas solo cada 5 años
+    
     p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
-      geom_line(color = "#2f2e7d", size = 1) +  
+      geom_line(color = "#2f2e7d", size = 1) +
       geom_point(color = "#adcc4e", size = 2,
                  aes(
                    text =
@@ -803,7 +876,7 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
       labs(title = title, x = xlab, y = ylab, color = colorlab) +
       scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
                          expand = expansion(mult = c(0, 0.1))) +
-      coord_cartesian(ylim = c(0, upper_y_limit)) +
+      scale_x_discrete(labels = x_labels) +  # Usar etiquetas filtradas para el eje x
       theme_minimal() +
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1),
@@ -811,29 +884,65 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
         panel.border = element_rect(colour = "black", fill = NA, size = 1),
         plot.margin = margin(t = 45, r = 10, b = 10, l = 10)
       )
-
+    
     return(p)
   }
 }
 
+
 # Crea un gráfico vacio indicando al usuario que debe seleccionar las variables a visualizar
+# create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
+#   data_df <- data()
+#   ggplot(data_df, aes_string(x = x, y = y)) +
+#     geom_blank() +  
+#     labs(title = title, x = xlab, y = ylab) +
+#     theme_minimal() +
+#     theme(
+#       axis.text.x = element_blank(),
+#       axis.ticks = element_blank(),  
+#       axis.text.y = element_blank(),
+#       axis.title.x = element_text(size = 12, margin = margin(t = 10)), 
+#       axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
+#       plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
+#       panel.border = element_rect(colour = "black", fill = NA, size = 1),
+#       plot.margin = margin(t = 100, r = 50, b = 100, l = 50)
+#     ) +
+#     annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 4, hjust = 0.5, vjust = 0.5)
+# }
+
 create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
   data_df <- data()
-  ggplot(data_df, aes_string(x = x, y = y)) +
-    geom_blank() +  
+  
+  # Crear el gráfico base
+  base_plot <- ggplot(data_df, aes_string(x = x, y = y)) +
+    geom_blank() +
     labs(title = title, x = xlab, y = ylab) +
     theme_minimal() +
     theme(
       axis.text.x = element_blank(),
-      axis.ticks = element_blank(),  
+      axis.ticks = element_blank(),
       axis.text.y = element_blank(),
-      axis.title.x = element_text(size = 12, margin = margin(t = 10)), 
-      axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
+      axis.title.x = element_text(size = 12, margin = margin(t = 10)),
+      axis.title.y = element_text(size = 12, margin = margin(r = 10)),
       plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
       panel.border = element_rect(colour = "black", fill = NA, size = 1),
       plot.margin = margin(t = 100, r = 50, b = 100, l = 50)
-    ) +
-    annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 4, hjust = 0.5, vjust = 0.5)
+    )
+  
+  # Obtener las dimensiones de la trama
+  plot_data <- ggplot_build(base_plot)
+  panel_width <- diff(plot_data$layout$panel_params[[1]]$x.range)
+  panel_height <- diff(plot_data$layout$panel_params[[1]]$y.range)
+  
+  # Calcular el tamaño del texto en función de las dimensiones del panel
+  text_size <- min(panel_width, panel_height) * 1.75
+  
+  # Agregar el texto dinámico al gráfico
+  base_plot +
+    annotate(
+      "text", x = 0.5, y = 0.5, label = emptyMessage,
+      size = text_size, hjust = 0.5, vjust = 0.5
+    )
 }
 
 #Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
@@ -919,9 +1028,6 @@ renderBarPlot_facets <- function(data, x, y, fill, title, xlab, ylab, fillLab = 
     return(p)
   }
 }
-#-----
-
-
 
 
 # renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
@@ -1384,8 +1490,8 @@ renderDataTable_Definitions <- function(filtered_data, title) {
 
 
 
-# Renderiza un mapa utilizando ggplot2 en el UI del ShinyApp
-renderMap <- function(data, fill, title, group, fill_lab = fill, 
+# # Renderiza un mapa utilizando ggplot2 en el UI del ShinyApp
+renderMap <- function(data, fill, title, group, fill_lab = fill,
                       light_color = "lightblue", dark_color = "darkblue") {
   p <- ggplot(data()) +
     geom_sf(aes(fill = {{fill}}, group = {{group}})) +  # Incluye group como aesthetic mapping
@@ -1394,16 +1500,17 @@ renderMap <- function(data, fill, title, group, fill_lab = fill,
     scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
     theme_minimal() +
     theme(
-      legend.position = "bottom",
+      legend.position = "left",
       axis.text = element_blank(),
       axis.ticks = element_blank(),
       panel.grid = element_blank(),
-      panel.border = element_rect(colour = "black", fill = NA, size = 1),  
+      panel.border = element_rect(colour = "black", fill = NA, size = 1),
       plot.margin = margin(20, 10, 10, 10),
       # plot.title = element_text(hjust = 0.5)
     )
   print(p)
 }
+
 
 renderMapGroup <- function(data, fill, title, fill_lab = fill) {
   p <- ggplot(data) +

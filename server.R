@@ -294,7 +294,7 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_año || !has_tipo || !has_sexo) {
-      message <- "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)"
+      message <- "Seleccione Tipo(s) de maltrato, Año(s) y Distrito(s)"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
@@ -307,9 +307,9 @@ server <- function(input, output, session) {
       numPlots = length(input$checkGroup_fam_dfMalt_sexo)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
       total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Sexo, ncol = 3) +
+      p <- p + facet_wrap(~Sexo, ncol = 2) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+              panel.spacing.y = unit(1.5, "lines")) #Espacio entre las facetas en y.
       
       p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
 
@@ -521,17 +521,20 @@ server <- function(input, output, session) {
   })
   
   output$map_just_mapaDeli <- renderPlotly({
+    # Generar el gráfico con ggplot
     p <- renderMap(
       data = mapaDeli_filt, fill = Casos,
-      # Casos de delitos por Distrito Fiscal según Artículo de la Ley 54
       title = paste0("Casos de delitos por Distrito Fiscal según el Artículo de \n", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año),
       group = GROUP,
       fill_lab = "Número de casos",
       light_color = "#E0BBE4",
       dark_color = "#5A189A"
     )
+
+    # Convertir el gráfico ggplot a plotly y ajustar la leyenda y colorbar
     ggplotly(p, tooltip = c("all"))
   })
+
   
     #Titulo de la Grafica
   output$plot_title23 <- renderUI({
@@ -714,8 +717,6 @@ server <- function(input, output, session) {
   output$plot_title3 <- renderUI({
     title <- "Viviendas Públicas Solicitadas y Asignadas \nAnualmente por Violencia Doméstica según Región"
   })
-  #----
-
   
   output$map_avp_mapaAvp <- renderPlotly({
     p <- renderMap(
@@ -726,7 +727,7 @@ server <- function(input, output, session) {
       light_color = "#E0BBE4",
       dark_color = "#5A189A"
     )
-    ggplotly(p + facet_wrap(~Estado),
+    ggplotly(p + facet_wrap(~Estado, ncol = 1),
              tooltip = c("all"))
   })
   
@@ -966,22 +967,22 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_edad || !has_año || !has_sexo) {
-      message <- "Seleccione Grupo(s) de Edad, Sexo de la Víctima y Año(s) a visualizar"
+      message <- HTML("Seleccione Grupo(s) de Edad, Sexo de \n la Víctima y Año(s) a visualizar")
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
                          paste("Incidencia de Violencia Doméstica \npor Edad de la Víctima"),
                          xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Grupo de Edad",
                          colorFill = vEdad_fill_edad,
-                         emptyMessage = "Seleccione Grupo(s) de Edad, Sexo de la Víctima y Año(s) a visualizar",barWidth = 0, xGap = 0)
+                         emptyMessage = HTML("Seleccione Grupo(s) de Edad, Sexo de \n la Víctima y Año(s) a visualizar"),barWidth = 0, xGap = 0)
       #Altura predeterminada para la grafica.
       plot_height = 500
       numPlots = length(input$checkGroup_poli_vEdad_sexo)
       #Altura predeterminada para la grafica.
       total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Sexo, ncol = 2)+
-        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(1, "lines")) #Espacio entre las facetas en y.
+        theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
       p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
       return(p)
@@ -1091,7 +1092,7 @@ server <- function(input, output, session) {
   })
   
   # Grafico de barras
-  output$barPlot_opm_opmFemiVD <- renderPlotly({
+  output$linePlot_opm_opmFemiVD <- renderPlotly({
   #   p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "Tasa", group = "1",
   #                       color = "1", title = "Tasa Anual de Asesinatos de Mujeres \n por Violencia Doméstica",
   #                       xlab = "Año", ylab = "Tasa por cada 100 mil mujeres",
@@ -1101,7 +1102,8 @@ server <- function(input, output, session) {
                         xlab = "Año", ylab = "Tasa por cada 100 mil mujeres",
                         emptyMessage = "Seleccione los Año(s) que desea visualizar")
     
-    ggplotly(p, tooltip = "text")
+    #ggplotly(p, tooltip = "text")
+    convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
   })
   
   #Titulo de la Grafica
@@ -1601,22 +1603,22 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_año || !has_tipo || !has_sexo) {
-      message <- "Seleccione Estado de la investigación, Sexo y Año(s) a visualizar"
+      message <- HTML("Seleccione Estado de la investigación, \n Sexo y Año(s) a visualizar")
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
                          title = "Casos en Supervisión de Ley 54: \nProgramas Alternativos al Confinamiento",
                          xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Estado de Investigación",
                          colorFill = dcrCasosInv_fill_tipo,
-                         emptyMessage = "Seleccione Estado de la investigación, Sexo y Año(s) a visualizar")
+                         emptyMessage = HTML("Seleccione Estado de la investigación, \n Sexo y Año(s) a visualizar"))
       #Altura predeterminada para la grafica.
       plot_height = 500
       numPlots = length(input$checkGroup_dcr_dcrSentenciadas_tipo)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
       total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Sexo, ncol = 3) +
-        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      p <- p + facet_wrap(~Sexo, ncol = 2) +
+        theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
       
       p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
@@ -1767,9 +1769,9 @@ server <- function(input, output, session) {
       numPlots = length(input$checkGroup_dcr_dcrSentenciadas_tipo)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
       total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Estado, ncol = 3) +
-        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      p <- p + facet_wrap(~Estado, ncol = 1) +
+        theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
       
       p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
@@ -1885,14 +1887,14 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_año || !has_edad || !has_region) {
-      message <- "Seleccione Grupo(s) de Edad, Región Judicial y Año(s) a visualizar"
+      message <- HTML("Seleccione Grupo(s) de Edad, Región Judicial \n y Año(s) a visualizar")
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
                          title = "Solicitudes de Órdenes de Protección \nbajo Ley 148 según Región Judicial y Edad",
                          xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
                          colorFill = OP_148_SoliGrupEdad_fill_edad,
-                         emptyMessage = "Seleccione Grupo(s) de Edad, Región Judicial y Año(s) a visualizar")
+                         emptyMessage = HTML("Seleccione Grupo(s) de Edad, Región Judicial \n y Año(s) a visualizar"))
       #Altura predeterminada para la grafica.
       plot_height = 500
       numPlots = length(input$checkGroup_trib_OP_148_SoliGrupEdad_Región)
@@ -1995,14 +1997,14 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_año || !has_delito || !has_region) {
-      message <- "Seleccione Delito(s), Región Judicial y Año(s) a visualizar"
+      message <- HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar")
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
                          title = "Órdenes de Protección Ex Parte emitidas \nbajo Ley 148, según Región Judicial y delito cometido",
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                          colorFill = OP_Ley148_ex_parteEmitidas_fill_delito,
-                         emptyMessage = "Seleccione Delito(s), Región Judicial y Año(s) a visualizar")
+                         emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
       #Altura predeterminada para la grafica.
       plot_height = 500
       numPlots = length(input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región)
@@ -2109,14 +2111,14 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_año || !has_razon || !has_region) {
-      message <- "Seleccione Razón, Distrito Fiscal y Año(s) a visualizar"
+      message <- HTML("Seleccione Razón, Distrito Fiscal \n y Año(s) a visualizar")
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
                          title = "Órdenes de Protección Ex Parte \nArchivadas bajo Ley 148 según Región Judicial",
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
                          colorFill = OP_LEY148Archivadas_fill_Razón,
-                         emptyMessage = "Seleccione Razón, Distrito Fiscal y Año(s) a visualizar")
+                         emptyMessage = HTML("Seleccione Razón, Distrito Fiscal \n y Año(s) a visualizar"))
       #Altura predeterminada para la grafica.
       plot_height = 500
       numPlots = length(input$checkGroup_trib_OP_LEY148Archivadas_Región)
@@ -2221,14 +2223,14 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_año || !has_razon || !has_region) {
-      message <- "Seleccione Razón, Región Judicial y Año(s) a visualizar"
+      message <- HTML("Seleccione Razón, Región Judicial \n y Año(s) a visualizar")
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
                          title = "Órdenes de protección denegadas bajo \nLey 148 por Razón de Archivo según Región Judicial",
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
                          colorFill = OP_LEY148Denegadas_fill_Razón,
-                         emptyMessage = "Seleccione Razón, Región Judicial y Año(s) a visualizar")
+                         emptyMessage = HTML("Seleccione Razón, Región Judicial \n y Año(s) a visualizar"))
       #Altura predeterminada para la grafica.
       plot_height = 500
       numPlots = length(input$checkGroup_trib_OP_LEY148Denegadas_Región)
@@ -2332,14 +2334,14 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_año || !has_delito || !has_region) {
-      message <- "Seleccione Delito(s), Región Judicial y Año(s) a visualizar"
+      message <- HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar")
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
                          title = "Órdenes de protección emitidas bajo Ley 148, \nsegún Región Judicial y Tipo de Delito",
                          xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                          colorFill = OP_LEY148FinalEmitidas_fill_Delito,
-                         emptyMessage = "Seleccione Delito(s), Región Judicial y Año(s) a visualizar")
+                         emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
       #Altura predeterminada para la grafica.
       plot_height = 500
       numPlots = length(input$checkGroup_trib_OP_LEY148FinalEmitidas_Región)
@@ -2443,7 +2445,7 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_año || !has_parte || !has_sexo) {
-      message <- "Seleccione Parte(s), Sexo y Año(s) a visualizar"
+      message <- HTML("Seleccione Parte(s), Sexo y Año(s) a visualizar")
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte",
@@ -2550,14 +2552,14 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_año || !has_delito || !has_casos) {
-      message <- "Seleccione Delito(s), Estado del caso y Año(s) a visualizar"
+      message <- HTML("Seleccione Delito(s), Estado del caso \n y Año(s) a visualizar")
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
                          title = "Movimiento Anual de Casos de Violencia \nDoméstica en el Tribunal según Ley 54",
                          xlab = "Año Fiscal", ylab = "Casos", fillLab = "Delito Cometido",
                          colorFill = tribCasosCrim_fill_Delito,
-                         emptyMessage = "Seleccione Delito(s), Estado del caso y Año(s) a visualizar", barWidth = 0, xGap = 0)
+                         emptyMessage = HTML("Seleccione Delito(s), Estado del caso \n y Año(s) a visualizar"), barWidth = 0, xGap = 0)
       #Altura predeterminada para la grafica.
       plot_height = 500
       numPlots = length(input$checkGroup_trib_tribCasosCrim_Casos)

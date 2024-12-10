@@ -19,6 +19,8 @@ library(sf)
 library(zoo)
 library(writexl)
 library(scales)
+library(ggplot2)
+library(leaflet)
 library(grDevices)
 source("utils.R")
 
@@ -683,7 +685,6 @@ opmFemiVD <- read_excel(paste0(opm, "opmFemiVD.xlsx")) %>%
   rename(
     Asesinatos = `Cantidad de asesinatos`,
     Tasa = `Tasa (x100,000 mujeres)`
-    # Continúa con los nombres que desees cambiar
   ) 
 
 #### opmCasos ####
