@@ -876,7 +876,7 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
       labs(title = title, x = xlab, y = ylab, color = colorlab) +
       scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
                          expand = expansion(mult = c(0, 0.1))) +
-      scale_x_discrete(labels = x_labels) +  # Usar etiquetas filtradas para el eje x
+      scale_x_discrete(breaks = x_labels) +  # Usar etiquetas filtradas para el eje x
       theme_minimal() +
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1),
