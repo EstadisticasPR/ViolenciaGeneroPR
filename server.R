@@ -203,16 +203,38 @@ server <- function(input, output, session) {
   
   #### Tab de Definiciones ####
   definitions_snmv <- list(
-    list(word = "Homicidio", definition = "Es un delito de resultado por el cual la conducta intencionada de un sujeto provoca la muerte de otro."),
-    list(word = "Homicidio múltiple", definition = "Se refiere a un acto en el cual una persona causa la muerte de múltiples individuos en un solo incidente."),
-    list(word = "Homicidio seguido de suicidio", definition = "Se refiere a un acto en el cual una persona causa la muerte de otra(s) y luego se quita la vida. Este tipo de incidente implica dos acciones distintas pero relacionadas: primero, el homicida comete el acto de matar a otra persona, y luego, la misma persona toma su propia vida."),
-    list(word = "Homicidio(s) seguido de suicidio(s), (más de dos víctimas)", definition = "Se refiere a un acto extremadamente trágico en el cual una o más personas causan la muerte de múltiples individuos antes de acabar con sus propias vidas en un solo evento."),
-    list(word = "Homicidio único", definition = "Se refiere a un acto en el cual una persona causa la muerte de otra en un evento específico."),
-    list(word = "Muerte accidental por arma de fuego", definition = "Evento en el cual una persona pierde la vida como resultado involuntario de la manipulación, manejo o uso incorrecto de un arma de fuego. Este tipo de incidente ocurre cuando un individuo dispara un arma de manera accidental, ya sea debido a un descuido, falta de conocimiento sobre el funcionamiento seguro del arma, o por la manipulación indebida del arma."),
-    list(word = "Muerte no determinada", definition = "Caso en el cual las circunstancias que rodean el fallecimiento de una persona no pueden ser claramente establecidas o comprendidas mediante la evidencia disponible en el momento de la investigación. Este término se utiliza cuando no hay suficiente información o evidencia forense para determinar con certeza si la muerte fue el resultado de causas naturales, accidentales, suicidas u homicidas."),
-    list(word = "Muertes violentas", definition = "PRVDRS define una muerte violenta como: Suicidio (incluyendo terrorismo), Homicidio (incluyendo terrorismo), Intervención legal (excluyendo terrorismo, ejecuciones por pena de muerte, o actos de guerra), Eventos con intención no determinada, Heridas por arma de fuego no intencional."),
-    list(word = "Suicidio Único", definition = "Se refiere a un acto en el cual una persona termina deliberadamente con su propia vida, sin la participación o implicación de otras personas en el proceso. Este término implica que el individuo toma la decisión y ejecuta el acto suicida de manera independiente, sin ningún intento de causar la muerte de otras personas o de involucrar a terceros en el evento."),
-    list(word = "Violencia", definition = "El uso intencional de la fuerza o el poder físico, de hecho, o como amenaza, contra uno mismo, otra persona o un grupo o comunidad, que cause o tenga gran probabilidad de causar lesiones, muerte, daños psicológicos, trastornos del desarrollo o privaciones.")
+    list(word = "Homicidio", definition = "Es un delito de resultado por el cual la conducta intencionada
+         de un sujeto provoca la muerte de otro."),
+    list(word = "Homicidio múltiple", definition = "Se refiere a un acto en el cual una persona causa la 
+         muerte de múltiples individuos en un solo incidente."),
+    list(word = "Homicidio seguido de suicidio", definition = "Se refiere a un acto en el cual una persona causa 
+         la muerte de otra(s) y luego se quita la vida. Este tipo de incidente implica dos acciones distintas pero
+         relacionadas: primero, el homicida comete el acto de matar a otra persona, y luego, la misma persona toma 
+         su propia vida."),
+    list(word = "Homicidio(s) seguido de suicidio(s), (más de dos víctimas)", definition = "Se refiere a un acto 
+         extremadamente trágico en el cual una o más personas causan la muerte de múltiples individuos antes de acabar
+         con sus propias vidas en un solo evento."),
+    list(word = "Homicidio único", definition = "Se refiere a un acto en el cual una persona causa la muerte de otra 
+         en un evento específico."),
+    list(word = "Muerte accidental por arma de fuego", definition = "Evento en el cual una persona pierde la vida 
+         como resultado involuntario de la manipulación, manejo o uso incorrecto de un arma de fuego. Este tipo de 
+         incidente ocurre cuando un individuo dispara un arma de manera accidental, ya sea debido a un descuido, falta
+         de conocimiento sobre el funcionamiento seguro del arma, o por la manipulación indebida del arma."),
+    list(word = "Muerte no determinada", definition = "Caso en el cual las circunstancias que rodean el fallecimiento
+         de una persona no pueden ser claramente establecidas o comprendidas mediante la evidencia disponible en el 
+         momento de la investigación. Este término se utiliza cuando no hay suficiente información o evidencia forense
+         para determinar con certeza si la muerte fue el resultado de causas naturales, accidentales, suicidas u homicidas."),
+    list(word = "Muertes violentas", definition = "El Sistema de Notificación de Muertes Violentas de Puerto Rico (PRVDRS por
+         su siglas en inglés) define una muerte violenta como: Suicidio (incluyendo terrorismo), Homicidio (incluyendo terrorismo),
+         Intervención legal (excluyendo terrorismo, ejecuciones por pena de muerte, o actos de guerra), Eventos con intención 
+         no determinada, Heridas por arma de fuego no intencional."),
+    list(word = "Suicidio Único", definition = "Se refiere a un acto en el cual una persona termina deliberadamente con 
+         su propia vida, sin la participación o implicación de otras personas en el proceso. Este término implica que el 
+         individuo toma la decisión y ejecuta el acto suicida de manera independiente, sin ningún intento de causar la 
+         muerte de otras personas o de involucrar a terceros en el evento."),
+    list(word = "Violencia", definition = "El uso intencional de la fuerza o el poder físico, de hecho, o como amenaza, 
+         contra uno mismo, otra persona o un grupo o comunidad, que cause o tenga gran probabilidad de causar lesiones, 
+         muerte, daños psicológicos, trastornos del desarrollo o privaciones.")
   )
   
   # Convertir lista a dataframe
@@ -369,20 +391,52 @@ server <- function(input, output, session) {
   
   #### Tab de Definiciones ####
   definitions_fam <- list(
-    list(word = "Abuso Sexual", definition = "Incurrir en conducta sexual en presencia de un o una menor o que se utilice, voluntaria o involuntariamente, para ejecutar conducta sexual dirigida a satisfacer los deseos sexuales. También se considera cualquier acto que, de procesarse por la vía criminal, configuraría cualesquiera de varios delitos de índole sexual, tales como agresión sexual, actos lascivos, comercio de personas para actos sexuales, exposiciones obscenas, proposición obscena, producción de pornografía infantil, entre otros delitos reconocidos en el Código Penal de Puerto Rico."),
-    list(word = "Explotación", definition = "Conducta obscena o utilización de una persona menor de edad para ejecutar conducta obscena. Explotación de una persona menor de edad o que se permita que otra persona lo explote, incluyendo –pero sin limitarse– a utilizarla para ejecutar conducta obscena, con el fin de lucrarse o de recibir algún otro beneficio."),
-    list(word = "Maltrato a Menores", definition = "Toda acción u omisión intencional del padre, de la madre o persona responsable del o de la menor que ocasione o ponga en riesgo de sufrir un daño o perjuicio a su salud e integridad física, mental o emocional."),
-    list(word = "Maltrato Físico", definition = "Se refiere a cualquier trauma, lesión o condición no accidental, causada en un episodio o varios, incluyendo la falta de alimentos que, de no ser atendida, pone en riesgo la vida y salud de la persona menor de edad."),
-    list(word = "Menores", definition = "Individuos que se encuentran bajo la edad legal de mayoría de edad en un contexto específico, lo que generalmente implica que aún no han alcanzado la edad en la que se les considera plenamente responsables de sus acciones según la ley."),
-    list(word = "Negligencia", definition = "Es un tipo de maltrato que consiste en no cumplir con la obligación de proveer a las personas menores de edad de manera adecuada los alimentos, ropa, albergue, educación, atención a su salud, poca supervisión, no visitar, ni mantener contacto con el o la menor o incurrir en alguna de las razones reconocidas en el Código Civil de Puerto Rico para que una persona sea privada de patria potestad entre otros."),
-    list(word = "Negligencia Educativa", definition = HTML("La negligencia institucional es cuando a una persona menor de edad, que está en un hogar de crianza, centro de cuidado sustituto o en una institución pública o privada, de cuido, educación, tratamiento o detención, se le cause daño o se ponga en riesgo de sufrir daño a su salud e integridad física, mental o emocional, incluyendo –pero sin limitarse– a abuso sexual. La negligencia institucional, ya sea conocida o que se sospeche que ocurre, o que ocurre como resultado de la política, prácticas y condiciones imperantes en la institución, la puede cometer:<ul>          
+    list(word = "Abuso Sexual", definition = "Incurrir en conducta sexual en presencia de un o una menor
+         o que se utilice, voluntaria o involuntariamente, para ejecutar conducta sexual dirigida a 
+         satisfacer los deseos sexuales. También se considera cualquier acto que, de procesarse por la vía
+         criminal, configuraría cualesquiera de varios delitos de índole sexual, tales como agresión sexual,
+         actos lascivos, comercio de personas para actos sexuales, exposiciones obscenas, proposición obscena,
+         producción de pornografía infantil, entre otros delitos reconocidos en el Código Penal de Puerto Rico."),
+    list(word = "Explotación", definition = "Conducta obscena o utilización de una persona menor de edad para 
+         ejecutar conducta obscena. Explotación de una persona menor de edad o que se permita que otra persona 
+         lo explote, incluyendo –pero sin limitarse– a utilizarla para ejecutar conducta obscena, con el fin de 
+         lucrarse o de recibir algún otro beneficio."),
+    list(word = "Maltrato a Menores", definition = "Toda acción u omisión intencional del padre, de la madre o 
+         persona responsable del o de la menor que ocasione o ponga en riesgo de sufrir un daño o perjuicio a su 
+         salud e integridad física, mental o emocional."),
+    list(word = "Maltrato Físico", definition = "Se refiere a cualquier trauma, lesión o condición no accidental, 
+         causada en un episodio o varios, incluyendo la falta de alimentos que, de no ser atendida, pone en riesgo 
+         la vida y salud de la persona menor de edad."),
+    list(word = "Menores", definition = "Individuos que se encuentran bajo la edad legal de mayoría de edad en un 
+         contexto específico, lo que generalmente implica que aún no han alcanzado la edad en la que se les considera
+         plenamente responsables de sus acciones según la ley."),
+    list(word = "Negligencia", definition = "Es un tipo de maltrato que consiste en no cumplir con la obligación de 
+         proveer a las personas menores de edad de manera adecuada los alimentos, ropa, albergue, educación, atención
+         a su salud, poca supervisión, no visitar, ni mantener contacto con el o la menor o incurrir en alguna de las 
+         razones reconocidas en el Código Civil de Puerto Rico para que una persona sea privada de patria potestad 
+         entre otros."),
+    list(word = "Negligencia Educativa", definition = HTML("La negligencia educativa es cuando a una persona 
+    menor de edad, que está en un hogar de crianza, centro de cuidado sustituto o en una institución pública o privada,
+    de cuido, educación, tratamiento o detención, se le cause daño o se ponga en riesgo de sufrir daño a su salud e 
+    integridad física, mental o emocional, incluyendo –pero sin limitarse– a abuso sexual. La negligencia institucional,
+    ya sea conocida o que se sospeche que ocurre, o que ocurre como resultado de la política, prácticas y condiciones 
+    imperantes en la institución, la puede cometer:<ul>          
             <br>
             <li> Operador u operadora de un hogar de crianza; 
-            <li> Cualquier empleado, empleada, funcionario o funcionaria que ofrezca servicios de cuido o que tenga bajo su control o custodia a una persona menor de edad para su cuido, educación, tratamiento o detención.
+            <li> Cualquier empleado, empleada, funcionario o funcionaria que ofrezca servicios de cuido o que tenga bajo
+            su control o custodia a una persona menor de edad para su cuido, educación, tratamiento o detención.
             </ul>")),
-    list(word = "Negligencia Emocional", definition = "Se define como causar menoscabo o afectar la capacidad intelectual o emocional de la persona menor de edad dentro de lo que se considera normal para su edad y entorno cultural."),
-    list(word = "Negligencia Médica", definition = "Situaciones en las que los proveedores de atención médica, como médicos, enfermeras u otros profesionales de la salud, no brindan el nivel adecuado de atención y cuidado a pacientes menores de edad, lo que resulta en daños físicos, emocionales o psicológicos para el paciente. Esto puede incluir errores en el diagnóstico, tratamiento inapropiado, falta de seguimiento adecuado, o cualquier otro acto u omisión que pueda considerarse una violación del estándar de cuidado aceptado en la práctica médica."),
-    list(word = "Trata Humana", definition = "Se define como la captación, traslado, transporte, acogida o recepción de una persona utilizando la violencia, amenaza, engaño, rapto, fuerza, abuso de poder, abuso de una situación de vulnerabilidad u otros elementos de coacción, con el fin de someterla a explotación y lucrarse con su actividad.")
+    list(word = "Negligencia Emocional", definition = "Se define como causar menoscabo o afectar la capacidad intelectual
+         o emocional de la persona menor de edad dentro de lo que se considera normal para su edad y entorno cultural."),
+    list(word = "Negligencia Médica", definition = "Situaciones en que la salud de un/una menor se ve comprometida debido 
+         a que los proveedores de atención médica, como médicos, enfermeras u otros profesionales de la salud, no brindan 
+         el nivel adecuado de atención y cuidado a pacientes menores de edad, lo que resulta en daños físicos, emocionales 
+         o psicológicos para el paciente. Esto puede incluir errores en el diagnóstico, tratamiento inapropiado, falta de 
+         seguimiento adecuado, o cualquier otro acto u omisión que pueda considerarse una violación del estándar de cuidado
+         aceptado en la práctica médica. "),
+    list(word = "Trata Humana", definition = "Se define como la captación, traslado, transporte, acogida o recepción de 
+         una persona utilizando la violencia, amenaza, engaño, rapto, fuerza, abuso de poder, abuso de una situación de 
+         vulnerabilidad u otros elementos de coacción, con el fin de someterla a explotación y lucrarse con su actividad.")
   )
   
   # Convertir lista a dataframe
@@ -562,35 +616,74 @@ server <- function(input, output, session) {
   
   #### Tab de Definiciones ####
   definitions_just <- list(
-    list(word = "Agresión Sexual Conyugal (Artículo 3.5)", definition = HTML("Se impondrá pena de reclusión, según se dispone más adelante, a toda persona que incurra en una relación sexual no consentida 
-    con su cónyuge o ex cónyuge, o con la persona con quien cohabite o haya cohabitado, o con quien sostuviera o haya sostenido una relación consensual, o la persona con quien 
-    haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas 
+    list(word = "Agresión Sexual Conyugal (Artículo 3.5)", definition = HTML("Se impondrá pena de reclusión,
+    según se dispone más adelante, a toda persona que incurra en una relación sexual no consentida 
+    con su cónyuge o ex cónyuge, o con la persona con quien cohabite o haya cohabitado, o con quien sostuviera
+    o haya sostenido una relación consensual, o la persona con quien 
+    haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de 
+    género o estatus migratorio de cualquiera de las personas 
     involucradas en la relación, en cualesquiera de las circunstancias siguientes:
               <ul>    
               <br>
-                <li> Si se ha compelido a incurrir en relación sexual mediante el empleo de fuerza, violencia, intimidación o amenaza de grave e inmediato daño corporal; o
-                <li> Si se ha anulado o disminuido sustancialmente, sin su conocimiento o sin su consentimiento, su capacidad de consentir, a través de medios hipnóticos, narcóticos, deprimentes o estimulantes o sustancias o medios similares; o
-                <li> Si por enfermedad o incapacidad mental, temporal o permanente, la víctima está incapacitada para comprender la naturaleza del acto en el momento de su realización;
-                <li> Si se le obliga o induce mediante maltrato, violencia física o psicológica a participar o involucrarse en una relación sexual no deseada con terceras personas.
+                <li> Si se ha compelido a incurrir en relación sexual mediante el empleo de fuerza, violencia, 
+                intimidación o amenaza de grave e inmediato daño corporal; o
+                <li> Si se ha anulado o disminuido sustancialmente, sin su conocimiento o sin su consentimiento, 
+                su capacidad de consentir, a través de medios hipnóticos, narcóticos, deprimentes o estimulantes o 
+                sustancias o medios similares; o
+                <li> Si por enfermedad o incapacidad mental, temporal o permanente, la víctima está incapacitada para 
+                comprender la naturaleza del acto en el momento de su realización;
+                <li> Si se le obliga o induce mediante maltrato, violencia física o psicológica a participar o 
+                involucrarse en una relación sexual no deseada con terceras personas.
               </ul>")),
-    list(word = "Incumplimiento de Órdenes de Protección (Artículo 2.8)", definition = "Cualquier violación a sabiendas de una orden de protección expedida."),
-    list(word = "Maltrato (Artículo 3.1)", definition = "Toda persona que empleare fuerza física o violencia psicológica,intimidación o persecución en la persona de su cónyuge, ex cónyuge, o la persona con quien cohabita o haya cohabitado, o la persona con quien sostuviere o haya sostenido una relación consensual, o la persona con quien haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, para causarle daño físico a su persona, a los bienes apreciados por ésta, excepto aquéllos que pertenecen privativamente al ofensor, o a la persona de otro o para causarle grave daño emocional, incurrirá en delito grave de cuarto grado en su mitad superior."),
-    list(word = "Maltrato Agravado (Artículo 3.2)", definition = HTML("Se impondrá pena correspondiente a delito grave de tercer grado en su mitad inferior cuando en la persona del cónyuge, ex cónyuge o de la persona con quien se cohabita o se haya cohabitado, o con quien se sostiene o haya sostenido una relación consensual, o con quien se haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, se incurriere en maltrato según tipificado en esta Ley, mediando una o más de las circunstancias siguientes:<br>
+    list(word = "Incumplimiento de Órdenes de Protección (Artículo 2.8)", definition = "Cualquier violación a sabiendas 
+         de una orden de protección expedida."),
+    list(word = "Maltrato (Artículo 3.1)", definition = "Toda persona que empleare fuerza física o violencia psicológica,
+         intimidación o persecución en la persona de su cónyuge, ex cónyuge, o la persona con quien cohabita o haya cohabitado,
+         o la persona con quien sostuviere o haya sostenido una relación consensual, o la persona con quien haya procreado 
+         un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus 
+         migratorio de cualquiera de las personas involucradas en la relación, para causarle daño físico a su persona, 
+         a los bienes apreciados por ésta, excepto aquéllos que pertenecen privativamente al ofensor, o a la persona de otro
+         o para causarle grave daño emocional, incurrirá en delito grave de cuarto grado en su mitad superior."),
+    list(word = "Maltrato Agravado (Artículo 3.2)", definition = HTML("Se impondrá pena correspondiente a delito grave de
+    tercer grado en su mitad inferior cuando en la persona del cónyuge, ex cónyuge o de la persona con quien se cohabita 
+    o se haya cohabitado, o con quien se sostiene o haya sostenido una relación consensual, o con quien se haya procreado 
+    un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio
+    de cualquiera de las personas involucradas en la relación, se incurriere en maltrato según tipificado en esta Ley, mediando
+    una o más de las circunstancias siguientes:<br>
     <ul>
     <br>
-      <li> Se penetrare en la morada de la persona o en el lugar donde esté albergada y se cometiere allí maltrato, en el caso de cónyuges o cohabitantes, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, cuando éstos estuvieren separados o mediare una orden de protección ordenando el desalojo de la residencia a una de las partes; o</li>
+      <li> Se penetrare en la morada de la persona o en el lugar donde esté albergada y se cometiere allí maltrato, en el caso
+      de cónyuges o cohabitantes, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus
+      migratorio de cualquiera de las personas involucradas en la relación, cuando éstos estuvieren separados o mediare una 
+      orden de protección ordenando el desalojo de la residencia a una de las partes; o</li>
       <li> Cuando se infiriere grave daño corporal a la persona; o</li>
       <li> Cuando se cometiere con arma mortífera en circunstancias que no revistiesen la intención de matar o mutilar; o</li>
       <li> Cuando se cometiere en la presencia de menores de edad; o</li>
-      <li> Cuando se cometiere luego de mediar una orden de protección o resolución contra la persona acusada expedida en auxilio de la víctima del maltrato; o</li>
-      <li> Se indujere, incitare u obligare a la persona a drogarse con sustancias controladas, o cualquier otra sustancia o medio que altere la voluntad de la persona o a intoxicarse con bebidas embriagantes; o</li>
-      <li> Cuando se cometiere y simultáneamente se incurriere en maltrato de un menor según definido en la Ley Núm. 177 de 1 de agosto de 2003.</li>
-      <li> Si a la víctima se le obliga o induce mediante maltrato, violencia física o sicológica a participar o involucrarse en una relación sexual no deseada con terceras personas.</li>
+      <li> Cuando se cometiere luego de mediar una orden de protección o resolución contra la persona acusada expedida en 
+      auxilio de la víctima del maltrato; </li>
+      <li> Se indujere, incitare u obligare a la persona a drogarse con sustancias controladas, o cualquier otra sustancia
+      o medio que altere la voluntad de la persona o a intoxicarse con bebidas embriagantes; o</li>
+      <li> Cuando se cometiere y simultáneamente se incurriere en maltrato de un menor según definido en la Ley Núm. 177 de
+      1 de agosto de 2003.</li>
+      <li> Si a la víctima se le obliga o induce mediante maltrato, violencia física o sicológica a participar o involucrarse
+      en una relación sexual no deseada con terceras personas.</li>
       <li> Cuando se cometiere contra una mujer embarazada.</li>
-      <li> Cuando se cometiere contra una persona menor de dieciséis (16) años y la persona agresora sea de dieciocho (18) años o más.</li>
+      <li> Cuando se cometiere contra una persona menor de dieciséis (16) años y la persona agresora sea de dieciocho (18) 
+      años o más.</li>
     </ul>")),
-    list(word = "Maltrato Mediante Restricción de la Libertad (Artículo 3.4)", definition = "Toda persona que utilice violencia o intimidación en la persona de su cónyuge, ex cónyuge, de la persona con quien cohabita o haya cohabitado, o con quien sostiene o haya sostenido una relación consensual, o la persona con quien haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, o que utilice pretexto de que padece o de que una de las personas antes mencionadas padece de enfermedad o defecto mental, para restringir su libertad con el conocimiento de la víctima, incurrirá en delito grave de tercer grado en su mitad inferior."),
-    list(word = "Maltrato Por Amenaza (Artículo 3.3)", definition = "Toda persona que amenaza con causarle daño a su cónyuge, ex cónyuge, a la persona con quien cohabita o con quien haya cohabitado o con quien sostiene o haya sostenido una relación consensual, o la persona con quien haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, a los bienes apreciados por ésta, excepto aquéllos que pertenecen privativamente al ofensor, o a la persona de otro, incurrirá en delito grave de cuarto grado en su mitad superior.")
+    list(word = "Maltrato Mediante Restricción de la Libertad (Artículo 3.4)", definition = "Toda persona que utilice violencia
+         o intimidación en la persona de su cónyuge, ex cónyuge, de la persona con quien cohabita o haya cohabitado, o con quien
+         sostiene o haya sostenido una relación consensual, o la persona con quien haya procreado un hijo o hija, independientemente
+         del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas
+         en la relación, o que utilice pretexto de que padece o de que una de las personas antes mencionadas padece de enfermedad o 
+         defecto mental, para restringir su libertad con el conocimiento de la víctima, incurrirá en delito grave de tercer grado en su
+         mitad inferior."),
+    list(word = "Maltrato Por Amenaza (Artículo 3.3)", definition = "Toda persona que amenaza con causarle daño a su cónyuge, ex cónyuge,
+         a la persona con quien cohabita o con quien haya cohabitado o con quien sostiene o haya sostenido una relación consensual, 
+         o la persona con quien haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad
+         de género o estatus migratorio de cualquiera de las personas involucradas en la relación, a los bienes apreciados por ésta, 
+         excepto aquéllos que pertenecen privativamente al ofensor, o a la persona de otro, incurrirá en delito grave de cuarto grado 
+         en su mitad superior.")
   )
   
   # Convertir lista a dataframe
@@ -811,9 +904,20 @@ server <- function(input, output, session) {
   
   definitions_avp <- list(
     #list(word = "Región", definition = "Se refiere a una división geográfica o área delimitada que comparte características similares, ya sea geográficas, culturales, económicas, políticas o administrativas. Subdivisión territorial establecida por las autoridades gubernamentales para propósitos de administración y gestión local. Estas divisiones pueden variar en tamaño y alcance dependiendo del país y su estructura administrativa."),
-    list(word = "Región", definition = "Subdivisión territorial establecida por las autoridades gubernamentales para propósitos de administración y gestión local."),
-    list(word = "Vivienda Pública", definition = "Vivienda que es proporcionada, administrada o subsidiada por el gobierno o entidades gubernamentales con el objetivo de brindar alojamiento a personas o familias que tienen dificultades para acceder a una vivienda adecuada en el mercado privado debido a limitaciones económicas o sociales. Estas viviendas suelen estar dirigidas a personas de bajos ingresos, familias en situación de pobreza, personas sin hogar, o aquellos que enfrentan otras formas de vulnerabilidad social."),
-    list(word = "Violencia Doméstica", definition = "Cuando una persona emplea fuerza física o violencia psicológica, intimidación o persecución en contra de su pareja o expareja. Esto, para causarle daño físico a su persona, a sus bienes, a otra persona o a un animal de servicio o mascota o para causarle grave daño emocional. Para que se considere violencia doméstica es necesario que exista o haya existido una relación afectiva entre las partes. Es decir, se da cuando la persona agresora es cónyuge, excónyuge, una persona con quien vive o ha vivido, con quien sostiene o haya sostenido una relación consensual o una persona con quien se haya procreado una hija o un hijo.")
+    list(word = "Región", definition = "Subdivisión territorial establecida por las autoridades gubernamentales 
+         para propósitos de administración y gestión local."),
+    list(word = "Vivienda Pública", definition = "Vivienda que es proporcionada, administrada o subsidiada 
+         por el gobierno o entidades gubernamentales con el objetivo de brindar alojamiento a personas o familias
+         que tienen dificultades para acceder a una vivienda adecuada en el mercado privado debido a limitaciones 
+         económicas o sociales. Estas viviendas suelen estar dirigidas a personas de bajos ingresos, familias en situación 
+         de pobreza, personas sin hogar, o aquellos que enfrentan otras formas de vulnerabilidad social."),
+    list(word = "Violencia Doméstica", definition = "Definición que ofrece la Ley Núm. 54 de 1989, según enmendada, que sigue vigente
+         en Puerto Rico. Violencia doméstica significa un patrón constante de empleo de fuerza física o violencia psicológica,
+         intimidación o persecución contra una persona por parte de su cónyuge, excónyuge, una persona con quien cohabita o 
+         haya cohabitado, con quien sostiene o haya sostenido una relación consensual o una persona con quien se haya procreado
+         una hija o hijo, para causarle daño físico a su persona, sus bienes u otra persona o para causarle grave daño emocional.
+         La Ley Núm. 54 incluyó, además, como delito la agresión sexual entre personas que cohabitan o matrimonios como violencia
+         doméstica.")
   )
   
   # Convertir lista a dtaframe
@@ -837,7 +941,7 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_avp, "Regiones de la Adminsitración de Vivienda Públicas")
   })
   
-  ########## Tab del Negociado de Policia ##########
+  ########## Tab del Negociado de la Policia ##########
   #### Tab con datos de mujeres desaparecidas (despDF) ####
   # Filtrar el conjunto de datos según los valores seleccionados del año y la categoria de evento
   despDF_filt <- reactive({
@@ -1056,16 +1160,37 @@ server <- function(input, output, session) {
 
   #### Tab de Definiciones ####
   definitions_poli <- list(
-    list(word = "Adultas Desaparecidas", definition = "Mujeres adultas cuya ubicación y paradero son desconocidos y no pueden ser determinados por familiares, amigos, o autoridades competentes. Esto puede surgir por razones como accidentes, secuestros, desastres naturales, o decisiones voluntarias de abandonar su entorno sin dejar rastro."),
-    list(word = "Adultas Localizadas", definition = "Mujeres adultas cuyo paradero ha sido identificado y confirmado después de haber sido reportadas como desaparecidas."),
-    list(word = "Adultas Sin Localizar", definition = "Mujeres adultas cuyo paradero no ha sido identificado ni confirmado tras haber sido reportadas como desaparecidas. Pueden haber sido vistas por última vez en circunstancias desconocidas, y su ubicación actual sigue siendo un misterio."),
-    list(word = "Incidencia", definition = "Número de incidentes o delitos reportados o registrados por las fuerzas policiales durante un período específico en una determinada área geográfica. Usada por autoridades para medir y analizar la cantidad y tipo de delitos en una comunidad."),
-    list(word = "Menores Desaparecidas", definition = "Menores femeninas cuya ubicación y paradero son desconocidos y no pueden ser determinados por familiares, amigos, o autoridades competentes. Esto puede surgir por razones como accidentes, secuestros, desastres naturales, o decisiones voluntarias de abandonar su entorno sin dejar rastro."),
-    list(word = "Menores Localizadas", definition = "Menores femeninas cuyo paradero ha sido identificado y confirmado después de haber sido reportadas como desaparecidas."),
-    list(word = "Menores Sin Localizar", definition = "Menores femeninas cuyo paradero no ha sido identificado ni confirmado tras haber sido reportadas como desaparecidas. Pueden haber sido vistas por última vez en circunstancias desconocidas, y su ubicación actual sigue siendo un misterio."),
-    list(word = "Región Policiaca", definition = "Zona geográfica específica asignada a un cuerpo de policía para llevar a cabo funciones de vigilancia, patrullaje y protección del orden público. Delimitada por autoridades para organizar y distribuir eficazmente recursos policiales."),
-    list(word = "Violencia Doméstica", definition = "Uso de fuerza física o violencia psicológica, intimidación o persecución contra una pareja o expareja para causar daño físico, a bienes, a otra persona, o a un animal de servicio o mascota, o para causar grave daño emocional. Requiere una relación afectiva previa o actual entre las partes."),
-    list(word = "Víctima", definition = "Persona que ha sufrido daño físico, emocional, psicológico o financiero como resultado de un acto delictivo, un accidente, un desastre natural, o cualquier otro evento traumático.")
+    list(word = "Adultas Desaparecidas", definition = "Mujeres adultas cuya ubicación y paradero son desconocidos y no pueden 
+         ser determinados por familiares, amigos, o autoridades competentes. Esto puede surgir por razones como accidentes, 
+         secuestros, desastres naturales, o decisiones voluntarias de abandonar su entorno sin dejar rastro."),
+    list(word = "Adultas Localizadas", definition = "Mujeres adultas cuyo paradero ha sido identificado y confirmado después
+         de haber sido reportadas como desaparecidas."),
+    list(word = "Adultas Sin Localizar", definition = "Mujeres adultas cuyo paradero no ha sido identificado ni confirmado 
+         tras haber sido reportadas como desaparecidas. Pueden haber sido vistas por última vez en circunstancias desconocidas,
+         y su ubicación actual sigue siendo un misterio."),
+    list(word = "Incidencia", definition = "Número de incidentes o delitos reportados o registrados por las fuerzas policiales
+         durante un período específico en una determinada área geográfica. Usada por autoridades para medir y analizar la 
+         cantidad y tipo de delitos en una comunidad."),
+    list(word = "Menores Desaparecidas", definition = "Menores femeninas cuya ubicación y paradero son desconocidos y no pueden
+         ser determinados por familiares, amigos, o autoridades competentes. Esto puede surgir por razones como accidentes, 
+         secuestros, desastres naturales, o decisiones voluntarias de abandonar su entorno sin dejar rastro."),
+    list(word = "Menores Localizadas", definition = "Menores femeninas cuyo paradero ha sido identificado y confirmado después
+         de haber sido reportadas como desaparecidas."),
+    list(word = "Menores Sin Localizar", definition = "Menores femeninas cuyo paradero no ha sido identificado ni confirmado 
+         tras haber sido reportadas como desaparecidas. Pueden haber sido vistas por última vez en circunstancias desconocidas,
+         y su ubicación actual sigue siendo un misterio."),
+    list(word = "Región Policiaca", definition = "Zona geográfica específica asignada a un cuerpo de policía para llevar a cabo
+         funciones de vigilancia, patrullaje y protección del orden público. Delimitada por autoridades para organizar y 
+         distribuir eficazmente recursos policiales."),
+    list(word = "Violencia Doméstica", definition = "Definición que ofrece la Ley Núm. 54 de 1989, según enmendada, que sigue vigente
+         en Puerto Rico. Violencia doméstica significa un patrón constante de empleo de fuerza física o violencia psicológica,
+         intimidación o persecución contra una persona por parte de su cónyuge, excónyuge, una persona con quien cohabita o 
+         haya cohabitado, con quien sostiene o haya sostenido una relación consensual o una persona con quien se haya procreado
+         una hija o hijo, para causarle daño físico a su persona, sus bienes u otra persona o para causarle grave daño emocional.
+         La Ley Núm. 54 incluyó, además, como delito la agresión sexual entre personas que cohabitan o matrimonios como violencia
+         doméstica."),
+    list(word = "Víctima", definition = "Persona que ha sufrido daño físico, emocional, psicológico o financiero como resultado
+         de un acto delictivo, un accidente, un desastre natural, o cualquier otro evento traumático.")
   )
   
   # Convertir lista a dataframe
@@ -1531,26 +1656,77 @@ server <- function(input, output, session) {
   
   #### Tab de Definiciones ####
   definitions_opm <- list(
-    list(word = "Acecho (A)", definition = "Es una persona, en la mayoría de las ocasiones mujer que sufre o es sometida a un patrón o la repetición de una conducta mediante la cual se mantiene de manera constante o repetida una vigilancia, proximidad física o visual sobre una persona específica."),
-    list(word = "Agresión sexual (AS)", definition = "Cualquier acto que degrada o daña el cuerpo y/o la sexualidad de la víctima y que por tanto atenta contra su libertad, dignidad e integridad física. Es una expresión de abuso de poder que implica la supremacía masculina sobre la mujer, al denigrar y concebirla como objeto."),
-    list(word = "CRIAS", definition = "Centro de Respuesta Integrada de Apoyo y Servicios para la Mujer. La misma surgió de la necesidad imperante de trabajar con el problema de la desigualdad que existe contra las mujeres y trabajar particularmente con la violencia doméstica desde una perspectiva dirigida hacia la validación, orientación y coordinación de servicios de apoyo. El Centro CRIAS establece las bases para un modelo de prevención, intervención y fiscalización de los diferentes tipos de violencia que nos permite levantar información de las víctimas sobrevivientes participantes, obtener análisis de experiencias personales y manejo de actitudes ante el problema. En el mismo, se ofrecen servicios de orientación, coordinación de servicios y referidos a mujeres víctimas/sobrevivientes de violencia doméstica, agresión sexual, acecho y otras manifestaciones de violencia por razón de género."),
-    list(word = "Discrimen de género (DG)", definition = "Hace referencia a «toda distinción, exclusión o restricción» que se realice en función del género de una persona con el objetivo o resultado de menoscabar o anular el reconocimiento, goce o ejercicio de sus derechos humanos. A menudo es consecuencia de los mitos y estereotipos de género tales como: las mujeres son las más aptas para ocuparse de la educación de los hijos, cocinar o limpiar, o para realizar trabajos de secretaría, enseñanza o enfermería, mientras que los hombres son líderes, buenos en economía y comercio. Esto ha dado lugar a un acceso desigual al mercado laboral, así como a un salario desigual para puestos similares, al sostenerse que las mujeres tienen peores resultados que los hombres en determinados ámbitos y, con ello, a una discriminación por género."),
-    list(word = "Femenino", definition = "Se refiere a características, atributos o cualidades asociadas tradicionalmente con las mujeres o lo que se considera típicamente propio del género femenino."),
-    list(word = "Feminicidios", definition = HTML("Es el crimen que consiste en matar intencionalmente a mujeres por el hecho de ser mujeres o de identificarse como tales. Las definiciones más amplias incluyen cualquier asesinato de mujeres o niñas, o el asesinato involuntario o indirecto de mujeres o niñas, «tal como demuestran algunos casos de violencia doméstica que podrían provocar la muerte de mujeres». El concepto «adquirió importancia en el marco del movimiento feminista de la década de 1970 cuando surge la expresión ‘femicidio’ como alternativa al término neutro ‘homicidio’, con el fin de reconocer y visibilizar la opresión, la desigualdad y la violencia sistemática» contra las mujeres que, en su forma más extrema, culmina en la muerte. El femicidio puede presentarse bajo diferentes formas e incluye los siguientes actos:
+    list(word = "Acecho (A)", definition = "Es el patrón o la repetición de una conducta mediante 
+         la cual se mantiene de manera constante o repetida una vigilancia, proximidad física o 
+         visual sobre una persona específica, en la mayora der las ocasiones, una mujer."),
+    list(word = "Agresión sexual (AS)", definition = "Cualquier acto que degrada o daña el cuerpo
+         y/o la sexualidad de la víctima y que por tanto atenta contra su libertad, dignidad e integridad
+         física. Es una expresión de abuso de poder que implica la supremacía masculina sobre la mujer, 
+         al denigrar y concebirla como objeto."),
+    list(word = "CRIAS", definition = "Centro de Respuesta Integrada de Apoyo y Servicios para la Mujer.
+         La misma surgió de la necesidad imperante de trabajar con el problema de la desigualdad que existe
+         contra las mujeres y trabajar particularmente con la violencia doméstica desde una perspectiva 
+         dirigida hacia la validación, orientación y coordinación de servicios de apoyo. El Centro CRIAS
+         establece las bases para un modelo de prevención, intervención y fiscalización de los diferentes
+         tipos de violencia que nos permite levantar información de las víctimas sobrevivientes participantes,
+         obtener análisis de experiencias personales y manejo de actitudes ante el problema. En el mismo, se 
+         ofrecen servicios de orientación, coordinación de servicios y referidos a mujeres víctimas/sobrevivientes
+         de violencia doméstica, agresión sexual, acecho y otras manifestaciones de violencia por razón de género."),
+    list(word = "Discrimen de género (DG)", definition = "Hace referencia a «toda distinción, exclusión o restricción»
+         que se realice en función del género de una persona con el objetivo o resultado de menoscabar o anular el 
+         reconocimiento, goce o ejercicio de sus derechos humanos. A menudo es consecuencia de los mitos y estereotipos
+         de género tales como: las mujeres son las más aptas para ocuparse de la educación de los hijos, cocinar o 
+         limpiar, o para realizar trabajos de secretaría, enseñanza o enfermería, mientras que los hombres son líderes,
+         buenos en economía y comercio. Esto ha dado lugar a un acceso desigual al mercado laboral, así como a un salario
+         desigual para puestos similares, al sostenerse que las mujeres tienen peores resultados que los hombres en 
+         determinados ámbitos y, con ello, a una discriminación por género."),
+    list(word = "Femenino", definition = "Se refiere a características, atributos o cualidades asociadas tradicionalmente
+         con las mujeres o lo que se considera típicamente propio del género femenino."),
+    list(word = "Feminicidios", definition = HTML("Es el crimen que consiste en matar intencionalmente a mujeres por el
+    hecho de ser mujeres o de identificarse como tales. Las definiciones más amplias incluyen cualquier asesinato de 
+    mujeres o niñas, o el asesinato involuntario o indirecto de mujeres o niñas, «tal como demuestran algunos casos de 
+    violencia doméstica que podrían provocar la muerte de mujeres». El concepto «adquirió importancia en el marco del 
+    movimiento feminista de la década de 1970 cuando surge la expresión ‘femicidio’ como alternativa al término neutro 
+    ‘homicidio’, con el fin de reconocer y visibilizar la opresión, la desigualdad y la violencia sistemática» contra 
+    las mujeres que, en su forma más extrema, culmina en la muerte. El femicidio puede presentarse bajo diferentes formas
+    e incluye los siguientes actos:
             <ul>   
             <br>
-            <li> Femicidio íntimo, perpetrado por una pareja actual o anterior, generalmente durante o después de una relación ya violenta (por ejemplo, de violencia doméstica o violencia sexual);
+            <li> Femicidio íntimo, perpetrado por una pareja actual o anterior, generalmente durante o después de una 
+            relación ya violenta (por ejemplo, de violencia doméstica o violencia sexual);
             <li> El llamado crimen de honor (o asesinato de o por honor); 
-            <li> El femicidio relacionado con la dote, que ocurre en un contexto de conflicto entre las familias de dos cónyuges recién casados, y es generalmente cometido por la familia política que cuestiona sobre todo el importe de la dote;
-            <li> El femicidio no íntimo, cometido por un agresor que no tiene una relación íntima con la víctima, que está muy difundido en algunas partes de América Latina y que, por lo general, está precedido de actos de violencia sexual o tortura.;
+            <li> El femicidio relacionado con la dote, que ocurre en un contexto de conflicto entre las familias de
+            dos cónyuges recién casados, y es generalmente cometido por la familia política que cuestiona sobre todo
+            el importe de la dote;
+            <li> El femicidio no íntimo, cometido por un agresor que no tiene una relación íntima con la víctima,
+            que está muy difundido en algunas partes de América Latina y que, por lo general, está precedido de 
+            actos de violencia sexual o tortura.;
             </ul>")),
-    list(word = "Identidad de género", definition = "Se refiere a la manera en que una persona se identifica, cómo se reconoce o se expresa sobre sí misma, en cuanto al género que puede corresponder o no a su sexo biológico o asignado en su nacimiento."),
-    list(word = "Masculino", definition = "Término utilizado para describir características, atributos o cualidades asociadas tradicionalmente con los hombres o lo que se considera típicamente propio del género masculino."),
+    list(word = "Identidad de género", definition = "Se refiere a la manera en que una persona se identifica, cómo
+         se reconoce o se expresa sobre sí misma, en cuanto al género que puede corresponder o no a su sexo biológico
+         o asignado en su nacimiento."),
+    list(word = "Masculino", definition = "Término utilizado para describir características, atributos o cualidades 
+         asociadas tradicionalmente con los hombres o lo que se considera típicamente propio del género masculino."),
     list(word = "Orientaciones", definition = "Direcciones o inclinaciones hacia las que se dirige o enfoca algo."),
-    list(word = "Tendencia", definition = "Dirección o patrón observado en datos o eventos que muestra una inclinación hacia cierto resultado o comportamiento a lo largo del tiempo."),
-    list(word = "Trans", definition = "Abreviatura comúnmente utilizada para referirse a personas que son transgénero o que tienen una identidad de género diferente de aquella que se les asignó al nacer. Las personas transgénero pueden identificarse como hombre, mujer, ambos, ninguno o con un género diferente al binario tradicional de hombre y mujer."),
-    list(word = "Violencia doméstica (VD)", definition = "Definición que ofrece la Ley Núm. 54 de 1989 que sigue vigente en Puerto Rico. Violencia doméstica significa un patrón constante de empleo de fuerza física o violencia psicológica, intimidación o persecución contra una persona por parte de su cónyuge, ex cónyuge, una persona con quien cohabita o haya cohabitado, con quien sostiene o haya sostenido una relación consensual o una persona con quien se haya procreado una hija o hijo, para causarle daño físico a su persona, sus bienes u otra persona o para causarle grave daño emocional. La Ley Núm. 54 incluyó además como delito la agresión sexual entre personas que cohabitan o matrimonios como violencia doméstica."),
-    list(word = "Violencia en cita (VC)", definition = "Violencia cometida por una persona que está o ha estado en una relación social de carácter romántico o íntimo con la víctima. La existencia de dicha relación se determinará con base en la declaración de la parte informante y teniendo en cuenta la duración de la relación, el tipo de relación y la frecuencia de interacción entre las personas involucradas en la relación. A los efectos de esta definición: La violencia en el noviazgo incluye, pero no se limita a, abuso sexual o físico o la amenaza de tal abuso. La violencia en el noviazgo no incluye actos cubiertos por la definición de violencia doméstica.")
+    list(word = "Tendencia", definition = "Dirección o patrón observado en datos o eventos que muestra una inclinación 
+         hacia cierto resultado o comportamiento a lo largo del tiempo."),
+    list(word = "Trans", definition = "Abreviatura comúnmente utilizada para referirse a personas que son transgénero 
+         o que tienen una identidad de género diferente de aquella que se les asignó al nacer. Las personas transgénero
+         pueden identificarse como hombre, mujer, ambos, ninguno o con un género diferente al binario tradicional de 
+         hombre y mujer."),
+    list(word = "Violencia doméstica (VD)", definition = "Definición que ofrece la Ley Núm. 54 de 1989 que sigue vigente
+         en Puerto Rico. Violencia doméstica significa un patrón constante de empleo de fuerza física o violencia 
+         psicológica, intimidación o persecución contra una persona por parte de su cónyuge, ex cónyuge, una persona
+         con quien cohabita o haya cohabitado, con quien sostiene o haya sostenido una relación consensual o una persona
+         con quien se haya procreado una hija o hijo, para causarle daño físico a su persona, sus bienes u otra persona
+         o para causarle grave daño emocional. La Ley Núm. 54 incluyó además como delito la agresión sexual entre personas
+         que cohabitan o matrimonios como violencia doméstica."),
+    list(word = "Violencia en cita (VC)", definition = "Violencia cometida por una persona que está o ha estado en una
+         relación social de carácter romántico o íntimo con la víctima. La existencia de dicha relación se determinará
+         con base en la declaración de la parte informante y teniendo en cuenta la duración de la relación, el tipo 
+         de relación y la frecuencia de interacción entre las personas involucradas en la relación. A los efectos de
+         esta definición: la violencia en cita incluye, pero no se limita a, abuso sexual o físico o la amenaza
+         de tal abuso. La violencia en cita no incluye actos cubiertos por la definición de violencia doméstica.")
   )
   
   

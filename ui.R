@@ -148,7 +148,7 @@ ui <-
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a los 
-                    homicidios de mujeres por grupo de edad desde el año 2017 al 2022.",
+                    homicidios de mujeres por grupo de edad desde el año natural 2017 al 2022.",
                     
                     style = "font-size: 16px; padding: 0px;" 
                   )
@@ -234,7 +234,7 @@ ui <-
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a la cantidad de 
-                    incidentes violentos (según su tipo) desde el año 2017 al 2022.",
+                    incidentes violentos (según su tipo) desde el año natural 2017 al 2022.",
                     
                     style = "font-size: 16px; padding: 0px;" 
                   )
@@ -541,7 +541,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden al
                     número de casos radicados por distrito fiscal y Artículo 
-                    de la Ley 54 desde el año 2020 al 2023.",
+                    de la Ley 54 desde el año natural 2020 al 2023.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -598,7 +598,7 @@ ui <-
                   p(
                     "Los datos representados en este mapa corresponden al
                     número de casos radicados por distrito fiscal y Artículo 
-                    de la Ley 54 desde el año 2020 al 2023.",
+                    de la Ley 54 desde el año natural 2020 al 2023.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -774,7 +774,7 @@ ui <-
                     "Los datos representados en esta gráfica corresponden al
                     total de viviendas públicas solicitadas y asignadas por
                     violencia doméstica por región de la Administración de Vivienda Pública
-                    desde el año 2017 al 2023.",
+                    desde el año natural 2017 al 2023.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -836,7 +836,7 @@ ui <-
                     "Los datos representados en este mapa corresponden al
                     total de viviendas públicas solicitadas y asignadas por
                     violencia doméstica por región de la Administración de Vivienda Pública
-                    desde el año 2017 al 2023.",
+                    desde el año natural 2017 al 2023.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -852,7 +852,7 @@ ui <-
           
           # Título del Tab 
           tags$ul(style = "list-style-type: none; text-align: center; padding: 5px; padding-top: 15px;",
-                  sectionTitle("Regiones de la Adminsitración de Vivienda Públicas", "24px")),
+                  sectionTitle("Regiones de la Adminsitración de Vivienda Pública", "24px")),
           fluidRow(
             column(12, DTOutput("dataTable_Def_avp"))
           ),
@@ -968,7 +968,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a la
                     cantidad de mujeres desaparecidas y localizadas (adultas y menores)
-                    desde el año 2020 al 2024.",
+                    desde el año natural 2020 al 2024.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1056,7 +1056,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a los
                     incidentes de violencia doméstica (por edad de la víctima)
-                    desde el año 2021 al 2024.",
+                    desde el año natural 2021 al 2024.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1108,7 +1108,7 @@ ui <-
           lowercaseTitle("Definiciones y Metadatos"),
           br(),
           tags$ul(style = "list-style-type: none; text-align: center;",
-                  sectionTitle("Negociado de Policía", "24px")),
+                  sectionTitle("Negociado de la Policía", "24px")),
           fluidRow(
             column(12, DTOutput("dataTable_Def_poli"))
           ),
@@ -1199,7 +1199,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a
                     la tasa de asesinatos de mujeres por violencia doméstica, 
-                    desde 1990 al 2021 (Tasa x100,000 mujeres).",
+                    desde el año natural 1990 al 2021 (Tasa x100,000 mujeres).",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1632,7 +1632,7 @@ ui <-
                 "Los datos representados en esta gráfica corresponden a
                  los casos en supervisión de ley 54 en programas alternos
                 al confinamiento (por estado de investigación): Programas de Comunidad
-                desde el año 2021 al 2023.",
+                desde el año natural 2021 al 2023.",
                 
                 style = "font-size: 16px;padding: 0px;" 
               )
@@ -1708,13 +1708,13 @@ ui <-
               class = "card",
               style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
               h4(
-                strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                strong("Última actualización: 28 de febrero de 2023", style="margin: 0px;") 
               ),
               p(
                 "Los datos representados en esta gráfica corresponden a
                  las personas sentenciadas en programa de supervisión 
                 electrónica por delitos de violencia doméstica por estado del caso 
-                desde el año 2020 al 2023.",
+                desde el año natural 2020 al 2023.",
                 
                 style = "font-size: 16px;padding: 0px;" 
               )
