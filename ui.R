@@ -554,7 +554,7 @@ ui <-
         
         #### tab con datos del mapa delitos de violencia doméstica (mapaDeli) ####
         tabPanel(
-          lowercaseTitle("Mapa de delitos Ley 54 por Distrito"),
+          lowercaseTitle("Mapas de delitos Ley 54 por Distrito"),
           br(), br(),
           
           # Título del Tab 
@@ -787,7 +787,7 @@ ui <-
         
         #### tab para el mapa de Adminsitración de Vivienda Públicas (mapaAvp) ####
         tabPanel(
-          lowercaseTitle("Mapa de Viviendas Públicas Solicitadas y Asignadas"),
+          lowercaseTitle("Mapas de Viviendas Públicas Solicitadas y Asignadas"),
           br(), br(),
           
           # Título del Tab
@@ -868,7 +868,7 @@ ui <-
             style = "display: flex; justify-content: center; align-items: center; text-align: center;",
             tags$ul(
               style = "list-style-type: none; padding: 0; margin: 0;",
-              sectionTitle("Regiones de Vivienda Pública", "24px"),
+              sectionTitle("Regiones de Administración de Vivienda Pública", "24px"),
               br(),
               embedImage(
                 "RegionesVivienda", "RegionesVivienda.png", 
@@ -891,7 +891,7 @@ ui <-
     
     #### Tab del Negociado de Policía de Puerto Rico ####
     tabPanel(
-      lowercaseTitle("Negociado de Policía"),
+      lowercaseTitle("Negociado de la Policía"),
       icon = icon("building-shield"),
       tabsetPanel(
         

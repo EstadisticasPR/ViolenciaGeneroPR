@@ -204,13 +204,13 @@ server <- function(input, output, session) {
   #### Tab de Definiciones ####
   definitions_snmv <- list(
     list(word = "Homicidio", definition = "Es un delito de resultado por el cual la conducta intencionada de un sujeto provoca la muerte de otro."),
-    list(word = "Homicidio múltiple:", definition = "Se refiere a un acto en el cual una persona causa la muerte de múltiples individuos en un solo incidente."),
+    list(word = "Homicidio múltiple", definition = "Se refiere a un acto en el cual una persona causa la muerte de múltiples individuos en un solo incidente."),
     list(word = "Homicidio seguido de suicidio", definition = "Se refiere a un acto en el cual una persona causa la muerte de otra(s) y luego se quita la vida. Este tipo de incidente implica dos acciones distintas pero relacionadas: primero, el homicida comete el acto de matar a otra persona, y luego, la misma persona toma su propia vida."),
     list(word = "Homicidio(s) seguido de suicidio(s), (más de dos víctimas)", definition = "Se refiere a un acto extremadamente trágico en el cual una o más personas causan la muerte de múltiples individuos antes de acabar con sus propias vidas en un solo evento."),
     list(word = "Homicidio único", definition = "Se refiere a un acto en el cual una persona causa la muerte de otra en un evento específico."),
-    list(word = "Muerte accidental por arma de fuego", definition = "Evento en el cual una persona pierde la vida como resultado involuntario de la manipulación, manejo o uso incorrecto de un arma de fuego. Este tipo de incidente ocurre cuando un individuo dispara un arma de manera accidental, ya sea debido a un descuido, falta de conocimiento sobre el funcionamiento seguro del arma, o por la manipulación indebida de la misma."),
+    list(word = "Muerte accidental por arma de fuego", definition = "Evento en el cual una persona pierde la vida como resultado involuntario de la manipulación, manejo o uso incorrecto de un arma de fuego. Este tipo de incidente ocurre cuando un individuo dispara un arma de manera accidental, ya sea debido a un descuido, falta de conocimiento sobre el funcionamiento seguro del arma, o por la manipulación indebida del arma."),
     list(word = "Muerte no determinada", definition = "Caso en el cual las circunstancias que rodean el fallecimiento de una persona no pueden ser claramente establecidas o comprendidas mediante la evidencia disponible en el momento de la investigación. Este término se utiliza cuando no hay suficiente información o evidencia forense para determinar con certeza si la muerte fue el resultado de causas naturales, accidentales, suicidas u homicidas."),
-    list(word = "Muertes violentas", definition = "PRVDRS define una muerte violenta como: Suicidio (incluyendo terrorismo), Homicidio (incluyendo terrorismo), Intervención legal (excluyendo terrorismo, ejecuciones por pena de muerte, o actos de guerra), Eventos con intención no Determinada, Heridas por arma de fuego no intencional."),
+    list(word = "Muertes violentas", definition = "PRVDRS define una muerte violenta como: Suicidio (incluyendo terrorismo), Homicidio (incluyendo terrorismo), Intervención legal (excluyendo terrorismo, ejecuciones por pena de muerte, o actos de guerra), Eventos con intención no determinada, Heridas por arma de fuego no intencional."),
     list(word = "Suicidio Único", definition = "Se refiere a un acto en el cual una persona termina deliberadamente con su propia vida, sin la participación o implicación de otras personas en el proceso. Este término implica que el individuo toma la decisión y ejecuta el acto suicida de manera independiente, sin ningún intento de causar la muerte de otras personas o de involucrar a terceros en el evento."),
     list(word = "Violencia", definition = "El uso intencional de la fuerza o el poder físico, de hecho, o como amenaza, contra uno mismo, otra persona o un grupo o comunidad, que cause o tenga gran probabilidad de causar lesiones, muerte, daños psicológicos, trastornos del desarrollo o privaciones.")
   )
@@ -370,7 +370,7 @@ server <- function(input, output, session) {
   #### Tab de Definiciones ####
   definitions_fam <- list(
     list(word = "Abuso Sexual", definition = "Incurrir en conducta sexual en presencia de un o una menor o que se utilice, voluntaria o involuntariamente, para ejecutar conducta sexual dirigida a satisfacer los deseos sexuales. También se considera cualquier acto que, de procesarse por la vía criminal, configuraría cualesquiera de varios delitos de índole sexual, tales como agresión sexual, actos lascivos, comercio de personas para actos sexuales, exposiciones obscenas, proposición obscena, producción de pornografía infantil, entre otros delitos reconocidos en el Código Penal de Puerto Rico."),
-    list(word = "Explotación", definition = "Conducta obscena o utilización de una persona menor de edad para ejecutar conducta obscena. explotación de una persona menor de edad o que se permita que otra persona lo explote, incluyendo –pero sin limitarse– a utilizarla para ejecutar conducta obscena, con el fin de lucrarse o de recibir algún otro beneficio."),
+    list(word = "Explotación", definition = "Conducta obscena o utilización de una persona menor de edad para ejecutar conducta obscena. Explotación de una persona menor de edad o que se permita que otra persona lo explote, incluyendo –pero sin limitarse– a utilizarla para ejecutar conducta obscena, con el fin de lucrarse o de recibir algún otro beneficio."),
     list(word = "Maltrato a Menores", definition = "Toda acción u omisión intencional del padre, de la madre o persona responsable del o de la menor que ocasione o ponga en riesgo de sufrir un daño o perjuicio a su salud e integridad física, mental o emocional."),
     list(word = "Maltrato Físico", definition = "Se refiere a cualquier trauma, lesión o condición no accidental, causada en un episodio o varios, incluyendo la falta de alimentos que, de no ser atendida, pone en riesgo la vida y salud de la persona menor de edad."),
     list(word = "Menores", definition = "Individuos que se encuentran bajo la edad legal de mayoría de edad en un contexto específico, lo que generalmente implica que aún no han alcanzado la edad en la que se les considera plenamente responsables de sus acciones según la ley."),
@@ -378,7 +378,7 @@ server <- function(input, output, session) {
     list(word = "Negligencia Educativa", definition = HTML("La negligencia institucional es cuando a una persona menor de edad, que está en un hogar de crianza, centro de cuidado sustituto o en una institución pública o privada, de cuido, educación, tratamiento o detención, se le cause daño o se ponga en riesgo de sufrir daño a su salud e integridad física, mental o emocional, incluyendo –pero sin limitarse– a abuso sexual. La negligencia institucional, ya sea conocida o que se sospeche que ocurre, o que ocurre como resultado de la política, prácticas y condiciones imperantes en la institución, la puede cometer:<ul>          
             <br>
             <li> Operador u operadora de un hogar de crianza; 
-            <li> Cualquier empleado, empleada, funcionario o funcionaria que ofrezca servicios de cuido o que tenga bajo su control o custodia a una persona menor de edad para su cuido, educación, tratamiento o detención;
+            <li> Cualquier empleado, empleada, funcionario o funcionaria que ofrezca servicios de cuido o que tenga bajo su control o custodia a una persona menor de edad para su cuido, educación, tratamiento o detención.
             </ul>")),
     list(word = "Negligencia Emocional", definition = "Se define como causar menoscabo o afectar la capacidad intelectual o emocional de la persona menor de edad dentro de lo que se considera normal para su edad y entorno cultural."),
     list(word = "Negligencia Médica", definition = "Situaciones en las que los proveedores de atención médica, como médicos, enfermeras u otros profesionales de la salud, no brindan el nivel adecuado de atención y cuidado a pacientes menores de edad, lo que resulta en daños físicos, emocionales o psicológicos para el paciente. Esto puede incluir errores en el diagnóstico, tratamiento inapropiado, falta de seguimiento adecuado, o cualquier otro acto u omisión que pueda considerarse una violación del estándar de cuidado aceptado en la práctica médica."),
@@ -573,23 +573,23 @@ server <- function(input, output, session) {
                 <li> Si por enfermedad o incapacidad mental, temporal o permanente, la víctima está incapacitada para comprender la naturaleza del acto en el momento de su realización;
                 <li> Si se le obliga o induce mediante maltrato, violencia física o psicológica a participar o involucrarse en una relación sexual no deseada con terceras personas.
               </ul>")),
-    list(word = "Incumplimiento de órdenes de protección (Artículo 2.8)", definition = "Cualquier violación a sabiendas de una orden de protección expedida."),
+    list(word = "Incumplimiento de Órdenes de Protección (Artículo 2.8)", definition = "Cualquier violación a sabiendas de una orden de protección expedida."),
     list(word = "Maltrato (Artículo 3.1)", definition = "Toda persona que empleare fuerza física o violencia psicológica,intimidación o persecución en la persona de su cónyuge, ex cónyuge, o la persona con quien cohabita o haya cohabitado, o la persona con quien sostuviere o haya sostenido una relación consensual, o la persona con quien haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, para causarle daño físico a su persona, a los bienes apreciados por ésta, excepto aquéllos que pertenecen privativamente al ofensor, o a la persona de otro o para causarle grave daño emocional, incurrirá en delito grave de cuarto grado en su mitad superior."),
     list(word = "Maltrato Agravado (Artículo 3.2)", definition = HTML("Se impondrá pena correspondiente a delito grave de tercer grado en su mitad inferior cuando en la persona del cónyuge, ex cónyuge o de la persona con quien se cohabita o se haya cohabitado, o con quien se sostiene o haya sostenido una relación consensual, o con quien se haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, se incurriere en maltrato según tipificado en esta Ley, mediando una o más de las circunstancias siguientes:<br>
     <ul>
     <br>
       <li> Se penetrare en la morada de la persona o en el lugar donde esté albergada y se cometiere allí maltrato, en el caso de cónyuges o cohabitantes, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, cuando éstos estuvieren separados o mediare una orden de protección ordenando el desalojo de la residencia a una de las partes; o</li>
-      <li> cuando se infiriere grave daño corporal a la persona; o</li>
-      <li> cuando se cometiere con arma mortífera en circunstancias que no revistiesen la intención de matar o mutilar; o</li>
-      <li> cuando se cometiere en la presencia de menores de edad; o</li>
-      <li> cuando se cometiere luego de mediar una orden de protección o resolución contra la persona acusada expedida en auxilio de la víctima del maltrato; o</li>
-      <li> se indujere, incitare u obligare a la persona a drogarse con sustancias controladas, o cualquier otra sustancia o medio que altere la voluntad de la persona o a intoxicarse con bebidas embriagantes; o</li>
+      <li> Cuando se infiriere grave daño corporal a la persona; o</li>
+      <li> Cuando se cometiere con arma mortífera en circunstancias que no revistiesen la intención de matar o mutilar; o</li>
+      <li> Cuando se cometiere en la presencia de menores de edad; o</li>
+      <li> Cuando se cometiere luego de mediar una orden de protección o resolución contra la persona acusada expedida en auxilio de la víctima del maltrato; o</li>
+      <li> Se indujere, incitare u obligare a la persona a drogarse con sustancias controladas, o cualquier otra sustancia o medio que altere la voluntad de la persona o a intoxicarse con bebidas embriagantes; o</li>
       <li> Cuando se cometiere y simultáneamente se incurriere en maltrato de un menor según definido en la Ley Núm. 177 de 1 de agosto de 2003.</li>
       <li> Si a la víctima se le obliga o induce mediante maltrato, violencia física o sicológica a participar o involucrarse en una relación sexual no deseada con terceras personas.</li>
       <li> Cuando se cometiere contra una mujer embarazada.</li>
       <li> Cuando se cometiere contra una persona menor de dieciséis (16) años y la persona agresora sea de dieciocho (18) años o más.</li>
     </ul>")),
-    list(word = "Maltrato Mediante Restricción de la Libertad (Artículo 3.4)", definition = "Maltrato mediante restricción de la libertad. Toda persona que utilice violencia o intimidación en la persona de su cónyuge, ex cónyuge, de la persona con quien cohabita o haya cohabitado, o con quien sostiene o haya sostenido una relación consensual, o la persona con quien haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, o que utilice pretexto de que padece o de que una de las personas antes mencionadas padece de enfermedad o defecto mental, para restringir su libertad con el conocimiento de la víctima, incurrirá en delito grave de tercer grado en su mitad inferior."),
+    list(word = "Maltrato Mediante Restricción de la Libertad (Artículo 3.4)", definition = "Toda persona que utilice violencia o intimidación en la persona de su cónyuge, ex cónyuge, de la persona con quien cohabita o haya cohabitado, o con quien sostiene o haya sostenido una relación consensual, o la persona con quien haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, o que utilice pretexto de que padece o de que una de las personas antes mencionadas padece de enfermedad o defecto mental, para restringir su libertad con el conocimiento de la víctima, incurrirá en delito grave de tercer grado en su mitad inferior."),
     list(word = "Maltrato Por Amenaza (Artículo 3.3)", definition = "Toda persona que amenaza con causarle daño a su cónyuge, ex cónyuge, a la persona con quien cohabita o con quien haya cohabitado o con quien sostiene o haya sostenido una relación consensual, o la persona con quien haya procreado un hijo o hija, independientemente del sexo, estado civil, orientación sexual, identidad de género o estatus migratorio de cualquiera de las personas involucradas en la relación, a los bienes apreciados por ésta, excepto aquéllos que pertenecen privativamente al ofensor, o a la persona de otro, incurrirá en delito grave de cuarto grado en su mitad superior.")
   )
   
@@ -810,7 +810,8 @@ server <- function(input, output, session) {
   #### Tab de Definiciones ####
   
   definitions_avp <- list(
-    list(word = "Región", definition = "Se refiere a una división geográfica o área delimitada que comparte características similares, ya sea geográficas, culturales, económicas, políticas o administrativas. Subdivisión territorial establecida por las autoridades gubernamentales para propósitos de administración y gestión local. Estas divisiones pueden variar en tamaño y alcance dependiendo del país y su estructura administrativa."),
+    #list(word = "Región", definition = "Se refiere a una división geográfica o área delimitada que comparte características similares, ya sea geográficas, culturales, económicas, políticas o administrativas. Subdivisión territorial establecida por las autoridades gubernamentales para propósitos de administración y gestión local. Estas divisiones pueden variar en tamaño y alcance dependiendo del país y su estructura administrativa."),
+    list(word = "Región", definition = "Subdivisión territorial establecida por las autoridades gubernamentales para propósitos de administración y gestión local."),
     list(word = "Vivienda Pública", definition = "Vivienda que es proporcionada, administrada o subsidiada por el gobierno o entidades gubernamentales con el objetivo de brindar alojamiento a personas o familias que tienen dificultades para acceder a una vivienda adecuada en el mercado privado debido a limitaciones económicas o sociales. Estas viviendas suelen estar dirigidas a personas de bajos ingresos, familias en situación de pobreza, personas sin hogar, o aquellos que enfrentan otras formas de vulnerabilidad social."),
     list(word = "Violencia Doméstica", definition = "Cuando una persona emplea fuerza física o violencia psicológica, intimidación o persecución en contra de su pareja o expareja. Esto, para causarle daño físico a su persona, a sus bienes, a otra persona o a un animal de servicio o mascota o para causarle grave daño emocional. Para que se considere violencia doméstica es necesario que exista o haya existido una relación afectiva entre las partes. Es decir, se da cuando la persona agresora es cónyuge, excónyuge, una persona con quien vive o ha vivido, con quien sostiene o haya sostenido una relación consensual o una persona con quien se haya procreado una hija o un hijo.")
   )
@@ -907,7 +908,7 @@ server <- function(input, output, session) {
   output$dataTableUI_poli_despDF <- renderUI({
     if (input$showTable_poli_despDF) {
       hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
-      texts <- c("Negociado de Policía de Puerto Rico")
+      texts <- c("Negociado de la Policía de Puerto Rico")
       
       tags$div(
         class = "card",
@@ -1011,7 +1012,7 @@ server <- function(input, output, session) {
   output$dataTableUI_poli_vEdad  <- renderUI({
     if (input$showTable_poli_vEdad ) {
       hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
-      texts <- c("Negociado de Policía de Puerto Rico")
+      texts <- c("Negociado de la Policía de Puerto Rico")
       
       tags$div(
         class = "card",
