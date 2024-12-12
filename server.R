@@ -216,6 +216,15 @@ server <- function(input, output, session) {
          con sus propias vidas en un solo evento."),
     list(word = "Homicidio único", definition = "Se refiere a un acto en el cual una persona causa la muerte de otra 
          en un evento específico."),
+    list(word = "Intervención legal", definition = "La muerte por intervención legal se define como una muerte en la que la 
+         víctima fue asesinado o murió como resultado de un oficial de la ley u otro oficial de paz (personas con autoridad legal
+         específica para usar fuerza letal), incluidas las fuerzas del orden militar, que actuaron en el cumplimiento del deber.  
+         El término intervención legal es una clasificación de los códigos ICD-10 y no denota la legalidad de las 
+         circunstancias que rodearon la muerte. Estas muertes pueden ocurrir durante el transcurso de un oficial de la ley 
+         que realiza una parada de tráfico aleatoria o dirigida, emite una citación, arresta o persigue a una víctima 
+         (por ejemplo, la víctima huye o escapa del arresto), responde a un llamado para mantener el orden, minimiza los
+         disturbios y / o garantiza la seguridad (por ejemplo, disturbios domésticos, para evitar una crisis de suicidio)
+         u otras acciones como parte de los deberes de las fuerzas del orden."),
     list(word = "Muerte accidental por arma de fuego", definition = "Evento en el cual una persona pierde la vida 
          como resultado involuntario de la manipulación, manejo o uso incorrecto de un arma de fuego. Este tipo de 
          incidente ocurre cuando un individuo dispara un arma de manera accidental, ya sea debido a un descuido, falta
@@ -228,15 +237,6 @@ server <- function(input, output, session) {
          su siglas en inglés) define una muerte violenta como: Suicidio (incluyendo terrorismo), Homicidio (incluyendo terrorismo),
          Intervención legal (excluyendo terrorismo, ejecuciones por pena de muerte, o actos de guerra), Eventos con intención 
          no determinada, Heridas por arma de fuego no intencional."),
-    list(word = "Intervención legal", definition = "La muerte por intervención legal se define como una muerte en la que la 
-         víctima fue asesinado o murió como resultado de un oficial de la ley u otro oficial de paz (personas con autoridad legal
-         específica para usar fuerza letal), incluidas las fuerzas del orden militar, que actuaron en el cumplimiento del deber.  
-         El término intervención legal es una clasificación de los códigos ICD-10 y no denota la legalidad de las 
-         circunstancias que rodearon la muerte. Estas muertes pueden ocurrir durante el transcurso de un oficial de la ley 
-         que realiza una parada de tráfico aleatoria o dirigida, emite una citación, arresta o persigue a una víctima 
-         (por ejemplo, la víctima huye o escapa del arresto), responde a un llamado para mantener el orden, minimiza los
-         disturbios y / o garantiza la seguridad (por ejemplo, disturbios domésticos, para evitar una crisis de suicidio)
-         u otras acciones como parte de los deberes de las fuerzas del orden."),
     list(word = "Suicidio Único", definition = "Se refiere a un acto en el cual una persona termina deliberadamente con 
          su propia vida, sin la participación o implicación de otras personas en el proceso. Este término implica que el 
          individuo toma la decisión y ejecuta el acto suicida de manera independiente, sin ningún intento de causar la 
