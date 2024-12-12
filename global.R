@@ -22,6 +22,7 @@ library(scales)
 library(ggplot2)
 library(leaflet)
 library(grDevices)
+library(htmlwidgets)
 source("utils.R")
 
 # packages <- c(
