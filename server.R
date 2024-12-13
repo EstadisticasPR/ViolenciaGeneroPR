@@ -1709,7 +1709,7 @@ server <- function(input, output, session) {
             el importe de la dote;
             <li> El femicidio no íntimo, cometido por un agresor que no tiene una relación íntima con la víctima,
             que está muy difundido en algunas partes de América Latina y que, por lo general, está precedido de 
-            actos de violencia sexual o tortura.;
+            actos de violencia sexual o tortura.
             </ul>")),
     list(word = "Identidad de género", definition = "Se refiere a la manera en que una persona se identifica, cómo
          se reconoce o se expresa sobre sí misma, en cuanto al género que puede corresponder o no a su sexo biológico
@@ -1986,7 +1986,7 @@ server <- function(input, output, session) {
   # Data Table para dcrSentenciadas
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_dcr_dcrSentenciadas <- renderDT(server = FALSE, {
-    renderDataTable(dcrSentenciadas_filt_rename(), "Datos: Programa de supervisión electrónica por delitos de violencia doméstica")
+    renderDataTable(dcrSentenciadas_filt_rename(), "Datos: Programa de supervisión <br>electrónica por delitos de <br>violencia doméstica")
   })
   
   # Crear Card con Fuentes
@@ -1997,13 +1997,13 @@ server <- function(input, output, session) {
       
       tags$div(
         class = "card",
-        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        style = "padding: 10px; width: 90%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
         
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
+          style = "padding: 5px; width: 90%; display: flex; justify-content: center;",  
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
+            style = "width: 90%; max-width: 750px; overflow-x: auto;",  
             DTOutput("dataTable_dcr_dcrSentenciadas")
           )
         ),
