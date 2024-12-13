@@ -896,7 +896,7 @@ casosCrimLey148 <- casosCrimLey148_list %>%
 # Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, 
 # por Región Judicial y grupo de edad de la parte peticionaria
 
-new_names <- c("Total", "menos de 20 años", "21-29", "30-39", "40-49", "50-59", "60 años o más", "No Indica")
+new_names <- c("Total", "20 años o menos", "21-29", "30-39", "40-49", "50-59", "60 años o más", "No Indica")
 
 # datos de solicitudes de órdenes de protección en el 2020-2021
 # OP_148_SoliGrupEdad2020_21 <- read_excel(paste0(trib, "OP_148_SoliGrupEdad2020_21.xlsx")) %>%
