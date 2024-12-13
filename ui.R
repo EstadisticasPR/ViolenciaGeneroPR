@@ -2539,7 +2539,7 @@ ui <-
             authorTag(
               nombre = 'Manuel Mangual Martínez',
               email = 'manuel.mangual@estadisticas.pr',
-              puesto = 'Supervisor del Proyecto Prevención, Apoyo, Rescate y Educación de la Violencia de Género',
+              puesto = 'Gerente de Proyectos: Prevención, Apoyo, Rescate y Educación de la Violencia de Género',
               grados = c('MS Investigación y Evaluación de la Salud, Universidad de Puerto Rico',
                          'BS Biología, Universidad de Puerto Rico')
             ),
@@ -2563,7 +2563,8 @@ ui <-
             authorTag(
               nombre = 'Raúl Figueroa Rodríguez',
               email = 'raul.figueroa@estadisticas.pr',
-              puesto = 'Gerente de Proyectos Estadísticos NVDRS',
+              puesto = 'Analista de Datos: Proyectos de Prevención, Apoyo, Rescate y Educación de la Violencia de Género',
+              #puesto = 'Analista de Datos: Proyectos Estadísticos NVDRS',
               grados = c('MS Demografía, Universidad de Puerto Rico',
                          'BS Ciencias Naturales, Universidad de Puerto Rico')
             ),
