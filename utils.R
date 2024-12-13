@@ -1257,7 +1257,41 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1, 
     #   title = list(text = y_axis_title, font = list(size = axis_text_size, family = "Arial", color = "black", weight = "bold")),
     #   tickfont = list(size = tick_size, family = "Arial", color = "black")
     # )
-  )
+  ) %>%
+    onRender("
+      function(el, x) {
+        function adjustLegendSpacing() {
+          console.log('Adjusting legend spacing');
+          var legendTexts = el.querySelectorAll('.legendtext'); // legendtext contiene el texto de los elementos de la leyenda
+          console.log('Number of legend texts found:', legendTexts.length);
+          if (legendTexts.length > 0) {
+            var fixedSpacingValue = 40;  // El spacing para todos los elementos de la leyenda
+            legendTexts.forEach(function(textNode) {
+              var parentG = textNode.closest('g');
+              var colorBox = parentG ? parentG.querySelector('rect') : null;
+              if (textNode && colorBox) {
+                console.log('Applying fixed spacing value:', fixedSpacingValue);
+                textNode.setAttribute('x', fixedSpacingValue);
+              }
+            });
+          }
+        }
+        
+        adjustLegendSpacing();
+        
+        // Observa si hay cambios en la leyenda(Seleccionar o Deseleccionar)
+        var observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            adjustLegendSpacing();
+          });
+        });
+        
+        var legendNode = el.querySelector('.legend');
+        if (legendNode) {
+          observer.observe(legendNode, { childList: true, subtree: true });
+        }
+      }
+    ")
 
   # Ajustar las opciones de la leyenda en dispositivos pequeños
   if (width < 800) {
@@ -1274,7 +1308,41 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1, 
         itemwidth = 50,  # Ajuste del ancho de cada categoría
         valign = "top"   # Alinear el texto de la leyenda en la parte superior
       )
-    )
+    ) %>%
+      onRender("
+      function(el, x) {
+        function adjustLegendSpacing() {
+          console.log('Adjusting legend spacing');
+          var legendTexts = el.querySelectorAll('.legendtext'); // legendtext contiene el texto de los elementos de la leyenda
+          console.log('Number of legend texts found:', legendTexts.length);
+          if (legendTexts.length > 0) {
+            var fixedSpacingValue = 40;  // El spacing para todos los elementos de la leyenda
+            legendTexts.forEach(function(textNode) {
+              var parentG = textNode.closest('g');
+              var colorBox = parentG ? parentG.querySelector('rect') : null;
+              if (textNode && colorBox) {
+                console.log('Applying fixed spacing value:', fixedSpacingValue);
+                textNode.setAttribute('x', fixedSpacingValue);
+              }
+            });
+          }
+        }
+        
+        adjustLegendSpacing();
+        
+        // Observa si hay cambios en la leyenda(Seleccionar o Deseleccionar)
+        var observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            adjustLegendSpacing();
+          });
+        });
+        
+        var legendNode = el.querySelector('.legend');
+        if (legendNode) {
+          observer.observe(legendNode, { childList: true, subtree: true });
+        }
+      }
+    ")
   }
 
   return(p_plotly)
