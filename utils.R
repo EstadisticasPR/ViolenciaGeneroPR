@@ -1024,9 +1024,11 @@ renderBarPlot_facets <- function(data, x, y, fill, title, xlab, ylab, fillLab = 
         panel.border = element_rect(colour = "black", fill = NA, size = 1),
         plot.margin = margin(t = 105, r = 50, b = 100, l = 50),
         panel.grid.major.x = element_blank() # Elimina el grid line por defacto en el eje de X
-      ) +
-      geom_vline(xintercept = seq(1.5, length(unique(data_df[[x]])) - 0.5, by = 1), # Grid line en X entre datos
-                 linetype = "dotted", color = "gray", size = 0.3, alpha = 0.5) # Visualización del grid line
+      ) 
+      if (length(unique(data_df[[x]])) > 1) {
+        p <- p + geom_vline(xintercept = seq(1.5, length(unique(data_df[[x]])) - 0.5, by = 1), #Grid line en x
+                            linetype = "dotted", color = "grey", size = 0.3, alpha = 0.5) #Visualización del grid line
+      }
     
     return(p)
   }
@@ -1110,9 +1112,12 @@ renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = f
         panel.border = element_rect(colour = "black", fill = NA, size = 1),
         plot.margin = margin(t = 100, r = 50, b = 100, l = 50),
         panel.grid.major.x = element_blank() # Elimina el grid line por defacto en el eje de X
-      ) +
-      geom_vline(xintercept = seq(1.5, length(unique(data_df[[x]])) - 0.5, by = 1), # Grid line en X entre datos
-                 linetype = "dotted", color = "gray", size = 0.3, alpha = 0.5) # Visualización del grid line
+      ) 
+    
+      if (length(unique(data_df[[x]])) > 1) {
+        p <- p + geom_vline(xintercept = seq(1.5, length(unique(data_df[[x]])) - 0.5, by = 1), #Grid line en x
+                            linetype = "dotted", color = "grey", size = 0.3, alpha = 0.5) #Visualización del grid line
+      }
     
     
     return(p)
