@@ -76,7 +76,7 @@ ui <-
         
         #### tab con datos de Homicidios por grupo de Edad ####
         tabPanel(
-          lowercaseTitle("Homicidios de mujeres por edad"),
+          lowercaseTitle("Homicidios de Mujeres por Edad"),
           br(), br(),
           # Título del Tab
           #titlePanel("Homicidios de mujeres por grupo de edad según el año"),
@@ -160,7 +160,7 @@ ui <-
         
         #### tab con datos de Incidentes segun el año ####
         tabPanel(
-          lowercaseTitle("Tipos de incidentes violentos"),
+          lowercaseTitle("Tipos de Incidentes Violentos"),
           br(), br(),
           
           # Título del Tab
@@ -265,7 +265,7 @@ ui <-
       tabsetPanel(
         #### tab con datos de menores víctimas de maltrato (dfMalt)  ####
         tabPanel(
-          lowercaseTitle("Maltrato de menores por sexo"),
+          lowercaseTitle("Maltrato de Menores por Sexo"),
           br(), br(),
           
           # Título del Tab
@@ -288,7 +288,7 @@ ui <-
                     id = "fam_dfMalt_tipo"
                   ),
                   createDropdownCheckbox(
-                    label = HTML("Seleccione <br> sexo de las víctimas:"),
+                    label = HTML("Seleccione <br> Sexo de las Víctimas:"),
                     choices = dfMalt$Sexo,
                     selected = 1,
                     id = "fam_dfMalt_sexo"
@@ -897,7 +897,7 @@ ui <-
         
         #### tab con datos de mujeres desaparecidas (despDF) ####
         tabPanel(
-          lowercaseTitle("Mujeres desaparecidas y localizadas"), 
+          lowercaseTitle("Mujeres Desaparecidas y Localizadas"), 
           br(), br(),
           
           # Título del Tab
@@ -914,7 +914,7 @@ ui <-
                     style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar la Categoría
                     createDropdownCheckbox(
-                      label = HTML("Seleccione<br>el estado de la víctima:"),
+                      label = HTML("Seleccione<br>el Estado de la Víctima:"),
                       choices = despDF$Estado,
                       selected = despDF$Estado,
                       id = "poli_despDF_categoría"
@@ -1004,7 +1004,7 @@ ui <-
                     ),
                     # botón para seleccionar el sexo
                     createDropdownCheckbox(
-                      label = HTML("Seleccione <br>sexo de las víctimas:"),
+                      label = HTML("Seleccione <br>Sexo de las Víctimas:"),
                       choices = vEdad$Sexo,
                       selected = vEdad$Sexo[1],
                       id = "poli_vEdad_sexo"
@@ -1454,7 +1454,7 @@ ui <-
         
         #### tab con datos de los servicios ofrecidos por mes (opmServiciosMes) ####
         tabPanel(
-          lowercaseTitle("Servicios y Alcanze de la OPM"), 
+          lowercaseTitle("Servicios y Alcance de la OPM"), 
           br(), br(),
           
           # Título del Tab
@@ -1571,14 +1571,14 @@ ui <-
                 style = "text-align: center; display: inline-block;", 
                 # botón para seleccionar el sexo
                 createDropdownCheckbox(
-                  label = "Seleccione el sexo:",
+                  label = "Seleccione el Sexo:",
                   choices = dcrCasosInv$Sexo,
                   selected = 1,
                   id = "dcr_dcrCasosInv_sexo"
                 ),
                 # botón para seleccionar el tipo de investigación 
                 createDropdownCheckbox(
-                  label = HTML("Seleccione  el<br> estado de Investigación:"),
+                  label = HTML("Seleccione  el<br> Estado de Investigación:"),
                   choices = dcrCasosInv$Estado,
                   selected = dcrCasosInv$Estado,
                   id = "dcr_dcrCasosInv_tipo"
@@ -1661,7 +1661,7 @@ ui <-
                 style = "text-align: center; display: inline-block;", 
                 # botón para seleccionar el tipo de investigación
                 createDropdownCheckbox(
-                  label = "Seleccione el estado del caso:",
+                  label = "Seleccione el Estado del Caso:",
                   choices = dcrSentenciadas$Estado,
                   selected = dcrSentenciadas$Estado,
                   id = "dcr_dcrSentenciadas_tipo"
@@ -2098,7 +2098,7 @@ ui <-
                   "Los datos representados en esta gráfica corresponden a
                   las órdenes de protección por violencia sexual denegadas
                   bajo la Ley 148 por razón de archivo, región judicial y año
-                  fiscal.Los datos para cada año fiscal se identifican con el
+                  fiscal. Los datos para cada año fiscal se identifican con el
                   año en que finaliza el mismo, por ejemplo, para los datos
                   del año fiscal 2020-2021, los datos son presentados como 
                   año fiscal 2021.",
@@ -2191,10 +2191,10 @@ ui <-
                 p(
                   "Los datos representados en esta gráfica corresponden a
                   las órdenes de protección emitidas bajo la Ley 148 por delito
-                  cometido, región judicial y año fiscal.Los datos para cada 
+                  cometido, región judicial y año fiscal. Los datos para cada 
                   año fiscal se identifican con el año en que finaliza
-                  el mismo, por ejemplo, para los datos del año fiscal 2020-2021
-                  , los datos son presentados como año fiscal 2021.",
+                  el mismo, por ejemplo, para los datos del año fiscal 2020-2021,
+                  los datos son presentados como año fiscal 2021.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -2477,7 +2477,7 @@ ui <-
                 p(
                   "Los datos representados en esta gráfica corresponden a la
                   tendencia del equipo de recolecta de evidencia de los
-                  SAFE Kits en casos de violencia sexual por estado de querella 
+                  SAFE Kits en casos de violencia sexual, según el estado de querella,
                   desde el año 2019 al 2023.",
                   
                   style = "font-size: 16px;padding: 0px;" 
