@@ -87,12 +87,51 @@ ui <-
           
           # Menu sidebar con widgets
             sidebarLayout(
+              # sidebarPanel(
+              #   style = "display: flex; flex-direction: column; align-items: center;",
+              #   
+              #   # # seleccionar valor de la variable
+              #   div(
+              #     style = "width: 100%; display: flex; justify-content: center;  margin-bottom: 20px;", 
+              #     div(
+              #       style = "text-align: center; display: inline-block;", 
+              #       createDropdownCheckbox(
+              #         label = HTML("Seleccione<br>Grupo(s) de Edad:"),
+              #         choices = homiEdad$Edad,
+              #         selected = 8,
+              #         id = "snmv_homiEdad_edad"
+              #       )
+              #     )
+              #   ),
+              #   
+              #   div(
+              #     style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+              #     div(
+              #       style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+              #       div(
+              #         style = "flex: 0.7; display: flex; justify-content: center;",
+              #         createDropdownCheckbox(
+              #           label = "Seleccione Año(s):",
+              #           choices = homiEdad$Año,
+              #           selected = NULL,
+              #           id = "snmv_homiEdad_año"
+              #         )
+              #       ),
+              #       showDataCheckbox("showTable_snmv")
+              #     )
+              #   ),
+              #   
+              #   # Output UI para la tabla de datos
+              #   uiOutput("dataTableUI_snmv")
+              #   
+              # ),
+              
               sidebarPanel(
                 style = "display: flex; flex-direction: column; align-items: center;",
                 
-                # # seleccionar valor de la variable
+                # Seleccionar valor de la variable
                 div(
-                  style = "width: 100%; display: flex; justify-content: center;  margin-bottom: 20px;", 
+                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                   div(
                     style = "text-align: center; display: inline-block;", 
                     createDropdownCheckbox(
@@ -107,9 +146,10 @@ ui <-
                 div(
                   style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
                   div(
-                    style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                    style = "width: 100%; display: flex; justify-content: space-between; align-items: center;", 
+                   
                     div(
-                      style = "flex: 0.7; display: flex; justify-content: center;",
+                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;", 
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
                         choices = homiEdad$Año,
@@ -117,14 +157,17 @@ ui <-
                         id = "snmv_homiEdad_año"
                       )
                     ),
-                    showDataCheckbox("showTable_snmv")
+                    div(
+                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                      showDataCheckbox("showTable_snmv")
+                    )
                   )
                 ),
                 
                 # Output UI para la tabla de datos
                 uiOutput("dataTableUI_snmv")
-                
               ),
+              
             
             # Sección principal con los gráficos
             mainPanel(
@@ -193,7 +236,7 @@ ui <-
                   div(
                     style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                     div(
-                      style = "flex: 0.7; display: flex; justify-content: center;",
+                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;", 
                       # botón para seleccionar año
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
@@ -202,7 +245,10 @@ ui <-
                         id = "snmv_inci_año"
                       )
                     ),
-                    showDataCheckbox("showTable_snmv_inci")
+                    div(
+                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                      showDataCheckbox("showTable_snmv_inci")
+                    )
                   )
                 ),
                 
@@ -301,7 +347,7 @@ ui <-
                 div(
                   style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                   div(
-                    style = "flex: 0.1; display: flex; justify-content: center;",
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                     # botón para seleccionar año
                     createDropdownCheckbox(
                       label = "Seleccionar Año:",
@@ -310,7 +356,10 @@ ui <-
                       id = "fam_dfMalt_año"
                     )
                   ),
-                  showDataCheckbox("showTable_fam")
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_fam")
+                  )
                 )
               ),
               
@@ -500,7 +549,7 @@ ui <-
                   div(
                     style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                     div(
-                      style = "flex: 0.1; display: flex; justify-content: center;",
+                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
                       # botón para seleccionar año
                       createDropdownCheckbox(
                         label = "Seleccionar Año:",
@@ -509,7 +558,10 @@ ui <-
                         id = "just_dfDeli_año"
                       )
                     ),
-                    showDataCheckbox("showTable_just")
+                    div(
+                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                      showDataCheckbox("showTable_just")
+                    )
                   )
                 ),
                 
@@ -733,7 +785,7 @@ ui <-
                   div(
                     style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                     div(
-                      style = "flex: 0.7; display: flex; justify-content: center;",
+                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                       # botón para seleccionar el año
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
@@ -742,7 +794,10 @@ ui <-
                         id = "avp_dfAvp_año"
                       )
                     ),
-                    showDataCheckbox("showTable_avp_dfAvp")
+                    div(
+                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                      showDataCheckbox("showTable_avp_dfAvp")
+                    )
                   )
                 ),
                 
@@ -927,7 +982,7 @@ ui <-
                   div(
                     style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                     div(
-                      style = "flex: 0.7; display: flex; justify-content: center;",
+                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                       # botón para seleccionar el año
                       createDropdownCheckbox(
                         label = "Seleccione año(s):",
@@ -936,7 +991,10 @@ ui <-
                         id = "poli_despDF_año"
                       )
                     ),
-                    showDataCheckbox("showTable_poli_despDF")
+                    div(
+                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                      showDataCheckbox("showTable_poli_despDF")
+                    )
                   )
                 ),
                 
@@ -1017,7 +1075,7 @@ ui <-
                   div(
                     style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                     div(
-                      style = "flex: 0.1; display: flex; justify-content: center;",
+                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                       # botón para seleccionar año
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
@@ -1026,7 +1084,10 @@ ui <-
                         id = "poli_vEdad_año"
                       )
                     ),
-                    showDataCheckbox("showTable_poli_vEdad")
+                    div(
+                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                      showDataCheckbox("showTable_poli_vEdad")
+                    )
                   )
                 ),
                 
@@ -1157,7 +1218,7 @@ ui <-
                   div(
                     style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                     div(
-                      style = "flex: 0.1; display: flex; justify-content: center;",
+                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                       # botón para seleccionar el año
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
@@ -1166,7 +1227,10 @@ ui <-
                         id = "opm_opmFemiVD_año"
                       )
                     ),
-                    showDataCheckbox("showTable_opm_opmFemiVD")
+                    div(
+                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                      showDataCheckbox("showTable_opm_opmFemiVD")
+                    )
                   )
                 ),
                 
@@ -1242,7 +1306,7 @@ ui <-
                   div(
                     style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                     div(
-                      style = "flex: 0.1; display: flex; justify-content: center;",
+                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                       createDropdownCheckbox(
                       label = "Seleccione Año(s):",
                       choices = opmCasos$Año,
@@ -1250,7 +1314,10 @@ ui <-
                       id = "opm_opmCasos_año"
                      )
                     ),
-                    showDataCheckbox("showTable_opm_opmCasos")
+                    div(
+                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                      showDataCheckbox("showTable_opm_opmCasos")
+                    )
                   )
                 ),
                 
@@ -1323,7 +1390,7 @@ ui <-
                   div(
                     style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                     div(
-                      style = "flex: 0.1; display: flex; justify-content: center;",
+                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
                         choices = opmVic$Año,
@@ -1331,7 +1398,10 @@ ui <-
                         id = "opm_opmVic_año"
                       )
                     ),
-                    showDataCheckbox("showTable_opm_opmVic")
+                    div(
+                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                      showDataCheckbox("showTable_opm_opmVic")
+                    )
                   )
                 ),
                 
@@ -1403,7 +1473,7 @@ ui <-
                   div(
                     style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                     div(
-                      style = "flex: 0.1; display: flex; justify-content: center;",
+                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                       # botón para seleccionar el año
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
@@ -1412,7 +1482,10 @@ ui <-
                         id = "opm_opmMedio_año"
                       )
                     ),
-                    showDataCheckbox("showTable_opm_opmMedio")
+                    div(
+                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                      showDataCheckbox("showTable_opm_opmMedio")
+                    )
                   )
                 ),
                 
@@ -1484,7 +1557,7 @@ ui <-
                   div(
                     style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                     div(
-                      style = "flex: 0.1; display: flex; justify-content: center;",
+                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                       # botón para seleccionar el año
                       createDropdownCheckbox(
                         label = "Seleccione Año(s):",
@@ -1493,7 +1566,10 @@ ui <-
                         id = "opm_opmServiciosMes_año"
                       )
                     ),
-                    showDataCheckbox("showTable_opm_opmServiciosMes")
+                    div(
+                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                      showDataCheckbox("showTable_opm_opmServiciosMes")
+                    )
                   )
                 ),
                 
@@ -1591,7 +1667,7 @@ ui <-
               div(
                 style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                 div(
-                  style = "flex: 0.1; display: flex; justify-content: center;",
+                  style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                   # botón para seleccionar el año
                   createDropdownCheckbox(
                     label = "Seleccione Año(s):",
@@ -1600,7 +1676,10 @@ ui <-
                     id = "dcr_dcrCasosInv_year"
                   )
                 ),
-                showDataCheckbox("showTable_dcr_dcrCasosInv")
+                div(
+                  style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                  showDataCheckbox("showTable_dcr_dcrCasosInv")
+                )
               )
             ),
             
@@ -1674,7 +1753,7 @@ ui <-
               div(
                 style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                 div(
-                  style = "flex: 0.1; display: flex; justify-content: center;",
+                  style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                   # botón para seleccionar el año
                   createDropdownCheckbox(
                     label = "Seleccione Año(s):",
@@ -1683,7 +1762,10 @@ ui <-
                     id = "dcr_dcrSentenciadas_year"
                   )
                 ),
-                showDataCheckbox("showTable_dcr_dcrSentenciadas")
+                div(
+                  style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                  showDataCheckbox("showTable_dcr_dcrSentenciadas")
+                )
               )
             ),
             
@@ -1781,7 +1863,7 @@ ui <-
                 div(
                   style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                   div(
-                    style = "flex: 0.1; display: flex; justify-content: center;",
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                     # botón para seleccionar el año
                     createDropdownCheckbox_añoFiscal(
                       label = HTML("Seleccione <br> Año(s) Fiscal:"),
@@ -1790,7 +1872,10 @@ ui <-
                       id = "trib_OP_148_SoliGrupEdad_AñoFiscal"
                     )
                   ),
-                  showDataCheckbox("showTable_OP_148_SoliGrupEdad")
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_OP_148_SoliGrupEdad")
+                  )
                 )
               ),
               
@@ -1873,7 +1958,7 @@ ui <-
                 div(
                   style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                   div(
-                    style = "flex: 0.1; display: flex; justify-content: center;",
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                     # botón para seleccionar el año fiscal
                     createDropdownCheckbox_añoFiscal(
                       label = HTML("Seleccione <br> Año(s) Fiscal:"),
@@ -1882,7 +1967,10 @@ ui <-
                       id = "trib_OP_Ley148_ex_parteEmitidas_AñoFiscal"
                     )
                   ),
-                  showDataCheckbox("showTable_OP_Ley148_ex_parteEmitidas")
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_OP_Ley148_ex_parteEmitidas")
+                  )
                 )
               ),
               
@@ -1965,7 +2053,7 @@ ui <-
                 div(
                   style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                   div(
-                    style = "flex: 0.1; display: flex; justify-content: center;",
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                     # botón para seleccionar el año fiscal
                     createDropdownCheckbox_añoFiscal(
                       label = HTML("Seleccione <br> Año(s) Fiscal:"),
@@ -1974,7 +2062,10 @@ ui <-
                       id = "trib_OP_LEY148Archivadas_AñoFiscal"
                     )
                   ),
-                  showDataCheckbox("showTable_OP_LEY148Archivadas")
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_OP_LEY148Archivadas")
+                  )
                 )
               ),
               
@@ -2058,7 +2149,7 @@ ui <-
                 div(
                   style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                   div(
-                    style = "flex: 0.1; display: flex; justify-content: center;",
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                     # botón para seleccionar el año fiscal
                     createDropdownCheckbox_añoFiscal(
                       label = HTML("Seleccione <br> Año(s) Fiscal:"),
@@ -2067,7 +2158,10 @@ ui <-
                       id = "trib_OP_LEY148Denegadas_AñoFiscal"
                     )
                   ),
-                  showDataCheckbox("showTable_OP_LEY148Denegadas")
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_OP_LEY148Denegadas")
+                  )
                 )
               ),
               
@@ -2151,7 +2245,7 @@ ui <-
                 div(
                   style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                   div(
-                    style = "flex: 0.1; display: flex; justify-content: center;",
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
                     # botón para seleccionar el año fiscal
                     createDropdownCheckbox_añoFiscal(
                       label = HTML("Seleccione <br> Año(s) Fiscal:"),
@@ -2160,7 +2254,10 @@ ui <-
                       id = "trib_OP_LEY148FinalEmitidas_AñoFiscal"
                     )
                   ),
-                  showDataCheckbox("showTable_OP_LEY148FinalEmitidas")
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_OP_LEY148FinalEmitidas")
+                  )
                 )
               ),
               
@@ -2243,7 +2340,7 @@ ui <-
                 div(
                   style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                   div(
-                    style = "flex: 0.1; display: flex; justify-content: center;",
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                     # botón para seleccionar el año fiscal
                     createDropdownCheckbox_añoFiscal(
                       label = HTML("Seleccione <br> Año(s) Fiscal:"),
@@ -2252,7 +2349,10 @@ ui <-
                       id = "trib_OP_LEY148Genero_AñoFiscal"
                     )
                   ),
-                  showDataCheckbox("showTable_OP_LEY148Genero")
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_OP_LEY148Genero")
+                  )
                 )
               ),
               
@@ -2335,7 +2435,7 @@ ui <-
                 div(
                   style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                   div(
-                    style = "flex: 0.1; display: flex; justify-content: center;",
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                     # botón para seleccionar el año fiscal
                     createDropdownCheckbox_añoFiscal(
                       label = HTML("Seleccione <br> Año(s) Fiscal:"),
@@ -2344,7 +2444,10 @@ ui <-
                       id = "trib_tribCasosCrim_AñoFiscal"
                     )
                   ),
-                  showDataCheckbox("showTable_tribCasosCrim")
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_tribCasosCrim")
+                  )
                 )
               ),
               
@@ -2437,7 +2540,7 @@ ui <-
                 div(
                   style = "width: 100%; display: flex; justify-content: center; align-items: center;",
                   div(
-                    style = "flex: 0.1; display: flex; justify-content: center;",
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                     # botón para seleccionar el año
                     createDropdownCheckbox(
                       label = "Seleccione Año(s):",
@@ -2446,7 +2549,10 @@ ui <-
                       id = "cavv_safekitsDF_Año"
                     )
                   ),
-                  showDataCheckbox("showTable_safekitsDF")
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_safekitsDF")
+                  )
                 )
               ),
               
