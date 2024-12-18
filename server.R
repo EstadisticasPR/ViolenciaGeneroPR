@@ -839,15 +839,16 @@ server <- function(input, output, session) {
     title <- paste0("Total de viviendas públicas solicitadas y asignadas \npor violencia doméstica por región en el año ", input$select_avp_mapaAvp_año)
   })
   
-  dfAvp_rename <- reactive({
-    dfAvp %>% 
+  
+  dfAvp_filt_rename <- reactive({
+    dfAvp_filt() %>% 
       rename(`Región de Vivienda` = Región)
   })
   
   # Data Table para la gráfica de barras de dfAvp
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_avp_dfAvp <- renderDT(server = FALSE, { 
-    renderDataTable(dfAvp_rename(), "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica")
+    renderDataTable(dfAvp_filt_rename(), "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica")
   })
   
   # Crear Card con Fuentes
