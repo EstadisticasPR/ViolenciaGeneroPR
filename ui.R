@@ -137,7 +137,7 @@ ui <-
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>Grupo(s) de Edad:"),
                       choices = homiEdad$Edad,
-                      selected = 8,
+                      selected = homiEdad$Edad,
                       id = "snmv_homiEdad_edad"
                     )
                   )
