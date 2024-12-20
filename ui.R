@@ -35,8 +35,8 @@ ui <-
         embedImage("logo_IEPR", "iepr_logo.png", "https://estadisticas.pr/", "estadisticas.pr"),
         
         ### Foto con enlace a la página de PARE ###
-        embedImage("logo_PARE", "logo_PARE.png", "https://parelaviolencia.pr.gov/", "PARE.gov"),
-        style = 'padding-top: 4px;',
+        # embedImage("logo_PARE", "logo_PARE.png", "https://parelaviolencia.pr.gov/", "PARE.gov"),
+        # style = 'padding-top: 4px;',
         
         ### Título de la App ###
         tags$li(
