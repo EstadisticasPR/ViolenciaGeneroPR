@@ -635,7 +635,8 @@ ui <-
                 column(12, 
                        div(id = "scrollable-plot", 
                            div(id = "plot-title", uiOutput("plot_title23")),
-                           plotlyOutput("map_just_mapaDeli"),  height = "100%"))
+                           # plotlyOutput("map_just_mapaDeli"),  height = "100%"))
+                           leafletOutput("map_just_mapaDeli", height = "450px"),  height = "100%"))
               ),
               #plotlyOutput("map_just_mapaDeli"),
               tags$div(style = "padding-bottom: 10px;"),

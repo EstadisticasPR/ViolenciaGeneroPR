@@ -311,11 +311,16 @@ dfDeli <- bind_rows(
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar 
 # los datos de delitos con los datos geográficos de los distritos fiscales
+# mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
+#   merge(dfDeli, by.x = "GROUP", by.y = "Distrito") %>%
+#   relocate(
+#     Año, GROUP, Delito, geometry,Casos
+#   )
+
 mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
   merge(dfDeli, by.x = "GROUP", by.y = "Distrito") %>%
-  relocate(
-    Año, GROUP, Delito, geometry,Casos
-  )
+  rename(`Distrito Fiscal` = GROUP) %>%
+  relocate(Año, `Distrito Fiscal`, Delito, geometry, Casos)
 
 #### Guardar datos procesados de Departamento de Justicia ####
 # dataframes <- list(dfDeli) # Lista de dataframes (por ejemplo: homiEdad y inci)

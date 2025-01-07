@@ -583,22 +583,28 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_just_mapaDeli_año", input, mapaDeli$Año)
   })
   
-  output$map_just_mapaDeli <- renderPlotly({
-    # Generar el gráfico con ggplot
-    p <- renderMap(
-      data = mapaDeli_filt, fill = Casos,
-      title = paste0("Casos de delitos por Distrito Fiscal según el Artículo de \n", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año),
-      group = GROUP,
-      fill_lab = "Número de casos",
-      light_color = "#E0BBE4",
-      dark_color = "#5A189A"
-    )
-
-    # Convertir el gráfico ggplot a plotly y ajustar la leyenda y colorbar
-    ggplotly(p, tooltip = c("all"))
+  # output$map_just_mapaDeli <- renderPlotly({
+  #   # Generar el gráfico con ggplot
+  #   p <- renderMap(
+  #     data = mapaDeli_filt, fill = Casos,
+  #     title = paste0("Casos de delitos por Distrito Fiscal según el Artículo de \n", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año),
+  #     # group = GROUP,
+  #     group = `Distrito Fiscal`,
+  #     fill_lab = "Número de casos",
+  #     light_color = "#E0BBE4",
+  #     dark_color = "#5A189A"
+  #   )
+  # 
+  #   # Convertir el gráfico ggplot a plotly y ajustar la leyenda y colorbar
+  #   ggplotly(p, tooltip = c("all"))
+  # })
+  
+  # Renderizar el mapa con Leaflet
+  output$map_just_mapaDeli <- renderLeaflet({
+    data <- mapaDeli_filt()
+    renderMap(data)
   })
 
-  
     #Titulo de la Grafica
   output$plot_title23 <- renderUI({
     title <- paste0("Casos de delitos por Distrito Fiscal según el Artículo de \n", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año)

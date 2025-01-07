@@ -1571,26 +1571,88 @@ renderDataTable_Definitions <- function(filtered_data, title) {
 
 
 # # Renderiza un mapa utilizando ggplot2 en el UI del ShinyApp
-renderMap <- function(data, fill, title, group, fill_lab = fill,
-                      light_color = "lightblue", dark_color = "darkblue") {
-  p <- ggplot(data()) +
-    geom_sf(aes(fill = {{fill}}, group = {{group}})) +  # Incluye group como aesthetic mapping
-    # labs(title = title, fill = fill_lab) +
-    labs(fill = fill_lab) +
-    scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
-    theme_minimal() +
-    theme(
-      legend.position = "left",
-      axis.text = element_blank(),
-      axis.ticks = element_blank(),
-      panel.grid = element_blank(),
-      panel.border = element_rect(colour = "black", fill = NA, size = 1),
-      plot.margin = margin(20, 10, 10, 10),
-      # plot.title = element_text(hjust = 0.5)
-    )
-  print(p)
-}
+# renderMap <- function(data, fill, title, group, fill_lab = fill,
+#                       light_color = "lightblue", dark_color = "darkblue") {
+#   p <- ggplot(data()) +
+#     geom_sf(aes(fill = {{fill}}, group = {{group}})) +  # Incluye group como aesthetic mapping
+#     # labs(title = title, fill = fill_lab) +
+#     labs(fill = fill_lab) +
+#     scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
+#     theme_minimal() +
+#     theme(
+#       legend.position = "left",
+#       axis.text = element_blank(),
+#       axis.ticks = element_blank(),
+#       panel.grid = element_blank(),
+#       panel.border = element_rect(colour = "black", fill = NA, size = 1),
+#       plot.margin = margin(20, 10, 10, 10),
+#       # plot.title = element_text(hjust = 0.5)
+#     )
+#   print(p)
+# }
 
+renderMap <- function(data, provider = providers$CartoDB.Positron) {
+  # Verificar que hay datos disponibles
+  if (nrow(data) == 0) {
+    return(leaflet() %>% addTiles())
+  }
+  
+  # Calcular límites para la escala de colores
+  min_casos <- min(data$Casos, na.rm = TRUE)
+  max_casos <- max(data$Casos, na.rm = TRUE)
+  rango <- max_casos - min_casos
+  
+  # Garantizar al menos 3 rangos
+  num_bins <- 3
+  if (rango < num_bins) {
+    # Si el rango es muy pequeño, ajustar el tamaño del paso para forzar 3 rangos
+    step <- 1
+    max_casos <- min_casos + (num_bins - 1) * step
+  } else {
+    # Definir el tamaño del paso dinámicamente basado en el rango y un número razonable de rangos
+    step <- ceiling(rango / num_bins)
+  }
+  
+  # Crear los límites de los bins
+  bins <- seq(
+    floor(min_casos / step) * step,  # Múltiplo inferior del tamaño del paso
+    ceiling(max_casos / step) * step,  # Múltiplo superior del tamaño del paso
+    by = step  # Incrementos definidos
+  )
+  
+  pal <- colorBin("Purples", domain = data$Casos, bins = bins, na.color = "transparent")
+  
+  # Crear el mapa
+  leaflet(data) %>%
+    addProviderTiles(provider) %>% # Fondo claro
+    addPolygons(
+      fillColor = ~pal(Casos), # Colores según cantidad de casos
+      weight = 1, # Líneas divisorias de los polígonos
+      opacity = 1,
+      color = "#666", # Color de las líneas divisorias
+      dashArray = "3", # Líneas completas
+      fillOpacity = 0.7,
+      label = ~paste(
+        "Distrito: ", `Distrito Fiscal`, "\n", # Saltos de línea
+        "Casos: ", Casos
+      ),
+      highlightOptions = highlightOptions(
+        weight = 1,
+        color = "#666",
+        dashArray = "",
+        fillOpacity = 0.9,
+        bringToFront = TRUE
+      )
+    ) %>%
+    addLegend(
+      pal = pal,
+      values = ~Casos,
+      opacity = 0.7,
+      title = "Número de casos",
+      position = "bottomright",
+      labFormat = labelFormat(digits = 0) # Evitar decimales en la leyenda
+    )
+}
 
 renderMapGroup <- function(data, fill, title, fill_lab = fill) {
   p <- ggplot(data) +
