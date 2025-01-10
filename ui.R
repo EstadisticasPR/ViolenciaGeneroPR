@@ -876,7 +876,15 @@ ui <-
                 column(12, 
                        div(id = "scrollable-plot", 
                            div(id = "plot-title", uiOutput("plot_title24")),
-                           plotlyOutput("map_avp_mapaAvp"),  height = "100%"))
+                           # plotlyOutput("map_avp_mapaAvp")
+                           # Mapa 1: Solicitadas
+                           h5("Solicitadas", style = "text-align: center; margin-top: 10px;"),
+                           leafletOutput("map_avp_mapaAvp_solicitadas", height = "200px"),
+                           tags$div(style = "margin-top: 10px;"),
+                           # Mapa 2: Asignadas
+                           h5("Asignadas", style = "text-align: center; margin-top: 10px;"),
+                           leafletOutput("map_avp_mapaAvp_asignadas", height = "200px"),
+                           height = "100%"))
               ),
               #plotlyOutput("map_avp_mapaAvp"),
               tags$div(style = "padding-bottom: 10px;"),

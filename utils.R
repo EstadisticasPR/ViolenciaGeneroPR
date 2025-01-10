@@ -733,25 +733,6 @@ updateCheckboxGroup <- function(session, inputId, input, data) {
   }
 }
 
-# create_empty_plot_with_message_forLine <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
-#   data_df <- data()
-#   ggplot(data_df, aes_string(x = x, y = y)) +
-#     geom_blank() +  
-#     labs(title = title, x = xlab, y = ylab) +
-#     theme_minimal() +
-#     theme(
-#       axis.text.x = element_blank(),
-#       axis.ticks = element_blank(),  
-#       axis.text.y = element_blank(),
-#       axis.title.x = element_text(size = 12, margin = margin(t = 10)), 
-#       axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
-#       plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
-#       panel.border = element_rect(colour = "black", fill = NA, size = 1),
-#       plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
-#     ) +
-#     annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 4, hjust = 0.5, vjust = 0.5)
-# }
-
 create_empty_plot_with_message_forLine <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
   data_df <- data()
   
@@ -786,69 +767,6 @@ create_empty_plot_with_message_forLine <- function(data, x, y, fill, title, xlab
       size = text_size, hjust = 0.5, vjust = 0.5
     )
 }
-
-# Renderiza un gráfico de lineas utilizando ggplot2 en el UI de Shiny.
-# renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, emptyMessage) {
-# 
-#   data_df <- data()  # Evaluar los datos reactivos una vez
-# 
-#   if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]])) {
-#     # Si no hay datos o las variables x/y son nulas, mostrar una gráfica vacía con ejes y un mensaje
-#     p <- create_empty_plot_with_message_forLine(data, x, y, fill, title, xlab, ylab,emptyMessage)
-#     
-#     return(p)
-#     # Si no hay datos o las variables x/y son nulas, mostrar una gráfica vacía con ejes y un mensaje
-#     # p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
-#     #   geom_blank() +  
-#     #   labs(title = title, x = xlab, y = ylab) +
-#     #   theme_minimal() +
-#     #   theme(
-#     #     axis.text.x = element_blank(),
-#     #     axis.ticks = element_blank(), 
-#     #     axis.text.y = element_blank(), 
-#     #     axis.title.x = element_text(size = 12, margin = margin(t = 10)),  
-#     #     axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
-#     #     plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
-#     #     panel.border = element_rect(colour = "black", fill = NA, size = 1),
-#     #     plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
-#     #   ) +
-#     #   annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 6, hjust = 0.5, vjust = 0.5)
-#     # 
-#     # return(p)
-# 
-#   } else {
-#     # Calcular rango del eje de y
-#     y_max <- max(data_df[[y]], na.rm = TRUE)
-#     y_interval <- pretty(c(0, y_max), n = 5)[2]  
-#     upper_y_limit <- ceiling(y_max / y_interval) * y_interval  
-# 
-# 
-#     p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
-#       geom_line(color = "#2f2e7d", size = 1) +  
-#       geom_point(color = "#adcc4e", size = 2,
-#                  aes(
-#                    text =
-#                      paste0("<b>", xlab, ":</b> ", .data[[x]],
-#                             "<br><b>", ylab, ":</b> ", .data[[y]]
-#                      )
-#                  )
-#       ) +
-#       expand_limits(y = 0) +  # Asegurar que el eje y comience en 0
-#       labs(title = title, x = xlab, y = ylab, color = colorlab) +
-#       scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
-#                          expand = expansion(mult = c(0, 0.1))) +
-#       coord_cartesian(ylim = c(0, upper_y_limit)) +
-#       theme_minimal() +
-#       theme(
-#         axis.text.x = element_text(angle = 45, hjust = 1),
-#         plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
-#         panel.border = element_rect(colour = "black", fill = NA, size = 1),
-#         plot.margin = margin(t = 45, r = 10, b = 10, l = 10)
-#       )
-# 
-#     return(p)
-#   }
-# }
 
 renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, emptyMessage) {
   data_df <- data()  # Evaluar los datos reactivos una vez
@@ -888,27 +806,6 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
     return(p)
   }
 }
-
-
-# Crea un gráfico vacio indicando al usuario que debe seleccionar las variables a visualizar
-# create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
-#   data_df <- data()
-#   ggplot(data_df, aes_string(x = x, y = y)) +
-#     geom_blank() +  
-#     labs(title = title, x = xlab, y = ylab) +
-#     theme_minimal() +
-#     theme(
-#       axis.text.x = element_blank(),
-#       axis.ticks = element_blank(),  
-#       axis.text.y = element_blank(),
-#       axis.title.x = element_text(size = 12, margin = margin(t = 10)), 
-#       axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
-#       plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
-#       panel.border = element_rect(colour = "black", fill = NA, size = 1),
-#       plot.margin = margin(t = 100, r = 50, b = 100, l = 50)
-#     ) +
-#     annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 4, hjust = 0.5, vjust = 0.5)
-# }
 
 create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
   data_df <- data()
@@ -1033,43 +930,6 @@ renderBarPlot_facets <- function(data, x, y, fill, title, xlab, ylab, fillLab = 
     return(p)
   }
 }
-
-
-# renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
-#                           emptyMessage, barWidth = 1, xGap = 0.1) {
-#   
-#   data_df <- data()  # Evaluate the reactive data once
-#   
-#   if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]]) || is.null(data_df[[y]]) || is.null(data_df[[fill]])) {
-#     # If there are no data or x/y variables are null, display an empty plot with axes and a message
-#     p <- create_empty_plot_with_message(data, x, y, fill, title, xlab, ylab, emptyMessage)
-#     
-#     return(p)
-#   } else {
-#     
-#     upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2) 
-#     
-#     p <- ggplot(data_df, aes_string(x = x, y = y, fill = fill)) +
-#       geom_bar(stat = "identity",
-#                position = position_dodge2(width = barWidth, padding = xGap),
-#                width = 0.7,
-#                aes(
-#                  text = paste(
-#                    paste0("<b>", ylab, ":</b> ", after_stat(y)), "<br>",
-#                    paste0("<b>", fillLab, ":</b> ", after_stat(fill)), "<br>"
-#                  )
-#                )) +
-#       scale_fill_manual(values = colorFill) +
-#       scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
-#                          expand = expansion(mult = c(0, 0.1))) +
-#       coord_cartesian(ylim = c(0, upper_y_limit)) +
-#       labs(title = title, x = xlab, y = ylab, fill = fillLab) +
-#       theme_minimal()  # Usar tema básico sin estilos específicos
-#     
-#     return(p)
-#   }
-# }
-
 
 # Renderiza un gráfico de barras apiladas 
 renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
@@ -1353,52 +1213,6 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1, 
   return(p_plotly)
 }
 
-# 
-# convert_to_plotly <- function(p, tooltip_value, width = "100%", height = "100%") {
-#   # Obtener los títulos de los ejes y el título del gráfico desde el objeto ggplot
-#   x_axis_title <- p$labels$x
-#   y_axis_title <- p$labels$y
-#   plot_title <- p$labels$title
-#   legend_title <- p$labels$colour %||% p$labels$fill
-#   
-#   # Convertir ggplot en un objeto plotly
-#   p_plotly <- ggplotly(p, tooltip = tooltip_value)
-#   
-#   # Ajustar el diseño
-#   p_plotly <- p_plotly %>% layout(
-#     autosize = TRUE,
-#     title = list(
-#       text = plot_title,
-#       font = list(size = 18, family = "Arial", color = "black", weight = "bold")
-#     ),
-#     legend = list(
-#       x = 1.05,
-#       y = 0.5,
-#       xanchor = "left",
-#       yanchor = "middle",
-#       font = list(size = 12, family = "Arial", color = "black"),
-#       title = list(
-#         text = if (!is.null(legend_title)) paste0(legend_title, "\n") else NULL,
-#         font = list(size = 14, family = "Arial", color = "black", weight = "bold")
-#       )
-#     ),
-#     margin = list(t = 100, r = 50, b = 100, l = 50),
-#     xaxis = list(
-#       title = list(text = x_axis_title, standoff = 10),
-#       tickfont = list(size = 12, family = "Arial", color = "black"),
-#       automargin = TRUE
-#     ),
-#     yaxis = list(
-#       title = list(text = y_axis_title, standoff = 10),
-#       tickfont = list(size = 12, family = "Arial", color = "black"),
-#       automargin = TRUE
-#     )
-#   )
-#   
-#   return(p_plotly)
-# }
-
-
 # Genera un div que muestra una lista de enlaces con las Fuentes
 createFuenteDiv <- function(hyperlinks, fuenteTexts) {
   if (length(hyperlinks) != length(fuenteTexts)) {
@@ -1569,45 +1383,28 @@ renderDataTable_Definitions <- function(filtered_data, title) {
 }
 
 
-
-# # Renderiza un mapa utilizando ggplot2 en el UI del ShinyApp
-# renderMap <- function(data, fill, title, group, fill_lab = fill,
-#                       light_color = "lightblue", dark_color = "darkblue") {
-#   p <- ggplot(data()) +
-#     geom_sf(aes(fill = {{fill}}, group = {{group}})) +  # Incluye group como aesthetic mapping
-#     # labs(title = title, fill = fill_lab) +
-#     labs(fill = fill_lab) +
-#     scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
-#     theme_minimal() +
-#     theme(
-#       legend.position = "left",
-#       axis.text = element_blank(),
-#       axis.ticks = element_blank(),
-#       panel.grid = element_blank(),
-#       panel.border = element_rect(colour = "black", fill = NA, size = 1),
-#       plot.margin = margin(20, 10, 10, 10),
-#       # plot.title = element_text(hjust = 0.5)
-#     )
-#   print(p)
-# }
-
-renderMap <- function(data, provider = providers$CartoDB.Positron) {
+# Renderiza mapa utilizando Leaflet
+renderMap <- function(data,value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron) {
   # Verificar que hay datos disponibles
-  if (nrow(data) == 0) {
+  if (nrow(data) == 0 || !value_col %in% colnames(data)) {
     return(leaflet() %>% addTiles())
   }
   
+  # Obtener valores de la columna dinámica
+  values <- data[[value_col]]
+  regiones <- data[[value_col_region]]
+  
   # Calcular límites para la escala de colores
-  min_casos <- min(data$Casos, na.rm = TRUE)
-  max_casos <- max(data$Casos, na.rm = TRUE)
-  rango <- max_casos - min_casos
+  min_val <- min(values, na.rm = TRUE)
+  max_val <- max(values, na.rm = TRUE)
+  rango <- max_val - min_val
   
   # Garantizar al menos 3 rangos
   num_bins <- 3
   if (rango < num_bins) {
     # Si el rango es muy pequeño, ajustar el tamaño del paso para forzar 3 rangos
     step <- 1
-    max_casos <- min_casos + (num_bins - 1) * step
+    max_val <- min_val + (num_bins - 1) * step
   } else {
     # Definir el tamaño del paso dinámicamente basado en el rango y un número razonable de rangos
     step <- ceiling(rango / num_bins)
@@ -1615,27 +1412,28 @@ renderMap <- function(data, provider = providers$CartoDB.Positron) {
   
   # Crear los límites de los bins
   bins <- seq(
-    floor(min_casos / step) * step,  # Múltiplo inferior del tamaño del paso
-    ceiling(max_casos / step) * step,  # Múltiplo superior del tamaño del paso
+    floor(min_val / step) * step,  # Múltiplo inferior del tamaño del paso
+    ceiling(max_val / step) * step,  # Múltiplo superior del tamaño del paso
     by = step  # Incrementos definidos
   )
   
-  pal <- colorBin("Purples", domain = data$Casos, bins = bins, na.color = "transparent")
+  pal <- colorBin("Purples", domain = values, bins = bins, na.color = "transparent")
   
   # Crear el mapa
   leaflet(data) %>%
+    setView(lng = -66.5, lat = 18.2, zoom = map_zoom) %>%
     addProviderTiles(provider) %>% # Fondo claro
     addPolygons(
-      fillColor = ~pal(Casos), # Colores según cantidad de casos
+      fillColor = ~pal(values), # Colores según cantidad de casos
       weight = 1, # Líneas divisorias de los polígonos
       opacity = 1,
       color = "#666", # Color de las líneas divisorias
-      dashArray = "3", # Líneas completas
+      dashArray = "3", 
       fillOpacity = 0.7,
-      label = ~paste(
-        "Distrito: ", `Distrito Fiscal`, "\n", # Saltos de línea
-        "Casos: ", Casos
-      ),
+      label = ~paste0(
+        value_col_region, ": ", regiones, "<br>",
+        value_col, ": ", values
+      ) %>% lapply(htmltools::HTML), # Interpretar el HTML
       highlightOptions = highlightOptions(
         weight = 1,
         color = "#666",
@@ -1646,30 +1444,85 @@ renderMap <- function(data, provider = providers$CartoDB.Positron) {
     ) %>%
     addLegend(
       pal = pal,
-      values = ~Casos,
+      values = ~values,
       opacity = 0.7,
-      title = "Número de casos",
+      title = value_col,
       position = "bottomright",
       labFormat = labelFormat(digits = 0) # Evitar decimales en la leyenda
     )
 }
 
-renderMapGroup <- function(data, fill, title, fill_lab = fill) {
-  p <- ggplot(data) +
-    geom_sf(aes(fill = {{fill}})) +
-    labs(title = title, fill = fill_lab) +
-    #scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
-    theme_minimal() +
-    theme(
-      legend.position = "bottom",
-      axis.text = element_blank(),
-      axis.ticks = element_blank(),
-      panel.grid = element_blank(),
-      plot.title = element_text(hjust = 0.5)
-    )
-  print(p)
-}
 
+renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron) {
+  # Verificar que hay datos disponibles
+  if (nrow(data) == 0 || !value_col %in% colnames(data)) {
+    return(leaflet() %>% addTiles())
+  }
+  
+  # Obtener valores de la columna dinámica
+  values <- data[[value_col]]
+  regiones <- data[[value_col_region]]
+  
+  # Calcular límites para la escala de colores
+  min_val <- 0
+  max_val <- max(values, na.rm = TRUE)
+  rango <- max_val - min_val
+  
+  # Definir el tamaño de los pasos y los límites de los bins
+  step <- ifelse(rango >= 30, 10, 5)
+  bins <- seq(
+    floor(min_val / step) * step,  # Múltiplo inferior del tamaño del paso
+    ceiling(max_val / step) * step,  # Múltiplo superior del tamaño del paso
+    by = step  # Incrementos definidos
+  )
+  
+  violet_colors <- c(
+    "#f9f5ff", "#f4e3ff", "#edd0ff", "#e2b3ff", 
+    "#d89aff", "#cc80ff", "#bf66ff", "#a64dff", 
+    "#8c33ff", "#701aff", "#5900f2", "#4400cc", 
+    "#3000a6", "#1d007d", "#0d004c"
+  )
+  
+  
+  # Seleccionar colores según el número de categorías
+  num_bins <- length(bins) - 1
+  colors <- violet_colors[seq_len(num_bins)]
+  
+  # Crear la paleta de colores personalizada
+  pal <- colorBin(colors, domain = values, bins = bins, na.color = "transparent")
+  
+  # Crear el mapa
+  leaflet(data) %>%
+    setView(lng = -66.5, lat = 18.2, zoom = map_zoom) %>%
+    addProviderTiles(provider) %>% # Fondo claro
+    addPolygons(
+      fillColor = ~pal(values), # Colores según cantidad de casos
+      weight = 1, # Líneas divisorias de los polígonos
+      opacity = 1,
+      color = "#666", # Color de las líneas divisorias
+      dashArray = "3", 
+      fillOpacity = 0.7,
+      label = ~paste0(
+        value_col_region, ": ", regiones, "<br>",
+        value_col, ": ", values
+      ) %>% lapply(htmltools::HTML), # Interpretar el HTML
+      highlightOptions = highlightOptions(
+        weight = 1,
+        color = "#666",
+        dashArray = "",
+        fillOpacity = 0.9,
+        bringToFront = TRUE
+      )
+    ) %>%
+    addLegend(
+      pal = pal,
+      values = ~values,
+      opacity = 0.7,
+      title = value_col,
+      position = "bottomright",
+      labFormat = labelFormat(digits = 0) # Evitar decimales en la leyenda
+    )
+}
 
 # Función para crear cards de definiciones y metadatos (Actualmente no se esta utilizando esta funcion)
 definitionCards <- function(definitions) {
@@ -1686,84 +1539,6 @@ definitionCards <- function(definitions) {
   })
   do.call(tagList, card_list)
 }
-
-
-# Genera una paleta de colores para los niveles de una variable categórica.
-# Esta función toma un dataframe y el nombre de una variable categórica, y devuelve una paleta de colores con un 
-# color único para cada nivel de la variable.
-# setColorFill <- function(df, variable) {
-#   # Obtener los niveles únicos de la variable
-#   unique_levels <- unique(df[[variable]])
-#   
-#   # Elegir una paleta de colores apropiada para el número de niveles únicos
-#   num_colors <- length(unique_levels)
-#   if (num_colors <= 8) {
-#     palette <- brewer.pal(n = num_colors, name = "Set1")
-#   } else {
-#     palette <- rainbow(num_colors)
-#   }
-#   
-#   # Generar una lista de patrones para los colores
-#   patterns <- c("#CC6677", "#E69F00", "#88CCEE", "#B8E186", "#332288", "#D55E00", 
-#                 "#F0E442", "#CC79A7", "#661100", "#888888", "#117733", "#000000")
-#   # Asignar patrones y colores a cada nivel único
-#   my_fill <- rep("black", length(unique_levels))
-#   names(my_fill) <- unique_levels
-#   for (i in 1:length(unique_levels)) {
-#     my_fill[i] <- ifelse(i <= length(patterns), patterns[i], palette[i])
-#   }
-#   
-#   return(my_fill)
-# }
-
-
-# 
-# setColorFill <- function(df, variable) {
-#   # Obtener los niveles únicos de la variable
-#   unique_levels <- unique(df[[variable]])
-#   num_colors <- length(unique_levels)
-#   
-#   # Colores base de la página web
-#   base_colors <- c("#8bc344", "#884e9f", "#2f2e7d", "#e84924", "#d5dc30", "#5eb7df", "#3e3f3a")
-#   
-#   # Expandir la paleta manteniendo armonía con los colores base
-#   if (num_colors > length(base_colors)) {
-#     extended_palette <- colorRampPalette(base_colors)(num_colors)
-#   } else {
-#     extended_palette <- base_colors[1:num_colors]
-#   }
-#   
-#   # Convertir colores a LAB para calcular distancias perceptuales
-#   colors_rgb <- col2rgb(extended_palette)
-#   colors_lab <- convertColor(t(colors_rgb / 255), from = "sRGB", to = "Lab")
-#   
-#   # Función para calcular la distancia entre colores
-#   color_distance <- function(c1, c2) {
-#     sqrt(sum((c1 - c2) ^ 2))
-#   }
-#   
-#   # Eliminar colores demasiado similares (distancia perceptual < 10)
-#   unique_colors <- list(colors_lab[1, ])
-#   final_colors <- extended_palette[1]
-#   
-#   for (i in 2:nrow(colors_lab)) {
-#     distances <- sapply(unique_colors, color_distance, c2 = colors_lab[i, ])
-#     if (all(distances >= 15)) { # Distancia mínima para diferenciación
-#       unique_colors <- append(unique_colors, list(colors_lab[i, ]))
-#       final_colors <- c(final_colors, extended_palette[i])
-#     }
-#   }
-#   
-#   # Asegurar que haya suficientes colores; si no, se interpolan nuevos
-#   if (length(final_colors) < num_colors) {
-#     warning("Algunos colores eran muy similares. Generando colores adicionales.")
-#     final_colors <- colorRampPalette(final_colors)(num_colors)
-#   }
-#   
-#   # Asignar colores a cada nivel único
-#   my_fill <- setNames(final_colors, unique_levels)
-#   return(my_fill)
-# }
 
 
 setColorFill <- function(df, variable) {
@@ -1851,3 +1626,308 @@ cacl_Y_Axis <- function(current_rows){
   
   return(y)
 }
+
+
+#### CODIGO MUERTO ####
+##################################
+
+# create_empty_plot_with_message_forLine <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
+#   data_df <- data()
+#   ggplot(data_df, aes_string(x = x, y = y)) +
+#     geom_blank() +  
+#     labs(title = title, x = xlab, y = ylab) +
+#     theme_minimal() +
+#     theme(
+#       axis.text.x = element_blank(),
+#       axis.ticks = element_blank(),  
+#       axis.text.y = element_blank(),
+#       axis.title.x = element_text(size = 12, margin = margin(t = 10)), 
+#       axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
+#       plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+#       panel.border = element_rect(colour = "black", fill = NA, size = 1),
+#       plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
+#     ) +
+#     annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 4, hjust = 0.5, vjust = 0.5)
+# }
+
+# Renderiza un gráfico de lineas utilizando ggplot2 en el UI de Shiny.
+# renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, emptyMessage) {
+# 
+#   data_df <- data()  # Evaluar los datos reactivos una vez
+# 
+#   if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]])) {
+#     # Si no hay datos o las variables x/y son nulas, mostrar una gráfica vacía con ejes y un mensaje
+#     p <- create_empty_plot_with_message_forLine(data, x, y, fill, title, xlab, ylab,emptyMessage)
+#     
+#     return(p)
+#     # Si no hay datos o las variables x/y son nulas, mostrar una gráfica vacía con ejes y un mensaje
+#     # p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
+#     #   geom_blank() +  
+#     #   labs(title = title, x = xlab, y = ylab) +
+#     #   theme_minimal() +
+#     #   theme(
+#     #     axis.text.x = element_blank(),
+#     #     axis.ticks = element_blank(), 
+#     #     axis.text.y = element_blank(), 
+#     #     axis.title.x = element_text(size = 12, margin = margin(t = 10)),  
+#     #     axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
+#     #     plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
+#     #     panel.border = element_rect(colour = "black", fill = NA, size = 1),
+#     #     plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
+#     #   ) +
+#     #   annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 6, hjust = 0.5, vjust = 0.5)
+#     # 
+#     # return(p)
+# 
+#   } else {
+#     # Calcular rango del eje de y
+#     y_max <- max(data_df[[y]], na.rm = TRUE)
+#     y_interval <- pretty(c(0, y_max), n = 5)[2]  
+#     upper_y_limit <- ceiling(y_max / y_interval) * y_interval  
+# 
+# 
+#     p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
+#       geom_line(color = "#2f2e7d", size = 1) +  
+#       geom_point(color = "#adcc4e", size = 2,
+#                  aes(
+#                    text =
+#                      paste0("<b>", xlab, ":</b> ", .data[[x]],
+#                             "<br><b>", ylab, ":</b> ", .data[[y]]
+#                      )
+#                  )
+#       ) +
+#       expand_limits(y = 0) +  # Asegurar que el eje y comience en 0
+#       labs(title = title, x = xlab, y = ylab, color = colorlab) +
+#       scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+#                          expand = expansion(mult = c(0, 0.1))) +
+#       coord_cartesian(ylim = c(0, upper_y_limit)) +
+#       theme_minimal() +
+#       theme(
+#         axis.text.x = element_text(angle = 45, hjust = 1),
+#         plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+#         panel.border = element_rect(colour = "black", fill = NA, size = 1),
+#         plot.margin = margin(t = 45, r = 10, b = 10, l = 10)
+#       )
+# 
+#     return(p)
+#   }
+# }
+
+# Crea un gráfico vacio indicando al usuario que debe seleccionar las variables a visualizar
+# create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
+#   data_df <- data()
+#   ggplot(data_df, aes_string(x = x, y = y)) +
+#     geom_blank() +  
+#     labs(title = title, x = xlab, y = ylab) +
+#     theme_minimal() +
+#     theme(
+#       axis.text.x = element_blank(),
+#       axis.ticks = element_blank(),  
+#       axis.text.y = element_blank(),
+#       axis.title.x = element_text(size = 12, margin = margin(t = 10)), 
+#       axis.title.y = element_text(size = 12, margin = margin(r = 10)),  
+#       plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
+#       panel.border = element_rect(colour = "black", fill = NA, size = 1),
+#       plot.margin = margin(t = 100, r = 50, b = 100, l = 50)
+#     ) +
+#     annotate("text", x = 0.5, y = 0.5, label = emptyMessage, size = 4, hjust = 0.5, vjust = 0.5)
+# }
+
+# renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
+#                           emptyMessage, barWidth = 1, xGap = 0.1) {
+#   
+#   data_df <- data()  # Evaluate the reactive data once
+#   
+#   if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]]) || is.null(data_df[[y]]) || is.null(data_df[[fill]])) {
+#     # If there are no data or x/y variables are null, display an empty plot with axes and a message
+#     p <- create_empty_plot_with_message(data, x, y, fill, title, xlab, ylab, emptyMessage)
+#     
+#     return(p)
+#   } else {
+#     
+#     upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2) 
+#     
+#     p <- ggplot(data_df, aes_string(x = x, y = y, fill = fill)) +
+#       geom_bar(stat = "identity",
+#                position = position_dodge2(width = barWidth, padding = xGap),
+#                width = 0.7,
+#                aes(
+#                  text = paste(
+#                    paste0("<b>", ylab, ":</b> ", after_stat(y)), "<br>",
+#                    paste0("<b>", fillLab, ":</b> ", after_stat(fill)), "<br>"
+#                  )
+#                )) +
+#       scale_fill_manual(values = colorFill) +
+#       scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+#                          expand = expansion(mult = c(0, 0.1))) +
+#       coord_cartesian(ylim = c(0, upper_y_limit)) +
+#       labs(title = title, x = xlab, y = ylab, fill = fillLab) +
+#       theme_minimal()  # Usar tema básico sin estilos específicos
+#     
+#     return(p)
+#   }
+# }
+
+
+
+# 
+# convert_to_plotly <- function(p, tooltip_value, width = "100%", height = "100%") {
+#   # Obtener los títulos de los ejes y el título del gráfico desde el objeto ggplot
+#   x_axis_title <- p$labels$x
+#   y_axis_title <- p$labels$y
+#   plot_title <- p$labels$title
+#   legend_title <- p$labels$colour %||% p$labels$fill
+#   
+#   # Convertir ggplot en un objeto plotly
+#   p_plotly <- ggplotly(p, tooltip = tooltip_value)
+#   
+#   # Ajustar el diseño
+#   p_plotly <- p_plotly %>% layout(
+#     autosize = TRUE,
+#     title = list(
+#       text = plot_title,
+#       font = list(size = 18, family = "Arial", color = "black", weight = "bold")
+#     ),
+#     legend = list(
+#       x = 1.05,
+#       y = 0.5,
+#       xanchor = "left",
+#       yanchor = "middle",
+#       font = list(size = 12, family = "Arial", color = "black"),
+#       title = list(
+#         text = if (!is.null(legend_title)) paste0(legend_title, "\n") else NULL,
+#         font = list(size = 14, family = "Arial", color = "black", weight = "bold")
+#       )
+#     ),
+#     margin = list(t = 100, r = 50, b = 100, l = 50),
+#     xaxis = list(
+#       title = list(text = x_axis_title, standoff = 10),
+#       tickfont = list(size = 12, family = "Arial", color = "black"),
+#       automargin = TRUE
+#     ),
+#     yaxis = list(
+#       title = list(text = y_axis_title, standoff = 10),
+#       tickfont = list(size = 12, family = "Arial", color = "black"),
+#       automargin = TRUE
+#     )
+#   )
+#   
+#   return(p_plotly)
+# }
+
+
+
+# # Renderiza un mapa utilizando ggplot2 en el UI del ShinyApp
+# renderMap <- function(data, fill, title, group, fill_lab = fill,
+#                       light_color = "lightblue", dark_color = "darkblue") {
+#   p <- ggplot(data()) +
+#     geom_sf(aes(fill = {{fill}}, group = {{group}})) +  # Incluye group como aesthetic mapping
+#     # labs(title = title, fill = fill_lab) +
+#     labs(fill = fill_lab) +
+#     scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
+#     theme_minimal() +
+#     theme(
+#       legend.position = "left",
+#       axis.text = element_blank(),
+#       axis.ticks = element_blank(),
+#       panel.grid = element_blank(),
+#       panel.border = element_rect(colour = "black", fill = NA, size = 1),
+#       plot.margin = margin(20, 10, 10, 10),
+#       # plot.title = element_text(hjust = 0.5)
+#     )
+#   print(p)
+# }
+
+# renderMapGroup <- function(data, fill, title, fill_lab = fill) {
+#   p <- ggplot(data) +
+#     geom_sf(aes(fill = {{fill}})) +
+#     labs(title = title, fill = fill_lab) +
+#     #scale_fill_gradient(name = fill_lab, low = light_color, high = dark_color) +
+#     theme_minimal() +
+#     theme(
+#       legend.position = "bottom",
+#       axis.text = element_blank(),
+#       axis.ticks = element_blank(),
+#       panel.grid = element_blank(),
+#       plot.title = element_text(hjust = 0.5)
+#     )
+#   print(p)
+# }
+
+# Genera una paleta de colores para los niveles de una variable categórica.
+# Esta función toma un dataframe y el nombre de una variable categórica, y devuelve una paleta de colores con un 
+# color único para cada nivel de la variable.
+# setColorFill <- function(df, variable) {
+#   # Obtener los niveles únicos de la variable
+#   unique_levels <- unique(df[[variable]])
+#   
+#   # Elegir una paleta de colores apropiada para el número de niveles únicos
+#   num_colors <- length(unique_levels)
+#   if (num_colors <= 8) {
+#     palette <- brewer.pal(n = num_colors, name = "Set1")
+#   } else {
+#     palette <- rainbow(num_colors)
+#   }
+#   
+#   # Generar una lista de patrones para los colores
+#   patterns <- c("#CC6677", "#E69F00", "#88CCEE", "#B8E186", "#332288", "#D55E00", 
+#                 "#F0E442", "#CC79A7", "#661100", "#888888", "#117733", "#000000")
+#   # Asignar patrones y colores a cada nivel único
+#   my_fill <- rep("black", length(unique_levels))
+#   names(my_fill) <- unique_levels
+#   for (i in 1:length(unique_levels)) {
+#     my_fill[i] <- ifelse(i <= length(patterns), patterns[i], palette[i])
+#   }
+#   
+#   return(my_fill)
+# }
+
+# 
+# setColorFill <- function(df, variable) {
+#   # Obtener los niveles únicos de la variable
+#   unique_levels <- unique(df[[variable]])
+#   num_colors <- length(unique_levels)
+#   
+#   # Colores base de la página web
+#   base_colors <- c("#8bc344", "#884e9f", "#2f2e7d", "#e84924", "#d5dc30", "#5eb7df", "#3e3f3a")
+#   
+#   # Expandir la paleta manteniendo armonía con los colores base
+#   if (num_colors > length(base_colors)) {
+#     extended_palette <- colorRampPalette(base_colors)(num_colors)
+#   } else {
+#     extended_palette <- base_colors[1:num_colors]
+#   }
+#   
+#   # Convertir colores a LAB para calcular distancias perceptuales
+#   colors_rgb <- col2rgb(extended_palette)
+#   colors_lab <- convertColor(t(colors_rgb / 255), from = "sRGB", to = "Lab")
+#   
+#   # Función para calcular la distancia entre colores
+#   color_distance <- function(c1, c2) {
+#     sqrt(sum((c1 - c2) ^ 2))
+#   }
+#   
+#   # Eliminar colores demasiado similares (distancia perceptual < 10)
+#   unique_colors <- list(colors_lab[1, ])
+#   final_colors <- extended_palette[1]
+#   
+#   for (i in 2:nrow(colors_lab)) {
+#     distances <- sapply(unique_colors, color_distance, c2 = colors_lab[i, ])
+#     if (all(distances >= 15)) { # Distancia mínima para diferenciación
+#       unique_colors <- append(unique_colors, list(colors_lab[i, ]))
+#       final_colors <- c(final_colors, extended_palette[i])
+#     }
+#   }
+#   
+#   # Asegurar que haya suficientes colores; si no, se interpolan nuevos
+#   if (length(final_colors) < num_colors) {
+#     warning("Algunos colores eran muy similares. Generando colores adicionales.")
+#     final_colors <- colorRampPalette(final_colors)(num_colors)
+#   }
+#   
+#   # Asignar colores a cada nivel único
+#   my_fill <- setNames(final_colors, unique_levels)
+#   return(my_fill)
+# }
+
+

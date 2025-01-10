@@ -402,6 +402,14 @@ mapaAvp <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
     Año, Región, Estado, geometry, Cantidad 
   )
 
+# Filtrar para "asignadas"
+mapaAvp_asig <- mapaAvp %>%
+  filter(Estado == "asignadas")
+
+# Filtrar para "solicitadas"
+mapaAvp_sol <- mapaAvp %>%
+  filter(Estado == "solicitadas")
+
 #### Guardar datos procesados de Administración de Vivienda Pública ####
 # dataframes <- list(dfAvp) # Lista de dataframes (por ejemplo: homiEdad y inci)
 # 

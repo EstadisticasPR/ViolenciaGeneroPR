@@ -602,7 +602,7 @@ server <- function(input, output, session) {
   # Renderizar el mapa con Leaflet
   output$map_just_mapaDeli <- renderLeaflet({
     data <- mapaDeli_filt()
-    renderMap(data)
+    renderMap(data, value_col = "Casos", value_col_region = "Distrito Fiscal", map_zoom = 9)
   })
 
     #Titulo de la Grafica
@@ -766,7 +766,7 @@ server <- function(input, output, session) {
   
   # Filtrar el conjunto de datos según el año, delito o distrito seleccionado
   mapaAvp_filt <- reactive({
-    filter(mapaAvp, 
+    filter(mapaAvp,
            Año %in% input$select_avp_mapaAvp_año)
   })
   
@@ -826,18 +826,38 @@ server <- function(input, output, session) {
     title <- "Viviendas Públicas Solicitadas y Asignadas \nAnualmente por Violencia Doméstica según Región"
   })
   
-  output$map_avp_mapaAvp <- renderPlotly({
-    p <- renderMap(
-      data = mapaAvp_filt, fill = Cantidad,
-      title = paste0("Total de viviendas públicas solicitadas y asignadas \npor violencia doméstica por región en el año ", input$select_avp_mapaAvp_año),
-      group = Región,
-      fill_lab = "Número de Viviendas",
-      light_color = "#E0BBE4",
-      dark_color = "#5A189A"
-    )
-    ggplotly(p + facet_wrap(~Estado, ncol = 1),
-             tooltip = c("all"))
+  mapaAvp_filt_asig <- reactive({
+    filter(mapaAvp_asig, 
+           Año %in% input$select_avp_mapaAvp_año)
   })
+  
+  output$map_avp_mapaAvp_asignadas <- renderLeaflet({
+    data <- mapaAvp_filt_asig()
+    renderMap_vivienda(data, value_col = "Cantidad", value_col_region = "Región", map_zoom = 8)
+  })
+  
+  mapaAvp_filt_sol <- reactive({
+    filter(mapaAvp_sol, 
+           Año %in% input$select_avp_mapaAvp_año)
+  })
+  
+  output$map_avp_mapaAvp_solicitadas <- renderLeaflet({
+    data <- mapaAvp_filt_sol()
+    renderMap_vivienda(data, value_col = "Cantidad", value_col_region = "Región", map_zoom = 8)
+  })
+  
+  # output$map_avp_mapaAvp <- renderPlotly({
+  #   p <- renderMap(
+  #     data = mapaAvp_filt, fill = Cantidad,
+  #     title = paste0("Total de viviendas públicas solicitadas y asignadas \npor violencia doméstica por región en el año ", input$select_avp_mapaAvp_año),
+  #     group = Región,
+  #     fill_lab = "Número de Viviendas",
+  #     light_color = "#E0BBE4",
+  #     dark_color = "#5A189A"
+  #   )
+  #   ggplotly(p + facet_wrap(~Estado, ncol = 1),
+  #            tooltip = c("all"))
+  # })
   
   
   #Titulo de la Grafica
