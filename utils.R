@@ -1383,8 +1383,76 @@ renderDataTable_Definitions <- function(filtered_data, title) {
 }
 
 
-# Renderiza mapa utilizando Leaflet
-renderMap <- function(data,value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron) {
+# # Renderiza mapa utilizando Leaflet
+# renderMap <- function(data,value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron) {
+#   # Verificar que hay datos disponibles
+#   if (nrow(data) == 0 || !value_col %in% colnames(data)) {
+#     return(leaflet() %>% addTiles())
+#   }
+#   
+#   # Obtener valores de la columna dinámica
+#   values <- data[[value_col]]
+#   regiones <- data[[value_col_region]]
+#   
+#   # Calcular límites para la escala de colores
+#   min_val <- min(values, na.rm = TRUE)
+#   max_val <- max(values, na.rm = TRUE)
+#   rango <- max_val - min_val
+#   
+#   # Garantizar al menos 3 rangos
+#   num_bins <- 3
+#   if (rango < num_bins) {
+#     # Si el rango es muy pequeño, ajustar el tamaño del paso para forzar 3 rangos
+#     step <- 1
+#     max_val <- min_val + (num_bins - 1) * step
+#   } else {
+#     # Definir el tamaño del paso dinámicamente basado en el rango y un número razonable de rangos
+#     step <- ceiling(rango / num_bins)
+#   }
+#   
+#   # Crear los límites de los bins
+#   bins <- seq(
+#     floor(min_val / step) * step,  # Múltiplo inferior del tamaño del paso
+#     ceiling(max_val / step) * step,  # Múltiplo superior del tamaño del paso
+#     by = step  # Incrementos definidos
+#   )
+#   
+#   pal <- colorBin("Purples", domain = values, bins = bins, na.color = "transparent")
+#   
+#   # Crear el mapa
+#   leaflet(data) %>%
+#     setView(lng = -66.5, lat = 18.2, zoom = map_zoom) %>%
+#     addProviderTiles(provider) %>% # Fondo claro
+#     addPolygons(
+#       fillColor = ~pal(values), # Colores según cantidad de casos
+#       weight = 1, # Líneas divisorias de los polígonos
+#       opacity = 1,
+#       color = "#666", # Color de las líneas divisorias
+#       dashArray = "3", 
+#       fillOpacity = 0.7,
+#       label = ~paste0(
+#         value_col_region, ": ", regiones, "<br>",
+#         value_col, ": ", values
+#       ) %>% lapply(htmltools::HTML), # Interpretar el HTML
+#       highlightOptions = highlightOptions(
+#         weight = 1,
+#         color = "#666",
+#         dashArray = "",
+#         fillOpacity = 0.9,
+#         bringToFront = TRUE
+#       )
+#     ) %>%
+#     addLegend(
+#       pal = pal,
+#       values = ~values,
+#       opacity = 0.7,
+#       title = value_col,
+#       position = "bottomright",
+#       labFormat = labelFormat(digits = 0) # Evitar decimales en la leyenda
+#     )
+# }
+
+renderMap <- function(data, value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron, municipios_geo) {
   # Verificar que hay datos disponibles
   if (nrow(data) == 0 || !value_col %in% colnames(data)) {
     return(leaflet() %>% addTiles())
@@ -1402,45 +1470,63 @@ renderMap <- function(data,value_col, value_col_region, map_zoom, provider = pro
   # Garantizar al menos 3 rangos
   num_bins <- 3
   if (rango < num_bins) {
-    # Si el rango es muy pequeño, ajustar el tamaño del paso para forzar 3 rangos
     step <- 1
     max_val <- min_val + (num_bins - 1) * step
   } else {
-    # Definir el tamaño del paso dinámicamente basado en el rango y un número razonable de rangos
     step <- ceiling(rango / num_bins)
   }
   
   # Crear los límites de los bins
   bins <- seq(
-    floor(min_val / step) * step,  # Múltiplo inferior del tamaño del paso
-    ceiling(max_val / step) * step,  # Múltiplo superior del tamaño del paso
-    by = step  # Incrementos definidos
+    floor(min_val / step) * step, 
+    ceiling(max_val / step) * step, 
+    by = step
   )
   
-  pal <- colorBin("Purples", domain = values, bins = bins, na.color = "transparent")
+  violet_colors <- c(
+    "#f9f5ff", "#e2b3ff", 
+    "#cc80ff", "#a64dff", 
+    "#8c33ff"
+  )
   
+  
+  # Seleccionar colores según el número de categorías
+  num_bins <- length(bins) - 1
+  colors <- violet_colors[seq_len(num_bins)]
+  
+  # Crear la paleta de colores personalizada
+  pal <- colorBin(colors, domain = values, bins = bins, na.color = "transparent")
+
   # Crear el mapa
   leaflet(data) %>%
     setView(lng = -66.5, lat = 18.2, zoom = map_zoom) %>%
-    addProviderTiles(provider) %>% # Fondo claro
+    addProviderTiles(provider) %>%
+    # Polígonos de las regiones coloreadas
     addPolygons(
-      fillColor = ~pal(values), # Colores según cantidad de casos
-      weight = 1, # Líneas divisorias de los polígonos
+      fillColor = ~pal(values), 
+      weight = 1, 
       opacity = 1,
-      color = "#666", # Color de las líneas divisorias
-      dashArray = "3", 
+      color = "#666", 
+      dashArray = "", 
       fillOpacity = 0.7,
       label = ~paste0(
         value_col_region, ": ", regiones, "<br>",
         value_col, ": ", values
-      ) %>% lapply(htmltools::HTML), # Interpretar el HTML
+      ) %>% lapply(htmltools::HTML), 
       highlightOptions = highlightOptions(
-        weight = 1,
+        weight = 2,
         color = "#666",
         dashArray = "",
         fillOpacity = 0.9,
         bringToFront = TRUE
       )
+    ) %>%
+    # Fronteras de los municipios
+    addPolylines(
+      data = municipios_geo,
+      weight = 1, # Grosor de las líneas
+      color = "#666", # Color de las líneas de los municipios
+      opacity = 1
     ) %>%
     addLegend(
       pal = pal,
@@ -1448,12 +1534,12 @@ renderMap <- function(data,value_col, value_col_region, map_zoom, provider = pro
       opacity = 0.7,
       title = value_col,
       position = "bottomright",
-      labFormat = labelFormat(digits = 0) # Evitar decimales en la leyenda
+      labFormat = labelFormat(digits = 0)
     )
 }
 
 
-renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron) {
+renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron, municipios_geo) {
   # Verificar que hay datos disponibles
   if (nrow(data) == 0 || !value_col %in% colnames(data)) {
     return(leaflet() %>% addTiles())
@@ -1500,7 +1586,7 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom, prov
       weight = 1, # Líneas divisorias de los polígonos
       opacity = 1,
       color = "#666", # Color de las líneas divisorias
-      dashArray = "3", 
+      dashArray = "", 
       fillOpacity = 0.7,
       label = ~paste0(
         value_col_region, ": ", regiones, "<br>",
@@ -1513,6 +1599,13 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom, prov
         fillOpacity = 0.9,
         bringToFront = TRUE
       )
+    ) %>%
+    # Fronteras de los municipios
+    addPolylines(
+      data = municipios_geo,
+      weight = 1, # Grosor de las líneas
+      color = "#666", # Color de las líneas de los municipios
+      opacity = 1
     ) %>%
     addLegend(
       pal = pal,

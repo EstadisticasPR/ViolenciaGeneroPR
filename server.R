@@ -602,7 +602,11 @@ server <- function(input, output, session) {
   # Renderizar el mapa con Leaflet
   output$map_just_mapaDeli <- renderLeaflet({
     data <- mapaDeli_filt()
-    renderMap(data, value_col = "Casos", value_col_region = "Distrito Fiscal", map_zoom = 9)
+    renderMap(data, value_col = "Casos",
+              value_col_region = "Distrito Fiscal",
+              map_zoom = 9,
+              provider = providers$CartoDB.Positron,
+              municipios_geo = municipios_geo)
   })
 
     #Titulo de la Grafica
@@ -833,7 +837,12 @@ server <- function(input, output, session) {
   
   output$map_avp_mapaAvp_asignadas <- renderLeaflet({
     data <- mapaAvp_filt_asig()
-    renderMap_vivienda(data, value_col = "Cantidad", value_col_region = "Región", map_zoom = 8)
+    renderMap_vivienda(data,
+                       value_col = "Cantidad", 
+                       value_col_region = "Región",
+                       map_zoom = 8,
+                       provider = providers$CartoDB.Positron,
+                       municipios_geo = municipios_geo)
   })
   
   mapaAvp_filt_sol <- reactive({
@@ -843,7 +852,12 @@ server <- function(input, output, session) {
   
   output$map_avp_mapaAvp_solicitadas <- renderLeaflet({
     data <- mapaAvp_filt_sol()
-    renderMap_vivienda(data, value_col = "Cantidad", value_col_region = "Región", map_zoom = 8)
+    renderMap_vivienda(data,
+                       value_col = "Cantidad",
+                       value_col_region = "Región", 
+                       map_zoom = 8,
+                       provider = providers$CartoDB.Positron,
+                       municipios_geo = municipios_geo)
   })
   
   # output$map_avp_mapaAvp <- renderPlotly({

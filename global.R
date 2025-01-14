@@ -322,6 +322,12 @@ mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
   rename(`Distrito Fiscal` = GROUP) %>%
   relocate(Año, `Distrito Fiscal`, Delito, geometry, Casos)
 
+# Cargar el shapefile de municipios
+municipios_geo <- st_read(paste0(maps_fol, "/municipios.shp"))
+
+# Asegúrate de que los datos tengan el mismo sistema de coordenadas que tus datos
+municipios_geo <- st_transform(municipios_geo, crs = 4326) # WGS84
+
 #### Guardar datos procesados de Departamento de Justicia ####
 # dataframes <- list(dfDeli) # Lista de dataframes (por ejemplo: homiEdad y inci)
 # 
