@@ -605,6 +605,11 @@ vEdad2023 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
                         sheet = sheet_name) %>%
   cleanSheet_npprVDedad(sheet_name)
 
+sheet_name = "2024"
+vEdad2024 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
+                        sheet = sheet_name) %>%
+  cleanSheet_npprVDedad(sheet_name)
+
 # vEdad2021 <- read_excel(paste0(poli, "npprVDedad2021.xlsx")) %>% 
 #   mutate(Año = "2021")
 # vEdad2022 <- read_excel(paste0(poli, "npprVDedad2022.xlsx")) %>% 
@@ -614,7 +619,8 @@ vEdad2023 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
 
 vEdad_list <- list(vEdad2021,
                     vEdad2022,
-                    vEdad2023)
+                    vEdad2023,
+                    vEdad2024)
 
 # Unir todos los data frames en la lista usando full_join
 vEdad <- vEdad_list %>%
