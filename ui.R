@@ -187,7 +187,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 15 de noviembre de 2024", style="margin: 0px;") 
+                    strong(actualizacion_snmv1, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a los 
@@ -276,7 +276,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 15 de noviembre de 2024", style="margin: 0px;") 
+                    strong(actualizacion_snmv2, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a la cantidad de 
@@ -386,7 +386,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong(actualizacion_familia, style="margin: 0px;") 
                   ),
                   p(
                     "Las cantidades podrían representar conteos duplicados del o 
@@ -588,7 +588,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong(actualizacion_justicia1, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden al
@@ -646,7 +646,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong(actualizacion_justicia2, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en este mapa corresponden al
@@ -824,7 +824,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong(actualizacion_avp1, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden al
@@ -894,7 +894,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong(actualizacion_avp2, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en este mapa corresponden al
@@ -1030,7 +1030,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 20 de septiembre de 2024", style="margin: 0px;") 
+                    strong(actualizacion_policia1, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a la
@@ -1121,7 +1121,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 20 de septiembre de 2024", style="margin: 0px;") 
+                    strong(actualizacion_policia2, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a los
@@ -1267,7 +1267,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong(actualizacion_opm1, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
@@ -1352,7 +1352,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong(actualizacion_opm2, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
@@ -1436,7 +1436,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong(actualizacion_opm3, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
@@ -1520,7 +1520,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong(actualizacion_opm4, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
@@ -1604,7 +1604,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                    strong(actualizacion_opm5, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
@@ -1714,7 +1714,7 @@ ui <-
               class = "card",
               style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
               h4(
-                strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                strong(actualizacion_dcr1, style="margin: 0px;") 
               ),
               p(
                 "Los datos representados en esta gráfica corresponden a
@@ -1799,7 +1799,7 @@ ui <-
               class = "card",
               style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
               h4(
-                strong("Última actualización: 28 de febrero de 2023", style="margin: 0px;") 
+                strong(actualizacion_dcr2, style="margin: 0px;") 
               ),
               p(
                 "Los datos representados en esta gráfica corresponden a
@@ -1909,7 +1909,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Última actualización: 14 de octubre de 2024", style="margin: 0px;") 
+                  strong(actualizacion_tribunales1, style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
@@ -2004,7 +2004,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Última actualización: 24 de noviembre de 2023", style="margin: 0px;") 
+                  strong(actualizacion_tribunales2, style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
@@ -2099,7 +2099,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Última actualización: 14 de octubre de 2024", style="margin: 0px;") 
+                  strong(actualizacion_tribunales3, style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
@@ -2195,7 +2195,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Última actualización: 14 de octubre de 2024", style="margin: 0px;") 
+                  strong(actualizacion_tribunales4, style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
@@ -2292,7 +2292,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Última actualización: 14 de octubre de 2024", style="margin: 0px;") 
+                  strong(actualizacion_tribunales5, style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
@@ -2386,7 +2386,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Última actualización: 14 de octubre de 2024", style="margin: 0px;") 
+                  strong(actualizacion_tribunales6, style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a
@@ -2481,7 +2481,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Última actualización: 14 de octubre de 2024", style="margin: 0px;") 
+                  strong(actualizacion_tribunales7, style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden al
@@ -2513,6 +2513,7 @@ ui <-
     )
   ),
   #### Tab del Centro de Ayuda a Víctimas de Violación ####
+      #### tab con datos de Tendencia Anual de SAFE Kits por Estado de Querella ####
   tabPanel(
     lowercaseTitle("Centro Ayuda a Víctimas de Violación"),
     icon = icon("building-circle-exclamation"),
@@ -2587,7 +2588,7 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong("Última actualización: 31 de diciembre de 2023", style="margin: 0px;") 
+                  strong(actualizacion_cavv, style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a la
