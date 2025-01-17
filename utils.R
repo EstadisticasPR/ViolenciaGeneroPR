@@ -1,24 +1,9 @@
 cat("Loading helper functions from utils.R...\n")
 
+##################################
 #### Helper Functions: Global ####
-# cleanSheet_OP_148_SoliGrupEdad <- function(data, sheet_name, new_names) {
-#   data %>%
-#     rename_at(vars(2:9), ~ new_names) %>%       # Renombra las columnas de la 2 a la 9
-#     pivot_longer(                                # Convierte las columnas a formato largo
-#       !Región, 
-#       names_to = "Edad", 
-#       values_to = "Solicitudes"
-#     ) %>%
-#     mutate(
-#       Edad = factor(Edad, levels = unique(Edad)), # Convierte Edad en factor con niveles únicos
-#       AñoFiscal = sheet_name                      # Asigna el año fiscal desde sheet_name
-#     ) %>%
-#     filter(
-#       Edad != "Total",                            # Filtra filas con 'Total' en Edad
-#       Región != "Total"                           # Filtra filas con 'Total' en Región
-#     )
-# }
-
+##################################
+#### cleanSheet_npprDesp ####
 cleanSheet_npprDesp <- function(data, sheet_name) {
   total_column <- paste0("Total Año ", sheet_name)  # Crear el nombre dinámico
   data %>%
@@ -26,12 +11,13 @@ cleanSheet_npprDesp <- function(data, sheet_name) {
     rename(Categoria = Mes, Total = !!sym(total_column)) # Usar el nombre dinámico
 }
 
+#### cleanSheet_npprVDedad ####
 cleanSheet_npprVDedad <- function(data, sheet_name) {
   data %>%
     mutate(Año = sheet_name)
 }
 
-
+#### cleanSheet_OP_148_SoliGrupEdad ####
 cleanSheet_OP_148_SoliGrupEdad <- function(data, sheet_name, new_names) {
   data %>%
     rename_at(vars(2:9), ~ new_names) %>%       # Renombra las columnas de la 2 a la 9
@@ -53,6 +39,7 @@ cleanSheet_OP_148_SoliGrupEdad <- function(data, sheet_name, new_names) {
     )
 }
 
+#### cleanSheet_OP_Ley148_ex_parteEmitidas ####
 cleanSheet_OP_Ley148_ex_parteEmitidas <- function(data, sheet_name, new_names) {
   data %>%
     rename_at(vars(2:6), ~ new_names) %>%       # Renombra las columnas de la 2 a la 6
@@ -74,6 +61,7 @@ cleanSheet_OP_Ley148_ex_parteEmitidas <- function(data, sheet_name, new_names) {
     )
 }
 
+#### cleanSheet_OP_LEY148Archivadas ####
 cleanSheet_OP_LEY148Archivadas <- function(data, sheet_name, new_names) {
   data %>%
     rename_at(vars(2:4), ~ new_names) %>%
@@ -95,6 +83,7 @@ cleanSheet_OP_LEY148Archivadas <- function(data, sheet_name, new_names) {
     )
 }
 
+#### cleanSheet_OP_LEY148Denegadas ####
 cleanSheet_OP_LEY148Denegadas <- function(data, sheet_name, new_names) {
   data %>%
     rename_at(vars(3:4), ~ new_names) %>%
@@ -112,6 +101,7 @@ cleanSheet_OP_LEY148Denegadas <- function(data, sheet_name, new_names) {
     )
 }
 
+#### cleanSheet_OP_LEY148FinalEmitidas ####
 cleanSheet_OP_LEY148FinalEmitidas <- function(data, sheet_name, new_names) {
   data %>%
     rename_at(vars(2:6), ~ new_names) %>%
@@ -129,6 +119,7 @@ cleanSheet_OP_LEY148FinalEmitidas <- function(data, sheet_name, new_names) {
     )
 }
 
+#### cleanSheet_OP_LEY148Genero ####
 cleanSheet_OP_LEY148Genero <- function(data, sheet_name) {
   data %>%
     pivot_longer(
@@ -144,6 +135,7 @@ cleanSheet_OP_LEY148Genero <- function(data, sheet_name) {
     )
 }
 
+#### cleanSheet_tribCasosCrim ####
 cleanSheet_tribCasosCrim <- function(data, sheet_name, new_names) {
   data %>%
     rename_at(vars(1:11), ~ new_names) %>%      # Renombra las primeras 11 columnas
@@ -161,50 +153,14 @@ cleanSheet_tribCasosCrim <- function(data, sheet_name, new_names) {
 }
 
 
+
+
 ###############################
 #### Helper Functions: UI  ####
 ###############################
-
-
+#### createDropdownCheckbox / createDropdownCheckbox_añoFiscal ####
 # Esta función genera un elemento de selección de checkboxes en un botón desplegable dentro de una interfaz de Shiny.
 # Permite a los usuarios seleccionar o deseleccionar todas las opciones de la lista de manera interactiva.
-# createDropdownCheckbox <- function(label, choices, selected, id) {
-#   choices <- levels(choices)
-#   if (is.null(selected)) {
-#     selected <- choices  
-#   } else {
-#     selected <- choices[selected]
-#   }
-# 
-#   div(
-#     dropdownButton(
-#       circle = FALSE,
-#       label = label,
-#       status = "default",
-#       size = "default",
-#       checkboxGroupInput(
-#         paste0("checkGroup_", id),
-#         label = "",
-#         choices = choices,
-#         selected = selected
-#       ),
-#       actionButton(paste0("deselectAll_", id), "(De)seleccionar todo")
-#     ),
-#     style = "display: inline-block; padding: 5px;",
-#     tags$style(HTML('
-#       .btn {
-#         background-color: #3e3f3a !important;
-#         color: white !important;
-#         border-color: #ccc !important;
-#       }
-#       .btn-default:hover, .btn-default:focus, .btn-default:active {
-#         background-color: #2c2c2a !important;
-#         color: #b0dce4 !important;
-#       }
-#     '))
-#   )
-# }
-
 createDropdownCheckbox_añoFiscal <- function(label, choices, selected, id) {
   # Step 1: Extract unique years and create custom labels
   unique_years <- unique(as.character(choices))
@@ -292,94 +248,6 @@ createDropdownCheckbox_añoFiscal <- function(label, choices, selected, id) {
   )
 }
 
-#' createDropdownCheckbox <- function(label, choices, selected, id) {
-#'   choices <- levels(choices)
-#'   if (is.null(selected)) {
-#'     selected <- choices  # Seleccionar todos los elementos
-#'   } else {
-#'     selected <- choices[selected]
-#'   }
-#' 
-#'   div(
-#'     style = "display: flex; justify-content: center; width: 100%;",
-#'     dropdownButton(
-#'       circle = FALSE,
-#'       label = lowercaseTitle(label),
-#'       status = "default",
-#'       size = "default",
-#'       checkboxGroupInput(
-#'         paste0("checkGroup_", id),
-#'         label = "",
-#'         choices = choices,
-#'         selected = selected
-#'       ),
-#'       actionButton(
-#'         paste0("deselectAll_", id),
-#'         HTML(lowercaseTitle("(De)seleccionar<br>todo")),
-#'         style = "display: block; margin: 10px auto; width: 100%;"  # Centrar el botón dentro del dropdown
-#'       )
-#'     ),
-#'     style = "display: flex; padding-right: 20px; padding-top: 10px; width: 100%;",
-#'     tags$style(HTML('
-#'       .btn {
-#'         font-size: 10px;
-#'         background-color: #3e3f3a !important;
-#'         color: white !important;
-#'         border-color: #ccc !important;
-#'         width: auto; /* Cambiar a auto para que se adapte al contenido */
-#'         max-width: 100%; /* Máximo 100% del contenedor */
-#'         box-sizing: border-box; /* Incluir padding en el tamaño total */
-#'       }
-#'       .btn-default:hover, .btn-default:focus, .btn-default:active {
-#'         background-color: #2c2c2a !important;
-#'         color: #b0dce4 !important;
-#'       }
-#'       .dropdown-menu {
-#'         width: 100% !important;
-#'         font-size: 12px;
-#' 
-#'       }
-#'       .shiny-input-checkboxgroup {
-#' 
-#'         display: flex;
-#'         flex-direction: column;
-#' 
-#'       }
-#'       @media (max-width: 1040px) { /* Adaptación para tabletas con ancho menor a 1040px */
-#'         .btn {
-#'           font-size: 6px !important;
-#'           padding: 6px 4px !important;
-#'           max-width: 100%; /* Asegurar que no se expanda más del contenedor */
-#'         }
-#'         .dropdown-menu {
-#'           font-size: 8px !important;
-#'         }
-#'       }
-#'       @media (max-width: 768px) { /* Adaptación para dispositivos medianos */
-#'         .btn {
-#'           font-size: 6px !important;
-#'           padding: 6px 4px !important;
-#'           max-width: 100%;
-#'         }
-#'         .dropdown-menu {
-#'           font-size: 6px !important;
-#'         }
-#'       }
-#'       @media (max-width: 600px) { /* Adaptación para teléfonos */
-#'         .btn {
-#'           font-size: 6px !important;
-#'           padding: 6px 4px !important;
-#'           max-width: 100%;
-#'         }
-#'         .dropdown-menu {
-#'           font-size: 6px !important;
-#'         }
-#'       }
-#'     '))
-#'   )
-#' }
-#' 
-#' 
 createDropdownCheckbox <- function(label, choices, selected, id) {
   choices <- levels(choices)
   if (is.null(selected)) {
@@ -462,9 +330,7 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
   )
 }
 
-
-
-
+#### embedImage ####
 # Crea un elemento de lista con una imagen que enlaza a una página web especificada.
 embedImage <- function(ID, img_src, link_href, link_alt, size = "60", padding_bottom = "0px") {
   tags$li(
@@ -487,107 +353,8 @@ embedImage <- function(ID, img_src, link_href, link_alt, size = "60", padding_bo
   )
 }
 
-
+#### showDataCheckbox ####
 # Crear un checkbox para mostrar u ocultar los datos.
-# showDataCheckbox <- function(inputId, label = lowercaseTitle("Mostrar Datos"), value = FALSE) {
-#   div(
-#     style = "margin-left: 10px; background-color: #3e3f3a; border-radius: 5px; width: 150px; height: 48px; display: flex; align-items: center; justify-content: center;",
-#     tags$style(HTML('
-#       .custom-checkbox {
-#         color: white;
-#         font-size: 13px;
-#         display: flex;
-#         align-items: center;
-#         justify-content: center;
-#       }
-#       .custom-checkbox:hover {
-#         width: 150px; 
-#         height: 48px;
-#         border-radius: 5px;
-#         background-color: #2c2c2a; /* Darker background color on hover */
-#         color: #b0dce4; /* Change text color on hover */
-#       }
-#       .custom-checkbox input[type="checkbox"] {
-#         padding-top: 0px;
-#         color: white;
-#         margin-right: 5px;
-#       }
-#       .custom-checkbox label {
-#         padding-top: 15px;
-#         margin: 0; /* Ensure no margin around the label */
-#       }
-#     ')),
-#     div(
-#       class = "custom-checkbox",
-#       checkboxInput(inputId, tags$b(label), value = value)
-#     )
-#   )
-# }
-
-#' showDataCheckbox <- function(inputId, label = lowercaseTitle("Mostrar Datos"), value = FALSE) {
-#'   div(
-#'     style = "background-color: #3e3f3a; border-radius: 5px; width: 150px; height: 48px; display: flex; align-items: center; justify-content: center; margin-top: 13px;",
-#'     tags$style(HTML('
-#'       .custom-checkbox {
-#'         color: white;
-#'         font-size: 13px; /* Ajustar tamaño de fuente del texto */
-#'         display: flex;
-#'         align-items: center;
-#'         justify-content: center;
-#'         width: 150px;  /* Mantener el mismo tamaño del contenedor */
-#'         height: 48px;  /* Mantener el mismo tamaño del contenedor */
-#'         border-radius: 5px; /* Asegurar que el borde se mantenga */
-#'       }
-#'       .custom-checkbox:hover {
-#'         background-color: #2c2c2a; /* Cambiar color de fondo en hover */
-#'         color: #b0dce4; /* Cambiar color del texto en hover */
-#'         width: 150px;  /* Mantener el tamaño en hover */
-#'         height: 48px;  /* Mantener el tamaño en hover */
-#'       }
-#'       .custom-checkbox input[type="checkbox"] {
-#'         padding-top: 0px; /* Ajustar padding superior del checkbox */
-#'         margin-top: 0px;
-#'         margin-right: 5px; /* Separar el checkbox del texto */
-#'         width: 18px; /* Ajustar tamaño del checkbox */
-#'         height: 18px; /* Ajustar tamaño del checkbox */
-#'       }
-#'       .custom-checkbox label {
-#'         margin: 0; /* Asegurarse de que no haya margen alrededor del label */
-#'         padding-top: 15px; /* Aplicar padding-top al texto */
-#'       }
-#'       .custom-checkbox label::before {
-#'         display: none; /* Eliminar el diseño predeterminado del checkbox */
-#'       }
-#' 
-#'       /* Estilos para pantallas pequeñas */
-#'       @media (max-width: 768px) {
-#'         .custom-checkbox {
-#'           font-size: 8px; /* Reducir tamaño de fuente en pantallas medianas */
-#'           width: 97%; /* Ajustar el ancho en pantallas medianas */
-#'         }
-#'         .custom-checkbox:hover {
-#'           width: 97%; /* Mantener el mismo tamaño en hover en pantallas medianas */
-#'         }
-#'       }
-#'       @media (max-width: 600px) {
-#'         .custom-checkbox {
-#'           font-size: 8px; /* Reducir tamaño de fuente en pantallas pequeñas */
-#'           padding: 8px 6px;
-#'           width: 97%; /* Ajustar el ancho en pantallas pequeñas */
-#'         }
-#'         .custom-checkbox:hover {
-#'           width: 97%; /* Mantener el mismo tamaño en hover en pantallas pequeñas */
-#'         }
-#'       }
-#'     ')),
-#'     div(
-#'       class = "custom-checkbox",
-#'       checkboxInput(inputId, tags$b(label), value = value)
-#'     )
-#'   )
-#' }
-#' 
-
 showDataCheckbox <- function(inputId, label = lowercaseTitle_mostrarDatos("Mostrar Datos"), value = FALSE) {
   div(
     style = "background-color: #3e3f3a; border-radius: 5px; width: 100px; height: 43px; display: flex; align-items: center; justify-content: center; margin-top: 13px;",
@@ -658,13 +425,13 @@ showDataCheckbox <- function(inputId, label = lowercaseTitle_mostrarDatos("Mostr
   )
 }
 
-
-
+#### sectionTitle ####
 # Función para especificar el tamaño de los titulos de secciones
 sectionTitle <- function(title, font_size = "20px") {
   HTML(paste("<div style='text-align: center; font-size:", font_size, ";'><b>", title, "</b></div>", sep = ""))
 }
 
+#### customSeparator ####
 # Función para crear separador personalizado
 customSeparator <- function() {
   tags$div(
@@ -673,6 +440,7 @@ customSeparator <- function() {
   )
 }
 
+#### lowercaseTitle ####
 # Función para hacer que los titulos se muestren en letras minúsculas
 lowercaseTitle <- function(title, font_size = "15px") {
   HTML(paste0(
@@ -682,6 +450,7 @@ lowercaseTitle <- function(title, font_size = "15px") {
   ))
 }
 
+#### lowercaseTitle_mostrarDatos ####
 # Función para hacer que los titulos se muestren en letras minúsculas
 lowercaseTitle_mostrarDatos <- function(title, font_size = "11px") {
   HTML(paste0(
@@ -691,6 +460,7 @@ lowercaseTitle_mostrarDatos <- function(title, font_size = "11px") {
   ))
 }
 
+#### authorTag ####
 # Función para crear sección de autores
 authorTag <- function(nombre, email, puesto, grados){
   tags$html(
@@ -705,10 +475,13 @@ authorTag <- function(nombre, email, puesto, grados){
   )
 }
 
+
+
 ##################################
 #### Helper Functions: Server #### 
 ##################################
 
+#### updateCheckboxGroup ####
 
 # Esta función toma como entrada el `session`, el `inputId` correspondiente al grupo
 # de checkbox, el objeto `input` y el conjunto de datos `data`. Dependiendo de si el
@@ -733,6 +506,7 @@ updateCheckboxGroup <- function(session, inputId, input, data) {
   }
 }
 
+#### create_empty_plot_with_message_forLine ####
 create_empty_plot_with_message_forLine <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
   data_df <- data()
   
@@ -768,6 +542,7 @@ create_empty_plot_with_message_forLine <- function(data, x, y, fill, title, xlab
     )
 }
 
+#### renderLinePlot ####
 renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, emptyMessage) {
   data_df <- data()  # Evaluar los datos reactivos una vez
   
@@ -807,6 +582,7 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
   }
 }
 
+#### create_empty_plot_with_message ####
 create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
   data_df <- data()
   
@@ -842,6 +618,7 @@ create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, 
     )
 }
 
+#### renderBarPlot ####
 #Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
 renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
                           emptyMessage, barWidth = 1, xGap = 0.1) {
@@ -884,6 +661,7 @@ renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, c
   }
 }
 
+#### renderBarPlot_facets ####
 #Funcion para las graficas con FACETAS
 #Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
 renderBarPlot_facets <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
@@ -931,6 +709,7 @@ renderBarPlot_facets <- function(data, x, y, fill, title, xlab, ylab, fillLab = 
   }
 }
 
+#### renderBarPlot_stack ####
 # Renderiza un gráfico de barras apiladas 
 renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
                           emptyMessage, barWidth = 0.4, xGap = 0.1) {  
@@ -984,6 +763,7 @@ renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = f
   }
 }
 
+#### renderBarPlot_stack2 ####
 # Renderiza un gráfico de barras apiladas con etiquetas de totales justo encima de las barras
 renderBarPlot_stack2 <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
                           emptyMessage, barWidth = 0.4, xGap = 0.1) {
@@ -1035,6 +815,7 @@ renderBarPlot_stack2 <- function(data, x, y, fill, title, xlab, ylab, fillLab = 
   }
 }
 
+#### convert_to_plotly ####
 # Transforma un gráfico ggplot en un gráfico interactivo plotly y configura el tooltip.
 convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1, width= "100%", height= "100%") {
   # Obtener los títulos de los ejes y el título del gráfico desde el objeto ggplot
@@ -1113,15 +894,6 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1, 
       )
     ),
     margin = plotly_margins
-    # ,  # Usar los márgenes del ggplot
-    # xaxis = list(
-    #   title = list(text = x_axis_title, font = list(size = axis_text_size, family = "Arial", color = "black", weight = "bold")),
-    #   tickfont = list(size = tick_size, family = "Arial", color = "black")
-    # ),
-    # yaxis = list(
-    #   title = list(text = y_axis_title, font = list(size = axis_text_size, family = "Arial", color = "black", weight = "bold")),
-    #   tickfont = list(size = tick_size, family = "Arial", color = "black")
-    # )
   ) %>%
     onRender("
       function(el, x) {
@@ -1213,6 +985,7 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1, 
   return(p_plotly)
 }
 
+#### createFuenteDiv ####
 # Genera un div que muestra una lista de enlaces con las Fuentes
 createFuenteDiv <- function(hyperlinks, fuenteTexts) {
   if (length(hyperlinks) != length(fuenteTexts)) {
@@ -1241,6 +1014,7 @@ createFuenteDiv <- function(hyperlinks, fuenteTexts) {
   )
 }
 
+#### renderBoxPlot ####
 # Renderiza un gráfico de caja utilizando ggplot2 en el UI de Shiny.
 renderBoxPlot <- function(data, x, y, color, title, xlab, ylab, colorlab = color) {
   p <- ggplot(data, aes(x = x, y = y)) +
@@ -1252,6 +1026,7 @@ renderBoxPlot <- function(data, x, y, color, title, xlab, ylab, colorlab = color
   print(p)
 }
 
+#### renderDataTable ####
 # Renderiza una tabla de datos utilizando el paquete DT en el UI de Shiny. Utilizada para presentar los datos
 renderDataTable <- function(filtered_data, title, font_size = "18px") {
   datatable(
@@ -1325,6 +1100,7 @@ renderDataTable <- function(filtered_data, title, font_size = "18px") {
   )
 }
 
+#### renderDataTable_Definitions ####
 # Renderizar Tabla de Definiciones con Botones de Exportación
 renderDataTable_Definitions <- function(filtered_data, title) {
   datatable(
@@ -1383,75 +1159,8 @@ renderDataTable_Definitions <- function(filtered_data, title) {
 }
 
 
-# # Renderiza mapa utilizando Leaflet
-# renderMap <- function(data,value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron) {
-#   # Verificar que hay datos disponibles
-#   if (nrow(data) == 0 || !value_col %in% colnames(data)) {
-#     return(leaflet() %>% addTiles())
-#   }
-#   
-#   # Obtener valores de la columna dinámica
-#   values <- data[[value_col]]
-#   regiones <- data[[value_col_region]]
-#   
-#   # Calcular límites para la escala de colores
-#   min_val <- min(values, na.rm = TRUE)
-#   max_val <- max(values, na.rm = TRUE)
-#   rango <- max_val - min_val
-#   
-#   # Garantizar al menos 3 rangos
-#   num_bins <- 3
-#   if (rango < num_bins) {
-#     # Si el rango es muy pequeño, ajustar el tamaño del paso para forzar 3 rangos
-#     step <- 1
-#     max_val <- min_val + (num_bins - 1) * step
-#   } else {
-#     # Definir el tamaño del paso dinámicamente basado en el rango y un número razonable de rangos
-#     step <- ceiling(rango / num_bins)
-#   }
-#   
-#   # Crear los límites de los bins
-#   bins <- seq(
-#     floor(min_val / step) * step,  # Múltiplo inferior del tamaño del paso
-#     ceiling(max_val / step) * step,  # Múltiplo superior del tamaño del paso
-#     by = step  # Incrementos definidos
-#   )
-#   
-#   pal <- colorBin("Purples", domain = values, bins = bins, na.color = "transparent")
-#   
-#   # Crear el mapa
-#   leaflet(data) %>%
-#     setView(lng = -66.5, lat = 18.2, zoom = map_zoom) %>%
-#     addProviderTiles(provider) %>% # Fondo claro
-#     addPolygons(
-#       fillColor = ~pal(values), # Colores según cantidad de casos
-#       weight = 1, # Líneas divisorias de los polígonos
-#       opacity = 1,
-#       color = "#666", # Color de las líneas divisorias
-#       dashArray = "3", 
-#       fillOpacity = 0.7,
-#       label = ~paste0(
-#         value_col_region, ": ", regiones, "<br>",
-#         value_col, ": ", values
-#       ) %>% lapply(htmltools::HTML), # Interpretar el HTML
-#       highlightOptions = highlightOptions(
-#         weight = 1,
-#         color = "#666",
-#         dashArray = "",
-#         fillOpacity = 0.9,
-#         bringToFront = TRUE
-#       )
-#     ) %>%
-#     addLegend(
-#       pal = pal,
-#       values = ~values,
-#       opacity = 0.7,
-#       title = value_col,
-#       position = "bottomright",
-#       labFormat = labelFormat(digits = 0) # Evitar decimales en la leyenda
-#     )
-# }
 
+#### renderMap ####
 renderMap <- function(data, value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron, municipios_geo) {
   # Verificar que hay datos disponibles
   if (nrow(data) == 0 || !value_col %in% colnames(data)) {
@@ -1538,7 +1247,7 @@ renderMap <- function(data, value_col, value_col_region, map_zoom, provider = pr
     )
 }
 
-
+#### renderMap_vivienda ####
 renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron, municipios_geo) {
   # Verificar que hay datos disponibles
   if (nrow(data) == 0 || !value_col %in% colnames(data)) {
@@ -1617,6 +1326,7 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom, prov
     )
 }
 
+#### definitionCards ####
 # Función para crear cards de definiciones y metadatos (Actualmente no se esta utilizando esta funcion)
 definitionCards <- function(definitions) {
   card_list <- lapply(definitions, function(def) {
@@ -1633,7 +1343,7 @@ definitionCards <- function(definitions) {
   do.call(tagList, card_list)
 }
 
-
+#### setColorFill ####
 setColorFill <- function(df, variable) {
   # Obtener los niveles únicos de la variable
   unique_levels <- unique(df[[variable]])
@@ -1679,7 +1389,7 @@ setColorFill <- function(df, variable) {
   return(my_fill)
 }
 
-
+#### plotHeight ####
 # Función para calcular el numero de facetas en una grafica basado
 # en la cantidad de filas.
 plotHeight <- function(plot_height, selected_plots){
@@ -1696,6 +1406,8 @@ plotHeight <- function(plot_height, selected_plots){
   
   return(height)
 }
+
+#### cacl_Y_Axis ####
 #Funcion para calcular la posicion de la leyenda en Y
 #Esto cada vez que una fila en las graficas de facetas se elimina
 
@@ -1721,8 +1433,10 @@ cacl_Y_Axis <- function(current_rows){
 }
 
 
+
+#######################
 #### CODIGO MUERTO ####
-##################################
+#######################
 
 # create_empty_plot_with_message_forLine <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
 #   data_df <- data()

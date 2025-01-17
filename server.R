@@ -2,7 +2,9 @@
 cat("Loading Server from server.R...\n")
 server <- function(input, output, session) {
   
+  #############################################################################
   ########## Server del Sistema de Notificación de Muertes Violentas ##########
+  #############################################################################
   #### Tab de Homicidios por Grupo de Edad (homiEdad) ####
   
   # Filtro para el dataset según los valores de año y edad
@@ -59,12 +61,11 @@ server <- function(input, output, session) {
     convert_to_plotly(empty_plot, tooltip = "text")
   })
   
-  #------------------------------------------
   #Titulo de la Grafica
   output$plot_title13 <- renderUI({
     title <- "Homicidios de Mujeres por grupo de Edad y Año"
   })
-  #----
+
   
   homiEdad_filt_rename <- reactive({
     homiEdad_filt() %>% 
@@ -154,13 +155,11 @@ server <- function(input, output, session) {
     convert_to_plotly(empty_plot, tooltip = "text")
   })
   
-  #------------------------------------------
   #Titulo de la Grafica
   output$plot_title14 <- renderUI({
     title <- "Incidentes Violentos ocurridos para ambos Sexos"
   })
-  #----
-
+ 
   inci_filt_rename <- reactive({
     inci_filt() %>% 
       rename(`Tipo de Incidente` = Incidente)  
@@ -198,7 +197,6 @@ server <- function(input, output, session) {
       )
     }
   })
-  
   
   
   #### Tab de Definiciones ####
@@ -258,7 +256,11 @@ server <- function(input, output, session) {
   })
   
   
+  
+  
+  ###########################################################
   ########## Server del Departamento de la Familia ##########
+  ###########################################################
   #### Tab de Maltrato (dfMalt) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año y el checkGroup
@@ -288,35 +290,6 @@ server <- function(input, output, session) {
   dfMalt_fill_Maltrato <- setColorFill(dfMalt, "Maltrato")
   
   # Crear gráfico de barras
-  # output$barPlot_fam <- renderPlotly({
-  #   # Verificar si hay opciones seleccionadas en cada grupo
-  #   has_año <- length(input$checkGroup_fam_dfMalt_año) > 0
-  #   has_tipo <- length(input$checkGroup_fam_dfMalt_tipo) > 0
-  #   has_sexo <- length(input$checkGroup_fam_dfMalt_sexo) > 0
-  #   
-  #   # Crear mensaje si faltan opciones seleccionadas
-  #   if (!has_año || !has_tipo || !has_sexo) {
-  #     message <- "Seleccione Tipo(s) de maltrato, Año(s) y Sexo de la víctima"
-  #   } else {
-  #     # Si todas las opciones están seleccionadas, crear la gráfica
-  #     p <- renderBarPlot(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-  #                        title = "Casos Anuales de maltrato infantil por Sexo y Tipo",
-  #                        xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de Maltrato", 
-  #                        colorFill = dfMalt_fill_Maltrato, 
-  #                        emptyMessage = "Seleccione Tipo(s) de maltrato, Año(s) y Sexo de la víctima")
-  #     p <- p + facet_wrap(~Sexo, scales = "fixed")
-  #     p <- convert_to_plotly(p, tooltip = "text")
-  #     
-  #     return(p)
-  #   }
-  #   
-  #   # Crear la gráfica vacía con mensaje
-  #   empty_plot <- create_empty_plot_with_message(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-  #                        title = "Casos Anuales de maltrato infantil por Sexo y Tipo",
-  #                        xlab = "Año", ylab = "Número de casos", message)
-  #   convert_to_plotly(empty_plot, tooltip = "text")
-  # })
-  
   output$barPlot_fam <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
     has_año <- length(input$checkGroup_fam_dfMalt_año) > 0
@@ -359,8 +332,6 @@ server <- function(input, output, session) {
   output$plot_title1 <- renderUI({
     title <- "Casos Anuales de maltrato infantil por Sexo y Tipo"
   })
-  #----
-  
   
   dfMalt_filt_rename <- reactive({
     dfMalt_filt() %>% 
@@ -459,7 +430,11 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_fam, "Departamento de la Familia")
   })
   
+  
+  
+  #########################################################
   ########## Server del Departamento de Justicia ##########
+  #########################################################
   #### Tab de Delitos (dfDeli) ####
   
   # Filtrar el conjunto de datos según el año, delito o distrito seleccionado
@@ -716,9 +691,12 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_just, "Artículos de la Ley 54")
   })
   
-  ########## Server del Departamento del Trabajo y Recursos Humanos ##########
-  #### Tab de Participación Laboral (parLab) ####
   
+  
+  ############################################################################
+  ########## Server del Departamento del Trabajo y Recursos Humanos ##########
+  ############################################################################
+  #### Tab de Participación Laboral (parLab) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de incidente
   # parLab_filt <- reactive({
@@ -756,9 +734,9 @@ server <- function(input, output, session) {
   
   
   
-  
-  
+  ##################################################################
   ########## Tab de la Administración de Vivienda Pública ##########
+  ##################################################################
   #### Tab de Administración de Vivienda Pública (dfAvp) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de incidente
@@ -991,7 +969,11 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_avp, "Regiones de la Adminsitración de Vivienda Públicas")
   })
   
+  
+  
+  #####################################################
   ########## Tab del Negociado de la Policia ##########
+  #####################################################
   #### Tab con datos de mujeres desaparecidas (despDF) ####
   # Filtrar el conjunto de datos según los valores seleccionados del año y la categoria de evento
   despDF_filt <- reactive({
@@ -1046,8 +1028,7 @@ server <- function(input, output, session) {
   output$plot_title15 <- renderUI({
     title <- "Mujeres Desaparecidas: Localizadas y por Localizar"
   })
-  #----
-  
+ 
   despDF_filt_rename <- reactive({
     despDF_filt() %>% 
       rename(`Estado de la Víctima` = Estado)
@@ -1081,8 +1062,6 @@ server <- function(input, output, session) {
       )
     }
   })
-  
-  
   
   #### Tab con datos de victimas por edad (vEdad) ####
   # Filtrar el conjunto de datos según los valores seleccionados del el grupo de edad y año 
@@ -1154,8 +1133,7 @@ server <- function(input, output, session) {
   output$plot_title4 <- renderUI({
     title <- "Incidencia de Violencia Doméstica por Edad de la Víctima"
   })
-  #----
-  
+ 
   # Data Table para el mapa de despDF
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_poli_vEdad <- renderDT(server = FALSE, {
@@ -1254,7 +1232,11 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_poli, "Negociado de Policía")
   })
 
+  
+  
+  ########################################################################
   ########## Tab de la Oficina de la Procuradora de las Mujeres ##########
+  ########################################################################
   #### tab con datos de asesinatos por violencia domestica (opmFemiVD) ####
   # Filtrar el conjunto de datos según los valores seleccionados del año y la categoria de evento
   opmFemiVD_filt <- reactive({
@@ -1269,10 +1251,6 @@ server <- function(input, output, session) {
   
   # Grafico de barras
   output$linePlot_opm_opmFemiVD <- renderPlotly({
-  #   p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "Tasa", group = "1",
-  #                       color = "1", title = "Tasa Anual de Asesinatos de Mujeres \n por Violencia Doméstica",
-  #                       xlab = "Año", ylab = "Tasa por cada 100 mil mujeres",
-  #                       emptyMessage = "Seleccione los Año(s) que desea visualizar")
     p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "Tasa", group = "1",
                         color = "1", title = "",
                         xlab = "Año", ylab = "Tasa por cada 100 mil mujeres",
@@ -1286,8 +1264,7 @@ server <- function(input, output, session) {
   output$plot_title16 <- renderUI({
     title <- "Tasa Anual de Asesinatos de Mujeres por Violencia Doméstica"
   })
-  #----
-  
+
   # Data Table para el mapa de despDF
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_opm_opmFemiVD <- renderDT(server = FALSE, {
@@ -1372,8 +1349,7 @@ server <- function(input, output, session) {
   output$plot_title17 <- renderUI({
     title <- "Población Atendida por el Programa CRIAS: Razón de Consulta"
   })
-  #----
-  
+
   opmCasos_filt_rename <- reactive({
     opmCasos_filt() %>% 
       rename(`Razón para Consulta` = Razón) %>% 
@@ -1442,15 +1418,6 @@ server <- function(input, output, session) {
     if (!has_año || !has_genero) {
       message <- "Seleccione Género y Año(s) a visualizar"
     } else {
-      
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      # p <- renderBarPlot(opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
-      #                    paste("Identidad de Género de Víctimas asistidas \npor el Programa CRIAS"),
-      #                    xlab = "Año", ylab = "Cantidad de Víctimas", fillLab = "Género de la Víctima",
-      #                    colorFill = opmVic_fill_género,
-      #                    emptyMessage = "Seleccione Género y Año(s) a visualizar")
-      # p <- convert_to_plotly(p, tooltip = "text")
-      
       p <- renderBarPlot_facets(opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
                          paste("Identidad de Género de Víctimas asistidas \npor el Programa CRIAS"),
                          xlab = "Año", ylab = "Cantidad de Víctimas", fillLab = "Género de la Víctima",
@@ -1472,8 +1439,7 @@ server <- function(input, output, session) {
   output$plot_title18 <- renderUI({
     title <- "Identidad de Género de Víctimas asistidas por el Programa CRIAS"
   })
-  #----
-  
+
   # Data Table para el mapa de despDF
   output$dataTable_opm_opmVic <- renderDT({
     renderDataTable(opmVic_filt(), "Datos: Identidad de género de víctimas asistidas por el programa CRIAS")
@@ -1536,14 +1502,6 @@ server <- function(input, output, session) {
     if (!has_año || !has_medio) {
       message <- "Seleccione Medio de Orientación y Año(s) a visualizar"
     } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      # p <- renderBarPlot(opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
-      #                    title = "Orientaciones brindadas por el Programa CRIAS",
-      #                    xlab = "Año", ylab = "Cantidad de Personas Orientadas", fillLab = "Medio de Orientación",
-      #                    colorFill = opmMedio_fill_medio,
-      #                    emptyMessage = "Seleccione Medio de Orientación y Año(s) a visualizar")
-      # p <- convert_to_plotly(p, tooltip = "text")
-      
       p <- renderBarPlot_facets(opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
                          title = "Orientaciones brindadas por el Programa CRIAS",
                          xlab = "Año", ylab = "Cantidad de Personas Orientadas", fillLab = "Medio de Orientación",
@@ -1565,8 +1523,7 @@ server <- function(input, output, session) {
   output$plot_title19 <- renderUI({
     title <- "Orientaciones brindadas por el Programa CRIAS"
   })
-  #----
-  
+
   opmMedio_filt_rename <- reactive({
     opmMedio_filt() %>% 
       rename(`Medio de Orientación` = Orientación) %>% 
@@ -1636,14 +1593,6 @@ server <- function(input, output, session) {
     if (!has_año || !has_tipo) {
       message <- "Seleccione Tipo de servicio y Año(s) a visualizar"
     } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      # p <- renderBarPlot(opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
-      #                    title = "Atención, Servicios y Seguimiento de casos \nmediante el Programa CRIAS",
-      #                    xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Tipo de Servicio",
-      #                    colorFill = opmServiciosMes_fill_tipo,
-      #                    emptyMessage = "Seleccione Tipo de servicio y Año(s) a visualizar")
-      # p <- convert_to_plotly(p, tooltip = "text")
-      
       p <- renderBarPlot_facets(opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
                          title = "Atención, Servicios y Seguimiento de casos \nmediante el Programa CRIAS",
                          xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Tipo de Servicio",
@@ -1665,8 +1614,7 @@ server <- function(input, output, session) {
   output$plot_title20 <- renderUI({
     title <- "Atención, Servicios y Seguimiento de casos mediante el Programa CRIAS"
   })
-  #----
-
+  
   opmServiciosMes_filt_rename <- reactive({
     opmServiciosMes_filt() %>% 
       rename(`Tipo de Servicio` = Servicio) %>% 
@@ -1791,7 +1739,11 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_opm, "Oficina de la Procuradora de la Mujer")
   })
   
+  
+  
+  ########################################################################
   ########## Tab del Departamento de Correción y Rehabilitación ##########
+  ########################################################################
   #### tab con datos de los servicios ofrecidos (dcrCasosInv) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año, el tipo de servicio y el sexo
@@ -1863,8 +1815,6 @@ server <- function(input, output, session) {
   output$plot_title21 <- renderUI({
     title <- "Casos en Supervisión de Ley 54: Programas Alternativos al Confinamiento"
   })
-  #----
-
   dcrCasosInv_filt_rename <- reactive({
     dcrCasosInv_filt() %>% 
       rename(`Estado de Investigación` = Estado) 
@@ -1927,54 +1877,6 @@ server <- function(input, output, session) {
   #dcrSentenciadas_fill_tipo <- setColorFill(dcrSentenciadas, "Estado")
   
   # # Grafico de barras
-  # output$barPlot_dcr_dcrSentenciadas <- renderPlotly({
-  #   # Verificar si hay opciones seleccionadas en cada grupo
-  #   has_año <- length(input$checkGroup_dcr_dcrSentenciadas_year) > 0
-  #   has_tipo <- length(input$checkGroup_dcr_dcrSentenciadas_tipo) > 0
-  #   
-  #   # Crear mensaje si faltan opciones seleccionadas
-  #   if (!has_año || !has_tipo) {
-  #     message <- "Seleccione Estado del caso y Año(s) a visualizar"
-  #   } else {
-  #     upper_y_limit <- ceiling(max(eval(parse(text = "dcrSentenciadas_filt()$Cantidad")), na.rm = TRUE) * 1.2)
-  #     
-  #     # Si todas las opciones están seleccionadas, crear la gráfica
-  #     p <- ggplot(dcrSentenciadas_filt(), aes(x = Fecha, y = Cantidad, fill = Estado)) +
-  #       geom_bar(stat = "identity",
-  #                position = position_dodge2(width = 1, padding = 0.1),
-  #                aes(
-  #                  text = paste(
-  #                    paste0("<b>", "Cantidad de Personas Sentenciadas", ":</b> ", after_stat(y)), "<br>",
-  #                    paste0("<b>", "Estado del Caso", ":</b> ", after_stat(fill)), "<br>"
-  #                  )
-  #                )) +
-  #       scale_fill_manual(values = dcrSentenciadas_fill_tipo) +
-  #       scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
-  #                          expand = expansion(mult = c(0, 0.1))) +
-  #       theme_minimal() +
-  #       labs(title = "Sentenciados por Violencia Doméstica bajo \nSupervisión Electrónica",
-  #            x = "Año", y = "Cantidad de Personas Sentenciadas", fill = "Estado del Caso") +
-  #       coord_cartesian(ylim = c(0, upper_y_limit)) +
-  #       theme(
-  #         axis.text.x = element_text(angle = 45, hjust = 1, margin = margin(t = 10)),
-  #         plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
-  #         panel.border = element_rect(colour = "black", fill = NA, size = 1),
-  #         plot.margin = margin(t = 45, r = 10, b = 10, l = 10))  
-  #       
-  #     p <- convert_to_plotly(p, tooltip = "text")
-  #     
-  #     return(p)
-  #   }
-  #   
-  #   # Crear la gráfica vacía con mensaje
-  #   empty_plot <- create_empty_plot_with_message(data = dcrSentenciadas_filt, x = "Fecha", y = "Cantidad", fill = "Estado",
-  #                                                title = "Sentenciados por Violencia Doméstica bajo \nSupervisión Electrónica",
-  #                                                xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", message)
-  #   convert_to_plotly(empty_plot, tooltip = "text")
-  # })
-  # 
-  # 
-  # 
   
   output$barPlot_dcr_dcrSentenciadas <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
@@ -2075,7 +1977,11 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_dcr, "Departamento de Corrección y Rehabilitación")
   })
   
+  
+  
+  ############################################################
   ########## Tab de la Administración de Tribunales ##########
+  ############################################################
   #### tab con datos de Ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el grupo de edad y el distrito fiscal
@@ -2904,7 +2810,11 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_trib, "Administración de Tribunales")
   })
   
+  
+  
+  #####################################################################
   ########## Tab del Centro de Ayuda a Víctimas de Violación ##########
+  #####################################################################
   #### (safekitsDF) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año y el estado de la querella
@@ -2947,49 +2857,17 @@ server <- function(input, output, session) {
       message <- "Seleccione Estado de querella y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      
-      # p <- renderBarPlot(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits", 
-      #                    title = HTML("Tendencia anual del equipo de <i>SAFE Kits</i> en casos de violencia sexual"), 
-      #                    xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Estado de Querella", 
-      #                    colorFill = safekitsDF_fill_Kits,
-      #                    emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
-      
-      # p <- renderBarPlot(safekitsDF_filt_noTotal, x = "Año", y = "Total", fill = "Kits",
-      #                    title = HTML("Tendencia anual del equipo de <i>SAFE Kits</i> en casos de violencia sexual"),
-      #                    xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Estado de Querella",
-      #                    colorFill = safekitsDF_fill_Kits,
-      #                    emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
-      
-      #---Comentada en Deciembre-2-2024-----
-      # p <- renderBarPlot_stack(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits",
-      #                    title = HTML("Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella"),
-      #                    xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Estado de Querella",
-      #                    colorFill = safekitsDF_fill_Kits,
-      #                    emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
-      #--------
-      
       p <- renderBarPlot_stack(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits",
                                title = HTML(""),
                                xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Estado de Querella",
                                colorFill = safekitsDF_fill_Kits,
                                emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
       
-      # p <- renderBarPlot_stack2(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits",
-      #                          title = HTML("Tendencia anual del equipo de <i>SAFE Kits</i> en casos de violencia sexual"),
-      #                          xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Estado de Querella",
-      #                          colorFill = safekitsDF_fill_Kits,
-      #                          emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
-      
       p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
       
       return(p)
     }
-    
     # Crear la gráfica vacía con mensaje
-    # empty_plot <- create_empty_plot_with_message(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits", 
-    #                                              title = HTML("Tendencia anual del equipo de <i>SAFE Kits</i> en casos de violencia sexual por estado de querella"), 
-    #                                              xlab = "Año", ylab = "Total de Kits Distribuidos", message)
-    
     empty_plot <- create_empty_plot_with_message(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits", 
                                                  title = HTML(""), 
                                                  xlab = "Año", ylab = "Total de Kits Distribuidos", message)
@@ -3001,9 +2879,7 @@ server <- function(input, output, session) {
   output$plot_title22 <- renderUI({
     title <- HTML("Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella")
   })
-  #----
-
-  
+ 
   safekitsDF_filt_rename <- reactive({
     safekitsDF_filt() %>%  
       rename(`SAFE Kits` = Kits) %>%  
@@ -3077,7 +2953,10 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_cavv, "Centro de Ayuda a Víctimas de Violación")
   })
   
+  
+  #########################################
   #### tab con informacion de Contacto ####
+  #########################################
   observeEvent(input$send, {
     req(input$email)  # Asegurar que el input del email no este vacio
     req(input$message)  # Asegurar que mensaje no este vacio
@@ -3106,3 +2985,9 @@ server <- function(input, output, session) {
   })
   
 }
+
+
+
+
+
+
