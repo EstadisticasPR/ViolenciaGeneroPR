@@ -2380,7 +2380,7 @@ ui <-
                   "Los datos representados en esta gráfica corresponden a la
                   tendencia del equipo de recolecta de evidencia de los
                   SAFE Kits en casos de violencia sexual, según el estado de querella,
-                  desde el año 2019 al 2023.",
+                  desde el año 2019 a octubre del 2024.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )

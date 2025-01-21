@@ -1382,7 +1382,7 @@ actualizacion_tribunales6 <- "Última actualización: 14 de octubre de 2024"
 actualizacion_tribunales7 <- "Última actualización: 14 de octubre de 2024"
 
 # Fecha actualizacion datos cavv
-actualizacion_cavv <- "Última actualización: 31 de diciembre de 2023"
+actualizacion_cavv <- "Última actualización: 31 de octubre de 2024"
 
 
 
