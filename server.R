@@ -579,7 +579,7 @@ server <- function(input, output, session) {
     data <- mapaDeli_filt()
     renderMap(data, value_col = "Casos",
               value_col_region = "Distrito Fiscal",
-              map_zoom = 9,
+              map_zoom = 8.5,
               provider = providers$CartoDB.Positron,
               municipios_geo = municipios_geo)
   })
