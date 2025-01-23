@@ -1296,6 +1296,31 @@ safekitsDF <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
     Año = factor(Año)
   )
 
+#### edades ####
+safekitsDF_edades <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
+                                sheet = "Edades")  %>%
+  mutate(
+    `Total de Kits con querella` = `Cantidad de menores` + `Cantidad de mayores` + `No identificado`
+  ) %>%
+  pivot_longer(
+    !Año,
+    names_to = "Categoria",
+    values_to = "Total"
+  ) %>%
+  filter(
+    Categoria != "Total de Kits con querella"
+  ) %>%
+  mutate(
+    Categoria = case_when(
+      Categoria == "Cantidad de menores" ~ "Menores de edad",
+      Categoria == "Cantidad de mayores" ~ "Mayores de edad",
+      Categoria == "No identificado" ~ "No identificado",
+      TRUE ~ Categoria # Opción para manejar cualquier valor inesperado
+    ),
+    Categoria = factor(Categoria, 
+                       levels = c("Menores de edad", "Mayores de edad", "No identificado")),
+    Año = factor(Año)
+  )
 
 #### Guardar datos procesados de CAVV ####
 # dataframes <- list(safekitsDF) # Lista de dataframes 
@@ -1355,7 +1380,7 @@ actualizacion_opm4 <- "Última actualización: 31 de diciembre de 2023"
 actualizacion_opm5 <- "Última actualización: 31 de diciembre de 2023"
 
 # Fecha actualizacion correccion y rehabilitacion tab1
-actualizacion_dcr1 <- "Última actualización: 31 de diciembre de 2023"
+actualizacion_dcr1 <- "Última actualización: 31 de octubre de 2024"
 
 # Fecha actualizacion correccion y rehabilitacion tab2
 actualizacion_dcr2 <- "Última actualización: 28 de febrero de 2023"
@@ -1381,9 +1406,11 @@ actualizacion_tribunales6 <- "Última actualización: 14 de octubre de 2024"
 # Fecha actualizacion Tribunales tab1
 actualizacion_tribunales7 <- "Última actualización: 14 de octubre de 2024"
 
-# Fecha actualizacion datos cavv
-actualizacion_cavv <- "Última actualización: 31 de octubre de 2024"
+# Fecha actualizacion datos cavv tab1
+actualizacion_cavv1 <- "Última actualización: 31 de diciembre de 2024"
 
+# Fecha actualizacion datos cavv tab2
+actualizacion_cavv2 <- "Última actualización: 31 de diciembre de 2024"
 
 
 

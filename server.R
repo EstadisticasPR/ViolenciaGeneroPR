@@ -2919,6 +2919,108 @@ server <- function(input, output, session) {
     }
   })
   
+  #### (safekitsDF_edades) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año y el estado de la querella
+  safekitsDF_edades_filt <- reactive({
+    filter(safekitsDF_edades,
+           Año %in% input$checkGroup_cavv_safekitsDF_edades_Año,
+           Categoria %in% input$checkGroup_cavv_safekitsDF_edades_Categoria
+    )
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el año
+  observeEvent(input$deselectAll_cavv_safekitsDF_edades_Año, {
+    updateCheckboxGroup(session, "checkGroup_cavv_safekitsDF_edades_Año", input, safekitsDF_edades$Año)
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el estado de querella
+  observeEvent(input$deselectAll_cavv_safekitsDF_edades_Categoria, {
+    updateCheckboxGroup(session, "checkGroup_cavv_safekitsDF_edades_Categoria", input, safekitsDF_edades$Categoria)
+  })
+  
+  # Colores de los estados de Querella
+  safekitsDF_fill_Categoria <- setColorFill(safekitsDF_edades, "Categoria")
+  
+  # Descartar fila con Total de Kits para omitir su representacion en la grafica
+  safekitsDF_edades_filt_noTotal <- reactive({
+    safekitsDF_edades_filt() %>%  
+      filter(Categoria != "Total de Kits con querella")
+  })
+  
+  
+  # Grafico de barras
+  output$barPlot_safekitsDF_edades <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_año <- length(input$checkGroup_cavv_safekitsDF_edades_Año) > 0
+    has_categoria <- length(input$checkGroup_cavv_safekitsDF_edades_Categoria) > 0
+    
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_año || !has_categoria) {
+      message <- "Seleccione Categoría y Año(s) a visualizar"
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderBarPlot_stack(safekitsDF_edades_filt, x = "Año", y = "Total", fill = "Categoria",
+                               title = HTML(""),
+                               xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Categoria",
+                               colorFill = safekitsDF_fill_Categoria,
+                               emptyMessage = "Seleccione Categoría y Año(s) a visualizar")
+      
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
+      
+      return(p)
+    }
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(safekitsDF_edades_filt, x = "Año", y = "Total", fill = "Categoria", 
+                                                 title = HTML(""), 
+                                                 xlab = "Año", ylab = "Total de Kits Distribuidos", message)
+    
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title23 <- renderUI({
+    title <- HTML("Tendencia Anual de <i>SAFE Kits<i> con querella en menores y mayores de edad")
+  })
+  
+  safekitsDF_edades_filt_rename <- reactive({
+    safekitsDF_edades_filt() %>%  
+      rename(`Total Distribuidos` = Total)
+  })
+  
+  
+  # Data Table
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_safekitsDF_edades <- renderDT(server = FALSE, {
+    renderDataTable(safekitsDF_edades_filt_rename(), "Datos: Tendencia anual del equipo de recolecta de evidencia de SAFE Kits en casos de violencia sexual")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_safekitsDF_edades  <- renderUI({
+    if (input$showTable_safekitsDF_edades) {
+      hyperlinks <- c("https://www.salud.pr.gov/CMS/104",
+                      "https://www.salud.pr.gov/")
+      texts <- c("Centro de Ayuda a Victimas de Violación", 
+                 "Departamento de Salud")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
+            DTOutput("dataTable_safekitsDF_edades")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
   
   #### Tab de Definiciones ####
   definitions_cavv <- list(

@@ -1537,7 +1537,10 @@ ui <-
                 "Los datos representados en esta gráfica corresponden a
                  los casos en supervisión de ley 54 en programas alternos
                 al confinamiento (por estado de investigación): Programas de Comunidad
-                desde el año natural 2021 al 2023.",
+                desde el año natural 2021 al 2024.Los datos de Investigaciones realizadas
+                se encuentran hasta febrero del 2023. Por el cambio de formato en sus datos,
+                el Departamento de Corrección y Rehabilitación ya no cuenta con esa información. 
+                Los datos de Casos en Supervisión se encuentran hasta el 31 de octubre de 2024.",
                 
                 style = "font-size: 16px;padding: 0px;" 
               )
@@ -2374,13 +2377,95 @@ ui <-
                 class = "card",
                 style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                 h4(
-                  strong(actualizacion_cavv, style="margin: 0px;") 
+                  strong(actualizacion_cavv1, style="margin: 0px;") 
                 ),
                 p(
                   "Los datos representados en esta gráfica corresponden a la
                   tendencia del equipo de recolecta de evidencia de los
                   SAFE Kits en casos de violencia sexual, según el estado de querella,
-                  desde el año 2019 a octubre del 2024.",
+                  desde el año 2019 al 2024.",
+                  
+                  style = "font-size: 16px;padding: 0px;" 
+                )
+              )
+            )
+          )
+        )
+      ),
+      
+      #### tab con datos de Tendencia Anual de SAFE Kits por Estado de Querella (Edades) ####
+      tabPanel(
+        lowercaseTitle("Tendencia Anual del Equipo Recolecta de Violencia Sexual (Categoría)"), 
+        br(), br(),
+        sidebarLayout(
+          sidebarPanel(
+            style = "display: flex; flex-direction: column; align-items: center;",
+            
+            # seleccionar valor de la variable
+            div(
+              style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",
+              div(
+                style = "text-align: center; display: inline-block;",
+                # botón para seleccionar el estado de querella
+                createDropdownCheckbox(
+                  label = "Seleccione Categoría:",
+                  choices = safekitsDF_edades$Categoria,
+                  selected = safekitsDF_edades$Categoria,
+                  id = "cavv_safekitsDF_edades_Categoria"
+                )
+              )
+            ),
+            
+            div(
+              style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+              div(
+                style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                div(
+                  style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                  # botón para seleccionar el año
+                  createDropdownCheckbox(
+                    label = "Seleccione Año(s):",
+                    choices = safekitsDF_edades$Año,
+                    selected = safekitsDF_edades$Año,
+                    id = "cavv_safekitsDF_edades_Año"
+                  )
+                ),
+                div(
+                  style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                  showDataCheckbox("showTable_safekitsDF_edades")
+                )
+              )
+            ),
+            
+            # Output UI para la tabla de datos
+            uiOutput("dataTableUI_safekitsDF_edades")
+            
+          ),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+            fluidRow(
+              column(12, 
+                     div(id = "scrollable-plot", 
+                         div(id = "plot-title", uiOutput("plot_title23")),
+                         plotlyOutput("barPlot_safekitsDF_edades"),  height = "100%"))
+            ),
+            tags$div(style = "padding-bottom: 10px;"),
+            tags$div(
+              style = "padding-bottom: 10px;",
+              div(
+                class = "card",
+                style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                h4(
+                  strong(actualizacion_cavv2, style="margin: 0px;") 
+                ),
+                p(
+                  "Los datos representados en esta gráfica corresponden a la
+                  tendencia del equipo de recolecta de evidencia de los
+                  SAFE Kits en casos de violencia sexual para aquellos casos con querellas
+                  segun la clasificacion del individuo (menor de edad o mayor de edad)
+                  desde el año 2019 al 2024.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )

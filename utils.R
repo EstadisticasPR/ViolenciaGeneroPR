@@ -712,7 +712,7 @@ renderBarPlot_facets <- function(data, x, y, fill, title, xlab, ylab, fillLab = 
 #### renderBarPlot_stack ####
 # Renderiza un gráfico de barras apiladas 
 renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
-                          emptyMessage, barWidth = 0.4, xGap = 0.1) {  
+                                 emptyMessage, barWidth = 0.4, xGap = 0.1) {  
   
   data_df <- data()  # Evalúa los datos reactivos una vez
   
@@ -722,12 +722,10 @@ renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = f
     
     return(p)
   } else {
+    # Eliminar el filtro de categorías específicas
+    apiladas_df <- data_df  # No se filtran categorías
     
-    # Filtrar solo las filas para apilar barras (sin el total de kits)
-    apiladas_df <- data_df %>%
-      filter(Kits %in% c("Total con querella", "Total sin querella"))
-    
-    upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2)
+    upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.8)
     
     p <- ggplot(apiladas_df, aes_string(x = x, y = y, fill = fill)) +
       geom_bar(stat = "identity",
@@ -750,70 +748,18 @@ renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = f
         plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
         panel.border = element_rect(colour = "black", fill = NA, size = 1),
         plot.margin = margin(t = 100, r = 50, b = 100, l = 50),
-        panel.grid.major.x = element_blank() # Elimina el grid line por defacto en el eje de X
+        panel.grid.major.x = element_blank() # Elimina el grid line por defecto en el eje de X
       ) 
     
-      if (length(unique(data_df[[x]])) > 1) {
-        p <- p + geom_vline(xintercept = seq(1.5, length(unique(data_df[[x]])) - 0.5, by = 1), #Grid line en x
-                            linetype = "dotted", color = "grey", size = 0.3, alpha = 0.5) #Visualización del grid line
-      }
-    
+    if (length(unique(data_df[[x]])) > 1) {
+      p <- p + geom_vline(xintercept = seq(1.5, length(unique(data_df[[x]])) - 0.5, by = 1), #Grid line en x
+                          linetype = "dotted", color = "grey", size = 0.3, alpha = 0.5) #Visualización del grid line
+    }
     
     return(p)
   }
 }
 
-#### renderBarPlot_stack2 ####
-# Renderiza un gráfico de barras apiladas con etiquetas de totales justo encima de las barras
-renderBarPlot_stack2 <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
-                          emptyMessage, barWidth = 0.4, xGap = 0.1) {
-  
-  data_df <- data()  # Evalúa los datos reactivos una vez
-  
-  if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]]) || is.null(data_df[[y]]) || is.null(data_df[[fill]])) {
-    # Si no hay datos o las variables x/y son nulas, muestra un gráfico vacío con un mensaje
-    p <- create_empty_plot_with_message(data, x, y, fill, title, xlab, ylab, emptyMessage)
-    return(p)
-  } else {
-    # Filtrar solo las filas para apilar barras (sin el total de kits)
-    apiladas_df <- data_df %>%
-      filter(Kits %in% c("Total con querella", "Total sin querella"))
-    
-    # Filtrar los totales para poner las etiquetas de total encima
-    totales_df <- data_df %>%
-      filter(Kits == "Total de Kits")
-    
-    # Crear el gráfico de barras apiladas
-    p <- ggplot(apiladas_df, aes_string(x = x, y = y, fill = fill)) +
-      geom_bar(stat = "identity",
-               position = position_stack(reverse = TRUE),  
-               width = barWidth,  
-               aes(
-                 text = paste(
-                   paste0("<b>", ylab, ":</b> ", after_stat(y)), "<br>",
-                   paste0("<b>", fillLab, ":</b> ", after_stat(fill)), "<br>"
-                 )
-               )) +
-      # Agregar los totales encima de cada barra
-      geom_text(data = totales_df, aes_string(x = x, y = y, label = y),
-                position = position_stack(vjust = 1.04),  # Etiquetas justo encima de la última barra
-                size = 4, color = "black") +  
-      scale_fill_manual(values = colorFill) +
-      scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
-                         expand = expansion(mult = c(0, 0.1))) +
-      coord_cartesian(ylim = c(0, ceiling(max(totales_df[[y]], na.rm = TRUE) * 1.2))) +  # Límite superior basado en los totales
-      labs(title = title, x = xlab, y = ylab, fill = fillLab) +
-      theme_minimal() +
-      theme(
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
-        panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
-      )
-    
-    return(p)
-  }
-}
 
 #### convert_to_plotly ####
 # Transforma un gráfico ggplot en un gráfico interactivo plotly y configura el tooltip.
