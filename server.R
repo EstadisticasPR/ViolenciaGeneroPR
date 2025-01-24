@@ -258,6 +258,8 @@ server <- function(input, output, session) {
   
   
   
+  
+  
   ###########################################################
   ########## Server del Departamento de la Familia ##########
   ###########################################################
@@ -3039,6 +3041,8 @@ server <- function(input, output, session) {
     list(word = "Kits", definition = "Equipo utilizado por profesionales de la salud para la recuperación de evidencia forense en casos de violencia sexual. Consiste en una caja que contiene instrucciones y materiales que facilitan la recolección de evidencia. También conocido como <i>Sexual Assault Kit</i> o, por sus siglas en inglés, <i>SAK</i>."),
     list(word = "Kit con Querella", definition = "Kit de recolección de evidencia forense que se acompaña con la querella radicada por la víctima sobreviviente de violencia sexual. Cuenta con un número otorgado por el NPPR."),
     list(word = "Kit sin Querella", definition = "Kit de recolección de evidencia forense que no se acompaña con una querella, pues la víctima sobreviviente de violencia sexual no ha radicado querella en el NPPR."),
+    list(word = "Mayor de Edad", definition = "Toda persona con 18 años o más"),
+    list(word = "Menor de Edad", definition = "Toda persona entre las edades de 0 a 18 años"),
     list(word = "Querella", definition = "Mecanismo que tiene disponible una persona para reportar a la policía un incidente que entiende debe ser investigado por ésta. El incidente puede tratarse de uno que involucre un delito, una infracción, una persona desaparecida, entre otros."),
     list(word = "Tendencia", definition = "Dirección o patrón observado en datos o eventos que muestra una inclinación hacia cierto resultado o comportamiento a lo largo del tiempo."),
     list(word = "Violencia Sexual", definition = "Cualquier acto que degrada o daña el cuerpo y/o la sexualidad de la víctima y que por tanto atenta contra su libertad, dignidad e integridad física. Es una expresión de abuso de poder que implica la supremacía masculina sobre la mujer, al denigrar y concebirla como objeto.")

@@ -1537,7 +1537,7 @@ ui <-
                 "Los datos representados en esta gráfica corresponden a
                  los casos en supervisión de ley 54 en programas alternos
                 al confinamiento (por estado de investigación): Programas de Comunidad
-                desde el año natural 2021 al 2024.Los datos de Investigaciones realizadas
+                desde el año natural 2021 al 2024. Los datos de Investigaciones realizadas
                 se encuentran hasta febrero del 2023. Por el cambio de formato en sus datos,
                 el Departamento de Corrección y Rehabilitación ya no cuenta con esa información. 
                 Los datos de Casos en Supervisión se encuentran hasta el 31 de octubre de 2024.",
