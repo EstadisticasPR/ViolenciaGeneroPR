@@ -1428,7 +1428,8 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a
                     la población atendida, servicios ofrecidos y seguimientos
-                    de casos mediante el programa CRIAS.",
+                    de casos mediante el programa CRIAS. Una misma persona pudo 
+                    haber recibido más de un servicio alrededor de los años.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -2314,7 +2315,7 @@ ui <-
     tabsetPanel(
       
       tabPanel(
-        lowercaseTitle("Tendencia Anual del Equipo Recolecta de Violencia Sexual"), 
+        lowercaseTitle("Tendencia de SAFEKits por estatus"), 
         br(), br(),
           sidebarLayout(
             sidebarPanel(
@@ -2395,7 +2396,7 @@ ui <-
       
       #### tab con datos de Tendencia Anual de SAFE Kits por Estado de Querella (Edades) ####
       tabPanel(
-        lowercaseTitle("Tendencia Anual del Equipo Recolecta de Violencia Sexual (Categoría)"), 
+        lowercaseTitle("Tendencia de SAFEKits por categoría de edad"), 
         br(), br(),
         sidebarLayout(
           sidebarPanel(
