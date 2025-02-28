@@ -166,7 +166,9 @@ createDropdownCheckbox_añoFiscal <- function(label, choices, selected, id) {
   unique_years <- unique(as.character(choices))
   formatted_choices <- setNames(
     unique_years,
-    paste0("jul ", unique_years, " - jun ", as.numeric(unique_years) + 1)
+    #Cambiado el 28 Febrero 2025
+    paste0("jul ", as.numeric(unique_years) - 1, " - jun ", unique_years)
+    # paste0("jul ", unique_years, " - jun ", as.numeric(unique_years) + 1)
   )
   
   # Step 2: Set all unique years as selected by default if selected is NULL
