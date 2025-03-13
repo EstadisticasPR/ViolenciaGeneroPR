@@ -1541,8 +1541,7 @@ ui <-
                 desde el año natural 2021 al 2024. Los datos de Investigaciones realizadas
                 se encuentran hasta febrero del 2023 por el cambio de formato en sus datos.
                 El Departamento de Corrección y Rehabilitación se encuentra trabajando
-                con la actualización de estos. Los datos de Casos en Supervisión se 
-                encuentran hasta el 31 de octubre de 2024.",
+                con la actualización de estos.",
                 
                 style = "font-size: 16px;padding: 0px;" 
               )
