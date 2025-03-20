@@ -35,7 +35,7 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_edad || !has_año ) {
-      message <- "Seleccione Grupo de edad y Año(s) a visualizar"
+      message <- "Seleccione Grupo de Edad y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
      
@@ -45,9 +45,9 @@ server <- function(input, output, session) {
       #                    emptyMessage = "Seleccione Grupo de edad y Año(s) a visualizar",barWidth = 0, xGap = 0)
       
       p <- renderBarPlot_facets(homiEdad_filt, "Año", "Casos", "Edad",
-                         title = "Homicidios de Mujeres por grupo de Edad y Año",
+                         title = "Homicidios de mujeres por grupo de edad y año",
                          "Año", "Cantidad de víctimas", fillLab = "Grupo de Edad", colorFill = homiEdad_fill_edad, 
-                         emptyMessage = "Seleccione Grupo de edad y Año(s) a visualizar",barWidth = 0, xGap = 0)
+                         emptyMessage = "Seleccione Grupo de Edad y Año(s) a visualizar",barWidth = 0, xGap = 0)
  
       p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
       
@@ -63,7 +63,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title13 <- renderUI({
-    title <- "Homicidios de Mujeres por grupo de Edad y Año"
+    title <- "Homicidios de mujeres por grupo de edad y año"
   })
 
   
@@ -75,7 +75,7 @@ server <- function(input, output, session) {
   # Data Table de homiEdad
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_snmv <- renderDT(server = FALSE, {
-    renderDataTable(homiEdad_filt_rename(), "Datos: Homicidios por Grupo de Edad")
+    renderDataTable(homiEdad_filt_rename(), "Datos: Homicidios por grupo de edad")
   })
   
   # Crear Card con Fuentes
@@ -139,7 +139,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(inci_filt, x = "Año", y = "Casos", fill = "Incidente",
-                         paste("Incidentes Violentos ocurridos para ambos Sexos"),
+                         paste("Incidentes violentos ocurridos para ambos sexos"),
                          xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de Incidente",
                          colorFill = inci_fill_sexo, 
                          emptyMessage = "Seleccione Tipo(s) de Incidente y Año(s) a visualizar")
@@ -157,7 +157,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title14 <- renderUI({
-    title <- "Incidentes Violentos ocurridos para ambos Sexos"
+    title <- "Incidentes violentos ocurridos para ambos sexos"
   })
  
   inci_filt_rename <- reactive({
@@ -300,14 +300,14 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_año || !has_tipo || !has_sexo) {
-      message <- "Seleccione Tipo(s) de maltrato, Año(s) y Distrito(s)"
+      message <- "Seleccione Tipo(s) de Maltrato, Año(s) y Distrito(s)"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                         title = "Casos Anuales de maltrato infantil por Sexo y Tipo",
+                         title = "Casos anuales de maltrato infantil por sexo y tipo",
                          xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de Maltrato", 
                          colorFill = dfMalt_fill_Maltrato, 
-                         emptyMessage = "Seleccione Tipo(s) de maltrato, Año(s) y Sexo de la víctima")
+                         emptyMessage = "Seleccione Tipo(s) de Maltrato, Año(s) y Sexo de la víctima")
       #Altura predeterminada para la grafica.
       plot_height = 500
       numPlots = length(input$checkGroup_fam_dfMalt_sexo)
@@ -332,7 +332,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title1 <- renderUI({
-    title <- "Casos Anuales de maltrato infantil por Sexo y Tipo"
+    title <- "Casos anuales de maltrato infantil por sexo y tipo"
   })
   
   dfMalt_filt_rename <- reactive({
@@ -478,7 +478,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
-                         title = "Radicación Anual de Casos por Distrito Fiscal según Ley 54",
+                         title = "Radicación anual de casos por Distrito Fiscal según Ley 54",
                          xlab = "Año", ylab = "Cantidad de víctimas",
                          fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito,
                          emptyMessage = "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)")
@@ -505,13 +505,13 @@ server <- function(input, output, session) {
   
   #Llamada a funcion para generar la legenda
   output$plot_title2 <- renderUI({
-    title <- "Radicación Anual de Casos por Distrito Fiscal según Ley 54"
+    title <- "Radicación anual de casos por Distrito Fiscal según Ley 54"
   })
   
   # Data table del DeptJust
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_just <- renderDT(server = FALSE, {
-    renderDataTable(dfDeli_filt(), "Datos: Delitos según Artículo de la Ley 54")
+    renderDataTable(dfDeli_filt(), "Datos: Delitos según artículo de la Ley 54")
   })
   
   
@@ -780,7 +780,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                         paste("Viviendas Públicas Solicitadas y Asignadas \nAnualmente por Violencia Doméstica según Región"),
+                         paste("Viviendas públicas solicitadas y asignadas \nanualmente por violencia doméstica según región"),
                          xlab = "Año", ylab = "Cantidad de viviendas públicas", fillLab = "Estado de la Vivienda",
                          colorFill = dfAvp_fill_status,
                          emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
@@ -807,7 +807,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title3 <- renderUI({
-    title <- "Viviendas Públicas Solicitadas y Asignadas \nAnualmente por Violencia Doméstica según Región"
+    title <- "Viviendas públicas solicitadas y asignadas \nanualmente por violencia doméstica según región"
   })
   
   mapaAvp_filt_asig <- reactive({
@@ -1010,7 +1010,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(despDF_filt, x = "Año", y = "Casos", fill = "Estado",
-                         paste("Mujeres Desaparecidas: \nLocalizadas y por Localizar"),
+                         paste("Mujeres desaparecidas: \nlocalizadas y por localizar"),
                          xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Estado de la Víctima",
                          colorFill = despDF_fill_categoria,
                          emptyMessage = "Seleccione Estado de la Víctima y Año(s) a visualizar")
@@ -1028,7 +1028,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title15 <- renderUI({
-    title <- "Mujeres Desaparecidas: Localizadas y por Localizar"
+    title <- "Mujeres desaparecidas: localizadas y por localizar"
   })
  
   despDF_filt_rename <- reactive({
@@ -1107,7 +1107,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
-                         paste("Incidencia de Violencia Doméstica \npor Edad de la Víctima"),
+                         paste("Incidencia de violencia doméstica \npor edad de la víctima"),
                          xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Grupo de Edad",
                          colorFill = vEdad_fill_edad,
                          emptyMessage = HTML("Seleccione Grupo(s) de Edad, Sexo de \n la Víctima y Año(s) a visualizar"),barWidth = 0, xGap = 0)
@@ -1133,7 +1133,7 @@ server <- function(input, output, session) {
 
   #Titulo de la Grafica
   output$plot_title4 <- renderUI({
-    title <- "Incidencia de Violencia Doméstica por Edad de la Víctima"
+    title <- "Incidencia de violencia doméstica por edad de la víctima"
   })
  
   # Data Table para el mapa de despDF
@@ -1264,7 +1264,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title16 <- renderUI({
-    title <- "Tasa Anual de Asesinatos de Mujeres por Violencia Doméstica del año 1990 al 2021"
+    title <- "Tasa anual de asesinatos de mujeres por violencia doméstica del año 1990 al 2021"
   })
 
   # Data Table para el mapa de despDF
@@ -1331,7 +1331,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(opmCasos_filt, x = "Año", y = "Cantidad", fill = "Razón",
-                         paste("Población Atendida por el Programa CRIAS: \nRazón de Consulta"),
+                         paste("Población atendida por el programa CRIAS: \nrazón de consulta"),
                          xlab = "Año", ylab = "Cantidad de Personas Atendidas", fillLab = "Razón para Consulta",
                          colorFill = opm_fill_tipo,
                          emptyMessage = "Seleccione Razón de la consulta y Año(s) a visualizar")
@@ -1349,7 +1349,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title17 <- renderUI({
-    title <- "Población Atendida por el Programa CRIAS: Razón de Consulta"
+    title <- "Población atendida por el programa CRIAS: razón de consulta"
   })
 
   opmCasos_filt_rename <- reactive({
@@ -1421,7 +1421,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Género y Año(s) a visualizar"
     } else {
       p <- renderBarPlot_facets(opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
-                         paste("Identidad de Género de Víctimas asistidas \npor el Programa CRIAS"),
+                         paste("Identidad de género de víctimas asistidas \npor el programa CRIAS"),
                          xlab = "Año", ylab = "Cantidad de Víctimas", fillLab = "Género de la Víctima",
                          colorFill = opmVic_fill_género,
                          emptyMessage = "Seleccione Género y Año(s) a visualizar")
@@ -1439,7 +1439,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title18 <- renderUI({
-    title <- "Identidad de Género de Víctimas asistidas por el Programa CRIAS"
+    title <- "Identidad de género de víctimas asistidas por el programa CRIAS"
   })
 
   # Data Table para el mapa de despDF
@@ -1505,7 +1505,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Medio de Orientación y Año(s) a visualizar"
     } else {
       p <- renderBarPlot_facets(opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
-                         title = "Orientaciones brindadas por el Programa CRIAS",
+                         title = "Orientaciones brindadas por el programa CRIAS",
                          xlab = "Año", ylab = "Cantidad de Personas Orientadas", fillLab = "Medio de Orientación",
                          colorFill = opmMedio_fill_medio,
                          emptyMessage = "Seleccione Medio de Orientación y Año(s) a visualizar")
@@ -1523,7 +1523,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title19 <- renderUI({
-    title <- "Orientaciones brindadas por el Programa CRIAS"
+    title <- "Orientaciones brindadas por el programa CRIAS"
   })
 
   opmMedio_filt_rename <- reactive({
@@ -1596,7 +1596,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Tipo de servicio y Año(s) a visualizar"
     } else {
       p <- renderBarPlot_facets(opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
-                         title = "Atención, Servicios y Seguimiento de casos \nmediante el Programa CRIAS",
+                         title = "Atención, servicios y seguimiento de casos \nmediante el programa CRIAS",
                          xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Tipo de Servicio",
                          colorFill = opmServiciosMes_fill_tipo,
                          emptyMessage = "Seleccione Tipo de servicio y Año(s) a visualizar")
@@ -1614,7 +1614,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title20 <- renderUI({
-    title <- "Atención, Servicios y Seguimiento de casos mediante el Programa CRIAS"
+    title <- "Atención, servicios y seguimiento de casos mediante el programa CRIAS"
   })
   
   opmServiciosMes_filt_rename <- reactive({
@@ -1788,7 +1788,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                         title = "Casos en Supervisión de Ley 54: \nProgramas Alternativos al Confinamiento",
+                         title = "Casos en supervisión de Ley 54: \nProgramas Alternativos al Confinamiento",
                          xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Estado de Investigación",
                          colorFill = dcrCasosInv_fill_tipo,
                          emptyMessage = HTML("Seleccione Estado de la investigación, \n Sexo y Año(s) a visualizar"))
@@ -1815,7 +1815,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title21 <- renderUI({
-    title <- "Casos en Supervisión de Ley 54: Programas Alternativos al Confinamiento"
+    title <- "Casos en supervisión de Ley 54: Programas Alternativos al Confinamiento"
   })
   dcrCasosInv_filt_rename <- reactive({
     dcrCasosInv_filt() %>% 
@@ -1891,7 +1891,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dcrSentenciadas_filt, x = "Año", y = "Cantidad", fill = "Mes",
-                         title = "Sentenciados por Violencia Doméstica bajo \nSupervisión Electrónica",
+                         title = "Sentenciados por violencia doméstica bajo \nsupervisión electrónica",
                          xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", fillLab = "Mes", 
                          colorFill = dcrSentenciadas_fill_tipo, 
                          emptyMessage = "Seleccione Estado del caso y Año(s) a visualizar")
@@ -1919,7 +1919,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title12 <- renderUI({
-    title <- "Sentenciados por Violencia Doméstica bajo Supervisión Electrónica"
+    title <- "Sentenciados por violencia doméstica bajo supervisión electrónica"
   })
   
   dcrSentenciadas_filt_rename <- reactive({
@@ -2026,7 +2026,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
-                         title = "Solicitudes de Órdenes de Protección \nbajo Ley 148 según Región Judicial y Edad",
+                         title = "Solicitudes de órdenes de protección \nbajo Ley 148 según región judicial y edad",
                          xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
                          colorFill = OP_148_SoliGrupEdad_fill_edad,
                          emptyMessage = HTML("Seleccione Grupo(s) de Edad, Región Judicial \n y Año(s) a visualizar"))
@@ -2052,7 +2052,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title5 <- renderUI({
-    title <- "Solicitudes de Órdenes de Protección bajo Ley 148 según Región Judicial y Edad"
+    title <- "Solicitudes de órdenes de protección bajo Ley 148 según región judicial y edad"
   })
   
   
@@ -2066,7 +2066,7 @@ server <- function(input, output, session) {
   # Data Table para dcrCasosInv
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_OP_148_SoliGrupEdad <- renderDT(server = FALSE, {
-    renderDataTable(OP_148_SoliGrupEdad_filt_rename(), "Datos: Órdenes de Protección Solicitadas por Violencia Sexual")
+    renderDataTable(OP_148_SoliGrupEdad_filt_rename(), "Datos: Órdenes de protección solicitadas por violencia sexual")
   })
   
   # Crear Card con Fuentes
@@ -2136,7 +2136,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                         title = "Órdenes de Protección Ex Parte emitidas \nbajo Ley 148, según Región Judicial y delito cometido",
+                         title = "Órdenes de protección ex parte emitidas \nbajo Ley 148, según región judicial y delito cometido",
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                          colorFill = OP_Ley148_ex_parteEmitidas_fill_delito,
                          emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
@@ -2162,7 +2162,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title6 <- renderUI({
-    title <- "Órdenes de Protección Ex Parte emitidas bajo Ley 148, según Región Judicial y delito cometido"
+    title <- "Órdenes de protección ex parte emitidas bajo Ley 148, según región judicial y delito cometido"
   })
   
   OP_Ley148_ex_parteEmitidas_filt_rename <- reactive({
@@ -2177,7 +2177,7 @@ server <- function(input, output, session) {
   # Data Table para dcrCasosInv
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_OP_Ley148_ex_parteEmitidas <- renderDT(server = FALSE, {
-    renderDataTable(OP_Ley148_ex_parteEmitidas_filt_rename(), "Datos: Órdenes de Protección Ex Parte Emitidas bajo Ley 148")
+    renderDataTable(OP_Ley148_ex_parteEmitidas_filt_rename(), "Datos: Órdenes de protección ex parte emitidas bajo Ley 148")
   })
   
   # Crear Card con Fuentes
@@ -2250,7 +2250,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-                         title = "Órdenes de Protección Ex Parte \nArchivadas bajo Ley 148 según Región Judicial",
+                         title = "Órdenes de protección ex parte \narchivadas bajo Ley 148 según región judicial",
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
                          colorFill = OP_LEY148Archivadas_fill_Razón,
                          emptyMessage = HTML("Seleccione Razón, Distrito Fiscal \n y Año(s) a visualizar"))
@@ -2276,7 +2276,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title8 <- renderUI({
-    title <- "Órdenes de Protección Ex Parte Archivadas bajo Ley 148 según Región Judicial"
+    title <- "Órdenes de protección ex parte archivadas bajo Ley 148 según región judicial"
   })
 
   
@@ -2291,7 +2291,7 @@ server <- function(input, output, session) {
   # Data Table 
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_OP_LEY148Archivadas <- renderDT(server = FALSE, {
-    renderDataTable(OP_LEY148Archivadas_filt_rename(), "Datos: Órdenes de Protección Ex Parte archivadas bajo Ley 148")
+    renderDataTable(OP_LEY148Archivadas_filt_rename(), "Datos: Órdenes de protección ex parte archivadas bajo Ley 148")
   })
   
   # Crear Card con Fuentes
@@ -2362,7 +2362,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                         title = "Órdenes de protección denegadas bajo \nLey 148 por Razón de Archivo según Región Judicial",
+                         title = "Órdenes de protección denegadas bajo \nLey 148 por razón de archivo según región judicial",
                          xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
                          colorFill = OP_LEY148Denegadas_fill_Razón,
                          emptyMessage = HTML("Seleccione Razón, Región Judicial \n y Año(s) a visualizar"))
@@ -2388,7 +2388,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title7 <- renderUI({
-    title <- "Órdenes de protección denegadas bajo Ley 148 por Razón de Archivo según Región Judicial"
+    title <- "Órdenes de protección denegadas bajo Ley 148 por razón de archivo según región judicial"
   })
   
   OP_LEY148Denegadas_filt_rename <- reactive({
@@ -2473,7 +2473,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                         title = "Órdenes de protección emitidas bajo Ley 148, \nsegún Región Judicial y Tipo de Delito",
+                         title = "Órdenes de protección emitidas bajo Ley 148, \nsegún región judicial y tipo de delito",
                          xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                          colorFill = OP_LEY148FinalEmitidas_fill_Delito,
                          emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
@@ -2499,7 +2499,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title9 <- renderUI({
-    title <- "Órdenes de protección emitidas bajo Ley 148, según Región Judicial y Tipo de Delito"
+    title <- "Órdenes de protección emitidas bajo Ley 148, según región judicial y tipo de delito"
   })
 
   OP_LEY148FinalEmitidas_filt_rename <- reactive({
@@ -2584,7 +2584,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte",
-                         title = "Órdenes de Protección Emitidas bajo Ley 148, \nsegún la Parte",
+                         title = "Órdenes de protección emitidas bajo Ley 148, \nsegún la parte",
                          xlab = "Año fiscal", ylab = "Solicitudes de Ordenes de Protección", fillLab = "Parte",
                          colorFill = OP_LEY148Genero_fill_Parte,
                          emptyMessage = "Seleccione Parte(s), Sexo y Año(s) a visualizar")
@@ -2612,7 +2612,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title10 <- renderUI({
-    title <- "Órdenes de Protección Emitidas bajo Ley 148, según la Parte"
+    title <- "Órdenes de protección emitidas bajo Ley 148, según la parte"
   })
   
   OP_LEY148Genero_filt_rename <- reactive({
@@ -2623,7 +2623,7 @@ server <- function(input, output, session) {
   # Data Table
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_OP_LEY148Genero <- renderDT(server = FALSE, {
-    renderDataTable(OP_LEY148Genero_filt_rename(), "Datos: Órdenes de Protección Emitidas bajo Ley 148")
+    renderDataTable(OP_LEY148Genero_filt_rename(), "Datos: Órdenes de protección emitidas bajo Ley 148")
   })
   
   # Crear Card con Fuentes
@@ -2691,7 +2691,7 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
-                         title = "Movimiento Anual de Casos de Violencia \nDoméstica en el Tribunal según Ley 54",
+                         title = "Movimiento anual de casos de violencia \ndoméstica en el Tribunal según Ley 54",
                          xlab = "Año Fiscal", ylab = "Casos", fillLab = "Delito Cometido",
                          colorFill = tribCasosCrim_fill_Delito,
                          emptyMessage = HTML("Seleccione Delito(s), Estado del caso \n y Año(s) a visualizar"), barWidth = 0, xGap = 0)
@@ -2720,7 +2720,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title11 <- renderUI({
-    title <- "Movimiento Anual de Casos de Violencia Doméstica en el Tribunal según Ley 54"
+    title <- "Movimiento anual de casos de violencia doméstica en el Tribunal según Ley 54"
   })
   
   tribCasosCrim_filt_rename <- reactive({
@@ -2733,7 +2733,7 @@ server <- function(input, output, session) {
   # Data Table
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_tribCasosCrim <- renderDT(server = FALSE, {
-    renderDataTable(tribCasosCrim_filt_rename(), "Datos: Ordenes de Protección según delito cometido")
+    renderDataTable(tribCasosCrim_filt_rename(), "Datos: Ordenes de protección según delito cometido")
   })
   
   # Crear Card con Fuentes
@@ -2861,7 +2861,7 @@ server <- function(input, output, session) {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_stack(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits",
                                title = HTML(""),
-                               xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Estado de Querella",
+                               xlab = "Año", ylab = "Total de kits distribuidos", fillLab = "Estado de Querella",
                                colorFill = safekitsDF_fill_Kits,
                                emptyMessage = "Seleccione Estado de querella y Año(s) a visualizar")
       
@@ -2879,7 +2879,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title22 <- renderUI({
-    title <- HTML("Tendencia Anual de <i>SAFE Kits<i> por Estado de Querella")
+    title <- HTML("Tendencia anual de <i>SAFE Kits</i> por estado de querella")
   })
  
   safekitsDF_filt_rename <- reactive({
@@ -2963,7 +2963,7 @@ server <- function(input, output, session) {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_stack(safekitsDF_edades_filt, x = "Año", y = "Total", fill = "Categoria",
                                title = HTML(""),
-                               xlab = "Año", ylab = "Total de Kits Distribuidos", fillLab = "Categoria",
+                               xlab = "Año", ylab = "Total de kits distribuidos", fillLab = "Categoria",
                                colorFill = safekitsDF_fill_Categoria,
                                emptyMessage = "Seleccione Categoría y Año(s) a visualizar")
       
@@ -2981,7 +2981,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title23 <- renderUI({
-    title <- HTML("Tendencia Anual de <i>SAFE Kits<i> con querella en menores y mayores de edad")
+    title <- HTML("Tendencia anual de <i>SAFE Kits</i> con querella en menores y mayores de edad")
   })
   
   safekitsDF_edades_filt_rename <- reactive({

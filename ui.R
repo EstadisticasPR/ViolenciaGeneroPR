@@ -75,7 +75,7 @@ ui <-
         
         #### tab con datos de Homicidios por grupo de Edad ####
         tabPanel(
-          lowercaseTitle("Homicidios de Mujeres por Edad"),
+          lowercaseTitle("Homicidios de mujeres por edad"),
           br(), br(),
           
           # Menu sidebar con widgets
@@ -155,7 +155,7 @@ ui <-
         
         #### tab con datos de Incidentes segun el año ####
         tabPanel(
-          lowercaseTitle("Tipos de Incidentes Violentos"),
+          lowercaseTitle("Tipos de incidentes violentos"),
           br(), br(),
           
             sidebarLayout(
@@ -259,7 +259,7 @@ ui <-
       tabsetPanel(
         #### tab con datos de menores víctimas de maltrato (dfMalt)  ####
         tabPanel(
-          lowercaseTitle("Maltrato de Menores por Sexo"),
+          lowercaseTitle("Maltrato de menores por sexo"),
           br(), br(),
           
           sidebarLayout(
@@ -386,7 +386,7 @@ ui <-
                     style = "text-align: center; display: inline-block;",  
                     # botón para seleccionar tipo de maltrato
                     createDropdownCheckbox(
-                      label = HTML("Seleccione<br>Artículo(s) de ley 54:"),
+                      label = HTML("Seleccione<br>Artículo(s) de Ley 54:"),
                       choices = dfDeli$Delito,
                       selected = 2,
                       id = "just_dfDeli_delito"
@@ -613,7 +613,7 @@ ui <-
         
         #### tab con datos de Adminsitración de Vivienda Públicas(dfAvp) ####
         tabPanel(
-          lowercaseTitle("Viviendas Públicas Solicitadas y Asignadas"), 
+          lowercaseTitle("Viviendas públicas solicitadas y asignadas"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -696,7 +696,7 @@ ui <-
         
         #### tab para el mapa de Adminsitración de Vivienda Públicas (mapaAvp) ####
         tabPanel(
-          lowercaseTitle("Mapas de Viviendas Públicas Solicitadas y Asignadas"),
+          lowercaseTitle("Mapas de viviendas públicas solicitadas y asignadas"),
           br(), br(),
           # Menu sidebar con widgets
           sidebarLayout(
@@ -811,7 +811,7 @@ ui <-
         
         #### tab con datos de mujeres desaparecidas (despDF) ####
         tabPanel(
-          lowercaseTitle("Mujeres Desaparecidas y Localizadas"), 
+          lowercaseTitle("Mujeres desaparecidas y localizadas"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -892,7 +892,7 @@ ui <-
         
         #### tab para el barplot de incidentes de violencia doméstica por edad de la víctima (vEdad) ####
         tabPanel(
-          lowercaseTitle("Violencia Doméstica por Edad"),
+          lowercaseTitle("Violencia doméstica por edad"),
           br(), br(),
           
             sidebarLayout(
@@ -1057,7 +1057,7 @@ ui <-
         
         #### tab con datos de violencia domestica (opmFemiVD) ####
         tabPanel(
-          lowercaseTitle("Feminicidios por Violencia Doméstica"), 
+          lowercaseTitle("Feminicidios por violencia doméstica"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -1124,7 +1124,7 @@ ui <-
         
         #### tab con datos de violencia domestica (opmCasos) ####
         tabPanel(
-          lowercaseTitle("Casos Según Razón para Consulta"), 
+          lowercaseTitle("Casos según razón para consulta"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -1203,7 +1203,7 @@ ui <-
         
         #### tab con datos del género de las víctimas (opmVic) ####
         tabPanel(
-          lowercaseTitle("Género de las Víctimas Atendidas"),
+          lowercaseTitle("Género de las víctimas atendidas"),
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -1281,7 +1281,7 @@ ui <-
         
         #### tab con datos de orientaciones medio de comunicación (opmMedio) ####
         tabPanel(
-          lowercaseTitle("Medio de Orientación a las Víctimas"),
+          lowercaseTitle("Medio de orientación a las víctimas"),
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -1360,7 +1360,7 @@ ui <-
         
         #### tab con datos de los servicios ofrecidos por mes (opmServiciosMes) ####
         tabPanel(
-          lowercaseTitle("Servicios y Alcance de la OPM"), 
+          lowercaseTitle("Servicios y alcance de la OPM"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -1462,7 +1462,7 @@ ui <-
       tabsetPanel(
         #### tab con datos del género de las víctimas (dcrCasosInv) ####
         tabPanel(
-        lowercaseTitle("Supervisión Ley 54: Programas Comunitarios"), 
+        lowercaseTitle("Supervisión Ley 54: programas comunitarios"), 
         br(), br(),
         sidebarLayout(
           sidebarPanel(
@@ -1553,7 +1553,7 @@ ui <-
     
         #### tab con datos personas sentenciadas al Programa de Supervisión Electrónica (dcrSentenciadas) ####
     tabPanel(
-      lowercaseTitle("Sentencias por Violencia Doméstica"),
+      lowercaseTitle("Sentencias por violencia doméstica"),
       br(), br(),
         sidebarLayout(
           sidebarPanel(
@@ -1655,7 +1655,7 @@ ui <-
       
         #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad) ####
         tabPanel(
-          lowercaseTitle("Órdenes de Protección Solicitadas por Edad y Región"), 
+          lowercaseTitle("Órdenes de protección solicitadas por edad y región"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -1746,7 +1746,7 @@ ui <-
         
         #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_Ley148_ex_parteEmitidas) ####
         tabPanel(
-          lowercaseTitle("Órdenes de Protección Ex Parte Emitidas por Delito Cometido y Región"), 
+          lowercaseTitle("Órdenes de protección ex parte emitidas por delito cometido y región"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -2020,7 +2020,7 @@ ui <-
         
         #### tab con datos de solicitudes de órdenes de protección finales emitidas (OP_LEY148FinalEmitidas) ####
         tabPanel(
-          lowercaseTitle("Órdenes de Protección Emitidas por Delito Cometido y Región"), 
+          lowercaseTitle("Órdenes de protección emitidas por delito cometido y región"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -2112,7 +2112,7 @@ ui <-
         
         #### tab con datos de solicitudes de órdenes de protección finales emitidas (OP_LEY148Genero) ####
         tabPanel(
-          lowercaseTitle("Órdenes de Protección Emitidas por Parte y Sexo"), 
+          lowercaseTitle("Órdenes de protección emitidas por parte y sexo"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -2203,7 +2203,7 @@ ui <-
         
         #### tab con datos de Movimiento de Casos Criminales de Violencia Doméstica (tribCasosCrim) ####
         tabPanel(
-          lowercaseTitle("Movimiento de Casos en Tribunal de Primera Instancia por Ley 54"), 
+          lowercaseTitle("Movimiento de casos en Tribunal de Primera Instancia por Ley 54"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -2315,7 +2315,7 @@ ui <-
     tabsetPanel(
       
       tabPanel(
-        lowercaseTitle("Tendencia de SAFEKits por estatus"), 
+        lowercaseTitle("Tendencia de SAFE Kits por estatus"), 
         br(), br(),
           sidebarLayout(
             sidebarPanel(
@@ -2396,7 +2396,7 @@ ui <-
       
       #### tab con datos de Tendencia Anual de SAFE Kits por Estado de Querella (Edades) ####
       tabPanel(
-        lowercaseTitle("Tendencia de SAFEKits por categoría de edad"), 
+        lowercaseTitle("Tendencia de SAFE Kits por categoría de edad"), 
         br(), br(),
         sidebarLayout(
           sidebarPanel(
