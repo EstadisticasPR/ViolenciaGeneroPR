@@ -683,7 +683,7 @@ ui <-
                     "Los datos representados en esta gráfica corresponden al
                     total de viviendas públicas solicitadas y asignadas por
                     violencia doméstica por región de la Administración de Vivienda Pública
-                    desde el año natural 2017 al 2023.",
+                    desde el año natural 2017 al 2024.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -747,7 +747,7 @@ ui <-
                     "Los datos representados en este mapa corresponden al
                     total de viviendas públicas solicitadas y asignadas por
                     violencia doméstica por región de la Administración de Vivienda Pública
-                    desde el año natural 2017 al 2023.",
+                    desde el año natural 2017 al 2024.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )

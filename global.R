@@ -384,35 +384,41 @@ parLab <- read_excel(paste0(dtra, "dtpartlab.xlsx")) %>%
 avp <- here::here("data", "Administracion_de_viviendas_publicas/")
 
 #### dfAvp ####
-avpAsignadas <- read_excel(paste0(avp, "/avpAsignadas2017_23.xlsx")) %>% 
-  rename(región = `Región `) %>%
-  pivot_longer(!región, names_to = "año", values_to = "asignadas")
+dfAvp <- read_excel(paste0(avp, "/administracion_vivienda_publica.xlsx"))%>%
+    mutate(
+      Región = factor(Región),
+      Estado = factor(Estado, levels = c("solicitadas", "asignadas"))) %>%
+    replace_na(list(Cantidad = 0))
 
-avpSolicitadas <- read_excel(paste0(avp, "/avpSolicitudes2017_23.xlsx")) %>% 
-  rename(región = `Región `) %>%
-  pivot_longer(!región, names_to = "año", values_to = "solicitadas")
+# avpAsignadas <- read_excel(paste0(avp, "/avpAsignadas2017_23.xlsx")) %>% 
+#   rename(región = `Región `) %>%
+#   pivot_longer(!región, names_to = "año", values_to = "asignadas")
+# 
+# avpSolicitadas <- read_excel(paste0(avp, "/avpSolicitudes2017_23.xlsx")) %>% 
+#   rename(región = `Región `) %>%
+#   pivot_longer(!región, names_to = "año", values_to = "solicitadas")
 
 # Unir los datasets por columna "región" y "año"
-dfAvp <- left_join(avpSolicitadas, avpAsignadas, by = c("región", "año")) %>% 
-  filter(región != "Total")  %>%
-  pivot_longer(
-    !c(región, año), names_to = "status", values_to = "cantidad"
-  ) %>%
-  mutate(
-    región = factor(región),
-    status = factor(status, levels = c("solicitadas", "asignadas"))
-  ) %>%
-  filter(
-    año != "*2023"
-  ) %>%
-  rename(Año = año) %>%
-  rename(Región = región) %>%
-  rename(Estado = status) %>%
-  rename(Cantidad = cantidad) %>%
-  replace_na(list(Cantidad = 0)) %>%
-  relocate(
-    Año, Región, Estado, Cantidad
-  )
+# dfAvp <- left_join(avpSolicitadas, avpAsignadas, by = c("región", "año")) %>% 
+#   filter(región != "Total")  %>%
+#   pivot_longer(
+#     !c(región, año), names_to = "status", values_to = "cantidad"
+#   ) %>%
+#   mutate(
+#     región = factor(región),
+#     status = factor(status, levels = c("solicitadas", "asignadas"))
+#   ) %>%
+#   filter(
+#     año != "*2023"
+#   ) %>%
+#   rename(Año = año) %>%
+#   rename(Región = región) %>%
+#   rename(Estado = status) %>%
+#   rename(Cantidad = cantidad) %>%
+#   replace_na(list(Cantidad = 0)) %>%
+#   relocate(
+#     Año, Región, Estado, Cantidad
+#   )
 
 # Convertir el año a numérico para eliminar el asterisco y convertirlo a int
 dfAvp$Año <- as.factor(sub("\\*", "", dfAvp$Año))
@@ -1353,10 +1359,10 @@ actualizacion_justicia1 <- "Última actualización: 31 de diciembre de 2023"
 actualizacion_justicia2 <- "Última actualización: 31 de diciembre de 2023"
 
 # Fecha actualizacion avp tab1
-actualizacion_avp1 <- "Última actualización: 31 de diciembre de 2023"
+actualizacion_avp1 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion avp tab2
-actualizacion_avp2 <- "Última actualización: 31 de diciembre de 2023"
+actualizacion_avp2 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion policia tab1
 actualizacion_policia1 <- "Última actualización: 20 de septiembre de 2024"
