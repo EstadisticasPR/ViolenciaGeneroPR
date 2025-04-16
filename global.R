@@ -971,7 +971,13 @@ OP_Ley148_ex_parteEmitidas2022_23 <- read_excel(paste0(trib, "OP_Ley148_ex_parte
                                                 sheet = sheet_name) %>%
   cleanSheet_OP_Ley148_ex_parteEmitidas(sheet_name, new_names)
 
-# datos de solicitudes de órdenes de protección en el 2022-2023
+# datos de solicitudes de órdenes de protección en el 2023-2024
+sheet_name = "2023-2024"
+OP_Ley148_ex_parteEmitidas2023_24 <- read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"),
+                                                sheet = sheet_name) %>%
+  cleanSheet_OP_Ley148_ex_parteEmitidas(sheet_name, new_names)
+
+# datos de solicitudes de órdenes de protección en el 2024-2025
 sheet_name = "2024-2025"
 OP_Ley148_ex_parteEmitidas2024_25 <- read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"),
                                                 sheet = sheet_name) %>%
@@ -980,7 +986,8 @@ OP_Ley148_ex_parteEmitidas2024_25 <- read_excel(paste0(trib, "OP_Ley148_ex_parte
 # dataset unido
 # Lista de data frames de OP_148_SoliGrupEdad
 OP_Ley148_ex_parteEmitidas_list <- list(OP_Ley148_ex_parteEmitidas2020_21, OP_Ley148_ex_parteEmitidas2021_22,
-                                        OP_Ley148_ex_parteEmitidas2022_23, OP_Ley148_ex_parteEmitidas2024_25)
+                                        OP_Ley148_ex_parteEmitidas2022_23, OP_Ley148_ex_parteEmitidas2023_24,
+                                        OP_Ley148_ex_parteEmitidas2024_25)
 
 # Unir todos los data frames en la lista usando full_join
 OP_Ley148_ex_parteEmitidas <- OP_Ley148_ex_parteEmitidas_list %>%
@@ -992,6 +999,7 @@ OP_Ley148_ex_parteEmitidas <- OP_Ley148_ex_parteEmitidas_list %>%
       AñoFiscal == "2020-2021" ~ "2021",
       AñoFiscal == "2021-2022" ~ "2022",
       AñoFiscal == "2022-2023" ~ "2023",
+      AñoFiscal == "2023-2024" ~ "2024",
       AñoFiscal == "2024-2025" ~ "2025",
       TRUE ~ AñoFiscal
     ),
