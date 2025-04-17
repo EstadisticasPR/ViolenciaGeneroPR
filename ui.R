@@ -2476,6 +2476,41 @@ ui <-
         )
       ),
       
+      #### tab de Publicaciones del CAVV ####
+      # tabPanel(
+      #   lowercaseTitle("Publicaciones"),
+      #   br(),
+      # 
+      #   #Panel para publicaciones
+      #   mainPanel(
+      #     fluidRow(
+      #       tags$div(
+      #         style = "padding: 20px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px;",
+      #         h4("⚠️ Esta sección está en desarrollo."),
+      #         p("Estamos trabajando en esta sección. Pronto estará disponible.")
+      #       )
+      #     ),
+      #     #Nota
+      #     fluidRow(
+      #       tags$div(
+      #         style = "padding-bottom: 10px; margin-top: 20px;",
+      #         div(
+      #           class = "card",
+      #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+      #           h4(
+      #             strong("Última actualización: XX de XXXXXX de XXXXX", style="margin: 0px;")
+      #           ),
+      #           p(
+      #             "Las publicaciones presentadss...",
+      # 
+      #             style = "font-size: 16px;padding: 0px;"
+      #           )
+      #         )
+      #       )
+      #     )
+      #   ) #END of mainPanel()
+      # ),
+      
        #### tab de Definiciones y Metadatos ####
       tabPanel(
         lowercaseTitle("Definiciones y Metadatos"),
