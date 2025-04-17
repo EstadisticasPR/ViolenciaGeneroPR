@@ -390,6 +390,10 @@ dfAvp <- read_excel(paste0(avp, "/administracion_vivienda_publica.xlsx"))%>%
       Estado = factor(Estado, levels = c("solicitadas", "asignadas"))) %>%
     replace_na(list(Cantidad = 0))
 
+sheet_name = "2024"
+dfAvp_municipio2024 <- read_excel(paste0(avp, "/avp_municipios.xlsx"),
+                       sheet = sheet_name)
+
 # avpAsignadas <- read_excel(paste0(avp, "/avpAsignadas2017_23.xlsx")) %>% 
 #   rename(región = `Región `) %>%
 #   pivot_longer(!región, names_to = "año", values_to = "asignadas")
