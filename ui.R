@@ -701,6 +701,10 @@ ui <-
           # Menu sidebar con widgets
           sidebarLayout(
             sidebarPanel(
+              # botón para seleccionar filtrado
+              # selectInput("select_avp_mapaAvp_visualizacion", "Seleccione Visualización:",
+              #             choices = c("Región", "Municipios"),
+              #             selected = "Región"),
               
               # Botón para seleccionar el año
               selectInput("select_avp_mapaAvp_año", "Seleccione Año:",

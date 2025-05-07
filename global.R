@@ -22,6 +22,7 @@ library(ggplot2)
 library(leaflet)
 library(grDevices)
 library(htmlwidgets)
+library(htmltools)
 source("utils.R")
 
 # packages <- c(
@@ -339,6 +340,27 @@ municipios_geo <- st_read(paste0(maps_fol, "/municipios.shp"))
 # Asegúrate de que los datos tengan el mismo sistema de coordenadas que tus datos
 municipios_geo <- st_transform(municipios_geo, crs = 4326) # WGS84
 
+municipios_geo <- municipios_geo %>%
+  mutate(municipio = case_when(
+    municipio == "A??asco" ~ "Añasco",
+    municipio == "Bayam??n" ~ "Bayamón",
+    municipio == "Can??vanas" ~ "Canóvanas",
+    municipio == "Cata??o" ~ "Cataño",
+    municipio == "Comer??o" ~ "Comerío",
+    municipio == "Gu??nica" ~ "Guánica",
+    municipio == "Juana D??az" ~ "Juana Díaz",
+    municipio == "Las Mar??as" ~ "Las Marias",
+    municipio == "Lo??za" ~ "Loíza",
+    municipio == "Manat??" ~ "Manatí",
+    municipio == "Mayag??ez" ~ "Mayagüez",
+    municipio == "Pe??uelas" ~ "Peñuelas",
+    municipio == "Rinc??n" ~ "Rincón",
+    municipio == "R??o Grande" ~ "Rio Grande",
+    municipio == "San Germ??n" ~ "San Germán",
+    municipio == "San Sebasti??n" ~ "San Sebastián",
+    TRUE ~ municipio  # mantiene los demás sin cambios
+  ))
+
 #### Guardar datos procesados de Departamento de Justicia ####
 # dataframes <- list(dfDeli) # Lista de dataframes (por ejemplo: homiEdad y inci)
 # 
@@ -390,9 +412,40 @@ dfAvp <- read_excel(paste0(avp, "/administracion_vivienda_publica.xlsx"))%>%
       Estado = factor(Estado, levels = c("solicitadas", "asignadas"))) %>%
     replace_na(list(Cantidad = 0))
 
-sheet_name = "2024"
-dfAvp_municipio2024 <- read_excel(paste0(avp, "/avp_municipios.xlsx"),
-                       sheet = sheet_name)
+# Ruta al archivo
+archivo <- paste0(avp, "/avp_municipios.xlsx")
+
+# Años de los sheets
+años <- as.character(2017:2024)
+
+# Leer y guardar cada hoja en una variable distinta con la columna Año agregada
+for (año in años) {
+  df <- read_excel(archivo, sheet = año)
+  df$Año <- año
+  assign(paste0("dfAvp_municipio", año), df)
+}
+
+# Lista de data.frames
+lista_df <- mget(paste0("dfAvp_municipio", 2017:2024))
+
+# Unión completa de todos
+dfAvp_municipios <- reduce(lista_df, full_join)
+
+# sheet_name = "2024"
+# dfAvp_municipio2024 <- read_excel(paste0(avp, "/avp_municipios.xlsx"),
+#                        sheet = sheet_name)
+
+dfAvp_municipios_asignadas <- dfAvp_municipios %>%
+  dplyr::select(municipio = Municipios, Región, Cantidad = Asignadas, Año)
+
+dfAvp_municipios_solicitadas <- dfAvp_municipios %>%
+  dplyr::select(municipio = Municipios, Región, Cantidad = Solicitadas, Año)
+
+municipios_geo_asig <- municipios_geo %>%
+  left_join(dfAvp_municipios_asignadas, by = "municipio")
+
+municipios_geo_sol <- municipios_geo %>%
+  left_join(dfAvp_municipios_solicitadas, by = "municipio")
 
 # avpAsignadas <- read_excel(paste0(avp, "/avpAsignadas2017_23.xlsx")) %>% 
 #   rename(región = `Región `) %>%

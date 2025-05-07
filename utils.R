@@ -1196,7 +1196,91 @@ renderMap <- function(data, value_col, value_col_region, map_zoom, provider = pr
 }
 
 #### renderMap_vivienda ####
-renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron, municipios_geo) {
+
+renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,
+                               provider = providers$CartoDB.Positron,
+                               municipios_geo, data_municipal = NULL) {
+  # Verificar que hay datos disponibles
+  if (nrow(data) == 0 || !value_col %in% colnames(data)) {
+    return(leaflet() %>% addTiles())
+  }
+
+  # Obtener valores de la columna dinámica
+  values <- data[[value_col]]
+  regiones <- data[[value_col_region]]
+
+  # Calcular límites para la escala de colores
+  min_val <- 0
+  max_val <- max(values, na.rm = TRUE)
+  rango <- max_val - min_val
+
+  # Definir el tamaño de los pasos y los límites de los bins
+  step <- ifelse(rango >= 30, 10, 5)
+  bins <- seq(
+    floor(min_val / step) * step,  # Múltiplo inferior del tamaño del paso
+    ceiling(max_val / step) * step,  # Múltiplo superior del tamaño del paso
+    by = step  # Incrementos definidos
+  )
+
+  violet_colors <- c(
+    "#f9f5ff", "#f4e3ff", "#edd0ff", "#e2b3ff",
+    "#d89aff", "#cc80ff", "#bf66ff", "#a64dff",
+    "#8c33ff", "#701aff", "#5900f2", "#4400cc",
+    "#3000a6", "#1d007d", "#0d004c"
+  )
+
+
+  # Seleccionar colores según el número de categorías
+  num_bins <- length(bins) - 1
+  colors <- violet_colors[seq_len(num_bins)]
+
+  # Crear la paleta de colores personalizada
+  pal <- colorBin(colors, domain = values, bins = bins, na.color = "transparent")
+
+  # Crear el mapa
+  leaflet(data) %>%
+    setView(lng = -66.5, lat = 18.2, zoom = map_zoom) %>%
+    addProviderTiles(provider) %>% # Fondo claro
+    addPolygons(
+      fillColor = ~pal(values), # Colores según cantidad de casos
+      weight = 1, # Líneas divisorias de los polígonos
+      opacity = 1,
+      color = "#666", # Color de las líneas divisorias
+      dashArray = "",
+      fillOpacity = 0.7,
+      label = ~paste0(
+        value_col_region, ": ", regiones, "<br>",
+        value_col, ": ", values
+      ) %>% lapply(htmltools::HTML), # Interpretar el HTML
+      highlightOptions = highlightOptions(
+        weight = 1,
+        color = "#666",
+        dashArray = "",
+        fillOpacity = 0.9,
+        bringToFront = TRUE
+      )
+    ) %>%
+    # Fronteras de los municipios
+    addPolylines(
+      data = municipios_geo,
+      weight = 1, # Grosor de las líneas
+      color = "#666", # Color de las líneas de los municipios
+      opacity = 1
+    ) %>%
+    addLegend(
+      pal = pal,
+      values = ~values,
+      opacity = 0.7,
+      title = value_col,
+      position = "bottomright",
+      labFormat = labelFormat(digits = 0) # Evitar decimales en la leyenda
+    )
+}
+
+#### renderMap_vivienda_new ####
+renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom, 
+                               provider = providers$CartoDB.Positron, 
+                               municipios_geo, data_municipal = NULL) {
   # Verificar que hay datos disponibles
   if (nrow(data) == 0 || !value_col %in% colnames(data)) {
     return(leaflet() %>% addTiles())
@@ -1205,6 +1289,8 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom, prov
   # Obtener valores de la columna dinámica
   values <- data[[value_col]]
   regiones <- data[[value_col_region]]
+  
+
   
   # Calcular límites para la escala de colores
   min_val <- 0
@@ -1257,13 +1343,6 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom, prov
         bringToFront = TRUE
       )
     ) %>%
-    # Fronteras de los municipios
-    addPolylines(
-      data = municipios_geo,
-      weight = 1, # Grosor de las líneas
-      color = "#666", # Color de las líneas de los municipios
-      opacity = 1
-    ) %>%
     addLegend(
       pal = pal,
       values = ~values,
@@ -1273,6 +1352,77 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom, prov
       labFormat = labelFormat(digits = 0) # Evitar decimales en la leyenda
     )
 }
+
+
+#### renderMap_vivienda_municipio ####
+renderMap_vivienda_municipio <- function(data, value_col, value_col_region, map_zoom, 
+                               provider = providers$CartoDB.Positron, 
+                               municipios_geo, data_municipal = NULL) {
+  
+  # Asegurarse de que municipios_geo tenga la columna "Cantidad"
+  if (!"Cantidad" %in% colnames(municipios_geo)) {
+    return(leaflet() %>% addTiles())
+  }
+  
+  # Obtener valores desde la columna Cantidad
+  values <- municipios_geo$Cantidad
+  
+  # Calcular límites para la escala de colores
+  min_val <- 0
+  max_val <- max(values, na.rm = TRUE)
+  rango <- max_val - min_val
+  
+  # Definir los bins
+  step <- ifelse(rango >= 30, 10, 5)
+  bins <- seq(
+    floor(min_val / step) * step,
+    ceiling(max_val / step) * step,
+    by = step
+  )
+  
+  violet_colors <- c(
+    "#f9f5ff", "#f4e3ff", "#edd0ff", "#e2b3ff", 
+    "#d89aff", "#cc80ff", "#bf66ff", "#a64dff", 
+    "#8c33ff", "#701aff", "#5900f2", "#4400cc", 
+    "#3000a6", "#1d007d", "#0d004c"
+  )
+  
+  num_bins <- length(bins) - 1
+  colors <- violet_colors[seq_len(num_bins)]
+  pal <- colorBin(colors, domain = values, bins = bins, na.color = "transparent")
+  
+  leaflet(municipios_geo) %>%
+    setView(lng = -66.5, lat = 18.2, zoom = map_zoom) %>%
+    addProviderTiles(provider) %>%
+    addPolygons(
+      fillColor = ~pal(Cantidad),
+      weight = 1,
+      opacity = 1,
+      color = "#666",
+      dashArray = "", 
+      fillOpacity = 0.7,
+      label = ~paste0(
+        "Municipio: ", municipio, "<br>",
+        "Cantidad: ", Cantidad
+      ) %>% lapply(htmltools::HTML),
+      highlightOptions = highlightOptions(
+        weight = 1,
+        color = "#666",
+        dashArray = "",
+        fillOpacity = 0.9,
+        bringToFront = TRUE
+      )
+    ) %>%
+    addLegend(
+      pal = pal,
+      values = ~Cantidad,
+      opacity = 0.7,
+      title = "Cantidad",
+      position = "bottomright",
+      labFormat = labelFormat(digits = 0)
+    )
+}
+
 
 #### definitionCards ####
 # Función para crear cards de definiciones y metadatos (Actualmente no se esta utilizando esta funcion)
