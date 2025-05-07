@@ -359,7 +359,8 @@ municipios_geo <- municipios_geo %>%
     municipio == "San Germ??n" ~ "San Germán",
     municipio == "San Sebasti??n" ~ "San Sebastián",
     TRUE ~ municipio  # mantiene los demás sin cambios
-  ))
+  ))%>%
+  dplyr::select(municipio, geometry)
 
 #### Guardar datos procesados de Departamento de Justicia ####
 # dataframes <- list(dfDeli) # Lista de dataframes (por ejemplo: homiEdad y inci)
