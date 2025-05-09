@@ -1199,7 +1199,7 @@ renderMap <- function(data, value_col, value_col_region, map_zoom, provider = pr
 
 renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,
                                provider = providers$CartoDB.Positron,
-                               municipios_geo, data_municipal = NULL) {
+                               municipios_geo) {
   # Verificar que hay datos disponibles
   if (nrow(data) == 0 || !value_col %in% colnames(data)) {
     return(leaflet() %>% addTiles())
@@ -1261,12 +1261,12 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,
       )
     ) %>%
     # Fronteras de los municipios
-    addPolylines(
-      data = municipios_geo,
-      weight = 1, # Grosor de las líneas
-      color = "#666", # Color de las líneas de los municipios
-      opacity = 1
-    ) %>%
+    # addPolylines(
+    #   data = municipios_geo,
+    #   weight = 1, # Grosor de las líneas
+    #   color = "#666", # Color de las líneas de los municipios
+    #   opacity = 1
+    # ) %>%
     addLegend(
       pal = pal,
       values = ~values,
@@ -1279,8 +1279,7 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,
 
 #### renderMap_vivienda_new ####
 renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom, 
-                               provider = providers$CartoDB.Positron, 
-                               municipios_geo, data_municipal = NULL) {
+                               provider = providers$CartoDB.Positron) {
   # Verificar que hay datos disponibles
   if (nrow(data) == 0 || !value_col %in% colnames(data)) {
     return(leaflet() %>% addTiles())
@@ -1355,9 +1354,8 @@ renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom,
 
 
 #### renderMap_vivienda_municipio ####
-renderMap_vivienda_municipio <- function(data, value_col, value_col_region, map_zoom, 
-                               provider = providers$CartoDB.Positron, 
-                               municipios_geo, data_municipal = NULL) {
+renderMap_vivienda_municipio <- function(municipios_geo, value_col, value_col_region, map_zoom, 
+                               provider = providers$CartoDB.Positron) {
   
   # Asegurarse de que municipios_geo tenga la columna "Cantidad"
   if (!"Cantidad" %in% colnames(municipios_geo)) {

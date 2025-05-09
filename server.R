@@ -753,7 +753,7 @@ server <- function(input, output, session) {
   # Filtrar el conjunto de datos según el año, delito o distrito seleccionado
   mapaAvp_filt <- reactive({
     filter(mapaAvp,
-           #Visualizacion %in% input$select_avp_mapaAvp_visualizacion,
+           # Visualizacion %in% input$select_avp_mapaAvp_visualizacion,
            Año %in% input$select_avp_mapaAvp_año)
   })
   
@@ -846,69 +846,65 @@ server <- function(input, output, session) {
 
   ## PARA REGION Y MUNICIPIOS
   # municipios_filt_asig <- reactive({
-  #   filter(municipios_geo_asig, 
+  #   filter(municipios_geo_asig,
   #          Año %in% input$select_avp_mapaAvp_año)
   # })
   # 
   # municipios_filt_sol <- reactive({
-  #   filter(municipios_geo_sol, 
+  #   filter(municipios_geo_sol,
   #          Año %in% input$select_avp_mapaAvp_año)
   # })
   # 
   # output$map_avp_mapaAvp_asignadas <- renderLeaflet({
   #   data <- mapaAvp_filt_asig()
   #   municipios_geo_asig <- municipios_filt_asig()
-  #   
+  # 
   #   if (input$select_avp_mapaAvp_visualizacion == "Municipios") {
-  #     renderMap_vivienda_municipio(data,
-  #                                  value_col = "Cantidad", 
+  #     renderMap_vivienda_municipio(municipios_geo_asig,
+  #                                  value_col = "Cantidad",
   #                                  value_col_region = "Municipio",
   #                                  map_zoom = 8,
-  #                                  provider = providers$CartoDB.Positron,
-  #                                  municipios_geo = municipios_geo_asig)
+  #                                  provider = providers$CartoDB.Positron)
   #   } else {
   #     renderMap_vivienda_new(data,
-  #                        value_col = "Cantidad", 
+  #                        value_col = "Cantidad",
   #                        value_col_region = "Región",
   #                        map_zoom = 8,
-  #                        provider = providers$CartoDB.Positron,
-  #                        municipios_geo = municipios_geo_asig)
+  #                        provider = providers$CartoDB.Positron)
   #   }
   # })
-  # 
+
   # output$map_avp_mapaAvp_solicitadas <- renderLeaflet({
   #   data <- mapaAvp_filt_sol()
   #   municipios_geo_sol <-municipios_filt_sol()
-  #   
+  # 
   #   if (input$select_avp_mapaAvp_visualizacion == "Municipios") {
-  #     renderMap_vivienda_municipio(data,
-  #                                  value_col = "Cantidad", 
+  #     renderMap_vivienda_municipio(municipios_geo_sol,
+  #                                  value_col = "Cantidad",
   #                                  value_col_region = "Municipio",
   #                                  map_zoom = 8,
-  #                                  provider = providers$CartoDB.Positron,
-  #                                  municipios_geo = municipios_geo_sol)
+  #                                  provider = providers$CartoDB.Positron)
   #   } else {
   #     renderMap_vivienda_new(data,
-  #                        value_col = "Cantidad", 
+  #                        value_col = "Cantidad",
   #                        value_col_region = "Región",
   #                        map_zoom = 8,
-  #                        provider = providers$CartoDB.Positron,
-  #                        municipios_geo = municipios_geo_sol)
+  #                        provider = providers$CartoDB.Positron)
   #   }
   # })
-  # 
-  # 
-  # 
-  # #Titulo de la Grafica
-  # output$plot_title24 <- renderUI({
-  #   title <- paste0("Total de viviendas públicas solicitadas y asignadas \npor violencia doméstica por región en el año ", input$select_avp_mapaAvp_año)
-  # })
-  # 
-  # 
-  # dfAvp_filt_rename <- reactive({
-  #   dfAvp_filt() %>% 
-  #     rename(`Región de Vivienda` = Región)
-  # })
+
+
+
+  #Titulo de la Grafica
+  output$plot_title24 <- renderUI({
+    title <- paste0("Total de viviendas públicas solicitadas y asignadas \npor violencia doméstica por región en el año ", input$select_avp_mapaAvp_año)
+  })
+
+
+  dfAvp_filt_rename <- reactive({
+    dfAvp_filt() %>%
+      rename(`Región de Vivienda` = Región)
+  })
   
   # Data Table para la gráfica de barras de dfAvp
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
