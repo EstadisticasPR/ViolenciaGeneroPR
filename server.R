@@ -19,10 +19,44 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_snmv_homiEdad_edad", input, homiEdad$Edad)
   })
   
-  ### lógica para el boton de deseleccionar/seleccionar año
+
+  # Actualizar el texto del botón según el estado actual
+  observe({
+    inputId <- "checkGroup_snmv_homiEdad_edad"
+    buttonId <- "deselectAll_snmv_homiEdad_edad"
+    all_choices <- levels(homiEdad$Edad)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+    ### lógica para el boton de deseleccionar/seleccionar año
   observeEvent(input$deselectAll_snmv_homiEdad_año, {
     updateCheckboxGroup(session, "checkGroup_snmv_homiEdad_año", input, homiEdad$Año)
   })
+  
+  # Actualizar el texto del botón según el estado actual
+  observe({
+    inputId <- "checkGroup_snmv_homiEdad_año"
+    buttonId <- "deselectAll_snmv_homiEdad_año"
+    all_choices <- levels(homiEdad$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   
   # Colores de las edades
   homiEdad_fill_edad <- setColorFill(homiEdad, "Edad")
@@ -119,9 +153,43 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_snmv_inci_tipo", input, inci$Incidente)
   })
   
+  # Actualizar el texto del botón según el estado actual
+  observe({
+    inputId <- "checkGroup_snmv_inci_tipo"
+    buttonId <- "deselectAll_snmv_inci_tipo"
+    all_choices <- levels(inci$Incidente)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  
+  
   ### lógica para el botón de deseleccionar/seleccionar el año
   observeEvent(input$deselectAll_snmv_inci_año, {
     updateCheckboxGroup(session, "checkGroup_snmv_inci_año", input, inci$Año)
+  })
+  
+  # Actualizar el texto del botón según el estado actual
+  observe({
+    inputId <- "checkGroup_snmv_inci_año"
+    buttonId <- "deselectAll_snmv_inci_año"
+    all_choices <- levels(inci$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # colores de los tipos de incidentes
@@ -278,14 +346,62 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_fam_dfMalt_tipo", input, dfMalt$Maltrato)
   })
   
+  # Actualizar el texto del botón según el estado actual
+  observe({
+    inputId <- "checkGroup_fam_dfMalt_tipo"
+    buttonId <- "deselectAll_fam_dfMalt_tipo"
+    all_choices <- levels(dfMalt$Maltrato)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   # funcion para el boton de deseleccionar/seleccionar año
   observeEvent(input$deselectAll_fam_dfMalt_año, {
     updateCheckboxGroup(session, "checkGroup_fam_dfMalt_año", input, dfMalt$Año)
   })
   
+  # Actualizar el texto del botón según el estado actual
+  observe({
+    inputId <- "checkGroup_fam_dfMalt_año"
+    buttonId <- "deselectAll_fam_dfMalt_año"
+    all_choices <- levels(dfMalt$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   # funcion para el boton de deseleccionar/seleccionar sexo
   observeEvent(input$deselectAll_fam_dfMalt_sexo, {
     updateCheckboxGroup(session, "checkGroup_fam_dfMalt_sexo", input, dfMalt$Sexo)
+  })
+  
+  # Actualizar el texto del botón según el estado actual
+  observe({
+    inputId <- "checkGroup_fam_dfMalt_sexo"
+    buttonId <- "deselectAll_fam_dfMalt_sexo"
+    all_choices <- levels(dfMalt$Sexo)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores de las edades
@@ -452,14 +568,61 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_just_dfDeli_delito", input, dfDeli$Delito)
   })
   
+  # Actualizar el texto del botón según el estado actual
+  observe({
+    inputId <- "checkGroup_just_dfDeli_delito"
+    buttonId <- "deselectAll_just_dfDeli_delito"
+    all_choices <- levels(dfDeli$Delito)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  
   # funcion para el boton de deseleccionar/seleccionar el año
   observeEvent(input$deselectAll_just_dfDeli_año, {
     updateCheckboxGroup(session, "checkGroup_just_dfDeli_año", input, dfDeli$Año)
   })
   
+  observe({
+    inputId <- "checkGroup_just_dfDeli_año"
+    buttonId <- "deselectAll_just_dfDeli_año"
+    all_choices <- levels(dfDeli$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   # funcion para el boton de deseleccionar/seleccionar el distrito fiscal
   observeEvent(input$deselectAll_just_dfDeli_distrito, {
     updateCheckboxGroup(session, "checkGroup_just_dfDeli_distrito", input, dfDeli$Distrito)
+  })
+  
+  observe({
+    inputId <- "checkGroup_just_dfDeli_distrito"
+    buttonId <- "deselectAll_just_dfDeli_distrito"
+    all_choices <- levels(dfDeli$Distrito)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores de las edades
@@ -762,9 +925,39 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_avp_dfAvp_región", input, dfAvp$Región)
   })
   
+  observe({
+    inputId <- "checkGroup_avp_dfAvp_región"
+    buttonId <- "deselectAll_avp_dfAvp_región"
+    all_choices <- levels(dfAvp$Región)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
   observeEvent(input$deselectAll_avp_dfAvp_año, {
     updateCheckboxGroup(session, "checkGroup_avp_dfAvp_año", input, dfAvp$Año)
+  })
+  
+  observe({
+    inputId <- "checkGroup_avp_dfAvp_año"
+    buttonId <- "deselectAll_avp_dfAvp_año"
+    all_choices <- levels(dfAvp$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores del status
@@ -1030,9 +1223,39 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_poli_despDF_categoría", input, despDF$Estado)
   })
   
+  observe({
+    inputId <- "checkGroup_poli_despDF_categoría"
+    buttonId <- "deselectAll_poli_despDF_categoría"
+    all_choices <- levels(despDF$Estado)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
   observeEvent(input$deselectAll_poli_despDF_año, {
     updateCheckboxGroup(session, "checkGroup_poli_despDF_año", input, despDF$Año)
+  })
+  
+  observe({
+    inputId <- "checkGroup_poli_despDF_año"
+    buttonId <- "deselectAll_poli_despDF_año"
+    all_choices <- levels(despDF$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores del status
@@ -1120,14 +1343,59 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_poli_vEdad_edad", input, vEdad$Edad)
   })
   
+  observe({
+    inputId <- "checkGroup_poli_vEdad_edad"
+    buttonId <- "deselectAll_poli_vEdad_edad"
+    all_choices <- levels(vEdad$Edad)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
   observeEvent(input$deselectAll_poli_vEdad_año, {
     updateCheckboxGroup(session, "checkGroup_poli_vEdad_año", input, vEdad$Año)
   })
   
+  observe({
+    inputId <- "checkGroup_poli_vEdad_año"
+    buttonId <- "deselectAll_poli_vEdad_año"
+    all_choices <- levels(vEdad$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el boton de deseleccionar/seleccionar el sexo
   observeEvent(input$deselectAll_poli_vEdad_sexo, {
     updateCheckboxGroup(session, "checkGroup_poli_vEdad_sexo", input, vEdad$Sexo)
+  })
+  
+  observe({
+    inputId <- "checkGroup_poli_vEdad_sexo"
+    buttonId <- "deselectAll_poli_vEdad_sexo"
+    all_choices <- levels(vEdad$Sexo)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores del status
@@ -1292,6 +1560,21 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_opm_opmFemiVD_año", input, opmFemiVD$Año)
   })
   
+  observe({
+    inputId <- "checkGroup_opm_opmFemiVD_año"
+    buttonId <- "deselectAll_opm_opmFemiVD_año"
+    all_choices <- levels(opmFemiVD$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   # Grafico de barras
   output$linePlot_opm_opmFemiVD <- renderPlotly({
     p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "Tasa", group = "1",
@@ -1352,9 +1635,39 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_opm_opmCasos_año", input, opmCasos$Año)
   })
   
+  observe({
+    inputId <- "checkGroup_opm_opmCasos_año"
+    buttonId <- "deselectAll_opm_opmCasos_año"
+    all_choices <- levels(opmCasos$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el boton de deseleccionar/seleccionar del botón de tipo de violencia
   observeEvent(input$deselectAll_opm_opmCasos_tipo, {
     updateCheckboxGroup(session, "checkGroup_opm_opmCasos_tipo", input, opmCasos$Razón)
+  })
+  
+  observe({
+    inputId <- "checkGroup_opm_opmCasos_tipo"
+    buttonId <- "deselectAll_opm_opmCasos_tipo"
+    all_choices <- levels(opmCasos$Razón)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores del status
@@ -1443,9 +1756,39 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_opm_opmVic_año", input, opmVic$Año)
   })
   
+  observe({
+    inputId <- "checkGroup_opm_opmVic_año"
+    buttonId <- "deselectAll_opm_opmVic_año"
+    all_choices <- levels(opmVic$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el boton de deseleccionar/seleccionar del botón del género de la víctima
   observeEvent(input$deselectAll_opm_opmVic_género, {
     updateCheckboxGroup(session, "checkGroup_opm_opmVic_género", input, opmVic$Género)
+  })
+  
+  observe({
+    inputId <- "checkGroup_opm_opmVic_género"
+    buttonId <- "deselectAll_opm_opmVic_género"
+    all_choices <- levels(opmVic$Género)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores del status
@@ -1527,9 +1870,39 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_opm_opmMedio_año", input, opmMedio$Año)
   })
   
+  observe({
+    inputId <- "checkGroup_opm_opmMedio_año"
+    buttonId <- "deselectAll_opm_opmMedio_año"
+    all_choices <- levels(opmMedio$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el boton de deseleccionar/seleccionar del botón del medio de orientación
   observeEvent(input$deselectAll_opm_opmMedio_medio, {
     updateCheckboxGroup(session, "checkGroup_opm_opmMedio_medio", input, opmMedio$Orientación)
+  })
+  
+  observe({
+    inputId <- "checkGroup_opm_opmMedio_medio"
+    buttonId <- "deselectAll_opm_opmMedio_medio"
+    all_choices <- levels(opmMedio$Orientación)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores del status
@@ -1618,9 +1991,39 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_opm_opmServiciosMes_año", input, opmServiciosMes$Año)
   })
   
+  observe({
+    inputId <- "checkGroup_opm_opmServiciosMes_año"
+    buttonId <- "deselectAll_opm_opmServiciosMes_año"
+    all_choices <- levels(opmServiciosMes$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el boton de deseleccionar/seleccionar del botón de tipo de servicio
   observeEvent(input$deselectAll_opm_opmServiciosMes_tipo, {
     updateCheckboxGroup(session, "checkGroup_opm_opmServiciosMes_tipo", input, opmServiciosMes$Servicio)
+  })
+  
+  observe({
+    inputId <- "checkGroup_opm_opmServiciosMes_tipo"
+    buttonId <- "deselectAll_opm_opmServiciosMes_tipo"
+    all_choices <- levels(opmServiciosMes$Servicio)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores del status
@@ -1803,14 +2206,59 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_year", input, dcrCasosInv$Año)
   })
   
+  observe({
+    inputId <- "checkGroup_dcr_dcrCasosInv_year"
+    buttonId <- "deselectAll_dcr_dcrCasosInv_year"
+    all_choices <- levels(dcrCasosInv$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el boton de deseleccionar/seleccionar del botón del estado de investigación
   observeEvent(input$deselectAll_dcr_dcrCasosInv_tipo, {
     updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_tipo", input, dcrCasosInv$Estado)
   })
   
+  observe({
+    inputId <- "checkGroup_dcr_dcrCasosInv_tipo"
+    buttonId <- "deselectAll_dcr_dcrCasosInv_tipo"
+    all_choices <- levels(dcrCasosInv$Estado)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el boton de deseleccionar/seleccionar del botón de sexo
   observeEvent(input$deselectAll_dcr_dcrCasosInv_sexo, {
     updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_sexo", input, dcrCasosInv$Sexo)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrCasosInv_sexo"
+    buttonId <- "deselectAll_dcr_dcrCasosInv_sexo"
+    all_choices <- levels(dcrCasosInv$Sexo)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores del status
@@ -1910,9 +2358,39 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_dcr_dcrSentenciadas_year", input, dcrSentenciadas$Año)
   })
   
+  observe({
+    inputId <- "checkGroup_dcr_dcrSentenciadas_year"
+    buttonId <- "deselectAll_dcr_dcrSentenciadas_year"
+    all_choices <- levels(dcrSentenciadas$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el boton de deseleccionar/seleccionar del botón del estado de caso 
   observeEvent(input$deselectAll_dcr_dcrSentenciadas_tipo, {
     updateCheckboxGroup(session, "checkGroup_dcr_dcrSentenciadas_tipo", input, dcrSentenciadas$Estado)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrSentenciadas_tipo"
+    buttonId <- "deselectAll_dcr_dcrSentenciadas_tipo"
+    all_choices <- levels(dcrSentenciadas$Estado)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores del status
@@ -2038,17 +2516,63 @@ server <- function(input, output, session) {
   
   ### funcion para el botón de deseleccionar/seleccionar el año fiscal
   observeEvent(input$deselectAll_trib_OP_148_SoliGrupEdad_AñoFiscal, {
-    updateCheckboxGroup(session, "checkGroup_trib_OP_148_SoliGrupEdad_AñoFiscal", input, OP_148_SoliGrupEdad$AñoFiscal)
+    updateCheckboxGroup_trib(session, "checkGroup_trib_OP_148_SoliGrupEdad_AñoFiscal", input, OP_148_SoliGrupEdad$AñoFiscal)
   })
+  
+  observe({
+    inputId <- "checkGroup_trib_OP_148_SoliGrupEdad_AñoFiscal"
+    buttonId <- "deselectAll_trib_OP_148_SoliGrupEdad_AñoFiscal"
+    all_choices <- levels(OP_148_SoliGrupEdad$AñoFiscal)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+
   
   ### funcion para el botón de deseleccionar/seleccionar el grupo de edad
   observeEvent(input$deselectAll_trib_OP_148_SoliGrupEdad_Edad, {
     updateCheckboxGroup(session, "checkGroup_trib_OP_148_SoliGrupEdad_Edad", input, OP_148_SoliGrupEdad$Edad)
   })
   
+  observe({
+    inputId <- "checkGroup_trib_OP_148_SoliGrupEdad_Edad"
+    buttonId <- "deselectAll_trib_OP_148_SoliGrupEdad_Edad"
+    all_choices <- levels(OP_148_SoliGrupEdad$Edad)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el botón de deseleccionar/seleccionar la región fiscal
   observeEvent(input$deselectAll_trib_OP_148_SoliGrupEdad_Región, {
     updateCheckboxGroup(session, "checkGroup_trib_OP_148_SoliGrupEdad_Región", input, OP_148_SoliGrupEdad$Región)
+  })
+  
+  observe({
+    inputId <- "checkGroup_trib_OP_148_SoliGrupEdad_Región"
+    buttonId <- "deselectAll_trib_OP_148_SoliGrupEdad_Región"
+    all_choices <- levels(OP_148_SoliGrupEdad$Región)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores del status
@@ -2148,17 +2672,63 @@ server <- function(input, output, session) {
   
   ### funcion para el botón de deseleccionar/seleccionar el año fiscal
   observeEvent(input$deselectAll_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal, {
-    updateCheckboxGroup(session, "checkGroup_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal", input, OP_Ley148_ex_parteEmitidas$AñoFiscal)
+    updateCheckboxGroup_trib(session, "checkGroup_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal", input, OP_Ley148_ex_parteEmitidas$AñoFiscal)
   })
+  
+  observe({
+    inputId <- "checkGroup_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal"
+    buttonId <- "deselectAll_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal"
+    all_choices <- levels(OP_Ley148_ex_parteEmitidas$AñoFiscal)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   
   ### funcion para el botón de deseleccionar/seleccionar el delito
   observeEvent(input$deselectAll_trib_OP_Ley148_ex_parteEmitidas_Delito, {
     updateCheckboxGroup(session, "checkGroup_trib_OP_Ley148_ex_parteEmitidas_Delito", input, OP_Ley148_ex_parteEmitidas$Delito)
   })
   
+  observe({
+    inputId <- "checkGroup_trib_OP_Ley148_ex_parteEmitidas_Delito"
+    buttonId <- "deselectAll_trib_OP_Ley148_ex_parteEmitidas_Delito"
+    all_choices <- levels(OP_Ley148_ex_parteEmitidas$Delito)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el botón de deseleccionar/seleccionar el Región
   observeEvent(input$deselectAll_trib_OP_Ley148_ex_parteEmitidas_Región, {
     updateCheckboxGroup(session, "checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región", input, OP_Ley148_ex_parteEmitidas$Región)
+  })
+  
+  observe({
+    inputId <- "checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región"
+    buttonId <- "deselectAll_trib_OP_Ley148_ex_parteEmitidas_Región"
+    all_choices <- levels(OP_Ley148_ex_parteEmitidas$Región)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores de los Delitos
@@ -2261,7 +2831,22 @@ server <- function(input, output, session) {
   
   ### funcion para el botón de deseleccionar/seleccionar el año fiscal
   observeEvent(input$deselectAll_trib_OP_LEY148Archivadas_AñoFiscal, {
-    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Archivadas_AñoFiscal", input, OP_LEY148Archivadas$AñoFiscal)
+    updateCheckboxGroup_trib(session, "checkGroup_trib_OP_LEY148Archivadas_AñoFiscal", input, OP_LEY148Archivadas$AñoFiscal)
+  })
+  
+  observe({
+    inputId <- "checkGroup_trib_OP_LEY148Archivadas_AñoFiscal"
+    buttonId <- "deselectAll_trib_OP_LEY148Archivadas_AñoFiscal"
+    all_choices <- levels(OP_LEY148Archivadas$AñoFiscal)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   ### funcion para el botón de deseleccionar/seleccionar la razón de archivado
@@ -2269,9 +2854,39 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Archivadas_Razón", input, OP_LEY148Archivadas$Razón)
   })
   
+  observe({
+    inputId <- "checkGroup_trib_OP_LEY148Archivadas_Razón"
+    buttonId <- "deselectAll_trib_OP_LEY148Archivadas_Razón"
+    all_choices <- levels(OP_LEY148Archivadas$Razón)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el botón de deseleccionar/seleccionar el Región
   observeEvent(input$deselectAll_trib_OP_LEY148Archivadas_Región, {
     updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Archivadas_Región", input, OP_LEY148Archivadas$Región)
+  })
+  
+  observe({
+    inputId <- "checkGroup_trib_OP_LEY148Archivadas_Región"
+    buttonId <- "deselectAll_trib_OP_LEY148Archivadas_Región"
+    all_choices <- levels(OP_LEY148Archivadas$Región)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores de las razones
@@ -2373,7 +2988,22 @@ server <- function(input, output, session) {
   
   ### funcion para el botón de deseleccionar/seleccionar el año fiscal
   observeEvent(input$deselectAll_trib_OP_LEY148Denegadas_AñoFiscal, {
-    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Denegadas_AñoFiscal", input, OP_LEY148Denegadas$AñoFiscal)
+    updateCheckboxGroup_trib(session, "checkGroup_trib_OP_LEY148Denegadas_AñoFiscal", input, OP_LEY148Denegadas$AñoFiscal)
+  })
+  
+  observe({
+    inputId <- "checkGroup_trib_OP_LEY148Denegadas_AñoFiscal"
+    buttonId <- "deselectAll_trib_OP_LEY148Denegadas_AñoFiscal"
+    all_choices <- levels(OP_LEY148Denegadas$AñoFiscal)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   ### funcion para el botón de deseleccionar/seleccionar la razón de archivado
@@ -2381,9 +3011,39 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Denegadas_Razón", input, OP_LEY148Denegadas$Razón)
   })
   
+  observe({
+    inputId <- "checkGroup_trib_OP_LEY148Denegadas_Razón"
+    buttonId <- "deselectAll_trib_OP_LEY148Denegadas_Razón"
+    all_choices <- levels(OP_LEY148Denegadas$Razón)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el botón de deseleccionar/seleccionar el Región
   observeEvent(input$deselectAll_trib_OP_LEY148Denegadas_Región, {
     updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Denegadas_Región", input, OP_LEY148Denegadas$Región)
+  })
+  
+  observe({
+    inputId <- "checkGroup_trib_OP_LEY148Denegadas_Región"
+    buttonId <- "deselectAll_trib_OP_LEY148Denegadas_Región"
+    all_choices <- levels(OP_LEY148Denegadas$Región)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores de las razones
@@ -2485,17 +3145,63 @@ server <- function(input, output, session) {
   
   ### funcion para el botón de deseleccionar/seleccionar el año fiscal
   observeEvent(input$deselectAll_trib_OP_LEY148FinalEmitidas_AñoFiscal, {
-    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148FinalEmitidas_AñoFiscal", input, OP_LEY148FinalEmitidas$AñoFiscal)
+    updateCheckboxGroup_trib(session, "checkGroup_trib_OP_LEY148FinalEmitidas_AñoFiscal", input, OP_LEY148FinalEmitidas$AñoFiscal)
   })
+  
+  observe({
+    inputId <- "checkGroup_trib_OP_LEY148FinalEmitidas_AñoFiscal"
+    buttonId <- "deselectAll_trib_OP_LEY148FinalEmitidas_AñoFiscal"
+    all_choices <- levels(OP_LEY148FinalEmitidas$AñoFiscal)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   
   ### funcion para el botón de deseleccionar/seleccionar delito cometido
   observeEvent(input$deselectAll_trib_OP_LEY148FinalEmitidas_Delito, {
     updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148FinalEmitidas_Delito", input, OP_LEY148FinalEmitidas$Delito)
   })
   
+  observe({
+    inputId <- "checkGroup_trib_OP_LEY148FinalEmitidas_Delito"
+    buttonId <- "deselectAll_trib_OP_LEY148FinalEmitidas_Delito"
+    all_choices <- levels(OP_LEY148FinalEmitidas$Delito)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el botón de deseleccionar/seleccionar el Región
   observeEvent(input$deselectAll_trib_OP_LEY148FinalEmitidas_Región, {
     updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148FinalEmitidas_Región", input, OP_LEY148FinalEmitidas$Región)
+  })
+  
+  observe({
+    inputId <- "checkGroup_trib_OP_LEY148FinalEmitidas_Región"
+    buttonId <- "deselectAll_trib_OP_LEY148FinalEmitidas_Región"
+    all_choices <- levels(OP_LEY148FinalEmitidas$Región)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores de las razones
@@ -2596,7 +3302,22 @@ server <- function(input, output, session) {
   
   ### funcion para el botón de deseleccionar/seleccionar el año fiscal
   observeEvent(input$deselectAll_trib_OP_LEY148Genero_AñoFiscal, {
-    updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Genero_AñoFiscal", input, OP_LEY148Genero$AñoFiscal)
+    updateCheckboxGroup_trib(session, "checkGroup_trib_OP_LEY148Genero_AñoFiscal", input, OP_LEY148Genero$AñoFiscal)
+  })
+  
+  observe({
+    inputId <- "checkGroup_trib_OP_LEY148Genero_AñoFiscal"
+    buttonId <- "deselectAll_trib_OP_LEY148Genero_AñoFiscal"
+    all_choices <- levels(OP_LEY148Genero$AñoFiscal)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   ### funcion para el botón de deseleccionar/seleccionar la parte peticionaria
@@ -2604,9 +3325,39 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Genero_Parte", input, OP_LEY148Genero$Parte)
   })
   
+  observe({
+    inputId <- "checkGroup_trib_OP_LEY148Genero_Parte"
+    buttonId <- "deselectAll_trib_OP_LEY148Genero_Parte"
+    all_choices <- levels(OP_LEY148Genero$Parte)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el botón de deseleccionar/seleccionar el sexo de la parte
   observeEvent(input$deselectAll_trib_OP_LEY148Genero_Sexo, {
     updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Genero_Sexo", input, OP_LEY148Genero$Sexo)
+  })
+  
+  observe({
+    inputId <- "checkGroup_trib_OP_LEY148Genero_Sexo"
+    buttonId <- "deselectAll_trib_OP_LEY148Genero_Sexo"
+    all_choices <- levels(OP_LEY148Genero$Sexo)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores de las partes
@@ -2703,7 +3454,22 @@ server <- function(input, output, session) {
   
   ### funcion para el botón de deseleccionar/seleccionar el año fiscal
   observeEvent(input$deselectAll_trib_tribCasosCrim_Casos, {
-    updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_AñoFiscal", input, tribCasosCrim$AñoFiscal)
+    updateCheckboxGroup_trib(session, "checkGroup_trib_tribCasosCrim_AñoFiscal", input, tribCasosCrim$AñoFiscal)
+  })
+  
+  observe({
+    inputId <- "checkGroup_trib_tribCasosCrim_AñoFiscal"
+    buttonId <- "deselectAll_trib_tribCasosCrim_Casos"
+    all_choices <- levels(tribCasosCrim$AñoFiscal)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   ### funcion para el botón de deseleccionar/seleccionar la parte peticionaria
@@ -2711,9 +3477,39 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Delito", input, tribCasosCrim$Delito)
   })
   
+  observe({
+    inputId <- "checkGroup_trib_tribCasosCrim_Delito"
+    buttonId <- "deselectAll_trib_tribCasosCrim_Casos"
+    all_choices <- levels(tribCasosCrim$Delito)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el botón de deseleccionar/seleccionar el sexo de la parte
   observeEvent(input$deselectAll_trib_tribCasosCrim_Casos, {
     updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Casos", input, tribCasosCrim$Casos)
+  })
+  
+  observe({
+    inputId <- "checkGroup_trib_tribCasosCrim_Casos"
+    buttonId <- "deselectAll_trib_tribCasosCrim_Casos"
+    all_choices <- levels(tribCasosCrim$Casos)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores de las partes
@@ -2873,9 +3669,39 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_cavv_safekitsDF_Año", input, safekitsDF$Año)
   })
   
+  observe({
+    inputId <- "checkGroup_cavv_safekitsDF_Año"
+    buttonId <- "deselectAll_cavv_safekitsDF_Año"
+    all_choices <- levels(safekitsDF$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el botón de deseleccionar/seleccionar el estado de querella
   observeEvent(input$deselectAll_cavv_safekitsDF_Kits, {
     updateCheckboxGroup(session, "checkGroup_cavv_safekitsDF_Kits", input, safekitsDF$Kits)
+  })
+  
+  observe({
+    inputId <- "checkGroup_cavv_safekitsDF_Kits"
+    buttonId <- "deselectAll_cavv_safekitsDF_Kits"
+    all_choices <- levels(safekitsDF$Kits)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores de los estados de Querella
@@ -2975,9 +3801,39 @@ server <- function(input, output, session) {
     updateCheckboxGroup(session, "checkGroup_cavv_safekitsDF_edades_Año", input, safekitsDF_edades$Año)
   })
   
+  observe({
+    inputId <- "checkGroup_cavv_safekitsDF_edades_Año"
+    buttonId <- "deselectAll_cavv_safekitsDF_edades_Año"
+    all_choices <- levels(safekitsDF_edades$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   ### funcion para el botón de deseleccionar/seleccionar el estado de querella
   observeEvent(input$deselectAll_cavv_safekitsDF_edades_Categoria, {
     updateCheckboxGroup(session, "checkGroup_cavv_safekitsDF_edades_Categoria", input, safekitsDF_edades$Categoria)
+  })
+  
+  observe({
+    inputId <- "checkGroup_cavv_safekitsDF_edades_Categoria"
+    buttonId <- "deselectAll_cavv_safekitsDF_edades_Categoria"
+    all_choices <- levels(safekitsDF_edades$Categoria)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
   })
   
   # Colores de los estados de Querella

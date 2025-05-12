@@ -166,14 +166,19 @@ createDropdownCheckbox_añoFiscal <- function(label, choices, selected, id) {
   unique_years <- unique(as.character(choices))
   formatted_choices <- setNames(
     unique_years,
-    #Cambiado el 28 Febrero 2025
     paste0("jul ", as.numeric(unique_years) - 1, " - jun ", unique_years)
-    # paste0("jul ", unique_years, " - jun ", as.numeric(unique_years) + 1)
   )
   
   # Step 2: Set all unique years as selected by default if selected is NULL
   if (is.null(selected)) {
     selected <- unique_years  # Select all unique years
+  }
+  
+  # Determinar texto inicial del botón
+  buttonLabel <- if (length(selected) > 1) {
+    HTML("Deseleccionar<br>todo")
+  } else {
+    HTML("Seleccionar<br>todo")
   }
   
   div(
@@ -186,27 +191,28 @@ createDropdownCheckbox_añoFiscal <- function(label, choices, selected, id) {
       checkboxGroupInput(
         paste0("checkGroup_", id),
         label = "",
-        choices = formatted_choices,  # Show custom names for years
+        choices = formatted_choices,
         selected = selected
       ),
       actionButton(
         paste0("deselectAll_", id), 
-        HTML(lowercaseTitle("(De)seleccionar<br>todo")),
-        style = "display: block; margin: 10px auto; width: 100%;"  # Center button in dropdown
+        buttonLabel,
+        class = "btn-toggle-select",
+        style = "display: block; margin: 10px auto; width: 100%;"
       )
     ),
     style = "display: flex; padding-right: 20px; padding-top: 10px; width: 100%;",
     tags$style(HTML('
       .btn {
-        font-size: 12px !important; /* Tamaño general del botón */
+        font-size: 12px !important;
         background-color: #3e3f3a !important;
         color: white !important;
         border-color: #ccc !important;
-        max-width: 100%; /* Máximo 100% del contenedor */
-        box-sizing: border-box; /* Incluir padding en el tamaño total */
+        max-width: 100%;
+        box-sizing: border-box;
       }
       .btn > span { 
-        font-size: 10px !important; /* Tamaño del título del botón */
+        font-size: 10px !important;
       }
       .btn-default:hover, .btn-default:focus, .btn-default:active {
         background-color: #2c2c2a !important;
@@ -214,33 +220,36 @@ createDropdownCheckbox_añoFiscal <- function(label, choices, selected, id) {
       }
       .dropdown-menu {
         width: 100% !important;
-        font-size: 8px !important; /* Tamaño de texto dentro del dropdown */
+        font-size: 8px !important;
       }
       .shiny-input-checkboxgroup {
         display: flex;
         flex-direction: column;
       }
-      @media (max-width: 1040px) { /* Teléfonos y tabletas medianas */
+      .btn-toggle-select {
+        text-transform: none !important;
+      }
+      @media (max-width: 1040px) {
         .btn {
-          font-size: 10px !important; /* Tamaño general para dispositivos pequeños */
+          font-size: 10px !important;
           padding: 6px 4px !important;
           max-width: 100%;
         }
-        .btn > span { 
-          font-size: 10px !important; /* Mantener el título pequeño */
+        .btn > span {
+          font-size: 10px !important;
         }
         .dropdown-menu {
           font-size: 10px !important;
         }
       }
-      @media (min-width: 1041px) { /* Computadoras (pantallas grandes) */
+      @media (min-width: 1041px) {
         .btn {
-          font-size: 12px !important; /* Tamaño general para dispositivos grandes */
+          font-size: 12px !important;
           padding: 8px 6px !important;
           max-width: 100%;
         }
-        .btn > span { 
-          font-size: 11px !important; /* Título del botón sigue siendo pequeño */
+        .btn > span {
+          font-size: 11px !important;
         }
         .dropdown-menu {
           font-size: 12px !important;
@@ -258,6 +267,13 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
     selected <- choices[selected]
   }
   
+  # Determinar texto inicial del botón
+  buttonLabel <- if (length(selected) > 1) {
+    HTML("Deseleccionar<br>todo")
+  } else {
+    HTML("Seleccionar<br>todo")
+  }
+  
   div(
     style = "display: flex; justify-content: center; width: 100%;",
     dropdownButton(
@@ -273,22 +289,23 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
       ),
       actionButton(
         paste0("deselectAll_", id),
-        HTML(lowercaseTitle("(De)seleccionar<br>todo")),
-        style = "display: block; margin: 10px auto; width: 100%;"  # Centrar el botón dentro del dropdown
+        buttonLabel,
+        class = "btn-toggle-select",
+        style = "display: block; margin: 10px auto; width: 100%;"
       )
     ),
     style = "display: flex; padding-right: 20px; padding-top: 10px; width: 100%;",
     tags$style(HTML('
       .btn {
-        font-size: 12px !important; /* Tamaño general del botón */
+        font-size: 12px !important;
         background-color: #3e3f3a !important;
         color: white !important;
         border-color: #ccc !important;
-        max-width: 100%; /* Máximo 100% del contenedor */
-        box-sizing: border-box; /* Incluir padding en el tamaño total */
+        max-width: 100%;
+        box-sizing: border-box;
       }
-      .btn > span { 
-        font-size: 10px !important; /* Tamaño del título del botón */
+      .btn > span {
+        font-size: 10px !important;
       }
       .btn-default:hover, .btn-default:focus, .btn-default:active {
         background-color: #2c2c2a !important;
@@ -296,33 +313,36 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
       }
       .dropdown-menu {
         width: 100% !important;
-        font-size: 8px !important; /* Tamaño de texto dentro del dropdown */
+        font-size: 8px !important;
       }
       .shiny-input-checkboxgroup {
         display: flex;
         flex-direction: column;
       }
-      @media (max-width: 1040px) { /* Teléfonos y tabletas medianas */
+      .btn-toggle-select {
+        text-transform: none !important;
+      }
+      @media (max-width: 1040px) {
         .btn {
-          font-size: 10px !important; /* Tamaño general para dispositivos pequeños */
+          font-size: 10px !important;
           padding: 6px 4px !important;
           max-width: 100%;
         }
-        .btn > span { 
-          font-size: 10px !important; /* Mantener el título pequeño */
+        .btn > span {
+          font-size: 10px !important;
         }
         .dropdown-menu {
           font-size: 10px !important;
         }
       }
-      @media (min-width: 1041px) { /* Computadoras (pantallas grandes) */
+      @media (min-width: 1041px) {
         .btn {
-          font-size: 12px !important; /* Tamaño general para dispositivos grandes */
+          font-size: 12px !important;
           padding: 8px 6px !important;
           max-width: 100%;
         }
-        .btn > span { 
-          font-size: 11px !important; /* Título del botón sigue siendo pequeño */
+        .btn > span {
+          font-size: 11px !important;
         }
         .dropdown-menu {
           font-size: 12px !important;
@@ -331,6 +351,7 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
     '))
   )
 }
+
 
 #### embedImage ####
 # Crea un elemento de lista con una imagen que enlaza a una página web especificada.
@@ -488,25 +509,90 @@ authorTag <- function(nombre, email, puesto, grados){
 # Esta función toma como entrada el `session`, el `inputId` correspondiente al grupo
 # de checkbox, el objeto `input` y el conjunto de datos `data`. Dependiendo de si el
 # grupo de checkbox está vacío o no, la función llena o vacía el grupo respectivamente.
+
 updateCheckboxGroup <- function(session, inputId, input, data) {
+  selected <- input[[inputId]]
+  all_choices <- levels(data)
   
-  if (is.null(input[[inputId]])) {
-    # "El checkbox está vacío, llénalo"
-    updateCheckboxGroupInput(
-      session,
-      inputId,
-      choices = levels(data),
-      selected = levels(data)
-    )
-  } else {
-    # "Vacía el checkbox"
+  is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  
+  if (is_all_selected) {
+    # Deseleccionar todos
     updateCheckboxGroupInput(
       session,
       inputId,
       selected = character(0)
     )
+    
+  } else {
+    # Seleccionar todos
+    updateCheckboxGroupInput(
+      session,
+      inputId,
+      choices = all_choices,
+      selected = all_choices
+    )
   }
 }
+
+updateCheckboxGroup_trib <- function(session, inputId, input, data) {
+  selected <- input[[inputId]]
+  all_choices <- levels(data)
+  
+  # Formatear las etiquetas con "jul XXXX - jun XXXX"
+  unique_years <- unique(as.character(all_choices))
+  formatted_choices <- setNames(
+    unique_years,
+    paste0("jul ", as.numeric(unique_years) - 1, " - jun ", unique_years)
+  )
+  
+  is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  
+  if (is_all_selected) {
+    # Deseleccionar todos pero conservar etiquetas formateadas
+    updateCheckboxGroupInput(
+      session,
+      inputId = inputId,
+      choices = formatted_choices,
+      selected = character(0)
+    )
+  } else {
+    # Seleccionar todos con etiquetas formateadas
+    updateCheckboxGroupInput(
+      session,
+      inputId = inputId,
+      choices = formatted_choices,
+      selected = all_choices
+    )
+  }
+}
+
+
+
+# updateCheckboxGroup_trib <- function(session, inputId, input, data) {
+#   selected <- input[[inputId]]
+#   all_choices <- levels(data)
+#   
+#   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+#   
+#   if (is_all_selected) {
+#     # Deseleccionar todos
+#     updateCheckboxGroupInput(
+#       session,
+#       inputId,
+#       selected = character(0)
+#     )
+#     
+#   } else {
+#     # Seleccionar todos
+#     updateCheckboxGroupInput(
+#       session,
+#       inputId,
+#       choices = all_choices,
+#       selected = all_choices
+#     )
+#   }
+# }
 
 #### create_empty_plot_with_message_forLine ####
 create_empty_plot_with_message_forLine <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
