@@ -110,6 +110,8 @@ guardarDatos_Polygons <- function(dataframe, nombre_archivo) {
 
 
 
+
+
 ##################################################################################
 #### Procesamiento de datos del Sistema de Notificacion de Muertes Violentas #####
 ##################################################################################
@@ -182,31 +184,17 @@ inci <- read_excel(file.path(snmv, "svmvIncidentes.xlsx")) %>%
 #### Directorio ####
 dfam <- here::here("data", "Departamento_de_Familia", "/")
 
+
 #### dfMalt ####
-# importar los datos de maltratos; dfMalt
-# importando datos del 2018
-dfMalt2018 <- read_excel(paste0(dfam, "dfMalt2018.xlsx")) %>%
-  mutate(Año = "2018")
+# Años a importar
+years <- 2018:2022
 
-# importando datos del 2019
-dfMalt2019 <- read_excel(paste0(dfam, "dfMalt2019.xlsx")) %>%
-  mutate(Año = "2019")
-
-# importando datos del 2020
-dfMalt2020 <- read_excel(paste0(dfam, "dfMalt2020.xlsx")) %>%
-  mutate(Año = "2020")
-
-# importando datos del 2021
-dfMalt2021 <- read_excel(paste0(dfam, "dfMalt2021.xlsx")) %>%
-  mutate(Año = "2021")
-
-# importando datos del 2022
-dfMalt2022 <- read_excel(paste0(dfam, "dfMalt2022.xlsx")) %>%
-  mutate(Año = "2022")
-
-dfMalt <- bind_rows(
-  list(dfMalt2018, dfMalt2019, dfMalt2020, dfMalt2021, dfMalt2022)
-) %>%
+# Importar y combinar todos los archivos
+dfMalt <- lapply(years, function(year) {
+  read_excel(paste0(dfam, "dfMalt", year, ".xlsx")) %>%
+    mutate(Año = as.character(year))
+}) %>%
+  bind_rows() %>%
   rename(
     Masculino = `Cantidad Masculino`,
     Femenino = `Cantidad Femenino`
@@ -229,7 +217,7 @@ dfMalt <- bind_rows(
     Sexo = factor(Sexo)
   ) %>%
   rename(
-     Maltrato = `Tipo de Maltrato`
+    Maltrato = `Tipo de Maltrato`
   ) %>%
   replace_na(list(Casos = 0)) %>%
   distinct() %>%
@@ -275,29 +263,16 @@ djus <- here::here("data", "Departamento_de_Justicia", "/")
 #### dfDeli ####
 maps_fol <- here::here("data", "mapas/")
 
-# importando delitos del 2020
-deli2020 <- read_excel(paste0(djus, "djDelitos2020.xlsx")) %>% 
-  convert_mixed_columns() %>%
-  mutate(Año = "2020") 
+# Años a importar
+years <- 2020:2023
 
-# importando delitos del 2021
-deli2021 <- read_excel(paste0(djus, "djDelitos2021.xlsx")) %>%
-  convert_mixed_columns() %>%
-  mutate(Año = "2021")
-
-# importando delitos del 2022
-deli2022 <- read_excel(paste0(djus, "djDelitos2022.xlsx")) %>%
-  convert_mixed_columns() %>%
-  mutate(Año = "2022")
-
-# importando delitos del 2023
-deli2023 <- read_excel(paste0(djus, "djDelitos2023.xlsx")) %>%
-  convert_mixed_columns() %>%
-  mutate(Año = "2023")
-
-dfDeli <- bind_rows(
-  list(deli2020, deli2021, deli2022, deli2023)
-) %>%
+# Importar y combinar todos los archivos
+dfDeli <- lapply(years, function(year) {
+  read_excel(paste0(djus, "djDelitos", year, ".xlsx")) %>%
+    convert_mixed_columns() %>%
+    mutate(Año = as.character(year))
+}) %>%
+  bind_rows() %>%
   filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE)) %>%
   select(-TOTAL) %>%
   pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
@@ -320,14 +295,9 @@ dfDeli <- bind_rows(
     Año, Distrito, Delito, Casos
   )
 
+
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar 
 # los datos de delitos con los datos geográficos de los distritos fiscales
-# mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
-#   merge(dfDeli, by.x = "GROUP", by.y = "Distrito") %>%
-#   relocate(
-#     Año, GROUP, Delito, geometry,Casos
-#   )
-
 #### mapaDeli ####
 mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
   merge(dfDeli, by.x = "GROUP", by.y = "Distrito") %>%
@@ -400,6 +370,8 @@ parLab <- read_excel(paste0(dtra, "dtpartlab.xlsx")) %>%
 
 
 
+
+
 ##################################################################################
 #### Procesamiento de datos de la Administración de Vivienda Pública #####
 ##################################################################################
@@ -432,10 +404,6 @@ lista_df <- mget(paste0("dfAvp_municipio", 2017:2024))
 # Unión completa de todos
 dfAvp_municipios <- reduce(lista_df, full_join)
 
-# sheet_name = "2024"
-# dfAvp_municipio2024 <- read_excel(paste0(avp, "/avp_municipios.xlsx"),
-#                        sheet = sheet_name)
-
 dfAvp_municipios_asignadas <- dfAvp_municipios %>%
   dplyr::select(municipio = Municipios, Región, Cantidad = Asignadas, Año)
 
@@ -448,35 +416,6 @@ municipios_geo_asig <- municipios_geo %>%
 municipios_geo_sol <- municipios_geo %>%
   left_join(dfAvp_municipios_solicitadas, by = "municipio")
 
-# avpAsignadas <- read_excel(paste0(avp, "/avpAsignadas2017_23.xlsx")) %>% 
-#   rename(región = `Región `) %>%
-#   pivot_longer(!región, names_to = "año", values_to = "asignadas")
-# 
-# avpSolicitadas <- read_excel(paste0(avp, "/avpSolicitudes2017_23.xlsx")) %>% 
-#   rename(región = `Región `) %>%
-#   pivot_longer(!región, names_to = "año", values_to = "solicitadas")
-
-# Unir los datasets por columna "región" y "año"
-# dfAvp <- left_join(avpSolicitadas, avpAsignadas, by = c("región", "año")) %>% 
-#   filter(región != "Total")  %>%
-#   pivot_longer(
-#     !c(región, año), names_to = "status", values_to = "cantidad"
-#   ) %>%
-#   mutate(
-#     región = factor(región),
-#     status = factor(status, levels = c("solicitadas", "asignadas"))
-#   ) %>%
-#   filter(
-#     año != "*2023"
-#   ) %>%
-#   rename(Año = año) %>%
-#   rename(Región = región) %>%
-#   rename(Estado = status) %>%
-#   rename(Cantidad = cantidad) %>%
-#   replace_na(list(Cantidad = 0)) %>%
-#   relocate(
-#     Año, Región, Estado, Cantidad
-#   )
 
 # Convertir el año a numérico para eliminar el asterisco y convertirlo a int
 dfAvp$Año <- as.factor(sub("\\*", "", dfAvp$Año))
@@ -583,81 +522,88 @@ poli <- here::here("data", "Negociado_de_Policia", "/")
 #### despDF ####
 meses <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
 
-sheet_name = "2020"
-desp2020 <- read_excel(paste0(poli, "npprDesp.xlsx"),
-                       sheet = sheet_name) %>%
-  cleanSheet_npprDesp(sheet_name)
+# Años a importar
+years <- 2020:2024
 
-sheet_name = "2021"
-desp2021 <- read_excel(paste0(poli, "npprDesp.xlsx"),
-                       sheet = sheet_name) %>%
-  cleanSheet_npprDesp(sheet_name)
+# Leer y limpiar los datos por hoja
+despDF_list <- lapply(as.character(years), function(sheet_name) {
+  read_excel(paste0(poli, "npprDesp.xlsx"), sheet = sheet_name) %>%
+    cleanSheet_npprDesp(sheet_name)
+})
 
-sheet_name = "2022"
-desp2022 <- read_excel(paste0(poli, "npprDesp.xlsx"),
-                       sheet = sheet_name) %>%
-  cleanSheet_npprDesp(sheet_name)
-
-sheet_name = "2023"
-desp2023 <- read_excel(paste0(poli, "npprDesp.xlsx"),
-                       sheet = sheet_name) %>%
-  cleanSheet_npprDesp(sheet_name)
-
-sheet_name = "2024"
-desp2024 <- read_excel(paste0(poli, "npprDesp.xlsx"),
-                       sheet = sheet_name) %>%
-  cleanSheet_npprDesp(sheet_name)
-
-despDF_list <- list(desp2020,
-                    desp2021,
-                    desp2022,
-                    desp2023,
-                    desp2024)
-
-# Unir todos los data frames en la lista usando full_join
+# Unir y transformar los datos
 despDF <- despDF_list %>%
   reduce(full_join) %>%
   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
-  filter(!grepl("Total", Meses)) %>%
+  filter(!grepl("Total", Meses, ignore.case = TRUE)) %>%
   group_by(Categoria, Año) %>%
-  summarise(Casos = sum(Casos, na.rm = TRUE)) %>%
-  ungroup() %>%
+  summarise(Casos = sum(Casos, na.rm = TRUE), .groups = "drop") %>%
   mutate(
     Año = factor(Año),
     Estado = factor(Categoria)
   ) %>%
   replace_na(list(Casos = 0)) %>%
-  select(
-    Año, Estado, Casos
-  )
+  select(Año, Estado, Casos)
+
+# sheet_name = "2020"
+# desp2020 <- read_excel(paste0(poli, "npprDesp.xlsx"),
+#                        sheet = sheet_name) %>%
+#   cleanSheet_npprDesp(sheet_name)
+# 
+# sheet_name = "2021"
+# desp2021 <- read_excel(paste0(poli, "npprDesp.xlsx"),
+#                        sheet = sheet_name) %>%
+#   cleanSheet_npprDesp(sheet_name)
+# 
+# sheet_name = "2022"
+# desp2022 <- read_excel(paste0(poli, "npprDesp.xlsx"),
+#                        sheet = sheet_name) %>%
+#   cleanSheet_npprDesp(sheet_name)
+# 
+# sheet_name = "2023"
+# desp2023 <- read_excel(paste0(poli, "npprDesp.xlsx"),
+#                        sheet = sheet_name) %>%
+#   cleanSheet_npprDesp(sheet_name)
+# 
+# sheet_name = "2024"
+# desp2024 <- read_excel(paste0(poli, "npprDesp.xlsx"),
+#                        sheet = sheet_name) %>%
+#   cleanSheet_npprDesp(sheet_name)
+# 
+# despDF_list <- list(desp2020,
+#                     desp2021,
+#                     desp2022,
+#                     desp2023,
+#                     desp2024)
+# 
+# # Unir todos los data frames en la lista usando full_join
+# despDF <- despDF_list %>%
+#   reduce(full_join) %>%
+#   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
+#   filter(!grepl("Total", Meses)) %>%
+#   group_by(Categoria, Año) %>%
+#   summarise(Casos = sum(Casos, na.rm = TRUE)) %>%
+#   ungroup() %>%
+#   mutate(
+#     Año = factor(Año),
+#     Estado = factor(Categoria)
+#   ) %>%
+#   replace_na(list(Casos = 0)) %>%
+#   select(
+#     Año, Estado, Casos
+#   )
 
 #### vEdad ####
-sheet_name = "2021"
-vEdad2021 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
-                       sheet = sheet_name) %>%
-  cleanSheet_npprVDedad(sheet_name)
+# Años a importar
+years <- 2021:2024
 
-sheet_name = "2022"
-vEdad2022 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
-                        sheet = sheet_name) %>%
-  cleanSheet_npprVDedad(sheet_name)
+# Leer y limpiar los datos por hoja
+vEdad_list <- lapply(as.character(years), function(sheet_name) {
+  read_excel(paste0(poli, "npprVDedad.xlsx"), sheet = sheet_name) %>%
+    cleanSheet_npprVDedad(sheet_name)
+})
 
-sheet_name = "2023"
-vEdad2023 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
-                        sheet = sheet_name) %>%
-  cleanSheet_npprVDedad(sheet_name)
-
-sheet_name = "2024"
-vEdad2024 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
-                        sheet = sheet_name) %>%
-  cleanSheet_npprVDedad(sheet_name)
-
-vEdad_list <- list(vEdad2021,
-                    vEdad2022,
-                    vEdad2023,
-                    vEdad2024)
-
-# Unir todos los data frames en la lista usando full_join
+# Unir y transformar los datos
 vEdad <- vEdad_list %>%
   reduce(full_join) %>%
   rename(
@@ -685,40 +631,129 @@ vEdad <- vEdad_list %>%
     Año, Edad, Sexo, Casos
   )
 
+# sheet_name = "2021"
+# vEdad2021 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
+#                        sheet = sheet_name) %>%
+#   cleanSheet_npprVDedad(sheet_name)
+# 
+# sheet_name = "2022"
+# vEdad2022 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
+#                         sheet = sheet_name) %>%
+#   cleanSheet_npprVDedad(sheet_name)
+# 
+# sheet_name = "2023"
+# vEdad2023 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
+#                         sheet = sheet_name) %>%
+#   cleanSheet_npprVDedad(sheet_name)
+# 
+# sheet_name = "2024"
+# vEdad2024 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
+#                         sheet = sheet_name) %>%
+#   cleanSheet_npprVDedad(sheet_name)
+# 
+# vEdad_list <- list(vEdad2021,
+#                     vEdad2022,
+#                     vEdad2023,
+#                     vEdad2024)
+# 
+# # Unir todos los data frames en la lista usando full_join
+# vEdad <- vEdad_list %>%
+#   reduce(full_join) %>%
+#   rename(
+#     Edad = `Grupos de Edad`,
+#     `Ambos Sexos` = Total,
+#     Mujeres = `Cantidad de mujeres víctimas`,
+#     Hombres = Masculino,
+#     Año = Año
+#   ) %>%
+#   pivot_longer(
+#     !c(Edad, Año), names_to = "Sexo", values_to = "Casos"
+#   ) %>%
+#   mutate(
+#     Edad = str_replace_all(Edad, c("^< 16$" = "menos de 16 años", "^65 o más$" = "65 años o más")),
+#     Edad = factor(Edad, levels = c("menos de 16 años", "16-17", "18-19", "20-24", "25-29", "30-34",
+#                                    "35-39","40-44","45-49","50-54","55-59","60-64","65 años o más",
+#                                    "Desconocida"),
+#                   ordered = TRUE),
+#     Año = factor(Año),
+#     Sexo = factor(Sexo, levels = c("Hombres", "Mujeres", "Ambos Sexos", "Desconocido"),
+#                   ordered = TRUE)
+#   ) %>%
+#   replace_na(list(Casos = 0)) %>%
+#   select(
+#     Año, Edad, Sexo, Casos
+#   )
+
 #### inciDF ####
-inci2021 <- read_excel(paste0(poli, "NPPRincidentes_2021.xlsx")) %>% 
-  rename_with(~gsub("2021", "",.), contains("2021")) %>%
-  rename_at(vars(2), ~ "Población") %>% 
-  mutate(Año = "2021")
+# Vector de años
+años <- c("2021", "2022", "2023")
 
-# faltan datos para el 2022
-inci2022 <- read_excel(paste0(poli, "NPPRincidentes_2022.xlsx")) %>% 
-  rename_with(~gsub("2022", "",.), contains("2022")) %>%
-  rename_at(vars(2), ~"Población") %>% 
-  mutate(Año = "2022")
+# Función para leer y procesar cada archivo
+leer_datos_incidentes <- function(año) {
+  data <- read_excel(paste0(poli, "NPPRincidentes_", año, ".xlsx")) %>%
+    rename_with(~ gsub(año, "", .), contains(año)) %>%
+    rename_at(vars(2), ~ "Población") %>%
+    mutate(Año = año)
+  
+  # Para el año 2023, también hay columnas con "2022"
+  if (año == "2023") {
+    data <- data %>%
+      rename_with(~ gsub("2022", "", .), contains("2022"))
+  }
+  
+  return(data)
+}
 
-# faltan datos desde mayo en adelante
-inci2023 <- read_excel(paste0(poli,"NPPRincidentes_2023.xlsx")) %>% rename_with(~gsub("2022", "",.), contains("2022")) %>%
-  rename_with(~gsub("2023", "",.), contains("2023")) %>%
-  rename_at(vars(2), ~ "Población") %>%
-  mutate(Año = "2023")
-
-# dataframe con toda la data combinada
-inciDF <- bind_rows(inci2021, inci2022, inci2023) %>%
+# Leer y combinar todos los años
+inciDF <- lapply(años, leer_datos_incidentes) %>%
+  bind_rows() %>%
   filter(`Áreas Policiacas` != "Total") %>%
   pivot_longer(cols = -c(`Áreas Policiacas`, Población, Año), names_to = "Mes", values_to = "Casos") %>%
   mutate(
     `Áreas Policiacas` = factor(str_trim(`Áreas Policiacas`)),
     Año = factor(Año),
-    Meses = factor(Mes), 
+    Meses = factor(Mes),
     Meses_Numéricos = match(Meses, Mes),
     Fecha = as.yearmon(paste(Año, Meses_Numéricos), "%Y %m")
   ) %>%
   replace_na(list(Casos = 0)) %>%
   select(-c(Meses_Numéricos, Mes, Meses)) %>%
-  relocate(
-    Año, `Áreas Policiacas`, Población, Casos
-  )
+  relocate(Año, `Áreas Policiacas`, Población, Casos)
+
+# inci2021 <- read_excel(paste0(poli, "NPPRincidentes_2021.xlsx")) %>% 
+#   rename_with(~gsub("2021", "",.), contains("2021")) %>%
+#   rename_at(vars(2), ~ "Población") %>% 
+#   mutate(Año = "2021")
+# 
+# # faltan datos para el 2022
+# inci2022 <- read_excel(paste0(poli, "NPPRincidentes_2022.xlsx")) %>% 
+#   rename_with(~gsub("2022", "",.), contains("2022")) %>%
+#   rename_at(vars(2), ~"Población") %>% 
+#   mutate(Año = "2022")
+# 
+# # faltan datos desde mayo en adelante
+# inci2023 <- read_excel(paste0(poli,"NPPRincidentes_2023.xlsx")) %>% 
+#   rename_with(~gsub("2022", "",.), contains("2022")) %>%
+#   rename_with(~gsub("2023", "",.), contains("2023")) %>%
+#   rename_at(vars(2), ~ "Población") %>%
+#   mutate(Año = "2023")
+# 
+# # dataframe con toda la data combinada
+# inciDF <- bind_rows(inci2021, inci2022, inci2023) %>%
+#   filter(`Áreas Policiacas` != "Total") %>%
+#   pivot_longer(cols = -c(`Áreas Policiacas`, Población, Año), names_to = "Mes", values_to = "Casos") %>%
+#   mutate(
+#     `Áreas Policiacas` = factor(str_trim(`Áreas Policiacas`)),
+#     Año = factor(Año),
+#     Meses = factor(Mes), 
+#     Meses_Numéricos = match(Meses, Mes),
+#     Fecha = as.yearmon(paste(Año, Meses_Numéricos), "%Y %m")
+#   ) %>%
+#   replace_na(list(Casos = 0)) %>%
+#   select(-c(Meses_Numéricos, Mes, Meses)) %>%
+#   relocate(
+#     Año, `Áreas Policiacas`, Población, Casos
+#   )
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y 
 # combinar los datos de delitos con los datos geográficos de los distritos fiscales
@@ -849,291 +884,396 @@ trib <- here::here("data", "administracion_de_tribunales", "/")
 ## Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual,
 ## por Región Judicial y grupo de edad de la parte peticionaria
 
-# importando datos del año fiscal 2020-2021
-sheet_name = "2020-2021"
-casosCrimLey148_20 <- read_excel(paste0(trib, "casosCrimLey148.xlsx"),
-                                 sheet = sheet_name) %>%
-  rename(
-    Delito = `Año fiscal/delitos`
-  ) %>%
-  pivot_longer(
-    !Delito,
-    names_to = "Status",
-    values_to = "Casos"
-  ) %>%
-  mutate(AñoFiscal = "2020-2021") %>%
-  filter(Delito != "2020-2021")
+#### Función para importar y procesar datos ####
+leer_y_procesar <- function(sheet_name) {
+  read_excel(paste0(trib, "casosCrimLey148.xlsx"), sheet = sheet_name) %>%
+    rename(Delito = `Año fiscal/delitos`) %>%
+    pivot_longer(!Delito, names_to = "Status", values_to = "Casos") %>%
+    mutate(AñoFiscal = sheet_name) %>%
+    filter(Delito != sheet_name)
+}
 
-# importando datos del año fiscal 2021-2022
-sheet_name = "2021-2022"
-casosCrimLey148_21 <- read_excel(paste0(trib, "casosCrimLey148.xlsx"),
-                                 sheet = sheet_name) %>%
-  rename(
-    Delito = `Año fiscal/delitos`
-  ) %>%
-  pivot_longer(
-    !Delito,
-    names_to = "Status",
-    values_to = "Casos"
-  ) %>%
-  mutate(AñoFiscal = "2021-2022") %>%
-  filter(Delito != "2021-2022")
+#### Leer todos los años fiscales ####
+años <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
+casosCrimLey148_list <- lapply(años, leer_y_procesar)
 
-sheet_name = "2022-2023"
-casosCrimLey148_22 <- read_excel(paste0(trib, "casosCrimLey148.xlsx"),
-                                 sheet = sheet_name) %>%
-  rename(
-    Delito = `Año fiscal/delitos`
-  ) %>%
-  pivot_longer(
-    !Delito,
-    names_to = "Status",
-    values_to = "Casos"
-  ) %>%
-  mutate(AñoFiscal = "2022-2023") %>%
-  filter(Delito != "2022-2023")
-
-sheet_name = "2023-2024"
-casosCrimLey148_23 <- read_excel(paste0(trib, "casosCrimLey148.xlsx"),
-                                 sheet = sheet_name) %>%
-  rename(
-    Delito = `Año fiscal/delitos`
-  ) %>%
-  pivot_longer(
-    !Delito,
-    names_to = "Status",
-    values_to = "Casos"
-  ) %>%
-  mutate(AñoFiscal = "2023-2024") %>%
-  filter(Delito != "2023-2024")
-
-sheet_name = "2024-2025"
-casosCrimLey148_24 <- read_excel(paste0(trib, "casosCrimLey148.xlsx"),
-                                 sheet = sheet_name) %>%
-  rename(
-    Delito = `Año fiscal/delitos`
-  ) %>%
-  pivot_longer(
-    !Delito,
-    names_to = "Status",
-    values_to = "Casos"
-  ) %>%
-  mutate(AñoFiscal = "2024-2025") %>%
-  filter(Delito != "2024-2025")
-
-## faltan datos
-# Lista de data frames
-casosCrimLey148_list <- list(casosCrimLey148_20, casosCrimLey148_21, casosCrimLey148_22, casosCrimLey148_23, casosCrimLey148_24)
-
-# Unir todos los data frames en la lista usando full_join
+#### Unir todos los data frames y ajustar variables ####
 casosCrimLey148 <- casosCrimLey148_list %>%
   reduce(full_join) %>%
   mutate(
-    AñoFiscal = case_when(
-      AñoFiscal == "2020-2021" ~ "2021",
-      AñoFiscal == "2021-2022" ~ "2022",
-      AñoFiscal == "2022-2023" ~ "2023",
-      AñoFiscal == "2023-2024" ~ "2024",
-      AñoFiscal == "2024-2025" ~ "2025",
-      TRUE ~ AñoFiscal
-    ),
+    AñoFiscal = recode(AñoFiscal,
+                       "2020-2021" = "2021",
+                       "2021-2022" = "2022",
+                       "2022-2023" = "2023",
+                       "2023-2024" = "2024",
+                       "2024-2025" = "2025"),
     AñoFiscal = factor(AñoFiscal),
-    Status = factor(Status), 
+    Status = factor(Status),
     Delito = factor(Delito)
   ) %>%
   replace_na(list(Casos = 0)) %>%
   relocate(AñoFiscal, Status, Delito, Casos)
 
+# # importando datos del año fiscal 2020-2021
+# sheet_name = "2020-2021"
+# casosCrimLey148_20 <- read_excel(paste0(trib, "casosCrimLey148.xlsx"),
+#                                  sheet = sheet_name) %>%
+#   rename(
+#     Delito = `Año fiscal/delitos`
+#   ) %>%
+#   pivot_longer(
+#     !Delito,
+#     names_to = "Status",
+#     values_to = "Casos"
+#   ) %>%
+#   mutate(AñoFiscal = "2020-2021") %>%
+#   filter(Delito != "2020-2021")
+# 
+# # importando datos del año fiscal 2021-2022
+# sheet_name = "2021-2022"
+# casosCrimLey148_21 <- read_excel(paste0(trib, "casosCrimLey148.xlsx"),
+#                                  sheet = sheet_name) %>%
+#   rename(
+#     Delito = `Año fiscal/delitos`
+#   ) %>%
+#   pivot_longer(
+#     !Delito,
+#     names_to = "Status",
+#     values_to = "Casos"
+#   ) %>%
+#   mutate(AñoFiscal = "2021-2022") %>%
+#   filter(Delito != "2021-2022")
+# 
+# sheet_name = "2022-2023"
+# casosCrimLey148_22 <- read_excel(paste0(trib, "casosCrimLey148.xlsx"),
+#                                  sheet = sheet_name) %>%
+#   rename(
+#     Delito = `Año fiscal/delitos`
+#   ) %>%
+#   pivot_longer(
+#     !Delito,
+#     names_to = "Status",
+#     values_to = "Casos"
+#   ) %>%
+#   mutate(AñoFiscal = "2022-2023") %>%
+#   filter(Delito != "2022-2023")
+# 
+# sheet_name = "2023-2024"
+# casosCrimLey148_23 <- read_excel(paste0(trib, "casosCrimLey148.xlsx"),
+#                                  sheet = sheet_name) %>%
+#   rename(
+#     Delito = `Año fiscal/delitos`
+#   ) %>%
+#   pivot_longer(
+#     !Delito,
+#     names_to = "Status",
+#     values_to = "Casos"
+#   ) %>%
+#   mutate(AñoFiscal = "2023-2024") %>%
+#   filter(Delito != "2023-2024")
+# 
+# sheet_name = "2024-2025"
+# casosCrimLey148_24 <- read_excel(paste0(trib, "casosCrimLey148.xlsx"),
+#                                  sheet = sheet_name) %>%
+#   rename(
+#     Delito = `Año fiscal/delitos`
+#   ) %>%
+#   pivot_longer(
+#     !Delito,
+#     names_to = "Status",
+#     values_to = "Casos"
+#   ) %>%
+#   mutate(AñoFiscal = "2024-2025") %>%
+#   filter(Delito != "2024-2025")
+# 
+# ## faltan datos
+# # Lista de data frames
+# casosCrimLey148_list <- list(casosCrimLey148_20, casosCrimLey148_21, casosCrimLey148_22, casosCrimLey148_23, casosCrimLey148_24)
+# 
+# # Unir todos los data frames en la lista usando full_join
+# casosCrimLey148 <- casosCrimLey148_list %>%
+#   reduce(full_join) %>%
+#   mutate(
+#     AñoFiscal = case_when(
+#       AñoFiscal == "2020-2021" ~ "2021",
+#       AñoFiscal == "2021-2022" ~ "2022",
+#       AñoFiscal == "2022-2023" ~ "2023",
+#       AñoFiscal == "2023-2024" ~ "2024",
+#       AñoFiscal == "2024-2025" ~ "2025",
+#       TRUE ~ AñoFiscal
+#     ),
+#     AñoFiscal = factor(AñoFiscal),
+#     Status = factor(Status), 
+#     Delito = factor(Delito)
+#   ) %>%
+#   replace_na(list(Casos = 0)) %>%
+#   relocate(AñoFiscal, Status, Delito, Casos)
+
 #### OP_148_SoliGrupEdad ####
 
 # Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, 
 # por Región Judicial y grupo de edad de la parte peticionaria
-
 new_names <- c("Total", "20 años o menos", "21-29", "30-39", "40-49", "50-59", "60 años o más", "No Indica")
+sheet_years <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
 
-# datos de solicitudes de órdenes de protección en el 2020-2021
-sheet_name = "2020-2021"
-OP_148_SoliGrupEdad2020_21 <- read_excel(paste0(trib, "OP_148_SoliGrupEdad.xlsx"),
-                                         sheet = sheet_name) %>%
-  cleanSheet_OP_148_SoliGrupEdad(sheet_name, new_names)
+# Leer y limpiar todos los datos
+OP_148_SoliGrupEdad_list <- lapply(sheet_years, function(year) {
+  read_excel(paste0(trib, "OP_148_SoliGrupEdad.xlsx"), sheet = year) %>%
+    cleanSheet_OP_148_SoliGrupEdad(year, new_names)
+})
 
-
-# datos de solicitudes de órdenes de protección en el 2021-2022
-sheet_name = "2021-2022"
-OP_148_SoliGrupEdad2021_22 <- read_excel(paste0(trib, "OP_148_SoliGrupEdad.xlsx"),
-                                         sheet = sheet_name) %>%
-  cleanSheet_OP_148_SoliGrupEdad(sheet_name, new_names)
-
-# datos de solicitudes de órdenes de protección en el 2022-2023
-sheet_name = "2022-2023"
-OP_148_SoliGrupEdad2022_23 <- read_excel(paste0(trib, "OP_148_SoliGrupEdad.xlsx"),
-                                         sheet = sheet_name) %>%
-  cleanSheet_OP_148_SoliGrupEdad(sheet_name, new_names)
-
-
-# datos de solicitudes de órdenes de protección en el 2023-2024
-sheet_name = "2023-2024"
-OP_148_SoliGrupEdad2023_24 <- read_excel(paste0(trib, "OP_148_SoliGrupEdad.xlsx"),
-                                         sheet = sheet_name) %>%
-  cleanSheet_OP_148_SoliGrupEdad(sheet_name, new_names)
-
-# datos de solicitudes de órdenes de protección en el 2024-2025
-sheet_name = "2024-2025"
-OP_148_SoliGrupEdad2024_25 <- read_excel(paste0(trib, "OP_148_SoliGrupEdad.xlsx"),
-                                         sheet = sheet_name) %>%
-  cleanSheet_OP_148_SoliGrupEdad(sheet_name, new_names)
-
-# Lista de data frames de OP_148_SoliGrupEdad
-OP_148_SoliGrupEdad_list <- list(OP_148_SoliGrupEdad2020_21, OP_148_SoliGrupEdad2021_22, OP_148_SoliGrupEdad2022_23,
-                                 OP_148_SoliGrupEdad2023_24, OP_148_SoliGrupEdad2024_25)
-
-# Unir todos los data frames en la lista usando full_join
-OP_148_SoliGrupEdad <- OP_148_SoliGrupEdad_list %>%
-  reduce(full_join) %>%
+# Unir los data frames y limpiar datos
+OP_148_SoliGrupEdad <- bind_rows(OP_148_SoliGrupEdad_list) %>%
   mutate(
-    AñoFiscal = case_when(
-      AñoFiscal == "2020-2021" ~ "2021",
-      AñoFiscal == "2021-2022" ~ "2022",
-      AñoFiscal == "2022-2023" ~ "2023",
-      AñoFiscal == "2023-2024" ~ "2024",
-      AñoFiscal == "2024-2025" ~ "2025",
-      TRUE ~ AñoFiscal
-    ),
+    AñoFiscal = recode(AñoFiscal,
+                       "2020-2021" = "2021",
+                       "2021-2022" = "2022",
+                       "2022-2023" = "2023",
+                       "2023-2024" = "2024",
+                       "2024-2025" = "2025"),
     AñoFiscal = factor(AñoFiscal),
     Región = factor(Región)
   ) %>%
   replace_na(list(Solicitudes = 0)) %>%
   relocate(AñoFiscal, Región, Edad, Solicitudes)
 
+# new_names <- c("Total", "20 años o menos", "21-29", "30-39", "40-49", "50-59", "60 años o más", "No Indica")
+# 
+# # datos de solicitudes de órdenes de protección en el 2020-2021
+# sheet_name = "2020-2021"
+# OP_148_SoliGrupEdad2020_21 <- read_excel(paste0(trib, "OP_148_SoliGrupEdad.xlsx"),
+#                                          sheet = sheet_name) %>%
+#   cleanSheet_OP_148_SoliGrupEdad(sheet_name, new_names)
+# 
+# 
+# # datos de solicitudes de órdenes de protección en el 2021-2022
+# sheet_name = "2021-2022"
+# OP_148_SoliGrupEdad2021_22 <- read_excel(paste0(trib, "OP_148_SoliGrupEdad.xlsx"),
+#                                          sheet = sheet_name) %>%
+#   cleanSheet_OP_148_SoliGrupEdad(sheet_name, new_names)
+# 
+# # datos de solicitudes de órdenes de protección en el 2022-2023
+# sheet_name = "2022-2023"
+# OP_148_SoliGrupEdad2022_23 <- read_excel(paste0(trib, "OP_148_SoliGrupEdad.xlsx"),
+#                                          sheet = sheet_name) %>%
+#   cleanSheet_OP_148_SoliGrupEdad(sheet_name, new_names)
+# 
+# 
+# # datos de solicitudes de órdenes de protección en el 2023-2024
+# sheet_name = "2023-2024"
+# OP_148_SoliGrupEdad2023_24 <- read_excel(paste0(trib, "OP_148_SoliGrupEdad.xlsx"),
+#                                          sheet = sheet_name) %>%
+#   cleanSheet_OP_148_SoliGrupEdad(sheet_name, new_names)
+# 
+# # datos de solicitudes de órdenes de protección en el 2024-2025
+# sheet_name = "2024-2025"
+# OP_148_SoliGrupEdad2024_25 <- read_excel(paste0(trib, "OP_148_SoliGrupEdad.xlsx"),
+#                                          sheet = sheet_name) %>%
+#   cleanSheet_OP_148_SoliGrupEdad(sheet_name, new_names)
+# 
+# # Lista de data frames de OP_148_SoliGrupEdad
+# OP_148_SoliGrupEdad_list <- list(OP_148_SoliGrupEdad2020_21, OP_148_SoliGrupEdad2021_22, OP_148_SoliGrupEdad2022_23,
+#                                  OP_148_SoliGrupEdad2023_24, OP_148_SoliGrupEdad2024_25)
+# 
+# # Unir todos los data frames en la lista usando full_join
+# OP_148_SoliGrupEdad <- OP_148_SoliGrupEdad_list %>%
+#   reduce(full_join) %>%
+#   mutate(
+#     AñoFiscal = case_when(
+#       AñoFiscal == "2020-2021" ~ "2021",
+#       AñoFiscal == "2021-2022" ~ "2022",
+#       AñoFiscal == "2022-2023" ~ "2023",
+#       AñoFiscal == "2023-2024" ~ "2024",
+#       AñoFiscal == "2024-2025" ~ "2025",
+#       TRUE ~ AñoFiscal
+#     ),
+#     AñoFiscal = factor(AñoFiscal),
+#     Región = factor(Región)
+#   ) %>%
+#   replace_na(list(Solicitudes = 0)) %>%
+#   relocate(AñoFiscal, Región, Edad, Solicitudes)
+
 #### OP_Ley148_ex_parteEmitidas ####
 # Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
-
-# lista con nuevos nombres de columnas para mejor interpretación
+# Nuevos nombres de columnas
 new_names <- c("Total", "Agresión Sexual", "Acoso Sexual", "Actos Lascivos", "Incesto") 
+sheet_years <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
 
-# datos de solicitudes de órdenes de protección en el 2021-2022
-sheet_name = "2020-2021"
-OP_Ley148_ex_parteEmitidas2020_21 <- read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"),
-                                                sheet = sheet_name) %>%
-  cleanSheet_OP_Ley148_ex_parteEmitidas(sheet_name, new_names)
-  
-# datos de solicitudes de órdenes de protección en el 2021-2022
-sheet_name = "2021-2022"
-OP_Ley148_ex_parteEmitidas2021_22 <- read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"),
-                                                sheet = sheet_name) %>%
-  cleanSheet_OP_Ley148_ex_parteEmitidas(sheet_name, new_names)
+# Leer y limpiar los datos
+OP_Ley148_ex_parteEmitidas_list <- lapply(sheet_years, function(year) {
+  read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"), sheet = year) %>%
+    cleanSheet_OP_Ley148_ex_parteEmitidas(year, new_names)
+})
 
-# datos de solicitudes de órdenes de protección en el 2022-2023
-sheet_name = "2022-2023"
-OP_Ley148_ex_parteEmitidas2022_23 <- read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"),
-                                                sheet = sheet_name) %>%
-  cleanSheet_OP_Ley148_ex_parteEmitidas(sheet_name, new_names)
-
-# datos de solicitudes de órdenes de protección en el 2023-2024
-sheet_name = "2023-2024"
-OP_Ley148_ex_parteEmitidas2023_24 <- read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"),
-                                                sheet = sheet_name) %>%
-  cleanSheet_OP_Ley148_ex_parteEmitidas(sheet_name, new_names)
-
-# datos de solicitudes de órdenes de protección en el 2024-2025
-sheet_name = "2024-2025"
-OP_Ley148_ex_parteEmitidas2024_25 <- read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"),
-                                                sheet = sheet_name) %>%
-  cleanSheet_OP_Ley148_ex_parteEmitidas(sheet_name, new_names)
-
-# dataset unido
-# Lista de data frames de OP_148_SoliGrupEdad
-OP_Ley148_ex_parteEmitidas_list <- list(OP_Ley148_ex_parteEmitidas2020_21, OP_Ley148_ex_parteEmitidas2021_22,
-                                        OP_Ley148_ex_parteEmitidas2022_23, OP_Ley148_ex_parteEmitidas2023_24,
-                                        OP_Ley148_ex_parteEmitidas2024_25)
-
-# Unir todos los data frames en la lista usando full_join
-OP_Ley148_ex_parteEmitidas <- OP_Ley148_ex_parteEmitidas_list %>%
-  reduce(full_join) %>%
+# Unir los data frames y procesar
+OP_Ley148_ex_parteEmitidas <- bind_rows(OP_Ley148_ex_parteEmitidas_list) %>%
   mutate(
+    AñoFiscal = recode(AñoFiscal,
+                       "2020-2021" = "2021",
+                       "2021-2022" = "2022",
+                       "2022-2023" = "2023",
+                       "2023-2024" = "2024",
+                       "2024-2025" = "2025"),
     Región = factor(Región),
     Delito = factor(Delito),
-    AñoFiscal = case_when(
-      AñoFiscal == "2020-2021" ~ "2021",
-      AñoFiscal == "2021-2022" ~ "2022",
-      AñoFiscal == "2022-2023" ~ "2023",
-      AñoFiscal == "2023-2024" ~ "2024",
-      AñoFiscal == "2024-2025" ~ "2025",
-      TRUE ~ AñoFiscal
-    ),
     AñoFiscal = factor(AñoFiscal)
   ) %>%
-  filter(
-    Región != "Total"
-  ) %>%
+  filter(Región != "Total") %>%
   replace_na(list(ÓrdenesEmitidas = 0)) %>%
-  relocate(
-    AñoFiscal, Delito, Región, ÓrdenesEmitidas
-  )
+  relocate(AñoFiscal, Delito, Región, ÓrdenesEmitidas)
+# 
+# # lista con nuevos nombres de columnas para mejor interpretación
+# new_names <- c("Total", "Agresión Sexual", "Acoso Sexual", "Actos Lascivos", "Incesto") 
+# 
+# # datos de solicitudes de órdenes de protección en el 2021-2022
+# sheet_name = "2020-2021"
+# OP_Ley148_ex_parteEmitidas2020_21 <- read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"),
+#                                                 sheet = sheet_name) %>%
+#   cleanSheet_OP_Ley148_ex_parteEmitidas(sheet_name, new_names)
+#   
+# # datos de solicitudes de órdenes de protección en el 2021-2022
+# sheet_name = "2021-2022"
+# OP_Ley148_ex_parteEmitidas2021_22 <- read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"),
+#                                                 sheet = sheet_name) %>%
+#   cleanSheet_OP_Ley148_ex_parteEmitidas(sheet_name, new_names)
+# 
+# # datos de solicitudes de órdenes de protección en el 2022-2023
+# sheet_name = "2022-2023"
+# OP_Ley148_ex_parteEmitidas2022_23 <- read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"),
+#                                                 sheet = sheet_name) %>%
+#   cleanSheet_OP_Ley148_ex_parteEmitidas(sheet_name, new_names)
+# 
+# # datos de solicitudes de órdenes de protección en el 2023-2024
+# sheet_name = "2023-2024"
+# OP_Ley148_ex_parteEmitidas2023_24 <- read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"),
+#                                                 sheet = sheet_name) %>%
+#   cleanSheet_OP_Ley148_ex_parteEmitidas(sheet_name, new_names)
+# 
+# # datos de solicitudes de órdenes de protección en el 2024-2025
+# sheet_name = "2024-2025"
+# OP_Ley148_ex_parteEmitidas2024_25 <- read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"),
+#                                                 sheet = sheet_name) %>%
+#   cleanSheet_OP_Ley148_ex_parteEmitidas(sheet_name, new_names)
+# 
+# # dataset unido
+# # Lista de data frames de OP_148_SoliGrupEdad
+# OP_Ley148_ex_parteEmitidas_list <- list(OP_Ley148_ex_parteEmitidas2020_21, OP_Ley148_ex_parteEmitidas2021_22,
+#                                         OP_Ley148_ex_parteEmitidas2022_23, OP_Ley148_ex_parteEmitidas2023_24,
+#                                         OP_Ley148_ex_parteEmitidas2024_25)
+# 
+# # Unir todos los data frames en la lista usando full_join
+# OP_Ley148_ex_parteEmitidas <- OP_Ley148_ex_parteEmitidas_list %>%
+#   reduce(full_join) %>%
+#   mutate(
+#     Región = factor(Región),
+#     Delito = factor(Delito),
+#     AñoFiscal = case_when(
+#       AñoFiscal == "2020-2021" ~ "2021",
+#       AñoFiscal == "2021-2022" ~ "2022",
+#       AñoFiscal == "2022-2023" ~ "2023",
+#       AñoFiscal == "2023-2024" ~ "2024",
+#       AñoFiscal == "2024-2025" ~ "2025",
+#       TRUE ~ AñoFiscal
+#     ),
+#     AñoFiscal = factor(AñoFiscal)
+#   ) %>%
+#   filter(
+#     Región != "Total"
+#   ) %>%
+#   replace_na(list(ÓrdenesEmitidas = 0)) %>%
+#   relocate(
+#     AñoFiscal, Delito, Región, ÓrdenesEmitidas
+#   )
 
 
 #### OP_LEY148Archivadas ####
-
 # Cantidad de solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual archivadas por Región Judicial
 new_names <- c("Total", "Solicitud Peticionaria", "Otra Razón")
+years <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
 
-# datos de solicitudes archivadas de órdenes de protección en 2020-2021
-sheet_name = "2020-2021"
-OP_LEY148Archivadas2020_21 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
-                                        sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
-
-# datos de solicitudes archivadas de órdenes de protección en 2021-2022
-sheet_name = "2021-2022"
-OP_LEY148Archivadas2021_22 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
-                                         sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
-
-sheet_name = "2022-2023"
-OP_LEY148Archivadas2022_23 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
-                                         sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
-
-sheet_name = "2023-2024"
-OP_LEY148Archivadas2023_24 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
-                                         sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
-
-sheet_name = "2024-2025"
-OP_LEY148Archivadas2024_25 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
-                                         sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
-
-# datos de solicitudes archivadas de órdenes de protección en juntadas
-OP_LEY148Archivadas_list <- list(OP_LEY148Archivadas2020_21,
-                                 OP_LEY148Archivadas2021_22,
-                                 OP_LEY148Archivadas2022_23,
-                                 OP_LEY148Archivadas2023_24,
-                                 OP_LEY148Archivadas2024_25)
+OP_LEY148Archivadas_list <- map(years, ~ {
+  read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"), sheet = .x) %>%
+    cleanSheet_OP_LEY148Archivadas(.x, new_names)
+})
 
 OP_LEY148Archivadas <- OP_LEY148Archivadas_list %>%
   reduce(full_join) %>%
   mutate(
-    Razón = factor(Razón, 
-                   levels = c("Solicitud Peticionaria", "Otra Razón")),
+    Razón = factor(Razón, levels = c("Solicitud Peticionaria", "Otra Razón")),
     Región = factor(Región),
-    AñoFiscal = case_when(
+    AñoFiscal = factor(case_when(
       AñoFiscal == "2020-2021" ~ "2021",
       AñoFiscal == "2021-2022" ~ "2022",
       AñoFiscal == "2022-2023" ~ "2023",
       AñoFiscal == "2023-2024" ~ "2024",
       AñoFiscal == "2024-2025" ~ "2025",
       TRUE ~ as.character(AñoFiscal)
-    ),
-    AñoFiscal = factor(AñoFiscal)
+    ))
   ) %>%
-  filter(
-    Región != "Total"
-  ) %>%
+  filter(Región != "Total") %>%
   replace_na(list(ÓrdenesArchivadas = 0)) %>%
-  relocate(
-    AñoFiscal, Razón, Región, ÓrdenesArchivadas
-  )
+  relocate(AñoFiscal, Razón, Región, ÓrdenesArchivadas)
+# 
+# # Cantidad de solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual archivadas por Región Judicial
+# new_names <- c("Total", "Solicitud Peticionaria", "Otra Razón")
+# 
+# # datos de solicitudes archivadas de órdenes de protección en 2020-2021
+# sheet_name = "2020-2021"
+# OP_LEY148Archivadas2020_21 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
+#                                         sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
+# 
+# # datos de solicitudes archivadas de órdenes de protección en 2021-2022
+# sheet_name = "2021-2022"
+# OP_LEY148Archivadas2021_22 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
+#                                          sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
+# 
+# sheet_name = "2022-2023"
+# OP_LEY148Archivadas2022_23 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
+#                                          sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
+# 
+# sheet_name = "2023-2024"
+# OP_LEY148Archivadas2023_24 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
+#                                          sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
+# 
+# sheet_name = "2024-2025"
+# OP_LEY148Archivadas2024_25 <- read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"),
+#                                          sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148Archivadas(sheet_name, new_names) 
+# 
+# # datos de solicitudes archivadas de órdenes de protección en juntadas
+# OP_LEY148Archivadas_list <- list(OP_LEY148Archivadas2020_21,
+#                                  OP_LEY148Archivadas2021_22,
+#                                  OP_LEY148Archivadas2022_23,
+#                                  OP_LEY148Archivadas2023_24,
+#                                  OP_LEY148Archivadas2024_25)
+# 
+# OP_LEY148Archivadas <- OP_LEY148Archivadas_list %>%
+#   reduce(full_join) %>%
+#   mutate(
+#     Razón = factor(Razón, 
+#                    levels = c("Solicitud Peticionaria", "Otra Razón")),
+#     Región = factor(Región),
+#     AñoFiscal = case_when(
+#       AñoFiscal == "2020-2021" ~ "2021",
+#       AñoFiscal == "2021-2022" ~ "2022",
+#       AñoFiscal == "2022-2023" ~ "2023",
+#       AñoFiscal == "2023-2024" ~ "2024",
+#       AñoFiscal == "2024-2025" ~ "2025",
+#       TRUE ~ as.character(AñoFiscal)
+#     ),
+#     AñoFiscal = factor(AñoFiscal)
+#   ) %>%
+#   filter(
+#     Región != "Total"
+#   ) %>%
+#   replace_na(list(ÓrdenesArchivadas = 0)) %>%
+#   relocate(
+#     AñoFiscal, Razón, Región, ÓrdenesArchivadas
+#   )
 
 
 #### OP_LEY148Denegadas ####
@@ -1141,242 +1281,343 @@ OP_LEY148Archivadas <- OP_LEY148Archivadas_list %>%
 # Cantidad de solicitudes de órdenes de protección denegadas al amparo de la Ley 148 - Violencia Sexual denegadas por Región Judicial
 # lista con nuevos nombres de columnas para mejor interpretación
 new_names <- c("No Aplican Disposiciones Ley148", "No Prueban Elementos")
+sheet_names <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024")
 
-# datos de solicitudes denegadas de órdenes de protección en 2022-2023
-sheet_name = "2020-2021"
-OP_LEY148Denegadas2020_21 <- read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"),
-                                                sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148Denegadas(sheet_name, new_names) 
+OP_LEY148Denegadas_list <- map(sheet_names, ~ {
+  read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"), sheet = .x) %>%
+    cleanSheet_OP_LEY148Denegadas(.x, new_names)
+})
 
-# datos de solicitudes denegadas de órdenes de protección en 2021-2022
-sheet_name = "2021-2022"
-OP_LEY148Denegadas2021_22 <- read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"),
-                                          sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148Denegadas(sheet_name, new_names)
-
-sheet_name = "2022-2023"
-OP_LEY148Denegadas2022_23 <- read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"),
-                                        sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148Denegadas(sheet_name, new_names) 
-
-sheet_name = "2023-2024"
-OP_LEY148Denegadas2023_24 <- read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"),
-                                        sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148Denegadas(sheet_name, new_names) 
-
-
-OP_LEY148Denegadas_list <- list(OP_LEY148Denegadas2020_21,
-                                        OP_LEY148Denegadas2021_22,
-                                        OP_LEY148Denegadas2022_23,
-                                        OP_LEY148Denegadas2023_24)
-
-# Unir todos los data frames en la lista usando full_join
 OP_LEY148Denegadas <- OP_LEY148Denegadas_list %>%
   reduce(full_join) %>%
   mutate(
     Región = factor(Región),
     Razón = factor(Razón),
-    AñoFiscal = case_when(
+    AñoFiscal = factor(case_when(
       AñoFiscal == "2020-2021" ~ "2021",
       AñoFiscal == "2021-2022" ~ "2022",
       AñoFiscal == "2022-2023" ~ "2023",
       AñoFiscal == "2023-2024" ~ "2024",
       TRUE ~ as.character(AñoFiscal)
-    ),
-    AñoFiscal = factor(AñoFiscal)
+    )),
+    ÓrdenesDenegadas = replace_na(ÓrdenesDenegadas, 0)
   ) %>%
-  replace_na(list(ÓrdenesDenegadas = 0)) %>%
-  relocate(
-    AñoFiscal, Razón, Región, ÓrdenesDenegadas
-  )
+  relocate(AñoFiscal, Razón, Región, ÓrdenesDenegadas)
+# 
+# new_names <- c("No Aplican Disposiciones Ley148", "No Prueban Elementos")
+# 
+# # datos de solicitudes denegadas de órdenes de protección en 2022-2023
+# sheet_name = "2020-2021"
+# OP_LEY148Denegadas2020_21 <- read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"),
+#                                                 sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148Denegadas(sheet_name, new_names) 
+# 
+# # datos de solicitudes denegadas de órdenes de protección en 2021-2022
+# sheet_name = "2021-2022"
+# OP_LEY148Denegadas2021_22 <- read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"),
+#                                           sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148Denegadas(sheet_name, new_names)
+# 
+# sheet_name = "2022-2023"
+# OP_LEY148Denegadas2022_23 <- read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"),
+#                                         sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148Denegadas(sheet_name, new_names) 
+# 
+# sheet_name = "2023-2024"
+# OP_LEY148Denegadas2023_24 <- read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"),
+#                                         sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148Denegadas(sheet_name, new_names) 
+# 
+# 
+# OP_LEY148Denegadas_list <- list(OP_LEY148Denegadas2020_21,
+#                                         OP_LEY148Denegadas2021_22,
+#                                         OP_LEY148Denegadas2022_23,
+#                                         OP_LEY148Denegadas2023_24)
+# 
+# # Unir todos los data frames en la lista usando full_join
+# OP_LEY148Denegadas <- OP_LEY148Denegadas_list %>%
+#   reduce(full_join) %>%
+#   mutate(
+#     Región = factor(Región),
+#     Razón = factor(Razón),
+#     AñoFiscal = case_when(
+#       AñoFiscal == "2020-2021" ~ "2021",
+#       AñoFiscal == "2021-2022" ~ "2022",
+#       AñoFiscal == "2022-2023" ~ "2023",
+#       AñoFiscal == "2023-2024" ~ "2024",
+#       TRUE ~ as.character(AñoFiscal)
+#     ),
+#     AñoFiscal = factor(AñoFiscal)
+#   ) %>%
+#   replace_na(list(ÓrdenesDenegadas = 0)) %>%
+#   relocate(
+#     AñoFiscal, Razón, Región, ÓrdenesDenegadas
+#   )
 
 
 #### OP_LEY148FinalEmitidas ####
 
 # Órdenes de protección finales emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
 
-# lista con nuevos nombres de columnas para mejor interpretación
 new_names <- c("Total", "Agresión Sexual", "Acoso Sexual", "Actos Lascivos", "Incesto")
+sheets <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
 
-# datos de solicitudes ex parte emitidas de la ley 148 en 2020-2021
-sheet_name = "2020-2021"
-OP_LEY148FinalEmitidas2020_21<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
-                                        sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
+# Leer y limpiar todos los sheets en una lista
+OP_LEY148FinalEmitidas_list <- lapply(sheets, function(sheet_name) {
+  read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"), sheet = sheet_name) %>%
+    cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
+})
 
-# datos de solicitudes ex parte emitidas de la ley 148 en 2021-2022
-sheet_name = "2021-2022"
-OP_LEY148FinalEmitidas2021_22<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
-                                           sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
-
-sheet_name = "2022-2023"
-OP_LEY148FinalEmitidas2022_23<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
-                                           sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
-
-sheet_name = "2023-2024"
-OP_LEY148FinalEmitidas2023_24<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
-                                           sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
-
-sheet_name = "2024-2025"
-OP_LEY148FinalEmitidas2024_25<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
-                                           sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
-
-# dataset joined
-
-OP_LEY148FinalEmitidas_list <- list(OP_LEY148FinalEmitidas2020_21,
-                                    OP_LEY148FinalEmitidas2021_22,
-                                    OP_LEY148FinalEmitidas2022_23,
-                                    OP_LEY148FinalEmitidas2023_24,
-                                    OP_LEY148FinalEmitidas2024_25)
-
-# Unir todos los data frames en la lista usando full_join
+# Unir todos los data frames y ajustar variables
 OP_LEY148FinalEmitidas <- OP_LEY148FinalEmitidas_list %>%
   reduce(full_join) %>%
   mutate(
     Región = factor(Región),
     Delito = factor(Delito),
-    AñoFiscal = case_when(
+    AñoFiscal = factor(case_when(
       AñoFiscal == "2020-2021" ~ "2021",
       AñoFiscal == "2021-2022" ~ "2022",
       AñoFiscal == "2022-2023" ~ "2023",
       AñoFiscal == "2023-2024" ~ "2024",
       AñoFiscal == "2024-2025" ~ "2025",
       TRUE ~ as.character(AñoFiscal)
-    ),
-    AñoFiscal = factor(AñoFiscal)
+    )),
+    ÓrdenesEmitidas = replace_na(ÓrdenesEmitidas, 0)
   ) %>%
-  replace_na(list(ÓrdenesEmitidas = 0)) %>%
-  relocate(
-    AñoFiscal, Delito, Región, ÓrdenesEmitidas
-  ) 
+  relocate(AñoFiscal, Delito, Región, ÓrdenesEmitidas)
+
+# # lista con nuevos nombres de columnas para mejor interpretación
+# new_names <- c("Total", "Agresión Sexual", "Acoso Sexual", "Actos Lascivos", "Incesto")
+# 
+# # datos de solicitudes ex parte emitidas de la ley 148 en 2020-2021
+# sheet_name = "2020-2021"
+# OP_LEY148FinalEmitidas2020_21<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
+#                                         sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
+# 
+# # datos de solicitudes ex parte emitidas de la ley 148 en 2021-2022
+# sheet_name = "2021-2022"
+# OP_LEY148FinalEmitidas2021_22<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
+#                                            sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
+# 
+# sheet_name = "2022-2023"
+# OP_LEY148FinalEmitidas2022_23<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
+#                                            sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
+# 
+# sheet_name = "2023-2024"
+# OP_LEY148FinalEmitidas2023_24<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
+#                                            sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
+# 
+# sheet_name = "2024-2025"
+# OP_LEY148FinalEmitidas2024_25<- read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"),
+#                                            sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
+# 
+# # dataset joined
+# 
+# OP_LEY148FinalEmitidas_list <- list(OP_LEY148FinalEmitidas2020_21,
+#                                     OP_LEY148FinalEmitidas2021_22,
+#                                     OP_LEY148FinalEmitidas2022_23,
+#                                     OP_LEY148FinalEmitidas2023_24,
+#                                     OP_LEY148FinalEmitidas2024_25)
+# 
+# # Unir todos los data frames en la lista usando full_join
+# OP_LEY148FinalEmitidas <- OP_LEY148FinalEmitidas_list %>%
+#   reduce(full_join) %>%
+#   mutate(
+#     Región = factor(Región),
+#     Delito = factor(Delito),
+#     AñoFiscal = case_when(
+#       AñoFiscal == "2020-2021" ~ "2021",
+#       AñoFiscal == "2021-2022" ~ "2022",
+#       AñoFiscal == "2022-2023" ~ "2023",
+#       AñoFiscal == "2023-2024" ~ "2024",
+#       AñoFiscal == "2024-2025" ~ "2025",
+#       TRUE ~ as.character(AñoFiscal)
+#     ),
+#     AñoFiscal = factor(AñoFiscal)
+#   ) %>%
+#   replace_na(list(ÓrdenesEmitidas = 0)) %>%
+#   relocate(
+#     AñoFiscal, Delito, Región, ÓrdenesEmitidas
+#   ) 
 
 #### OP_LEY148Genero ####
 # Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por sexo de la parte
+sheet_names <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024")
 
+OP_LEY148Genero_list <- lapply(sheet_names, function(sheet) {
+  read_excel(paste0(trib, "OP_LEY148Genero.xlsx"), sheet = sheet) %>%
+    cleanSheet_OP_LEY148Genero(sheet)
+})
 
-sheet_name = "2020-2021"
-OP_LEY148Genero2020_21<- read_excel(paste0(trib, "OP_LEY148Genero.xlsx"),
-                                           sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148Genero(sheet_name)
-
-sheet_name = "2021-2022"
-OP_LEY148Genero2021_22<- read_excel(paste0(trib, "OP_LEY148Genero.xlsx"),
-                                    sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148Genero(sheet_name)
-
-sheet_name = "2022-2023"
-OP_LEY148Genero2022_23<- read_excel(paste0(trib, "OP_LEY148Genero.xlsx"),
-                                    sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148Genero(sheet_name)
-
-sheet_name = "2023-2024"
-OP_LEY148Genero2023_24<- read_excel(paste0(trib, "OP_LEY148Genero.xlsx"),
-                                    sheet = sheet_name) %>%
-  cleanSheet_OP_LEY148Genero(sheet_name)
-
-
-# dataset joined
-
-OP_LEY148Genero_list <- list(OP_LEY148Genero2020_21,
-                             OP_LEY148Genero2021_22,
-                             OP_LEY148Genero2022_23,
-                             OP_LEY148Genero2023_24)
-
-# Unir todos los data frames en la lista usando full_join
 OP_LEY148Genero <- OP_LEY148Genero_list %>%
   reduce(full_join) %>%
   mutate(
     Sexo = factor(Sexo),
     Parte = factor(Parte),
-    AñoFiscal = case_when(
+    AñoFiscal = factor(case_when(
       AñoFiscal == "2020-2021" ~ "2021",
       AñoFiscal == "2021-2022" ~ "2022",
       AñoFiscal == "2022-2023" ~ "2023",
       AñoFiscal == "2023-2024" ~ "2024",
       TRUE ~ as.character(AñoFiscal)
-    ),
-    AñoFiscal = factor(AñoFiscal)
+    ))
   ) %>%
   replace_na(list(Solicitudes = 0)) %>%
-  relocate(
-    AñoFiscal, Parte, Sexo, Solicitudes
-  )
+  relocate(AñoFiscal, Parte, Sexo, Solicitudes)
 
+# 
+# sheet_name = "2020-2021"
+# OP_LEY148Genero2020_21<- read_excel(paste0(trib, "OP_LEY148Genero.xlsx"),
+#                                            sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148Genero(sheet_name)
+# 
+# sheet_name = "2021-2022"
+# OP_LEY148Genero2021_22<- read_excel(paste0(trib, "OP_LEY148Genero.xlsx"),
+#                                     sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148Genero(sheet_name)
+# 
+# sheet_name = "2022-2023"
+# OP_LEY148Genero2022_23<- read_excel(paste0(trib, "OP_LEY148Genero.xlsx"),
+#                                     sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148Genero(sheet_name)
+# 
+# sheet_name = "2023-2024"
+# OP_LEY148Genero2023_24<- read_excel(paste0(trib, "OP_LEY148Genero.xlsx"),
+#                                     sheet = sheet_name) %>%
+#   cleanSheet_OP_LEY148Genero(sheet_name)
+# 
+# 
+# # dataset joined
+# 
+# OP_LEY148Genero_list <- list(OP_LEY148Genero2020_21,
+#                              OP_LEY148Genero2021_22,
+#                              OP_LEY148Genero2022_23,
+#                              OP_LEY148Genero2023_24)
+# 
+# # Unir todos los data frames en la lista usando full_join
+# OP_LEY148Genero <- OP_LEY148Genero_list %>%
+#   reduce(full_join) %>%
+#   mutate(
+#     Sexo = factor(Sexo),
+#     Parte = factor(Parte),
+#     AñoFiscal = case_when(
+#       AñoFiscal == "2020-2021" ~ "2021",
+#       AñoFiscal == "2021-2022" ~ "2022",
+#       AñoFiscal == "2022-2023" ~ "2023",
+#       AñoFiscal == "2023-2024" ~ "2024",
+#       TRUE ~ as.character(AñoFiscal)
+#     ),
+#     AñoFiscal = factor(AñoFiscal)
+#   ) %>%
+#   replace_na(list(Solicitudes = 0)) %>%
+#   relocate(
+#     AñoFiscal, Parte, Sexo, Solicitudes
+#   )
+# 
 
 
 #### tribCasosCrim ####
 
 # Tribunal de Primera Instancia: Movimiento de casos criminales al amparo de la Ley Núm. 54-1989 para la prevención e intervención con la violencia doméstica
-
-# lista con nuevos nombres de columnas para mejor interpretación 
 new_names <- c("Delito", "Pendiente Inicio", "Presentados", 
                "A Resolver", "Condenas", "Absoluciones", 
                "Archivos", "Traslados", "Otros", "Total", "Pendiente Final")
 
-# datos de movimiento de casos criminales en año fiscal 2019-2020
+years <- c("2019-2020", "2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
 
-sheet_name = "2019-2020"
-tribCasosCrim19 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
-                              sheet = sheet_name) %>%
-  cleanSheet_tribCasosCrim(sheet_name, new_names)
+tribCasosCrim_list <- map(years, ~ {
+  read_excel(paste0(trib, "tribCasosCrim.xlsx"), sheet = .x) %>%
+    cleanSheet_tribCasosCrim(.x, new_names)
+})
 
-sheet_name = "2020-2021"
-tribCasosCrim20 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
-                              sheet = sheet_name) %>%
-  cleanSheet_tribCasosCrim(sheet_name, new_names)
-
-
-sheet_name = "2021-2022"
-tribCasosCrim21 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
-                              sheet = sheet_name) %>%
-  cleanSheet_tribCasosCrim(sheet_name, new_names)
- 
-sheet_name = "2022-2023"
-tribCasosCrim22 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
-                              sheet = sheet_name) %>%
-  cleanSheet_tribCasosCrim(sheet_name, new_names)
-
-sheet_name = "2023-2024"
-tribCasosCrim23 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
-                              sheet = sheet_name) %>%
-  cleanSheet_tribCasosCrim(sheet_name, new_names)
-
-sheet_name = "2024-2025"
-tribCasosCrim24 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
-                              sheet = sheet_name) %>%
-  cleanSheet_tribCasosCrim(sheet_name, new_names)
-
-# dataset joined
-tribCasosCrim <- full_join(
-  tribCasosCrim19, tribCasosCrim20) %>%
-  full_join(tribCasosCrim21) %>%
-  full_join(tribCasosCrim22) %>%
-  full_join(tribCasosCrim23) %>%
-  full_join(tribCasosCrim24) %>%
+tribCasosCrim <- reduce(tribCasosCrim_list, full_join) %>%
   mutate(
     Delito = factor(Delito),
-    Casos = factor(Casos, levels = c("A Resolver", "Absoluciones", "Archivos", "Condenas", "Pendiente Inicio", "Pendiente Final",
-                                     "Presentados","Traslados","Otros"),
-                   ordered = TRUE),
-    AñoFiscal = case_when(
-      AñoFiscal == "2019-2020" ~ "2020",
-      AñoFiscal == "2020-2021" ~ "2021",
-      AñoFiscal == "2021-2022" ~ "2022",
-      AñoFiscal == "2022-2023" ~ "2023",
-      AñoFiscal == "2023-2024" ~ "2024",
-      AñoFiscal == "2024-2025" ~ "2025",
-      TRUE ~ as.character(AñoFiscal)
-    ),
+    Casos = factor(Casos, levels = c("A Resolver", "Absoluciones", "Archivos", "Condenas", 
+                                     "Pendiente Inicio", "Pendiente Final", "Presentados",
+                                     "Traslados", "Otros"), ordered = TRUE),
+    AñoFiscal = recode(AñoFiscal,
+                       "2019-2020" = "2020",
+                       "2020-2021" = "2021",
+                       "2021-2022" = "2022",
+                       "2022-2023" = "2023",
+                       "2023-2024" = "2024",
+                       "2024-2025" = "2025"),
     AñoFiscal = factor(AñoFiscal)
   ) %>%
   replace_na(list(Cantidad = 0)) %>%
-  relocate(
-    AñoFiscal, Delito, Casos, Cantidad
-  )
+  relocate(AñoFiscal, Delito, Casos, Cantidad)
+
+# # lista con nuevos nombres de columnas para mejor interpretación 
+# new_names <- c("Delito", "Pendiente Inicio", "Presentados", 
+#                "A Resolver", "Condenas", "Absoluciones", 
+#                "Archivos", "Traslados", "Otros", "Total", "Pendiente Final")
+# 
+# # datos de movimiento de casos criminales en año fiscal 2019-2020
+# 
+# sheet_name = "2019-2020"
+# tribCasosCrim19 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
+#                               sheet = sheet_name) %>%
+#   cleanSheet_tribCasosCrim(sheet_name, new_names)
+# 
+# sheet_name = "2020-2021"
+# tribCasosCrim20 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
+#                               sheet = sheet_name) %>%
+#   cleanSheet_tribCasosCrim(sheet_name, new_names)
+# 
+# 
+# sheet_name = "2021-2022"
+# tribCasosCrim21 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
+#                               sheet = sheet_name) %>%
+#   cleanSheet_tribCasosCrim(sheet_name, new_names)
+#  
+# sheet_name = "2022-2023"
+# tribCasosCrim22 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
+#                               sheet = sheet_name) %>%
+#   cleanSheet_tribCasosCrim(sheet_name, new_names)
+# 
+# sheet_name = "2023-2024"
+# tribCasosCrim23 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
+#                               sheet = sheet_name) %>%
+#   cleanSheet_tribCasosCrim(sheet_name, new_names)
+# 
+# sheet_name = "2024-2025"
+# tribCasosCrim24 <- read_excel(paste0(trib, "tribCasosCrim.xlsx"),
+#                               sheet = sheet_name) %>%
+#   cleanSheet_tribCasosCrim(sheet_name, new_names)
+# 
+# # dataset joined
+# tribCasosCrim <- full_join(
+#   tribCasosCrim19, tribCasosCrim20) %>%
+#   full_join(tribCasosCrim21) %>%
+#   full_join(tribCasosCrim22) %>%
+#   full_join(tribCasosCrim23) %>%
+#   full_join(tribCasosCrim24) %>%
+#   mutate(
+#     Delito = factor(Delito),
+#     Casos = factor(Casos, levels = c("A Resolver", "Absoluciones", "Archivos", "Condenas", "Pendiente Inicio", "Pendiente Final",
+#                                      "Presentados","Traslados","Otros"),
+#                    ordered = TRUE),
+#     AñoFiscal = case_when(
+#       AñoFiscal == "2019-2020" ~ "2020",
+#       AñoFiscal == "2020-2021" ~ "2021",
+#       AñoFiscal == "2021-2022" ~ "2022",
+#       AñoFiscal == "2022-2023" ~ "2023",
+#       AñoFiscal == "2023-2024" ~ "2024",
+#       AñoFiscal == "2024-2025" ~ "2025",
+#       TRUE ~ as.character(AñoFiscal)
+#     ),
+#     AñoFiscal = factor(AñoFiscal)
+#   ) %>%
+#   replace_na(list(Cantidad = 0)) %>%
+#   relocate(
+#     AñoFiscal, Delito, Casos, Cantidad
+#   )
 
 #### Guardar datos procesados de Administración de Tribunales ####
 # dataframes <- list(OP_148_SoliGrupEdad, OP_Ley148_ex_parteEmitidas,
