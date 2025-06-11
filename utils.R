@@ -17,6 +17,12 @@ cleanSheet_npprVDedad <- function(data, sheet_name) {
     mutate(Año = sheet_name)
 }
 
+#### cleanSheet_npprMalt ####
+cleanSheet_npprMalt <- function(data, sheet_name) {
+  data %>%
+    mutate(Año = sheet_name)
+}
+
 #### cleanSheet_OP_148_SoliGrupEdad ####
 cleanSheet_OP_148_SoliGrupEdad <- function(data, sheet_name, new_names) {
   data %>%

@@ -143,7 +143,7 @@ ui <-
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a los 
-                    homicidios de mujeres por grupo de edad desde el año natural 2017 al 2022.",
+                    homicidios de mujeres por grupo de edad desde el año natural 2017 al 2023.",
                     
                     style = "font-size: 16px; padding: 0px;" 
                   )
@@ -225,7 +225,7 @@ ui <-
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a la cantidad de 
-                    incidentes violentos (según su tipo) desde el año natural 2017 al 2022.",
+                    incidentes violentos (según su tipo) desde el año natural 2017 al 2023.",
                     
                     style = "font-size: 16px; padding: 0px;" 
                   )
@@ -899,58 +899,58 @@ ui <-
           lowercaseTitle("Violencia doméstica por edad"),
           br(), br(),
           
-            sidebarLayout(
-              sidebarPanel(
-                style = "display: flex; flex-direction: column; align-items: center;",
-                
-                # # seleccionar valor de la variable
+          sidebarLayout(
+            sidebarPanel(
+              style = "display: flex; flex-direction: column; align-items: center;",
+              
+              # # seleccionar valor de la variable
+              div(
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
-                  div(
-                    style = "text-align: center; display: inline-block;", 
-                    # botón para seleccionar edad
-                    createDropdownCheckbox(
-                      label = HTML("Seleccione <br>Grupo(s) de Edad:"),
-                      choices = vEdad$Edad,
-                      selected = vEdad$Edad,
-                      id = "poli_vEdad_edad"
-                    ),
-                    # botón para seleccionar el sexo
-                    createDropdownCheckbox(
-                      label = HTML("Seleccione <br>Sexo de las Víctimas:"),
-                      choices = vEdad$Sexo,
-                      selected = vEdad$Sexo[1],
-                      id = "poli_vEdad_sexo"
-                    )
+                  style = "text-align: center; display: inline-block;", 
+                  # botón para seleccionar edad
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br>Grupo(s) de Edad:"),
+                    choices = vEdad$Edad,
+                    selected = vEdad$Edad,
+                    id = "poli_vEdad_edad"
+                  ),
+                  # botón para seleccionar el sexo
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br>Sexo de las Víctimas:"),
+                    choices = vEdad$Sexo,
+                    selected = vEdad$Sexo[1],
+                    id = "poli_vEdad_sexo"
                   )
-                ),
-                
-                div(
-                  style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
-                  div(
-                    style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-                    div(
-                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
-                      # botón para seleccionar año
-                      createDropdownCheckbox(
-                        label = "Seleccione Año(s):",
-                        choices = vEdad$Año,
-                        selected = vEdad$Año,
-                        id = "poli_vEdad_año"
-                      )
-                    ),
-                    div(
-                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-                      showDataCheckbox("showTable_poli_vEdad")
-                    )
-                  )
-                ),
-                
-                # Output UI para la tabla de datos
-                uiOutput("dataTableUI_poli_vEdad")
-                
+                )
               ),
               
+              div(
+                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                div(
+                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                    # botón para seleccionar año
+                    createDropdownCheckbox(
+                      label = "Seleccione Año(s):",
+                      choices = vEdad$Año,
+                      selected = vEdad$Año,
+                      id = "poli_vEdad_año"
+                    )
+                  ),
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_poli_vEdad")
+                  )
+                )
+              ),
+              
+              # Output UI para la tabla de datos
+              uiOutput("dataTableUI_poli_vEdad")
+              
+            ),
+            
             # Sección principal con los gráficos
             mainPanel(
               style = "height: calc(100vh - 150px); padding-bottom: 10px;",
@@ -973,6 +973,95 @@ ui <-
                     "Los datos representados en esta gráfica corresponden a los
                     incidentes de violencia doméstica (por edad de la víctima)
                     desde el año natural 2021 al 2023.",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
+            )
+          )
+        ), 
+        
+        
+        #### tab para el barplot de incidentes de maltrato por sexo de la víctima (maltPoli) ####
+        tabPanel(
+          lowercaseTitle("Tipos de Maltrato por sexo"),
+          br(), br(),
+          
+          sidebarLayout(
+            sidebarPanel(
+              style = "display: flex; flex-direction: column; align-items: center;",
+              
+              # # seleccionar valor de la variable
+              div(
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                div(
+                  style = "text-align: center; display: inline-block;", 
+                  # botón para seleccionar edad
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br>Tipo(s) de Maltrato:"),
+                    choices = maltPoli$Maltrato,
+                    selected = maltPoli$Maltrato,
+                    id = "poli_Malt"
+                  ),
+                  # botón para seleccionar el sexo
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br>Sexo de las Víctimas:"),
+                    choices = maltPoli$Sexo,
+                    selected = maltPoli$Sexo[0],
+                    id = "poli_Malt_sexo"
+                  )
+                )
+              ),
+              
+              div(
+                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                div(
+                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                    # botón para seleccionar año
+                    createDropdownCheckbox(
+                      label = "Seleccione Año(s):",
+                      choices = maltPoli$Año,
+                      selected = maltPoli$Año,
+                      id = "poli_Malt_año"
+                    )
+                  ),
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_poli_Malt")
+                  )
+                )
+              ),
+              
+              # Output UI para la tabla de datos
+              uiOutput("dataTableUI_poli_Malt")
+              
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title_maltPoli")),
+                           plotlyOutput("barPlot_poli_Malt"),  height = "100%"))
+              ),
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong(actualizacion_policia3, style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a los
+                    incidentes de maltrato (por sexo de la víctima)
+                    desde el año natural 2021 al 2025.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )

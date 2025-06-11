@@ -1478,6 +1478,153 @@ server <- function(input, output, session) {
   })
   
   
+  #### Tab con datos de victimas por sexo (maltPoli) ####
+  # Filtrar el conjunto de datos según los valores seleccionados del el grupo de edad y año 
+  maltPoli_filt <- reactive({
+    filter(maltPoli,
+           Maltrato %in% input$checkGroup_poli_Malt,
+           Año %in% input$checkGroup_poli_Malt_año,
+           Sexo %in% input$checkGroup_poli_Malt_sexo)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar el grupo de edad
+  observeEvent(input$deselectAll_poli_Malt, {
+    updateCheckboxGroup(session, "checkGroup_poli_Malt", input, maltPoli$Maltrato)
+  })
+  
+  observe({
+    inputId <- "checkGroup_poli_Malt"
+    buttonId <- "deselectAll_poli_Malt"
+    all_choices <- levels(maltPoli$Maltrato)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_poli_Malt_año, {
+    updateCheckboxGroup(session, "checkGroup_poli_Malt_año", input, maltPoli$Año)
+  })
+  
+  observe({
+    inputId <- "checkGroup_poli_Malt_año"
+    buttonId <- "deselectAll_poli_Malt_año"
+    all_choices <- levels(maltPoli$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar el sexo
+  observeEvent(input$deselectAll_poli_Malt_sexo, {
+    updateCheckboxGroup(session, "checkGroup_poli_Malt_sexo", input, maltPoli$Sexo)
+  })
+  
+  observe({
+    inputId <- "checkGroup_poli_Malt_sexo"
+    buttonId <- "deselectAll_poli_Malt_sexo"
+    all_choices <- levels(maltPoli$Sexo)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  # Colores del status
+  maltPoli_fill_malt <- setColorFill(maltPoli, "Maltrato")
+  
+  
+  # Grafico de barras
+  
+  output$barPlot_poli_Malt <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_malt <- length(input$checkGroup_poli_Malt) > 0
+    has_año <- length(input$checkGroup_poli_Malt_año) > 0
+    has_sexo <- length(input$checkGroup_poli_Malt_sexo) > 0
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_malt || !has_año || !has_sexo) {
+      message <- HTML("Seleccione Tipo(s) de Maltrato, Sexo de \n la Víctima y Año(s) a visualizar")
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderBarPlot_facets(maltPoli_filt, x = "Año", y = "Casos", fill = "Maltrato",
+                                paste(""),
+                                xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Maltrato",
+                                colorFill = maltPoli_fill_malt,
+                                emptyMessage = HTML("Seleccione Grupo(s) de Edad, Sexo de \n la Víctima y Año(s) a visualizar"),barWidth = 0, xGap = 0)
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      numPlots = length(input$checkGroup_poli_Malt_sexo)
+      #Altura predeterminada para la grafica.
+      total_height = plotHeight(plot_height, numPlots)
+      p <- p + facet_wrap(~Sexo, ncol = 2)+
+        theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      
+      return(p)
+    }
+    
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(data = maltPoli_filt, x = "Año", y = "Casos", fill = "Maltrato",
+                                                 paste(""),
+                                                 xlab = "Año", ylab = "Cantidad de víctimas", message)
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title_maltPoli <- renderUI({
+    title <- "Incidencia de casos de maltrato por sexo de la víctima"
+  })
+  
+  # Data Table para el mapa de despDF
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_poli_Malt <- renderDT(server = FALSE, {
+    renderDataTable(maltPoli_filt(), "Datos: Incidentes de maltrato")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_poli_Malt  <- renderUI({
+    if (input$showTable_poli_Malt ) {
+      hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
+      texts <- c("Negociado de la Policía de Puerto Rico")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
+            DTOutput("dataTable_poli_Malt")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   #### tab con datos de incidentes de violencia doméstica (inciDF) ####
   # Filtrar el conjunto de datos según los valores seleccionados del el grupo de edad y año 
   inciMapa_filt <- reactive({

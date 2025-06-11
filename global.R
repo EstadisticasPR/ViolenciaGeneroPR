@@ -684,6 +684,42 @@ vEdad <- vEdad_list %>%
 #     Año, Edad, Sexo, Casos
 #   )
 
+#### maltPoli ####
+# Años a importar
+years <- 2021:2025
+
+# Leer y limpiar los datos por hoja
+maltPoli_list <- lapply(as.character(years), function(sheet_name) {
+  read_excel(paste0(poli, "nppr_maltrato.xlsx"), sheet = sheet_name) %>%
+    cleanSheet_npprMalt(sheet_name)
+})
+
+# Unir y transformar los datos
+maltPoli <- maltPoli_list %>%
+  reduce(full_join) %>%
+  rename(
+    Maltrato = `Tipo de Maltrato`,
+    Mujeres = Femenino,
+    Hombres = Masculino,
+    Año = Año
+  ) %>%
+  pivot_longer(
+    !c(Maltrato, Año), names_to = "Sexo", values_to = "Casos"
+  ) %>%
+  mutate(
+    Maltrato = factor(Maltrato, levels = c("Violación Orden de Protección", "Sexual", "Restricción de libertad", 
+                                                               "Psicológico o emocional", "Físico", "Amenaza","Otro"),
+                                ordered = TRUE),
+    Año = factor(Año),
+    Sexo = factor(Sexo, levels = c("Hombres", "Mujeres", "Hombre Trans", "Desconocido"),
+                  ordered = TRUE)
+  ) %>%
+  replace_na(list(Casos = 0)) %>%
+  select(
+    Año, Maltrato, Sexo, Casos
+  )
+
+
 #### inciDF ####
 # Vector de años
 años <- c("2021", "2022", "2023")
@@ -1230,6 +1266,9 @@ actualizacion_policia1 <- "Última actualización: 20 de septiembre de 2024"
 
 # Fecha actualizacion policia tab2
 actualizacion_policia2 <- "Última actualización: 20 de septiembre de 2024"
+
+# Fecha actualizacion policia tab3
+actualizacion_policia3 <- "Última actualización: 31 de mayo de 2025"
 
 # Fecha actualizacion opm tab1
 actualizacion_opm1 <- "Última actualización: 31 de diciembre de 2023"
