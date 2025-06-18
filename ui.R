@@ -1008,7 +1008,7 @@ ui <-
                   createDropdownCheckbox(
                     label = HTML("Seleccione <br>Sexo de las Víctimas:"),
                     choices = maltPoli$Sexo,
-                    selected = maltPoli$Sexo[0],
+                    selected = maltPoli$Sexo[1:2],
                     id = "poli_Malt_sexo"
                   )
                 )

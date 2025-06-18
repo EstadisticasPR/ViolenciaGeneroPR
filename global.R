@@ -1241,10 +1241,10 @@ safekitsDF_edades <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
 ##### Actualizaciones de los Datos #####
 ##################################################################################
 # Fecha actualizacion de los datos de SNMV tab1
-actualizacion_snmv1 <- "Última actualización: 15 de noviembre de 2024"
+actualizacion_snmv1 <- "Última actualización: 30 de abril de 2025"
 
 # Fecha actualizacion de los datos de SNMV tab2
-actualizacion_snmv2 <- "Última actualización: 15 de noviembre de 2024"
+actualizacion_snmv2 <- "Última actualización: 30 de abril de 2025"
 
 # Fecha actualizacion familia
 actualizacion_familia <- "Última actualización: 31 de diciembre de 2023"
