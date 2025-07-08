@@ -2632,13 +2632,6 @@ ui <-
           lowercaseTitle("Autores"),
           div(
             authorTag(
-              nombre = 'Félix A. Báez Santiago',
-              email = 'felix.baez@estadisticas.pr',
-              puesto = 'Programador Estadístico',
-              grados = 'BS Ciencia de Datos, Iowa State University'
-            ),
-            
-            authorTag(
               nombre = 'Génesis N. Pérez González',
               email = 'genesis.perez@estadisticas.pr',
               puesto = 'Programadora Estadística',
@@ -2646,6 +2639,13 @@ ui <-
                 'BS Ciencia de Datos, Universidad de Puerto Rico Humacao',
                 'BS Matemáticas Computacionales, Universidad de Puerto Rico Humacao'
               )
+            ),
+            
+            authorTag(
+              nombre = 'Félix A. Báez Santiago',
+              email = 'felix.baez@estadisticas.pr',
+              puesto = 'Programador Estadístico',
+              grados = 'BS Ciencia de Datos, Iowa State University'
             ),
             
             authorTag(
@@ -2705,13 +2705,13 @@ ui <-
         tabPanel(
           lowercaseTitle("Contacto"),
           mainPanel(
-            style = "width: 100%",
             fluidRow(
-              
+              # Columna 1: Información de contacto y redes sociales
               column(6,
-                     style = "padding-left: 30px;", 
+                     class = "contact-column",
+                     style = "padding-left: 30px; padding-top: 30px;",
                      br(),
-                     h2(strong("Instituto De Estadísticas De Puerto Rico")),
+                     h3(strong("Instituto De Estadísticas De Puerto Rico")),
                      br(),
                      h4(
                        a(
@@ -2719,67 +2719,157 @@ ui <-
                          'Postal: P.O. Box 195484 | San Juan, PR 00919-5484'
                        )
                      ),
-                     h4( a(href="tel:787-819-0730", 'Tel: (787) 819-0730')),
+                     h4(a(href="tel:787-819-0730", 'Tel: (787) 819-0730')),
                      h4(a(href = "mailto:preguntas@estadisticas.pr", 'Email: preguntas@estadisticas.pr')),
                      h4('Horario de Oficina: lunes a viernes, 8:00 am a 4:30 pm'),
+                     br(),
                      a(href='https://www.facebook.com/estadisticas.pr',
-                       icon("facebook","fa-2x"),) ,
-                     a(href='https://www.instagram.com/institutodeestadisticas/' ,
+                       icon("facebook","fa-2x")),
+                     a(href='https://www.instagram.com/institutodeestadisticas/',
                        icon('instagram','fa-2x')),
                      a(href="https://twitter.com/EstadisticasPR",
                        icon('twitter','fa-2x')),
                      a(href="https://www.youtube.com/channel/UCIZggRtE5KK0z9D39FGZtyQ",
-                       icon('youtube','fa-2x')),
-                     br(),
-                     column(5,
-                            style = "padding-left: 0px;",
-                            br(),
-                            column(3,
-                                   a(img(src = 'IEPRlocal.png', height = 250),
-                                     href = "https://www.google.com/maps/place/Instituto+de+Estad%C3%ADsticas+de+Puerto+Rico/@18.4279999,-66.056444,17.5z/data=!4m5!3m4!1s0x8c0368a432af0b3d:0x274ac1c656b89f89!8m2!3d18.4275192!4d-66.0562994"),
-                                   style = "padding-left: 0px; padding-top: 20px;")
-                     )
-                     ,
-                     
-                     column(1,
-                            br(),
-                            column(3,
-                                   a(img(src='IEPRmap.png', height=250),
-                                     href='https://www.google.com/maps/place/Instituto+de+Estad%C3%ADsticas+de+Puerto+Rico/@18.4279999,-66.056444,17.5z/data=!4m5!3m4!1s0x8c0368a432af0b3d:0x274ac1c656b89f89!8m2!3d18.4275192!4d-66.0562994'),
-                                   style = "padding-left: 0px; padding-top: 20px;")
-                     )
-                     
-              ),
+                       icon('youtube','fa-2x'))),
               
-              
-              column(6,
+              # Columna 2: Primera imagen
+              column(3,
+                     class = "image-column",  # Clase para aplicar estilos personalizados
                      br(),
-                     style = "padding-left: 80px; padding-top: 50px;",
-                     div(
-                       class = "card",
-                       style = "padding: 30px; background-color: lightgrey; border-radius: 5px; margin-top: 10px;width: 400px; height: 470px; display: flex; flex-direction: column; justify-content: space-between;",
-                       div(
-                         style = "flex-grow: 1; overflow: auto;",  
-                         h3("Enviar un mensaje",style="margin-top: 0px; text-align: center;"),
-                         div(style = "width: 100%; margin-bottom: 10px;",
-                             textInput("name", "Nombre", placeholder = "Ingrese su nombre")
-                         ),
-                         div(style = "width: 100%; margin-bottom: 10px;",
-                             textInput("email", "Correo Electrónico", placeholder = "Ingrese su correo electrónico")
-                         ),
-                         div(style = "width: 100%;",
-                             textAreaInput("message", "Mensaje", "", rows = 5, placeholder = "Escriba su mensaje aquí")
-                         )
-                       ),
-                       div(style = "padding-top: 20px; padding-bottom: 0px; text-align: center;",
-                           actionButton("send", "Enviar", icon = icon("paper-plane")),
-                           textOutput("response")
-                       )
-                     )
-              )
+                     a(img(src = 'IEPRlocal.png', height = 300),
+                       href = "https://www.google.com/maps/place/Instituto+de+Estad%C3%ADsticas+de+Puerto+Rico/@18.4279999,-66.056444,17.5z/data=!4m5!3m4!1s0x8c0368a432af0b3d:0x274ac1c656b89f89!8m2!3d18.4275192!4d-66.0562994"),
+                     style = "padding-left: 50px; padding-top: 60px; text-align: center;"),
+              
+              # Columna 3: Segunda imagen
+              column(3,
+                     class = "image-column",  # Clase para aplicar estilos personalizados
+                     br(),
+                     a(img(src='IEPRmap.png', height=300),
+                       href='https://www.google.com/maps/place/Instituto+de+Estad%C3%ADsticas+de+Puerto+Rico/@18.4279999,-66.056444,17.5z/data=!4m5!3m4!1s0x8c0368a432af0b3d:0x274ac1c656b89f89!8m2!3d18.4275192!4d-66.0562994'),
+                     style = "padding-left: 110px; padding-top: 60px; text-align: center;")
             )
-          )
+          ),
+          
+          # Estilos CSS personalizados para ajustar la disposición de las imágenes
+          tags$style(HTML('
+    /* Ajustes para columnas de imágenes y contenido en pantallas grandes */
+    .image-column, .contact-column {
+      flex: 1;
+      text-align: left;
+    }
+
+    /* Ajustes para pantallas de tamaño mediano (tabletas) */
+    @media (max-width: 900px) {
+      .image-column, .contact-column {
+        flex: 100%;       /* Cambiar cada columna a ocupar el 100% */
+        padding: 10px;    /* Espaciado adicional para evitar solapamiento */
+        text-align: center;  /* Centrar el texto y las imágenes */
+      }
+      .image-column img {
+        width: 90%;   /* Redimensionar imágenes para que se ajusten en pantallas medianas */
+        height: auto;  /* Mantener la proporción */
+      }
+    }
+
+    /* Ajustes para pantallas pequeñas (teléfonos) */
+    @media (max-width: 600px) {
+      .image-column, .contact-column {
+        width: 100%;
+        text-align: center;  /* Centrar el contenido en pantallas pequeñas */
+        padding: 10px 0;     /* Espaciado vertical */
+        display: block;      /* Asegurar que cada columna se muestre en bloque */
+      }
+
+      .image-column img {
+        width: 100%;   /* Imágenes adaptadas a todo el contenedor */
+        height: auto;  /* Mantener proporción de la imagen */
+      }
+    }
+  '))
         )
+        
+        
+        # tabPanel(
+        #   lowercaseTitle("Contacto"),
+        #   mainPanel(
+        #     style = "width: 100%",
+        #     fluidRow(
+        #       
+        #       column(6,
+        #              style = "padding-left: 30px;", 
+        #              br(),
+        #              h2(strong("Instituto De Estadísticas De Puerto Rico")),
+        #              br(),
+        #              h4(
+        #                a(
+        #                  href = "https://www.google.com/maps/place/Instituto+de+Estad%C3%ADsticas+de+Puerto+Rico/@18.4279999,-66.056444,17.5z/data=!4m5!3m4!1s0x8c0368a432af0b3d:0x274ac1c656b89f89!8m2!3d18.4275192!4d-66.0562994",
+        #                  'Postal: P.O. Box 195484 | San Juan, PR 00919-5484'
+        #                )
+        #              ),
+        #              h4( a(href="tel:787-819-0730", 'Tel: (787) 819-0730')),
+        #              h4(a(href = "mailto:preguntas@estadisticas.pr", 'Email: preguntas@estadisticas.pr')),
+        #              h4('Horario de Oficina: lunes a viernes, 8:00 am a 4:30 pm'),
+        #              a(href='https://www.facebook.com/estadisticas.pr',
+        #                icon("facebook","fa-2x"),) ,
+        #              a(href='https://www.instagram.com/institutodeestadisticas/' ,
+        #                icon('instagram','fa-2x')),
+        #              a(href="https://twitter.com/EstadisticasPR",
+        #                icon('twitter','fa-2x')),
+        #              a(href="https://www.youtube.com/channel/UCIZggRtE5KK0z9D39FGZtyQ",
+        #                icon('youtube','fa-2x')),
+        #              br(),
+        #              column(5,
+        #                     style = "padding-left: 0px;",
+        #                     br(),
+        #                     column(3,
+        #                            a(img(src = 'IEPRlocal.png', height = 250),
+        #                              href = "https://www.google.com/maps/place/Instituto+de+Estad%C3%ADsticas+de+Puerto+Rico/@18.4279999,-66.056444,17.5z/data=!4m5!3m4!1s0x8c0368a432af0b3d:0x274ac1c656b89f89!8m2!3d18.4275192!4d-66.0562994"),
+        #                            style = "padding-left: 0px; padding-top: 20px;")
+        #              )
+        #              ,
+        #              
+        #              column(1,
+        #                     br(),
+        #                     column(3,
+        #                            a(img(src='IEPRmap.png', height=250),
+        #                              href='https://www.google.com/maps/place/Instituto+de+Estad%C3%ADsticas+de+Puerto+Rico/@18.4279999,-66.056444,17.5z/data=!4m5!3m4!1s0x8c0368a432af0b3d:0x274ac1c656b89f89!8m2!3d18.4275192!4d-66.0562994'),
+        #                            style = "padding-left: 0px; padding-top: 20px;")
+        #              )
+        #              
+        #       ),
+        #       
+        #       
+        #       column(6,
+        #              br(),
+        #              style = "padding-left: 80px; padding-top: 50px;",
+        #              div(
+        #                class = "card",
+        #                style = "padding: 30px; background-color: lightgrey; border-radius: 5px; margin-top: 10px;width: 400px; height: 470px; display: flex; flex-direction: column; justify-content: space-between;",
+        #                div(
+        #                  style = "flex-grow: 1; overflow: auto;",  
+        #                  h3("Enviar un mensaje",style="margin-top: 0px; text-align: center;"),
+        #                  div(style = "width: 100%; margin-bottom: 10px;",
+        #                      textInput("name", "Nombre", placeholder = "Ingrese su nombre")
+        #                  ),
+        #                  div(style = "width: 100%; margin-bottom: 10px;",
+        #                      textInput("email", "Correo Electrónico", placeholder = "Ingrese su correo electrónico")
+        #                  ),
+        #                  div(style = "width: 100%;",
+        #                      textAreaInput("message", "Mensaje", "", rows = 5, placeholder = "Escriba su mensaje aquí")
+        #                  )
+        #                ),
+        #                div(style = "padding-top: 20px; padding-bottom: 0px; text-align: center;",
+        #                    actionButton("send", "Enviar", icon = icon("paper-plane")),
+        #                    textOutput("response")
+        #                )
+        #              )
+        #       )
+        #     )
+        #   )
+        # )
+        
+        
+        
         
       )
     ),
