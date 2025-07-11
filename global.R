@@ -823,29 +823,32 @@ opmFemiVD <- read_excel(paste0(opm, "opmFemiVD.xlsx")) %>%
   ) 
 
 #### opmCasos ####
-opmCasos <- read_excel(paste0(opm, "opmPartMes.xlsx")) %>%
-  select(-c(month)) %>%
-  group_by(tipo, year) %>%
-  summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
-  ungroup() %>%
-  mutate(
-    year = factor(year),
-    tipo = str_remove(tipo, " \\(.*\\)") %>%  # Quitar el texto entre paréntesis
-      factor(levels = c("Acecho", "Agresión sexual", "Discrimen de género",
-                        "Violencia doméstica", "Violencia en cita", "Otras"))
-  ) %>%
-  rename(Año = year) %>%
-  rename(Razón = tipo) %>%
-  rename(Cantidad = cantidad) %>%
-  replace_na(list(Cantidad = 0)) %>%
-  relocate(
-    Año, Razón, Cantidad
-  )
+# Niveles con "Otras" al final
+niveles_completos <- c("Acecho", "Agresión sexual", "Discrimen de género",
+                       "Violencia doméstica", "Violencia en cita", "Trata Humana", "Otras")
 
+opm_mes_df <- read_excel(paste0(opm, "opmPartMes.xlsx"), sheet = "mensual")
+opm_anual_df <- read_excel(paste0(opm, "opmPartMes.xlsx"), sheet = "anual")
+
+# Limpiar con la función
+opmCasos_list <- list(
+  cleanSheet_OPM(opm_mes_df, "mensual", niveles_completos),
+  cleanSheet_OPM(opm_anual_df, "anual", niveles_completos)
+)
+
+# Unir todo
+opmCasos <- reduce(opmCasos_list, full_join)
+
+# Procesar ambas hojas y unirlas
+opmCasos <- list(
+  procesar_opm("mensual", incluir_trata = TRUE),
+  procesar_opm("anual")
+) %>%
+  reduce(full_join)
 
 #### opmVic ####
 opmVic <- read_excel(paste0(opm, "opmVicGraf.xlsx")) %>% 
-  rename_at(vars(1,2,3,4), ~ c("género","2020", "2021", "2022")) %>%
+  rename_at(vars(1,2,3,4,5,6), ~ c("género","2020", "2021", "2022", "2023", "2024")) %>%
   pivot_longer(!género, names_to = "año", values_to = "víctimas") %>%
   mutate(
     género = factor(género,
@@ -862,7 +865,8 @@ opmVic <- read_excel(paste0(opm, "opmVicGraf.xlsx")) %>%
 
 #### opmMedio ####
 opmMedio <- read_excel(paste0(opm, "opmMedio.xlsx")) %>% 
-  rename_at(vars(2,3,4), ~ c("2020", "2021", "2022")) %>%
+  rename_at(vars(2,3,4,5,6), ~ c("2020", "2021", "2022", "2023", "2024")) %>%
+  mutate(across(c("2020", "2021", "2022", "2023", "2024"), as.numeric)) %>%
   pivot_longer(!`Medio de orientación`, names_to = "año", values_to = "personas atendidas") %>% 
   filter(`Medio de orientación` != "Total") %>%
   mutate(

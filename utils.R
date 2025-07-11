@@ -161,6 +161,40 @@ cleanSheet_tribCasosCrim <- function(data, sheet_name, new_names) {
 
 
 
+
+
+# Función para limpiar y procesar los datos OPM
+cleanSheet_OPM <- function(df, hoja, niveles) {
+  if (hoja == "mensual") {
+    df <- df %>%
+      select(-month) %>%
+      group_by(tipo, year) %>%
+      summarise(cantidad = sum(cantidad, na.rm = TRUE), .groups = "drop") %>%
+      mutate(tipo = str_remove(tipo, " \\(.*\\)"))
+    
+    # Asegurar que 'Trata Humana' esté presente para todos los años
+    años_completos <- sort(unique(df$year))
+    df <- df %>%
+      bind_rows(expand_grid(
+        tipo = "Trata Humana",
+        year = años_completos,
+        cantidad = 0
+      ))
+  } else if (hoja == "anual") {
+    df <- df %>%
+      mutate(tipo = str_remove(tipo, " \\(.*\\)"))
+  }
+  
+  df %>%
+    mutate(
+      year = factor(year),
+      tipo = factor(tipo, levels = niveles)
+    ) %>%
+    rename(Año = year, Razón = tipo, Cantidad = cantidad) %>%
+    replace_na(list(Cantidad = 0)) %>%
+    relocate(Año, Razón, Cantidad)
+}
+
 ###############################
 #### Helper Functions: UI  ####
 ###############################
