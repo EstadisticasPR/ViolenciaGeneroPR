@@ -1215,6 +1215,86 @@ ui <-
           ),
         ),
         
+        #### tab con datos de agresores por tipo de situacion (opmAgresores) ####
+        tabPanel(
+          lowercaseTitle("Agresores según el tipo de situación"), 
+          br(), br(),
+          sidebarLayout(
+            sidebarPanel(
+              style = "display: flex; flex-direction: column; align-items: center;",
+              
+              # # seleccionar valor de la variable
+              div(
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                div(
+                  style = "text-align: center; display: inline-block;", 
+                  # botón para seleccionar el tipo de violencia
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione<br> Tipo de Situación:"),
+                    choices = opmAgresores$Razón,
+                    selected = opmAgresores$Razón,
+                    id = "opm_opmAgresores_tipo"
+                  )
+                )
+              ),
+              
+              div(
+                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                div(
+                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                    createDropdownCheckbox(
+                      label = "Seleccione Año(s):",
+                      choices = opmAgresores$Año,
+                      selected = opmAgresores$Año,
+                      id = "opm_opmAgresores_año"
+                    )
+                  ),
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_opm_opmAgresores")
+                  )
+                )
+              ),
+              
+              # Output UI para la tabla de datos
+              uiOutput("dataTableUI_opm_opmAgresores")
+              
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title_opmAgresores")),
+                           plotlyOutput("barPlot_opm_opmAgresores"),  height = "100%"))
+              ),
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong(actualizacion_opm2, style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a
+                    los agresores según el tipo de situación en el que estuvieron
+                    involucrados.",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
+            )
+          ),
+        ),
+        
+        
         #### tab con datos de violencia domestica (opmCasos) ####
         tabPanel(
           lowercaseTitle("Casos según razón para consulta"), 
@@ -1279,7 +1359,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong(actualizacion_opm2, style="margin: 0px;") 
+                    strong(actualizacion_opm3, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
@@ -1358,7 +1438,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong(actualizacion_opm3, style="margin: 0px;") 
+                    strong(actualizacion_opm4, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
@@ -1437,7 +1517,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong(actualizacion_opm4, style="margin: 0px;") 
+                    strong(actualizacion_opm5, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a
@@ -1516,7 +1596,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong(actualizacion_opm5, style="margin: 0px;") 
+                    strong(actualizacion_opm6, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a

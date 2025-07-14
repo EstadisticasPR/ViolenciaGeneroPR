@@ -822,6 +822,18 @@ opmFemiVD <- read_excel(paste0(opm, "opmFemiVD.xlsx")) %>%
     Tasa = `Tasa (x100,000 mujeres)`
   ) 
 
+
+#### opmAgresores ####
+opmAgresores <- read_excel(paste0(opm, "opmAgresores.xlsx"))  %>%
+  rename(
+    Razón = `tipo`,
+    Año = `year`,
+    Cantidad = `cantidad`
+  ) %>%
+  mutate(Año = factor(Año),
+         Razón = factor(Razón, levels = c("Acecho", "Agresión sexual", "Discrimen de género",
+                                          "Violencia doméstica", "Violencia en cita", "Trata Humana", "Otras")))
+
 #### opmCasos ####
 # Niveles con "Otras" al final
 niveles_completos <- c("Acecho", "Agresión sexual", "Discrimen de género",
@@ -1278,16 +1290,19 @@ actualizacion_policia3 <- "Última actualización: 31 de mayo de 2025"
 actualizacion_opm1 <- "Última actualización: 31 de diciembre de 2023"
 
 # Fecha actualizacion opm tab2
-actualizacion_opm2 <- "Última actualización: 31 de diciembre de 2023"
+actualizacion_opm2 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion opm tab3
-actualizacion_opm3 <- "Última actualización: 31 de diciembre de 2023"
+actualizacion_opm3 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion opm tab4
-actualizacion_opm4 <- "Última actualización: 31 de diciembre de 2023"
+actualizacion_opm4 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion opm tab5
-actualizacion_opm5 <- "Última actualización: 31 de diciembre de 2023"
+actualizacion_opm5 <- "Última actualización: 31 de diciembre de 2024"
+
+# Fecha actualizacion opm tab6
+actualizacion_opm6 <- "Última actualización: 31 de diciembre de 2023"
 
 # Fecha actualizacion correccion y rehabilitacion tab1
 actualizacion_dcr1 <- "Última actualización: 31 de octubre de 2024"

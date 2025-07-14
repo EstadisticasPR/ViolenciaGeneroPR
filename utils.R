@@ -163,7 +163,7 @@ cleanSheet_tribCasosCrim <- function(data, sheet_name, new_names) {
 
 
 
-# Función para limpiar y procesar los datos OPM
+#### cleanSheet_OPM ####
 cleanSheet_OPM <- function(df, hoja, niveles) {
   if (hoja == "mensual") {
     df <- df %>%

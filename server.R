@@ -1770,6 +1770,128 @@ server <- function(input, output, session) {
     }
   })
   
+  
+  #### tab con datos de agresores segun tipo de situacion (opmAgresores) ####
+  # Filtrar el conjunto de datos según los valores seleccionados del año y la categoria de evento
+  opmAgresores_filt <- reactive({
+    filter(opmAgresores,
+           Año %in% input$checkGroup_opm_opmAgresores_año,
+           Razón %in% input$checkGroup_opm_opmAgresores_tipo
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_opm_opmAgresores_año, {
+    updateCheckboxGroup(session, "checkGroup_opm_opmAgresores_año", input, opmAgresores$Año)
+  })
+  
+  observe({
+    inputId <- "checkGroup_opm_opmAgresores_año"
+    buttonId <- "deselectAll_opm_opmAgresores_año"
+    all_choices <- levels(opmAgresores$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de tipo de violencia
+  observeEvent(input$deselectAll_opm_opmAgresores_tipo, {
+    updateCheckboxGroup(session, "checkGroup_opm_opmAgresores_tipo", input, opmAgresores$Razón)
+  })
+  
+  observe({
+    inputId <- "checkGroup_opm_opmAgresores_tipo"
+    buttonId <- "deselectAll_opm_opmAgresores_tipo"
+    all_choices <- levels(opmAgresores$Razón)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  # Colores del status
+  opm_fill_tipo <- setColorFill(opmAgresores, "Razón")
+  
+  # Grafico de barras
+  output$barPlot_opm_opmAgresores <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_año <- length(input$checkGroup_opm_opmAgresores_año) > 0
+    has_tipo <- length(input$checkGroup_opm_opmAgresores_tipo) > 0
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_año || !has_tipo) {
+      message <- "Seleccione Tipo de Situación y Año(s) a visualizar"
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderBarPlot_facets(opmAgresores_filt, x = "Año", y = "Cantidad", fill = "Razón",
+                                paste("Agresores según el tipo de situación"),
+                                xlab = "Año", ylab = "Cantidad de Agresores", fillLab = "Tipo de situación",
+                                colorFill = opm_fill_tipo,
+                                emptyMessage = "Seleccione Tipo de Situación y Año(s) a visualizar")
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
+      
+      return(p)
+    }
+    
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(data = opmAgresores_filt, x = "Año", y = "Cantidad", fill = "Razón",
+                                                 paste(""),
+                                                 xlab = "Año", ylab = "Cantidad de Agresores", message)
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title_opmAgresores <- renderUI({
+    title <- "Agresores según el tipo de situación"
+  })
+  
+  opmAgresores_filt_rename <- reactive({
+    opmAgresores_filt() %>% 
+      rename(`Tipo de Situación` = Razón) %>% 
+      rename(`Cantidad de Agresores` = Cantidad)
+  })
+  
+  # Data Table para el mapa de despDF
+  output$dataTable_opm_opmAgresores <- renderDT({
+    renderDataTable(opmAgresores_filt_rename(), "Datos: Agresores según el tipo de situación")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_opm_opmAgresores  <- renderUI({
+    if (input$showTable_opm_opmAgresores) {
+      hyperlinks <- c("https://www.mujer.pr.gov/")
+      texts <- c("Oficina de la Procuradora de las Mujeres")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
+            DTOutput("dataTable_opm_opmAgresores")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   #### tab con datos de casos de violencia (opmCasos) ####
   # Filtrar el conjunto de datos según los valores seleccionados del año y la categoria de evento
   opmCasos_filt <- reactive({
