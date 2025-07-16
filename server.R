@@ -96,7 +96,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title13 <- renderUI({
+  output$plot_title_homiEdad <- renderUI({
     title <- "Homicidios de mujeres por grupo de edad y año"
   })
 
@@ -224,7 +224,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title14 <- renderUI({
+  output$plot_title_inci <- renderUI({
     title <- "Incidentes violentos ocurridos para ambos sexos"
   })
  
@@ -447,7 +447,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title1 <- renderUI({
+  output$plot_title_dfMalt <- renderUI({
     title <- "Casos anuales de maltrato infantil por sexo y tipo"
   })
   
@@ -667,7 +667,7 @@ server <- function(input, output, session) {
   })
   
   #Llamada a funcion para generar la legenda
-  output$plot_title2 <- renderUI({
+  output$plot_title_dfDeli <- renderUI({
     title <- "Radicación anual de casos por Distrito Fiscal según Ley 54"
   })
   
@@ -750,7 +750,7 @@ server <- function(input, output, session) {
   })
 
     #Titulo de la Grafica
-  output$plot_title23 <- renderUI({
+  output$plot_title_mapaDeli <- renderUI({
     title <- paste0("Casos de delitos por Distrito Fiscal según el Artículo de \n", input$select_just_mapaDeli_delito, " en el año ", input$select_just_mapaDeli_año)
   })
   
@@ -1004,7 +1004,7 @@ server <- function(input, output, session) {
   
   
   #Titulo de la Grafica
-  output$plot_title3 <- renderUI({
+  output$plot_title_dfAvp <- renderUI({
     title <- "Viviendas públicas solicitadas y asignadas \nanualmente por violencia doméstica según región"
   })
   
@@ -1091,7 +1091,7 @@ server <- function(input, output, session) {
 
 
   #Titulo de la Grafica
-  output$plot_title24 <- renderUI({
+  output$plot_title_mapaAvp <- renderUI({
     title <- paste0("Total de viviendas públicas solicitadas y asignadas \npor violencia doméstica por región en el año ", input$select_avp_mapaAvp_año)
   })
 
@@ -1293,7 +1293,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title15 <- renderUI({
+  output$plot_title_despDF <- renderUI({
     title <- "Mujeres desaparecidas: localizadas y por localizar"
   })
  
@@ -1443,7 +1443,7 @@ server <- function(input, output, session) {
   })
 
   #Titulo de la Grafica
-  output$plot_title4 <- renderUI({
+  output$plot_title_vEdad <- renderUI({
     title <- "Incidencia de violencia doméstica por edad de la víctima"
   })
  
@@ -1736,7 +1736,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title16 <- renderUI({
+  output$plot_title_opmFemiVD <- renderUI({
     title <- "Tasa anual de asesinatos de mujeres por violencia doméstica del año 1990 al 2021"
   })
 
@@ -1973,7 +1973,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title17 <- renderUI({
+  output$plot_title_opmCasos <- renderUI({
     title <- "Población atendida por el programa CRIAS: razón de consulta"
   })
 
@@ -2093,7 +2093,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title18 <- renderUI({
+  output$plot_title_opmVic <- renderUI({
     title <- "Identidad de género de víctimas asistidas por el programa CRIAS"
   })
 
@@ -2207,7 +2207,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title19 <- renderUI({
+  output$plot_title_opmMedio <- renderUI({
     title <- "Orientaciones brindadas por el programa CRIAS"
   })
 
@@ -2328,7 +2328,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title20 <- renderUI({
+  output$plot_title_opmServiciosMes <- renderUI({
     title <- "Atención, servicios y seguimiento de casos mediante el programa CRIAS"
   })
   
@@ -2574,7 +2574,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title21 <- renderUI({
+  output$plot_title_dcrCasosInv <- renderUI({
     title <- "Casos en supervisión de Ley 54: Programas Alternativos al Confinamiento"
   })
   dcrCasosInv_filt_rename <- reactive({
@@ -2708,7 +2708,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title12 <- renderUI({
+  output$plot_title_dcrSentenciadas <- renderUI({
     title <- "Sentenciados por violencia doméstica bajo supervisión electrónica"
   })
   
@@ -2887,7 +2887,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title5 <- renderUI({
+  output$plot_title_OP_148_SoliGrupEdad <- renderUI({
     title <- "Solicitudes de órdenes de protección bajo Ley 148 según región judicial y edad"
   })
   
@@ -3043,7 +3043,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title6 <- renderUI({
+  output$plot_title_OP_Ley148_ex_parteEmitidas <- renderUI({
     title <- "Órdenes de protección ex parte emitidas bajo Ley 148, según región judicial y delito cometido"
   })
   
@@ -3202,7 +3202,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title8 <- renderUI({
+  output$plot_title_OP_LEY148Archivadas <- renderUI({
     title <- "Órdenes de protección ex parte archivadas bajo Ley 148 según región judicial"
   })
 
@@ -3359,7 +3359,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title7 <- renderUI({
+  output$plot_title_OP_LEY148Denegadas <- renderUI({
     title <- "Órdenes de protección denegadas bajo Ley 148 por razón de archivo según región judicial"
   })
   
@@ -3516,7 +3516,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title9 <- renderUI({
+  output$plot_title_OP_LEY148FinalEmitidas <- renderUI({
     title <- "Órdenes de protección emitidas bajo Ley 148, según región judicial y tipo de delito"
   })
 
@@ -3674,7 +3674,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title10 <- renderUI({
+  output$plot_title_OP_LEY148Genero <- renderUI({
     title <- "Órdenes de protección emitidas bajo Ley 148, según la parte"
   })
   
@@ -3827,7 +3827,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title11 <- renderUI({
+  output$plot_title_tribCasosCrim <- renderUI({
     title <- "Movimiento anual de casos de violencia doméstica en el Tribunal según Ley 54"
   })
   
@@ -4016,7 +4016,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title22 <- renderUI({
+  output$plot_title_safekitsDF <- renderUI({
     title <- HTML("Tendencia anual de <i>SAFE Kits</i> por estado de querella")
   })
  
@@ -4148,7 +4148,7 @@ server <- function(input, output, session) {
   })
   
   #Titulo de la Grafica
-  output$plot_title23 <- renderUI({
+  output$plot_title_safekitsDF_edades <- renderUI({
     title <- HTML("Tendencia anual de <i>SAFE Kits</i> con querella en menores y mayores de edad")
   })
   
