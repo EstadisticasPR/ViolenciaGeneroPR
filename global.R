@@ -851,13 +851,6 @@ opmCasos_list <- list(
 # Unir todo
 opmCasos <- reduce(opmCasos_list, full_join)
 
-# Procesar ambas hojas y unirlas
-opmCasos <- list(
-  procesar_opm("mensual", incluir_trata = TRUE),
-  procesar_opm("anual")
-) %>%
-  reduce(full_join)
-
 #### opmVic ####
 opmVic <- read_excel(paste0(opm, "opmVicGraf.xlsx")) %>% 
   rename_at(vars(1,2,3,4,5,6), ~ c("género","2020", "2021", "2022", "2023", "2024")) %>%
