@@ -189,11 +189,17 @@ dfam <- here::here("data", "Departamento_de_Familia", "/")
 # Años a importar
 years <- 2018:2022
 
-# Importar y combinar todos los archivos
-dfMalt <- lapply(years, function(year) {
-  read_excel(paste0(dfam, "dfMalt", year, ".xlsx")) %>%
-    mutate(Año = as.character(year))
+# Leer y limpiar los datos por hoja
+dfMalt <- lapply(as.character(years), function(sheet_name) {
+  read_excel(paste0(dfam, "dfMalt.xlsx"), sheet = sheet_name) %>%
+    mutate(Año = sheet_name)
 }) %>%
+
+# Importar y combinar todos los archivos
+# dfMalt <- lapply(years, function(year) {
+#   read_excel(paste0(dfam, "dfMalt", year, ".xlsx")) %>%
+#     mutate(Año = as.character(year))
+# }) %>%
   bind_rows() %>%
   rename(
     Masculino = `Cantidad Masculino`,
@@ -239,7 +245,7 @@ dfMalt <- dfMalt %>%
   bind_rows(negligencia_sum) %>% # Unir el dataset original con el dataset de negligencia 
   mutate(Maltrato = factor(Maltrato,
                                 levels = c("Abuso Sexual", "Explotación", "Maltrato Físico",      
-                                           "Trata Humana", "Otro"),
+                                           "Trata Humana", "Negligencia" ,"Otro"),
                                 ordered = TRUE))
 
 
