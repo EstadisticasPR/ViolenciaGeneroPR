@@ -194,12 +194,6 @@ dfMalt <- lapply(as.character(years), function(sheet_name) {
   read_excel(paste0(dfam, "dfMalt.xlsx"), sheet = sheet_name) %>%
     mutate(Año = sheet_name)
 }) %>%
-
-# Importar y combinar todos los archivos
-# dfMalt <- lapply(years, function(year) {
-#   read_excel(paste0(dfam, "dfMalt", year, ".xlsx")) %>%
-#     mutate(Año = as.character(year))
-# }) %>%
   bind_rows() %>%
   rename(
     Masculino = `Cantidad Masculino`,
