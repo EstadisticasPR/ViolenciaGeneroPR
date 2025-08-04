@@ -990,6 +990,8 @@ OP_148_SoliGrupEdad <- bind_rows(OP_148_SoliGrupEdad_list) %>%
   relocate(AñoFiscal, Región, Edad, Solicitudes)
 
 
+
+
 #### OP_Ley148_ex_parteEmitidas ####
 # Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
 # Nuevos nombres de columnas
@@ -1020,6 +1022,8 @@ OP_Ley148_ex_parteEmitidas <- bind_rows(OP_Ley148_ex_parteEmitidas_list) %>%
   relocate(AñoFiscal, Delito, Región, ÓrdenesEmitidas)
 
 
+
+
 #### OP_LEY148Archivadas ####
 # Cantidad de solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual archivadas por Región Judicial
 new_names <- c("Total", "Solicitud Peticionaria", "Otra Razón")
@@ -1047,6 +1051,12 @@ OP_LEY148Archivadas <- OP_LEY148Archivadas_list %>%
   filter(Región != "Total") %>%
   replace_na(list(ÓrdenesArchivadas = 0)) %>%
   relocate(AñoFiscal, Razón, Región, ÓrdenesArchivadas)
+
+
+# OP_LEY148Archivadas_2 <- OP_LEY148Archivadas %>%
+#   group_by(AñoFiscal, Razón) %>%
+#   summarise(ÓrdenesArchivadas = sum(ÓrdenesArchivadas, na.rm = TRUE)) %>%
+#   ungroup()
 
 
 #### OP_LEY148Denegadas ####
@@ -1108,6 +1118,8 @@ OP_LEY148FinalEmitidas <- OP_LEY148FinalEmitidas_list %>%
   ) %>%
   relocate(AñoFiscal, Delito, Región, ÓrdenesEmitidas)
 
+
+
 #### OP_LEY148Genero ####
 # Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por sexo de la parte
 sheet_names <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024")
@@ -1148,7 +1160,7 @@ tribCasosCrim_list <- map(years, ~ {
     cleanSheet_tribCasosCrim(.x, new_names)
 })
 
-tribCasosCrim <- reduce(tribCasosCrim_list, full_join) %>%
+tribCasosCrim_grande <- reduce(tribCasosCrim_list, full_join) %>%
   mutate(
     Delito = factor(Delito),
     Casos = factor(Casos, levels = c("A Resolver", "Absoluciones", "Archivos", "Condenas", 
@@ -1161,10 +1173,40 @@ tribCasosCrim <- reduce(tribCasosCrim_list, full_join) %>%
                        "2022-2023" = "2023",
                        "2023-2024" = "2024",
                        "2024-2025" = "2025"),
-    AñoFiscal = factor(AñoFiscal)
+    AñoFiscal = factor(AñoFiscal),
+    DelitoAgrupado = case_when(
+      Delito %in% c(
+        "Agresión sexual conyugal Art. 3.5", 
+        "Tentativa de agresión sexual conyugal Art 3.5"
+      ) ~ "Agresión sexual/Tentativa",
+      
+      Delito %in% c(
+        "Maltrato agravado Art. 3.2",
+        "Maltrato Art 3.1",
+        "Maltrato mediante amenaza Art 3.3",
+        "Maltrato mediante restricción de libertad Art. 3.4",
+        "Tentativa de maltrato agravado Art 3.2",
+        "Tentativa de maltrato Art 3.1",
+        "Tentativa de maltrato mediante amenaza Art 3.3",
+        "Tentativa de maltrato mediante restricción de libertad Art 3.4"
+      ) ~ "Maltrato/Tentativa",
+      
+      Delito %in% c(
+        "Tentativa de violación orden de protección Art 2.8",
+        "Violación orden de protección Art 2.8"
+      ) ~ "Violación órden de protección/Tentativa",
+      
+      TRUE ~ as.character(Delito)  # mantener los demás como están
+    ),
+    DelitoAgrupado = factor(DelitoAgrupado),
   ) %>%
   replace_na(list(Cantidad = 0)) %>%
   relocate(AñoFiscal, Delito, Casos, Cantidad)
+
+tribCasosCrim <- tribCasosCrim_grande %>%
+  group_by(AñoFiscal, DelitoAgrupado, Casos) %>%
+  summarise(Cantidad = sum(Cantidad, na.rm = TRUE), .groups = "drop") %>%
+  rename(Delito = DelitoAgrupado)
 
 #### Guardar datos procesados de Administración de Tribunales ####
 # dataframes <- list(OP_148_SoliGrupEdad, OP_Ley148_ex_parteEmitidas,

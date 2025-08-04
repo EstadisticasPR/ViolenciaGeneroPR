@@ -1830,7 +1830,8 @@ ui <-
       
         #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad) ####
         tabPanel(
-          lowercaseTitle("Órdenes de protección solicitadas por edad y región"), 
+          # lowercaseTitle("Órdenes de protección solicitadas por edad y región"), 
+          lowercaseTitle("Órdenes de protección solicitadas por grupo de edad"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -1847,12 +1848,13 @@ ui <-
                       choices = OP_148_SoliGrupEdad$Edad,
                       selected = OP_148_SoliGrupEdad$Edad,
                       id = "trib_OP_148_SoliGrupEdad_Edad"
-                    ),
+                    )
+                    ,
                     # botón para seleccionar el distrito fiscal
-                    createDropdownCheckbox(
+                    createDropdownCheckbox_region(
                       label = HTML("Seleccione <br> Región Judicial:"),
                       choices = OP_148_SoliGrupEdad$Región,
-                      selected = OP_148_SoliGrupEdad$Región,
+                      selected = NULL,
                       id = "trib_OP_148_SoliGrupEdad_Región"
                     )
                   )
@@ -1902,17 +1904,30 @@ ui <-
                   h4(
                     strong(actualizacion_tribunales1, style="margin: 0px;") 
                   ),
-                  p(
-                    "Los datos representados en esta gráfica corresponden a
-                   las órdenes de protección solicitadas por violencia sexual
-                    bajo la Ley 148, según grupo de edad, región judicial y año 
-                    fiscal. Los datos para cada año fiscal se identifican con el
-                    año en que finaliza el mismo, por ejemplo, para los datos
-                    del año fiscal 2020-2021, los datos son presentados como 
-                    año fiscal 2021.",
-                    
-                    style = "font-size: 16px;padding: 0px;" 
-                  )
+                  uiOutput("texto_Solicitadas")
+                  # p(
+                  #   "Los datos representados en esta gráfica corresponden a
+                  #  las órdenes de protección solicitadas por violencia sexual
+                  #   bajo la Ley 148, según grupo de edad y año 
+                  #   fiscal para todas las regiones judiciales de Puerto Rico.
+                  #   Los datos para cada año fiscal se identifican con el
+                  #   año en que finaliza el mismo, por ejemplo, para los datos
+                  #   del año fiscal 2020-2021, los datos son presentados como 
+                  #   año fiscal 2021.",
+                  #   
+                  #   style = "font-size: 16px;padding: 0px;" 
+                  # )
+                  # p(
+                  #   "Los datos representados en esta gráfica corresponden a
+                  #  las órdenes de protección solicitadas por violencia sexual
+                  #   bajo la Ley 148, según grupo de edad, región judicial y año 
+                  #   fiscal. Los datos para cada año fiscal se identifican con el
+                  #   año en que finaliza el mismo, por ejemplo, para los datos
+                  #   del año fiscal 2020-2021, los datos son presentados como 
+                  #   año fiscal 2021.",
+                  #   
+                  #   style = "font-size: 16px;padding: 0px;" 
+                  # )
                 )
               )
             )
@@ -1921,7 +1936,8 @@ ui <-
         
         #### tab con datos de ley 148 - Violencia Sexual por grupo de edad (OP_Ley148_ex_parteEmitidas) ####
         tabPanel(
-          lowercaseTitle("Órdenes de protección ex parte emitidas por delito cometido y región"), 
+          # lowercaseTitle("Órdenes de protección ex parte emitidas por delito cometido y región"), 
+          lowercaseTitle("Órdenes de protección ex parte emitidas por delito cometido"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -1938,12 +1954,13 @@ ui <-
                       choices = OP_Ley148_ex_parteEmitidas$Delito,
                       selected = OP_Ley148_ex_parteEmitidas$Delito,
                       id = "trib_OP_Ley148_ex_parteEmitidas_Delito"
-                    ),
+                    )
+                    ,
                     # botón para seleccionar la región fiscal
-                    createDropdownCheckbox(
+                    createDropdownCheckbox_region(
                       label = HTML("Seleccione <br> Región Judicial:"),
                       choices = OP_Ley148_ex_parteEmitidas$Región,
-                      selected = OP_Ley148_ex_parteEmitidas$Región,
+                      selected = NULL,
                       id = "trib_OP_Ley148_ex_parteEmitidas_Región"
                     )
                   )
@@ -1993,17 +2010,30 @@ ui <-
                   h4(
                     strong(actualizacion_tribunales2, style="margin: 0px;") 
                   ),
-                  p(
-                    "Los datos representados en esta gráfica corresponden a
-                    las órdenes de protección ex parte emitidas bajo la Ley 148
-                    según región judicial, delito cometido y año fiscal.
-                    Los datos para cada año fiscal se identifican con el
-                    año en que finaliza el mismo, por ejemplo, para los datos
-                    del año fiscal 2020-2021, los datos son presentados como 
-                    año fiscal 2021.",
-                    
-                    style = "font-size: 16px;padding: 0px;" 
-                  )
+                  uiOutput("texto_exparteEmitidas")
+                  # p(
+                  #   "Los datos representados en esta gráfica corresponden a
+                  #   las órdenes de protección ex parte emitidas bajo la Ley 148
+                  #   según delito cometido y año fiscal para todas las regiones
+                  #   judiciales de Puerto Rico.
+                  #   Los datos para cada año fiscal se identifican con el
+                  #   año en que finaliza el mismo, por ejemplo, para los datos
+                  #   del año fiscal 2020-2021, los datos son presentados como 
+                  #   año fiscal 2021.",
+                  #   
+                  #   style = "font-size: 16px;padding: 0px;" 
+                  # )
+                  # p(
+                  #   "Los datos representados en esta gráfica corresponden a
+                  #   las órdenes de protección ex parte emitidas bajo la Ley 148
+                  #   según región judicial, delito cometido y año fiscal.
+                  #   Los datos para cada año fiscal se identifican con el
+                  #   año en que finaliza el mismo, por ejemplo, para los datos
+                  #   del año fiscal 2020-2021, los datos son presentados como 
+                  #   año fiscal 2021.",
+                  #   
+                  #   style = "font-size: 16px;padding: 0px;" 
+                  # )
                 )
               )
             )
@@ -2031,10 +2061,11 @@ ui <-
                       id = "trib_OP_LEY148Archivadas_Razón"
                     ),
                     # botón para seleccionar la región fiscal
-                    createDropdownCheckbox(
+                    createDropdownCheckbox_region(
                       label = "Seleccione Distrito(s) Fiscal:",
                       choices = OP_LEY148Archivadas$Región,
-                      selected = OP_LEY148Archivadas$Región,
+                      # selected = OP_LEY148Archivadas$Región,
+                      selected = NULL,
                       id = "trib_OP_LEY148Archivadas_Región"
                     )
                   )
@@ -2084,17 +2115,18 @@ ui <-
                   h4(
                     strong(actualizacion_tribunales3, style="margin: 0px;") 
                   ),
-                  p(
-                    "Los datos representados en esta gráfica corresponden a
-                    las órdenes de protección ex parte bajo la Ley 148 archivadas
-                    por razón, región judicial y año fiscal.
-                    Los datos para cada año fiscal se identifican con el
-                    año en que finaliza el mismo, por ejemplo, para los datos
-                    del año fiscal 2020-2021, los datos son presentados como 
-                    año fiscal 2021.",
-                    
-                    style = "font-size: 16px;padding: 0px;" 
-                  )
+                  uiOutput("texto_exparteArchivadas")
+                  # p(
+                  #   "Los datos representados en esta gráfica corresponden a
+                  #   las órdenes de protección ex parte bajo la Ley 148 archivadas
+                  #   por razón, región judicial y año fiscal.
+                  #   Los datos para cada año fiscal se identifican con el
+                  #   año en que finaliza el mismo, por ejemplo, para los datos
+                  #   del año fiscal 2020-2021, los datos son presentados como 
+                  #   año fiscal 2021.",
+                  #   
+                  #   style = "font-size: 16px;padding: 0px;" 
+                  # )
                 )
               )
             )
@@ -2123,10 +2155,11 @@ ui <-
                     ),
                     customSeparator(),
                     # botón para seleccionar la región fiscal
-                    createDropdownCheckbox(
+                    createDropdownCheckbox_region(
                       label = "Seleccione Región Judicial:",
                       choices = OP_LEY148Denegadas$Región,
-                      selected = OP_LEY148Denegadas$Región,
+                      # selected = OP_LEY148Denegadas$Región,
+                      selected = NULL,
                       id = "trib_OP_LEY148Denegadas_Región"
                     )
                   )
@@ -2176,17 +2209,18 @@ ui <-
                   h4(
                     strong(actualizacion_tribunales4, style="margin: 0px;") 
                   ),
-                  p(
-                    "Los datos representados en esta gráfica corresponden a
-                    las órdenes de protección por violencia sexual denegadas
-                    bajo la Ley 148 por razón de archivo, región judicial y año
-                    fiscal. Los datos para cada año fiscal se identifican con el
-                    año en que finaliza el mismo, por ejemplo, para los datos
-                    del año fiscal 2020-2021, los datos son presentados como 
-                    año fiscal 2021.",
-                    
-                    style = "font-size: 16px;padding: 0px;" 
-                  )
+                  uiOutput("texto_Denegadas")
+                  # p(
+                  #   "Los datos representados en esta gráfica corresponden a
+                  #   las órdenes de protección por violencia sexual denegadas
+                  #   bajo la Ley 148 por razón de archivo, región judicial y año
+                  #   fiscal. Los datos para cada año fiscal se identifican con el
+                  #   año en que finaliza el mismo, por ejemplo, para los datos
+                  #   del año fiscal 2020-2021, los datos son presentados como 
+                  #   año fiscal 2021.",
+                  #   
+                  #   style = "font-size: 16px;padding: 0px;" 
+                  # )
                 )
               )
             )
@@ -2195,7 +2229,8 @@ ui <-
         
         #### tab con datos de solicitudes de órdenes de protección finales emitidas (OP_LEY148FinalEmitidas) ####
         tabPanel(
-          lowercaseTitle("Órdenes de protección emitidas por delito cometido y región"), 
+          # lowercaseTitle("Órdenes de protección emitidas por delito cometido y región"), 
+          lowercaseTitle("Órdenes de protección emitidas por delito cometido"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -2212,13 +2247,12 @@ ui <-
                       choices = OP_LEY148FinalEmitidas$Delito,
                       selected = OP_LEY148FinalEmitidas$Delito,
                       id = "trib_OP_LEY148FinalEmitidas_Delito"
-                    ),
-                    customSeparator(),
-                    # botón para seleccionar la región fiscal
-                    createDropdownCheckbox(
+                    )
+                    ,
+                    createDropdownCheckbox_region(
                       label = HTML("Seleccione <br> Región Judicial:"),
                       choices = OP_LEY148FinalEmitidas$Región,
-                      selected = OP_LEY148FinalEmitidas$Región,
+                      selected = NULL,
                       id = "trib_OP_LEY148FinalEmitidas_Región"
                     )
                   )
@@ -2259,6 +2293,9 @@ ui <-
                        div(id = "scrollable-plot", 
                            div(id = "plot-title", uiOutput("plot_title_OP_LEY148FinalEmitidas")),
                            plotlyOutput("barPlot_OP_LEY148FinalEmitidas"),  height = "100%"))
+                           
+                           # plotlyOutput("plot_OP_LEY148FinalEmitidas"),  height = "100%"))
+                      
               ),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
@@ -2269,16 +2306,28 @@ ui <-
                   h4(
                     strong(actualizacion_tribunales5, style="margin: 0px;") 
                   ),
-                  p(
-                    "Los datos representados en esta gráfica corresponden a
-                    las órdenes de protección emitidas bajo la Ley 148 por delito
-                    cometido, región judicial y año fiscal. Los datos para cada 
-                    año fiscal se identifican con el año en que finaliza
-                    el mismo, por ejemplo, para los datos del año fiscal 2020-2021,
-                    los datos son presentados como año fiscal 2021.",
-                    
-                    style = "font-size: 16px;padding: 0px;" 
-                  )
+                  uiOutput("texto_FinalEmitidas")
+                  # p(
+                  #   "Los datos representados en esta gráfica corresponden a
+                  #   las órdenes de protección emitidas bajo la Ley 148 por delito
+                  #   cometido y año fiscal para todas las regiones judiciales
+                  #   de Puerto Rico. Los datos para cada
+                  #   año fiscal se identifican con el año en que finaliza
+                  #   el mismo, por ejemplo, para los datos del año fiscal 2020-2021,
+                  #   los datos son presentados como año fiscal 2021.",
+                  # 
+                  #   style = "font-size: 16px;padding: 0px;"
+                  # )
+                  # p(
+                  #   "Los datos representados en esta gráfica corresponden a
+                  #   las órdenes de protección emitidas bajo la Ley 148 por delito
+                  #   cometido, región judicial y año fiscal. Los datos para cada 
+                  #   año fiscal se identifican con el año en que finaliza
+                  #   el mismo, por ejemplo, para los datos del año fiscal 2020-2021,
+                  #   los datos son presentados como año fiscal 2021.",
+                  #   
+                  #   style = "font-size: 16px;padding: 0px;" 
+                  # )
                 )
               )
             )
@@ -2377,60 +2426,150 @@ ui <-
         
         
         #### tab con datos de Movimiento de Casos Criminales de Violencia Doméstica (tribCasosCrim) ####
+        # tabPanel(
+        #   lowercaseTitle("Movimiento de casos en Tribunal de Primera Instancia por Ley 54"), 
+        #   br(), br(),
+        #     sidebarLayout(
+        #       sidebarPanel(
+        #         style = "display: flex; flex-direction: column; align-items: center;",
+        #         
+        #         # # seleccionar valor de la variable
+        #         div(
+        #           style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+        #           div(
+        #             style = "text-align: center; display: inline-block;",  
+        #             # botón para seleccionar el Delito
+        #             createDropdownCheckbox(
+        #               label = "Seleccione Delito(s):",
+        #               choices = tribCasosCrim$Delito,
+        #               selected = tribCasosCrim$Delito,
+        #               id = "trib_tribCasosCrim_Delito"
+        #             ),
+        #             # botón para seleccionar el estado del caso
+        #             createDropdownCheckbox(
+        #               label = "Seleccione Estado del Caso:",
+        #               choices = tribCasosCrim$Casos,
+        #               selected = 1,
+        #               id = "trib_tribCasosCrim_Casos"
+        #             )
+        #           )
+        #         ),
+        #         
+        #         div(
+        #           style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+        #           div(
+        #             style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+        #             div(
+        #               style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+        #               # botón para seleccionar el año fiscal
+        #               createDropdownCheckbox_añoFiscal(
+        #                 label = HTML("Seleccione <br> Año(s) Fiscal:"),
+        #                 choices = tribCasosCrim$AñoFiscal,
+        #                 selected = tribCasosCrim$AñoFiscal,
+        #                 id = "trib_tribCasosCrim_AñoFiscal"
+        #               )
+        #             ),
+        #             div(
+        #               style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+        #               showDataCheckbox("showTable_tribCasosCrim")
+        #             )
+        #           )
+        #         ),
+        #         
+        #         # Output UI para la tabla de datos
+        #         uiOutput("dataTableUI_tribCasosCrim")
+        #         
+        #       ),
+        #     
+        #     # Sección principal con los gráficos
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       fluidRow(
+        #         column(12, 
+        #                div(id = "scrollable-plot", 
+        #                    div(id = "plot-title", uiOutput("plot_title_tribCasosCrim")),
+        #                    plotlyOutput("barPlot_tribCasosCrim"),  height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 10px;"),
+        #       tags$div(
+        #         style = "padding-bottom: 10px;",
+        #         div(
+        #           class = "card",
+        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+        #           h4(
+        #             strong(actualizacion_tribunales7, style="margin: 0px;") 
+        #           ),
+        #           p(
+        #             "Los datos representados en esta gráfica corresponden al
+        #             movimiento de casos criminales de violencia doméstica en 
+        #             el tribunal de primera instancia según la ley Núm. 54 
+        #             por delito cometido y año fiscal. Los datos para cada año 
+        #             fiscal se identifican con el año en que finaliza el mismo,
+        #             por ejemplo, para los datos del año fiscal 2020-2021, 
+        #             los datos son presentados como año fiscal 2021.",
+        #             
+        #             style = "font-size: 16px;padding: 0px;" 
+        #           )
+        #         )
+        #       )
+        #     )
+        #   ),
+        # ),
+        # 
         tabPanel(
           lowercaseTitle("Movimiento de casos en Tribunal de Primera Instancia por Ley 54"), 
           br(), br(),
-            sidebarLayout(
-              sidebarPanel(
-                style = "display: flex; flex-direction: column; align-items: center;",
-                
-                # # seleccionar valor de la variable
+          sidebarLayout(
+            sidebarPanel(
+              style = "display: flex; flex-direction: column; align-items: center;",
+              
+              # # seleccionar valor de la variable
+              div(
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
-                  div(
-                    style = "text-align: center; display: inline-block;",  
-                    # botón para seleccionar el Delito
-                    createDropdownCheckbox(
-                      label = "Seleccione Delito(s):",
-                      choices = tribCasosCrim$Delito,
-                      selected = tribCasosCrim$Delito,
-                      id = "trib_tribCasosCrim_Delito"
-                    ),
-                    # botón para seleccionar el estado del caso
-                    createDropdownCheckbox(
-                      label = "Seleccione Estado del Caso:",
-                      choices = tribCasosCrim$Casos,
-                      selected = 1,
-                      id = "trib_tribCasosCrim_Casos"
-                    )
+                  style = "text-align: center; display: inline-block;",  
+                  # botón para seleccionar el Delito
+                  createDropdownCheckbox(
+                    label = "Seleccione Delito(s):",
+                    choices = tribCasosCrim$Delito,
+                    selected = tribCasosCrim$Delito,
+                    id = "trib_tribCasosCrim_Delito"
+                  ),
+                  # botón para seleccionar el estado del caso
+                  createDropdownCheckbox(
+                    label = "Seleccione Estado del Caso:",
+                    choices = tribCasosCrim$Casos,
+                    selected = 1,
+                    id = "trib_tribCasosCrim_Casos"
                   )
-                ),
-                
-                div(
-                  style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
-                  div(
-                    style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-                    div(
-                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
-                      # botón para seleccionar el año fiscal
-                      createDropdownCheckbox_añoFiscal(
-                        label = HTML("Seleccione <br> Año(s) Fiscal:"),
-                        choices = tribCasosCrim$AñoFiscal,
-                        selected = tribCasosCrim$AñoFiscal,
-                        id = "trib_tribCasosCrim_AñoFiscal"
-                      )
-                    ),
-                    div(
-                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-                      showDataCheckbox("showTable_tribCasosCrim")
-                    )
-                  )
-                ),
-                
-                # Output UI para la tabla de datos
-                uiOutput("dataTableUI_tribCasosCrim")
-                
+                )
               ),
+              
+              div(
+                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                div(
+                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                    # botón para seleccionar el año fiscal
+                    createDropdownCheckbox_añoFiscal(
+                      label = HTML("Seleccione <br> Año(s) Fiscal:"),
+                      choices = tribCasosCrim$AñoFiscal,
+                      selected = tribCasosCrim$AñoFiscal,
+                      id = "trib_tribCasosCrim_AñoFiscal"
+                    )
+                  ),
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_tribCasosCrim")
+                  )
+                )
+              ),
+              
+              # Output UI para la tabla de datos
+              uiOutput("dataTableUI_tribCasosCrim")
+              
+            ),
             
             # Sección principal con los gráficos
             mainPanel(
@@ -2466,6 +2605,7 @@ ui <-
             )
           ),
         ),
+        
         
         #### tab de Definiciones y Metadatos ####
         tabPanel(

@@ -392,6 +392,100 @@ createDropdownCheckbox <- function(label, choices, selected, id) {
   )
 }
 
+createDropdownCheckbox_region <- function(label, choices, selected = NULL, id) {
+  choices <- levels(choices)
+  
+  # Si selected es NULL, no seleccionar ningún valor
+  if (is.null(selected)) {
+    selected <- character(0)
+  } else {
+    selected <- choices[selected]
+  }
+  
+  # Determinar texto inicial del botón
+  buttonLabel <- if (length(selected) > 1) {
+    HTML("Deseleccionar<br>todo")
+  } else {
+    HTML("Seleccionar<br>todo")
+  }
+  
+  div(
+    style = "display: flex; justify-content: center; width: 100%;",
+    dropdownButton(
+      circle = FALSE,
+      label = lowercaseTitle(label),
+      status = "default",
+      size = "default",
+      checkboxGroupInput(
+        paste0("checkGroup_", id),
+        label = "",
+        choices = choices,
+        selected = selected
+      ),
+      actionButton(
+        paste0("deselectAll_", id),
+        buttonLabel,
+        class = "btn-toggle-select",
+        style = "display: block; margin: 10px auto; width: 100%;"
+      )
+    ),
+    style = "display: flex; padding-right: 20px; padding-top: 10px; width: 100%;",
+    tags$style(HTML('
+      .btn {
+        font-size: 12px !important;
+        background-color: #3e3f3a !important;
+        color: white !important;
+        border-color: #ccc !important;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .btn > span {
+        font-size: 10px !important;
+      }
+      .btn-default:hover, .btn-default:focus, .btn-default:active {
+        background-color: #2c2c2a !important;
+        color: #b0dce4 !important;
+      }
+      .dropdown-menu {
+        width: 100% !important;
+        font-size: 8px !important;
+      }
+      .shiny-input-checkboxgroup {
+        display: flex;
+        flex-direction: column;
+      }
+      .btn-toggle-select {
+        text-transform: none !important;
+      }
+      @media (max-width: 1040px) {
+        .btn {
+          font-size: 10px !important;
+          padding: 6px 4px !important;
+          max-width: 100%;
+        }
+        .btn > span {
+          font-size: 10px !important;
+        }
+        .dropdown-menu {
+          font-size: 10px !important;
+        }
+      }
+      @media (min-width: 1041px) {
+        .btn {
+          font-size: 12px !important;
+          padding: 8px 6px !important;
+          max-width: 100%;
+        }
+        .btn > span {
+          font-size: 11px !important;
+        }
+        .dropdown-menu {
+          font-size: 12px !important;
+        }
+      }
+    '))
+  )
+}
 
 #### embedImage ####
 # Crea un elemento de lista con una imagen que enlaza a una página web especificada.

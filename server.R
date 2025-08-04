@@ -2774,7 +2774,7 @@ server <- function(input, output, session) {
   ############################################################
   ########## Tab de la Administración de Tribunales ##########
   ############################################################
-  #### tab con datos de Ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad) ####
+  #### tab con datos de Ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad Responsive) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el grupo de edad y el distrito fiscal
   OP_148_SoliGrupEdad_filt <- reactive({
@@ -2782,6 +2782,19 @@ server <- function(input, output, session) {
            AñoFiscal %in% input$checkGroup_trib_OP_148_SoliGrupEdad_AñoFiscal,
            Edad %in% input$checkGroup_trib_OP_148_SoliGrupEdad_Edad,
            Región %in% input$checkGroup_trib_OP_148_SoliGrupEdad_Región
+    )
+  })
+  
+  OP_148_SoliGrupEdad_total <- OP_148_SoliGrupEdad %>%
+    group_by(AñoFiscal, Edad) %>%
+    summarise(Solicitudes = sum(Solicitudes, na.rm = TRUE)) %>%
+    ungroup()
+  
+  
+  OP_148_SoliGrupEdad_filt_total <- reactive({
+    filter(OP_148_SoliGrupEdad_total,
+           AñoFiscal %in% input$checkGroup_trib_OP_148_SoliGrupEdad_AñoFiscal,
+           Edad %in% input$checkGroup_trib_OP_148_SoliGrupEdad_Edad
     )
   })
   
@@ -2804,7 +2817,7 @@ server <- function(input, output, session) {
       label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
     )
   })
-
+  
   
   ### funcion para el botón de deseleccionar/seleccionar el grupo de edad
   observeEvent(input$deselectAll_trib_OP_148_SoliGrupEdad_Edad, {
@@ -2830,15 +2843,15 @@ server <- function(input, output, session) {
   observeEvent(input$deselectAll_trib_OP_148_SoliGrupEdad_Región, {
     updateCheckboxGroup(session, "checkGroup_trib_OP_148_SoliGrupEdad_Región", input, OP_148_SoliGrupEdad$Región)
   })
-  
+
   observe({
     inputId <- "checkGroup_trib_OP_148_SoliGrupEdad_Región"
     buttonId <- "deselectAll_trib_OP_148_SoliGrupEdad_Región"
     all_choices <- levels(OP_148_SoliGrupEdad$Región)
     selected <- input[[inputId]]
-    
+
     is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
-    
+
     updateActionButton(
       session,
       inputId = buttonId,
@@ -2848,62 +2861,124 @@ server <- function(input, output, session) {
   
   # Colores del status
   OP_148_SoliGrupEdad_fill_edad <- setColorFill(OP_148_SoliGrupEdad, "Edad")
-  
-  # Grafico de barras
+
+  # Grafico de Barras
   output$barPlot_OP_148_SoliGrupEdad <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
     has_año <- length(input$checkGroup_trib_OP_148_SoliGrupEdad_AñoFiscal) > 0
     has_edad <- length(input$checkGroup_trib_OP_148_SoliGrupEdad_Edad) > 0
     has_region <- length(input$checkGroup_trib_OP_148_SoliGrupEdad_Región) > 0
-    
-    # Crear mensaje si faltan opciones seleccionadas
-    if (!has_año || !has_edad || !has_region) {
-      message <- HTML("Seleccione Grupo(s) de Edad, Región Judicial \n y Año(s) a visualizar")
-    } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
-                         title = "Solicitudes de órdenes de protección \nbajo Ley 148 según región judicial y edad",
-                         xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
-                         colorFill = OP_148_SoliGrupEdad_fill_edad,
-                         emptyMessage = HTML("Seleccione Grupo(s) de Edad, Región Judicial \n y Año(s) a visualizar"))
-      #Altura predeterminada para la grafica.
-      plot_height = 500
-      numPlots = length(input$checkGroup_trib_OP_148_SoliGrupEdad_Región)
-      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Región, ncol = 2) +
-        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+
+    # Si faltan selecciones necesarias
+    if (!has_año || !has_edad) {
+      message <- HTML("Seleccione Grupo de Edad y Año(s) a visualizar")
+      empty_plot <- create_empty_plot_with_message(data = OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
+                                                   title = "",
+                                                   xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", message)
+     
+      #Titulo de la Grafica
+      output$plot_title_OP_148_SoliGrupEdad <- renderUI({
+        title <- "Solicitudes de órdenes de protección bajo Ley 148"
+      })
       
-      return(p)
+      return(convert_to_plotly(empty_plot, tooltip = "text"))
     }
     
-    # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
-                                                 title = "",
-                                                 xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", message)
-    convert_to_plotly(empty_plot, tooltip = "text")
+    # Si NO hay región seleccionada, usar el dataset agregado
+    if (!has_region) {
+      p <- renderBarPlot_facets(OP_148_SoliGrupEdad_filt_total, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
+                                title = "",
+                                xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
+                                colorFill = OP_148_SoliGrupEdad_fill_edad,
+                                emptyMessage = HTML("Seleccione Grupo(s) de Edad y Año(s) a visualizar"))
+      #Titulo de la Grafica
+      output$plot_title_OP_148_SoliGrupEdad <- renderUI({
+        title <- "Total de solicitudes de órdenes de protección bajo Ley 148 según grupo de edad"
+      })
+      
+      OP_148_SoliGrupEdad_filt_rename <- reactive({
+        OP_148_SoliGrupEdad_filt_total() %>%
+          rename(`Año Fiscal` = AñoFiscal)  
+      })
+      
+      
+      # Data Table para dcrCasosInv
+      # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+      output$dataTable_OP_148_SoliGrupEdad <- renderDT(server = FALSE, {
+        renderDataTable(OP_148_SoliGrupEdad_filt_rename(), "Datos: Órdenes de protección solicitadas por violencia sexual")
+      })
+      
+      return(convert_to_plotly(p, tooltip = "text")%>% layout(height = 450))
+    }
+    
+    #Titulo de la Grafica
+    output$plot_title_OP_148_SoliGrupEdad <- renderUI({
+      title <- "Solicitudes de órdenes de protección bajo Ley 148 según región judicial y edad"
+    })
+    
+    p <- renderBarPlot_facets(OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
+                              title = "Solicitudes de órdenes de protección \nbajo Ley 148 según región judicial y edad",
+                              xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
+                              colorFill = OP_148_SoliGrupEdad_fill_edad,
+                              emptyMessage = HTML("Seleccione Grupo(s) de Edad, Región Judicial \n y Año(s) a visualizar"))
+    #Altura predeterminada para la grafica.
+    plot_height = 500
+    numPlots = length(input$checkGroup_trib_OP_148_SoliGrupEdad_Región)
+    #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+    total_height = plotHeight(plot_height, numPlots)
+    p <- p + facet_wrap(~Región, ncol = 2) +
+      theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+            panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+    p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+    
+    OP_148_SoliGrupEdad_filt_rename <- reactive({
+      OP_148_SoliGrupEdad_filt() %>%
+        rename(`Año Fiscal` = AñoFiscal)  %>%
+        rename(`Región Judicial` = Región)
+    })
+    
+    
+    # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+    output$dataTable_OP_148_SoliGrupEdad <- renderDT(server = FALSE, {
+      renderDataTable(OP_148_SoliGrupEdad_filt_rename(), "Datos: Órdenes de protección solicitadas por violencia sexual")
+    })
+    
+    return(p)
   })
   
-  #Titulo de la Grafica
-  output$plot_title_OP_148_SoliGrupEdad <- renderUI({
-    title <- "Solicitudes de órdenes de protección bajo Ley 148 según región judicial y edad"
+  
+  # Texto explicativo dinámico
+  output$texto_Solicitadas <- renderUI({
+    regiones <- input$checkGroup_trib_OP_148_SoliGrupEdad_Región
+    if (is.null(regiones) || length(regiones) == 0) {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden a
+        las órdenes de protección solicitadas por violencia sexual
+        bajo la Ley 148, según grupo de edad y año 
+        fiscal para todas las regiones judiciales de Puerto Rico.
+        Los datos para cada año fiscal se identifican con el
+        año en que finaliza el mismo, por ejemplo, para los datos
+        del año fiscal 2020-2021, los datos son presentados como 
+        año fiscal 2021.
+      </p>"
+      )
+    } else {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden a
+        las órdenes de protección solicitadas por violencia sexual
+        bajo la Ley 148, según grupo de edad, región judicial y año fiscal.
+        Los datos para cada año fiscal se identifican con el
+        año en que finaliza el mismo, por ejemplo, para los datos
+        del año fiscal 2020-2021, los datos son presentados como 
+        año fiscal 2021.
+      </p>"
+      )
+    }
   })
   
   
-  OP_148_SoliGrupEdad_filt_rename <- reactive({
-    OP_148_SoliGrupEdad_filt() %>% 
-      rename(`Año Fiscal` = AñoFiscal)  %>% 
-      rename(`Región Judicial` = Región)
-  })
-  
-  
-  # Data Table para dcrCasosInv
-  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
-  output$dataTable_OP_148_SoliGrupEdad <- renderDT(server = FALSE, {
-    renderDataTable(OP_148_SoliGrupEdad_filt_rename(), "Datos: Órdenes de protección solicitadas por violencia sexual")
-  })
   
   # Crear Card con Fuentes
   output$dataTableUI_OP_148_SoliGrupEdad  <- renderUI({
@@ -2914,7 +2989,7 @@ server <- function(input, output, session) {
       tags$div(
         class = "card",
         style = "padding: 10px; width: 98%; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
-       
+        
         # Contenedor centrado para la tabla
         div(
           style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
@@ -2929,8 +3004,8 @@ server <- function(input, output, session) {
     }
   })
   
-  
-  #### (OP_Ley148_ex_parteEmitidas) ####
+    
+  #### (OP_Ley148_ex_parteEmitidas Responsive) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el delito cometido y la región fiscal
   OP_Ley148_ex_parteEmitidas_filt <- reactive({
@@ -2938,6 +3013,19 @@ server <- function(input, output, session) {
            AñoFiscal %in% input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal,
            Delito %in% input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Delito,
            Región %in% input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región
+    )
+  })
+
+  OP_Ley148_ex_parteEmitidas_total <- OP_Ley148_ex_parteEmitidas %>%
+    group_by(AñoFiscal, Delito) %>%
+    summarise(ÓrdenesEmitidas = sum(ÓrdenesEmitidas, na.rm = TRUE)) %>%
+    ungroup()
+  
+  
+  OP_Ley148_ex_parteEmitidas_filt_total <- reactive({
+    filter(OP_Ley148_ex_parteEmitidas_total,
+           AñoFiscal %in% input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal,
+           Delito %in% input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Delito
     )
   })
   
@@ -2982,19 +3070,19 @@ server <- function(input, output, session) {
     )
   })
   
-  ### funcion para el botón de deseleccionar/seleccionar el Región
+  ## funcion para el botón de deseleccionar/seleccionar el Región
   observeEvent(input$deselectAll_trib_OP_Ley148_ex_parteEmitidas_Región, {
     updateCheckboxGroup(session, "checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región", input, OP_Ley148_ex_parteEmitidas$Región)
   })
-  
+
   observe({
     inputId <- "checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región"
     buttonId <- "deselectAll_trib_OP_Ley148_ex_parteEmitidas_Región"
     all_choices <- levels(OP_Ley148_ex_parteEmitidas$Región)
     selected <- input[[inputId]]
-    
+
     is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
-    
+
     updateActionButton(
       session,
       inputId = buttonId,
@@ -3012,54 +3100,120 @@ server <- function(input, output, session) {
     has_delito <- length(input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Delito) > 0
     has_region <- length(input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región) > 0
     
-    # Crear mensaje si faltan opciones seleccionadas
-    if (!has_año || !has_delito || !has_region) {
-      message <- HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar")
-    } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                         title = "Órdenes de protección ex parte emitidas \nbajo Ley 148, según región judicial y delito cometido",
-                         xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
-                         colorFill = OP_Ley148_ex_parteEmitidas_fill_delito,
-                         emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
-      #Altura predeterminada para la grafica.
-      plot_height = 500
-      numPlots = length(input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región)
-      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Región, ncol = 2) +
-        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+
+    # Si faltan selecciones necesarias
+    if (!has_año || !has_delito) {
+      message <- HTML("Seleccione Delito y Año(s) a visualizar")
+      empty_plot <- create_empty_plot_with_message(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+                                                   title = "",
+                                                   xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", message)
+      #Titulo de la Grafica
+      output$plot_title_OP_Ley148_ex_parteEmitidas <- renderUI({
+        title <- "Órdenes de protección ex parte emitidas bajo Ley 148"
+      })
       
-      return(p)
+      return(convert_to_plotly(empty_plot, tooltip = "text"))
     }
     
-    # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                                                 title = "",
-                                                 xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", message)
-    convert_to_plotly(empty_plot, tooltip = "text")
+    # Si NO hay región seleccionada, usar el dataset agregado
+    if (!has_region) {
+      p <- renderBarPlot_facets(OP_Ley148_ex_parteEmitidas_filt_total, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+                                title = "",
+                                xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
+                                colorFill = OP_Ley148_ex_parteEmitidas_fill_delito,
+                                emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
+      #Titulo de la Grafica
+      output$plot_title_OP_Ley148_ex_parteEmitidas <- renderUI({
+        title <- "Total de órdenes de protección ex parte emitidas bajo Ley 148, según delito cometido"
+      })
+      
+      OP_Ley148_ex_parteEmitidas_filt_rename <- reactive({
+        OP_Ley148_ex_parteEmitidas_filt() %>%  
+          rename(`Año Fiscal` = AñoFiscal)  %>% 
+          rename(`Órdenes Emitidas` = ÓrdenesEmitidas) %>% 
+          rename(`Delito Cometido` = Delito)
+      })
+      
+      
+      # Data Table para dcrCasosInv
+      # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+      output$dataTable_OP_Ley148_ex_parteEmitidas <- renderDT(server = FALSE, {
+        renderDataTable(OP_Ley148_ex_parteEmitidas_filt_rename(), "Datos: Órdenes de protección ex parte emitidas bajo Ley 148")
+      })
+      
+      return(convert_to_plotly(p, tooltip = "text")%>% layout(height = 450))
+    }
+    
+    #Titulo de la Grafica
+    output$plot_title_OP_Ley148_ex_parteEmitidas <- renderUI({
+      title <- "Órdenes de protección ex parte emitidas bajo Ley 148, según región judicial y delito cometido"
+    })
+    
+    p <- renderBarPlot_facets(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+                              title = "Órdenes de protección ex parte emitidas \nbajo Ley 148, según región judicial y delito cometido",
+                              xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
+                              colorFill = OP_Ley148_ex_parteEmitidas_fill_delito,
+                              emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
+    #Altura predeterminada para la grafica.
+    plot_height = 500
+    numPlots = length(input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región)
+    #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+    total_height = plotHeight(plot_height, numPlots)
+    p <- p + facet_wrap(~Región, ncol = 2) +
+      theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+            panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+    p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+  
+    
+    OP_Ley148_ex_parteEmitidas_filt_rename <- reactive({
+      OP_Ley148_ex_parteEmitidas_filt() %>%
+        rename(`Año Fiscal` = AñoFiscal)  %>%
+        rename(`Órdenes Emitidas` = ÓrdenesEmitidas) %>%
+        rename(`Región Judicial` = Región) %>%
+        rename(`Delito Cometido` = Delito)
+    })
+    
+    
+    # Data Table para dcrCasosInv
+    # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+    output$dataTable_OP_Ley148_ex_parteEmitidas <- renderDT(server = FALSE, {
+      renderDataTable(OP_Ley148_ex_parteEmitidas_filt_rename(), "Datos: Órdenes de protección ex parte emitidas bajo Ley 148")
+    })
+    
+    
+    return(p)
   })
   
-  #Titulo de la Grafica
-  output$plot_title_OP_Ley148_ex_parteEmitidas <- renderUI({
-    title <- "Órdenes de protección ex parte emitidas bajo Ley 148, según región judicial y delito cometido"
-  })
   
-  OP_Ley148_ex_parteEmitidas_filt_rename <- reactive({
-    OP_Ley148_ex_parteEmitidas_filt() %>%  
-      rename(`Año Fiscal` = AñoFiscal)  %>% 
-      rename(`Órdenes Emitidas` = ÓrdenesEmitidas) %>% 
-      rename(`Región Judicial` = Región) %>% 
-      rename(`Delito Cometido` = Delito)
-  })
-  
-  
-  # Data Table para dcrCasosInv
-  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
-  output$dataTable_OP_Ley148_ex_parteEmitidas <- renderDT(server = FALSE, {
-    renderDataTable(OP_Ley148_ex_parteEmitidas_filt_rename(), "Datos: Órdenes de protección ex parte emitidas bajo Ley 148")
+  # Texto explicativo dinámico
+  output$texto_exparteEmitidas <- renderUI({
+    regiones <- input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región
+    if (is.null(regiones) || length(regiones) == 0) {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden a
+        las órdenes de protección ex parte emitidas bajo la Ley 148
+        según delito cometido y año fiscal para todas las regiones
+        judiciales de Puerto Rico.
+        Los datos para cada año fiscal se identifican con el
+        año en que finaliza el mismo, por ejemplo, para los datos
+        del año fiscal 2020-2021, los datos son presentados como 
+        año fiscal 2021.
+      </p>"
+      )
+    } else {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden a
+        las órdenes de protección ex parte emitidas bajo la Ley 148
+        según delito cometido, region judicial y año fiscal.
+        Los datos para cada año fiscal se identifican con el
+        año en que finaliza el mismo, por ejemplo, para los datos
+        del año fiscal 2020-2021, los datos son presentados como 
+        año fiscal 2021.
+      </p>"
+      )
+    }
   })
   
   # Crear Card con Fuentes
@@ -3086,10 +3240,8 @@ server <- function(input, output, session) {
     }
   })
   
-  
-  
-  
-  #### (OP_LEY148Archivadas) ####
+    
+  #### (OP_LEY148Archivadas Responsive) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, la razón de archivado y la región fiscal
   OP_LEY148Archivadas_filt <- reactive({
@@ -3097,6 +3249,18 @@ server <- function(input, output, session) {
            AñoFiscal %in% input$checkGroup_trib_OP_LEY148Archivadas_AñoFiscal,
            Razón %in% input$checkGroup_trib_OP_LEY148Archivadas_Razón,
            Región %in% input$checkGroup_trib_OP_LEY148Archivadas_Región
+    )
+  })
+  
+  OP_LEY148Archivadas_total <- OP_LEY148Archivadas %>%
+    group_by(AñoFiscal, Razón) %>%
+    summarise(ÓrdenesArchivadas = sum(ÓrdenesArchivadas, na.rm = TRUE)) %>%
+    ungroup()
+  
+  OP_LEY148Archivadas_filt_total <- reactive({
+    filter(OP_LEY148Archivadas_total,
+           AñoFiscal %in% input$checkGroup_trib_OP_LEY148Archivadas_AñoFiscal,
+           Razón %in% input$checkGroup_trib_OP_LEY148Archivadas_Razón
     )
   })
   
@@ -3163,62 +3327,122 @@ server <- function(input, output, session) {
   # Colores de las razones
   OP_LEY148Archivadas_fill_Razón <- setColorFill(OP_LEY148Archivadas, "Razón")
   
-  
-  # Grafico de barras
+  # Grafico de Barras
   output$barPlot_OP_LEY148Archivadas <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
     has_año <- length(input$checkGroup_trib_OP_LEY148Archivadas_AñoFiscal) > 0
     has_razon <- length(input$checkGroup_trib_OP_LEY148Archivadas_Razón) > 0
     has_region <- length(input$checkGroup_trib_OP_LEY148Archivadas_Región) > 0
     
-    # Crear mensaje si faltan opciones seleccionadas
-    if (!has_año || !has_razon || !has_region) {
-      message <- HTML("Seleccione Razón, Distrito Fiscal \n y Año(s) a visualizar")
-    } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-                         title = "Órdenes de protección ex parte \narchivadas bajo Ley 148 según región judicial",
-                         xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
-                         colorFill = OP_LEY148Archivadas_fill_Razón,
-                         emptyMessage = HTML("Seleccione Razón, Distrito Fiscal \n y Año(s) a visualizar"))
-      #Altura predeterminada para la grafica.
-      plot_height = 500
-      numPlots = length(input$checkGroup_trib_OP_LEY148Archivadas_Región)
-      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Región, ncol = 2) +
-        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+    # Si faltan selecciones necesarias
+    if (!has_año || !has_razon) {
+      message <- HTML("Seleccione Razón y Año(s) a visualizar")
+      empty_plot <- create_empty_plot_with_message(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
+                                                   title = "",
+                                                   xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", message)
+      #Titulo de la Grafica
+      output$plot_title_OP_LEY148Archivadas <- renderUI({
+        title <- "Órdenes de protección ex parte archivadas bajo Ley 148"
+      })
       
-      return(p)
+      return(convert_to_plotly(empty_plot, tooltip = "text"))
     }
     
-    # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-                                                 title = "",
-                                                 xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", message)
-    convert_to_plotly(empty_plot, tooltip = "text")
-  })
-  
-  #Titulo de la Grafica
-  output$plot_title_OP_LEY148Archivadas <- renderUI({
-    title <- "Órdenes de protección ex parte archivadas bajo Ley 148 según región judicial"
-  })
+    # Si NO hay región seleccionada, usar el dataset agregado
+    if (!has_region) {
+      p <- renderBarPlot(OP_LEY148Archivadas_filt_total, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
+                         title = "",
+                         xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
+                         colorFill = OP_LEY148Archivadas_fill_Razón,
+                         emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
+      #Titulo de la Grafica
+      output$plot_title_OP_LEY148Archivadas <- renderUI({
+        title <- "Total de órdenes de protección ex parte archivadas bajo Ley 148"
+      })
+      
+      OP_LEY148Archivadas_filt_rename <- reactive({
+        OP_LEY148Archivadas_filt_total() %>% 
+          rename(`Año Fiscal` = AñoFiscal)  %>% 
+          rename(`Órdenes Archivadas` = ÓrdenesArchivadas)%>% 
+          rename(`Razón de Archivo` = Razón)
+      })
+      
+      # Data Table 
+      # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+      output$dataTable_OP_LEY148Archivadas <- renderDT(server = FALSE, {
+        renderDataTable(OP_LEY148Archivadas_filt_rename(), "Datos: Órdenes de protección ex parte archivadas bajo Ley 148")
+      })
+      
+      return(convert_to_plotly(p, tooltip = "text")%>% layout(height = 450))
+    }
+    
+    #Titulo de la Grafica
+    output$plot_title_OP_LEY148Archivadas <- renderUI({
+      title <- "Órdenes de protección ex parte archivadas bajo Ley 148 según región judicial"
+    })
+    
+    # Si hay selección en todos los filtros, usar dataset completo con facetas
+    p <- renderBarPlot_facets(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
+                              title = "",
+                              xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
+                              colorFill = OP_LEY148Archivadas_fill_Razón,
+                              emptyMessage = HTML("Seleccione Razón, Distrito Fiscal \n y Año(s) a visualizar"))
+    #Altura predeterminada para la grafica.
+    plot_height = 500
+    numPlots = length(input$checkGroup_trib_OP_LEY148Archivadas_Región)
+    #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+    total_height = plotHeight(plot_height, numPlots)
+    p <- p + facet_wrap(~Región, ncol = 2) +
+      theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+            panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+    p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+    
+    OP_LEY148Archivadas_filt_rename <- reactive({
+      OP_LEY148Archivadas_filt() %>% 
+        rename(`Año Fiscal` = AñoFiscal)  %>% 
+        rename(`Distrito Fiscal` = Región) %>% 
+        rename(`Órdenes Archivadas` = ÓrdenesArchivadas)%>% 
+        rename(`Razón de Archivo` = Razón)
+    })
+    
+    # Data Table 
+    # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+    output$dataTable_OP_LEY148Archivadas <- renderDT(server = FALSE, {
+      renderDataTable(OP_LEY148Archivadas_filt_rename(), "Datos: Órdenes de protección ex parte archivadas bajo Ley 148")
+    })
 
-  
-  OP_LEY148Archivadas_filt_rename <- reactive({
-    OP_LEY148Archivadas_filt() %>% 
-      rename(`Año Fiscal` = AñoFiscal)  %>% 
-      rename(`Distrito Fiscal` = Región) %>% 
-      rename(`Órdenes Archivadas` = ÓrdenesArchivadas)%>% 
-      rename(`Razón de Archivo` = Razón)
+    return(p)
   })
   
-  # Data Table 
-  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
-  output$dataTable_OP_LEY148Archivadas <- renderDT(server = FALSE, {
-    renderDataTable(OP_LEY148Archivadas_filt_rename(), "Datos: Órdenes de protección ex parte archivadas bajo Ley 148")
+  
+  # Texto explicativo dinámico
+  output$texto_exparteArchivadas <- renderUI({
+    regiones <- input$checkGroup_trib_OP_LEY148Archivadas_Región
+    if (is.null(regiones) || length(regiones) == 0) {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden a
+        las órdenes de protección ex parte bajo la Ley 148 archivadas
+        por razón y año fiscal para todas las regiones judiciales
+        a nivel de Puerto Rico. Los datos para cada año fiscal se
+        identifican con el año en que finaliza el mismo, por 
+        ejemplo, para los datos del año fiscal 2020-2021, los datos
+        son presentados como año fiscal 2021.
+      </p>"
+      )
+    } else {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden a
+        las órdenes de protección ex parte bajo la Ley 148 archivadas
+        por razón, región judicial y año fiscal.
+        Los datos para cada año fiscal se identifican con el
+        año en que finaliza el mismo, por ejemplo, para los datos
+        del año fiscal 2020-2021, los datos son presentados como 
+        año fiscal 2021.
+      </p>"
+      )
+    }
   })
   
   # Crear Card con Fuentes
@@ -3239,14 +3463,14 @@ server <- function(input, output, session) {
             DTOutput("dataTable_OP_LEY148Archivadas")
           )
         ),
-     
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
   })
   
-  
-  #### (OP_LEY148Denegadas) ####
+    
+  #### (OP_LEY148Denegadas Responsive) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, la razón de archivado y la región fiscal
   OP_LEY148Denegadas_filt <- reactive({
@@ -3254,6 +3478,18 @@ server <- function(input, output, session) {
            AñoFiscal %in% input$checkGroup_trib_OP_LEY148Denegadas_AñoFiscal,
            Razón %in% input$checkGroup_trib_OP_LEY148Denegadas_Razón,
            Región %in% input$checkGroup_trib_OP_LEY148Denegadas_Región
+    )
+  })
+  
+  OP_LEY148Denegadas_total <- OP_LEY148Denegadas %>%
+    group_by(AñoFiscal, Razón) %>%
+    summarise(ÓrdenesDenegadas = sum(ÓrdenesDenegadas, na.rm = TRUE)) %>%
+    ungroup()
+  
+  OP_LEY148Denegadas_filt_total <- reactive({
+    filter(OP_LEY148Denegadas_total,
+           AñoFiscal %in% input$checkGroup_trib_OP_LEY148Denegadas_AñoFiscal,
+           Razón %in% input$checkGroup_trib_OP_LEY148Denegadas_Razón
     )
   })
   
@@ -3321,63 +3557,130 @@ server <- function(input, output, session) {
   OP_LEY148Denegadas_fill_Razón <- setColorFill(OP_LEY148Denegadas, "Razón")
   
   
-  # Grafico de barras
+  # Grafico de Barras
   output$barPlot_OP_LEY148Denegadas <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
     has_año <- length(input$checkGroup_trib_OP_LEY148Denegadas_AñoFiscal) > 0
     has_razon <- length(input$checkGroup_trib_OP_LEY148Denegadas_Razón) > 0
     has_region <- length(input$checkGroup_trib_OP_LEY148Denegadas_Región) > 0
     
-    # Crear mensaje si faltan opciones seleccionadas
-    if (!has_año || !has_razon || !has_region) {
-      message <- HTML("Seleccione Razón, Región Judicial \n y Año(s) a visualizar")
-    } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                         title = "Órdenes de protección denegadas bajo \nLey 148 por razón de archivo según región judicial",
-                         xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
-                         colorFill = OP_LEY148Denegadas_fill_Razón,
-                         emptyMessage = HTML("Seleccione Razón, Región Judicial \n y Año(s) a visualizar"))
-      #Altura predeterminada para la grafica.
-      plot_height = 500
-      numPlots = length(input$checkGroup_trib_OP_LEY148Denegadas_Región)
-      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Región, ncol = 2) +
-        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+    # Si faltan selecciones necesarias
+    if (!has_año || !has_razon) {
+      message <- HTML("Seleccione Razón y Año(s) a visualizar")
+      empty_plot <- create_empty_plot_with_message(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
+                                                   title = "",
+                                                   xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", message)
+      #Titulo de la Grafica
+      output$plot_title_OP_LEY148Denegadas <- renderUI({
+        title <- "Órdenes de protección denegadas bajo Ley 148 por razón de archivo"
+      })
       
-      return(p)
+      return(convert_to_plotly(empty_plot, tooltip = "text"))
     }
     
-    # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                                                 title = "",
-                                                 xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", message)
-    convert_to_plotly(empty_plot, tooltip = "text")
+    # Si NO hay región seleccionada, usar el dataset agregado
+    if (!has_region) {
+      p <- renderBarPlot(OP_LEY148Denegadas_filt_total, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
+                         title = "",
+                         xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
+                         colorFill = OP_LEY148Denegadas_fill_Razón,
+                         emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
+      #Titulo de la Grafica
+      output$plot_title_OP_LEY148Denegadas <- renderUI({
+        title <- "Total de órdenes de protección denegadas bajo Ley 148 por razón de archivo"
+      })
+      
+      OP_LEY148Denegadas_filt_rename <- reactive({
+        OP_LEY148Denegadas_filt() %>% 
+          rename(`Año Fiscal` = AñoFiscal)  %>% 
+          rename(`Órdenes Denegadas` = ÓrdenesDenegadas)%>% 
+          rename(`Razón de Archivo` = Razón)
+      })
+      
+      
+      # Data Table 
+      # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+      output$dataTable_OP_LEY148Denegadas <- renderDT(server = FALSE, {
+        renderDataTable(OP_LEY148Denegadas_filt_rename(), "Datos: Ordenes de protección denegadas por violencia sexual bajo Ley 148")
+      })
+      
+      return(convert_to_plotly(p, tooltip = "text")%>% layout(height = 450))
+    }
+    
+    #Titulo de la Grafica
+    output$plot_title_OP_LEY148Denegadas <- renderUI({
+      title <- "Órdenes de protección denegadas bajo Ley 148 por razón de archivo según región judicial"
+    })
+    
+    # Si hay selección en todos los filtros, usar dataset completo con facetas
+    p <- renderBarPlot_facets(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
+                              title = "",
+                              xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
+                              colorFill = OP_LEY148Denegadas_fill_Razón,
+                              emptyMessage = HTML("Seleccione Razón, Distrito Fiscal \n y Año(s) a visualizar"))
+  
+    #Altura predeterminada para la grafica.
+    plot_height = 500
+    numPlots = length(input$checkGroup_trib_OP_LEY148Denegadas_Región)
+    #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+    total_height = plotHeight(plot_height, numPlots)
+    p <- p + facet_wrap(~Región, ncol = 2) +
+      theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+            panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+    p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+    
+    
+    OP_LEY148Denegadas_filt_rename <- reactive({
+      OP_LEY148Denegadas_filt() %>% 
+        rename(`Año Fiscal` = AñoFiscal)  %>% 
+        rename(`Región Judicial` = Región) %>% 
+        rename(`Órdenes Denegadas` = ÓrdenesDenegadas)%>% 
+        rename(`Razón de Archivo` = Razón)
+    })
+    
+    
+    # Data Table 
+    # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+    output$dataTable_OP_LEY148Denegadas <- renderDT(server = FALSE, {
+      renderDataTable(OP_LEY148Denegadas_filt_rename(), "Datos: Ordenes de protección denegadas por violencia sexual bajo Ley 148")
+    })
+    
+    return(p)
   })
   
-  #Titulo de la Grafica
-  output$plot_title_OP_LEY148Denegadas <- renderUI({
-    title <- "Órdenes de protección denegadas bajo Ley 148 por razón de archivo según región judicial"
+
+  # Texto explicativo dinámico
+  output$texto_Denegadas <- renderUI({
+    regiones <- input$checkGroup_trib_OP_LEY148Denegadas_Región
+    if (is.null(regiones) || length(regiones) == 0) {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden a
+        las órdenes de protección por violencia sexual denegadas
+        bajo la Ley 148 por razón de archivo y año fiscal para todas
+        las regiones judiciales de Puerto Rico.
+        Los datos para cada año fiscal se identifican con el
+        año en que finaliza el mismo, por ejemplo, para los datos
+        del año fiscal 2020-2021, los datos son presentados como 
+        año fiscal 2021.
+      </p>"
+      )
+    } else {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden a
+        las órdenes de protección por violencia sexual denegadas
+        bajo la Ley 148 por razón de archivo, región judicial y año
+        fiscal. Los datos para cada año fiscal se identifican con el
+        año en que finaliza el mismo, por ejemplo, para los datos
+        del año fiscal 2020-2021, los datos son presentados como 
+        año fiscal 2021.
+      </p>"
+      )
+    }
   })
   
-  OP_LEY148Denegadas_filt_rename <- reactive({
-    OP_LEY148Denegadas_filt() %>% 
-      rename(`Año Fiscal` = AñoFiscal)  %>% 
-      rename(`Región Judicial` = Región) %>% 
-      rename(`Órdenes Denegadas` = ÓrdenesDenegadas)%>% 
-      rename(`Razón de Archivo` = Razón)
-  })
-  
-  
-  # Data Table 
-  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
-  output$dataTable_OP_LEY148Denegadas <- renderDT(server = FALSE, {
-    renderDataTable(OP_LEY148Denegadas_filt_rename(), "Datos: Ordenes de protección denegadas por violencia sexual bajo Ley 148")
-  })
-  
+
   # Crear Card con Fuentes
   output$dataTableUI_OP_LEY148Denegadas  <- renderUI({
     if (input$showTable_OP_LEY148Denegadas) {
@@ -3403,8 +3706,9 @@ server <- function(input, output, session) {
   })
   
   
-  #### (OP_LEY148FinalEmitidas) ####
-  
+    
+  #### (OP_LEY148FinalEmitidas Responsive) ####
+
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el delito cometido y la región fiscal
   OP_LEY148FinalEmitidas_filt <- reactive({
     filter(OP_LEY148FinalEmitidas,
@@ -3414,70 +3718,82 @@ server <- function(input, output, session) {
     )
   })
   
+  OP_LEY148FinalEmitidas_total <- OP_LEY148FinalEmitidas %>%
+    group_by(AñoFiscal, Delito) %>%
+    summarise(ÓrdenesEmitidas = sum(ÓrdenesEmitidas, na.rm = TRUE)) %>%
+    ungroup()
+  
+  OP_LEY148FinalEmitidas_filt_total <- reactive({
+    filter(OP_LEY148FinalEmitidas_total,
+           AñoFiscal %in% input$checkGroup_trib_OP_LEY148FinalEmitidas_AñoFiscal,
+           Delito %in% input$checkGroup_trib_OP_LEY148FinalEmitidas_Delito,
+    )
+  })
+
   ### funcion para el botón de deseleccionar/seleccionar el año fiscal
   observeEvent(input$deselectAll_trib_OP_LEY148FinalEmitidas_AñoFiscal, {
     updateCheckboxGroup_trib(session, "checkGroup_trib_OP_LEY148FinalEmitidas_AñoFiscal", input, OP_LEY148FinalEmitidas$AñoFiscal)
   })
-  
+
   observe({
     inputId <- "checkGroup_trib_OP_LEY148FinalEmitidas_AñoFiscal"
     buttonId <- "deselectAll_trib_OP_LEY148FinalEmitidas_AñoFiscal"
     all_choices <- levels(OP_LEY148FinalEmitidas$AñoFiscal)
     selected <- input[[inputId]]
-    
+
     is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
-    
+
     updateActionButton(
       session,
       inputId = buttonId,
       label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
     )
   })
-  
-  
+
+
   ### funcion para el botón de deseleccionar/seleccionar delito cometido
   observeEvent(input$deselectAll_trib_OP_LEY148FinalEmitidas_Delito, {
     updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148FinalEmitidas_Delito", input, OP_LEY148FinalEmitidas$Delito)
   })
-  
+
   observe({
     inputId <- "checkGroup_trib_OP_LEY148FinalEmitidas_Delito"
     buttonId <- "deselectAll_trib_OP_LEY148FinalEmitidas_Delito"
     all_choices <- levels(OP_LEY148FinalEmitidas$Delito)
     selected <- input[[inputId]]
-    
+
     is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
-    
+
     updateActionButton(
       session,
       inputId = buttonId,
       label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
     )
   })
-  
+
   ### funcion para el botón de deseleccionar/seleccionar el Región
   observeEvent(input$deselectAll_trib_OP_LEY148FinalEmitidas_Región, {
     updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148FinalEmitidas_Región", input, OP_LEY148FinalEmitidas$Región)
   })
-  
+
   observe({
     inputId <- "checkGroup_trib_OP_LEY148FinalEmitidas_Región"
     buttonId <- "deselectAll_trib_OP_LEY148FinalEmitidas_Región"
     all_choices <- levels(OP_LEY148FinalEmitidas$Región)
     selected <- input[[inputId]]
-    
+
     is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
-    
+
     updateActionButton(
       session,
       inputId = buttonId,
       label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
     )
   })
-  
+
   # Colores de las razones
   OP_LEY148FinalEmitidas_fill_Delito <- setColorFill(OP_LEY148FinalEmitidas, "Delito")
-  
+
   # Grafico de barras
   output$barPlot_OP_LEY148FinalEmitidas <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
@@ -3485,81 +3801,150 @@ server <- function(input, output, session) {
     has_delito <- length(input$checkGroup_trib_OP_LEY148FinalEmitidas_Delito) > 0
     has_region <- length(input$checkGroup_trib_OP_LEY148FinalEmitidas_Región) > 0
     
-    # Crear mensaje si faltan opciones seleccionadas
-    if (!has_año || !has_delito || !has_region) {
-      message <- HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar")
-    } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                         title = "Órdenes de protección emitidas bajo Ley 148, \nsegún región judicial y tipo de delito",
-                         xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
-                         colorFill = OP_LEY148FinalEmitidas_fill_Delito,
-                         emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
-      #Altura predeterminada para la grafica.
-      plot_height = 500
-      numPlots = length(input$checkGroup_trib_OP_LEY148FinalEmitidas_Región)
-      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Región, ncol = 2) +
-      theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-            panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+    
+    # Si faltan selecciones necesarias
+    if (!has_año || !has_delito) {
+      message <- HTML("Seleccione Delito y Año(s) a visualizar")
+      create_empty_plot_with_message(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+                                     title = "",
+                                     xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", message)
+      #Titulo de la Grafica
+      output$plot_title_OP_LEY148FinalEmitidas <- renderUI({
+        title <- "Órdenes de protección emitidas bajo Ley 148"
+      })
       
-      return(p)
+      
+      return(convert_to_plotly(empty_plot, tooltip = "text"))
     }
     
-    # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                                                 title = "",
-                                                 xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", message)
-    convert_to_plotly(empty_plot, tooltip = "text")
-  })
-  
-  #Titulo de la Grafica
-  output$plot_title_OP_LEY148FinalEmitidas <- renderUI({
-    title <- "Órdenes de protección emitidas bajo Ley 148, según región judicial y tipo de delito"
-  })
+    # Si NO hay región seleccionada, usar el dataset agregado
+    if (!has_region) {
+      p <- renderBarPlot_facets(OP_LEY148FinalEmitidas_filt_total, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+                                title = "",
+                                xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
+                                colorFill = OP_LEY148FinalEmitidas_fill_Delito,
+                                emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
+      
+      #Titulo de la Grafica
+      output$plot_title_OP_LEY148FinalEmitidas <- renderUI({
+        title <- "Total de órdenes de protección emitidas bajo Ley 148, según delito cometido"
+      })
+      
+      OP_LEY148FinalEmitidas_filt_rename <- reactive({
+        OP_LEY148FinalEmitidas_filt() %>%
+          rename(`Año Fiscal` = AñoFiscal)  %>%
+          rename(`Órdenes Emitidas` = ÓrdenesEmitidas)%>%
+          rename(`Delito Cometido` = Delito)
+      })
+      
+      
+      # Data Table
+      # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+      output$dataTable_OP_LEY148FinalEmitidas <- renderDT(server = FALSE, {
+        renderDataTable(OP_LEY148FinalEmitidas_filt_rename(), "Datos: Órdenes de protección emitidas bajo ley 148")
+      })
+      
+      return(convert_to_plotly(p, tooltip = "text")%>% layout(height = 450))
+    }
+    
+    #Titulo de la Grafica
+    output$plot_title_OP_LEY148FinalEmitidas <- renderUI({
+      title <- "Órdenes de protección emitidas bajo Ley 148, según región judicial y tipo de delito"
+    })
+    
+    p <- renderBarPlot_facets(OP_LEY148FinalEmitidas_filt_region, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+                              title = "Órdenes de protección emitidas bajo Ley 148, \nsegún región judicial y tipo de delito",
+                              xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
+                              colorFill = OP_LEY148FinalEmitidas_fill_Delito,
+                              emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
+    #Altura predeterminada para la grafica.
+    plot_height = 500
+    numPlots = length(input$checkGroup_trib_OP_LEY148FinalEmitidas_Región)
+    #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+    total_height = plotHeight(plot_height, numPlots)
+    p <- p + facet_wrap(~Región, ncol = 2) +
+      theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+            panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+    p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+    
+    
+    OP_LEY148FinalEmitidas_filt_rename <- reactive({
+      OP_LEY148FinalEmitidas_filt_region() %>%
+        rename(`Año Fiscal` = AñoFiscal)  %>%
+        rename(`Región Judicial` = Región) %>%
+        rename(`Órdenes Emitidas` = ÓrdenesEmitidas)%>%
+        rename(`Delito Cometido` = Delito)
+    })
+    
+    
+    # Data Table
+    # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+    output$dataTable_OP_LEY148FinalEmitidas <- renderDT(server = FALSE, {
+      renderDataTable(OP_LEY148FinalEmitidas_filt_rename(), "Datos: Órdenes de protección emitidas bajo ley 148")
+    })
 
-  OP_LEY148FinalEmitidas_filt_rename <- reactive({
-    OP_LEY148FinalEmitidas_filt() %>% 
-      rename(`Año Fiscal` = AñoFiscal)  %>% 
-      rename(`Región Judicial` = Región) %>% 
-      rename(`Órdenes Emitidas` = ÓrdenesEmitidas)%>% 
-      rename(`Delito Cometido` = Delito)
+    return(p)
   })
   
   
-  # Data Table
-  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
-  output$dataTable_OP_LEY148FinalEmitidas <- renderDT(server = FALSE, {
-    renderDataTable(OP_LEY148FinalEmitidas_filt_rename(), "Datos: Órdenes de protección emitidas bajo ley 148")
+  # Texto explicativo dinámico
+  output$texto_exparteEmitidas <- renderUI({
+    regiones <- input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región
+    if (is.null(regiones) || length(regiones) == 0) {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden a
+        las órdenes de protección emitidas bajo la Ley 148 por delito
+        cometido y año fiscal para todas las regiones judiciales
+        de Puerto Rico. Los datos para cada
+        año fiscal se identifican con el año en que finaliza
+        el mismo, por ejemplo, para los datos del año fiscal 2020-2021,
+        los datos son presentados como año fiscal 2021.
+      </p>"
+      )
+    } else {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden a
+        las órdenes de protección emitidas bajo la Ley 148 por delito
+        cometido, región judicial y año fiscal. Los datos para cada
+        año fiscal se identifican con el año en que finaliza
+        el mismo, por ejemplo, para los datos del año fiscal 2020-2021,
+        los datos son presentados como año fiscal 2021.
+      </p>"
+      )
+    }
   })
   
+
+ 
   # Crear Card con Fuentes
   output$dataTableUI_OP_LEY148FinalEmitidas  <- renderUI({
     if (input$showTable_OP_LEY148FinalEmitidas) {
       hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
       texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
-      
+
       tags$div(
         class = "card",
         style = "padding: 10px; width: 87%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
-        
+
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",
             DTOutput("dataTable_OP_LEY148FinalEmitidas")
           )
         ),
-        
+
         createFuenteDiv(hyperlinks, texts)
       )
     }
   })
-  
-  
+
+
+
+    
   #### (OP_LEY148Genero) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, la parte peticionaria y el sexo de la parte
@@ -3713,163 +4098,7 @@ server <- function(input, output, session) {
     }
   })
   
-  
-  #### (tribCasosCrim) ####
-  tribCasosCrim_filt <- reactive({
-    filter(tribCasosCrim,
-           AñoFiscal %in% input$checkGroup_trib_tribCasosCrim_AñoFiscal,
-           Delito %in% input$checkGroup_trib_tribCasosCrim_Delito,
-           Casos %in% input$checkGroup_trib_tribCasosCrim_Casos
-    )
-  })
-  
-  ### funcion para el botón de deseleccionar/seleccionar el año fiscal
-  observeEvent(input$deselectAll_trib_tribCasosCrim_Casos, {
-    updateCheckboxGroup_trib(session, "checkGroup_trib_tribCasosCrim_AñoFiscal", input, tribCasosCrim$AñoFiscal)
-  })
-  
-  observe({
-    inputId <- "checkGroup_trib_tribCasosCrim_AñoFiscal"
-    buttonId <- "deselectAll_trib_tribCasosCrim_Casos"
-    all_choices <- levels(tribCasosCrim$AñoFiscal)
-    selected <- input[[inputId]]
     
-    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
-    
-    updateActionButton(
-      session,
-      inputId = buttonId,
-      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
-    )
-  })
-  
-  ### funcion para el botón de deseleccionar/seleccionar la parte peticionaria
-  observeEvent(input$deselectAll_trib_tribCasosCrim_Casos, {
-    updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Delito", input, tribCasosCrim$Delito)
-  })
-  
-  observe({
-    inputId <- "checkGroup_trib_tribCasosCrim_Delito"
-    buttonId <- "deselectAll_trib_tribCasosCrim_Casos"
-    all_choices <- levels(tribCasosCrim$Delito)
-    selected <- input[[inputId]]
-    
-    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
-    
-    updateActionButton(
-      session,
-      inputId = buttonId,
-      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
-    )
-  })
-  
-  ### funcion para el botón de deseleccionar/seleccionar el sexo de la parte
-  observeEvent(input$deselectAll_trib_tribCasosCrim_Casos, {
-    updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Casos", input, tribCasosCrim$Casos)
-  })
-  
-  observe({
-    inputId <- "checkGroup_trib_tribCasosCrim_Casos"
-    buttonId <- "deselectAll_trib_tribCasosCrim_Casos"
-    all_choices <- levels(tribCasosCrim$Casos)
-    selected <- input[[inputId]]
-    
-    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
-    
-    updateActionButton(
-      session,
-      inputId = buttonId,
-      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
-    )
-  })
-  
-  # Colores de las partes
-  tribCasosCrim_fill_Delito <- setColorFill(tribCasosCrim, "Delito")
-  
-  # Grafico de barras
-  output$barPlot_tribCasosCrim <- renderPlotly({
-    # Verificar si hay opciones seleccionadas en cada grupo
-    has_año <- length(input$checkGroup_trib_tribCasosCrim_AñoFiscal) > 0
-    has_delito <- length(input$checkGroup_trib_tribCasosCrim_Delito) > 0
-    has_casos <- length(input$checkGroup_trib_tribCasosCrim_Casos) > 0
-    
-    # Crear mensaje si faltan opciones seleccionadas
-    if (!has_año || !has_delito || !has_casos) {
-      message <- HTML("Seleccione Delito(s), Estado del caso \n y Año(s) a visualizar")
-    } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
-                         title = "Movimiento anual de casos de violencia \ndoméstica en el Tribunal según Ley 54",
-                         xlab = "Año Fiscal", ylab = "Casos", fillLab = "Delito Cometido",
-                         colorFill = tribCasosCrim_fill_Delito,
-                         emptyMessage = HTML("Seleccione Delito(s), Estado del caso \n y Año(s) a visualizar"), barWidth = 0, xGap = 0)
-      #Altura predeterminada para la grafica.
-      plot_height = 500
-      numPlots = length(input$checkGroup_trib_tribCasosCrim_Casos)
-      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Casos, ncol = 2) +
-        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height,
-                                                                             legend = list(           
-                                                                               font = list(size = 8.6) #Tamaño de letra para los elementos de la legenda.
-                                                                             ))
-      
-      return(p)
-    }
-    
-    # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
-                                                 title = "",
-                                                 xlab = "Año Fiscal", ylab = "Casos", message)
-    convert_to_plotly(empty_plot, tooltip = "text")
-  })
-  
-  #Titulo de la Grafica
-  output$plot_title_tribCasosCrim <- renderUI({
-    title <- "Movimiento anual de casos de violencia doméstica en el Tribunal según Ley 54"
-  })
-  
-  tribCasosCrim_filt_rename <- reactive({
-    tribCasosCrim_filt() %>% 
-      rename(`Año Fiscal` = AñoFiscal) %>% 
-      rename(`Estado del Caso` = Casos)%>% 
-      rename(`Delito Cometido` = Delito)
-  })
-  
-  # Data Table
-  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
-  output$dataTable_tribCasosCrim <- renderDT(server = FALSE, {
-    renderDataTable(tribCasosCrim_filt_rename(), "Datos: Ordenes de protección según delito cometido")
-  })
-  
-  # Crear Card con Fuentes
-  output$dataTableUI_tribCasosCrim <- renderUI({
-    if (input$showTable_tribCasosCrim) {
-      hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
-      texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
-      
-      tags$div(
-        class = "card",
-        style = "padding: 10px; width: 90%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
-        
-        # Contenedor centrado para la tabla
-        div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
-          div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
-            DTOutput("dataTable_tribCasosCrim")
-          )
-        ),
-        
-        createFuenteDiv(hyperlinks, texts)
-      )
-    }
-  })
-  
-  
-  
   #### Tab de Definiciones ####
   definitions_trib <- list(
     list(word = "Año Fiscal", definition = "Período de 12 meses comprendido entre el 1ro de julio de un año y el 30
@@ -3920,6 +4149,941 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_trib, "Administración de Tribunales")
   })
   
+    
+  # #### tab con datos de Ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad regiones) ####
+  # 
+  # # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el grupo de edad y el distrito fiscal
+  # OP_148_SoliGrupEdad_filt <- reactive({
+  #   filter(OP_148_SoliGrupEdad,
+  #          AñoFiscal %in% input$checkGroup_trib_OP_148_SoliGrupEdad_AñoFiscal,
+  #          Edad %in% input$checkGroup_trib_OP_148_SoliGrupEdad_Edad,
+  #          Región %in% input$checkGroup_trib_OP_148_SoliGrupEdad_Región
+  #   )
+  # })
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+  # observeEvent(input$deselectAll_trib_OP_148_SoliGrupEdad_AñoFiscal, {
+  #   updateCheckboxGroup_trib(session, "checkGroup_trib_OP_148_SoliGrupEdad_AñoFiscal", input, OP_148_SoliGrupEdad$AñoFiscal)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_trib_OP_148_SoliGrupEdad_AñoFiscal"
+  #   buttonId <- "deselectAll_trib_OP_148_SoliGrupEdad_AñoFiscal"
+  #   all_choices <- levels(OP_148_SoliGrupEdad$AñoFiscal)
+  #   selected <- input[[inputId]]
+  #   
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  #   
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar el grupo de edad
+  # observeEvent(input$deselectAll_trib_OP_148_SoliGrupEdad_Edad, {
+  #   updateCheckboxGroup(session, "checkGroup_trib_OP_148_SoliGrupEdad_Edad", input, OP_148_SoliGrupEdad$Edad)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_trib_OP_148_SoliGrupEdad_Edad"
+  #   buttonId <- "deselectAll_trib_OP_148_SoliGrupEdad_Edad"
+  #   all_choices <- levels(OP_148_SoliGrupEdad$Edad)
+  #   selected <- input[[inputId]]
+  #   
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  #   
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar la región fiscal
+  # observeEvent(input$deselectAll_trib_OP_148_SoliGrupEdad_Región, {
+  #   updateCheckboxGroup(session, "checkGroup_trib_OP_148_SoliGrupEdad_Región", input, OP_148_SoliGrupEdad$Región)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_trib_OP_148_SoliGrupEdad_Región"
+  #   buttonId <- "deselectAll_trib_OP_148_SoliGrupEdad_Región"
+  #   all_choices <- levels(OP_148_SoliGrupEdad$Región)
+  #   selected <- input[[inputId]]
+  #   
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  #   
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # # Colores del status
+  # OP_148_SoliGrupEdad_fill_edad <- setColorFill(OP_148_SoliGrupEdad, "Edad")
+  # 
+  # # Grafico de barras
+  # output$barPlot_OP_148_SoliGrupEdad <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_año <- length(input$checkGroup_trib_OP_148_SoliGrupEdad_AñoFiscal) > 0
+  #   has_edad <- length(input$checkGroup_trib_OP_148_SoliGrupEdad_Edad) > 0
+  #   has_region <- length(input$checkGroup_trib_OP_148_SoliGrupEdad_Región) > 0
+  # 
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_año || !has_edad || !has_region) {
+  #     message <- HTML("Seleccione Grupo(s) de Edad, Región Judicial \n y Año(s) a visualizar")
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- renderBarPlot_facets(OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
+  #                        title = "Solicitudes de órdenes de protección \nbajo Ley 148 según región judicial y edad",
+  #                        xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
+  #                        colorFill = OP_148_SoliGrupEdad_fill_edad,
+  #                        emptyMessage = HTML("Seleccione Grupo(s) de Edad, Región Judicial \n y Año(s) a visualizar"))
+  #     #Altura predeterminada para la grafica.
+  #     plot_height = 500
+  #     numPlots = length(input$checkGroup_trib_OP_148_SoliGrupEdad_Región)
+  #     #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+  #     total_height = plotHeight(plot_height, numPlots)
+  #     p <- p + facet_wrap(~Región, ncol = 2) +
+  #       theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+  #             panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+  #     p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+  # 
+  #     return(p)
+  #   }
+  # 
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(data = OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
+  #                                                title = "",
+  #                                                xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", message)
+  #   convert_to_plotly(empty_plot, tooltip = "text")
+  # })
+  # 
+  # #Titulo de la Grafica
+  # output$plot_title_OP_148_SoliGrupEdad <- renderUI({
+  #   title <- "Solicitudes de órdenes de protección bajo Ley 148 según región judicial y edad"
+  # })
+  # 
+  # 
+  # OP_148_SoliGrupEdad_filt_rename <- reactive({
+  #   OP_148_SoliGrupEdad_filt() %>%
+  #     rename(`Año Fiscal` = AñoFiscal)  %>%
+  #     rename(`Región Judicial` = Región)
+  # })
+  # 
+  # 
+  # # Data Table para dcrCasosInv
+  # # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  # output$dataTable_OP_148_SoliGrupEdad <- renderDT(server = FALSE, {
+  #   renderDataTable(OP_148_SoliGrupEdad_filt_rename(), "Datos: Órdenes de protección solicitadas por violencia sexual")
+  # })
+  # 
+  # # Crear Card con Fuentes
+  # output$dataTableUI_OP_148_SoliGrupEdad  <- renderUI({
+  #   if (input$showTable_OP_148_SoliGrupEdad) {
+  #     hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+  #     texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+  #     
+  #     tags$div(
+  #       class = "card",
+  #       style = "padding: 10px; width: 98%; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",
+  #      
+  #       # Contenedor centrado para la tabla
+  #       div(
+  #         style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
+  #         div(
+  #           style = "width: 98%; max-width: 800px; overflow-x: auto;",  
+  #           DTOutput("dataTable_OP_148_SoliGrupEdad")
+  #         )
+  #       ),
+  #       
+  #       createFuenteDiv(hyperlinks, texts)
+  #     )
+  #   }
+  # })
+  
+  # #### (OP_Ley148_ex_parteEmitidas Regiones) ####
+  # 
+  # # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el delito cometido y la región fiscal
+  # OP_Ley148_ex_parteEmitidas_filt <- reactive({
+  #   filter(OP_Ley148_ex_parteEmitidas,
+  #          AñoFiscal %in% input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal,
+  #          Delito %in% input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Delito,
+  #          Región %in% input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región
+  #   )
+  # })
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+  # observeEvent(input$deselectAll_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal, {
+  #   updateCheckboxGroup_trib(session, "checkGroup_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal", input, OP_Ley148_ex_parteEmitidas$AñoFiscal)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal"
+  #   buttonId <- "deselectAll_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal"
+  #   all_choices <- levels(OP_Ley148_ex_parteEmitidas$AñoFiscal)
+  #   selected <- input[[inputId]]
+  #   
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  #   
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar el delito
+  # observeEvent(input$deselectAll_trib_OP_Ley148_ex_parteEmitidas_Delito, {
+  #   updateCheckboxGroup(session, "checkGroup_trib_OP_Ley148_ex_parteEmitidas_Delito", input, OP_Ley148_ex_parteEmitidas$Delito)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_trib_OP_Ley148_ex_parteEmitidas_Delito"
+  #   buttonId <- "deselectAll_trib_OP_Ley148_ex_parteEmitidas_Delito"
+  #   all_choices <- levels(OP_Ley148_ex_parteEmitidas$Delito)
+  #   selected <- input[[inputId]]
+  #   
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  #   
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar el Región
+  # observeEvent(input$deselectAll_trib_OP_Ley148_ex_parteEmitidas_Región, {
+  #   updateCheckboxGroup(session, "checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región", input, OP_Ley148_ex_parteEmitidas$Región)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región"
+  #   buttonId <- "deselectAll_trib_OP_Ley148_ex_parteEmitidas_Región"
+  #   all_choices <- levels(OP_Ley148_ex_parteEmitidas$Región)
+  #   selected <- input[[inputId]]
+  #   
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  #   
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # # Colores de los Delitos
+  # OP_Ley148_ex_parteEmitidas_fill_delito <- setColorFill(OP_Ley148_ex_parteEmitidas, "Delito")
+  # 
+  # # Grafico de barras
+  # output$barPlot_OP_Ley148_ex_parteEmitidas <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_año <- length(input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_AñoFiscal) > 0
+  #   has_delito <- length(input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Delito) > 0
+  #   has_region <- length(input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región) > 0
+  #   
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_año || !has_delito || !has_region) {
+  #     message <- HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar")
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+      # p <- renderBarPlot_facets(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+      #                    title = "Órdenes de protección ex parte emitidas \nbajo Ley 148, según región judicial y delito cometido",
+      #                    xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
+      #                    colorFill = OP_Ley148_ex_parteEmitidas_fill_delito,
+      #                    emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
+      # #Altura predeterminada para la grafica.
+      # plot_height = 500
+      # numPlots = length(input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región)
+      # #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      # total_height = plotHeight(plot_height, numPlots)
+      # p <- p + facet_wrap(~Región, ncol = 2) +
+      #   theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+      #         panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      # p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      # 
+      # return(p)
+  #   }
+  #   
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+  #                                                title = "",
+  #                                                xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", message)
+  #   convert_to_plotly(empty_plot, tooltip = "text")
+  # })
+  # 
+  # #Titulo de la Grafica
+  # output$plot_title_OP_Ley148_ex_parteEmitidas <- renderUI({
+  #   title <- "Órdenes de protección ex parte emitidas bajo Ley 148, según región judicial y delito cometido"
+  # })
+  # 
+  # OP_Ley148_ex_parteEmitidas_filt_rename <- reactive({
+  #   OP_Ley148_ex_parteEmitidas_filt() %>%
+  #     rename(`Año Fiscal` = AñoFiscal)  %>%
+  #     rename(`Órdenes Emitidas` = ÓrdenesEmitidas) %>%
+  #     rename(`Región Judicial` = Región) %>%
+  #     rename(`Delito Cometido` = Delito)
+  # })
+  # 
+  # 
+  # # Data Table para dcrCasosInv
+  # # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  # output$dataTable_OP_Ley148_ex_parteEmitidas <- renderDT(server = FALSE, {
+  #   renderDataTable(OP_Ley148_ex_parteEmitidas_filt_rename(), "Datos: Órdenes de protección ex parte emitidas bajo Ley 148")
+  # })
+
+  # # Crear Card con Fuentes
+  # output$dataTableUI_OP_Ley148_ex_parteEmitidas <- renderUI({
+  #   if (input$showTable_OP_Ley148_ex_parteEmitidas) {
+  #     hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+  #     texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+  #     
+  #     tags$div(
+  #       class = "card",
+  #       style = "padding: 10px; width: 90%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+  #       
+  #       # Contenedor centrado para la tabla
+  #       div(
+  #         style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
+  #         div(
+  #           style = "width: 98%; max-width: 800px; overflow-x: auto;", 
+  #           DTOutput("dataTable_OP_Ley148_ex_parteEmitidas")
+  #         )
+  #       ),
+  #       
+  #       createFuenteDiv(hyperlinks, texts)
+  #     )
+  #   }
+  # })
+  # 
+  
+  # #### (OP_LEY148Archivadas regiones) ####
+  # 
+  # # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, la razón de archivado y la región fiscal
+  # OP_LEY148Archivadas_filt <- reactive({
+  #   filter(OP_LEY148Archivadas,
+  #          AñoFiscal %in% input$checkGroup_trib_OP_LEY148Archivadas_AñoFiscal,
+  #          Razón %in% input$checkGroup_trib_OP_LEY148Archivadas_Razón,
+  #          Región %in% input$checkGroup_trib_OP_LEY148Archivadas_Región
+  #   )
+  # })
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+  # observeEvent(input$deselectAll_trib_OP_LEY148Archivadas_AñoFiscal, {
+  #   updateCheckboxGroup_trib(session, "checkGroup_trib_OP_LEY148Archivadas_AñoFiscal", input, OP_LEY148Archivadas$AñoFiscal)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_trib_OP_LEY148Archivadas_AñoFiscal"
+  #   buttonId <- "deselectAll_trib_OP_LEY148Archivadas_AñoFiscal"
+  #   all_choices <- levels(OP_LEY148Archivadas$AñoFiscal)
+  #   selected <- input[[inputId]]
+  #   
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  #   
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar la razón de archivado
+  # observeEvent(input$deselectAll_trib_OP_LEY148Archivadas_Razón, {
+  #   updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Archivadas_Razón", input, OP_LEY148Archivadas$Razón)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_trib_OP_LEY148Archivadas_Razón"
+  #   buttonId <- "deselectAll_trib_OP_LEY148Archivadas_Razón"
+  #   all_choices <- levels(OP_LEY148Archivadas$Razón)
+  #   selected <- input[[inputId]]
+  #   
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  #   
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar el Región
+  # observeEvent(input$deselectAll_trib_OP_LEY148Archivadas_Región, {
+  #   updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Archivadas_Región", input, OP_LEY148Archivadas$Región)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_trib_OP_LEY148Archivadas_Región"
+  #   buttonId <- "deselectAll_trib_OP_LEY148Archivadas_Región"
+  #   all_choices <- levels(OP_LEY148Archivadas$Región)
+  #   selected <- input[[inputId]]
+  #   
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  #   
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # # Colores de las razones
+  # OP_LEY148Archivadas_fill_Razón <- setColorFill(OP_LEY148Archivadas, "Razón")
+  # 
+  # 
+  # # Grafico de barras
+  # output$barPlot_OP_LEY148Archivadas <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_año <- length(input$checkGroup_trib_OP_LEY148Archivadas_AñoFiscal) > 0
+  #   has_razon <- length(input$checkGroup_trib_OP_LEY148Archivadas_Razón) > 0
+  #   has_region <- length(input$checkGroup_trib_OP_LEY148Archivadas_Región) > 0
+  #   
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_año || !has_razon || !has_region) {
+  #     message <- HTML("Seleccione Razón, Distrito Fiscal \n y Año(s) a visualizar")
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- renderBarPlot_facets(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
+  #                        title = "Órdenes de protección ex parte \narchivadas bajo Ley 148 según región judicial",
+  #                        xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
+  #                        colorFill = OP_LEY148Archivadas_fill_Razón,
+  #                        emptyMessage = HTML("Seleccione Razón, Distrito Fiscal \n y Año(s) a visualizar"))
+  #     #Altura predeterminada para la grafica.
+  #     plot_height = 500
+  #     numPlots = length(input$checkGroup_trib_OP_LEY148Archivadas_Región)
+  #     #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+  #     total_height = plotHeight(plot_height, numPlots)
+  #     p <- p + facet_wrap(~Región, ncol = 2) +
+  #       theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+  #             panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+  #     p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+  #     
+  #     return(p)
+  #   }
+  #   
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
+  #                                                title = "",
+  #                                                xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", message)
+  #   convert_to_plotly(empty_plot, tooltip = "text")
+  # })
+  # 
+  # #Titulo de la Grafica
+  # output$plot_title_OP_LEY148Archivadas <- renderUI({
+  #   title <- "Órdenes de protección ex parte archivadas bajo Ley 148 según región judicial"
+  # })
+  # 
+  # 
+  # OP_LEY148Archivadas_filt_rename <- reactive({
+  #   OP_LEY148Archivadas_filt() %>% 
+  #     rename(`Año Fiscal` = AñoFiscal)  %>% 
+  #     rename(`Distrito Fiscal` = Región) %>% 
+  #     rename(`Órdenes Archivadas` = ÓrdenesArchivadas)%>% 
+  #     rename(`Razón de Archivo` = Razón)
+  # })
+  # 
+  # # Data Table 
+  # # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  # output$dataTable_OP_LEY148Archivadas <- renderDT(server = FALSE, {
+  #   renderDataTable(OP_LEY148Archivadas_filt_rename(), "Datos: Órdenes de protección ex parte archivadas bajo Ley 148")
+  # })
+  # 
+  # # Crear Card con Fuentes
+  # output$dataTableUI_OP_LEY148Archivadas  <- renderUI({
+  #   if (input$showTable_OP_LEY148Archivadas) {
+  #     hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+  #     texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+  #     
+  #     tags$div(
+  #       class = "card",
+  #       style = "padding: 10px; width: 75%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+  #       
+  #       # Contenedor centrado para la tabla
+  #       div(
+  #         style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
+  #         div(
+  #           style = "width: 98%; max-width: 800px; overflow-x: auto;",  
+  #           DTOutput("dataTable_OP_LEY148Archivadas")
+  #         )
+  #       ),
+  #    
+  #       createFuenteDiv(hyperlinks, texts)
+  #     )
+  #   }
+  # })
+  
+  # #### (OP_LEY148Denegadas regiones) ####
+  # 
+  # # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, la razón de archivado y la región fiscal
+  # OP_LEY148Denegadas_filt <- reactive({
+  #   filter(OP_LEY148Denegadas,
+  #          AñoFiscal %in% input$checkGroup_trib_OP_LEY148Denegadas_AñoFiscal,
+  #          Razón %in% input$checkGroup_trib_OP_LEY148Denegadas_Razón,
+  #          Región %in% input$checkGroup_trib_OP_LEY148Denegadas_Región
+  #   )
+  # })
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+  # observeEvent(input$deselectAll_trib_OP_LEY148Denegadas_AñoFiscal, {
+  #   updateCheckboxGroup_trib(session, "checkGroup_trib_OP_LEY148Denegadas_AñoFiscal", input, OP_LEY148Denegadas$AñoFiscal)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_trib_OP_LEY148Denegadas_AñoFiscal"
+  #   buttonId <- "deselectAll_trib_OP_LEY148Denegadas_AñoFiscal"
+  #   all_choices <- levels(OP_LEY148Denegadas$AñoFiscal)
+  #   selected <- input[[inputId]]
+  #   
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  #   
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar la razón de archivado
+  # observeEvent(input$deselectAll_trib_OP_LEY148Denegadas_Razón, {
+  #   updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Denegadas_Razón", input, OP_LEY148Denegadas$Razón)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_trib_OP_LEY148Denegadas_Razón"
+  #   buttonId <- "deselectAll_trib_OP_LEY148Denegadas_Razón"
+  #   all_choices <- levels(OP_LEY148Denegadas$Razón)
+  #   selected <- input[[inputId]]
+  #   
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  #   
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # ### funcion para el botón de deseleccionar/seleccionar el Región
+  # observeEvent(input$deselectAll_trib_OP_LEY148Denegadas_Región, {
+  #   updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148Denegadas_Región", input, OP_LEY148Denegadas$Región)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_trib_OP_LEY148Denegadas_Región"
+  #   buttonId <- "deselectAll_trib_OP_LEY148Denegadas_Región"
+  #   all_choices <- levels(OP_LEY148Denegadas$Región)
+  #   selected <- input[[inputId]]
+  #   
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  #   
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # # Colores de las razones
+  # OP_LEY148Denegadas_fill_Razón <- setColorFill(OP_LEY148Denegadas, "Razón")
+  # 
+  # 
+  # # Grafico de barras
+  # output$barPlot_OP_LEY148Denegadas <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_año <- length(input$checkGroup_trib_OP_LEY148Denegadas_AñoFiscal) > 0
+  #   has_razon <- length(input$checkGroup_trib_OP_LEY148Denegadas_Razón) > 0
+  #   has_region <- length(input$checkGroup_trib_OP_LEY148Denegadas_Región) > 0
+  #   
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_año || !has_razon || !has_region) {
+  #     message <- HTML("Seleccione Razón, Región Judicial \n y Año(s) a visualizar")
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- renderBarPlot_facets(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
+  #                        title = "Órdenes de protección denegadas bajo \nLey 148 por razón de archivo según región judicial",
+  #                        xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
+  #                        colorFill = OP_LEY148Denegadas_fill_Razón,
+  #                        emptyMessage = HTML("Seleccione Razón, Región Judicial \n y Año(s) a visualizar"))
+      # #Altura predeterminada para la grafica.
+      # plot_height = 500
+      # numPlots = length(input$checkGroup_trib_OP_LEY148Denegadas_Región)
+      # #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      # total_height = plotHeight(plot_height, numPlots)
+      # p <- p + facet_wrap(~Región, ncol = 2) +
+      #   theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+      #         panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      # p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+
+  #     return(p)
+  #   }
+  #   
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
+  #                                                title = "",
+  #                                                xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", message)
+  #   convert_to_plotly(empty_plot, tooltip = "text")
+  # })
+  # 
+  # #Titulo de la Grafica
+  # output$plot_title_OP_LEY148Denegadas <- renderUI({
+  #   title <- "Órdenes de protección denegadas bajo Ley 148 por razón de archivo según región judicial"
+  # })
+  # 
+  # OP_LEY148Denegadas_filt_rename <- reactive({
+  #   OP_LEY148Denegadas_filt() %>% 
+  #     rename(`Año Fiscal` = AñoFiscal)  %>% 
+  #     rename(`Región Judicial` = Región) %>% 
+  #     rename(`Órdenes Denegadas` = ÓrdenesDenegadas)%>% 
+  #     rename(`Razón de Archivo` = Razón)
+  # })
+  # 
+  # 
+  # # Data Table 
+  # # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  # output$dataTable_OP_LEY148Denegadas <- renderDT(server = FALSE, {
+  #   renderDataTable(OP_LEY148Denegadas_filt_rename(), "Datos: Ordenes de protección denegadas por violencia sexual bajo Ley 148")
+  # })
+  # 
+  # # Crear Card con Fuentes
+  # output$dataTableUI_OP_LEY148Denegadas  <- renderUI({
+  #   if (input$showTable_OP_LEY148Denegadas) {
+  #     hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+  #     texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+  #     
+  #     tags$div(
+  #       class = "card",
+  #       style = "padding: 10px; width: 85%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+  #       
+  #       # Contenedor centrado para la tabla
+  #       div(
+  #         style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
+  #         div(
+  #           style = "width: 98%; max-width: 800px; overflow-x: auto;",  
+  #           DTOutput("dataTable_OP_LEY148Denegadas")
+  #         )
+  #       ),
+  #       
+  #       createFuenteDiv(hyperlinks, texts)
+  #     )
+  #   }
+  # })
+  # 
+  # #### (OP_LEY148FinalEmitidas Datos por region) ####
+# 
+#   # Filtrar el conjunto de datos según los valores seleccionados del año fiscal, el delito cometido y la región fiscal
+#   OP_LEY148FinalEmitidas_filt_region <- reactive({
+#     filter(OP_LEY148FinalEmitidas,
+#            AñoFiscal %in% input$checkGroup_trib_OP_LEY148FinalEmitidas_AñoFiscal,
+#            Delito %in% input$checkGroup_trib_OP_LEY148FinalEmitidas_Delito,
+#            Región %in% input$checkGroup_trib_OP_LEY148FinalEmitidas_Región
+#     )
+#   })
+# 
+#   ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+#   observeEvent(input$deselectAll_trib_OP_LEY148FinalEmitidas_AñoFiscal, {
+#     updateCheckboxGroup_trib(session, "checkGroup_trib_OP_LEY148FinalEmitidas_AñoFiscal", input, OP_LEY148FinalEmitidas$AñoFiscal)
+#   })
+# 
+#   observe({
+#     inputId <- "checkGroup_trib_OP_LEY148FinalEmitidas_AñoFiscal"
+#     buttonId <- "deselectAll_trib_OP_LEY148FinalEmitidas_AñoFiscal"
+#     all_choices <- levels(OP_LEY148FinalEmitidas$AñoFiscal)
+#     selected <- input[[inputId]]
+# 
+#     is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+# 
+#     updateActionButton(
+#       session,
+#       inputId = buttonId,
+#       label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+#     )
+#   })
+# 
+# 
+#   ### funcion para el botón de deseleccionar/seleccionar delito cometido
+#   observeEvent(input$deselectAll_trib_OP_LEY148FinalEmitidas_Delito, {
+#     updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148FinalEmitidas_Delito", input, OP_LEY148FinalEmitidas$Delito)
+#   })
+# 
+#   observe({
+#     inputId <- "checkGroup_trib_OP_LEY148FinalEmitidas_Delito"
+#     buttonId <- "deselectAll_trib_OP_LEY148FinalEmitidas_Delito"
+#     all_choices <- levels(OP_LEY148FinalEmitidas$Delito)
+#     selected <- input[[inputId]]
+# 
+#     is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+# 
+#     updateActionButton(
+#       session,
+#       inputId = buttonId,
+#       label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+#     )
+#   })
+# 
+#   ### funcion para el botón de deseleccionar/seleccionar el Región
+#   observeEvent(input$deselectAll_trib_OP_LEY148FinalEmitidas_Región, {
+#     updateCheckboxGroup(session, "checkGroup_trib_OP_LEY148FinalEmitidas_Región", input, OP_LEY148FinalEmitidas$Región)
+#   })
+# 
+#   observe({
+#     inputId <- "checkGroup_trib_OP_LEY148FinalEmitidas_Región"
+#     buttonId <- "deselectAll_trib_OP_LEY148FinalEmitidas_Región"
+#     all_choices <- levels(OP_LEY148FinalEmitidas$Región)
+#     selected <- input[[inputId]]
+# 
+#     is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+# 
+#     updateActionButton(
+#       session,
+#       inputId = buttonId,
+#       label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+#     )
+#   })
+# 
+#   # Colores de las razones
+#   OP_LEY148FinalEmitidas_fill_Delito <- setColorFill(OP_LEY148FinalEmitidas, "Delito")
+# 
+#   # Grafico de barras
+#   output$barPlot_OP_LEY148FinalEmitidas_region <- renderPlotly({
+#     # Verificar si hay opciones seleccionadas en cada grupo
+#     has_año <- length(input$checkGroup_trib_OP_LEY148FinalEmitidas_AñoFiscal) > 0
+#     has_delito <- length(input$checkGroup_trib_OP_LEY148FinalEmitidas_Delito) > 0
+#     has_region <- length(input$checkGroup_trib_OP_LEY148FinalEmitidas_Región) > 0
+# 
+#     # Crear mensaje si faltan opciones seleccionadas
+#     if (!has_año || !has_delito || !has_region) {
+#       message <- HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar")
+#     } else {
+#       # Si todas las opciones están seleccionadas, crear la gráfica
+      # p <- renderBarPlot_facets(OP_LEY148FinalEmitidas_filt_region, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+      #                    title = "Órdenes de protección emitidas bajo Ley 148, \nsegún región judicial y tipo de delito",
+      #                    xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
+      #                    colorFill = OP_LEY148FinalEmitidas_fill_Delito,
+      #                    emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
+      # #Altura predeterminada para la grafica.
+      # plot_height = 500
+      # numPlots = length(input$checkGroup_trib_OP_LEY148FinalEmitidas_Región)
+      # #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      # total_height = plotHeight(plot_height, numPlots)
+      # p <- p + facet_wrap(~Región, ncol = 2) +
+      # theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+      #       panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      # p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+
+#       return(p)
+#     }
+# 
+#     # Crear la gráfica vacía con mensaje
+#     empty_plot <- create_empty_plot_with_message(OP_LEY148FinalEmitidas_filt_region, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+#                                                  title = "",
+#                                                  xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", message)
+#     convert_to_plotly(empty_plot, tooltip = "text")
+#   })
+# 
+  # #Titulo de la Grafica
+  # output$plot_title_OP_LEY148FinalEmitidas <- renderUI({
+  #   title <- "Órdenes de protección emitidas bajo Ley 148, según región judicial y tipo de delito"
+  # })
+  # 
+  # OP_LEY148FinalEmitidas_filt_rename <- reactive({
+  #   OP_LEY148FinalEmitidas_filt_region() %>%
+  #     rename(`Año Fiscal` = AñoFiscal)  %>%
+  #     rename(`Región Judicial` = Región) %>%
+  #     rename(`Órdenes Emitidas` = ÓrdenesEmitidas)%>%
+  #     rename(`Delito Cometido` = Delito)
+  # })
+  # 
+  # 
+  # # Data Table
+  # # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  # output$dataTable_OP_LEY148FinalEmitidas <- renderDT(server = FALSE, {
+  #   renderDataTable(OP_LEY148FinalEmitidas_filt_rename(), "Datos: Órdenes de protección emitidas bajo ley 148")
+  # })
+
+#   # Crear Card con Fuentes
+#   output$dataTableUI_OP_LEY148FinalEmitidas  <- renderUI({
+#     if (input$showTable_OP_LEY148FinalEmitidas) {
+#       hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+#       texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+# 
+#       tags$div(
+#         class = "card",
+#         style = "padding: 10px; width: 87%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+# 
+#         # Contenedor centrado para la tabla
+#         div(
+#           style = "padding: 5px; width: 98%; display: flex; justify-content: center;",
+#           div(
+#             style = "width: 98%; max-width: 800px; overflow-x: auto;",
+#             DTOutput("dataTable_OP_LEY148FinalEmitidas")
+#           )
+#         ),
+# 
+#         createFuenteDiv(hyperlinks, texts)
+#       )
+#     }
+#   })
+# 
+  #### (tribCasosCrim) ####
+  tribCasosCrim_filt <- reactive({
+    filter(tribCasosCrim,
+           AñoFiscal %in% input$checkGroup_trib_tribCasosCrim_AñoFiscal,
+           Delito %in% input$checkGroup_trib_tribCasosCrim_Delito,
+           Casos %in% input$checkGroup_trib_tribCasosCrim_Casos
+    )
+  })
+
+  ### funcion para el botón de deseleccionar/seleccionar el año fiscal
+  observeEvent(input$deselectAll_trib_tribCasosCrim_AñoFiscal, {
+    updateCheckboxGroup_trib(session, "checkGroup_trib_tribCasosCrim_AñoFiscal", input, tribCasosCrim$AñoFiscal)
+  })
+
+  observe({
+    inputId <- "checkGroup_trib_tribCasosCrim_AñoFiscal"
+    buttonId <- "deselectAll_trib_tribCasosCrim_AñoFiscal"
+    all_choices <- levels(tribCasosCrim$AñoFiscal)
+    selected <- input[[inputId]]
+
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+
+  ### funcion para el botón de deseleccionar/seleccionar la parte peticionaria
+  observeEvent(input$deselectAll_trib_tribCasosCrim_Delito, {
+    updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Delito", input, tribCasosCrim$Delito)
+  })
+
+  observe({
+    inputId <- "checkGroup_trib_tribCasosCrim_Delito"
+    buttonId <- "deselectAll_trib_tribCasosCrim_Delito"
+    all_choices <- levels(tribCasosCrim$Delito)
+    selected <- input[[inputId]]
+
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+
+  ### funcion para el botón de deseleccionar/seleccionar el sexo de la parte
+  observeEvent(input$deselectAll_trib_tribCasosCrim_Casos, {
+    updateCheckboxGroup(session, "checkGroup_trib_tribCasosCrim_Casos", input, tribCasosCrim$Casos)
+  })
+
+  observe({
+    inputId <- "checkGroup_trib_tribCasosCrim_Casos"
+    buttonId <- "deselectAll_trib_tribCasosCrim_Casos"
+    all_choices <- levels(tribCasosCrim$Casos)
+    selected <- input[[inputId]]
+
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+
+  # Colores de las partes
+  tribCasosCrim_fill_Delito <- setColorFill(tribCasosCrim, "Delito")
+
+  # Grafico de barras
+  output$barPlot_tribCasosCrim <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_año <- length(input$checkGroup_trib_tribCasosCrim_AñoFiscal) > 0
+    has_delito <- length(input$checkGroup_trib_tribCasosCrim_Delito) > 0
+    has_casos <- length(input$checkGroup_trib_tribCasosCrim_Casos) > 0
+
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_año || !has_delito || !has_casos) {
+      message <- HTML("Seleccione Delito(s), Estado del caso \n y Año(s) a visualizar")
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderBarPlot_facets(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
+                         title = "Movimiento anual de casos de violencia \ndoméstica en el Tribunal según Ley 54",
+                         xlab = "Año Fiscal", ylab = "Casos", fillLab = "Delito Cometido",
+                         colorFill = tribCasosCrim_fill_Delito,
+                         emptyMessage = HTML("Seleccione Delito(s), Estado del caso \n y Año(s) a visualizar"), barWidth = 0, xGap = 0)
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      numPlots = length(input$checkGroup_trib_tribCasosCrim_Casos)
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, numPlots)
+      p <- p + facet_wrap(~Casos, ncol = 2) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(-0.05, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height,
+                                                                             legend = list(
+                                                                               font = list(size = 8.6) #Tamaño de letra para los elementos de la legenda.
+                                                                             ))
+
+      return(p)
+    }
+
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
+                                                 title = "",
+                                                 xlab = "Año Fiscal", ylab = "Casos", message)
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+
+  #Titulo de la Grafica
+  output$plot_title_tribCasosCrim <- renderUI({
+    title <- "Movimiento anual de casos de violencia doméstica en el Tribunal según Ley 54"
+  })
+
+  tribCasosCrim_filt_rename <- reactive({
+    tribCasosCrim_filt() %>%
+      rename(`Año Fiscal` = AñoFiscal) %>%
+      rename(`Estado del Caso` = Casos)%>%
+      rename(`Delito Cometido` = Delito)
+  })
+
+  # Data Table
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_tribCasosCrim <- renderDT(server = FALSE, {
+    renderDataTable(tribCasosCrim_filt_rename(), "Datos: Ordenes de protección según delito cometido")
+  })
+
+  # Crear Card con Fuentes
+  output$dataTableUI_tribCasosCrim <- renderUI({
+    if (input$showTable_tribCasosCrim) {
+      hyperlinks <- c("https://poderjudicial.pr/mision-y-vision-de-la-rama-judicial/")
+      texts <- c("Oficina de Administración de los Tribunales, Directoría de Operaciones, Oficina de Estadísticas")
+
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 90%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",
+            DTOutput("dataTable_tribCasosCrim")
+          )
+        ),
+
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+
   
   
   #####################################################################
