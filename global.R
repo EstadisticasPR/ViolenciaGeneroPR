@@ -1208,6 +1208,7 @@ tribCasosCrim <- tribCasosCrim_grande %>%
   summarise(Cantidad = sum(Cantidad, na.rm = TRUE), .groups = "drop") %>%
   rename(Delito = DelitoAgrupado)
 
+
 #### Guardar datos procesados de Administración de Tribunales ####
 # dataframes <- list(OP_148_SoliGrupEdad, OP_Ley148_ex_parteEmitidas,
 #                    OP_LEY148Archivadas, OP_LEY148Denegadas, 
@@ -1221,6 +1222,9 @@ tribCasosCrim <- tribCasosCrim_grande %>%
 # 
 # # Uso de la función
 # guardarDatos(dataframes, nombres_sheets, "administracion_tribunales")
+
+
+
 
 
 
