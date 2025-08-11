@@ -3350,11 +3350,12 @@ server <- function(input, output, session) {
     
     # Si NO hay región seleccionada, usar el dataset agregado
     if (!has_region) {
-      p <- renderBarPlot(OP_LEY148Archivadas_filt_total, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-                         title = "",
-                         xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
-                         colorFill = OP_LEY148Archivadas_fill_Razón,
-                         emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
+      p <- renderBarPlot_facets(OP_LEY148Archivadas_filt_total, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
+                           title = "",
+                           xlab = "Año Fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
+                           colorFill = OP_LEY148Archivadas_fill_Razón,
+                           emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
+      
       #Titulo de la Grafica
       output$plot_title_OP_LEY148Archivadas <- renderUI({
         title <- "Total de órdenes de protección ex parte archivadas bajo Ley 148"
@@ -3382,11 +3383,11 @@ server <- function(input, output, session) {
     })
     
     # Si hay selección en todos los filtros, usar dataset completo con facetas
-    p <- renderBarPlot_facets(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-                              title = "",
-                              xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
-                              colorFill = OP_LEY148Archivadas_fill_Razón,
-                              emptyMessage = HTML("Seleccione Razón, Distrito Fiscal \n y Año(s) a visualizar"))
+    p <- p <- renderBarPlot_facets(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
+                                   title = "",
+                                   xlab = "Año Fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
+                                   colorFill = OP_LEY148Archivadas_fill_Razón,
+                                   emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
     #Altura predeterminada para la grafica.
     plot_height = 500
     numPlots = length(input$checkGroup_trib_OP_LEY148Archivadas_Región)
@@ -3580,11 +3581,12 @@ server <- function(input, output, session) {
     
     # Si NO hay región seleccionada, usar el dataset agregado
     if (!has_region) {
-      p <- renderBarPlot(OP_LEY148Denegadas_filt_total, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                         title = "",
-                         xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
-                         colorFill = OP_LEY148Denegadas_fill_Razón,
-                         emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
+      p <- renderBarPlot_facets(OP_LEY148Denegadas_filt_total, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
+                                title = "",
+                                xlab = "Año Fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
+                                colorFill = OP_LEY148Denegadas_fill_Razón,
+                                emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
+      
       #Titulo de la Grafica
       output$plot_title_OP_LEY148Denegadas <- renderUI({
         title <- "Total de órdenes de protección denegadas bajo Ley 148 por razón de archivo"
@@ -3615,9 +3617,9 @@ server <- function(input, output, session) {
     # Si hay selección en todos los filtros, usar dataset completo con facetas
     p <- renderBarPlot_facets(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
                               title = "",
-                              xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
+                              xlab = "Año Fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
                               colorFill = OP_LEY148Denegadas_fill_Razón,
-                              emptyMessage = HTML("Seleccione Razón, Distrito Fiscal \n y Año(s) a visualizar"))
+                              emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
   
     #Altura predeterminada para la grafica.
     plot_height = 500

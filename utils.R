@@ -777,6 +777,8 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
     x_levels <- levels(data_df[[x]])
     x_labels <- ifelse(as.numeric(x_levels) %% 5 == 0, x_levels, "")  # Mostrar etiquetas solo cada 5 años
     
+    upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.1)
+    
     p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
       geom_line(color = "#2f2e7d", size = 1) +
       geom_point(color = "#adcc4e", size = 2,
@@ -791,6 +793,7 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
       labs(title = title, x = xlab, y = ylab, color = colorlab) +
       scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
                          expand = expansion(mult = c(0, 0.1))) +
+      coord_cartesian(ylim = c(0, upper_y_limit)) +
       scale_x_discrete(breaks = x_labels) +  # Usar etiquetas filtradas para el eje x
       theme_minimal() +
       theme(
@@ -898,7 +901,7 @@ renderBarPlot_facets <- function(data, x, y, fill, title, xlab, ylab, fillLab = 
     return(p)
   } else {
     
-    upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2)
+    upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.5)
     
     p <- ggplot(data_df, aes_string(x = x, y = y, fill = fill)) +
       geom_bar(stat = "identity",
@@ -947,7 +950,7 @@ renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = f
     # Eliminar el filtro de categorías específicas
     apiladas_df <- data_df  # No se filtran categorías
     
-    upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.8)
+    upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.9)
     
     p <- ggplot(apiladas_df, aes_string(x = x, y = y, fill = fill)) +
       geom_bar(stat = "identity",
