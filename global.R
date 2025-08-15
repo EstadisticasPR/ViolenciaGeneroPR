@@ -1053,12 +1053,6 @@ OP_LEY148Archivadas <- OP_LEY148Archivadas_list %>%
   relocate(AñoFiscal, Razón, Región, ÓrdenesArchivadas)
 
 
-# OP_LEY148Archivadas_2 <- OP_LEY148Archivadas %>%
-#   group_by(AñoFiscal, Razón) %>%
-#   summarise(ÓrdenesArchivadas = sum(ÓrdenesArchivadas, na.rm = TRUE)) %>%
-#   ungroup()
-
-
 #### OP_LEY148Denegadas ####
 
 # Cantidad de solicitudes de órdenes de protección denegadas al amparo de la Ley 148 - Violencia Sexual denegadas por Región Judicial
