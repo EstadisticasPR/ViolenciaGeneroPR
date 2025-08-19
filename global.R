@@ -112,6 +112,9 @@ guardarDatos_Polygons <- function(dataframe, nombre_archivo) {
 
 
 
+
+
+
 ##################################################################################
 #### Procesamiento de datos del Sistema de Notificacion de Muertes Violentas #####
 ##################################################################################
@@ -254,6 +257,9 @@ dfMalt <- dfMalt %>%
 
 
 
+
+
+
 ##################################################################################
 ##### Procesamiento de datos del Departamento de Justicia #####
 ##################################################################################
@@ -343,6 +349,9 @@ municipios_geo <- municipios_geo %>%
 
 # Uso de la función
 # guardarDatos_Polygons(mapaDeli, "departamento_justicia_distritosfiscales")
+
+
+
 
 
 

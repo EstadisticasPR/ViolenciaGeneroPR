@@ -845,51 +845,51 @@ create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, 
 
 #### renderBarPlot ####
 #Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
-renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
-                          emptyMessage, barWidth = 1, xGap = 0.1) {
-
-  data_df <- data()  # Evaluate the reactive data once
-
-  if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]]) || is.null(data_df[[y]]) || is.null(data_df[[fill]])) {
-    # If there are no data or x/y variables are null, display an empty plot with axes and a message
-    p <- create_empty_plot_with_message(data, x, y, fill, title, xlab, ylab,emptyMessage)
-
-    return(p)
-  } else {
-
-    upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2)
-
-    p <- ggplot(data_df, aes_string(x = x, y = y, fill = fill)) +
-      geom_bar(stat = "identity",
-               position = position_dodge2(width = barWidth, padding = xGap),
-               width = 0.7,
-               aes(
-                 text = paste(
-                   paste0("<b>", ylab, ":</b> ", after_stat(y)), "<br>",
-                   paste0("<b>", fillLab, ":</b> ", after_stat(fill)), "<br>"
-                 )
-               )) +
-      scale_fill_manual(values = colorFill) +
-      scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
-                         expand = expansion(mult = c(0, 0.1))) +
-      coord_cartesian(ylim = c(0, upper_y_limit)) +
-      labs(title = title, x = xlab, y = ylab, fill = fillLab) +
-      theme_minimal() +
-      theme(
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
-        panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        plot.margin = margin(t = 150, r = 50, b = 100, l = 50)
-      )
-
-    return(p)
-  }
-}
+# renderBarPlot <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
+#                           emptyMessage, barWidth = 1, xGap = 0.1) {
+# 
+#   data_df <- data()  # Evaluate the reactive data once
+# 
+#   if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]]) || is.null(data_df[[y]]) || is.null(data_df[[fill]])) {
+#     # If there are no data or x/y variables are null, display an empty plot with axes and a message
+#     p <- create_empty_plot_with_message(data, x, y, fill, title, xlab, ylab,emptyMessage)
+# 
+#     return(p)
+#   } else {
+# 
+#     upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.2)
+# 
+#     p <- ggplot(data_df, aes_string(x = x, y = y, fill = fill)) +
+#       geom_bar(stat = "identity",
+#                position = position_dodge2(width = barWidth, padding = xGap),
+#                width = 0.7,
+#                aes(
+#                  text = paste(
+#                    paste0("<b>", ylab, ":</b> ", after_stat(y)), "<br>",
+#                    paste0("<b>", fillLab, ":</b> ", after_stat(fill)), "<br>"
+#                  )
+#                )) +
+#       scale_fill_manual(values = colorFill) +
+#       scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+#                          expand = expansion(mult = c(0, 0.1))) +
+#       coord_cartesian(ylim = c(0, upper_y_limit)) +
+#       labs(title = title, x = xlab, y = ylab, fill = fillLab) +
+#       theme_minimal() +
+#       theme(
+#         axis.text.x = element_text(angle = 45, hjust = 1),
+#         plot.title = element_text(hjust = 0.5, size = 13, colour = "black", face = "bold"),
+#         panel.border = element_rect(colour = "black", fill = NA, size = 1),
+#         plot.margin = margin(t = 150, r = 50, b = 100, l = 50)
+#       )
+# 
+#     return(p)
+#   }
+# }
 
 #### renderBarPlot_facets ####
 #Funcion para las graficas con FACETAS
 #Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
-renderBarPlot_facets <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
+renderBarPlot_facets <- function(data, x, y, fill, xlab, ylab, fillLab = fill, colorFill = "Set1",
                           emptyMessage, barWidth = 1, xGap = 0.1) {
   
   data_df <- data()  # Evaluate the reactive data once

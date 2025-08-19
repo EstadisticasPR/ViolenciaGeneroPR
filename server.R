@@ -72,14 +72,7 @@ server <- function(input, output, session) {
       message <- "Seleccione Grupo de Edad y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-     
-      # p <- renderBarPlot(homiEdad_filt, "Año", "Casos", "Edad",
-      #                    paste("Homicidios de Mujeres por grupo de Edad y Año", input$yearInput_snmv),
-      #                    "Año", "Cantidad de víctimas", fillLab = "Grupo de Edad", colorFill = homiEdad_fill_edad, 
-      #                    emptyMessage = "Seleccione Grupo de edad y Año(s) a visualizar",barWidth = 0, xGap = 0)
-      
       p <- renderBarPlot_facets(homiEdad_filt, "Año", "Casos", "Edad",
-                         title = "Homicidios de mujeres por grupo de edad y año",
                          "Año", "Cantidad de víctimas", fillLab = "Grupo de Edad", colorFill = homiEdad_fill_edad, 
                          emptyMessage = "Seleccione Grupo de Edad y Año(s) a visualizar",barWidth = 0, xGap = 0)
  
@@ -207,7 +200,6 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(inci_filt, x = "Año", y = "Casos", fill = "Incidente",
-                         paste("Incidentes violentos ocurridos para ambos sexos"),
                          xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de Incidente",
                          colorFill = inci_fill_sexo, 
                          emptyMessage = "Seleccione Tipo(s) de Incidente y Año(s) a visualizar")
@@ -420,7 +412,6 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                         title = "Casos anuales de maltrato infantil por sexo y tipo",
                          xlab = "Año", ylab = "Número de casos", fillLab = "Tipo de Maltrato", 
                          colorFill = dfMalt_fill_Maltrato, 
                          emptyMessage = "Seleccione Tipo(s) de Maltrato, Año(s) y Sexo de la víctima")
@@ -641,7 +632,6 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
-                         title = "Radicación anual de casos por Distrito Fiscal según Ley 54",
                          xlab = "Año", ylab = "Cantidad de víctimas",
                          fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito,
                          emptyMessage = "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)")
@@ -978,7 +968,6 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                         paste("Viviendas públicas solicitadas y asignadas \nanualmente por violencia doméstica según región"),
                          xlab = "Año", ylab = "Cantidad de viviendas públicas", fillLab = "Estado de la Vivienda",
                          colorFill = dfAvp_fill_status,
                          emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
@@ -1276,7 +1265,6 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(despDF_filt, x = "Año", y = "Casos", fill = "Estado",
-                         paste("Mujeres desaparecidas: \nlocalizadas y por localizar"),
                          xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Estado de la Víctima",
                          colorFill = despDF_fill_categoria,
                          emptyMessage = "Seleccione Estado de la Víctima y Año(s) a visualizar")
@@ -1418,7 +1406,6 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
-                         paste("Incidencia de violencia doméstica \npor edad de la víctima"),
                          xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Grupo de Edad",
                          colorFill = vEdad_fill_edad,
                          emptyMessage = HTML("Seleccione Grupo(s) de Edad, Sexo de \n la Víctima y Año(s) a visualizar"),barWidth = 0, xGap = 0)
@@ -1565,7 +1552,6 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(maltPoli_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                                paste(""),
                                 xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Maltrato",
                                 colorFill = maltPoli_fill_malt,
                                 emptyMessage = HTML("Seleccione Grupo(s) de Edad, Sexo de \n la Víctima y Año(s) a visualizar"),barWidth = 0, xGap = 0)
@@ -1835,7 +1821,6 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(opmAgresores_filt, x = "Año", y = "Cantidad", fill = "Razón",
-                                paste("Agresores según el tipo de situación"),
                                 xlab = "Año", ylab = "Cantidad de Agresores", fillLab = "Tipo de situación",
                                 colorFill = opm_fill_tipo,
                                 emptyMessage = "Seleccione Tipo de Situación y Año(s) a visualizar")
@@ -1956,7 +1941,6 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(opmCasos_filt, x = "Año", y = "Cantidad", fill = "Razón",
-                         paste("Población atendida por el programa CRIAS: \nrazón de consulta"),
                          xlab = "Año", ylab = "Cantidad de Personas Atendidas", fillLab = "Razón para Consulta",
                          colorFill = opm_fill_tipo,
                          emptyMessage = "Seleccione Razón de la consulta y Año(s) a visualizar")
@@ -2076,7 +2060,6 @@ server <- function(input, output, session) {
       message <- "Seleccione Género y Año(s) a visualizar"
     } else {
       p <- renderBarPlot_facets(opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
-                         paste("Identidad de género de víctimas asistidas \npor el programa CRIAS"),
                          xlab = "Año", ylab = "Cantidad de Víctimas", fillLab = "Género de la Víctima",
                          colorFill = opmVic_fill_género,
                          emptyMessage = "Seleccione Género y Año(s) a visualizar")
@@ -2190,7 +2173,6 @@ server <- function(input, output, session) {
       message <- "Seleccione Medio de Orientación y Año(s) a visualizar"
     } else {
       p <- renderBarPlot_facets(opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
-                         title = "Orientaciones brindadas por el programa CRIAS",
                          xlab = "Año", ylab = "Cantidad de Personas Orientadas", fillLab = "Medio de Orientación",
                          colorFill = opmMedio_fill_medio,
                          emptyMessage = "Seleccione Medio de Orientación y Año(s) a visualizar")
@@ -2311,7 +2293,6 @@ server <- function(input, output, session) {
       message <- "Seleccione Tipo de servicio y Año(s) a visualizar"
     } else {
       p <- renderBarPlot_facets(opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
-                         title = "Atención, servicios y seguimiento de casos \nmediante el programa CRIAS",
                          xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Tipo de Servicio",
                          colorFill = opmServiciosMes_fill_tipo,
                          emptyMessage = "Seleccione Tipo de servicio y Año(s) a visualizar")
@@ -2548,7 +2529,6 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                         title = "Casos en supervisión de Ley 54: \nProgramas Alternativos al Confinamiento",
                          xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Estado de Investigación",
                          colorFill = dcrCasosInv_fill_tipo,
                          emptyMessage = HTML("Seleccione Estado de la investigación, \n Sexo y Año(s) a visualizar"))
@@ -2681,7 +2661,6 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dcrSentenciadas_filt, x = "Año", y = "Cantidad", fill = "Mes",
-                         title = "Sentenciados por violencia doméstica bajo \nsupervisión electrónica",
                          xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", fillLab = "Mes", 
                          colorFill = dcrSentenciadas_fill_tipo, 
                          emptyMessage = "Seleccione Estado del caso y Año(s) a visualizar")
@@ -2887,7 +2866,6 @@ server <- function(input, output, session) {
     # Si NO hay región seleccionada, usar el dataset agregado
     if (!has_region) {
       p <- renderBarPlot_facets(OP_148_SoliGrupEdad_filt_total, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
-                                title = "",
                                 xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
                                 colorFill = OP_148_SoliGrupEdad_fill_edad,
                                 emptyMessage = HTML("Seleccione Grupo(s) de Edad y Año(s) a visualizar"))
@@ -2917,7 +2895,6 @@ server <- function(input, output, session) {
     })
     
     p <- renderBarPlot_facets(OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
-                              title = "Solicitudes de órdenes de protección \nbajo Ley 148 según región judicial y edad",
                               xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", fillLab = "Grupo de Edad",
                               colorFill = OP_148_SoliGrupEdad_fill_edad,
                               emptyMessage = HTML("Seleccione Grupo(s) de Edad, Región Judicial \n y Año(s) a visualizar"))
@@ -3118,7 +3095,6 @@ server <- function(input, output, session) {
     # Si NO hay región seleccionada, usar el dataset agregado
     if (!has_region) {
       p <- renderBarPlot_facets(OP_Ley148_ex_parteEmitidas_filt_total, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                                title = "",
                                 xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                                 colorFill = OP_Ley148_ex_parteEmitidas_fill_delito,
                                 emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
@@ -3150,7 +3126,6 @@ server <- function(input, output, session) {
     })
     
     p <- renderBarPlot_facets(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                              title = "Órdenes de protección ex parte emitidas \nbajo Ley 148, según región judicial y delito cometido",
                               xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                               colorFill = OP_Ley148_ex_parteEmitidas_fill_delito,
                               emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
@@ -3351,7 +3326,6 @@ server <- function(input, output, session) {
     # Si NO hay región seleccionada, usar el dataset agregado
     if (!has_region) {
       p <- renderBarPlot_facets(OP_LEY148Archivadas_filt_total, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-                           title = "",
                            xlab = "Año Fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
                            colorFill = OP_LEY148Archivadas_fill_Razón,
                            emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
@@ -3384,7 +3358,6 @@ server <- function(input, output, session) {
     
     # Si hay selección en todos los filtros, usar dataset completo con facetas
     p <- p <- renderBarPlot_facets(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-                                   title = "",
                                    xlab = "Año Fiscal", ylab = "Órdenes de Protección Archivadas", fillLab = "Razón de Archivo",
                                    colorFill = OP_LEY148Archivadas_fill_Razón,
                                    emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
@@ -3582,7 +3555,6 @@ server <- function(input, output, session) {
     # Si NO hay región seleccionada, usar el dataset agregado
     if (!has_region) {
       p <- renderBarPlot_facets(OP_LEY148Denegadas_filt_total, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                                title = "",
                                 xlab = "Año Fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
                                 colorFill = OP_LEY148Denegadas_fill_Razón,
                                 emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
@@ -3616,7 +3588,6 @@ server <- function(input, output, session) {
     
     # Si hay selección en todos los filtros, usar dataset completo con facetas
     p <- renderBarPlot_facets(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                              title = "",
                               xlab = "Año Fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
                               colorFill = OP_LEY148Denegadas_fill_Razón,
                               emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
@@ -3822,7 +3793,6 @@ server <- function(input, output, session) {
     # Si NO hay región seleccionada, usar el dataset agregado
     if (!has_region) {
       p <- renderBarPlot_facets(OP_LEY148FinalEmitidas_filt_total, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                                title = "",
                                 xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                                 colorFill = OP_LEY148FinalEmitidas_fill_Delito,
                                 emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
@@ -3855,7 +3825,6 @@ server <- function(input, output, session) {
     })
     
     p <- renderBarPlot_facets(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                              title = "Órdenes de protección emitidas bajo Ley 148, \nsegún región judicial y tipo de delito",
                               xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", fillLab = "Delito Cometido",
                               colorFill = OP_LEY148FinalEmitidas_fill_Delito,
                               emptyMessage = HTML("Seleccione Delito(s), Región Judicial \n y Año(s) a visualizar"))
@@ -4034,7 +4003,6 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte",
-                         title = "Órdenes de protección emitidas bajo Ley 148, \nsegún la parte",
                          xlab = "Año fiscal", ylab = "Solicitudes de Ordenes de Protección", fillLab = "Parte",
                          colorFill = OP_LEY148Genero_fill_Parte,
                          emptyMessage = "Seleccione Parte(s), Sexo y Año(s) a visualizar")
@@ -4186,7 +4154,6 @@ server <- function(input, output, session) {
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
-                                title = "Movimiento anual de casos de violencia \ndoméstica en el Tribunal según Ley 54",
                                 xlab = "Año Fiscal", ylab = "Casos", fillLab = "Delito Cometido",
                                 colorFill = tribCasosCrim_fill_Delito,
                                 emptyMessage = HTML("Seleccione Delito(s), Estado del caso \n y Año(s) a visualizar"), barWidth = 0, xGap = 0)
