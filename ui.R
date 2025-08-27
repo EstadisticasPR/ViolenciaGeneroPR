@@ -961,6 +961,14 @@ ui <-
                            plotlyOutput("barPlot_poli_vEdad"),  height = "100%"))
               ),
               tags$div(style = "padding-bottom: 10px;"),
+              fluidRow(
+                column(
+                  12, 
+                  div(id = "scrollable-plot", 
+                      div(id = "plot-title", uiOutput("plot_title_vEdad")),
+                      plotlyOutput("heatmap_poli_vEdad"),
+                      height = "100%"))
+              ),
               tags$div(
                 style = "padding-bottom: 10px;",
                 div(

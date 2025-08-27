@@ -934,6 +934,8 @@ renderBarPlot_facets <- function(data, x, y, fill, xlab, ylab, fillLab = fill, c
   }
 }
 
+
+
 #### renderBarPlot_stack ####
 # Renderiza un gráfico de barras apiladas 
 renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
@@ -1327,6 +1329,77 @@ renderDataTable_Definitions <- function(filtered_data, title) {
     ),
     class = 'display compact' 
   )
+}
+
+
+
+#### renderHeatmap_facets ####
+
+renderHeatmap_facets <- function(data, 
+                                 x,           # "Sexo"
+                                 y,           # "Maltrato"
+                                 value,       # "Casos" (numérico)
+                                 facet,       # "Año"
+                                 xlab, ylab, fillLab = value,
+                                 emptyMessage,
+                                 lowColor = "white", highColor = "steelblue") {
+  data_df <- data()  # evaluar el reactive una vez
+  
+  # Validaciones y gráfico vacío
+  if (is.null(data_df) || nrow(data_df) == 0 ||
+      is.null(data_df[[x]]) || is.null(data_df[[y]]) || is.null(data_df[[value]]) || is.null(data_df[[facet]])) {
+    return(create_empty_plot_with_message(data, x, y, value, title = "", xlab, ylab, emptyMessage))
+  }
+  
+  # Asegurar que existan todas las combinaciones (Sexo x Maltrato x Año) y rellenar con 0
+  # Conservamos los niveles/orden existentes si son factor
+  x_lv <- if (is.factor(data_df[[x]])) levels(data_df[[x]]) else sort(unique(data_df[[x]]))
+  y_lv <- if (is.factor(data_df[[y]])) levels(data_df[[y]]) else sort(unique(data_df[[y]]))
+  f_lv <- if (is.factor(data_df[[facet]])) levels(data_df[[facet]]) else sort(unique(data_df[[facet]]))
+  
+  df_complete <- data_df %>%
+    tidyr::complete(!!rlang::sym(x) := x_lv,
+                    !!rlang::sym(y) := y_lv,
+                    !!rlang::sym(facet) := f_lv) %>%
+    dplyr::mutate(!!rlang::sym(value) := dplyr::coalesce(!!rlang::sym(value), 0))
+  
+  # Restaurar levels (si aplica) para controlar el orden en ejes y facetas
+  if (is.factor(data_df[[x]]))    df_complete[[x]]     <- factor(df_complete[[x]],     levels = x_lv)
+  if (is.factor(data_df[[y]]))    df_complete[[y]]     <- factor(df_complete[[y]],     levels = y_lv)
+  if (is.factor(data_df[[facet]])) df_complete[[facet]] <- factor(df_complete[[facet]], levels = f_lv)
+  
+  # Límite superior para la escala de color
+  max_val <- max(df_complete[[value]], na.rm = TRUE)
+  upper_limit <- ceiling(max_val * 1.0)  # 1.0 = directo; si quieres más contraste usa 1.2-1.5
+  
+  # Tooltips personalizados (convert_to_plotly(tooltip="text") leerá esta columna)
+  df_complete <- df_complete %>%
+    dplyr::mutate(
+      .tooltip = paste0(
+        "<b>", xlab, ":</b> ", .data[[x]], "<br>",
+        "<b>", ylab, ":</b> ", scales::comma(.data[[value]]), "<br>",
+        "<b>", fillLab, ":</b> ", .data[[y]], "<br>",
+        "<b>Año:</b> ", .data[[facet]]
+      )
+    )
+  
+  p <- ggplot(df_complete, aes_string(x = x, y = y, fill = value, text = ".tooltip")) +
+    geom_tile(color = "white", linewidth = 0.3) +
+    scale_fill_gradient(
+      low = lowColor, high = highColor,
+      limits = c(0, upper_limit),
+      labels = function(z) paste0(scales::comma(z), " ")
+    ) +
+    labs(x = xlab, y = fillLab, fill = ylab) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      panel.border = element_rect(colour = "black", fill = NA, linewidth = 1),
+      plot.margin = margin(t = 80, r = 40, b = 80, l = 40),
+      panel.grid = element_blank()
+    )
+  
+  return(p)
 }
 
 

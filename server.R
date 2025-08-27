@@ -447,6 +447,7 @@ server <- function(input, output, session) {
       rename(`Tipo de Maltrato` = Maltrato)  
   })
   
+  
   # Data Table del DeptFam
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_fam <- renderDT(server = FALSE, {
@@ -1433,6 +1434,57 @@ server <- function(input, output, session) {
   output$plot_title_vEdad <- renderUI({
     title <- "Incidencia de violencia doméstica por edad de la víctima"
   })
+  
+  
+  
+  # Heatmap: ejes = Sexo (x) vs. Tipo de maltrato (y), color = Casos, facetas = Año
+  output$heatmap_poli_vEdad <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_edad <- length(input$checkGroup_poli_vEdad_edad) > 0
+    has_año <- length(input$checkGroup_poli_vEdad_año) > 0
+    has_sexo <- length(input$checkGroup_poli_vEdad_sexo) > 0
+    
+    if (!has_año || !has_edad || !has_sexo) {
+      message <- "Seleccione Grupo(s) de Edad, Sexo de \n la Víctima y Año(s) a visualizar"
+      empty_plot <- create_empty_plot_with_message(
+        data   = vEdad_filt,
+        x      = "Edad",
+        y      = "Año",
+        fill   = "Casos",
+        title  = "",
+        xlab   = "Edad",
+        ylab   = "Número de casos",
+        message = message
+      )
+      return(convert_to_plotly(empty_plot, tooltip = "text"))
+    }
+    
+    p <- renderHeatmap_facets(
+      data  = vEdad_filt,
+      x     = "Edad",
+      y     = "Año",
+      value = "Casos",
+      facet = "Sexo",
+      xlab  = "Edad",
+      ylab  = "Número de casos",
+      fillLab = "Grupo de Edad",
+      emptyMessage = "Seleccione Grupo(s) de Edad, Sexo de \n la Víctima y Año(s) a visualizar",
+      lowColor = "white", highColor = "#3b4175"
+    )
+    
+    # Altura dinámica según # de facetas (años seleccionados)
+    plot_height <- 500
+    numPlots    <- length(input$checkGroup_poli_vEdad_sexo)
+    total_height <- plotHeight(plot_height, numPlots)
+    
+    p <- p + facet_wrap(~Sexo, ncol = 2) +
+      theme(panel.spacing.x = unit(0.2, "lines"),
+            panel.spacing.y = unit(1.5, "lines"))
+    
+    convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>%
+      layout(height = total_height)
+  })
+  
  
   # Data Table para el mapa de despDF
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
@@ -1848,7 +1900,11 @@ server <- function(input, output, session) {
   })
   
   # Data Table para el mapa de despDF
-  output$dataTable_opm_opmAgresores <- renderDT({
+  # output$dataTable_opm_opmAgresores <- renderDT({
+  #   renderDataTable(opmAgresores_filt_rename(), "Datos: Agresores según el tipo de situación")
+  # })
+  
+  output$dataTable_opm_opmAgresores <- renderDT(server = FALSE, {
     renderDataTable(opmAgresores_filt_rename(), "Datos: Agresores según el tipo de situación")
   })
   
@@ -1968,7 +2024,11 @@ server <- function(input, output, session) {
   })
   
   # Data Table para el mapa de despDF
-  output$dataTable_opm_opmCasos <- renderDT({
+  # output$dataTable_opm_opmCasos <- renderDT({
+  #   renderDataTable(opmCasos_filt_rename(), "Datos: Población atendida mediante el programa CRIAS")
+  # })
+  
+  output$dataTable_opm_opmCasos <- renderDT(server = FALSE, {
     renderDataTable(opmCasos_filt_rename(), "Datos: Población atendida mediante el programa CRIAS")
   })
   
@@ -2081,7 +2141,11 @@ server <- function(input, output, session) {
   })
 
   # Data Table para el mapa de despDF
-  output$dataTable_opm_opmVic <- renderDT({
+  # output$dataTable_opm_opmVic <- renderDT({
+  #   renderDataTable(opmVic_filt(), "Datos: Identidad de género de víctimas asistidas por el programa CRIAS")
+  # })
+  
+  output$dataTable_opm_opmVic <- renderDT(server = FALSE, {
     renderDataTable(opmVic_filt(), "Datos: Identidad de género de víctimas asistidas por el programa CRIAS")
   })
   
