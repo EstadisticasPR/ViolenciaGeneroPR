@@ -741,6 +741,7 @@ npprDS_victima_list <- lapply(as.character(years), function(sheet_name) {
 
 npprDS_victima <- npprDS_victima_list %>%
   reduce(full_join) %>%
+  filter(Año != 2025) %>%
   rename(
     Edad = `Grupos de Edad`
   ) %>%
@@ -773,6 +774,7 @@ npprDS_ofensores_list <- lapply(as.character(years), function(sheet_name) {
 
 npprDS_ofensores <- npprDS_ofensores_list %>%
   reduce(full_join) %>%
+  filter(Año != 2025) %>%
   rename(
     Edad = `Grupos de Edad`
   ) %>%
