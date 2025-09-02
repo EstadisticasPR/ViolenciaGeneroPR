@@ -729,6 +729,74 @@ maltPoli <- maltPoli_list %>%
   )
 
 
+#### npprDS_victima ####
+# Años a importar
+years <- 2019:2025
+
+# Leer y limpiar los datos por hoja
+npprDS_victima_list <- lapply(as.character(years), function(sheet_name) {
+  read_excel(paste0(poli, "npprDS_victima.xlsx"), sheet = sheet_name) %>%
+    cleanSheet_npprDS(sheet_name)
+})
+
+npprDS_victima <- npprDS_victima_list %>%
+  reduce(full_join) %>%
+  rename(
+    Edad = `Grupos de Edad`
+  ) %>%
+  pivot_longer(
+    !c(Edad, Año), names_to = "Sexo", values_to = "Casos"
+  ) %>%
+  mutate(
+    Edad = str_replace(Edad, "^10 años o menos$", "menos de 10 años"),
+    Edad = factor(Edad, levels = unique(Edad)),
+    Año = factor(Año),
+    Sexo = factor(Sexo)
+  ) %>%
+  replace_na(list(Casos = 0)) %>%
+  select(
+    Año, Edad, Sexo, Casos
+  )
+
+npprDS_victima_rol <- npprDS_victima  %>%
+  mutate(Rol = "Víctima")
+
+#### npprDS_ofensores ####
+# Años a importar
+years <- 2019:2025
+
+# Leer y limpiar los datos por hoja
+npprDS_ofensores_list <- lapply(as.character(years), function(sheet_name) {
+  read_excel(paste0(poli, "npprDS_ofensores.xlsx"), sheet = sheet_name) %>%
+    cleanSheet_npprDS(sheet_name)
+})
+
+npprDS_ofensores <- npprDS_ofensores_list %>%
+  reduce(full_join) %>%
+  rename(
+    Edad = `Grupos de Edad`
+  ) %>%
+  pivot_longer(
+    !c(Edad, Año), names_to = "Sexo", values_to = "Casos"
+  ) %>%
+  mutate(
+    Edad = str_replace(Edad, "^10 años o menos$", "menos de 10 años"),
+    Edad = factor(Edad, levels = unique(Edad)),
+    Año = factor(Año),
+    Sexo = factor(Sexo)
+  ) %>%
+  replace_na(list(Casos = 0)) %>%
+  select(
+    Año, Edad, Sexo, Casos
+  )
+
+npprDS_ofensores_rol <- npprDS_ofensores  %>%
+  mutate(Rol = "Ofensor")
+
+# Juntar dataframe de victima y ofensores para la descarga de datos
+npprDS_rol <- dplyr::bind_rows(npprDS_victima_rol, npprDS_ofensores_rol)
+
+
 #### inciDF ####
 # Vector de años
 años <- c("2021", "2022", "2023")
@@ -1359,6 +1427,9 @@ actualizacion_policia2 <- "Última actualización: 20 de septiembre de 2024"
 
 # Fecha actualizacion policia tab3
 actualizacion_policia3 <- "Última actualización: 31 de mayo de 2025"
+
+# Fecha actualizacion policia tab4
+actualizacion_policia4 <- "Última actualización: 30 de junio de 2025"
 
 # Fecha actualizacion opm tab1
 actualizacion_opm1 <- "Última actualización: 31 de diciembre de 2023"

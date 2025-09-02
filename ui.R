@@ -1079,6 +1079,101 @@ ui <-
           )
         ), 
         
+        #### tab para el barplot de datos de víctimas y ofensores de delitos sexuales (npprDS_victima y npprDS_ofensores) ####
+        tabPanel(
+          lowercaseTitle("Delitos Sexuales (victimas y ofensores)"),
+          br(), br(),
+          
+          sidebarLayout(
+            sidebarPanel(
+              style = "display: flex; flex-direction: column; align-items: center;",
+              
+              # # seleccionar valor de la variable
+              div(
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                div(
+                  style = "text-align: center; display: inline-block;", 
+                  # botón para seleccionar edad
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br>Grupo(s) de Edad:"),
+                    choices = npprDS_victima$Edad,
+                    selected = npprDS_victima$Edad,
+                    id = "npprDS_edad"
+                  ),
+                  # botón para seleccionar el sexo
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br>Sexo de las Víctimas/Ofensores:"),
+                    choices = npprDS_victima$Sexo,
+                    selected = npprDS_victima$Sexo,
+                    id = "npprDS_sexo"
+                  )
+                )
+              ),
+              
+              div(
+                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                div(
+                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                    # botón para seleccionar año
+                    createDropdownCheckbox(
+                      label = "Seleccione Año(s):",
+                      choices = npprDS_victima$Año,
+                      selected = npprDS_victima$Año,
+                      id = "npprDS_año"
+                    )
+                  ),
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_npprDS")
+                  )
+                )
+              ),
+              
+              # Output UI para la tabla de datos
+              uiOutput("dataTableUI_npprDS")
+              
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title_npprDS_victima")),
+                           plotlyOutput("barPlot_npprDS_victima"),  height = "100%"))
+              ),
+              tags$div(style = "padding-bottom: 10px;"),
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title_npprDS_ofensores")),
+                           plotlyOutput("barPlot_npprDS_ofensores"),  height = "100%"))
+              ),
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong(actualizacion_policia4, style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a los
+                     datos de víctimas y ofensores de delitos sexuales (por sexo)
+                     desde el año natural 2019 al 2025.",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
+            )
+          )
+        ), 
+        
         #### tab para el mapa de incidentes de violencia doméstica por área policiaca (inciMapa) ####
         # tabPanel(
         #   lowercaseTitle("inciMapa"),
