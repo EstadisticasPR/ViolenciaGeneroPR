@@ -23,7 +23,13 @@ cleanSheet_npprMalt <- function(data, sheet_name) {
     mutate(Año = sheet_name)
 }
 
-#### cleanSheet_npprMalt ####
+#### cleanSheet_npprDS_totales ####
+cleanSheet_npprDS_totales <- function(data, sheet_name) {
+  data %>%
+    mutate(Rol = sheet_name)
+}
+
+#### cleanSheet_npprDS ####
 cleanSheet_npprDS <- function(data, sheet_name) {
   data %>%
     mutate(Año = sheet_name)
@@ -734,42 +740,6 @@ updateCheckboxGroup_trib <- function(session, inputId, input, data) {
 #   }
 # }
 
-#### create_empty_plot_with_message_forLine ####
-create_empty_plot_with_message_forLine <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
-  data_df <- data()
-  
-  # Crear el gráfico base
-  base_plot <- ggplot(data_df, aes_string(x = x, y = y)) +
-    geom_blank() +
-    labs(title = title, x = xlab, y = ylab) +
-    theme_minimal() +
-    theme(
-      axis.text.x = element_blank(),
-      axis.ticks = element_blank(),
-      axis.text.y = element_blank(),
-      axis.title.x = element_text(size = 12, margin = margin(t = 10)),
-      axis.title.y = element_text(size = 12, margin = margin(r = 10)),
-      plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
-      panel.border = element_rect(colour = "black", fill = NA, size = 1),
-      plot.margin = margin(t = 50, r = 10, b = 10, l = 10)
-    )
-  
-  # Obtener las dimensiones de la trama
-  plot_data <- ggplot_build(base_plot)
-  panel_width <- diff(plot_data$layout$panel_params[[1]]$x.range)
-  panel_height <- diff(plot_data$layout$panel_params[[1]]$y.range)
-  
-  # Calcular el tamaño del texto en función de las dimensiones del panel
-  text_size <- min(panel_width, panel_height) * 1.75
-  
-  # Agregar el texto dinámico al gráfico
-  base_plot +
-    annotate(
-      "text", x = 0.5, y = 0.5, label = emptyMessage,
-      size = text_size, hjust = 0.5, vjust = 0.5
-    )
-}
-
 #### renderLinePlot ####
 renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab = color, emptyMessage) {
   data_df <- data()  # Evaluar los datos reactivos una vez
@@ -814,13 +784,13 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
 }
 
 #### create_empty_plot_with_message ####
-create_empty_plot_with_message <- function(data, x, y, fill, title, xlab, ylab, emptyMessage) {
+create_empty_plot_with_message <- function(data, x, y, fill, xlab, ylab, emptyMessage) {
   data_df <- data()
   
   # Crear el gráfico base
   base_plot <- ggplot(data_df, aes_string(x = x, y = y)) +
     geom_blank() +
-    labs(title = title, x = xlab, y = ylab) +
+    labs(x = xlab, y = ylab) +
     theme_minimal() +
     theme(
       axis.text.x = element_blank(),

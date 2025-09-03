@@ -728,6 +728,34 @@ maltPoli <- maltPoli_list %>%
     Año, Maltrato, Sexo, Casos
   )
 
+#### npprDS_totales ####
+# sheets a importar
+sheets <- c("Victimas", "Ofensores")
+
+# Leer y limpiar los datos por hoja
+npprDS_totales_list <- lapply(sheets, function(sheet_name) {
+  read_excel(paste0(poli, "npprDS_totales.xlsx"), sheet = sheet_name) %>%
+    cleanSheet_npprDS_totales(sheet_name)
+})
+
+npprDS_totales <- npprDS_totales_list %>%
+  reduce(full_join)  %>%
+  pivot_longer(
+    cols = c(Mujeres, Hombres),   # columnas a pivotear
+    names_to = "Sexo",            # nombre de la nueva columna
+    values_to = "Casos"           # valores
+  )%>%
+  mutate(
+    Rol = factor(Rol),
+    Año = factor(Año),
+    Sexo = factor(Sexo)
+  ) %>%
+  replace_na(list(Casos = 0)) %>%
+  select(
+    Año, Sexo, Casos, Rol
+  )
+
+
 
 #### npprDS_victima ####
 # Años a importar

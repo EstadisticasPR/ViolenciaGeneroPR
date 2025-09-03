@@ -83,7 +83,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(homiEdad_filt, "Año", "Casos", "Edad",
-                                                 paste("", input$yearInput_snmv),
                                                  "Año", "Cantidad de víctimas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -210,7 +209,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(inci_filt, x = "Año", y = "Casos", fill = "Incidente",
-                                                 paste(""),
                                                  xlab = "Año", ylab = "Número de casos", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -431,7 +429,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                                                 title = "",
                                                  xlab = "Año", ylab = "Número de casos", message)
     #ggplotly(empty_plot)
     convert_to_plotly(empty_plot, tooltip = "text")
@@ -651,7 +648,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
-                                                 title = "",
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     #ggplotly(empty_plot)
     convert_to_plotly(empty_plot, tooltip = "text", TRUE)
@@ -987,7 +983,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de viviendas públicas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -1276,7 +1271,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = despDF_filt, x = "Año", y = "Casos", fill = "Estado",
-                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -1425,7 +1419,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = vEdad_filt, x = "Año", y = "Casos", fill = "Edad",
-                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -1451,7 +1444,6 @@ server <- function(input, output, session) {
         x      = "Edad",
         y      = "Año",
         fill   = "Casos",
-        title  = "",
         xlab   = "Edad",
         ylab   = "Número de casos",
         message = message
@@ -1622,7 +1614,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = maltPoli_filt, x = "Año", y = "Casos", fill = "Maltrato",
-                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -1662,8 +1653,14 @@ server <- function(input, output, session) {
     }
   })
   
-  #### Tab con datos de victimas y agresores de deloitos sexuales por sexo (npprDS_victima y npprDS_ofensores) ####
+  #### Tab con datos de victimas y agresores de delitos sexuales por sexo (npprDS_totales, npprDS_victima y npprDS_ofensores) ####
   # Filtrar el conjunto de datos según los valores seleccionados del el grupo de edad y año 
+  npprDS_totales_filt <- reactive({
+    filter(npprDS_totales,
+           Año %in% input$checkGroup_npprDS_año,
+           Sexo %in% input$checkGroup_npprDS_sexo)
+  })
+  
   npprDS_victima_filt <- reactive({
     filter(npprDS_victima,
            Edad %in% input$checkGroup_npprDS_edad,
@@ -1746,10 +1743,50 @@ server <- function(input, output, session) {
   })
   
   # Colores del status
+  npprDS_totales_fill <- setColorFill(npprDS_totales, "Sexo")
   npprDS_victima_fill <- setColorFill(npprDS_victima, "Edad")
   
+  # Grafico de barras totales
+  output$barPlot_npprDS_totales <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_año <- length(input$checkGroup_npprDS_año) > 0
+    has_sexo <- length(input$checkGroup_npprDS_sexo) > 0
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_año || !has_sexo) {
+      message <- HTML("Seleccione Sexo y Año(s) a visualizar")
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderBarPlot_facets(npprDS_totales_filt, x = "Año", y = "Casos", fill = "Sexo",
+                                xlab = "Año", ylab = "Casos", fillLab = "Sexo",
+                                colorFill = npprDS_totales_fill,
+                                emptyMessage = HTML("Seleccione Sexo y Año(s) a visualizar"),barWidth = 0, xGap = 0)
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      numPlots = length(input$checkGroup_npprDS_sexo)
+      #Altura predeterminada para la grafica.
+      total_height = plotHeight(plot_height, numPlots)
+      p <- p + facet_wrap(~Rol, ncol = 2)+
+        theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      
+      return(p)
+    }
+    
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(data = npprDS_totales_filt, x = "Año", y = "Casos", fill = "Sexo",
+                                                 xlab = "Año", ylab = "Casos", message)
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
   
-  # Grafico de barras
+  #Titulo de la Grafica
+  output$plot_title_npprDS_totales <- renderUI({
+    title <- "Total de casos de delitos sexuales por sexo de las victimas y ofensores"
+  })
+  
+  
+  # Grafico de barras victimas
   output$barPlot_npprDS_victima <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
     has_edad <- length(input$checkGroup_npprDS_edad) > 0
@@ -1780,7 +1817,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = npprDS_victima_filt, x = "Año", y = "Casos", fill = "Edad",
-                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -1790,7 +1826,7 @@ server <- function(input, output, session) {
     title <- "Casos de delitos sexuales por sexo de la víctima"
   })
   
-  # Grafico de barras
+  # Grafico de barras ofensores
   output$barPlot_npprDS_ofensores <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
     has_edad <- length(input$checkGroup_npprDS_edad) > 0
@@ -1821,7 +1857,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = npprDS_ofensores_filt, x = "Año", y = "Casos", fill = "Edad",
-                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de ofensores", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -1963,16 +1998,33 @@ server <- function(input, output, session) {
     )
   })
   
-  # Grafico de barras
+  
+  # Grafico de linea
   output$linePlot_opm_opmFemiVD <- renderPlotly({
-    p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "Tasa", group = "1",
-                        color = "1", title = "",
-                        xlab = "Año", ylab = "Tasa por cada 100 mil mujeres",
-                        emptyMessage = "Seleccione los Año(s) que desea visualizar")
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_año <- length(input$checkGroup_opm_opmFemiVD_año) > 0
     
-    #ggplotly(p, tooltip = "text")
-    convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_año) {
+      message <- "Seleccione los Año(s) que desea visualizar"
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderLinePlot(data = opmFemiVD_filt, x = "Año", y = "Tasa", group = "1",
+                          color = "1", title = "",
+                          xlab = "Año", ylab = "Tasa por cada 100 mil mujeres",
+                          emptyMessage = "Seleccione los Año(s) que desea visualizar")
+      
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
+      
+      return(p)
+    }
+    
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(data = opmFemiVD_filt, x = "Año", y = "Tasa", fill = " ",
+                                                 xlab = "Año", ylab = "Tasa por cada 100 mil mujeres", message)
+    convert_to_plotly(empty_plot, tooltip = "text")
   })
+  
   
   #Titulo de la Grafica
   output$plot_title_opmFemiVD <- renderUI({
@@ -2084,7 +2136,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmAgresores_filt, x = "Año", y = "Cantidad", fill = "Razón",
-                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de Agresores", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -2208,7 +2259,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmCasos_filt, x = "Año", y = "Cantidad", fill = "Razón",
-                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de Personas Atendidas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -2331,7 +2381,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmVic_filt, x = "Año", y = "Víctimas", fill = "Género",
-                                                 paste(""),
                                                  xlab = "Año", ylab = "Cantidad de Víctimas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -2448,7 +2497,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmMedio_filt, x = "Año", y = "Cantidad", fill = "Orientación",
-                                                 title = "",
                                                  xlab = "Año", ylab = "Cantidad de Personas Orientadas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -2568,7 +2616,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = opmServiciosMes_filt, x = "Año", y = "Cantidad", fill = "Servicio",
-                                                 title = "",
                                                  xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -2813,7 +2860,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                                                 title = "",
                                                  xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -2945,7 +2991,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dcrSentenciadas_filt, x = "Año", y = "Cantidad", fill = "Mes",
-                                                 title = "",
                                                  xlab = "Año", ylab = "Cantidad de Personas Sentenciadas", message)
     #ggplotly(empty_plot)
     convert_to_plotly(empty_plot, tooltip = "text")
@@ -3117,7 +3162,6 @@ server <- function(input, output, session) {
     if (!has_año || !has_edad) {
       message <- HTML("Seleccione Grupo de Edad y Año(s) a visualizar")
       empty_plot <- create_empty_plot_with_message(data = OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
-                                                   title = "",
                                                    xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", message)
      
       #Titulo de la Grafica
@@ -3347,7 +3391,6 @@ server <- function(input, output, session) {
     if (!has_año || !has_delito) {
       message <- HTML("Seleccione Delito y Año(s) a visualizar")
       empty_plot <- create_empty_plot_with_message(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                                                   title = "",
                                                    xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", message)
       #Titulo de la Grafica
       output$plot_title_OP_Ley148_ex_parteEmitidas <- renderUI({
@@ -3578,7 +3621,6 @@ server <- function(input, output, session) {
     if (!has_año || !has_razon) {
       message <- HTML("Seleccione Razón y Año(s) a visualizar")
       empty_plot <- create_empty_plot_with_message(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-                                                   title = "",
                                                    xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", message)
       #Titulo de la Grafica
       output$plot_title_OP_LEY148Archivadas <- renderUI({
@@ -3807,7 +3849,6 @@ server <- function(input, output, session) {
     if (!has_año || !has_razon) {
       message <- HTML("Seleccione Razón y Año(s) a visualizar")
       empty_plot <- create_empty_plot_with_message(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                                                   title = "",
                                                    xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", message)
       #Titulo de la Grafica
       output$plot_title_OP_LEY148Denegadas <- renderUI({
@@ -4044,7 +4085,6 @@ server <- function(input, output, session) {
     if (!has_año || !has_delito) {
       message <- HTML("Seleccione Delito y Año(s) a visualizar")
       create_empty_plot_with_message(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                                     title = "",
                                      xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", message)
       #Titulo de la Grafica
       output$plot_title_OP_LEY148FinalEmitidas <- renderUI({
@@ -4288,7 +4328,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(OP_LEY148Genero_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Parte",
-                                                 title = "",
                                                  xlab = "Año fiscal", ylab = "Solicitudes de Ordenes de Protección", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -4440,7 +4479,6 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(tribCasosCrim_filt, x = "AñoFiscal", y = "Cantidad", fill = "Delito",
-                                                 title = "",
                                                  xlab = "Año Fiscal", ylab = "Casos", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
@@ -4648,7 +4686,6 @@ server <- function(input, output, session) {
   # 
   #   # Crear la gráfica vacía con mensaje
   #   empty_plot <- create_empty_plot_with_message(data = OP_148_SoliGrupEdad_filt, x = "AñoFiscal", y = "Solicitudes", fill = "Edad",
-  #                                                title = "",
   #                                                xlab = "Año Fiscal", ylab = "Órdenes de Protección Solicitadas", message)
   #   convert_to_plotly(empty_plot, tooltip = "text")
   # })
@@ -4803,7 +4840,6 @@ server <- function(input, output, session) {
   #   
   #   # Crear la gráfica vacía con mensaje
   #   empty_plot <- create_empty_plot_with_message(OP_Ley148_ex_parteEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-  #                                                title = "",
   #                                                xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", message)
   #   convert_to_plotly(empty_plot, tooltip = "text")
   # })
@@ -4960,7 +4996,6 @@ server <- function(input, output, session) {
   #   
   #   # Crear la gráfica vacía con mensaje
   #   empty_plot <- create_empty_plot_with_message(OP_LEY148Archivadas_filt, x = "AñoFiscal", y = "ÓrdenesArchivadas", fill = "Razón",
-  #                                                title = "",
   #                                                xlab = "Año fiscal", ylab = "Órdenes de Protección Archivadas", message)
   #   convert_to_plotly(empty_plot, tooltip = "text")
   # })
@@ -5116,7 +5151,6 @@ server <- function(input, output, session) {
   #   
   #   # Crear la gráfica vacía con mensaje
   #   empty_plot <- create_empty_plot_with_message(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-  #                                                title = "",
   #                                                xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", message)
   #   convert_to_plotly(empty_plot, tooltip = "text")
   # })
@@ -5272,7 +5306,6 @@ server <- function(input, output, session) {
 # 
 #     # Crear la gráfica vacía con mensaje
 #     empty_plot <- create_empty_plot_with_message(OP_LEY148FinalEmitidas_filt_region, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-#                                                  title = "",
 #                                                  xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", message)
 #     convert_to_plotly(empty_plot, tooltip = "text")
 #   })
@@ -5412,7 +5445,6 @@ server <- function(input, output, session) {
     }
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(safekitsDF_filt, x = "Año", y = "Total", fill = "Kits", 
-                                                 title = HTML(""), 
                                                  xlab = "Año", ylab = "Total de Kits Distribuidos", message)
     
     convert_to_plotly(empty_plot, tooltip = "text")
@@ -5544,7 +5576,6 @@ server <- function(input, output, session) {
     }
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(safekitsDF_edades_filt, x = "Año", y = "Total", fill = "Categoria", 
-                                                 title = HTML(""), 
                                                  xlab = "Año", ylab = "Total de Kits Distribuidos", message)
     
     convert_to_plotly(empty_plot, tooltip = "text")

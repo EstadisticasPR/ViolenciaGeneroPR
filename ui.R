@@ -1141,20 +1141,27 @@ ui <-
               style = "height: calc(100vh - 150px); padding-bottom: 10px;",
               fluidRow(
                 column(12, 
-                       div(id = "scrollable-plot", 
+                       div(id = "plot-container", 
+                           div(id = "plot-title", uiOutput("plot_title_npprDS_totales")),
+                           plotlyOutput("barPlot_npprDS_totales"),  height = "100%"))
+              ),
+              tags$div(style = "padding-bottom: 60px;"),
+              fluidRow(
+                column(12, 
+                       div(id = "plot-container", 
                            div(id = "plot-title", uiOutput("plot_title_npprDS_victima")),
                            plotlyOutput("barPlot_npprDS_victima"),  height = "100%"))
               ),
-              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(style = "padding-bottom: 60px;"),
               fluidRow(
                 column(12, 
-                       div(id = "scrollable-plot", 
+                       div(id = "plot-container", 
                            div(id = "plot-title", uiOutput("plot_title_npprDS_ofensores")),
                            plotlyOutput("barPlot_npprDS_ofensores"),  height = "100%"))
               ),
-              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(style = "padding-bottom: 80px;"),
               tags$div(
-                style = "padding-bottom: 10px;",
+                style = "padding-bottom: 40px;",
                 div(
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
