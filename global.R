@@ -826,6 +826,32 @@ npprDS_ofensores_rol <- npprDS_ofensores  %>%
 # Juntar dataframe de victima y ofensores para la descarga de datos
 npprDS_rol <- dplyr::bind_rows(npprDS_victima_rol, npprDS_ofensores_rol)
 
+#### npprDS_relacion ####
+# Años a importar
+years <- 2019:2024
+
+# Leer y limpiar los datos por hoja
+npprDS_relacion_list <- lapply(as.character(years), function(sheet_name) {
+  read_excel(paste0(poli, "npprDS_relacion.xlsx"), sheet = sheet_name) %>%
+    cleanSheet_npprDS(sheet_name)
+})
+
+npprDS_relacion <- npprDS_relacion_list %>%
+  reduce(full_join) %>%
+  pivot_longer(
+    c(Familiar, `No Familiar`),
+    names_to = "Relación", 
+    values_to = "Casos"
+  ) %>%
+  mutate(
+    Relación = factor(Relación),
+    Año = factor(Año),
+    Región = factor(Región)
+  ) %>%
+  replace_na(list(Casos = 0)) %>%
+  select(
+    Año, Región, Relación, Casos
+  )
 
 #### inciDF ####
 # Vector de años

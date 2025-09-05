@@ -1708,8 +1708,8 @@ server <- function(input, output, session) {
   })
   
   observe({
-    inputId <- "checkGroup_npprDS__año"
-    buttonId <- "deselectAll_npprDS__año"
+    inputId <- "checkGroup_npprDS_año"
+    buttonId <- "deselectAll_npprDS_año"
     all_choices <- levels(npprDS_victima$Año)
     selected <- input[[inputId]]
     
@@ -1896,6 +1896,247 @@ server <- function(input, output, session) {
     }
   })
   
+  #### Tab con datos de victimas y agresores de delitos sexuales por sexo (npprDS_relacion) ####
+  # Filtrar el conjunto de datos según los valores seleccionados de region, tipo de relacion y año 
+  npprDS_relacion_filt <- reactive({
+    filter(npprDS_relacion,
+           Año %in% input$checkGroup_npprDS_relacion_año,
+           Relación %in% input$checkGroup_npprDS_relacion_relacion,
+           Región %in% input$checkGroup_npprDS_relacion_region)
+  })
+  
+  npprDS_relacion_total <- npprDS_relacion %>%
+    group_by(Año, Relación) %>%
+    summarise(Casos = sum(Casos, na.rm = TRUE)) %>%
+    ungroup()
+  
+  npprDS_relacion_filt_total <- reactive({
+    filter(npprDS_relacion_total,
+           Año %in% input$checkGroup_npprDS_relacion_año,
+           Relación %in% input$checkGroup_npprDS_relacion_relacion
+    )
+  })
+  
+  
+  ### funcion para el boton de deseleccionar/seleccionar el grupo de edad
+  observeEvent(input$deselectAll_npprDS_relacion_relacion, {
+    updateCheckboxGroup(session, "checkGroup_npprDS_relacion_relacion", input, npprDS_relacion$Relación)
+  })
+  
+  observe({
+    inputId <- "checkGroup_npprDS_relacion_relacion"
+    buttonId <- "deselectAll_npprDS_relacion_relacion"
+    all_choices <- levels(npprDS_relacion$Relación)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_npprDS_relacion_año, {
+    updateCheckboxGroup(session, "checkGroup_npprDS_relacion_año", input, npprDS_relacion$Año)
+  })
+  
+  observe({
+    inputId <- "checkGroup_npprDS_relacion_año"
+    buttonId <- "deselectAll_npprDS_relacion_año"
+    all_choices <- levels(npprDS_relacion$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar el sexo
+  observeEvent(input$deselectAll_npprDS_relacion_region, {
+    updateCheckboxGroup(session, "checkGroup_npprDS_relacion_region", input, npprDS_relacion$Región)
+  })
+  
+  observe({
+    inputId <- "checkGroup_npprDS_relacion_region"
+    buttonId <- "deselectAll_npprDS_relacion_region"
+    all_choices <- levels(npprDS_relacion$Región)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  # Colores del status
+  npprDS_relacion_fill <- setColorFill(npprDS_relacion, "Relación")
+  
+  # # Grafico de barras totales
+  # output$barPlot_npprDS_relacion <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_año <- length(input$checkGroup_npprDS_relacion_año) > 0
+  #   has_relacion <- length(input$checkGroup_npprDS_relacion_relacion) > 0
+  #   has_region <- length(input$checkGroup_npprDS_relacion_region) > 0
+  #   
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_año || !has_relacion || !has_region) {
+  #     message <- HTML("Seleccione Región, Tipo(s) de Relación \n y Año(s) a visualizar")
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- renderBarPlot_facets(npprDS_relacion_filt, x = "Año", y = "Casos", fill = "Relación",
+  #                               xlab = "Año", ylab = "Casos", fillLab = "Relación",
+  #                               colorFill = npprDS_relacion_fill,
+  #                               emptyMessage = HTML("Seleccione Región, Tipo(s) de Relación \n y Año(s) a visualizar"),
+  #                               barWidth = 0, xGap = 0)
+  #     #Altura predeterminada para la grafica.
+  #     plot_height = 500
+  #     numPlots = length(input$checkGroup_npprDS_relacion_region)
+  #     #Altura predeterminada para la grafica.
+  #     total_height = plotHeight(plot_height, numPlots)
+  #     p <- p + facet_wrap(~Región, ncol = 2)+
+  #       theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+  #             panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
+  #     p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+  #     
+  #     return(p)
+  #   }
+  #   
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(data = npprDS_relacion_filt, x = "Año", y = "Casos", fill = "Relación",
+  #                                                xlab = "Año", ylab = "Casos", message)
+  #   convert_to_plotly(empty_plot, tooltip = "text")
+  # })
+  # 
+  
+  # Grafico de barras
+  output$barPlot_npprDS_relacion <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_año <- length(input$checkGroup_npprDS_relacion_año) > 0
+    has_relacion <- length(input$checkGroup_npprDS_relacion_relacion) > 0
+    has_region <- length(input$checkGroup_npprDS_relacion_region) > 0
+    
+    
+    # Si faltan selecciones necesarias
+    if (!has_año || !has_relacion) {
+      message <- HTML("Seleccione Tipo(s) de Relación \n y Año(s) a visualizar")
+      empty_plot <- create_empty_plot_with_message(npprDS_relacion_filt, x = "Año", y = "Casos", fill = "Relación",
+                                                   xlab = "Año", ylab = "Casos", message)
+      #Titulo de la Grafica
+      output$plot_title_npprDS_relacion <- renderUI({
+        title <- "Total de casos de delitos sexuales por tipo de relación ofensor/víctima"
+      })
+      
+      return(convert_to_plotly(empty_plot, tooltip = "text"))
+    }
+    
+    # Si NO hay región seleccionada, usar el dataset agregado
+    if (!has_region) {
+      p <- renderBarPlot_facets(npprDS_relacion_filt_total, x = "Año", y = "Casos", fill = "Relación",
+                                xlab = "Año", ylab = "Casos", fillLab = "Relación",
+                                colorFill = npprDS_relacion_fill,
+                                emptyMessage = HTML("Seleccione Región, Tipo(s) de Relación \n y Año(s) a visualizar"))
+      
+      #Titulo de la Grafica
+      output$plot_title_npprDS_relacion <- renderUI({
+        title <- "Total de casos de delitos sexuales según tipo de relación ofensor/víctima"
+      })
+      
+      # Data Table
+      # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+      output$dataTable_npprDS_relacion <- renderDT(server = FALSE, {
+        renderDataTable(npprDS_relacion_filt_total(), "Datos: Delitos Sexuales según tipo de relación ofensor/víctima")
+      })
+      
+      return(convert_to_plotly(p, tooltip = "text")%>% layout(height = 450))
+    }
+    
+    #Titulo de la Grafica
+    output$plot_title_npprDS_relacion <- renderUI({
+      title <- "Total de casos de delitos sexuales según región y tipo de relación ofensor/víctima"
+    })
+    
+    p <- renderBarPlot_facets(npprDS_relacion_filt, x = "Año", y = "Casos", fill = "Relación",
+                              xlab = "Año", ylab = "Casos", fillLab = "Relación",
+                              colorFill = npprDS_relacion_fill,
+                              emptyMessage = HTML("Seleccione Región, Tipo(s) de Relación \n y Año(s) a visualizar"))
+    #Altura predeterminada para la grafica.
+    plot_height = 500
+    numPlots = length(input$checkGroup_npprDS_relacion_region)
+    #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+    total_height = plotHeight(plot_height, numPlots)
+    p <- p + facet_wrap(~Región, ncol = 2) +
+      theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+            panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+    p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+    
+    # Data Table
+    # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+    output$dataTable_npprDS_relacion <- renderDT(server = FALSE, {
+      renderDataTable(npprDS_relacion_filt(), "Datos: Delitos Sexuales según tipo de relación ofensor/víctima")
+    })
+    
+    return(p)
+  })
+  
+  
+  
+  # Texto explicativo dinámico
+  output$texto_npprDS_relacion <- renderUI({
+    regiones <- input$checkGroup_npprDS_relacion_region
+    if (is.null(regiones) || length(regiones) == 0) {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden a los
+        datos de delitos sexuales según el tipo de relación
+        ofensor/víctima desde el año natural 2019 al 2025.
+        
+      </p>"
+      )
+    } else {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden a los
+        datos de delitos sexuales según región y tipo de relación
+        ofensor/víctima desde el año natural 2019 al 2025.
+      </p>"
+      )
+    }
+  })
+  
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_npprDS_relacion  <- renderUI({
+    if (input$showTable_npprDS_relacion) {
+      hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
+      texts <- c("Negociado de la Policía de Puerto Rico")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
+            DTOutput("dataTable_npprDS_relacion")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
   
   
   
@@ -4084,13 +4325,12 @@ server <- function(input, output, session) {
     # Si faltan selecciones necesarias
     if (!has_año || !has_delito) {
       message <- HTML("Seleccione Delito y Año(s) a visualizar")
-      create_empty_plot_with_message(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
-                                     xlab = "Año Fiscal", ylab = "Órdenes de Protección Emitidas", message)
+      empty_plot <- create_empty_plot_with_message(OP_LEY148FinalEmitidas_filt, x = "AñoFiscal", y = "ÓrdenesEmitidas", fill = "Delito",
+                                                   xlab = "Año fiscal", ylab = "Órdenes de Protección Emitidas", message)
       #Titulo de la Grafica
       output$plot_title_OP_LEY148FinalEmitidas <- renderUI({
         title <- "Órdenes de protección emitidas bajo Ley 148"
       })
-      
       
       return(convert_to_plotly(empty_plot, tooltip = "text"))
     }

@@ -1079,7 +1079,7 @@ ui <-
           )
         ), 
         
-        #### tab para el barplot de datos de víctimas y ofensores de delitos sexuales (npprDS_victima y npprDS_ofensores) ####
+        #### tab para el barplot de datos de víctimas y ofensores de delitos sexuales (npprDS_totales, npprDS_victima y npprDS_ofensores) ####
         tabPanel(
           lowercaseTitle("Delitos Sexuales (victimas y ofensores)"),
           br(), br(),
@@ -1175,6 +1175,89 @@ ui <-
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
+                )
+              )
+            )
+          )
+        ), 
+        
+        
+        #### tab para el barplot de datos de casos de delitos sexuales por relacion Ofensor/Victima (npprDS_relacion) ####
+        tabPanel(
+          lowercaseTitle("Delitos Sexuales por relación Ofensor/Víctima"),
+          br(), br(),
+          
+          sidebarLayout(
+            sidebarPanel(
+              style = "display: flex; flex-direction: column; align-items: center;",
+              
+              # # seleccionar valor de la variable
+              div(
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                div(
+                  style = "text-align: center; display: inline-block;", 
+                  # botón para seleccionar edad
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br>Región:"),
+                    choices = npprDS_relacion$Región,
+                    selected = npprDS_relacion$Región,
+                    id = "npprDS_relacion_region"
+                  ),
+                  # botón para seleccionar el sexo
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br>Tipo de Relación:"),
+                    choices = npprDS_relacion$Relación,
+                    selected = npprDS_relacion$Relación,
+                    id = "npprDS_relacion_relacion"
+                  )
+                )
+              ),
+              
+              div(
+                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                div(
+                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                    # botón para seleccionar año
+                    createDropdownCheckbox(
+                      label = "Seleccione Año(s):",
+                      choices = npprDS_relacion$Año,
+                      selected = npprDS_relacion$Año,
+                      id = "npprDS_relacion_año"
+                    )
+                  ),
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_npprDS_relacion")
+                  )
+                )
+              ),
+              
+              # Output UI para la tabla de datos
+              uiOutput("dataTableUI_npprDS_relacion")
+              
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title_npprDS_relacion")),
+                           plotlyOutput("barPlot_npprDS_relacion"),  height = "100%"))
+              ),
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong(actualizacion_policia4, style="margin: 0px;") 
+                  ),
+                  uiOutput("texto_npprDS_relacion")
                 )
               )
             )
