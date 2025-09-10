@@ -2140,6 +2140,151 @@ server <- function(input, output, session) {
   
   
   
+  
+  
+  #### Tab con datos de victimas de delitos sexuales por sexo y tipo de delito (npprDS_tiposdelitos) ####
+  # Filtrar el conjunto de datos según los valores seleccionados de sexo, tipo de delito y año 
+  npprDS_tiposdelitos_filt <- reactive({
+    filter(npprDS_tiposdelitos,
+           Año %in% input$checkGroup_npprDS_tiposdelitos_año,
+           Delitos %in% input$checkGroup_npprDS_tiposdelitos_delito,
+           Sexo %in% input$checkGroup_npprDS_tiposdelitos_sexo)
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar el tipo de delito
+  observeEvent(input$deselectAll_npprDS_tiposdelitos_delito, {
+    updateCheckboxGroup(session, "checkGroup_npprDS_tiposdelitos_delito", input, npprDS_tiposdelitos$Delitos)
+  })
+  
+  observe({
+    inputId <- "checkGroup_npprDS_tiposdelitos_delito"
+    buttonId <- "deselectAll_npprDS_tiposdelitos_delito"
+    all_choices <- levels(npprDS_tiposdelitos$Delitos)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_npprDS_tiposdelitos_año, {
+    updateCheckboxGroup(session, "checkGroup_npprDS_tiposdelitos_año", input, npprDS_tiposdelitos$Año)
+  })
+  
+  observe({
+    inputId <- "checkGroup_npprDS_tiposdelitos_año"
+    buttonId <- "deselectAll_npprDS_tiposdelitos_año"
+    all_choices <- levels(npprDS_tiposdelitos$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar el sexo
+  observeEvent(input$deselectAll_npprDS_tiposdelitos_sexo, {
+    updateCheckboxGroup(session, "checkGroup_npprDS_tiposdelitos_sexo", input, npprDS_tiposdelitos$Sexo)
+  })
+  
+  observe({
+    inputId <- "checkGroup_npprDS_tiposdelitos_sexo"
+    buttonId <- "deselectAll_npprDS_tiposdelitos_sexo"
+    all_choices <- levels(npprDS_tiposdelitos$Sexo)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  # Colores del status
+  npprDS_tiposdelitos_fill <- setColorFill(npprDS_tiposdelitos, "Delitos")
+  
+  # Grafico de barras totales
+  output$barPlot_npprDS_tiposdelitos <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_año <- length(input$checkGroup_npprDS_tiposdelitos_año) > 0
+    has_sexo <- length(input$checkGroup_npprDS_tiposdelitos_sexo) > 0
+    has_delito <- length(input$checkGroup_npprDS_tiposdelitos_delito) > 0
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_año || !has_sexo || !has_delito) {
+      message <- HTML("Seleccione Sexo, Delito(s) y Año(s) a visualizar")
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderBarPlot_facets(npprDS_tiposdelitos_filt, x = "Año", y = "Casos", fill = "Delitos",
+                                xlab = "Año", ylab = "Casos", fillLab = "Delitos",
+                                colorFill = npprDS_tiposdelitos_fill,
+                                emptyMessage = HTML("Seleccione Sexo, Delito(s) y Año(s) a visualizar"),barWidth = 0, xGap = 0)
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      numPlots = length(input$checkGroup_npprDS_sexo)
+      #Altura predeterminada para la grafica.
+      total_height = plotHeight(plot_height, numPlots)
+      p <- p + facet_wrap(~Sexo, ncol = 2)+
+        theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      
+      return(p)
+    }
+    
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(data = npprDS_tiposdelitos_filt, x = "Año", y = "Casos", fill = "Delitos",
+                                                 xlab = "Año", ylab = "Casos", message)
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title_npprDS_tiposdelitos <- renderUI({
+    title <- "Total de casos de delitos sexuales por sexo de las victimas y tipo de delito"
+  })
+  
+  
+  # Data Table 
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_npprDS_tiposdelitos <- renderDT(server = FALSE, {
+    renderDataTable(npprDS_tiposdelitos_filt(), "Datos: Delitos Sexuales")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_npprDS_tiposdelitos  <- renderUI({
+    if (input$showTable_npprDS_tiposdelitos) {
+      hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
+      texts <- c("Negociado de la Policía de Puerto Rico")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
+            DTOutput("dataTable_npprDS_tiposdelitos")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
   #### tab con datos de incidentes de violencia doméstica (inciDF) ####
   # Filtrar el conjunto de datos según los valores seleccionados del el grupo de edad y año 
   inciMapa_filt <- reactive({

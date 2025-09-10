@@ -853,6 +853,37 @@ npprDS_relacion <- npprDS_relacion_list %>%
     Año, Región, Relación, Casos
   )
 
+#### npprDS_tiposdelitos ####
+# Años a importar
+years <- 2019:2024
+
+# Leer y limpiar los datos por hoja
+npprDS_tiposdelitos_list <- lapply(as.character(years), function(sheet_name) {
+  read_excel(paste0(poli, "npprDS_tiposdelitos.xlsx"), sheet = sheet_name) %>%
+    cleanSheet_npprDS(sheet_name)
+})
+
+npprDS_tiposdelitos <- npprDS_tiposdelitos_list %>%
+  reduce(full_join) %>%
+  pivot_longer(
+    cols = c(Mujeres, Hombres),   # columnas a pivotear
+    names_to = "Sexo",            # nombre de la nueva columna
+    values_to = "Casos"           # valores
+  ) %>%
+  mutate(
+    Delitos = factor(Delitos, levels = c("Violación", "Sodomia", "Actos Lasivos", 
+                                         "Incesto", "Violación Técnica", "Ley 54 (3.5)"),
+                    ordered = TRUE),
+    Año = factor(Año),
+    Sexo = factor(Sexo)
+  ) %>%
+  replace_na(list(Casos = 0)) %>%
+  select(
+    Año, Delitos, Sexo, Casos
+  )
+
+
+
 #### inciDF ####
 # Vector de años
 años <- c("2021", "2022", "2023")
@@ -1486,6 +1517,9 @@ actualizacion_policia3 <- "Última actualización: 31 de mayo de 2025"
 
 # Fecha actualizacion policia tab4
 actualizacion_policia4 <- "Última actualización: 30 de junio de 2025"
+
+# Fecha actualizacion policia tab5
+actualizacion_policia5 <- "Última actualización: 30 de junio de 2025"
 
 # Fecha actualizacion opm tab1
 actualizacion_opm1 <- "Última actualización: 31 de diciembre de 2023"

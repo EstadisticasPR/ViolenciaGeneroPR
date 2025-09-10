@@ -1171,7 +1171,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a los
                      datos de víctimas y ofensores de delitos sexuales (por sexo)
-                     desde el año natural 2019 al 2025.",
+                     desde el año natural 2019 al 2024.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1258,6 +1258,95 @@ ui <-
                     strong(actualizacion_policia4, style="margin: 0px;") 
                   ),
                   uiOutput("texto_npprDS_relacion")
+                )
+              )
+            )
+          )
+        ), 
+        
+        
+        #### tab para el barplot de datos de casos de delitos sexuales por tipo de delito y sexo (npprDS_tiposdelitos) ####
+        tabPanel(
+          lowercaseTitle("Delitos Sexuales por tipo de delito y sexo"),
+          br(), br(),
+          
+          sidebarLayout(
+            sidebarPanel(
+              style = "display: flex; flex-direction: column; align-items: center;",
+              
+              # # seleccionar valor de la variable
+              div(
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                div(
+                  style = "text-align: center; display: inline-block;", 
+                  # botón para seleccionar edad
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br>Delito:"),
+                    choices = npprDS_tiposdelitos$Delitos,
+                    selected = npprDS_tiposdelitos$Delitos,
+                    id = "npprDS_tiposdelitos_delito"
+                  ),
+                  # botón para seleccionar el sexo
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br>Sexo de las Víctimas:"),
+                    choices = npprDS_tiposdelitos$Sexo,
+                    selected = npprDS_tiposdelitos$Sexo,
+                    id = "npprDS_tiposdelitos_sexo"
+                  )
+                )
+              ),
+              
+              div(
+                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                div(
+                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                    # botón para seleccionar año
+                    createDropdownCheckbox(
+                      label = "Seleccione Año(s):",
+                      choices = npprDS_tiposdelitos$Año,
+                      selected = npprDS_tiposdelitos$Año,
+                      id = "npprDS_tiposdelitos_año"
+                    )
+                  ),
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_npprDS_tiposdelitos")
+                  )
+                )
+              ),
+              
+              # Output UI para la tabla de datos
+              uiOutput("dataTableUI_npprDS_tiposdelitos")
+              
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title_npprDS_tiposdelitos")),
+                           plotlyOutput("barPlot_npprDS_tiposdelitos"),  height = "100%"))
+              ),
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong(actualizacion_policia5, style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a los
+                     datos de casos de víctimas de delitos sexuales (por sexo y tipo de delito) 
+                     a nivel Isla desde el año natural 2019 al 2024.",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
                 )
               )
             )
