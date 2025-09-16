@@ -1896,6 +1896,154 @@ server <- function(input, output, session) {
     }
   })
   
+  #### Tab con datos de victimas y agresores de delitos sexuales por sexo (npprDS_victimas_agrupados) ####
+  # Filtrar el conjunto de datos según los valores seleccionados del el grupo de edad y año 
+  npprDS_victimas_agrupados_filt <- reactive({
+    filter(npprDS_victimas_agrupados,
+           Edad %in% input$checkGroup_npprDS_victimas_agrupados_edad,
+           Año %in% input$checkGroup_npprDS_victimas_agrupados_año,
+           Sexo %in% input$checkGroup_npprDS_victimas_agrupados_sexo)
+  })
+  
+  
+  
+  ### funcion para el boton de deseleccionar/seleccionar el grupo de edad
+  observeEvent(input$deselectAll_npprDS_victimas_agrupados_edad, {
+    updateCheckboxGroup(session, "checkGroup_npprDS_victimas_agrupados_edad", input, npprDS_victimas_agrupados$Edad)
+  })
+  
+  observe({
+    inputId <- "checkGroup_npprDS_victimas_agrupados_edad"
+    buttonId <- "deselectAll_npprDS_victimas_agrupados_edad"
+    all_choices <- levels(npprDS_victimas_agrupados$Edad)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_npprDS_victimas_agrupados_año, {
+    updateCheckboxGroup(session, "checkGroup_npprDS_victimas_agrupados_año", input, npprDS_victimas_agrupados$Año)
+  })
+  
+  observe({
+    inputId <- "checkGroup_npprDS_victimas_agrupados_año"
+    buttonId <- "deselectAll_npprDS_victimas_agrupados_año"
+    all_choices <- levels(npprDS_victimas_agrupados$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar el sexo
+  observeEvent(input$deselectAll_npprDS_victimas_agrupados_sexo, {
+    updateCheckboxGroup(session, "checkGroup_npprDS_victimas_agrupados_sexo", input, npprDS_victimas_agrupados$Sexo)
+  })
+  
+  observe({
+    inputId <- "checkGroup_npprDS_victimas_agrupados_sexo"
+    buttonId <- "deselectAll_npprDS_victimas_agrupados_sexo"
+    all_choices <- levels(npprDS_victimas_agrupados$Sexo)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  
+  
+  # Grafico de linea
+  output$linePlot_npprDS_victimas_agrupados <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_edad <- length(input$checkGroup_npprDS_victimas_agrupados_edad) > 0
+    has_año <- length(input$checkGroup_npprDS_victimas_agrupados_año) > 0
+    has_sexo <- length(input$checkGroup_npprDS_victimas_agrupados_sexo) > 0
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_edad || !has_año || !has_sexo) {
+      message <- "Seleccione Grupo(s) de Edad, Sexo y Año(s) que desea visualizar"
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderLinePlot_poli(data = npprDS_victimas_agrupados_filt, x = "Año", y = "Casos", group = "Edad",
+                          color = "Edad", title = "",
+                          xlab = "Año", ylab = "Número de Casos",
+                          emptyMessage = "Seleccione Grupo(s) de Edad, Sexo y Año(s) que desea visualizar")
+      
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      numPlots = length(input$checkGroup_npprDS_victimas_agrupados_sexo)
+      #Altura predeterminada para la grafica.
+      total_height = plotHeight(plot_height, numPlots)
+      p <- p + facet_wrap(~Sexo, ncol = 2)+
+        theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      
+      return(p)
+    }
+
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(data = npprDS_victimas_agrupados_filt, x = "Año", y = "Casos", fill = " ",
+                                                 xlab = "Año", ylab = "Número de Casos", message)
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  
+  #Titulo de la Grafica
+  output$plot_title_npprDS_victimas_agrupados <- renderUI({
+    title <- "Total de casos de delitos sexuales por sexo de las victimas y categoría de edad"
+  })
+  
+  
+  # Data Table 
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_npprDS_victimas_agrupados <- renderDT(server = FALSE, {
+    renderDataTable(npprDS_victimas_agrupados_filt(), "Datos: Delitos Sexuales")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_npprDS_victimas_agrupados  <- renderUI({
+    if (input$showTable_npprDS_victimas_agrupados) {
+      hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
+      texts <- c("Negociado de la Policía de Puerto Rico")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
+            DTOutput("dataTable_npprDS_victimas_agrupados")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   #### Tab con datos de victimas y agresores de delitos sexuales por sexo (npprDS_relacion) ####
   # Filtrar el conjunto de datos según los valores seleccionados de region, tipo de relacion y año 
   npprDS_relacion_filt <- reactive({
@@ -2137,8 +2285,6 @@ server <- function(input, output, session) {
       )
     }
   })
-  
-  
   
   
   
@@ -5999,6 +6145,128 @@ server <- function(input, output, session) {
           div(
             style = "width: 98%; max-width: 800px; overflow-x: auto;", 
             DTOutput("dataTable_safekitsDF_edades")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
+  ####  (safekitsDF_analizados) ####
+  # Filtrar el conjunto de datos según los valores seleccionados del año y el estado de la querella
+  safekitsDF_analizados_filt <- reactive({
+    filter(safekitsDF_analizados,
+           Año %in% input$checkGroup_cavv_safekitsDF_analizados_Año,
+           Laboratorio %in% input$checkGroup_cavv_safekitsDF_analizados_Laboratorio
+    )
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el año
+  observeEvent(input$deselectAll_cavv_safekitsDF_analizados_Año, {
+    updateCheckboxGroup(session, "checkGroup_cavv_safekitsDF_analizados_Año", input, safekitsDF_analizados$Año)
+  })
+  
+  observe({
+    inputId <- "checkGroup_cavv_safekitsDF_analizados_Año"
+    buttonId <- "deselectAll_cavv_safekitsDF_analizados_Año"
+    all_choices <- levels(safekitsDF_analizados$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el botón de deseleccionar/seleccionar el estado de querella
+  observeEvent(input$deselectAll_cavv_safekitsDF_analizados_Laboratorio, {
+    updateCheckboxGroup(session, "checkGroup_cavv_safekitsDF_analizados_Laboratorio", input, safekitsDF_analizados$Laboratorio)
+  })
+  
+  observe({
+    inputId <- "checkGroup_cavv_safekitsDF_analizados_Laboratorio"
+    buttonId <- "deselectAll_cavv_safekitsDF_analizados_Laboratorio"
+    all_choices <- levels(safekitsDF_analizados$Laboratorio)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  # Colores de los estados de Querella
+  safekitsDF_analizados_fill_Laboratorio <- setColorFill(safekitsDF_analizados, "Laboratorio")
+  
+  
+  # Grafico de barras
+  output$barPlot_safekitsDF_analizados <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_año <- length(input$checkGroup_cavv_safekitsDF_analizados_Año) > 0
+    has_lab <- length(input$checkGroup_cavv_safekitsDF_analizados_Laboratorio) > 0
+    
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_año || !has_lab) {
+      message <- "Seleccione Laboratorio(s) y Año(s) a visualizar"
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderBarPlot_facets(safekitsDF_analizados_filt, "Año", "Total", "Laboratorio",
+                                "Año", "Total de Kits Analizados", fillLab = "Laboratorio", colorFill = safekitsDF_analizados_fill_Laboratorio, 
+                                emptyMessage = "Seleccione Laboratorio(s) y Año(s) a visualizar",barWidth = 0, xGap = 0)
+      
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
+      
+      return(p)
+    }
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(safekitsDF_analizados_filt, x = "Año", y = "Total", fill = "Laboratorio", 
+                                                 xlab = "Año", ylab = "Total de Kits Analizados", message)
+    
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title_safekitsDF_analizados <- renderUI({
+    title <- HTML("Total de kits de agresiones sexuales analizados")
+  })
+  
+  safekitsDF_analizados_filt_rename <- reactive({
+    safekitsDF_analizados_filt() %>%  
+      rename(`Total de Kits Analizados` = Total)
+  })
+  
+  
+  # Data Table
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_safekitsDF_analizados <- renderDT(server = FALSE, {
+    renderDataTable(safekitsDF_analizados_filt_rename(), "Datos: Total de kits de agresiones sexuales analizados")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_safekitsDF_analizados  <- renderUI({
+    if (input$showTable_safekitsDF_analizados) {
+      hyperlinks <- c("https://www.icf.pr.gov/")
+      texts <- c("Instituto de Ciencias Forenses")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
+            DTOutput("dataTable_safekitsDF_analizados")
           )
         ),
         

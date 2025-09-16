@@ -826,6 +826,35 @@ npprDS_ofensores_rol <- npprDS_ofensores  %>%
 # Juntar dataframe de victima y ofensores para la descarga de datos
 npprDS_rol <- dplyr::bind_rows(npprDS_victima_rol, npprDS_ofensores_rol)
 
+
+#### npprDS_victimas_agrupados ####
+# Años a importar
+years <- 2019:2024
+
+# Leer y limpiar los datos por hoja
+npprDS_victimas_agrupados_list <- lapply(as.character(years), function(sheet_name) {
+  read_excel(paste0(poli, "npprDS_victimas_agrupados.xlsx"), sheet = sheet_name) %>%
+    cleanSheet_npprDS(sheet_name)
+})
+
+npprDS_victimas_agrupados <- npprDS_victimas_agrupados_list %>%
+  reduce(full_join) %>%
+  rename(
+    Edad = `Grupos de Edad`
+  ) %>%
+  pivot_longer(
+    !c(Edad, Año), names_to = "Sexo", values_to = "Casos"
+  ) %>%
+  mutate(
+    Edad = factor(Edad, levels = unique(Edad)),
+    Año = factor(Año),
+    Sexo = factor(Sexo)
+  ) %>%
+  replace_na(list(Casos = 0)) %>%
+  select(
+    Año, Edad, Sexo, Casos
+  )
+
 #### npprDS_relacion ####
 # Años a importar
 years <- 2019:2024
@@ -1470,6 +1499,21 @@ safekitsDF_edades <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
     Año = factor(Año)
   )
 
+#### kits analizados ####
+safekitsDF_analizados <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
+                                sheet = "Kit Analizados")  %>%
+  pivot_longer(
+    !Año,
+    names_to = "Laboratorio",
+    values_to = "Total"
+  ) %>%
+  mutate(
+    Laboratorio = factor(Laboratorio, 
+                       levels = c("Laboratorio Forense", "Laboratorios Externos: BODE", "Laboratorios Externos: DNA Solutions")),
+    Año = factor(Año)
+  )
+
+
 #### Guardar datos procesados de CAVV ####
 # dataframes <- list(safekitsDF) # Lista de dataframes 
 # 
@@ -1520,6 +1564,12 @@ actualizacion_policia4 <- "Última actualización: 30 de junio de 2025"
 
 # Fecha actualizacion policia tab5
 actualizacion_policia5 <- "Última actualización: 30 de junio de 2025"
+
+# Fecha actualizacion policia tab6
+actualizacion_policia6 <- "Última actualización: 30 de junio de 2025"
+
+# Fecha actualizacion policia tab7
+actualizacion_policia7 <- "Última actualización: 30 de junio de 2025"
 
 # Fecha actualizacion opm tab1
 actualizacion_opm1 <- "Última actualización: 31 de diciembre de 2023"
@@ -1572,7 +1622,8 @@ actualizacion_cavv1 <- "Última actualización: 31 de diciembre de 2024"
 # Fecha actualizacion datos cavv tab2
 actualizacion_cavv2 <- "Última actualización: 31 de diciembre de 2024"
 
-
+# Fecha actualizacion datos cavv tab3
+actualizacion_cavv3 <- "Última actualización: 31 de mayo de 2025"
 
 ##################################################################################
 ##### Credenciales para el web hosting #####

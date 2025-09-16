@@ -783,6 +783,51 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
   }
 }
 
+#### renderLinePlot_poli ####
+renderLinePlot_poli <- function(data, x, y, group, color, title, xlab, ylab, 
+                           colorlab = color, emptyMessage) {
+  data_df <- data()  # Evaluar los datos reactivos una vez
+  
+  if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]])) {
+    # Mostrar una gráfica vacía con un mensaje si no hay datos
+    p <- create_empty_plot_with_message_forLine(data, x, y, color, title, xlab, ylab, emptyMessage)
+    return(p)
+  } else {
+    # Filtrar los niveles del factor Año para que solo incluya cada 5 años
+    x_levels <- levels(factor(data_df[[x]]))
+    x_labels <- ifelse(as.numeric(x_levels) %% 5 == 0, x_levels, "")  
+    
+    upper_y_limit <- ceiling(max(data_df[[y]], na.rm = TRUE) * 1.1)
+    
+    p <- ggplot(data_df, aes_string(x = x, y = y, group = group, color = color)) +
+      geom_line(size = 1) +
+      geom_point(size = 2,
+                 aes(
+                   text = paste0("<b>", xlab, ":</b> ", .data[[x]],
+                                 "<br><b>", ylab, ":</b> ", .data[[y]])
+                 )
+      ) +
+      expand_limits(y = 0) +
+      labs(title = title, x = xlab, y = ylab, color = colorlab) +
+      scale_y_continuous(
+        labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+        expand = expansion(mult = c(0, 0.1))
+      ) +
+      coord_cartesian(ylim = c(0, upper_y_limit)) +
+      scale_x_discrete(breaks = x_labels) +
+      theme_minimal() +
+      theme(
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5, size = 15, colour = "black", face = "bold"),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1),
+        plot.margin = margin(t = 45, r = 10, b = 10, l = 10)
+      )
+    
+    return(p)
+  }
+}
+
+
 #### create_empty_plot_with_message ####
 create_empty_plot_with_message <- function(data, x, y, fill, xlab, ylab, emptyMessage) {
   data_df <- data()

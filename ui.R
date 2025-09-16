@@ -1181,6 +1181,94 @@ ui <-
           )
         ), 
         
+        #### tab para el barplot de datos de casos de delitos sexuales por tipo de delito y sexo (npprDS_victimas_agrupados) ####
+        tabPanel(
+          lowercaseTitle("Delitos Sexuales por edad y sexo"),
+          br(), br(),
+          
+          sidebarLayout(
+            sidebarPanel(
+              style = "display: flex; flex-direction: column; align-items: center;",
+              
+              # # seleccionar valor de la variable
+              div(
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                div(
+                  style = "text-align: center; display: inline-block;", 
+                  # botón para seleccionar edad
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br> Grupo(s) de Edad:"),
+                    choices = npprDS_victimas_agrupados$Edad,
+                    selected = npprDS_victimas_agrupados$Edad,
+                    id = "npprDS_victimas_agrupados_edad"
+                  ),
+                  # botón para seleccionar el sexo
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br>Sexo de las Víctimas:"),
+                    choices = npprDS_victimas_agrupados$Sexo,
+                    selected = npprDS_victimas_agrupados$Sexo,
+                    id = "npprDS_victimas_agrupados_sexo"
+                  )
+                )
+              ),
+              
+              div(
+                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                div(
+                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                    # botón para seleccionar año
+                    createDropdownCheckbox(
+                      label = "Seleccione Año(s):",
+                      choices = npprDS_victimas_agrupados$Año,
+                      selected = npprDS_victimas_agrupados$Año,
+                      id = "npprDS_victimas_agrupados_año"
+                    )
+                  ),
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_npprDS_victimas_agrupados")
+                  )
+                )
+              ),
+              
+              # Output UI para la tabla de datos
+              uiOutput("dataTableUI_npprDS_victimas_agrupados")
+              
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title_npprDS_victimas_agrupados")),
+                           plotlyOutput("linePlot_npprDS_victimas_agrupados"),  height = "100%"))
+              ),
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong(actualizacion_policia5, style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden a los
+                     datos de casos de víctimas de delitos sexuales (por sexo y cat) 
+                     a nivel Isla desde el año natural 2019 al 2024.",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
+            )
+          )
+        ), 
+        
         
         #### tab para el barplot de datos de casos de delitos sexuales por relacion Ofensor/Victima (npprDS_relacion) ####
         tabPanel(
@@ -1255,7 +1343,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong(actualizacion_policia4, style="margin: 0px;") 
+                    strong(actualizacion_policia6, style="margin: 0px;") 
                   ),
                   uiOutput("texto_npprDS_relacion")
                 )
@@ -1338,7 +1426,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong(actualizacion_policia5, style="margin: 0px;") 
+                    strong(actualizacion_policia7, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a los
@@ -2987,6 +3075,85 @@ ui <-
         )
       ),
       
+      #### tab con datos de Total de kits de agresión sexual analizados ####
+      tabPanel(
+        lowercaseTitle("Kits de agresión sexual analizados"), 
+        br(), br(),
+        sidebarLayout(
+          sidebarPanel(
+            style = "display: flex; flex-direction: column; align-items: center;",
+            
+            # # seleccionar valor de la variable
+            div(
+              style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+              div(
+                style = "text-align: center; display: inline-block;",  
+                # botón para seleccionar el estado de querella
+                createDropdownCheckbox(
+                  label = "Seleccione Laboratorio(s):",
+                  choices = safekitsDF_analizados$Laboratorio,
+                  selected = safekitsDF_analizados$Laboratorio,
+                  id = "cavv_safekitsDF_analizados_Laboratorio"
+                )
+              )
+            ),
+            
+            div(
+              style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+              div(
+                style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                div(
+                  style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                  # botón para seleccionar el año
+                  createDropdownCheckbox(
+                    label = "Seleccione Año(s):",
+                    choices = safekitsDF_analizados$Año,
+                    selected = safekitsDF_analizados$Año,
+                    id = "cavv_safekitsDF_analizados_Año"
+                  )
+                ),
+                div(
+                  style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                  showDataCheckbox("showTable_safekitsDF_analizados")
+                )
+              )
+            ),
+            
+            # Output UI para la tabla de datos
+            uiOutput("dataTableUI_safekitsDF_analizados")
+            
+          ),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+            fluidRow(
+              column(12, 
+                     div(id = "scrollable-plot", 
+                         div(id = "plot-title", uiOutput("plot_title_safekitsDF_analizados")),
+                         plotlyOutput("barPlot_safekitsDF_analizados"),  height = "100%"))
+            ),
+            tags$div(style = "padding-bottom: 10px;"),
+            tags$div(
+              style = "padding-bottom: 10px;",
+              div(
+                class = "card",
+                style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                h4(
+                  strong(actualizacion_cavv3, style="margin: 0px;") 
+                ),
+                p(
+                  "Los datos representados en esta gráfica corresponden a la
+              cantidad de kits de agresión sexual que han sido analizados
+              desde el año 2021 al 2025. Los datos para el año 2025 son preliminares",
+                  
+                  style = "font-size: 16px;padding: 0px;" 
+                )
+              )
+            )
+          )
+        )
+      ),
       #### tab de Publicaciones del CAVV ####
       # tabPanel(
       #   lowercaseTitle("Publicaciones"),
