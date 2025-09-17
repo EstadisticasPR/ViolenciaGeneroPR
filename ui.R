@@ -1181,7 +1181,7 @@ ui <-
           )
         ), 
         
-        #### tab para el barplot de datos de casos de delitos sexuales por tipo de delito y sexo (npprDS_victimas_agrupados) ####
+        #### tab para el barplot de datos de casos de delitos sexuales por tipo de delito y sexo (npprDS_victimas_agrupados y npprDS_ofensores_agrupados) ####
         tabPanel(
           lowercaseTitle("Delitos Sexuales por edad y sexo"),
           br(), br(),
@@ -1243,9 +1243,16 @@ ui <-
               style = "height: calc(100vh - 150px); padding-bottom: 10px;",
               fluidRow(
                 column(12, 
-                       div(id = "scrollable-plot", 
+                       div(id = "plot-container", 
                            div(id = "plot-title", uiOutput("plot_title_npprDS_victimas_agrupados")),
-                           plotlyOutput("linePlot_npprDS_victimas_agrupados"),  height = "100%"))
+                           plotlyOutput("barPlot_npprDS_victimas_agrupados"),  height = "100%"))
+              ),
+              tags$div(style = "padding-bottom: 10px;"),
+              fluidRow(
+                column(12, 
+                       div(id = "plot-container", 
+                           div(id = "plot-title", uiOutput("plot_title_npprDS_ofensores_agrupados")),
+                           plotlyOutput("barPlot_npprDS_ofensores_agrupados"),  height = "100%"))
               ),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(
@@ -1260,6 +1267,80 @@ ui <-
                     "Los datos representados en esta gráfica corresponden a los
                      datos de casos de víctimas de delitos sexuales (por sexo y cat) 
                      a nivel Isla desde el año natural 2019 al 2024.",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
+            )
+          )
+        ), 
+        
+        #### tab para el barplot de datos de casos de delitos sexuales por region (npprDS_region) ####
+        tabPanel(
+          lowercaseTitle("Mapas de casos de delitos sexuales"),
+          br(), br(),
+          # Menu sidebar con widgets
+          sidebarLayout(
+            sidebarPanel(
+              # botón para seleccionar filtrado
+              # selectInput("select_avp_mapaAvp_visualizacion", "Seleccione Visualización:",
+              #             choices = c("Región", "Municipios"),
+              #             selected = "Región"),
+              
+              # Botón para seleccionar el año
+              selectInput("select_mapa_npprDS_region_año", "Seleccione Año:",
+                          choices = levels(mapa_npprDS_region$Año),
+                          selected = 1),
+              
+              # Centrar el checkbox y la tabla
+              div(
+                style = "flex: 0.7; display: flex; justify-content: center;",
+                
+                # Checkbox para mostrar/ocultar la tabla de datos
+                showDataCheckbox("showTable_npprDS_region"),
+              ),
+              # Output UI para la tabla de datos
+              uiOutput("dataTableUI_npprDS_region")
+              
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title_npprDS_region")),
+                           # Mapa 1: Víctimas: Mujeres
+                           h5("Víctimas: Mujeres", style = "text-align: center; margin-top: 10px;"),
+                           leafletOutput("map_npprDS_victimas_mujeres", height = "300px"),
+                           tags$div(style = "margin-top: 10px;"),
+                           # Mapa 2: Víctimas: Hombres
+                           h5("Víctimas: Hombres", style = "text-align: center; margin-top: 10px;"),
+                           leafletOutput("map_npprDS_victimas_hombres", height = "300px"),
+                           tags$div(style = "margin-top: 10px;"),
+                           # Mapa 3: Ofensores: Mujeres
+                           h5("Víctimas: Mujeres", style = "text-align: center; margin-top: 10px;"),
+                           leafletOutput("map_npprDS_ofensores_mujeres", height = "300px"),
+                           tags$div(style = "margin-top: 10px;"),
+                           # Mapa 4: Ofensores: Hombres
+                           h5("Víctimas: Hombres", style = "text-align: center; margin-top: 10px;"),
+                           leafletOutput("map_npprDS_ofensores_hombres", height = "300px"),
+                           height = "100%"))
+              ),
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong(actualizacion_avp2, style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en este mapa corresponden al
+                    total de casos de deitos sexuales por región del
+                    Negociado de la Policia desde el año 2019 al 2024.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )

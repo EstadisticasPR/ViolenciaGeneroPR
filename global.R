@@ -826,6 +826,59 @@ npprDS_ofensores_rol <- npprDS_ofensores  %>%
 # Juntar dataframe de victima y ofensores para la descarga de datos
 npprDS_rol <- dplyr::bind_rows(npprDS_victima_rol, npprDS_ofensores_rol)
 
+#### npprDS_region ####
+
+# Años a importar
+years <- 2019:2024
+
+# Leer y limpiar los datos por hoja
+npprDS_region_list <- lapply(as.character(years), function(sheet_name) {
+  read_excel(paste0(poli, "npprDS_region.xlsx"), sheet = sheet_name) %>%
+    cleanSheet_npprDS(sheet_name)
+})
+
+npprDS_region <- npprDS_region_list %>%
+  reduce(full_join) %>%
+  pivot_longer(
+    !c(Región, Año), names_to = "Categoría", values_to = "Casos"
+  ) %>%
+  mutate(
+    Región = factor(Región, levels = unique(Región)),
+    Año = factor(Año),
+    Categoría = factor(Categoría, levels = c("Víctimas: Mujeres", "Víctimas: Hombres", "Ofensores: Mujeres", 
+                                         "Ofensores: Hombres"),
+                     ordered = TRUE)
+  ) %>%
+  replace_na(list(Casos = 0)) %>%
+  select(
+    Año, Región, Categoría, Casos
+  )
+
+# Crear un dataframe con las coordenadas de las fiscalías policiacas y 
+# combinar los datos de delitos con los datos geográficos de los distritos fiscales
+mapa_npprDS_region <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
+  merge(npprDS_region, by.x = "GROUP", by.y = "Región") %>%
+  rename(Región = GROUP) %>%
+  relocate(
+    Año, Región, Categoría, geometry, Casos 
+  )
+
+# Filtrar para "victimas mujeres"
+mapa_npprDS_victimas_mujeres <- mapa_npprDS_region %>%
+  filter(Categoría == "Víctimas: Mujeres")
+
+# Filtrar para "victimas mujeres"
+mapa_npprDS_victimas_hombres <- mapa_npprDS_region %>%
+  filter(Categoría == "Víctimas: Hombres")
+
+# Filtrar para "victimas mujeres"
+mapa_npprDS_ofensores_mujeres <- mapa_npprDS_region %>%
+  filter(Categoría == "Ofensores: Mujeres")
+
+# Filtrar para "victimas mujeres"
+mapa_npprDS_ofensores_hombres <- mapa_npprDS_region %>%
+  filter(Categoría == "Ofensores: Hombres")
+
 
 #### npprDS_victimas_agrupados ####
 # Años a importar
@@ -838,6 +891,34 @@ npprDS_victimas_agrupados_list <- lapply(as.character(years), function(sheet_nam
 })
 
 npprDS_victimas_agrupados <- npprDS_victimas_agrupados_list %>%
+  reduce(full_join) %>%
+  rename(
+    Edad = `Grupos de Edad`
+  ) %>%
+  pivot_longer(
+    !c(Edad, Año), names_to = "Sexo", values_to = "Casos"
+  ) %>%
+  mutate(
+    Edad = factor(Edad, levels = unique(Edad)),
+    Año = factor(Año),
+    Sexo = factor(Sexo)
+  ) %>%
+  replace_na(list(Casos = 0)) %>%
+  select(
+    Año, Edad, Sexo, Casos
+  )
+
+#### npprDS_victimas_agrupados ####
+# Años a importar
+years <- 2019:2024
+
+# Leer y limpiar los datos por hoja
+npprDS_ofensores_agrupados_list <- lapply(as.character(years), function(sheet_name) {
+  read_excel(paste0(poli, "npprDS_ofensores_agrupados.xlsx"), sheet = sheet_name) %>%
+    cleanSheet_npprDS(sheet_name)
+})
+
+npprDS_ofensores_agrupados <- npprDS_ofensores_agrupados_list %>%
   reduce(full_join) %>%
   rename(
     Edad = `Grupos de Edad`

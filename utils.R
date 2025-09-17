@@ -1512,6 +1512,71 @@ renderMap <- function(data, value_col, value_col_region, map_zoom, provider = pr
     )
 }
 
+#### renderMap_npprDS ####
+
+renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
+                             provider = providers$CartoDB.Positron,
+                             municipios_geo) {
+  # Verificar que hay datos disponibles
+  if (nrow(data) == 0 || !value_col %in% colnames(data)) {
+    return(leaflet() %>% addTiles())
+  }
+  
+  # Obtener valores de la columna dinámica
+  values <- data[[value_col]]
+  regiones <- data[[value_col_region]]
+  
+  # Calcular límites
+  min_val <- 0
+  max_val <- max(values, na.rm = TRUE)
+  
+  # Usar pretty() para cortes más "naturales"
+  bins <- pretty(c(min_val, max_val), n = 7)  # <-- n = número de cortes
+  
+  violet_colors <- c(
+    "#f9f5ff", "#f4e3ff", "#edd0ff", "#e2b3ff",
+    "#d89aff", "#cc80ff", "#bf66ff", "#a64dff",
+    "#8c33ff", "#701aff", "#5900f2", "#4400cc",
+    "#3000a6", "#1d007d", "#0d004c"
+  )
+  
+  num_bins <- length(bins) - 1
+  colors <- violet_colors[seq_len(num_bins)]
+  
+  pal <- colorBin(colors, domain = values, bins = bins, na.color = "transparent")
+  
+  leaflet(data) %>%
+    setView(lng = -66.5, lat = 18.2, zoom = map_zoom) %>%
+    addProviderTiles(provider) %>%
+    addPolygons(
+      fillColor = ~pal(values),
+      weight = 1,
+      opacity = 1,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      label = ~paste0(
+        value_col_region, ": ", regiones, "<br>",
+        value_col, ": ", values
+      ) %>% lapply(htmltools::HTML),
+      highlightOptions = highlightOptions(
+        weight = 1,
+        color = "#666",
+        dashArray = "",
+        fillOpacity = 0.9,
+        bringToFront = TRUE
+      )
+    ) %>%
+    addLegend(
+      pal = pal,
+      values = ~values,
+      opacity = 0.7,
+      title = value_col,
+      position = "bottomright",
+      labFormat = labelFormat(digits = 0)
+    )
+}
+
 #### renderMap_vivienda ####
 
 renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,

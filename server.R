@@ -1896,10 +1896,132 @@ server <- function(input, output, session) {
     }
   })
   
+  
+  #### Tab con datos de victimas y agresores de delitos sexuales por region (npprDS_region) ####
+  
+  mapa_npprDS_region_filt <- reactive({
+    filter(mapa_npprDS_region,
+           # Visualizacion %in% input$select_avp_mapaAvp_visualizacion,
+           Año %in% input$select_mapa_npprDS_region_año)
+  })
+  
+  mapa_npprDS_victimas_mujeres_filt <- reactive({
+    filter(mapa_npprDS_victimas_mujeres, 
+           Año %in% input$select_mapa_npprDS_region_año)
+  })
+  
+  mapa_npprDS_victimas_hombres_filt <- reactive({
+    filter(mapa_npprDS_victimas_hombres, 
+           Año %in% input$select_mapa_npprDS_region_año)
+  })
+  
+  mapa_npprDS_ofensores_mujeres_filt <- reactive({
+    filter(mapa_npprDS_ofensores_mujeres, 
+           Año %in% input$select_mapa_npprDS_region_año)
+  })
+  
+  mapa_npprDS_ofensores_hombres_filt <- reactive({
+    filter(mapa_npprDS_ofensores_hombres, 
+           Año %in% input$select_mapa_npprDS_region_año)
+  })
+  
+  
+  output$map_npprDS_victimas_mujeres<- renderLeaflet({
+    data <- mapa_npprDS_victimas_mujeres_filt()
+    renderMap_npprDS(data,
+                       value_col = "Casos",
+                       value_col_region = "Región",
+                       map_zoom = 8,
+                       provider = providers$CartoDB.Positron,
+                       municipios_geo = municipios_geo_asig)
+  })
+  
+  
+  output$map_npprDS_victimas_hombres <- renderLeaflet({
+    data <- mapa_npprDS_victimas_hombres_filt()
+    renderMap_npprDS(data,
+                       value_col = "Casos",
+                       value_col_region = "Región",
+                       map_zoom = 8,
+                       provider = providers$CartoDB.Positron,
+                       municipios_geo = municipios_geo_sol)
+  })
+  
+  output$map_npprDS_ofensores_mujeres<- renderLeaflet({
+    data <- mapa_npprDS_ofensores_mujeres_filt()
+    renderMap_npprDS(data,
+                       value_col = "Casos",
+                       value_col_region = "Región",
+                       map_zoom = 8,
+                       provider = providers$CartoDB.Positron,
+                       municipios_geo = municipios_geo_asig)
+  })
+  
+  
+  output$map_npprDS_ofensores_hombres <- renderLeaflet({
+    data <- mapa_npprDS_ofensores_hombres_filt()
+    renderMap_npprDS  (data,
+                       value_col = "Casos",
+                       value_col_region = "Región",
+                       map_zoom = 8,
+                       provider = providers$CartoDB.Positron,
+                       municipios_geo = municipios_geo_sol)
+  })
+  
+  
+  
+  #Titulo de la Grafica
+  output$plot_title_npprDS_region <- renderUI({
+    title <- paste0("Total de casos de delitos sexuales \npor región en el año ", input$select_mapa_npprDS_region_año)
+  })
+  
+  
+  mapa_npprDS_region_filt_rename <- reactive({
+      st_drop_geometry(mapa_npprDS_region_filt())%>% 
+      rename(`Región Policiaca` = Región)
+  })
+  
+  # Data Table para la gráfica de barras de dfAvp
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_npprDS_region <- renderDT(server = FALSE, { 
+    renderDataTable(mapa_npprDS_region_filt_rename(), "Datos: Total de casos de delitos sexuales")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_npprDS_region <- renderUI({
+    if (input$showTable_npprDS_region) {
+      hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
+      texts <- c("Negociado de la Policía de Puerto Rico")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
+            DTOutput("dataTable_npprDS_region")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
   #### Tab con datos de victimas y agresores de delitos sexuales por sexo (npprDS_victimas_agrupados) ####
   # Filtrar el conjunto de datos según los valores seleccionados del el grupo de edad y año 
   npprDS_victimas_agrupados_filt <- reactive({
     filter(npprDS_victimas_agrupados,
+           Edad %in% input$checkGroup_npprDS_victimas_agrupados_edad,
+           Año %in% input$checkGroup_npprDS_victimas_agrupados_año,
+           Sexo %in% input$checkGroup_npprDS_victimas_agrupados_sexo)
+  })
+  
+  npprDS_ofensores_agrupados_filt <- reactive({
+    filter(npprDS_ofensores_agrupados,
            Edad %in% input$checkGroup_npprDS_victimas_agrupados_edad,
            Año %in% input$checkGroup_npprDS_victimas_agrupados_año,
            Sexo %in% input$checkGroup_npprDS_victimas_agrupados_sexo)
@@ -1967,10 +2089,10 @@ server <- function(input, output, session) {
     )
   })
   
-  
+  npprDS_victimas_agrupados_fill <- setColorFill(npprDS_victimas_agrupados, "Edad")
   
   # Grafico de linea
-  output$linePlot_npprDS_victimas_agrupados <- renderPlotly({
+  output$barPlot_npprDS_victimas_agrupados <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
     # Verificar si hay opciones seleccionadas en cada grupo
     has_edad <- length(input$checkGroup_npprDS_victimas_agrupados_edad) > 0
@@ -1982,11 +2104,25 @@ server <- function(input, output, session) {
       message <- "Seleccione Grupo(s) de Edad, Sexo y Año(s) que desea visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderLinePlot_poli(data = npprDS_victimas_agrupados_filt, x = "Año", y = "Casos", group = "Edad",
-                          color = "Edad", title = "",
-                          xlab = "Año", ylab = "Número de Casos",
-                          emptyMessage = "Seleccione Grupo(s) de Edad, Sexo y Año(s) que desea visualizar")
+      # p <- renderLinePlot_poli(data = npprDS_victimas_agrupados_filt, x = "Año", y = "Casos", group = "Edad",
+      #                     color = "Edad", title = "",
+      #                     xlab = "Año", ylab = "Número de Casos",
+      #                     emptyMessage = "Seleccione Grupo(s) de Edad, Sexo y Año(s) que desea visualizar")
+      # 
+      # #Altura predeterminada para la grafica.
+      # plot_height = 500
+      # numPlots = length(input$checkGroup_npprDS_victimas_agrupados_sexo)
+      # #Altura predeterminada para la grafica.
+      # total_height = plotHeight(plot_height, numPlots)
+      # p <- p + facet_wrap(~Sexo, ncol = 2)+
+      #   theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+      #         panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
+      # p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
+      p <- renderBarPlot_facets(npprDS_victimas_agrupados_filt, x = "Año", y = "Casos", fill = "Edad",
+                                xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Edad",
+                                colorFill = npprDS_victimas_agrupados_fill,
+                                emptyMessage = HTML("Seleccione Grupo(s) de Edad, Sexo y Año(s) que desea visualizar"),barWidth = 0, xGap = 0)
       #Altura predeterminada para la grafica.
       plot_height = 500
       numPlots = length(input$checkGroup_npprDS_victimas_agrupados_sexo)
@@ -1996,7 +2132,7 @@ server <- function(input, output, session) {
         theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
       p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
-      
+
       return(p)
     }
 
@@ -2009,9 +2145,66 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title_npprDS_victimas_agrupados <- renderUI({
-    title <- "Total de casos de delitos sexuales por sexo de las victimas y categoría de edad"
+    title <- "Total de casos de delitos sexuales por sexo de las VICTIMAS y categoría de edad"
   })
   
+  
+  # Grafico de linea
+  output$barPlot_npprDS_ofensores_agrupados <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_edad <- length(input$checkGroup_npprDS_victimas_agrupados_edad) > 0
+    has_año <- length(input$checkGroup_npprDS_victimas_agrupados_año) > 0
+    has_sexo <- length(input$checkGroup_npprDS_victimas_agrupados_sexo) > 0
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_edad || !has_año || !has_sexo) {
+      message <- "Seleccione Grupo(s) de Edad, Sexo y Año(s) que desea visualizar"
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      # p <- renderLinePlot_poli(data = npprDS_victimas_agrupados_filt, x = "Año", y = "Casos", group = "Edad",
+      #                     color = "Edad", title = "",
+      #                     xlab = "Año", ylab = "Número de Casos",
+      #                     emptyMessage = "Seleccione Grupo(s) de Edad, Sexo y Año(s) que desea visualizar")
+      # 
+      # #Altura predeterminada para la grafica.
+      # plot_height = 500
+      # numPlots = length(input$checkGroup_npprDS_victimas_agrupados_sexo)
+      # #Altura predeterminada para la grafica.
+      # total_height = plotHeight(plot_height, numPlots)
+      # p <- p + facet_wrap(~Sexo, ncol = 2)+
+      #   theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+      #         panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
+      # p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      
+      p <- renderBarPlot_facets(npprDS_ofensores_agrupados_filt, x = "Año", y = "Casos", fill = "Edad",
+                                xlab = "Año", ylab = "Cantidad de ofensores", fillLab = "Edad",
+                                colorFill = npprDS_victimas_agrupados_fill,
+                                emptyMessage = HTML("Seleccione Grupo(s) de Edad, Sexo y Año(s) que desea visualizar"),barWidth = 0, xGap = 0)
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      numPlots = length(input$checkGroup_npprDS_victimas_agrupados_sexo)
+      #Altura predeterminada para la grafica.
+      total_height = plotHeight(plot_height, numPlots)
+      p <- p + facet_wrap(~Sexo, ncol = 2)+
+        theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      
+      return(p)
+    }
+    
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(data = npprDS_ofensores_agrupados_filt, x = "Año", y = "Casos", fill = " ",
+                                                 xlab = "Año", ylab = "Número de Casos", message)
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  
+  #Titulo de la Grafica
+  output$plot_title_npprDS_ofensores_agrupados <- renderUI({
+    title <- "Total de casos de delitos sexuales por sexo de las OFENSORES y categoría de edad"
+  })
   
   # Data Table 
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
