@@ -1247,14 +1247,14 @@ ui <-
                            div(id = "plot-title", uiOutput("plot_title_npprDS_victimas_agrupados")),
                            plotlyOutput("barPlot_npprDS_victimas_agrupados"),  height = "100%"))
               ),
-              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(style = "padding-bottom: 60px;"),
               fluidRow(
                 column(12, 
                        div(id = "plot-container", 
                            div(id = "plot-title", uiOutput("plot_title_npprDS_ofensores_agrupados")),
                            plotlyOutput("barPlot_npprDS_ofensores_agrupados"),  height = "100%"))
               ),
-              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(style = "padding-bottom: 80px;"),
               tags$div(
                 style = "padding-bottom: 10px;",
                 div(
