@@ -3315,6 +3315,13 @@ ui <-
             ),
             
             authorTag(
+              nombre = 'Orlando Hernández',
+              email = 'orlando.hernandez@estadisticas.pr',
+              puesto = 'Asistente de Proyectos Estadísticos',
+              grados = 'BBA Contabilidad y Estadísticas, Universidad de Puerto Rico Rio Piedras'
+            ),
+            
+            authorTag(
               nombre = 'Aisha M. Cruz De Jesús',
               email = 'aisha.cruz@estadisticas.pr',
               puesto = 'Programadora Estadística',
