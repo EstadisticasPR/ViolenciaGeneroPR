@@ -2995,7 +2995,7 @@ ui <-
     tabsetPanel(
       
       tabPanel(
-        lowercaseTitle("Tendencia de SAFE Kits por estatus"), 
+        lowercaseTitle("Tendencia de Rape Kits por estatus"), 
         br(), br(),
           sidebarLayout(
             sidebarPanel(
@@ -3063,7 +3063,7 @@ ui <-
                 p(
                   "Los datos representados en esta gráfica corresponden a la
                   tendencia del equipo de recolecta de evidencia de los
-                  SAFE Kits en casos de violencia sexual, según el estado de querella,
+                  Rape Kits en casos de violencia sexual, según el estado de querella,
                   desde el año 2019 al 2024.",
                   
                   style = "font-size: 16px;padding: 0px;" 
@@ -3076,7 +3076,7 @@ ui <-
       
       #### tab con datos de Tendencia Anual de SAFE Kits por Estado de Querella (Edades) ####
       tabPanel(
-        lowercaseTitle("Tendencia de SAFE Kits por categoría de edad"), 
+        lowercaseTitle("Tendencia de Rape Kits por categoría de edad"), 
         br(), br(),
         sidebarLayout(
           sidebarPanel(
@@ -3144,7 +3144,7 @@ ui <-
                 p(
                   "Los datos representados en esta gráfica corresponden a la
                   tendencia del equipo de recolecta de evidencia de los
-                  SAFE Kits en casos de violencia sexual para aquellos casos con querellas
+                  Rape Kits en casos de violencia sexual para aquellos casos con querellas
                   segun la clasificacion del individuo (menor de edad o mayor de edad)
                   desde el año 2019 al 2024.",
                   

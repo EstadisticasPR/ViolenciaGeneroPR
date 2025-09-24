@@ -318,6 +318,10 @@ server <- function(input, output, session) {
   
   
   
+  
+  
+  
+  
   ###########################################################
   ########## Server del Departamento de la Familia ##########
   ###########################################################
@@ -539,7 +543,11 @@ server <- function(input, output, session) {
   
   
   
-  #########################################################
+ 
+  
+  
+  
+   #########################################################
   ########## Server del Departamento de Justicia ##########
   #########################################################
   #### Tab de Delitos (dfDeli) ####
@@ -883,6 +891,10 @@ server <- function(input, output, session) {
   # output$dataTable_trab_parLab <- renderDT({
   #   renderDataTable(parLab_filt())
   # })
+  
+  
+  
+  
   
   
   
@@ -5301,7 +5313,6 @@ server <- function(input, output, session) {
     
   
   
-  
   #### Codigo Muerto en Administracion de Tribunales ####
   # #### tab con datos de Ley 148 - Violencia Sexual por grupo de edad (OP_148_SoliGrupEdad regiones) ####
   # 
@@ -6082,6 +6093,10 @@ server <- function(input, output, session) {
 
   
   
+  
+  
+  
+  
   #####################################################################
   ########## Tab del Centro de Ayuda a Víctimas de Violación ##########
   #####################################################################
@@ -6176,7 +6191,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title_safekitsDF <- renderUI({
-    title <- HTML("Tendencia anual de <i>SAFE Kits</i> por estado de querella")
+    title <- HTML("Tendencia anual de <i>Rape Kits</i> por estado de querella")
   })
  
   safekitsDF_filt_rename <- reactive({
@@ -6189,7 +6204,7 @@ server <- function(input, output, session) {
   # Data Table
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_safekitsDF <- renderDT(server = FALSE, {
-    renderDataTable(safekitsDF_filt_rename(), "Datos: Tendencia anual del equipo de recolecta de evidencia de SAFE Kits en casos de violencia sexual")
+    renderDataTable(safekitsDF_filt_rename(), "Datos: Tendencia anual del equipo de recolecta de evidencia de Rape Kits en casos de violencia sexual")
   })
   
   # Crear Card con Fuentes
@@ -6307,7 +6322,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title_safekitsDF_edades <- renderUI({
-    title <- HTML("Tendencia anual de <i>SAFE Kits</i> con querella en menores y mayores de edad")
+    title <- HTML("Tendencia anual de <i>Rape Kits</i> con querella en menores y mayores de edad")
   })
   
   safekitsDF_edades_filt_rename <- reactive({
@@ -6319,7 +6334,7 @@ server <- function(input, output, session) {
   # Data Table
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_safekitsDF_edades <- renderDT(server = FALSE, {
-    renderDataTable(safekitsDF_edades_filt_rename(), "Datos: Tendencia anual del equipo de recolecta de evidencia de SAFE Kits en casos de violencia sexual")
+    renderDataTable(safekitsDF_edades_filt_rename(), "Datos: Tendencia anual del equipo de recolecta de evidencia de Rape Kits en casos de violencia sexual")
   })
   
   # Crear Card con Fuentes
@@ -6502,6 +6517,10 @@ server <- function(input, output, session) {
   output$dataTable_Def_cavv <- renderDT({
     renderDataTable_Definitions(definitions_df_cavv, "Centro de Ayuda a Víctimas de Violación")
   })
+  
+  
+  
+  
   
   
   #########################################
