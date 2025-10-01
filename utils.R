@@ -1821,6 +1821,80 @@ definitionCards <- function(definitions) {
   do.call(tagList, card_list)
 }
 
+#### publicationCardPDF ####
+# publicationCardPDF <- function(id, title, pdf_file, height = "300px") {
+#   ns <- NS(id)
+#   div(
+#     class = "card shadow-sm p-3 mb-4 bg-white rounded",
+#     tags$h4(title),
+#     tags$iframe(
+#       src = pdf_file,
+#       width = "100%", height = height, style = "border:none;"
+#     ),
+#     br(),
+#     downloadButton(ns("download_pdf"), "Descargar PDF")
+#   )
+# }
+
+publicationCardPDF <- function(id, title, pdf_file, height = "300px") {
+  
+  # Ruta de la imagen preview (misma carpeta que www/)
+  preview_file <- sub("\\.pdf$", "_preview.png", pdf_file)
+  
+  # Generar imagen preview si no existe
+  if (!file.exists(file.path("www", preview_file))) {
+    pdf_convert(
+      pdf = file.path("www", pdf_file),  # aquí va pdf=...
+      format = "png",
+      pages = 1,
+      filenames = file.path("www", preview_file)
+    )
+  }
+  
+  ns <- NS(id)
+  
+  div(
+    class = "card shadow-sm p-3 mb-4 bg-white rounded",
+    tags$h4(title),
+    # Mostrar la primera página como imagen
+    tags$img(src = preview_file, width = "100%", height = height, style = "object-fit: contain;"),
+    br(),
+    downloadButton(ns("download_pdf"), "Descargar PDF")
+  )
+}
+
+#### publicationCardPDFServer ####
+publicationCardPDFServer <- function(id, pdf_file) {
+  moduleServer(id, function(input, output, session) {
+    output$download_pdf <- downloadHandler(
+      filename = function() { basename(pdf_file) },
+      content = function(file) {
+        file.copy(file.path("www", pdf_file), file)
+      }
+    )
+  })
+}
+
+
+
+#### publicationCardWeb ####
+publicationCardWeb <- function(title, url, height = "300px") {
+  div(
+    class = "card shadow-sm p-3 mb-4 bg-white rounded",
+    tags$h4(title),
+    tags$iframe(
+      src = url,
+      width = "100%", height = height, style = "border:none;"
+    ),
+    br(),
+    tags$a(
+      href = url, target = "_blank",
+      class = "btn btn-primary",
+      "Leer más"
+    )
+  )
+}
+
 #### setColorFill ####
 setColorFill <- function(df, variable) {
   # Obtener los niveles únicos de la variable

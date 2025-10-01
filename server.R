@@ -313,9 +313,11 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_snmv, "Sistema de Notificación de Muertes Violentas")
   })
   
-  
-  
-  
+  #### Tab de Publicaciones ####
+  # PDF 1
+  publicationCardPDFServer("pdf1", "snmv/reporte2023.pdf")
+  # PDF 2
+  publicationCardPDFServer("pdf2", "snmv/reporte2022.pdf")
   
   
   

@@ -22,6 +22,7 @@ library(ggplot2)
 library(leaflet)
 library(grDevices)
 library(htmlwidgets)
+library(pdftools)
 library(htmltools)
 source("utils.R")
 
@@ -1089,12 +1090,19 @@ inciMapa <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
 opm <- here::here("data", "Oficina_de_procuradora_de_mujeres", "/")
 
 #### opmFemiVD ####
-opmFemiVD <- read_excel(paste0(opm, "opmFemiVD.xlsx")) %>%
+opmFemiVD <- read_excel(paste0(opm, "opmTasas.xlsx")) %>%
   mutate(Año = factor(Año)) %>%
+  mutate(
+    Año = factor(Año),
+    Tasa = round(`Tasa_IE`, 2)   # Redondear a 2 decimales
+  ) %>%
   rename(
-    Asesinatos = `Cantidad de asesinatos`,
-    Tasa = `Tasa (x100,000 mujeres)`
-  ) 
+    Asesinatos = `Asesinatos`
+  ) %>%
+  select(Año, Asesinatos, Tasa)%>%
+  relocate(
+    Año, Asesinatos, Tasa
+  )
 
 
 #### opmAgresores ####
@@ -1611,10 +1619,10 @@ safekitsDF_analizados <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
 ##### Actualizaciones de los Datos #####
 ##################################################################################
 # Fecha actualizacion de los datos de SNMV tab1
-actualizacion_snmv1 <- "Última actualización: 30 de abril de 2025"
+actualizacion_snmv1 <- "Última actualización: 1 de octubre de 2025"
 
 # Fecha actualizacion de los datos de SNMV tab2
-actualizacion_snmv2 <- "Última actualización: 30 de abril de 2025"
+actualizacion_snmv2 <- "Última actualización: 1 de octubre de 2025"
 
 # Fecha actualizacion familia
 actualizacion_familia <- "Última actualización: 31 de diciembre de 2023"

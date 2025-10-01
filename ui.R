@@ -143,7 +143,8 @@ ui <-
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a los 
-                    homicidios de mujeres por grupo de edad desde el año natural 2017 al 2023.",
+                    homicidios de mujeres por grupo de edad desde el año natural 2017 al 2024.
+                    Los datos del año 2023 y 2024 son preliminares.",
                     
                     style = "font-size: 16px; padding: 0px;" 
                   )
@@ -225,7 +226,8 @@ ui <-
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden a la cantidad de 
-                    incidentes violentos (según su tipo) desde el año natural 2017 al 2023.",
+                    incidentes violentos (según su tipo) desde el año natural 2017 al 2024.
+                    Los datos del año 2023 y 2024 son preliminares.",
                     
                     style = "font-size: 16px; padding: 0px;" 
                   )
@@ -235,6 +237,25 @@ ui <-
           ),
         ), 
         
+        #### tab de Publicaciones ####
+        # tabPanel(
+        #   lowercaseTitle("Publicaciones"),
+        #   br(), br(),
+        #   tags$ul(
+        #     style = "list-style-type: none; text-align: center;",
+        #     sectionTitle("Publicaciones y Recursos", "24px")
+        #   ),
+        # 
+        #   fluidRow(
+        #     column(6, publicationCardPDF("pdf1", "Reporte 2023", "snmv/reporte2023.pdf")),
+        #     column(6, publicationCardWeb("Artículo en línea", "https://rpubs.com/"))
+        #   ),
+        # 
+        #   fluidRow(
+        #     column(6, publicationCardPDF("pdf2", "Reporte Estadístico 2022", "snmv/reporte2022.pdf")),
+        #     column(6, publicationCardWeb("Blog de Investigación", "https://shiny.rstudio.com/"))
+        #   )
+        # ),
      
         #### tab de Definiciones y Metadatos ####
         tabPanel(
@@ -248,8 +269,9 @@ ui <-
         )
       )
     ),
+
     
-    
+
     
     
     #### Tab del Departamento de la Familia ####
