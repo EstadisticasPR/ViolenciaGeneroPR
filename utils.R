@@ -1822,19 +1822,7 @@ definitionCards <- function(definitions) {
 }
 
 #### publicationCardPDF ####
-# publicationCardPDF <- function(id, title, pdf_file, height = "300px") {
-#   ns <- NS(id)
-#   div(
-#     class = "card shadow-sm p-3 mb-4 bg-white rounded",
-#     tags$h4(title),
-#     tags$iframe(
-#       src = pdf_file,
-#       width = "100%", height = height, style = "border:none;"
-#     ),
-#     br(),
-#     downloadButton(ns("download_pdf"), "Descargar PDF")
-#   )
-# }
+
 
 publicationCardPDF <- function(id, title, pdf_file, height = "300px") {
   

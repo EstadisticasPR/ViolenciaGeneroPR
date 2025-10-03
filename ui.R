@@ -241,21 +241,33 @@ ui <-
         # tabPanel(
         #   lowercaseTitle("Publicaciones"),
         #   br(), br(),
-        #   tags$ul(
-        #     style = "list-style-type: none; text-align: center;",
-        #     sectionTitle("Publicaciones y Recursos", "24px")
-        #   ),
         # 
-        #   fluidRow(
-        #     column(6, publicationCardPDF("pdf1", "Reporte 2023", "snmv/reporte2023.pdf")),
-        #     column(6, publicationCardWeb("Artículo en línea", "https://rpubs.com/"))
-        #   ),
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
         # 
-        #   fluidRow(
-        #     column(6, publicationCardPDF("pdf2", "Reporte Estadístico 2022", "snmv/reporte2022.pdf")),
-        #     column(6, publicationCardWeb("Blog de Investigación", "https://shiny.rstudio.com/"))
+        #       # Radio buttons
+        #       div(
+        #         style = "width: 100%; margin-bottom: 20px;",
+        #         h4("Seleccione el tipo de contenido:"),
+        #         radioButtons(
+        #           inputId = "snmv_view_option",
+        #           label = NULL,
+        #           choices = c("Publicaciones", "Dashboard de la Agencia"),
+        #           selected = "Publicaciones",
+        #           inline = FALSE
+        #         )
+        #       )
+        #     ),
+        # 
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       uiOutput("snmv_view_content")
+        #     )
         #   )
         # ),
+
+        
      
         #### tab de Definiciones y Metadatos ####
         tabPanel(
@@ -3258,6 +3270,35 @@ ui <-
         )
       ),
       #### tab de Publicaciones del CAVV ####
+      tabPanel(
+        lowercaseTitle("Publicaciones"),
+        br(), br(),
+        
+        sidebarLayout(
+          sidebarPanel(
+            style = "display: flex; flex-direction: column; align-items: center;",
+            
+            # Radio buttons
+            div(
+              style = "width: 100%; margin-bottom: 20px;",
+              h4("Seleccione el tipo de contenido:"),
+              radioButtons(
+                inputId = "snmv_view_option",
+                label = NULL,
+                choices = c("Publicaciones", "Dashboard de la Agencia"),
+                selected = "Publicaciones",
+                inline = FALSE
+              )
+            )
+          ),
+          
+          mainPanel(
+            style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+            uiOutput("snmv_view_content")
+          )
+        )
+      ),
+      
       # tabPanel(
       #   lowercaseTitle("Publicaciones"),
       #   br(),

@@ -313,16 +313,6 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_snmv, "Sistema de Notificación de Muertes Violentas")
   })
   
-  #### Tab de Publicaciones ####
-  # PDF 1
-  publicationCardPDFServer("pdf1", "snmv/reporte2023.pdf")
-  # PDF 2
-  publicationCardPDFServer("pdf2", "snmv/reporte2022.pdf")
-  
-  
-  
-  
-  
   
   ###########################################################
   ########## Server del Departamento de la Familia ##########
@@ -6484,6 +6474,38 @@ server <- function(input, output, session) {
       )
     }
   })
+  
+  #### Tab de Publicaciones ####
+  # # PDF 1
+  # publicationCardPDFServer("pdf1", "snmv/reporte2023.pdf")
+  # # PDF 2
+  # publicationCardPDFServer("pdf2", "snmv/reporte2022.pdf")
+  # 
+  output$snmv_view_content <- renderUI({
+    if (input$snmv_view_option == "Publicaciones") {
+      # tagList(
+      #   tags$ul(
+      #     style = "list-style-type: none; text-align: center;",
+      #     sectionTitle("Publicaciones y Recursos", "24px")
+      #   ),
+      #   fluidRow(
+      #     column(12, publicationCardPDF("pdf1", "Reporte 2023", "snmv/reporte2023.pdf"))
+      #   ),
+      #   fluidRow(
+      #     column(12, publicationCardPDF("pdf2", "Reporte Estadístico 2022", "snmv/reporte2022.pdf"))
+      #   )
+      # )
+    } else {
+      # Dashboard de la Agencia (embed link)
+      tags$div(
+        fluidRow(
+          column(12, publicationCardWeb("Dashboard de la Agencia:", "http://safekits.pr.gov/?fbclid=IwAR3ooo0EgJS_8MEVB3Z5IettOyplWfi3sYQU18AZlC5yieAIMhIYOuHjHZs"))
+        )
+      )
+    }
+  })
+  
+  
   
   #### Tab de Definiciones ####
   definitions_cavv <- list(
