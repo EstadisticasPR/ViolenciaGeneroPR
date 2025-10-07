@@ -1866,19 +1866,32 @@ publicationCardPDFServer <- function(id, pdf_file) {
 
 
 #### publicationCardWeb ####
-publicationCardWeb <- function(title, url, height = "300px") {
+publicationCardWeb <- function(title, url, height = "500px") {
+  safe_id <- gsub("[^a-zA-Z0-9]", "_", title)
+  
   div(
     class = "card shadow-sm p-3 mb-4 bg-white rounded",
-    tags$h4(title),
+    style = "text-align: center;",
+    
+    tags$h4(title, style = "margin-bottom: 15px;"),
+    
+    # iframe con sandbox para evitar abrir nuevas pestañas
     tags$iframe(
       src = url,
-      width = "100%", height = height, style = "border:none;"
+      width = "100%",
+      height = height,
+      style = "border:none; border-radius: 8px;",
+      sandbox = "allow-scripts allow-same-origin allow-forms"  
     ),
+    
     br(),
+    
+    # botón externo por si el usuario quiere abrir la página completa
     tags$a(
-      href = url, target = "_blank",
+      href = url,
+      target = "_blank",
       class = "btn btn-primary",
-      "Leer más"
+      "Ir a la página"
     )
   )
 }

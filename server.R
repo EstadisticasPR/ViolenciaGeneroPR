@@ -2649,6 +2649,39 @@ server <- function(input, output, session) {
   })
   
 
+  #### Tab de Publicaciones ####
+  # # PDF 1
+  # publicationCardPDFServer("cavv_pdf1", "cavv/boletinVS2023.pdf")
+  # # PDF 2
+  # publicationCardPDFServer("pdf2", "snmv/reporte2022.pdf")
+  # 
+  output$poli_view_content <- renderUI({
+    if (input$snmv_view_option == "Publicaciones") {
+      tagList(
+        tags$ul(
+          style = "list-style-type: none; text-align: center;",
+          sectionTitle("Publicaciones y Recursos", "24px")
+        )
+        # ,
+        # fluidRow(
+        #   column(12, publicationCardPDF("cavv_pdf1", "Boletín Estadístico de Violencia Sexual, Año 2023", "cavv/boletinVS2023.pdf"))
+        # )
+        # ,
+        # fluidRow(
+        #   column(12, publicationCardPDF("pdf2", "Reporte Estadístico 2022", "snmv/reporte2022.pdf"))
+        # )
+      )
+    } else {
+      # Dashboard de la Agencia (embed link)
+      tags$div(
+        fluidRow(
+          column(12, publicationCardWeb("Dashboard de la Agencia:", 
+                                        "https://app.powerbigov.us/view?r=eyJrIjoiN2M3NTdiZTQtNTgyZS00NGMyLTgxYjAtZWQ4ZTE5NmMwNDJmIiwidCI6ImUwYzIyNzAyLTA5MmYtNGRhYi1hNTkyLWZhYjUyZGRlNGMxZiJ9"))
+        )
+      )
+    }
+  })
+  
   #### Tab de Definiciones ####
   definitions_poli <- list(
     list(word = "Adultas Desaparecidas", definition = "Mujeres adultas cuya ubicación y paradero son desconocidos y no pueden 
@@ -6476,30 +6509,32 @@ server <- function(input, output, session) {
   })
   
   #### Tab de Publicaciones ####
-  # # PDF 1
-  # publicationCardPDFServer("pdf1", "snmv/reporte2023.pdf")
+  # PDF 1
+  publicationCardPDFServer("cavv_pdf1", "cavv/boletinVS2023.pdf")
   # # PDF 2
   # publicationCardPDFServer("pdf2", "snmv/reporte2022.pdf")
   # 
-  output$snmv_view_content <- renderUI({
+  output$cavv_view_content <- renderUI({
     if (input$snmv_view_option == "Publicaciones") {
-      # tagList(
-      #   tags$ul(
-      #     style = "list-style-type: none; text-align: center;",
-      #     sectionTitle("Publicaciones y Recursos", "24px")
-      #   ),
-      #   fluidRow(
-      #     column(12, publicationCardPDF("pdf1", "Reporte 2023", "snmv/reporte2023.pdf"))
-      #   ),
-      #   fluidRow(
-      #     column(12, publicationCardPDF("pdf2", "Reporte Estadístico 2022", "snmv/reporte2022.pdf"))
-      #   )
-      # )
+      tagList(
+        tags$ul(
+          style = "list-style-type: none; text-align: center;",
+          sectionTitle("Publicaciones y Recursos", "24px")
+        ),
+        fluidRow(
+          column(12, publicationCardPDF("cavv_pdf1", "Boletín Estadístico de Violencia Sexual, Año 2023", "cavv/boletinVS2023.pdf"))
+        )
+        # ,
+        # fluidRow(
+        #   column(12, publicationCardPDF("pdf2", "Reporte Estadístico 2022", "snmv/reporte2022.pdf"))
+        # )
+      )
     } else {
       # Dashboard de la Agencia (embed link)
       tags$div(
         fluidRow(
-          column(12, publicationCardWeb("Dashboard de la Agencia:", "http://safekits.pr.gov/?fbclid=IwAR3ooo0EgJS_8MEVB3Z5IettOyplWfi3sYQU18AZlC5yieAIMhIYOuHjHZs"))
+          column(12, publicationCardWeb("Dashboard de la Agencia:", 
+                                        "https://safekits.pr.gov/?fbclid=IwAR3ooo0EgJS_8MEVB3Z5IettOyplWfi3sYQU18AZlC5yieAIMhIYOuHjHZs"))
         )
       )
     }

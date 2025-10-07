@@ -1593,6 +1593,35 @@ ui <-
         #   )
         # ), 
         
+        #### tab de Publicaciones del Negociado de la Policia ####
+        tabPanel(
+          lowercaseTitle("Publicaciones"),
+          br(), br(),
+          
+          sidebarLayout(
+            sidebarPanel(
+              style = "display: flex; flex-direction: column; align-items: center;",
+              
+              # Radio buttons
+              div(
+                style = "width: 100%; margin-bottom: 20px;",
+                h4("Seleccione el tipo de contenido:"),
+                radioButtons(
+                  inputId = "snmv_view_option",
+                  label = NULL,
+                  choices = c("Publicaciones", "Dashboard de la Agencia"),
+                  selected = "Publicaciones",
+                  inline = FALSE
+                )
+              )
+            ),
+            
+            mainPanel(
+              style = "height: 100%; padding-bottom: 10px;",
+              uiOutput("poli_view_content")
+            )
+          )
+        ),
         #### tab de Definiciones y Metadatos ####
         tabPanel(
           lowercaseTitle("Definiciones y Metadatos"),
@@ -3293,45 +3322,12 @@ ui <-
           ),
           
           mainPanel(
-            style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-            uiOutput("snmv_view_content")
+            style = "height: 100%; padding-bottom: 10px;",
+            uiOutput("cavv_view_content")
           )
         )
       ),
       
-      # tabPanel(
-      #   lowercaseTitle("Publicaciones"),
-      #   br(),
-      # 
-      #   #Panel para publicaciones
-      #   mainPanel(
-      #     fluidRow(
-      #       tags$div(
-      #         style = "padding: 20px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px;",
-      #         h4("⚠️ Esta sección está en desarrollo."),
-      #         p("Estamos trabajando en esta sección. Pronto estará disponible.")
-      #       )
-      #     ),
-      #     #Nota
-      #     fluidRow(
-      #       tags$div(
-      #         style = "padding-bottom: 10px; margin-top: 20px;",
-      #         div(
-      #           class = "card",
-      #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
-      #           h4(
-      #             strong("Última actualización: XX de XXXXXX de XXXXX", style="margin: 0px;")
-      #           ),
-      #           p(
-      #             "Las publicaciones presentadss...",
-      # 
-      #             style = "font-size: 16px;padding: 0px;"
-      #           )
-      #         )
-      #       )
-      #     )
-      #   ) #END of mainPanel()
-      # ),
       
        #### tab de Definiciones y Metadatos ####
       tabPanel(
