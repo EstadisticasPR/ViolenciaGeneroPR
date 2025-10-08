@@ -3312,7 +3312,7 @@ ui <-
               style = "width: 100%; margin-bottom: 20px;",
               h4("Seleccione el tipo de contenido:"),
               radioButtons(
-                inputId = "snmv_view_option",
+                inputId = "cavv_view_option",
                 label = NULL,
                 choices = c("Publicaciones", "Dashboard de la Agencia"),
                 selected = "Publicaciones",

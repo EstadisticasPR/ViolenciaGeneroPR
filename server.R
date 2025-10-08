@@ -6515,7 +6515,7 @@ server <- function(input, output, session) {
   # publicationCardPDFServer("pdf2", "snmv/reporte2022.pdf")
   # 
   output$cavv_view_content <- renderUI({
-    if (input$snmv_view_option == "Publicaciones") {
+    if (input$cavv_view_option == "Publicaciones") {
       tagList(
         tags$ul(
           style = "list-style-type: none; text-align: center;",
