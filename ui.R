@@ -237,15 +237,15 @@ ui <-
           ),
         ), 
         
-        #### tab de Publicaciones ####
+        #### tab de Publicaciones del SNMV ####
         # tabPanel(
         #   lowercaseTitle("Publicaciones"),
         #   br(), br(),
-        # 
+        #   
         #   sidebarLayout(
         #     sidebarPanel(
         #       style = "display: flex; flex-direction: column; align-items: center;",
-        # 
+        #       
         #       # Radio buttons
         #       div(
         #         style = "width: 100%; margin-bottom: 20px;",
@@ -259,15 +259,13 @@ ui <-
         #         )
         #       )
         #     ),
-        # 
+        #     
         #     mainPanel(
-        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       style = "height: 100%; padding-bottom: 10px;",
         #       uiOutput("snmv_view_content")
         #     )
         #   )
         # ),
-
-        
      
         #### tab de Definiciones y Metadatos ####
         tabPanel(
@@ -383,6 +381,35 @@ ui <-
           )
         ),
         
+        #### tab de Publicaciones del Departamento de la Familia ####
+        # tabPanel(
+        #   lowercaseTitle("Publicaciones"),
+        #   br(), br(),
+        #   
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # Radio buttons
+        #       div(
+        #         style = "width: 100%; margin-bottom: 20px;",
+        #         h4("Seleccione el tipo de contenido:"),
+        #         radioButtons(
+        #           inputId = "fam_view_option",
+        #           label = NULL,
+        #           choices = c("Publicaciones", "Dashboard de la Agencia"),
+        #           selected = "Publicaciones",
+        #           inline = FALSE
+        #         )
+        #       )
+        #     ),
+        #     
+        #     mainPanel(
+        #       style = "height: 100%; padding-bottom: 10px;",
+        #       uiOutput("fam_view_content")
+        #     )
+        #   )
+        # ),
         #### tab de Definiciones y Metadatos ####
         tabPanel(
           lowercaseTitle("Definiciones y Metadatos"),
@@ -547,6 +574,35 @@ ui <-
           )
         ), 
         
+        #### tab de Publicaciones del Departamento de Justicia ####
+        # tabPanel(
+        #   lowercaseTitle("Publicaciones"),
+        #   br(), br(),
+        #   
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # Radio buttons
+        #       div(
+        #         style = "width: 100%; margin-bottom: 20px;",
+        #         h4("Seleccione el tipo de contenido:"),
+        #         radioButtons(
+        #           inputId = "just_view_option",
+        #           label = NULL,
+        #           choices = c("Publicaciones", "Dashboard de la Agencia"),
+        #           selected = "Publicaciones",
+        #           inline = FALSE
+        #         )
+        #       )
+        #     ),
+        #     
+        #     mainPanel(
+        #       style = "height: 100%; padding-bottom: 10px;",
+        #       uiOutput("just_view_content")
+        #     )
+        #   )
+        # ),
         #### tab de Definiciones y Metadatos ####
         tabPanel(
           lowercaseTitle("Definiciones y Metadatos"),
@@ -795,6 +851,35 @@ ui <-
           )
         ), 
         
+        #### tab de Publicaciones del AVP ####
+        # tabPanel(
+        #   lowercaseTitle("Publicaciones"),
+        #   br(), br(),
+        #   
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # Radio buttons
+        #       div(
+        #         style = "width: 100%; margin-bottom: 20px;",
+        #         h4("Seleccione el tipo de contenido:"),
+        #         radioButtons(
+        #           inputId = "avp_view_option",
+        #           label = NULL,
+        #           choices = c("Publicaciones", "Dashboard de la Agencia"),
+        #           selected = "Publicaciones",
+        #           inline = FALSE
+        #         )
+        #       )
+        #     ),
+        #     
+        #     mainPanel(
+        #       style = "height: 100%; padding-bottom: 10px;",
+        #       uiOutput("avp_view_content")
+        #     )
+        #   )
+        # ),
         #### tab para el Definiciones y Metadatos ####
         tabPanel(
           lowercaseTitle("Definiciones y Metadatos"),
@@ -2126,6 +2211,35 @@ ui <-
           ),
         ),
         
+        #### tab de Publicaciones de la OPM ####
+        # tabPanel(
+        #   lowercaseTitle("Publicaciones"),
+        #   br(), br(),
+        #   
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # Radio buttons
+        #       div(
+        #         style = "width: 100%; margin-bottom: 20px;",
+        #         h4("Seleccione el tipo de contenido:"),
+        #         radioButtons(
+        #           inputId = "opm_view_option",
+        #           label = NULL,
+        #           choices = c("Publicaciones", "Dashboard de la Agencia"),
+        #           selected = "Publicaciones",
+        #           inline = FALSE
+        #         )
+        #       )
+        #     ),
+        #     
+        #     mainPanel(
+        #       style = "height: 100%; padding-bottom: 10px;",
+        #       uiOutput("opm_view_content")
+        #     )
+        #   )
+        # ),
         #### tab de Definiciones y Metadatos ####
         tabPanel(
           lowercaseTitle("Definiciones y Metadatos"),
@@ -2318,6 +2432,35 @@ ui <-
         )
       )
     ),
+    #### tab de Publicaciones del Departamento de Correccion ####
+    # tabPanel(
+    #   lowercaseTitle("Publicaciones"),
+    #   br(), br(),
+    #   
+    #   sidebarLayout(
+    #     sidebarPanel(
+    #       style = "display: flex; flex-direction: column; align-items: center;",
+    #       
+    #       # Radio buttons
+    #       div(
+    #         style = "width: 100%; margin-bottom: 20px;",
+    #         h4("Seleccione el tipo de contenido:"),
+    #         radioButtons(
+    #           inputId = "dcr_view_option",
+    #           label = NULL,
+    #           choices = c("Publicaciones", "Dashboard de la Agencia"),
+    #           selected = "Publicaciones",
+    #           inline = FALSE
+    #         )
+    #       )
+    #     ),
+    #     
+    #     mainPanel(
+    #       style = "height: 100%; padding-bottom: 10px;",
+    #       uiOutput("dcr_view_content")
+    #     )
+    #   )
+    # ),
         #### tab de Definiciones y Metadatos ####
     tabPanel(
       lowercaseTitle("Definiciones y Metadatos"),
@@ -3033,6 +3176,35 @@ ui <-
         # 
         
         
+        #### tab de Publicaciones del Departamento de Correccion ####
+        # tabPanel(
+        #   lowercaseTitle("Publicaciones"),
+        #   br(), br(),
+        #   
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # Radio buttons
+        #       div(
+        #         style = "width: 100%; margin-bottom: 20px;",
+        #         h4("Seleccione el tipo de contenido:"),
+        #         radioButtons(
+        #           inputId = "trib_view_option",
+        #           label = NULL,
+        #           choices = c("Publicaciones", "Dashboard de la Agencia"),
+        #           selected = "Publicaciones",
+        #           inline = FALSE
+        #         )
+        #       )
+        #     ),
+        #     
+        #     mainPanel(
+        #       style = "height: 100%; padding-bottom: 10px;",
+        #       uiOutput("trib_view_content")
+        #     )
+        #   )
+        # ),
         #### tab de Definiciones y Metadatos ####
         tabPanel(
           lowercaseTitle("Definiciones y Metadatos"),

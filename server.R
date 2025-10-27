@@ -257,6 +257,37 @@ server <- function(input, output, session) {
   })
   
   
+  #### Tab de Publicaciones ####
+  # PDF 1
+  # publicationCardPDFServer("snmv_pdf1", "snmv/boletinVS2023.pdf")
+  # # PDF 2
+  # publicationCardPDFServer("snmv_pdf2", "snmv/reporte2022.pdf")
+  # 
+  # output$snmv_view_content <- renderUI({
+  #   if (input$snmv_view_option == "Publicaciones") {
+  #     tagList(
+  #       tags$ul(
+  #         style = "list-style-type: none; text-align: center;",
+  #         sectionTitle("Publicaciones y Recursos", "24px")
+  #       ),
+  #       fluidRow(
+  #         column(12, publicationCardPDF("snmv_pdf1", "Boletín Estadístico de Violencia Sexual, Año 2023", "snmv/boletinVS2023.pdf"))
+  #       )
+  #       # ,
+  #       # fluidRow(
+  #       #   column(12, publicationCardPDF("snmv_pdf2", "Reporte Estadístico 2022", "snmv/reporte2022.pdf"))
+  #       # )
+  #     )
+  #   } else {
+  #     # Dashboard de la Agencia (embed link)
+  #     tags$div(
+  #       fluidRow(
+  #         column(12, publicationCardWeb("Dashboard de la Agencia:", 
+  #                                       "https://safekits.pr.gov/?fbclid=IwAR3ooo0EgJS_8MEVB3Z5IettOyplWfi3sYQU18AZlC5yieAIMhIYOuHjHZs"))
+  #       )
+  #     )
+  #   }
+  # })
   #### Tab de Definiciones ####
   definitions_snmv <- list(
     list(word = "Homicidio", definition = "Es un delito de resultado por el cual la conducta intencionada
@@ -472,6 +503,37 @@ server <- function(input, output, session) {
   })
   
   
+  #### Tab de Publicaciones ####
+  # PDF 1
+  # publicationCardPDFServer("fam_pdf1", "fam/boletinVS2023.pdf")
+  # # PDF 2
+  # publicationCardPDFServer("fam_pdf2", "fam/reporte2022.pdf")
+  # 
+  # output$fam_view_content <- renderUI({
+  #   if (input$fam_view_option == "Publicaciones") {
+  #     tagList(
+  #       tags$ul(
+  #         style = "list-style-type: none; text-align: center;",
+  #         sectionTitle("Publicaciones y Recursos", "24px")
+  #       ),
+  #       fluidRow(
+  #         column(12, publicationCardPDF("fam_pdf1", "Boletín Estadístico de Violencia Sexual, Año 2023", "fam/boletinVS2023.pdf"))
+  #       )
+  #       # ,
+  #       # fluidRow(
+  #       #   column(12, publicationCardPDF("fam_pdf2", "Reporte Estadístico 2022", "fam/reporte2022.pdf"))
+  #       # )
+  #     )
+  #   } else {
+  #     # Dashboard de la Agencia (embed link)
+  #     tags$div(
+  #       fluidRow(
+  #         column(12, publicationCardWeb("Dashboard de la Agencia:",
+  #                                       "https://safekits.pr.gov/?fbclid=IwAR3ooo0EgJS_8MEVB3Z5IettOyplWfi3sYQU18AZlC5yieAIMhIYOuHjHZs"))
+  #       )
+  #     )
+  #   }
+  # })
   #### Tab de Definiciones ####
   definitions_fam <- list(
     list(word = "Abuso Sexual", definition = "Incurrir en conducta sexual en presencia de un o una menor
@@ -760,6 +822,37 @@ server <- function(input, output, session) {
   
   
   
+  #### Tab de Publicaciones ####
+  # PDF 1
+  # publicationCardPDFServer("just_pdf1", "just/boletinVS2023.pdf")
+  # # PDF 2
+  # publicationCardPDFServer("just_pdf2", "just/reporte2022.pdf")
+  # 
+  # output$just_view_content <- renderUI({
+  #   if (input$just_view_option == "Publicaciones") {
+  #     tagList(
+  #       tags$ul(
+  #         style = "list-style-type: none; text-align: center;",
+  #         sectionTitle("Publicaciones y Recursos", "24px")
+  #       ),
+  #       fluidRow(
+  #         column(12, publicationCardPDF("just_pdf1", "Boletín Estadístico de Violencia Sexual, Año 2023", "just/boletinVS2023.pdf"))
+  #       )
+  #       # ,
+  #       # fluidRow(
+  #       #   column(12, publicationCardPDF("just_pdf2", "Reporte Estadístico 2022", "just/reporte2022.pdf"))
+  #       # )
+  #     )
+  #   } else {
+  #     # Dashboard de la Agencia (embed link)
+  #     tags$div(
+  #       fluidRow(
+  #         column(12, publicationCardWeb("Dashboard de la Agencia:",
+  #                                       "https://safekits.pr.gov/?fbclid=IwAR3ooo0EgJS_8MEVB3Z5IettOyplWfi3sYQU18AZlC5yieAIMhIYOuHjHZs"))
+  #       )
+  #     )
+  #   }
+  # })
   #### Tab de Definiciones ####
   definitions_just <- list(
     list(word = "Agresión Sexual Conyugal (Artículo 3.5)", definition = HTML("Se impondrá pena de reclusión,
@@ -1155,6 +1248,37 @@ server <- function(input, output, session) {
   })
   
   
+  #### Tab de Publicaciones ####
+  # PDF 1
+  # publicationCardPDFServer("avp_pdf1", "avp/boletinVS2023.pdf")
+  # # PDF 2
+  # publicationCardPDFServer("avp_pdf2", "avp/reporte2022.pdf")
+  # 
+  # output$avp_view_content <- renderUI({
+  #   if (input$avp_view_option == "Publicaciones") {
+  #     tagList(
+  #       tags$ul(
+  #         style = "list-style-type: none; text-align: center;",
+  #         sectionTitle("Publicaciones y Recursos", "24px")
+  #       ),
+  #       fluidRow(
+  #         column(12, publicationCardPDF("avp_pdf1", "Boletín Estadístico de Violencia Sexual, Año 2023", "avp/boletinVS2023.pdf"))
+  #       )
+  #       # ,
+  #       # fluidRow(
+  #       #   column(12, publicationCardPDF("avp_pdf2", "Reporte Estadístico 2022", "avp/reporte2022.pdf"))
+  #       # )
+  #     )
+  #   } else {
+  #     # Dashboard de la Agencia (embed link)
+  #     tags$div(
+  #       fluidRow(
+  #         column(12, publicationCardWeb("Dashboard de la Agencia:",
+  #                                       "https://safekits.pr.gov/?fbclid=IwAR3ooo0EgJS_8MEVB3Z5IettOyplWfi3sYQU18AZlC5yieAIMhIYOuHjHZs"))
+  #       )
+  #     )
+  #   }
+  # })
   #### Tab de Definiciones ####
   
   definitions_avp <- list(
@@ -3424,6 +3548,37 @@ server <- function(input, output, session) {
     }
   })
   
+  #### Tab de Publicaciones ####
+  # PDF 1
+  # publicationCardPDFServer("opm_pdf1", "opm/boletinVS2023.pdf")
+  # # PDF 2
+  # publicationCardPDFServer("opm_pdf2", "opm/reporte2022.pdf")
+  # 
+  # output$opm_view_content <- renderUI({
+  #   if (input$opm_view_option == "Publicaciones") {
+  #     tagList(
+  #       tags$ul(
+  #         style = "list-style-type: none; text-align: center;",
+  #         sectionTitle("Publicaciones y Recursos", "24px")
+  #       ),
+  #       fluidRow(
+  #         column(12, publicationCardPDF("opm_pdf1", "Boletín Estadístico de Violencia Sexual, Año 2023", "opm/boletinVS2023.pdf"))
+  #       )
+  #       # ,
+  #       # fluidRow(
+  #       #   column(12, publicationCardPDF("opm_pdf2", "Reporte Estadístico 2022", "opm/reporte2022.pdf"))
+  #       # )
+  #     )
+  #   } else {
+  #     # Dashboard de la Agencia (embed link)
+  #     tags$div(
+  #       fluidRow(
+  #         column(12, publicationCardWeb("Dashboard de la Agencia:",
+  #                                       "https://safekits.pr.gov/?fbclid=IwAR3ooo0EgJS_8MEVB3Z5IettOyplWfi3sYQU18AZlC5yieAIMhIYOuHjHZs"))
+  #       )
+  #     )
+  #   }
+  # })
   #### Tab de Definiciones ####
   definitions_opm <- list(
     list(word = "Acecho (A)", definition = "Es el patrón o la repetición de una conducta mediante 
@@ -3800,6 +3955,37 @@ server <- function(input, output, session) {
   })
   
   
+  #### Tab de Publicaciones ####
+  # PDF 1
+  # publicationCardPDFServer("dcr_pdf1", "dcr/boletinVS2023.pdf")
+  # # PDF 2
+  # publicationCardPDFServer("dcr_pdf2", "dcr/reporte2022.pdf")
+  # 
+  # output$dcr_view_content <- renderUI({
+  #   if (input$dcr_view_option == "Publicaciones") {
+  #     tagList(
+  #       tags$ul(
+  #         style = "list-style-type: none; text-align: center;",
+  #         sectionTitle("Publicaciones y Recursos", "24px")
+  #       ),
+  #       fluidRow(
+  #         column(12, publicationCardPDF("dcr_pdf1", "Boletín Estadístico de Violencia Sexual, Año 2023", "dcr/boletinVS2023.pdf"))
+  #       )
+  #       # ,
+  #       # fluidRow(
+  #       #   column(12, publicationCardPDF("dcr_pdf2", "Reporte Estadístico 2022", "dcr/reporte2022.pdf"))
+  #       # )
+  #     )
+  #   } else {
+  #     # Dashboard de la Agencia (embed link)
+  #     tags$div(
+  #       fluidRow(
+  #         column(12, publicationCardWeb("Dashboard de la Agencia:",
+  #                                       "https://safekits.pr.gov/?fbclid=IwAR3ooo0EgJS_8MEVB3Z5IettOyplWfi3sYQU18AZlC5yieAIMhIYOuHjHZs"))
+  #       )
+  #     )
+  #   }
+  # })
   #### Tab de Definiciones ####
   definitions_dcr <- list(
     list(word = "Investigaciones realizadas", definition = "Proceso sistemático y metódico de recopilación, análisis y evaluación de información con el objetivo de obtener conclusiones, resolver problemas o generar conocimiento en un campo específico."),
@@ -5285,6 +5471,37 @@ server <- function(input, output, session) {
       )
     }
   })
+  #### Tab de Publicaciones ####
+  # PDF 1
+  # publicationCardPDFServer("trib_pdf1", "trib/boletinVS2023.pdf")
+  # # PDF 2
+  # publicationCardPDFServer("trib_pdf2", "trib/reporte2022.pdf")
+  # 
+  # output$trib_view_content <- renderUI({
+  #   if (input$trib_view_option == "Publicaciones") {
+  #     tagList(
+  #       tags$ul(
+  #         style = "list-style-type: none; text-align: center;",
+  #         sectionTitle("Publicaciones y Recursos", "24px")
+  #       ),
+  #       fluidRow(
+  #         column(12, publicationCardPDF("trib_pdf1", "Boletín Estadístico de Violencia Sexual, Año 2023", "trib/boletinVS2023.pdf"))
+  #       )
+  #       # ,
+  #       # fluidRow(
+  #       #   column(12, publicationCardPDF("trib_pdf2", "Reporte Estadístico 2022", "trib/reporte2022.pdf"))
+  #       # )
+  #     )
+  #   } else {
+  #     # Dashboard de la Agencia (embed link)
+  #     tags$div(
+  #       fluidRow(
+  #         column(12, publicationCardWeb("Dashboard de la Agencia:",
+  #                                       "https://safekits.pr.gov/?fbclid=IwAR3ooo0EgJS_8MEVB3Z5IettOyplWfi3sYQU18AZlC5yieAIMhIYOuHjHZs"))
+  #       )
+  #     )
+  #   }
+  # })
   #### Tab de Definiciones ####
   definitions_trib <- list(
     list(word = "Año Fiscal", definition = "Período de 12 meses comprendido entre el 1ro de julio de un año y el 30
