@@ -982,8 +982,10 @@ npprDS_tiposdelitos <- npprDS_tiposdelitos_list %>%
     values_to = "Casos"           # valores
   ) %>%
   mutate(
-    Delitos = factor(Delitos, levels = c("Violación", "Sodomia", "Actos Lasivos", 
-                                         "Incesto", "Violación Técnica", "Ley 54 (3.5)"),
+    Delitos = factor(Delitos, levels = c("Violación", "Sodomia", "Actos Lascivos", 
+                                         "Incesto", "Violación Técnica", "Ley 54 (3.5)","Agresión Sexual",
+                                         "Maltrato", "Pornografia infantil", "Hostigamiento Sexual", "Maltrato Institucional",
+                                         "Trata Humana", "Agresión"),
                     ordered = TRUE),
     Año = factor(Año),
     Sexo = factor(Sexo)

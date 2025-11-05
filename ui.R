@@ -1439,11 +1439,11 @@ ui <-
                            leafletOutput("map_npprDS_victimas_hombres", height = "300px"),
                            tags$div(style = "margin-top: 10px;"),
                            # Mapa 3: Ofensores: Mujeres
-                           h5("Víctimas: Mujeres", style = "text-align: center; margin-top: 10px;"),
+                           h5("Ofensores: Mujeres", style = "text-align: center; margin-top: 10px;"),
                            leafletOutput("map_npprDS_ofensores_mujeres", height = "300px"),
                            tags$div(style = "margin-top: 10px;"),
                            # Mapa 4: Ofensores: Hombres
-                           h5("Víctimas: Hombres", style = "text-align: center; margin-top: 10px;"),
+                           h5("Ofensores: Hombres", style = "text-align: center; margin-top: 10px;"),
                            leafletOutput("map_npprDS_ofensores_hombres", height = "300px"),
                            height = "100%"))
               ),
@@ -3493,7 +3493,7 @@ ui <-
             )
           ),
           
-          mainPanel(
+          mainPanel( 
             style = "height: 100%; padding-bottom: 10px;",
             uiOutput("cavv_view_content")
           )
@@ -3517,6 +3517,23 @@ ui <-
   
   
   
+  
+  
+    #### Tab Indicadores ####
+     tabPanel(
+        lowercaseTitle("Indicadores"),
+        icon = icon("info-circle"),
+        tabsetPanel(
+          
+          # tab de los autores del proyecto
+          tabPanel(
+            lowercaseTitle("Indicadores"),
+            div(style = "height: 100%; padding-bottom: 10px;",
+                uiOutput("indicadores_view_content"))
+          )
+        )),
+            
+            
   
     #### Tab Acerca del Dashboard ####
     tabPanel(

@@ -2331,7 +2331,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title_npprDS_ofensores_agrupados <- renderUI({
-    title <- "Total de casos de delitos sexuales por sexo de las OFENSORES y categoría de edad"
+    title <- "Total de casos de delitos sexuales por sexo de los OFENSORES y categoría de edad"
   })
   
   # Data Table 
@@ -6794,6 +6794,104 @@ server <- function(input, output, session) {
     renderDataTable_Definitions(definitions_df_cavv, "Centro de Ayuda a Víctimas de Violación")
   })
   
+  
+  
+  #### Tab de Publicaciones ####
+  # PDF 1
+  publicationCardPDFServer("cavv_pdf1", "cavv/boletinVS2023.pdf")
+  # # PDF 2
+  # publicationCardPDFServer("pdf2", "snmv/reporte2022.pdf")
+  # 
+  output$cavv_view_content <- renderUI({
+    if (input$cavv_view_option == "Publicaciones") {
+      tagList(
+        tags$ul(
+          style = "list-style-type: none; text-align: center;",
+          sectionTitle("Publicaciones y Recursos", "24px")
+        ),
+        fluidRow(
+          column(12, publicationCardPDF("cavv_pdf1", "Boletín Estadístico de Violencia Sexual, Año 2023", "cavv/boletinVS2023.pdf"))
+        )
+        # ,
+        # fluidRow(
+        #   column(12, publicationCardPDF("pdf2", "Reporte Estadístico 2022", "snmv/reporte2022.pdf"))
+        # )
+      )
+    } else {
+      # Dashboard de la Agencia (embed link)
+      tags$div(
+        fluidRow(
+          column(12, publicationCardWeb("Dashboard de la Agencia:", 
+                                        "https://safekits.pr.gov/?fbclid=IwAR3ooo0EgJS_8MEVB3Z5IettOyplWfi3sYQU18AZlC5yieAIMhIYOuHjHZs"))
+        )
+      )
+    }
+  })
+  
+  ##############################
+  #### Tab de Publicaciones ####
+  ##############################
+  
+  # # PDF 1
+  # publicationCardPDFServer("cavv_pdf1", "cavv/boletinVS2023.pdf")
+  # 
+  # output$indicadores_view_content <- renderUI({
+  #   tags$div(
+  #     fluidRow(
+  #       column(12, publicationCardWeb("Indicadores:", 
+  #                                     "https://infogram.com/1p0yk2e59wrpqkuek2l20dx0w1unj70evey"))
+  #     )
+  #   )
+  # })
+  
+  # output$indicadores_view_content <- renderUI({
+  #   tags$div(
+  #     style = "
+  #     width: 100%;
+  #     overflow: hidden;
+  #     position: relative;
+  #     padding-top: 56.25%; /* Relación 16:9 */
+  #   ",
+  #     tags$iframe(
+  #       src = "https://infogram.com/1p0yk2e59wrpqkuek2l20dx0w1unj70evey",
+  #       style = "
+  #       position: absolute;
+  #       top: 0;
+  #       left: 0;
+  #       width: 100%;
+  #       height: 100%;
+  #       border: none;
+  #       transform: scale(0.8);
+  #       transform-origin: 0 0;
+  #     "
+  #     )
+  #   )
+  # })
+  
+  output$indicadores_view_content <- renderUI({
+    tags$div(
+      style = "
+      width: 100%;
+      height: auto;
+      overflow: hidden; /* ocultar scroll interno */
+      display: flex;
+      justify-content: center;
+      padding-bottom: 40px; /* margen inferior opcional */
+    ",
+      tags$iframe(
+        src = "https://infogram.com/1p0yk2e59wrpqkuek2l20dx0w1unj70evey",
+        style = "
+        width: 100%;
+        height: 2500px; /* agranda para cubrir toda la infografía */
+        border: none;
+        overflow: hidden; /* elimina barras internas */
+        transform: scale(0.9); /* reduce zoom */
+        transform-origin: top center;
+        pointer-events: auto; /* mantiene clics funcionales */
+      "
+      )
+    )
+  })
   
   
   
