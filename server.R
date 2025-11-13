@@ -1422,7 +1422,7 @@ server <- function(input, output, session) {
   output$dataTableUI_poli_despDF <- renderUI({
     if (input$showTable_poli_despDF) {
       hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
-      texts <- c("Negociado de la Policía de Puerto Rico")
+      texts <- c("Policía de Puerto Rico")
       
       tags$div(
         class = "card",
@@ -1616,7 +1616,7 @@ server <- function(input, output, session) {
   output$dataTableUI_poli_vEdad  <- renderUI({
     if (input$showTable_poli_vEdad ) {
       hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
-      texts <- c("Negociado de la Policía de Puerto Rico")
+      texts <- c("Policía de Puerto Rico")
       
       tags$div(
         class = "card",
@@ -1761,7 +1761,7 @@ server <- function(input, output, session) {
   output$dataTableUI_poli_Malt  <- renderUI({
     if (input$showTable_poli_Malt ) {
       hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
-      texts <- c("Negociado de la Policía de Puerto Rico")
+      texts <- c("Policía de Puerto Rico")
       
       tags$div(
         class = "card",
@@ -2004,7 +2004,7 @@ server <- function(input, output, session) {
   output$dataTableUI_npprDS  <- renderUI({
     if (input$showTable_npprDS) {
       hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
-      texts <- c("Negociado de la Policía de Puerto Rico")
+      texts <- c("Policía de Puerto Rico")
       
       tags$div(
         class = "card",
@@ -2119,7 +2119,7 @@ server <- function(input, output, session) {
   output$dataTableUI_npprDS_region <- renderUI({
     if (input$showTable_npprDS_region) {
       hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
-      texts <- c("Negociado de la Policía de Puerto Rico")
+      texts <- c("Policía de Puerto Rico")
       
       tags$div(
         class = "card",
@@ -2344,7 +2344,7 @@ server <- function(input, output, session) {
   output$dataTableUI_npprDS_victimas_agrupados  <- renderUI({
     if (input$showTable_npprDS_victimas_agrupados) {
       hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
-      texts <- c("Negociado de la Policía de Puerto Rico")
+      texts <- c("Policía de Puerto Rico")
       
       tags$div(
         class = "card",
@@ -2587,7 +2587,7 @@ server <- function(input, output, session) {
   output$dataTableUI_npprDS_relacion  <- renderUI({
     if (input$showTable_npprDS_relacion) {
       hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
-      texts <- c("Negociado de la Policía de Puerto Rico")
+      texts <- c("Policía de Puerto Rico")
       
       tags$div(
         class = "card",
@@ -2732,7 +2732,7 @@ server <- function(input, output, session) {
   output$dataTableUI_npprDS_tiposdelitos  <- renderUI({
     if (input$showTable_npprDS_tiposdelitos) {
       hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
-      texts <- c("Negociado de la Policía de Puerto Rico")
+      texts <- c("Policía de Puerto Rico")
       
       tags$div(
         class = "card",
@@ -2849,7 +2849,7 @@ server <- function(input, output, session) {
   
   # Usar funcion para presentar tabla con definiciones
   output$dataTable_Def_poli <- renderDT({
-    renderDataTable_Definitions(definitions_df_poli, "Negociado de Policía")
+    renderDataTable_Definitions(definitions_df_poli, "Policía de Puerto Rico")
   })
 
   
@@ -4800,7 +4800,7 @@ server <- function(input, output, session) {
                                                    xlab = "Año fiscal", ylab = "Órdenes de Protección Denegadas", message)
       #Titulo de la Grafica
       output$plot_title_OP_LEY148Denegadas <- renderUI({
-        title <- "Órdenes de protección denegadas bajo Ley 148 por razón de archivo"
+        title <- "Órdenes de protección denegadas bajo Ley 148 por razón de denegación"
       })
       
       return(convert_to_plotly(empty_plot, tooltip = "text"))
@@ -4809,13 +4809,13 @@ server <- function(input, output, session) {
     # Si NO hay región seleccionada, usar el dataset agregado
     if (!has_region) {
       p <- renderBarPlot_facets(OP_LEY148Denegadas_filt_total, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                                xlab = "Año Fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
+                                xlab = "Año Fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Denegación",
                                 colorFill = OP_LEY148Denegadas_fill_Razón,
                                 emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
       
       #Titulo de la Grafica
       output$plot_title_OP_LEY148Denegadas <- renderUI({
-        title <- "Total de órdenes de protección denegadas bajo Ley 148 por razón de archivo"
+        title <- "Total de órdenes de protección denegadas bajo Ley 148 por razón de denegación"
       })
       
       OP_LEY148Denegadas_filt_rename <- reactive({
@@ -4837,12 +4837,12 @@ server <- function(input, output, session) {
     
     #Titulo de la Grafica
     output$plot_title_OP_LEY148Denegadas <- renderUI({
-      title <- "Órdenes de protección denegadas bajo Ley 148 por razón de archivo según región judicial"
+      title <- "Órdenes de protección denegadas bajo Ley 148 por razón de denegación según región judicial"
     })
     
     # Si hay selección en todos los filtros, usar dataset completo con facetas
     p <- renderBarPlot_facets(OP_LEY148Denegadas_filt, x = "AñoFiscal", y = "ÓrdenesDenegadas", fill = "Razón",
-                              xlab = "Año Fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Archivo",
+                              xlab = "Año Fiscal", ylab = "Órdenes de Protección Denegadas", fillLab = "Razón de Denegación",
                               colorFill = OP_LEY148Denegadas_fill_Razón,
                               emptyMessage = HTML("Seleccione Razón y Año(s) a visualizar"))
   
@@ -4884,7 +4884,7 @@ server <- function(input, output, session) {
         "<p style='font-size: 16px;padding: 0px;'>
         Los datos representados en esta gráfica corresponden a
         las órdenes de protección por violencia sexual denegadas
-        bajo la Ley 148 por razón de archivo y año fiscal para todas
+        bajo la Ley 148 por razón de denegación y año fiscal para todas
         las regiones judiciales de Puerto Rico.
         Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
@@ -4897,7 +4897,7 @@ server <- function(input, output, session) {
         "<p style='font-size: 16px;padding: 0px;'>
         Los datos representados en esta gráfica corresponden a
         las órdenes de protección por violencia sexual denegadas
-        bajo la Ley 148 por razón de archivo, región judicial y año
+        bajo la Ley 148 por razón de denegación, región judicial y año
         fiscal. Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
@@ -5432,7 +5432,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title_tribCasosCrim <- renderUI({
-    title <- "Movimiento anual de casos de violencia doméstica en el Tribunal según Ley 54"
+    title <- "Movimiento anual de casos criminales de violencia doméstica en el Tribunal según Ley 54"
   })
   
   tribCasosCrim_filt_rename <- reactive({
@@ -6829,7 +6829,7 @@ server <- function(input, output, session) {
   })
   
   ##############################
-  #### Tab de Publicaciones ####
+  #### Tab de Publicaciones Generales ####
   ##############################
   
   # # PDF 1
@@ -6868,7 +6868,7 @@ server <- function(input, output, session) {
   #   )
   # })
   
-  output$indicadores_view_content <- renderUI({
+  output$publicaciones_view_content <- renderUI({
     tags$div(
       style = "
       width: 100%;

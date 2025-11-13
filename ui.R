@@ -926,9 +926,9 @@ ui <-
     
     
     
-    #### Tab del Negociado de Policía de Puerto Rico ####
+    #### Tab de la Policía de Puerto Rico ####
     tabPanel(
-      lowercaseTitle("Negociado de la Policía"),
+      lowercaseTitle("Policía de Puerto Rico"),
       icon = icon("building-shield"),
       tabsetPanel(
         
@@ -1679,34 +1679,34 @@ ui <-
         # ), 
         
         #### tab de Publicaciones del Negociado de la Policia ####
-        tabPanel(
-          lowercaseTitle("Publicaciones"),
-          br(), br(),
-          
-          sidebarLayout(
-            sidebarPanel(
-              style = "display: flex; flex-direction: column; align-items: center;",
-              
-              # Radio buttons
-              div(
-                style = "width: 100%; margin-bottom: 20px;",
-                h4("Seleccione el tipo de contenido:"),
-                radioButtons(
-                  inputId = "snmv_view_option",
-                  label = NULL,
-                  choices = c("Publicaciones", "Dashboard de la Agencia"),
-                  selected = "Publicaciones",
-                  inline = FALSE
-                )
-              )
-            ),
-            
-            mainPanel(
-              style = "height: 100%; padding-bottom: 10px;",
-              uiOutput("poli_view_content")
-            )
-          )
-        ),
+        # tabPanel(
+        #   lowercaseTitle("Publicaciones"),
+        #   br(), br(),
+        #   
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # Radio buttons
+        #       div(
+        #         style = "width: 100%; margin-bottom: 20px;",
+        #         h4("Seleccione el tipo de contenido:"),
+        #         radioButtons(
+        #           inputId = "snmv_view_option",
+        #           label = NULL,
+        #           choices = c("Publicaciones", "Dashboard de la Agencia"),
+        #           selected = "Publicaciones",
+        #           inline = FALSE
+        #         )
+        #       )
+        #     ),
+        #     
+        #     mainPanel(
+        #       style = "height: 100%; padding-bottom: 10px;",
+        #       uiOutput("poli_view_content")
+        #     )
+        #   )
+        # ),
         #### tab de Definiciones y Metadatos ####
         tabPanel(
           lowercaseTitle("Definiciones y Metadatos"),
@@ -2735,7 +2735,7 @@ ui <-
         
         #### tab con datos de solicitudes de órdenes de protección denegadas (OP_LEY148Denegadas) ####
         tabPanel(
-          lowercaseTitle("Órdenes de protección denegadas por razón del archivo y región"), 
+          lowercaseTitle("Órdenes de protección denegadas por razón de denegación y región"), 
           br(), br(),
             sidebarLayout(
               sidebarPanel(
@@ -2995,7 +2995,7 @@ ui <-
         
         #### tab con datos de Movimiento de Casos Criminales de Violencia Doméstica (tribCasosCrim) ####
         tabPanel(
-          lowercaseTitle("Movimiento de casos en Tribunal de Primera Instancia por Ley 54"), 
+          lowercaseTitle("Movimiento de casos criminales en Tribunal de Primera Instancia por Ley 54"), 
           br(), br(),
           sidebarLayout(
             sidebarPanel(
@@ -3471,34 +3471,34 @@ ui <-
         )
       ),
       #### tab de Publicaciones del CAVV ####
-      tabPanel(
-        lowercaseTitle("Publicaciones"),
-        br(), br(),
-        
-        sidebarLayout(
-          sidebarPanel(
-            style = "display: flex; flex-direction: column; align-items: center;",
-            
-            # Radio buttons
-            div(
-              style = "width: 100%; margin-bottom: 20px;",
-              h4("Seleccione el tipo de contenido:"),
-              radioButtons(
-                inputId = "cavv_view_option",
-                label = NULL,
-                choices = c("Publicaciones", "Dashboard de la Agencia"),
-                selected = "Publicaciones",
-                inline = FALSE
-              )
-            )
-          ),
-          
-          mainPanel( 
-            style = "height: 100%; padding-bottom: 10px;",
-            uiOutput("cavv_view_content")
-          )
-        )
-      ),
+      # tabPanel(
+      #   lowercaseTitle("Publicaciones"),
+      #   br(), br(),
+      #   
+      #   sidebarLayout(
+      #     sidebarPanel(
+      #       style = "display: flex; flex-direction: column; align-items: center;",
+      #       
+      #       # Radio buttons
+      #       div(
+      #         style = "width: 100%; margin-bottom: 20px;",
+      #         h4("Seleccione el tipo de contenido:"),
+      #         radioButtons(
+      #           inputId = "cavv_view_option",
+      #           label = NULL,
+      #           choices = c("Publicaciones", "Dashboard de la Agencia"),
+      #           selected = "Publicaciones",
+      #           inline = FALSE
+      #         )
+      #       )
+      #     ),
+      #     
+      #     mainPanel( 
+      #       style = "height: 100%; padding-bottom: 10px;",
+      #       uiOutput("cavv_view_content")
+      #     )
+      #   )
+      # ),
       
       
        #### tab de Definiciones y Metadatos ####
@@ -3519,21 +3519,21 @@ ui <-
   
   
   
-    #### Tab Indicadores ####
-     tabPanel(
-        lowercaseTitle("Indicadores"),
-        icon = icon("info-circle"),
-        tabsetPanel(
-          
-          # tab de los autores del proyecto
-          tabPanel(
-            lowercaseTitle("Indicadores"),
-            div(style = "height: 100%; padding-bottom: 10px;",
-                uiOutput("indicadores_view_content"))
-          )
-        )),
-            
-            
+    #### Tab Publicaciones Generales ####
+     # tabPanel(
+     #    lowercaseTitle("Publicaciones"),
+     #    icon = icon("info-circle"),
+     #    tabsetPanel(
+     #      
+     #      # tab de los autores del proyecto
+     #      tabPanel(
+     #        lowercaseTitle("Publicaciones"),
+     #        div(style = "height: 100%; padding-bottom: 10px;",
+     #            uiOutput("publicaciones_view_content"))
+     #      )
+     #    )),
+     #        
+     #        
   
     #### Tab Acerca del Dashboard ####
     tabPanel(
