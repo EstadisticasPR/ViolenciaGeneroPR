@@ -944,13 +944,20 @@ ui <-
                 div(
                   style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
                   div(
-                    style = "text-align: center; display: inline-block;",  
-                    # botón para seleccionar la Categoría
+                    style = "text-align: center; display: inline-block;", 
+                    # botón para seleccionar estado adultas
                     createDropdownCheckbox(
-                      label = HTML("Seleccione<br>el Estado de la Víctima:"),
-                      choices = despDF$Estado,
-                      selected = despDF$Estado,
-                      id = "poli_despDF_categoría"
+                      label = HTML("Seleccione<br>el Estado de la Víctima (Adultas):"),
+                      choices = despDF_Adultas$Estado,
+                      selected = despDF_Adultas$Estado,
+                      id = "poli_despDF_categoría_adultas"
+                    ),
+                    # botón para seleccionar el estado menores
+                    createDropdownCheckbox(
+                      label = HTML("Seleccione<br>el Estado de la Víctima (Menores):"),
+                      choices = despDF_Menores$Estado,
+                      selected = despDF_Menores$Estado,
+                      id = "poli_despDF_categoría_menores"
                     )
                   )
                 ),
@@ -964,8 +971,8 @@ ui <-
                       # botón para seleccionar el año
                       createDropdownCheckbox(
                         label = "Seleccione año(s):",
-                        choices = despDF$Año,
-                        selected = despDF$Año,
+                        choices = despDF_Adultas$Año,
+                        selected = despDF_Adultas$Año,
                         id = "poli_despDF_año"
                       )
                     ),
@@ -988,8 +995,15 @@ ui <-
               fluidRow(
                 column(12, 
                        div(id = "scrollable-plot", 
-                           div(id = "plot-title", uiOutput("plot_title_despDF")),
-                           plotlyOutput("barPlot_poli_despDF"),  height = "100%"))
+                           div(id = "plot-title", uiOutput("plot_title_despDF_adultas")),
+                           plotlyOutput("barPlot_poli_despDF_adultas"),  height = "100%"))
+              ),
+              tags$div(style = "padding-bottom: 10px;"),
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title_despDF_menores")),
+                           plotlyOutput("barPlot_poli_despDF_menores"),  height = "100%"))
               ),
               tags$div(style = "padding-bottom: 10px;"),
               tags$div(

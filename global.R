@@ -542,10 +542,14 @@ despDF_list <- lapply(as.character(years), function(sheet_name) {
 })
 
 # Unir y transformar los datos
-despDF <- despDF_list %>%
+despDF_Adultas <- despDF_list %>%
   reduce(full_join) %>%
   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
   filter(!grepl("Total", Meses, ignore.case = TRUE)) %>%
+  filter(!grepl("Adultas Desaparecidas", Categoria, ignore.case = TRUE)) %>%
+  filter(!grepl("Menores Desaparecidas", Categoria, ignore.case = TRUE)) %>%
+  filter(!grepl("Menores Localizadas", Categoria, ignore.case = TRUE)) %>%
+  filter(!grepl("Menores sin Localizar", Categoria, ignore.case = TRUE)) %>%
   group_by(Categoria, Año) %>%
   summarise(Casos = sum(Casos, na.rm = TRUE), .groups = "drop") %>%
   mutate(
@@ -554,6 +558,37 @@ despDF <- despDF_list %>%
   ) %>%
   replace_na(list(Casos = 0)) %>%
   select(Año, Estado, Casos)
+
+despDF_Menores <- despDF_list %>%
+  reduce(full_join) %>%
+  pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
+  filter(!grepl("Total", Meses, ignore.case = TRUE)) %>%
+  filter(!grepl("Adultas Desaparecidas", Categoria, ignore.case = TRUE)) %>%
+  filter(!grepl("Menores Desaparecidas", Categoria, ignore.case = TRUE)) %>%
+  filter(!grepl("Adultas Localizadas", Categoria, ignore.case = TRUE)) %>%
+  filter(!grepl("Adultas Sin Localizar", Categoria, ignore.case = TRUE)) %>%
+  group_by(Categoria, Año) %>%
+  summarise(Casos = sum(Casos, na.rm = TRUE), .groups = "drop") %>%
+  mutate(
+    Año = factor(Año),
+    Estado = factor(Categoria)
+  ) %>%
+  replace_na(list(Casos = 0)) %>%
+  select(Año, Estado, Casos)
+
+
+# despDF <- despDF_list %>%
+#   reduce(full_join) %>%
+#   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
+#   filter(!grepl("Total", Meses, ignore.case = TRUE)) %>%
+#   group_by(Categoria, Año) %>%
+#   summarise(Casos = sum(Casos, na.rm = TRUE), .groups = "drop") %>%
+#   mutate(
+#     Año = factor(Año),
+#     Estado = factor(Categoria)
+#   ) %>%
+#   replace_na(list(Casos = 0)) %>%
+#   select(Año, Estado, Casos)
 
 # sheet_name = "2020"
 # desp2020 <- read_excel(paste0(poli, "npprDesp.xlsx"),

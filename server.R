@@ -1327,21 +1327,53 @@ server <- function(input, output, session) {
   #####################################################
   #### Tab con datos de mujeres desaparecidas (despDF) ####
   # Filtrar el conjunto de datos según los valores seleccionados del año y la categoria de evento
-  despDF_filt <- reactive({
-    filter(despDF,
-           Estado %in% input$checkGroup_poli_despDF_categoría,
+  # despDF_filt <- reactive({
+  #   filter(despDF,
+  #          Estado %in% input$checkGroup_poli_despDF_categoría,
+  #          Año %in% input$checkGroup_poli_despDF_año)
+  # })
+  
+  despDF_filt_Adultas <- reactive({
+    filter(despDF_Adultas,
+           Estado %in% input$checkGroup_poli_despDF_categoría_adultas,
+           Año %in% input$checkGroup_poli_despDF_año)
+  })
+  
+  despDF_filt_Menores <- reactive({
+    filter(despDF_Menores,
+           Estado %in% input$checkGroup_poli_despDF_categoría_menores,
            Año %in% input$checkGroup_poli_despDF_año)
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de categoria
-  observeEvent(input$deselectAll_poli_despDF_categoría, {
-    updateCheckboxGroup(session, "checkGroup_poli_despDF_categoría", input, despDF$Estado)
+  observeEvent(input$deselectAll_poli_despDF_categoría_adultas, {
+    updateCheckboxGroup(session, "checkGroup_poli_despDF_categoría_adultas", input, despDF_Adultas$Estado)
   })
   
   observe({
-    inputId <- "checkGroup_poli_despDF_categoría"
-    buttonId <- "deselectAll_poli_despDF_categoría"
-    all_choices <- levels(despDF$Estado)
+    inputId <- "checkGroup_poli_despDF_categoría_adultas"
+    buttonId <- "deselectAll_poli_despDF_categoría_adultas"
+    all_choices <- levels(despDF_Adultas$Estado)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de categoria
+  observeEvent(input$deselectAll_poli_despDF_categoría_menores, {
+    updateCheckboxGroup(session, "checkGroup_poli_despDF_categoría_menores", input, despDF_Menores$Estado)
+  })
+  
+  observe({
+    inputId <- "checkGroup_poli_despDF_categoría_menores"
+    buttonId <- "deselectAll_poli_despDF_categoría_menores"
+    all_choices <- levels(despDF_Menores$Estado)
     selected <- input[[inputId]]
     
     is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
@@ -1355,7 +1387,7 @@ server <- function(input, output, session) {
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
   observeEvent(input$deselectAll_poli_despDF_año, {
-    updateCheckboxGroup(session, "checkGroup_poli_despDF_año", input, despDF$Año)
+    updateCheckboxGroup(session, "checkGroup_poli_despDF_año", input, despDF_Adultas$Año)
   })
   
   observe({
@@ -1374,38 +1406,115 @@ server <- function(input, output, session) {
   })
   
   # Colores del status
-  despDF_fill_categoria <- setColorFill(despDF, "Estado")
+  despDF_fill_categoria_adultas <- setColorFill(despDF_Adultas, "Estado")
+  despDF_fill_categoria_menores <- setColorFill(despDF_Menores, "Estado")
   
-  # Grafico de barras
+  # # Descartar filtrar con menores para omitir su representacion en la grafica
+  # despDF_filt_noMenores <- reactive({
+  #   despDF_filt() %>%  
+  #     filter(Estado != "Menores Localizadas")%>%  
+  #     filter(Estado != "Menores sin Localizar")
+  # })
   
-  output$barPlot_poli_despDF <- renderPlotly({
+  # Grafico de barras apiladas
+  output$barPlot_poli_despDF_adultas <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
-    has_categoria <- length(input$checkGroup_poli_despDF_categoría) > 0
+    has_categoria <- length(input$checkGroup_poli_despDF_categoría_adultas) > 0
     has_año <- length(input$checkGroup_poli_despDF_año) > 0
     
+    
     # Crear mensaje si faltan opciones seleccionadas
-    if (!has_categoria || !has_año) {
+    if (!has_año || !has_categoria) {
       message <- "Seleccione Estado de la Víctima y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(despDF_filt, x = "Año", y = "Casos", fill = "Estado",
-                         xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Estado de la Víctima",
-                         colorFill = despDF_fill_categoria,
-                         emptyMessage = "Seleccione Estado de la Víctima y Año(s) a visualizar")
+      p <- renderBarPlot_stack(despDF_filt_Adultas, x = "Año", y = "Casos", fill = "Estado",
+                               title = HTML(""),
+                               xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Estado de la Víctima",
+                               colorFill = despDF_fill_categoria_adultas,
+                               emptyMessage = "Seleccione Estado de la Víctima y Año(s) a visualizar")
+      
       p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
       
       return(p)
     }
-    
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = despDF_filt, x = "Año", y = "Casos", fill = "Estado",
+    empty_plot <- create_empty_plot_with_message(despDF_filt_Adultas, x = "Año", y = "Casos", fill = "Estado", 
                                                  xlab = "Año", ylab = "Cantidad de víctimas", message)
+    
     convert_to_plotly(empty_plot, tooltip = "text")
   })
   
-  #Titulo de la Grafica
-  output$plot_title_despDF <- renderUI({
-    title <- "Mujeres desaparecidas: localizadas y por localizar"
+  # # Grafico de barras
+  # output$barPlot_poli_despDF <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_categoria <- length(input$checkGroup_poli_despDF_categoría) > 0
+  #   has_año <- length(input$checkGroup_poli_despDF_año) > 0
+  #   
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_categoria || !has_año) {
+  #     message <- "Seleccione Estado de la Víctima y Año(s) a visualizar"
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- renderBarPlot_facets(despDF_filt, x = "Año", y = "Casos", fill = "Estado",
+  #                        xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Estado de la Víctima",
+  #                        colorFill = despDF_fill_categoria,
+  #                        emptyMessage = "Seleccione Estado de la Víctima y Año(s) a visualizar")
+  #     p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
+  #     
+  #     return(p)
+  #   }
+  #   
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(data = despDF_filt, x = "Año", y = "Casos", fill = "Estado",
+  #                                                xlab = "Año", ylab = "Cantidad de víctimas", message)
+  #   convert_to_plotly(empty_plot, tooltip = "text")
+  # })
+  
+  #Titulo de la Grafica Mujeres
+  output$plot_title_despDF_adultas <- renderUI({
+    title <- "Adultas desaparecidas: localizadas y por localizar"
+  })
+  
+  # # Descartar filtrar con menores para omitir su representacion en la grafica
+  # despDF_filt_noAdultas <- reactive({
+  #   despDF_filt() %>%  
+  #     filter(Estado != "Adultas Localizadas")%>%  
+  #     filter(Estado != "Adultas Sin Localizar")
+  # })
+  
+  # Grafico de barras apiladas
+  output$barPlot_poli_despDF_menores <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_categoria <- length(input$checkGroup_poli_despDF_categoría_menores) > 0
+    has_año <- length(input$checkGroup_poli_despDF_año) > 0
+    
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_año || !has_categoria) {
+      message <- "Seleccione Estado de la Víctima y Año(s) a visualizar"
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderBarPlot_stack(despDF_filt_Menores, x = "Año", y = "Casos", fill = "Estado",
+                               title = HTML(""),
+                               xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Estado de la Víctima",
+                               colorFill = despDF_fill_categoria_menores,
+                               emptyMessage = "Seleccione Estado de la Víctima y Año(s) a visualizar")
+      
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
+      
+      return(p)
+    }
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(despDF_filt_Menores, x = "Año", y = "Casos", fill = "Estado", 
+                                                 xlab = "Año", ylab = "Cantidad de víctimas", message)
+    
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica Menores
+  output$plot_title_despDF_menores <- renderUI({
+    title <- "Menores desaparecidas: localizadas y por localizar"
   })
  
   despDF_filt_rename <- reactive({
