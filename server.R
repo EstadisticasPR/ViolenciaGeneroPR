@@ -614,6 +614,19 @@ server <- function(input, output, session) {
            Distrito %in% input$checkGroup_just_dfDeli_distrito)
   })
   
+  dfDeli_total <- dfDeli %>%
+    group_by(Año, Delito) %>%
+    summarise(Casos = sum(Casos, na.rm = TRUE)) %>%
+    ungroup()
+  
+  
+  dfDeli_filt_total <- reactive({
+    filter(dfDeli_total,
+           Año %in% input$checkGroup_just_dfDeli_año,
+           Delito %in% input$checkGroup_just_dfDeli_delito
+    )
+  })
+  
   # funcion para el boton de deseleccionar/seleccionar el delito
   observeEvent(input$deselectAll_just_dfDeli_delito, {
     updateCheckboxGroup(session, "checkGroup_just_dfDeli_delito", input, dfDeli$Delito)
@@ -686,44 +699,132 @@ server <- function(input, output, session) {
     has_año <- length(input$checkGroup_just_dfDeli_año) > 0
     has_distrito <- length(input$checkGroup_just_dfDeli_distrito) > 0
     
-    # Crear mensaje si faltan opciones seleccionadas
-    if (!has_delito || !has_año || !has_distrito) {
-      message <- "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)"
-    } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
-                         xlab = "Año", ylab = "Cantidad de víctimas",
-                         fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito,
-                         emptyMessage = "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)")
-      #Altura predeterminada para la grafica.
-      plot_height = 500
-      numPlots = length(input$checkGroup_just_dfDeli_distrito)
-      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Distrito, ncol = 2) +
-        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+    
+    # Si faltan selecciones necesarias
+    if (!has_año || !has_delito) {
+      message <- HTML("Seleccione Delito y Año(s) a visualizar")
+      empty_plot <- create_empty_plot_with_message(data = dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
+                                                   xlab = "Año", ylab = "Cantidad de víctimas", message)
       
-      return(p)
+      #Titulo de la Grafica
+      output$plot_title_dfDeli <- renderUI({
+        title <- "Casos radicados anualmente según Ley 54"
+      })
+      
+      return(convert_to_plotly(empty_plot, tooltip = "text"))
     }
     
-    # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
-                                                 xlab = "Año", ylab = "Cantidad de víctimas", message)
-    #ggplotly(empty_plot)
-    convert_to_plotly(empty_plot, tooltip = "text", TRUE)
+    # Si NO hay región seleccionada, usar el dataset agregado
+    if (!has_distrito) {
+      p <- renderBarPlot_facets(dfDeli_filt_total, x = "Año", y = "Casos", fill = "Delito",
+                                xlab = "Año", ylab = "Cantidad de víctimas",
+                                fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito,
+                                emptyMessage = HTML("Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)"))
+      
+      #Titulo de la Grafica
+      output$plot_title_dfDeli <- renderUI({
+        title <- "Total de casos radicados anualmente según Ley 54"
+      })
+      
+      output$dataTable_just <- renderDT(server = FALSE, {
+        renderDataTable(dfDeli_filt(), "Datos: Delitos según artículo de la Ley 54")
+      })
+      
+      return(convert_to_plotly(p, tooltip = "text")%>% layout(height = 450))
+    }
+    
+    #Titulo de la Grafica
+    output$plot_title_dfDeli <- renderUI({
+      title <- "Total de casos radicados anualmente según Ley 54 por región judicial"
+    })
+    
+    p <- renderBarPlot_facets(dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
+                              xlab = "Año", ylab = "Cantidad de víctimas",
+                              fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito,
+                              emptyMessage = HTML("Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)"))
+    #Altura predeterminada para la grafica.
+    plot_height = 500
+    numPlots = length(input$checkGroup_just_dfDeli_distrito)
+    #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+    total_height = plotHeight(plot_height, numPlots)
+    p <- p + facet_wrap(~Distrito, ncol = 2) +
+      theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+            panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+    p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+    
+    
+    # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+    output$dataTable_just <- renderDT(server = FALSE, {
+      renderDataTable(dfDeli_filt(), "Datos: Delitos según artículo de la Ley 54")
+    })
+    
+    return(p)
   })
   
-  #Llamada a funcion para generar la legenda
-  output$plot_title_dfDeli <- renderUI({
-    title <- "Radicación anual de casos por Distrito Fiscal según Ley 54"
-  })
+    
+    
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_delito || !has_año || !has_distrito) {
+  #     message <- "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)"
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- renderBarPlot_facets(dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
+  #                        xlab = "Año", ylab = "Cantidad de víctimas",
+  #                        fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito,
+  #                        emptyMessage = "Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)")
+  #     #Altura predeterminada para la grafica.
+  #     plot_height = 500
+  #     numPlots = length(input$checkGroup_just_dfDeli_distrito)
+  #     #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+  #     total_height = plotHeight(plot_height, numPlots)
+  #     p <- p + facet_wrap(~Distrito, ncol = 2) +
+  #       theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+  #             panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+  #     p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+  #     
+  #     return(p)
+  #   }
+  #   
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(data = dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
+  #                                                xlab = "Año", ylab = "Cantidad de víctimas", message)
+  #   #ggplotly(empty_plot)
+  #   convert_to_plotly(empty_plot, tooltip = "text", TRUE)
+  # })
+  # 
+  # #Llamada a funcion para generar la legenda
+  # output$plot_title_dfDeli <- renderUI({
+  #   title <- "Radicación anual de casos por Distrito Fiscal según Ley 54"
+  # })
+  # 
+  # # Data table del DeptJust
+  # # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  # output$dataTable_just <- renderDT(server = FALSE, {
+  #   renderDataTable(dfDeli_filt(), "Datos: Delitos según artículo de la Ley 54")
+  # })
+  #
   
-  # Data table del DeptJust
-  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
-  output$dataTable_just <- renderDT(server = FALSE, {
-    renderDataTable(dfDeli_filt(), "Datos: Delitos según artículo de la Ley 54")
+  
+  # Texto explicativo dinámico
+  output$texto_Deli <- renderUI({
+    regiones <- input$checkGroup_just_dfDeli_distrito
+    if (is.null(regiones) || length(regiones) == 0) {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden al
+        total de casos radicados por Artículo
+        de la Ley 54 desde el año natural 2020 al 2023.
+      </p>"
+      )
+    } else {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden al
+        número de casos radicados por distrito fiscal y Artículo
+        de la Ley 54 desde el año natural 2020 al 2023.
+      </p>"
+      )
+    }
   })
   
   
@@ -990,31 +1091,26 @@ server <- function(input, output, session) {
   ##################################################################
   ########## Tab de la Administración de Vivienda Pública ##########
   ##################################################################
-  #### Tab de Administración de Vivienda Pública (dfAvp) ####
+  #### Tab de Administración de Vivienda Pública (dfAvp_region_soli) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de incidente
-  dfAvp_filt <- reactive({
-    filter(dfAvp,
-           Región %in% input$checkGroup_avp_dfAvp_región,
-           Año %in% input$checkGroup_avp_dfAvp_año)
+  dfAvp_region_soli_filt <- reactive({
+    filter(dfAvp_region_soli,
+           Región %in% input$checkGroup_avp_dfAvp_soli_región,
+           Año %in% input$checkGroup_avp_dfAvp_soli_año)
   })
   
-  # Filtrar el conjunto de datos según el año, delito o distrito seleccionado
-  mapaAvp_filt <- reactive({
-    filter(mapaAvp,
-           # Visualizacion %in% input$select_avp_mapaAvp_visualizacion,
-           Año %in% input$select_avp_mapaAvp_año)
-  })
+
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de región
-  observeEvent(input$deselectAll_avp_dfAvp_región, {
-    updateCheckboxGroup(session, "checkGroup_avp_dfAvp_región", input, dfAvp$Región)
+  observeEvent(input$deselectAll_avp_dfAvp_soli_región, {
+    updateCheckboxGroup(session, "checkGroup_avp_dfAvp_soli_región", input, dfAvp_region_soli$Región)
   })
   
   observe({
-    inputId <- "checkGroup_avp_dfAvp_región"
-    buttonId <- "deselectAll_avp_dfAvp_región"
-    all_choices <- levels(dfAvp$Región)
+    inputId <- "checkGroup_avp_dfAvp_soli_región"
+    buttonId <- "deselectAll_avp_dfAvp_soli_región"
+    all_choices <- levels(dfAvp_region_soli$Región)
     selected <- input[[inputId]]
     
     is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
@@ -1027,14 +1123,14 @@ server <- function(input, output, session) {
   })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
-  observeEvent(input$deselectAll_avp_dfAvp_año, {
-    updateCheckboxGroup(session, "checkGroup_avp_dfAvp_año", input, dfAvp$Año)
+  observeEvent(input$deselectAll_avp_dfAvp_soli_año, {
+    updateCheckboxGroup(session, "checkGroup_avp_dfAvp_soli_año", input, dfAvp_region_soli$Año)
   })
   
   observe({
-    inputId <- "checkGroup_avp_dfAvp_año"
-    buttonId <- "deselectAll_avp_dfAvp_año"
-    all_choices <- levels(dfAvp$Año)
+    inputId <- "checkGroup_avp_dfAvp_soli_año"
+    buttonId <- "deselectAll_avp_dfAvp_soli_año"
+    all_choices <- levels(dfAvp_region_soli$Año)
     selected <- input[[inputId]]
     
     is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
@@ -1051,23 +1147,23 @@ server <- function(input, output, session) {
   
   
   # Grafico de barras
-  output$barPlot_avp_dfAvp <- renderPlotly({
+  output$barPlot_avp_dfAvp_soli <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
-    has_region <- length(input$checkGroup_avp_dfAvp_región) > 0
-    has_año <- length(input$checkGroup_avp_dfAvp_año) > 0
+    has_region <- length(input$checkGroup_avp_dfAvp_soli_región) > 0
+    has_año <- length(input$checkGroup_avp_dfAvp_soli_año) > 0
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_region || !has_año) {
       message <- "Seleccione Región de Vivienda y Año(s) a visualizar"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                         xlab = "Año", ylab = "Cantidad de viviendas públicas", fillLab = "Estado de la Vivienda",
-                         colorFill = dfAvp_fill_status,
-                         emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
+      p <- renderBarPlot_facets(dfAvp_region_soli_filt, x = "Año", y = "Cantidad", fill = "Estado",
+                                xlab = "Año", ylab = "Cantidad de viviendas públicas solicitadas", fillLab = "Estado de la Vivienda",
+                                colorFill = dfAvp_fill_status,
+                                emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
       #Altura predeterminada para la grafica.
       plot_height = 500
-      numPlots = length(input$checkGroup_avp_dfAvp_región)
+      numPlots = length(input$checkGroup_avp_dfAvp_soli_región)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
       total_height = plotHeight(plot_height, numPlots)
       p <- p + facet_wrap(~Región, ncol = 2) +
@@ -1079,27 +1175,204 @@ server <- function(input, output, session) {
     }
     
     # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = dfAvp_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                                                 xlab = "Año", ylab = "Cantidad de viviendas públicas", message)
+    empty_plot <- create_empty_plot_with_message(data = dfAvp_region_soli_filt, x = "Año", y = "Cantidad", fill = "Estado",
+                                                 xlab = "Año", ylab = "Cantidad de viviendas públicas solicitadas", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   
   #Titulo de la Grafica
-  output$plot_title_dfAvp <- renderUI({
-    title <- "Viviendas públicas solicitadas y asignadas \nanualmente por violencia doméstica según región"
+  output$plot_title_dfAvp_soli <- renderUI({
+    title <- "Viviendas públicas solicitadas \nanualmente por violencia doméstica según región"
   })
   
+  
+  dfAvp_soli_filt_rename <- reactive({
+    dfAvp_region_soli_filt() %>%
+      rename(`Región de Vivienda` = Región)
+  })
+  
+  # Data Table para la gráfica de barras de dfAvp
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_avp_dfAvp_soli <- renderDT(server = FALSE, { 
+    renderDataTable(dfAvp_soli_filt_rename(), "Datos: Viviendas públicas solicitadas por violencia doméstica")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_avp_dfAvp_soli <- renderUI({
+    if (input$showTable_avp_dfAvp_soli) {
+      hyperlinks <- c("https://www.avp.pr.gov/")
+      texts <- c("Administración de Vivienda Pública")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
+            DTOutput("dataTable_avp_dfAvp_soli")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  #### Tab de Administración de Vivienda Pública (dfAvp_region_asig) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de incidente
+  dfAvp_region_asig_filt <- reactive({
+    filter(dfAvp_region_asig,
+           Región %in% input$checkGroup_avp_dfAvp_asig_región,
+           Año %in% input$checkGroup_avp_dfAvp_asig_año)
+  })
+  
+  
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de región
+  observeEvent(input$deselectAll_avp_dfAvp_asig_región, {
+    updateCheckboxGroup(session, "checkGroup_avp_dfAvp_asig_región", input, dfAvp_region_asig$Región)
+  })
+  
+  observe({
+    inputId <- "checkGroup_avp_dfAvp_asig_región"
+    buttonId <- "deselectAll_avp_dfAvp_asig_región"
+    all_choices <- levels(dfAvp_region_asig$Región)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_avp_dfAvp_asig_año, {
+    updateCheckboxGroup(session, "checkGroup_avp_dfAvp_asig_año", input, dfAvp_region_asig$Año)
+  })
+  
+  observe({
+    inputId <- "checkGroup_avp_dfAvp_asig_año"
+    buttonId <- "deselectAll_avp_dfAvp_asig_año"
+    all_choices <- levels(dfAvp_region_asig$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  # Colores del status
+  dfAvp_fill_status <- setColorFill(dfAvp, "Estado")
+  
+  
+  # Grafico de barras
+  output$barPlot_avp_dfAvp_asig <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_region <- length(input$checkGroup_avp_dfAvp_asig_región) > 0
+    has_año <- length(input$checkGroup_avp_dfAvp_asig_año) > 0
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_region || !has_año) {
+      message <- "Seleccione Región de Vivienda y Año(s) a visualizar"
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderBarPlot_facets(dfAvp_region_asig_filt, x = "Año", y = "Cantidad", fill = "Estado",
+                                xlab = "Año", ylab = "Cantidad de viviendas públicas asignadas", fillLab = "Estado de la Vivienda",
+                                colorFill = dfAvp_fill_status,
+                                emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      numPlots = length(input$checkGroup_avp_dfAvp_asig_región)
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, numPlots)
+      p <- p + facet_wrap(~Región, ncol = 2) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      
+      return(p)
+    }
+    
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(data = dfAvp_region_asig_filt, x = "Año", y = "Cantidad", fill = "Estado",
+                                                 xlab = "Año", ylab = "Cantidad de viviendas públicas asignadas", message)
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  
+  #Titulo de la Grafica
+  output$plot_title_dfAvp_asig <- renderUI({
+    title <- "Viviendas públicas asignadas \nanualmente por violencia doméstica según región"
+  })
+  
+  
+  dfAvp_asig_filt_rename <- reactive({
+    dfAvp_region_asig_filt() %>%
+      rename(`Región de Vivienda` = Región)
+  })
+  
+  # Data Table para la gráfica de barras de dfAvp
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_avp_dfAvp_asig <- renderDT(server = FALSE, { 
+    renderDataTable(dfAvp_asig_filt_rename(), "Datos: Viviendas públicas asignadas por violencia doméstica")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_avp_dfAvp_asig <- renderUI({
+    if (input$showTable_avp_dfAvp_asig) {
+      hyperlinks <- c("https://www.avp.pr.gov/")
+      texts <- c("Administración de Vivienda Pública")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
+            DTOutput("dataTable_avp_dfAvp_asig")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  #### Tab de Administración de Vivienda Pública (mapaAvp) ####
+
+  # Filtrar el conjunto de datos según el año, delito o distrito seleccionado
+  mapaAvp_filt <- reactive({
+    filter(mapaAvp,
+           # Visualizacion %in% input$select_avp_mapaAvp_visualizacion,
+           Año %in% input$select_avp_mapaAvp_año)
+  })
+
+
   mapaAvp_filt_asig <- reactive({
-    filter(mapaAvp_asig, 
+    filter(mapaAvp_asig,
            Año %in% input$select_avp_mapaAvp_año)
   })
-  
+
   mapaAvp_filt_sol <- reactive({
-    filter(mapaAvp_sol, 
+    filter(mapaAvp_sol,
            Año %in% input$select_avp_mapaAvp_año)
   })
-  
+
   output$map_avp_mapaAvp_asignadas <- renderLeaflet({
     data <- mapaAvp_filt_asig()
     renderMap_vivienda(data,
@@ -1122,130 +1395,91 @@ server <- function(input, output, session) {
   })
 
   ## PARA REGION Y MUNICIPIOS
-  # municipios_filt_asig <- reactive({
-  #   filter(municipios_geo_asig,
-  #          Año %in% input$select_avp_mapaAvp_año)
-  # })
-  # 
-  # municipios_filt_sol <- reactive({
-  #   filter(municipios_geo_sol,
-  #          Año %in% input$select_avp_mapaAvp_año)
-  # })
-  # 
-  # output$map_avp_mapaAvp_asignadas <- renderLeaflet({
-  #   data <- mapaAvp_filt_asig()
-  #   municipios_geo_asig <- municipios_filt_asig()
-  # 
-  #   if (input$select_avp_mapaAvp_visualizacion == "Municipios") {
-  #     renderMap_vivienda_municipio(municipios_geo_asig,
-  #                                  value_col = "Cantidad",
-  #                                  value_col_region = "Municipio",
-  #                                  map_zoom = 8,
-  #                                  provider = providers$CartoDB.Positron)
-  #   } else {
-  #     renderMap_vivienda_new(data,
-  #                        value_col = "Cantidad",
-  #                        value_col_region = "Región",
-  #                        map_zoom = 8,
-  #                        provider = providers$CartoDB.Positron)
-  #   }
-  # })
-
-  # output$map_avp_mapaAvp_solicitadas <- renderLeaflet({
-  #   data <- mapaAvp_filt_sol()
-  #   municipios_geo_sol <-municipios_filt_sol()
-  # 
-  #   if (input$select_avp_mapaAvp_visualizacion == "Municipios") {
-  #     renderMap_vivienda_municipio(municipios_geo_sol,
-  #                                  value_col = "Cantidad",
-  #                                  value_col_region = "Municipio",
-  #                                  map_zoom = 8,
-  #                                  provider = providers$CartoDB.Positron)
-  #   } else {
-  #     renderMap_vivienda_new(data,
-  #                        value_col = "Cantidad",
-  #                        value_col_region = "Región",
-  #                        map_zoom = 8,
-  #                        provider = providers$CartoDB.Positron)
-  #   }
-  # })
-
-
-
-  #Titulo de la Grafica
-  output$plot_title_mapaAvp <- renderUI({
-    title <- paste0("Total de viviendas públicas solicitadas y asignadas \npor violencia doméstica por región en el año ", input$select_avp_mapaAvp_año)
+  municipios_filt_asig <- reactive({
+    filter(municipios_geo_asig,
+           Año %in% input$select_avp_mapaAvp_año)
   })
 
+  municipios_filt_sol <- reactive({
+    filter(municipios_geo_sol,
+           Año %in% input$select_avp_mapaAvp_año)
+  })
 
-  dfAvp_filt_rename <- reactive({
-    dfAvp_filt() %>%
-      rename(`Región de Vivienda` = Región)
-  })
-  
-  # Data Table para la gráfica de barras de dfAvp
-  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
-  output$dataTable_avp_dfAvp <- renderDT(server = FALSE, { 
-    renderDataTable(dfAvp_filt_rename(), "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica")
-  })
-  
-  # Crear Card con Fuentes
-  output$dataTableUI_avp_dfAvp <- renderUI({
-    if (input$showTable_avp_dfAvp) {
-      hyperlinks <- c("https://www.avp.pr.gov/")
-      texts <- c("Administración de Vivienda Pública")
-      
-      tags$div(
-        class = "card",
-        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
-        
-        # Contenedor centrado para la tabla
-        div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
-          div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
-            DTOutput("dataTable_avp_dfAvp")
-          )
-        ),
-        
-        createFuenteDiv(hyperlinks, texts)
-      )
+  output$map_avp_mapaAvp_asignadas <- renderLeaflet({
+    data <- mapaAvp_filt_asig()
+    municipios_geo_asig <- municipios_filt_asig()
+
+    if (input$select_avp_mapaAvp_visualizacion == "Municipios") {
+      renderMap_vivienda_municipio(municipios_geo_asig,
+                                   value_col = "Cantidad",
+                                   value_col_region = "Municipio",
+                                   map_zoom = 8,
+                                   provider = providers$CartoDB.Positron)
+    } else {
+      renderMap_vivienda_new(data,
+                         value_col = "Cantidad",
+                         value_col_region = "Región",
+                         map_zoom = 8,
+                         provider = providers$CartoDB.Positron)
     }
   })
-  
+
+  output$map_avp_mapaAvp_solicitadas <- renderLeaflet({
+    data <- mapaAvp_filt_sol()
+    municipios_geo_sol <-municipios_filt_sol()
+
+    if (input$select_avp_mapaAvp_visualizacion == "Municipios") {
+      renderMap_vivienda_municipio(municipios_geo_sol,
+                                   value_col = "Cantidad",
+                                   value_col_region = "Municipio",
+                                   map_zoom = 8,
+                                   provider = providers$CartoDB.Positron)
+    } else {
+      renderMap_vivienda_new(data,
+                         value_col = "Cantidad",
+                         value_col_region = "Región",
+                         map_zoom = 8,
+                         provider = providers$CartoDB.Positron)
+    }
+  })
+
+
+
   mapaAvp_filt_noGeom <- reactive({
-    st_drop_geometry(mapaAvp_filt())%>% 
+    st_drop_geometry(mapaAvp_filt())%>%
       rename(`Región de Vivienda` = Región)
   })
-  
+
   # Data Table para el mapa de dfAvp
   output$dataTable_avp_mapaAvp <- renderDT({
     renderDataTable(mapaAvp_filt_noGeom(), "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica")
   })
-  
+
   # Crear Card con Fuentes
   output$dataTableUI_avp_mapaAvp <- renderUI({
     if (input$showTable_avp_mapaAvp) {
       hyperlinks <- c("https://www.avp.pr.gov/")
       texts <- c("Administración de Vivienda Pública")
-      
+
       tags$div(
         class = "card",
         style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
-        
+
         # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
+            style = "width: 98%; max-width: 800px; overflow-x: auto;",
             DTOutput("dataTable_avp_mapaAvp")
           )
         ),
-        
+
         createFuenteDiv(hyperlinks, texts)
       )
     }
   })
+
+  
   
   
   #### Tab de Publicaciones ####

@@ -395,6 +395,39 @@ dfAvp <- read_excel(paste0(avp, "/administracion_vivienda_publica.xlsx"))%>%
       Estado = factor(Estado, levels = c("solicitadas", "asignadas"))) %>%
     replace_na(list(Cantidad = 0))
 
+
+# sheet_names <- list("region_soli", "region_asig", "municipios_soli", "municipios_asig")
+sheet_names <- list("region_soli", "region_asig")
+
+for (sheet_name in sheet_names) {
+  
+  df <- read_excel(paste0(avp, "/datos_vivienda.xlsx"), sheet = sheet_name)
+  
+  # Detectar columnas de años (números)
+  year_cols <- names(df)[grepl("^[0-9]{4}$", names(df))]
+  
+  # Extraer estado desde el nombre de la hoja
+  estado <- ifelse(grepl("soli", sheet_name), "solicitadas", "asignadas")
+  
+  # Convertir formato ancho → largo
+  df_long <- df %>%
+    pivot_longer(
+      cols = all_of(year_cols),
+      names_to = "Año",
+      values_to = "Cantidad"
+    ) %>%
+    mutate(
+      Estado = factor(estado),
+      Región = factor(Región),
+      Año = factor(Año)
+    ) %>%
+    relocate(Año, .before = everything()) %>%
+    relocate(Estado, .before = Cantidad)
+  
+  # Guardar como dfAvp_region_soli, dfAvp_region_asig, etc.
+  assign(paste0("dfAvp_", sheet_name), df_long)
+}
+
 # Ruta al archivo
 archivo <- paste0(avp, "/avp_municipios.xlsx")
 
@@ -432,11 +465,25 @@ dfAvp$Año <- as.factor(sub("\\*", "", dfAvp$Año))
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y 
 # combinar los datos de delitos con los datos geográficos de los distritos fiscales
+mapaAvp_region_soli <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
+  merge(dfAvp_region_soli, by.x = "GROUP", by.y = "Región") %>%
+  rename(Región = GROUP) %>%
+  relocate(
+    Año, Región, Estado, geometry, Cantidad 
+  )
+
+mapaAvp_region_asig <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
+  merge(dfAvp_region_asig, by.x = "GROUP", by.y = "Región") %>%
+  rename(Región = GROUP) %>%
+  relocate(
+    Año, Región, Estado, geometry, Cantidad 
+  )
+
 mapaAvp <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
   merge(dfAvp, by.x = "GROUP", by.y = "Región") %>%
   rename(Región = GROUP) %>%
   relocate(
-    Año, Región, Estado, geometry, Cantidad 
+    Año, Región, Estado, geometry, Cantidad
   )
 
 # Filtrar para "asignadas"
@@ -1675,6 +1722,9 @@ actualizacion_avp1 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion avp tab2
 actualizacion_avp2 <- "Última actualización: 31 de diciembre de 2024"
+
+# Fecha actualizacion avp tab3
+actualizacion_avp3 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion policia tab1
 actualizacion_policia1 <- "Última actualización: 20 de septiembre de 2024"
