@@ -4,11 +4,28 @@ cat("Loading helper functions from utils.R...\n")
 #### Helper Functions: Global ####
 ##################################
 #### cleanSheet_npprDesp ####
-cleanSheet_npprDesp <- function(data, sheet_name) {
-  total_column <- paste0("Total Año ", sheet_name)  # Crear el nombre dinámico
+# cleanSheet_npprDesp <- function(data, sheet_name) {
+#   total_column <- paste0("Total Año ", sheet_name)  # Crear el nombre dinámico
+#   data %>%
+#     mutate(Año = sheet_name) %>%
+#     rename(Categoria = Mes, Total = !!sym(total_column)) # Usar el nombre dinámico
+# }
+
+#### cleanSheet_npprDesp ####
+cleanSheet_npprDesp <- function(data) {
+  
   data %>%
-    mutate(Año = sheet_name) %>%
-    rename(Categoria = Mes, Total = !!sym(total_column)) # Usar el nombre dinámico
+    rename(Estado = Año) %>%        # La columna Año realmente es la categoría
+    pivot_longer(
+      cols = -Estado,               # Todo menos Categoria son años
+      names_to = "Año",
+      values_to = "Casos"
+    )
+  # %>%
+  #   mutate(
+  #     Año = factor(Año),
+  #     Estado = factor(Estado)
+  #   )
 }
 
 #### cleanSheet_npprVDedad ####

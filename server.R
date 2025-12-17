@@ -1561,11 +1561,17 @@ server <- function(input, output, session) {
   #####################################################
   #### Tab con datos de mujeres desaparecidas (despDF) ####
   # Filtrar el conjunto de datos según los valores seleccionados del año y la categoria de evento
-  # despDF_filt <- reactive({
-  #   filter(despDF,
-  #          Estado %in% input$checkGroup_poli_despDF_categoría,
-  #          Año %in% input$checkGroup_poli_despDF_año)
-  # })
+  despDF_filt <- reactive({
+    despDF %>%
+      filter(
+        Estado %in% c(
+          input$checkGroup_poli_despDF_categoría_adultas,
+          input$checkGroup_poli_despDF_categoría_menores
+        ),
+        Año %in% input$checkGroup_poli_despDF_año
+      )
+  })
+  
   
   despDF_filt_Adultas <- reactive({
     filter(despDF_Adultas,
@@ -1627,7 +1633,7 @@ server <- function(input, output, session) {
   observe({
     inputId <- "checkGroup_poli_despDF_año"
     buttonId <- "deselectAll_poli_despDF_año"
-    all_choices <- levels(despDF$Año)
+    all_choices <- levels(despDF_Adultas$Año)
     selected <- input[[inputId]]
     
     is_all_selected <- !is.null(selected) && setequal(selected, all_choices)

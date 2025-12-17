@@ -1184,7 +1184,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a la
                     cantidad de mujeres desaparecidas y localizadas (adultas y menores)
-                    desde el año natural 2020 al 2024.",
+                    desde el año natural 2020 al 2025. Los datos para el 2025 son preliminares.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )

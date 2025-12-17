@@ -428,36 +428,69 @@ for (sheet_name in sheet_names) {
   assign(paste0("dfAvp_", sheet_name), df_long)
 }
 
-# Ruta al archivo
-archivo <- paste0(avp, "/avp_municipios.xlsx")
+# sheet_names <- list("region_soli", "region_asig", "municipios_soli", "municipios_asig")
+sheet_names <- list("municipios_soli", "municipios_asig")
 
-# Años de los sheets
-años <- as.character(2017:2024)
-
-# Leer y guardar cada hoja en una variable distinta con la columna Año agregada
-for (año in años) {
-  df <- read_excel(archivo, sheet = año)
-  df$Año <- año
-  assign(paste0("dfAvp_municipio", año), df)
+for (sheet_name in sheet_names) {
+  
+  df <- read_excel(paste0(avp, "/datos_vivienda.xlsx"), sheet = sheet_name)
+  
+  # Detectar columnas de años (números)
+  year_cols <- names(df)[grepl("^[0-9]{4}$", names(df))]
+  
+  # Extraer estado desde el nombre de la hoja
+  estado <- ifelse(grepl("soli", sheet_name), "solicitadas", "asignadas")
+  
+  # Convertir formato ancho → largo
+  df_long <- df %>%
+    pivot_longer(
+      cols = all_of(year_cols),
+      names_to = "Año",
+      values_to = "Cantidad"
+    ) %>%
+    mutate(
+      Estado = factor(estado),
+      municipio = factor(municipio),
+      Región = factor(Región),
+      Año = factor(Año)
+    ) %>%
+    relocate(Año, .before = everything()) %>%
+    relocate(Estado, .before = Cantidad)
+  
+  # Guardar como dfAvp_region_soli, dfAvp_region_asig, etc.
+  assign(paste0("dfAvp_", sheet_name), df_long)
 }
 
-# Lista de data.frames
-lista_df <- mget(paste0("dfAvp_municipio", 2017:2024))
-
-# Unión completa de todos
-dfAvp_municipios <- reduce(lista_df, full_join)
-
-dfAvp_municipios_asignadas <- dfAvp_municipios %>%
-  dplyr::select(municipio = Municipios, Región, Cantidad = Asignadas, Año)
-
-dfAvp_municipios_solicitadas <- dfAvp_municipios %>%
-  dplyr::select(municipio = Municipios, Región, Cantidad = Solicitadas, Año)
+# Ruta al archivo
+# archivo <- paste0(avp, "/avp_municipios.xlsx")
+# 
+# # Años de los sheets
+# años <- as.character(2017:2024)
+# 
+# # Leer y guardar cada hoja en una variable distinta con la columna Año agregada
+# for (año in años) {
+#   df <- read_excel(archivo, sheet = año)
+#   df$Año <- año
+#   assign(paste0("dfAvp_municipio", año), df)
+# }
+# 
+# # Lista de data.frames
+# lista_df <- mget(paste0("dfAvp_municipio", 2017:2024))
+# 
+# # Unión completa de todos
+# dfAvp_municipios <- reduce(lista_df, full_join)
+# 
+# dfAvp_municipios_asignadas <- dfAvp_municipios %>%
+#   dplyr::select(municipio = Municipios, Región, Cantidad = Asignadas, Año)
+# 
+# dfAvp_municipios_solicitadas <- dfAvp_municipios %>%
+#   dplyr::select(municipio = Municipios, Región, Cantidad = Solicitadas, Año)
 
 municipios_geo_asig <- municipios_geo %>%
-  left_join(dfAvp_municipios_asignadas, by = "municipio")
+  left_join(dfAvp_municipios_asig, by = "municipio")
 
 municipios_geo_sol <- municipios_geo %>%
-  left_join(dfAvp_municipios_solicitadas, by = "municipio")
+  left_join(dfAvp_municipios_soli, by = "municipio")
 
 
 # Convertir el año a numérico para eliminar el asterisco y convertirlo a int
@@ -577,52 +610,83 @@ dcrSentenciadas <- dcrSentenciadas %>%
 poli <- here::here("data", "Negociado_de_Policia", "/")
 
 #### despDF ####
-meses <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
+# meses <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
+# 
+# # Años a importar
+# years <- 2020:2024
+# 
+# # Leer y limpiar los datos por hoja
+# despDF_list <- lapply(as.character(years), function(sheet_name) {
+#   read_excel(paste0(poli, "npprDesp.xlsx"), sheet = sheet_name) %>%
+#     cleanSheet_npprDesp(sheet_name)
+# })
 
-# Años a importar
-years <- 2020:2024
+despDF_Adultas <- read_excel(paste0(poli, "npprDesp.xlsx")) %>%
+  cleanSheet_npprDesp() %>%
+  filter(!grepl("Adultas Desaparecidas", Estado, ignore.case = TRUE)) %>%
+  filter(!grepl("Menores Desaparecidas", Estado, ignore.case = TRUE)) %>%
+  filter(!grepl("Menores Localizadas", Estado, ignore.case = TRUE)) %>%
+  filter(!grepl("Menores sin Localizar", Estado, ignore.case = TRUE))%>%
+  mutate(
+    Año = factor(Año),
+    Estado = factor(Estado)
+  ) %>%
+  replace_na(list(Casos = 0)) %>%
+  select(Año, Estado, Casos)
 
-# Leer y limpiar los datos por hoja
-despDF_list <- lapply(as.character(years), function(sheet_name) {
-  read_excel(paste0(poli, "npprDesp.xlsx"), sheet = sheet_name) %>%
-    cleanSheet_npprDesp(sheet_name)
-})
+despDF_Menores <- read_excel(paste0(poli, "npprDesp.xlsx")) %>%
+  cleanSheet_npprDesp() %>%
+  filter(!grepl("Adultas Desaparecidas", Estado, ignore.case = TRUE)) %>%
+  filter(!grepl("Menores Desaparecidas", Estado, ignore.case = TRUE)) %>%
+  filter(!grepl("Adultas Localizadas", Estado, ignore.case = TRUE)) %>%
+  filter(!grepl("Adultas Sin Localizar", Estado, ignore.case = TRUE))%>%
+  mutate(
+    Año = factor(Año),
+    Estado = factor(Estado)
+  ) %>%
+  replace_na(list(Casos = 0)) %>%
+  select(Año, Estado, Casos)
 
 # Unir y transformar los datos
-despDF_Adultas <- despDF_list %>%
-  reduce(full_join) %>%
-  pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
-  filter(!grepl("Total", Meses, ignore.case = TRUE)) %>%
-  filter(!grepl("Adultas Desaparecidas", Categoria, ignore.case = TRUE)) %>%
-  filter(!grepl("Menores Desaparecidas", Categoria, ignore.case = TRUE)) %>%
-  filter(!grepl("Menores Localizadas", Categoria, ignore.case = TRUE)) %>%
-  filter(!grepl("Menores sin Localizar", Categoria, ignore.case = TRUE)) %>%
-  group_by(Categoria, Año) %>%
-  summarise(Casos = sum(Casos, na.rm = TRUE), .groups = "drop") %>%
-  mutate(
-    Año = factor(Año),
-    Estado = factor(Categoria)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(Año, Estado, Casos)
+# despDF_Adultas <- despDF_list %>%
+#   reduce(full_join) %>%
+#   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
+#   filter(!grepl("Total", Meses, ignore.case = TRUE)) %>%
+#   filter(!grepl("Adultas Desaparecidas", Categoria, ignore.case = TRUE)) %>%
+#   filter(!grepl("Menores Desaparecidas", Categoria, ignore.case = TRUE)) %>%
+#   filter(!grepl("Menores Localizadas", Categoria, ignore.case = TRUE)) %>%
+#   filter(!grepl("Menores sin Localizar", Categoria, ignore.case = TRUE)) %>%
+#   group_by(Categoria, Año) %>%
+#   summarise(Casos = sum(Casos, na.rm = TRUE), .groups = "drop") %>%
+#   mutate(
+#     Año = factor(Año),
+#     Estado = factor(Categoria)
+#   ) %>%
+#   replace_na(list(Casos = 0)) %>%
+#   select(Año, Estado, Casos)
+# 
+# despDF_Menores <- despDF_list %>%
+#   reduce(full_join) %>%
+#   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
+#   filter(!grepl("Total", Meses, ignore.case = TRUE)) %>%
+#   filter(!grepl("Adultas Desaparecidas", Categoria, ignore.case = TRUE)) %>%
+#   filter(!grepl("Menores Desaparecidas", Categoria, ignore.case = TRUE)) %>%
+#   filter(!grepl("Adultas Localizadas", Categoria, ignore.case = TRUE)) %>%
+#   filter(!grepl("Adultas Sin Localizar", Categoria, ignore.case = TRUE)) %>%
+#   group_by(Categoria, Año) %>%
+#   summarise(Casos = sum(Casos, na.rm = TRUE), .groups = "drop") %>%
+#   mutate(
+#     Año = factor(Año),
+#     Estado = factor(Categoria)
+#   ) %>%
+#   replace_na(list(Casos = 0)) %>%
+#   select(Año, Estado, Casos)
+# 
 
-despDF_Menores <- despDF_list %>%
-  reduce(full_join) %>%
-  pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
-  filter(!grepl("Total", Meses, ignore.case = TRUE)) %>%
-  filter(!grepl("Adultas Desaparecidas", Categoria, ignore.case = TRUE)) %>%
-  filter(!grepl("Menores Desaparecidas", Categoria, ignore.case = TRUE)) %>%
-  filter(!grepl("Adultas Localizadas", Categoria, ignore.case = TRUE)) %>%
-  filter(!grepl("Adultas Sin Localizar", Categoria, ignore.case = TRUE)) %>%
-  group_by(Categoria, Año) %>%
-  summarise(Casos = sum(Casos, na.rm = TRUE), .groups = "drop") %>%
-  mutate(
-    Año = factor(Año),
-    Estado = factor(Categoria)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(Año, Estado, Casos)
-
+despDF <- bind_rows(
+  despDF_Adultas,
+  despDF_Menores
+)
 
 # despDF <- despDF_list %>%
 #   reduce(full_join) %>%
@@ -1727,7 +1791,7 @@ actualizacion_avp2 <- "Última actualización: 31 de diciembre de 2024"
 actualizacion_avp3 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion policia tab1
-actualizacion_policia1 <- "Última actualización: 20 de septiembre de 2024"
+actualizacion_policia1 <- "Última actualización: 30 de noviembre de 2025"
 
 # Fecha actualizacion policia tab2
 actualizacion_policia2 <- "Última actualización: 20 de septiembre de 2024"
