@@ -800,10 +800,10 @@ ui <-
                   div(
                     style = "text-align: center; display: inline-block;", 
                     # botón para seleccionar la región
-                    createDropdownCheckbox(
+                    createDropdownCheckbox_region(
                       label = HTML("Seleccione<br>Región de Vivienda:"),
                       choices = dfAvp_region_soli$Región,
-                      selected = dfAvp_region_soli$Región,
+                      selected = NULL,
                       id = "avp_dfAvp_soli_región"
                     )
                   )
@@ -854,14 +854,15 @@ ui <-
                   h4(
                     strong(actualizacion_avp1, style="margin: 0px;") 
                   ),
-                  p(
-                    "Los datos representados en esta gráfica corresponden al
-                    total de viviendas públicas solicitadas por
-                    violencia doméstica por región de la Administración de Vivienda Pública
-                    desde el año natural 2017 al 2024.",
-                    
-                    style = "font-size: 16px;padding: 0px;" 
-                  )
+                  uiOutput("texto_dfAvp_region_soli")
+                  # p(
+                  #   "Los datos representados en esta gráfica corresponden al
+                  #   total de viviendas públicas solicitadas por
+                  #   violencia doméstica por región de la Administración de Vivienda Pública
+                  #   desde el año natural 2017 al 2024.",
+                  #   
+                  #   style = "font-size: 16px;padding: 0px;" 
+                  # )
                 )
               )
             )
@@ -882,10 +883,10 @@ ui <-
                 div(
                   style = "text-align: center; display: inline-block;", 
                   # botón para seleccionar la región
-                  createDropdownCheckbox(
+                  createDropdownCheckbox_region(
                     label = HTML("Seleccione<br>Región de Vivienda:"),
                     choices = dfAvp_region_asig$Región,
-                    selected = dfAvp_region_asig$Región,
+                    selected = NULL,
                     id = "avp_dfAvp_asig_región"
                   )
                 )
@@ -936,14 +937,15 @@ ui <-
                   h4(
                     strong(actualizacion_avp2, style="margin: 0px;") 
                   ),
-                  p(
-                    "Los datos representados en esta gráfica corresponden al
-                    total de viviendas públicas asignadas por
-                    violencia doméstica por región de la Administración de Vivienda Pública
-                    desde el año natural 2017 al 2024.",
-                    
-                    style = "font-size: 16px;padding: 0px;" 
-                  )
+                  uiOutput("texto_dfAvp_region_asig")
+                  # p(
+                  #   "Los datos representados en esta gráfica corresponden al
+                  #   total de viviendas públicas asignadas por
+                  #   violencia doméstica por región de la Administración de Vivienda Pública
+                  #   desde el año natural 2017 al 2024.",
+                  #   
+                  #   style = "font-size: 16px;padding: 0px;" 
+                  # )
                 )
               )
             )

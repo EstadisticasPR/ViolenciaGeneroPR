@@ -1100,6 +1100,18 @@ server <- function(input, output, session) {
            Año %in% input$checkGroup_avp_dfAvp_soli_año)
   })
   
+  dfAvp_region_soli_total <- dfAvp_region_soli %>%
+    group_by(Año, Estado) %>%
+    summarise(Cantidad = sum(Cantidad, na.rm = TRUE)) %>%
+    ungroup()
+  
+  
+  dfAvp_region_soli_filt_total <- reactive({
+    filter(dfAvp_region_soli_total,
+           Año %in% input$checkGroup_avp_dfAvp_soli_año
+    )
+  })
+  
 
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de región
@@ -1149,55 +1161,161 @@ server <- function(input, output, session) {
   # Grafico de barras
   output$barPlot_avp_dfAvp_soli <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
-    has_region <- length(input$checkGroup_avp_dfAvp_soli_región) > 0
     has_año <- length(input$checkGroup_avp_dfAvp_soli_año) > 0
+    has_region <- length(input$checkGroup_avp_dfAvp_soli_región) > 0
     
-    # Crear mensaje si faltan opciones seleccionadas
-    if (!has_region || !has_año) {
+    
+    # Si faltan selecciones necesarias
+    if (!has_año) {
       message <- "Seleccione Región de Vivienda y Año(s) a visualizar"
-    } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(dfAvp_region_soli_filt, x = "Año", y = "Cantidad", fill = "Estado",
+      # Crear la gráfica vacía con mensaje
+      empty_plot <- create_empty_plot_with_message(data = dfAvp_region_soli_filt, x = "Año", y = "Cantidad", fill = "Estado",
+                                                   xlab = "Año", ylab = "Cantidad de viviendas públicas solicitadas", message)
+
+      #Titulo de la Grafica
+      output$plot_title_dfAvp_soli <- renderUI({
+        title <- "Viviendas públicas solicitadas \nanualmente por violencia doméstica"
+      })
+      
+      return(convert_to_plotly(empty_plot, tooltip = "text"))
+    }
+    
+    # Si NO hay región seleccionada, usar el dataset agregado
+    if (!has_region) {
+      p <- renderBarPlot_facets(dfAvp_region_soli_filt_total, x = "Año", y = "Cantidad", fill = "Estado",
                                 xlab = "Año", ylab = "Cantidad de viviendas públicas solicitadas", fillLab = "Estado de la Vivienda",
                                 colorFill = dfAvp_fill_status,
                                 emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
-      #Altura predeterminada para la grafica.
-      plot_height = 500
-      numPlots = length(input$checkGroup_avp_dfAvp_soli_región)
-      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Región, ncol = 2) +
-        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+   
+      #Titulo de la Grafica
+      output$plot_title_dfAvp_soli <- renderUI({
+        title <- "Viviendas públicas solicitadas \nanualmente por violencia doméstica"
+      })
+    
       
-      return(p)
+      # Data Table para dcrCasosInv
+      # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+      output$dataTable_avp_dfAvp_soli <- renderDT(server = FALSE, { 
+        renderDataTable(dfAvp_region_soli_filt_total, "Datos: Viviendas públicas solicitadas por violencia doméstica")
+      })
+      
+      return(convert_to_plotly(p, tooltip = "text")%>% layout(height = 450))
     }
     
-    # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = dfAvp_region_soli_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                                                 xlab = "Año", ylab = "Cantidad de viviendas públicas solicitadas", message)
-    convert_to_plotly(empty_plot, tooltip = "text")
+    #Titulo de la Grafica
+    output$plot_title_dfAvp_soli <- renderUI({
+      title <- "Viviendas públicas solicitadas \nanualmente por violencia doméstica según región"
+    })
+    
+    p <- renderBarPlot_facets(dfAvp_region_soli_filt, x = "Año", y = "Cantidad", fill = "Estado",
+                              xlab = "Año", ylab = "Cantidad de viviendas públicas solicitadas", fillLab = "Estado de la Vivienda",
+                              colorFill = dfAvp_fill_status,
+                              emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
+    #Altura predeterminada para la grafica.
+    plot_height = 500
+    numPlots = length(input$checkGroup_avp_dfAvp_soli_región)
+    #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+    total_height = plotHeight(plot_height, numPlots)
+    p <- p + facet_wrap(~Región, ncol = 2) +
+      theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+            panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+    p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+    
+    
+    dfAvp_soli_filt_rename <- reactive({
+      dfAvp_region_soli_filt() %>%
+        rename(`Región de Vivienda` = Región)
+    })
+    
+    # Data Table para la gráfica de barras de dfAvp
+    # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+    output$dataTable_avp_dfAvp_soli <- renderDT(server = FALSE, { 
+      renderDataTable(dfAvp_soli_filt_rename(), "Datos: Viviendas públicas solicitadas por violencia doméstica")
+    })
+    
+    
+    return(p)
   })
   
   
-  #Titulo de la Grafica
-  output$plot_title_dfAvp_soli <- renderUI({
-    title <- "Viviendas públicas solicitadas \nanualmente por violencia doméstica según región"
+  # Texto explicativo dinámico
+  output$texto_dfAvp_region_soli <- renderUI({
+    regiones <- input$checkGroup_avp_dfAvp_soli_región
+    if (is.null(regiones) || length(regiones) == 0) {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden al
+        total de viviendas públicas solicitadas por
+        violencia de la Administración de Vivienda Pública
+        desde el año natural 2017 al 2024.
+      </p>"
+      )
+    } else {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden al
+        total de viviendas públicas solicitadas por
+        violencia doméstica por región de la Administración de Vivienda Pública
+        desde el año natural 2017 al 2024.
+      </p>"
+      )
+    }
   })
   
   
-  dfAvp_soli_filt_rename <- reactive({
-    dfAvp_region_soli_filt() %>%
-      rename(`Región de Vivienda` = Región)
-  })
-  
-  # Data Table para la gráfica de barras de dfAvp
-  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
-  output$dataTable_avp_dfAvp_soli <- renderDT(server = FALSE, { 
-    renderDataTable(dfAvp_soli_filt_rename(), "Datos: Viviendas públicas solicitadas por violencia doméstica")
-  })
-  
+  # 
+  # # Grafico de barras
+  # output$barPlot_avp_dfAvp_soli <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_region <- length(input$checkGroup_avp_dfAvp_soli_región) > 0
+  #   has_año <- length(input$checkGroup_avp_dfAvp_soli_año) > 0
+  #   
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_region || !has_año) {
+  #     message <- "Seleccione Región de Vivienda y Año(s) a visualizar"
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- renderBarPlot_facets(dfAvp_region_soli_filt, x = "Año", y = "Cantidad", fill = "Estado",
+  #                               xlab = "Año", ylab = "Cantidad de viviendas públicas solicitadas", fillLab = "Estado de la Vivienda",
+  #                               colorFill = dfAvp_fill_status,
+  #                               emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
+  #     #Altura predeterminada para la grafica.
+  #     plot_height = 500
+  #     numPlots = length(input$checkGroup_avp_dfAvp_soli_región)
+  #     #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+  #     total_height = plotHeight(plot_height, numPlots)
+  #     p <- p + facet_wrap(~Región, ncol = 2) +
+  #       theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+  #             panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+  #     p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+  #     
+  #     return(p)
+  #   }
+  #   
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(data = dfAvp_region_soli_filt, x = "Año", y = "Cantidad", fill = "Estado",
+  #                                                xlab = "Año", ylab = "Cantidad de viviendas públicas solicitadas", message)
+  #   convert_to_plotly(empty_plot, tooltip = "text")
+  # })
+  # 
+  # 
+  # #Titulo de la Grafica
+  # output$plot_title_dfAvp_soli <- renderUI({
+  #   title <- "Viviendas públicas solicitadas \nanualmente por violencia doméstica según región"
+  # })
+  # 
+  # 
+  # dfAvp_soli_filt_rename <- reactive({
+  #   dfAvp_region_soli_filt() %>%
+  #     rename(`Región de Vivienda` = Región)
+  # })
+  # 
+  # # Data Table para la gráfica de barras de dfAvp
+  # # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  # output$dataTable_avp_dfAvp_soli <- renderDT(server = FALSE, { 
+  #   renderDataTable(dfAvp_soli_filt_rename(), "Datos: Viviendas públicas solicitadas por violencia doméstica")
+  # })
+  # 
   # Crear Card con Fuentes
   output$dataTableUI_avp_dfAvp_soli <- renderUI({
     if (input$showTable_avp_dfAvp_soli) {
@@ -1231,6 +1349,17 @@ server <- function(input, output, session) {
            Año %in% input$checkGroup_avp_dfAvp_asig_año)
   })
   
+  dfAvp_region_asig_total <- dfAvp_region_asig %>%
+    group_by(Año, Estado) %>%
+    summarise(Cantidad = sum(Cantidad, na.rm = TRUE)) %>%
+    ungroup()
+  
+  
+  dfAvp_region_asig_filt_total <- reactive({
+    filter(dfAvp_region_asig_total,
+           Año %in% input$checkGroup_avp_dfAvp_asig_año
+    )
+  })
   
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de región
@@ -1276,58 +1405,163 @@ server <- function(input, output, session) {
   # Colores del status
   dfAvp_fill_status <- setColorFill(dfAvp, "Estado")
   
-  
-  # Grafico de barras
   output$barPlot_avp_dfAvp_asig <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
-    has_region <- length(input$checkGroup_avp_dfAvp_asig_región) > 0
     has_año <- length(input$checkGroup_avp_dfAvp_asig_año) > 0
+    has_region <- length(input$checkGroup_avp_dfAvp_asig_región) > 0
     
-    # Crear mensaje si faltan opciones seleccionadas
-    if (!has_region || !has_año) {
+    
+    # Si faltan selecciones necesarias
+    if (!has_año) {
       message <- "Seleccione Región de Vivienda y Año(s) a visualizar"
-    } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(dfAvp_region_asig_filt, x = "Año", y = "Cantidad", fill = "Estado",
+      # Crear la gráfica vacía con mensaje
+      empty_plot <- create_empty_plot_with_message(data = dfAvp_region_asig_filt, x = "Año", y = "Cantidad", fill = "Estado",
+                                                   xlab = "Año", ylab = "Cantidad de viviendas públicas asignadas", message)
+      
+      #Titulo de la Grafica
+      output$plot_title_dfAvp_asig <- renderUI({
+        title <- "Viviendas públicas asignadas \nanualmente por violencia doméstica"
+      })
+      
+      return(convert_to_plotly(empty_plot, tooltip = "text"))
+    }
+    
+    # Si NO hay región seleccionada, usar el dataset agregado
+    if (!has_region) {
+      p <- renderBarPlot_facets(dfAvp_region_asig_filt_total, x = "Año", y = "Cantidad", fill = "Estado",
                                 xlab = "Año", ylab = "Cantidad de viviendas públicas asignadas", fillLab = "Estado de la Vivienda",
                                 colorFill = dfAvp_fill_status,
                                 emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
-      #Altura predeterminada para la grafica.
-      plot_height = 500
-      numPlots = length(input$checkGroup_avp_dfAvp_asig_región)
-      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
-      total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Región, ncol = 2) +
-        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
       
-      return(p)
+      #Titulo de la Grafica
+      output$plot_title_dfAvp_asig <- renderUI({
+        title <- "Viviendas públicas asignadas \nanualmente por violencia doméstica"
+      })
+      
+      
+      # Data Table para dcrCasosInv
+      # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+      output$dataTable_avp_dfAvp_asig <- renderDT(server = FALSE, { 
+        renderDataTable(dfAvp_region_asig_filt_total, "Datos: Viviendas públicas asignadas por violencia doméstica")
+      })
+      
+      return(convert_to_plotly(p, tooltip = "text")%>% layout(height = 450))
     }
     
-    # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = dfAvp_region_asig_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                                                 xlab = "Año", ylab = "Cantidad de viviendas públicas asignadas", message)
-    convert_to_plotly(empty_plot, tooltip = "text")
+    #Titulo de la Grafica
+    output$plot_title_dfAvp_asig <- renderUI({
+      title <- "Viviendas públicas asignadas \nanualmente por violencia doméstica según región"
+    })
+    
+    p <- renderBarPlot_facets(dfAvp_region_asig_filt, x = "Año", y = "Cantidad", fill = "Estado",
+                              xlab = "Año", ylab = "Cantidad de viviendas públicas asignadas", fillLab = "Estado de la Vivienda",
+                              colorFill = dfAvp_fill_status,
+                              emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
+    #Altura predeterminada para la grafica.
+    plot_height = 500
+    numPlots = length(input$checkGroup_avp_dfAvp_asig_región)
+    #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+    total_height = plotHeight(plot_height, numPlots)
+    p <- p + facet_wrap(~Región, ncol = 2) +
+      theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+            panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+    p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+    
+    
+    dfAvp_asig_filt_rename <- reactive({
+      dfAvp_region_asig_filt() %>%
+        rename(`Región de Vivienda` = Región)
+    })
+    
+    # Data Table para la gráfica de barras de dfAvp
+    # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+    output$dataTable_avp_dfAvp_asig <- renderDT(server = FALSE, { 
+      renderDataTable(dfAvp_asig_filt_rename(), "Datos: Viviendas públicas asignadas por violencia doméstica")
+    })
+    
+    
+    return(p)
   })
   
   
-  #Titulo de la Grafica
-  output$plot_title_dfAvp_asig <- renderUI({
-    title <- "Viviendas públicas asignadas \nanualmente por violencia doméstica según región"
+  # Texto explicativo dinámico
+  output$texto_dfAvp_region_asig <- renderUI({
+    regiones <- input$checkGroup_avp_dfAvp_asig_región
+    if (is.null(regiones) || length(regiones) == 0) {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden al
+        total de viviendas públicas asignadas por
+        violencia de la Administración de Vivienda Pública
+        desde el año natural 2017 al 2024.
+      </p>"
+      )
+    } else {
+      HTML(
+        "<p style='font-size: 16px;padding: 0px;'>
+        Los datos representados en esta gráfica corresponden al
+        total de viviendas públicas asignadas por
+        violencia doméstica por región de la Administración de Vivienda Pública
+        desde el año natural 2017 al 2024.
+      </p>"
+      )
+    }
   })
   
   
-  dfAvp_asig_filt_rename <- reactive({
-    dfAvp_region_asig_filt() %>%
-      rename(`Región de Vivienda` = Región)
-  })
   
-  # Data Table para la gráfica de barras de dfAvp
-  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
-  output$dataTable_avp_dfAvp_asig <- renderDT(server = FALSE, { 
-    renderDataTable(dfAvp_asig_filt_rename(), "Datos: Viviendas públicas asignadas por violencia doméstica")
-  })
+  
+  # # Grafico de barras
+  # output$barPlot_avp_dfAvp_asig <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_region <- length(input$checkGroup_avp_dfAvp_asig_región) > 0
+  #   has_año <- length(input$checkGroup_avp_dfAvp_asig_año) > 0
+  #   
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_region || !has_año) {
+  #     message <- "Seleccione Región de Vivienda y Año(s) a visualizar"
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- renderBarPlot_facets(dfAvp_region_asig_filt, x = "Año", y = "Cantidad", fill = "Estado",
+  #                               xlab = "Año", ylab = "Cantidad de viviendas públicas asignadas", fillLab = "Estado de la Vivienda",
+  #                               colorFill = dfAvp_fill_status,
+  #                               emptyMessage = "Seleccione Región de Vivienda y Año(s) a visualizar")
+  #     #Altura predeterminada para la grafica.
+  #     plot_height = 500
+  #     numPlots = length(input$checkGroup_avp_dfAvp_asig_región)
+  #     #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+  #     total_height = plotHeight(plot_height, numPlots)
+  #     p <- p + facet_wrap(~Región, ncol = 2) +
+  #       theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+  #             panel.spacing.y = unit(-0.02, "lines")) #Espacio entre las facetas en y.
+  #     p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+  #     
+  #     return(p)
+  #   }
+  #   
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(data = dfAvp_region_asig_filt, x = "Año", y = "Cantidad", fill = "Estado",
+  #                                                xlab = "Año", ylab = "Cantidad de viviendas públicas asignadas", message)
+  #   convert_to_plotly(empty_plot, tooltip = "text")
+  # })
+  # 
+  # 
+  # #Titulo de la Grafica
+  # output$plot_title_dfAvp_asig <- renderUI({
+  #   title <- "Viviendas públicas asignadas \nanualmente por violencia doméstica según región"
+  # })
+  # 
+  # 
+  # dfAvp_asig_filt_rename <- reactive({
+  #   dfAvp_region_asig_filt() %>%
+  #     rename(`Región de Vivienda` = Región)
+  # })
+  # 
+  # # Data Table para la gráfica de barras de dfAvp
+  # # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  # output$dataTable_avp_dfAvp_asig <- renderDT(server = FALSE, { 
+  #   renderDataTable(dfAvp_asig_filt_rename(), "Datos: Viviendas públicas asignadas por violencia doméstica")
+  # })
   
   # Crear Card con Fuentes
   output$dataTableUI_avp_dfAvp_asig <- renderUI({
