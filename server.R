@@ -433,7 +433,7 @@ server <- function(input, output, session) {
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_año || !has_tipo || !has_sexo) {
-      message <- "Seleccione Tipo(s) de Maltrato, Año(s) y Distrito(s)"
+      message <- "Seleccione Tipo(s) de Maltrato, Año(s) y Sexo de la víctima"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dfMalt_filt, x = "Año", y = "Casos", fill = "Maltrato",
@@ -727,7 +727,7 @@ server <- function(input, output, session) {
       })
       
       output$dataTable_just <- renderDT(server = FALSE, {
-        renderDataTable(dfDeli_filt(), "Datos: Delitos según artículo de la Ley 54")
+        renderDataTable(dfDeli_filt_total(), "Datos: Delitos según artículo de la Ley 54")
       })
       
       return(convert_to_plotly(p, tooltip = "text")%>% layout(height = 450))
@@ -1196,7 +1196,7 @@ server <- function(input, output, session) {
       # Data Table para dcrCasosInv
       # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
       output$dataTable_avp_dfAvp_soli <- renderDT(server = FALSE, { 
-        renderDataTable(dfAvp_region_soli_filt_total, "Datos: Viviendas públicas solicitadas por violencia doméstica")
+        renderDataTable(dfAvp_region_soli_filt_total(), "Datos: Viviendas públicas solicitadas por violencia doméstica")
       })
       
       return(convert_to_plotly(p, tooltip = "text")%>% layout(height = 450))
@@ -1442,7 +1442,7 @@ server <- function(input, output, session) {
       # Data Table para dcrCasosInv
       # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
       output$dataTable_avp_dfAvp_asig <- renderDT(server = FALSE, { 
-        renderDataTable(dfAvp_region_asig_filt_total, "Datos: Viviendas públicas asignadas por violencia doméstica")
+        renderDataTable(dfAvp_region_asig_filt_total(), "Datos: Viviendas públicas asignadas por violencia doméstica")
       })
       
       return(convert_to_plotly(p, tooltip = "text")%>% layout(height = 450))
@@ -1579,6 +1579,7 @@ server <- function(input, output, session) {
           div(
             style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_avp_dfAvp_asig")
+            
           )
         ),
         
@@ -3150,7 +3151,7 @@ server <- function(input, output, session) {
         "<p style='font-size: 16px;padding: 0px;'>
         Los datos representados en esta gráfica corresponden a los
         datos de delitos sexuales según el tipo de relación
-        ofensor/víctima desde el año natural 2019 al 2025.
+        ofensor/víctima desde el año natural 2019 al 2024.
         
       </p>"
       )
@@ -3159,7 +3160,7 @@ server <- function(input, output, session) {
         "<p style='font-size: 16px;padding: 0px;'>
         Los datos representados en esta gráfica corresponden a los
         datos de delitos sexuales según región y tipo de relación
-        ofensor/víctima desde el año natural 2019 al 2025.
+        ofensor/víctima desde el año natural 2019 al 2024.
       </p>"
       )
     }
@@ -4777,7 +4778,7 @@ server <- function(input, output, session) {
         Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021.
+        año fiscal 2021. Los datos del 2025 son preliminares.
       </p>"
       )
     } else {
@@ -4789,7 +4790,7 @@ server <- function(input, output, session) {
         Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021.
+        año fiscal 2021. Los datos del 2025 son preliminares.
       </p>"
       )
     }
@@ -5012,7 +5013,7 @@ server <- function(input, output, session) {
         Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021.
+        año fiscal 2021. Los datos del 2025 son preliminares.
       </p>"
       )
     } else {
@@ -5024,7 +5025,7 @@ server <- function(input, output, session) {
         Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021.
+        año fiscal 2021. Los datos del 2025 son preliminares.
       </p>"
       )
     }
@@ -5239,7 +5240,7 @@ server <- function(input, output, session) {
         a nivel de Puerto Rico. Los datos para cada año fiscal se
         identifican con el año en que finaliza el mismo, por 
         ejemplo, para los datos del año fiscal 2020-2021, los datos
-        son presentados como año fiscal 2021.
+        son presentados como año fiscal 2021. Los datos del 2025 son preliminares.
       </p>"
       )
     } else {
@@ -5251,7 +5252,7 @@ server <- function(input, output, session) {
         Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021.
+        año fiscal 2021. Los datos del 2025 son preliminares.
       </p>"
       )
     }
@@ -5472,7 +5473,7 @@ server <- function(input, output, session) {
         Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021.
+        año fiscal 2021. Los datos del 2025 son preliminares.
       </p>"
       )
     } else {
@@ -5484,7 +5485,7 @@ server <- function(input, output, session) {
         fiscal. Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021.
+        año fiscal 2021. Los datos del 2025 son preliminares.
       </p>"
       )
     }
@@ -5694,8 +5695,8 @@ server <- function(input, output, session) {
   
   
   # Texto explicativo dinámico
-  output$texto_exparteEmitidas <- renderUI({
-    regiones <- input$checkGroup_trib_OP_Ley148_ex_parteEmitidas_Región
+  output$texto_FinalEmitidas <- renderUI({
+    regiones <- input$checkGroup_trib_OP_LEY148FinalEmitidas_Región
     if (is.null(regiones) || length(regiones) == 0) {
       HTML(
         "<p style='font-size: 16px;padding: 0px;'>
@@ -5705,7 +5706,7 @@ server <- function(input, output, session) {
         de Puerto Rico. Los datos para cada
         año fiscal se identifican con el año en que finaliza
         el mismo, por ejemplo, para los datos del año fiscal 2020-2021,
-        los datos son presentados como año fiscal 2021.
+        los datos son presentados como año fiscal 2021. Los datos del 2025 son preliminares.
       </p>"
       )
     } else {
@@ -5716,7 +5717,7 @@ server <- function(input, output, session) {
         cometido, región judicial y año fiscal. Los datos para cada
         año fiscal se identifican con el año en que finaliza
         el mismo, por ejemplo, para los datos del año fiscal 2020-2021,
-        los datos son presentados como año fiscal 2021.
+        los datos son presentados como año fiscal 2021. Los datos del 2025 son preliminares.
       </p>"
       )
     }

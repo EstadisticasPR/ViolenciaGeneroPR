@@ -1767,13 +1767,13 @@ safekitsDF_analizados <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
 ##### Actualizaciones de los Datos #####
 ##################################################################################
 # Fecha actualizacion de los datos de SNMV tab1
-actualizacion_snmv1 <- "Última actualización: 1 de octubre de 2025"
+actualizacion_snmv1 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion de los datos de SNMV tab2
-actualizacion_snmv2 <- "Última actualización: 1 de octubre de 2025"
+actualizacion_snmv2 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion familia
-actualizacion_familia <- "Última actualización: 31 de diciembre de 2023"
+actualizacion_familia <- "Última actualización: 31 de diciembre de 2022"
 
 # Fecha actualizacion justicia tab1
 actualizacion_justicia1 <- "Última actualización: 31 de diciembre de 2023"
@@ -1800,19 +1800,19 @@ actualizacion_policia2 <- "Última actualización: 20 de septiembre de 2024"
 actualizacion_policia3 <- "Última actualización: 31 de mayo de 2025"
 
 # Fecha actualizacion policia tab4
-actualizacion_policia4 <- "Última actualización: 30 de junio de 2025"
+actualizacion_policia4 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion policia tab5
-actualizacion_policia5 <- "Última actualización: 30 de junio de 2025"
+actualizacion_policia5 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion policia tab6
-actualizacion_policia6 <- "Última actualización: 30 de junio de 2025"
+actualizacion_policia6 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion policia tab7
-actualizacion_policia7 <- "Última actualización: 30 de junio de 2025"
+actualizacion_policia7 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion opm tab1
-actualizacion_opm1 <- "Última actualización: 31 de diciembre de 2023"
+actualizacion_opm1 <- "Última actualización: 31 de julio de 2024"
 
 # Fecha actualizacion opm tab2
 actualizacion_opm2 <- "Última actualización: 31 de diciembre de 2024"
@@ -1830,13 +1830,13 @@ actualizacion_opm5 <- "Última actualización: 31 de diciembre de 2024"
 actualizacion_opm6 <- "Última actualización: 31 de diciembre de 2023"
 
 # Fecha actualizacion correccion y rehabilitacion tab1
-actualizacion_dcr1 <- "Última actualización: 31 de octubre de 2024"
+actualizacion_dcr1 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion correccion y rehabilitacion tab2
 actualizacion_dcr2 <- "Última actualización: 28 de febrero de 2023"
 
 # Fecha actualizacion Tribunales tab1
-actualizacion_tribunales1 <- "Última actualización: 27 de marzo de 2025"
+actualizacion_tribunales1 <- "Última actualización: 15 de octubre de 2024"
 
 # Fecha actualizacion Tribunales tab2
 actualizacion_tribunales2 <- "Última actualización: 15 de octubre de 2024"
@@ -1857,10 +1857,10 @@ actualizacion_tribunales6 <- "Última actualización: 15 de octubre de 2024"
 actualizacion_tribunales7 <- "Última actualización: 27 de marzo de 2025"
 
 # Fecha actualizacion datos cavv tab1
-actualizacion_cavv1 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_cavv1 <- "Última actualización: 31 de mayo de 2025"
 
 # Fecha actualizacion datos cavv tab2
-actualizacion_cavv2 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_cavv2 <- "Última actualización: 31 de mayo de 2025"
 
 # Fecha actualizacion datos cavv tab3
 actualizacion_cavv3 <- "Última actualización: 31 de mayo de 2025"

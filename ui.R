@@ -1282,7 +1282,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a los
                     incidentes de violencia doméstica (por edad de la víctima)
-                    desde el año natural 2021 al 2023.",
+                    desde el año natural 2021 al 2024. Datos del 2024 son preliminares.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1371,7 +1371,8 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a los
                     incidentes de maltrato (por sexo de la víctima)
-                    desde el año natural 2021 al 2025.",
+                    desde el año natural 2021 al 2025. Los datos del 2025
+                    son preliminares.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1668,12 +1669,13 @@ ui <-
                 div(
                   style = "text-align: center; display: inline-block;", 
                   # botón para seleccionar edad
-                  createDropdownCheckbox(
+                  createDropdownCheckbox_region(
                     label = HTML("Seleccione <br>Región:"),
                     choices = npprDS_relacion$Región,
-                    selected = npprDS_relacion$Región,
+                    selected = NULL,
                     id = "npprDS_relacion_region"
                   ),
+    
                   # botón para seleccionar el sexo
                   createDropdownCheckbox(
                     label = HTML("Seleccione <br>Tipo de Relación:"),
@@ -1986,7 +1988,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a
                     la tasa de asesinatos de mujeres por violencia doméstica, 
-                    desde el año natural 1990 al 2021 (Tasa x100,000 mujeres).",
+                    desde el año natural 1990 al 2024 (Tasa x100,000 mujeres).",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -3257,7 +3259,8 @@ ui <-
                     por delito cometido y año fiscal. Los datos para cada año 
                     fiscal se identifican con el año en que finaliza el mismo,
                     por ejemplo, para los datos del año fiscal 2020-2021, 
-                    los datos son presentados como año fiscal 2021.",
+                    los datos son presentados como año fiscal 2021. Los datos 
+                    del 2025 son preliminares.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -3482,7 +3485,7 @@ ui <-
                   "Los datos representados en esta gráfica corresponden a la
                   tendencia del equipo de recolecta de evidencia de los
                   Rape Kits en casos de violencia sexual, según el estado de querella,
-                  desde el año 2019 al 2024.",
+                  desde el año 2019 al 2025. Los datos del 2025 son preliminares.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -3564,7 +3567,7 @@ ui <-
                   tendencia del equipo de recolecta de evidencia de los
                   Rape Kits en casos de violencia sexual para aquellos casos con querellas
                   segun la clasificacion del individuo (menor de edad o mayor de edad)
-                  desde el año 2019 al 2024.",
+                  desde el año 2019 al 2025. Los datos del 2025 son preliminares.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
