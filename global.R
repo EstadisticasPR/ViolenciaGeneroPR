@@ -916,7 +916,7 @@ npprDS_victima_list <- lapply(as.character(years), function(sheet_name) {
 
 npprDS_victima <- npprDS_victima_list %>%
   reduce(full_join) %>%
-  filter(Año != 2025) %>%
+  #filter(Año != 2025) %>%
   rename(
     Edad = `Grupos de Edad`
   ) %>%
@@ -949,7 +949,7 @@ npprDS_ofensores_list <- lapply(as.character(years), function(sheet_name) {
 
 npprDS_ofensores <- npprDS_ofensores_list %>%
   reduce(full_join) %>%
-  filter(Año != 2025) %>%
+  #filter(Año != 2025) %>%
   rename(
     Edad = `Grupos de Edad`
   ) %>%
@@ -976,7 +976,7 @@ npprDS_rol <- dplyr::bind_rows(npprDS_victima_rol, npprDS_ofensores_rol)
 #### npprDS_region ####
 
 # Años a importar
-years <- 2019:2024
+years <- 2019:2025
 
 # Leer y limpiar los datos por hoja
 npprDS_region_list <- lapply(as.character(years), function(sheet_name) {
@@ -1029,7 +1029,7 @@ mapa_npprDS_ofensores_hombres <- mapa_npprDS_region %>%
 
 #### npprDS_victimas_agrupados ####
 # Años a importar
-years <- 2019:2024
+years <- 2019:2025
 
 # Leer y limpiar los datos por hoja
 npprDS_victimas_agrupados_list <- lapply(as.character(years), function(sheet_name) {
@@ -1057,7 +1057,7 @@ npprDS_victimas_agrupados <- npprDS_victimas_agrupados_list %>%
 
 #### npprDS_victimas_agrupados ####
 # Años a importar
-years <- 2019:2024
+years <- 2019:2025
 
 # Leer y limpiar los datos por hoja
 npprDS_ofensores_agrupados_list <- lapply(as.character(years), function(sheet_name) {
@@ -1085,7 +1085,7 @@ npprDS_ofensores_agrupados <- npprDS_ofensores_agrupados_list %>%
 
 #### npprDS_relacion ####
 # Años a importar
-years <- 2019:2024
+years <- 2019:2025
 
 # Leer y limpiar los datos por hoja
 npprDS_relacion_list <- lapply(as.character(years), function(sheet_name) {
@@ -1112,7 +1112,7 @@ npprDS_relacion <- npprDS_relacion_list %>%
 
 #### npprDS_tiposdelitos ####
 # Años a importar
-years <- 2019:2024
+years <- 2019:2025
 
 # Leer y limpiar los datos por hoja
 npprDS_tiposdelitos_list <- lapply(as.character(years), function(sheet_name) {
