@@ -5,7 +5,7 @@ account: proyectosestadisticosiepr
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12144507
-bundleId: 11214092
+bundleId: 11506395
 url: https://proyectosestadisticosiepr.shinyapps.io/ViolenciaGeneroPR/
 version: 1
 asMultiple: FALSE

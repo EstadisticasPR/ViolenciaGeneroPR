@@ -3151,7 +3151,7 @@ server <- function(input, output, session) {
         "<p style='font-size: 16px;padding: 0px;'>
         Los datos representados en esta gráfica corresponden a los
         datos de delitos sexuales según el tipo de relación
-        ofensor/víctima desde el año natural 2019 al 2024.
+        ofensor/víctima desde el año natural 2019 al 2025.
         
       </p>"
       )
@@ -3160,7 +3160,7 @@ server <- function(input, output, session) {
         "<p style='font-size: 16px;padding: 0px;'>
         Los datos representados en esta gráfica corresponden a los
         datos de delitos sexuales según región y tipo de relación
-        ofensor/víctima desde el año natural 2019 al 2024.
+        ofensor/víctima desde el año natural 2019 al 2025.
       </p>"
       )
     }

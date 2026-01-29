@@ -1186,7 +1186,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a la
                     cantidad de mujeres desaparecidas y localizadas (adultas y menores)
-                    desde el año natural 2020 al 2025. Los datos para el 2025 son preliminares.",
+                    desde el año natural 2020 al 2025.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1474,7 +1474,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a los
                      datos de víctimas y ofensores de delitos sexuales (por sexo)
-                     desde el año natural 2019 al 2024.",
+                     desde el año natural 2019 al 2025.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1569,7 +1569,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a los
                      datos de casos de víctimas de delitos sexuales (por sexo y cat) 
-                     a nivel Isla desde el año natural 2019 al 2024.",
+                     a nivel Isla desde el año natural 2019 al 2025.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1643,7 +1643,7 @@ ui <-
                   p(
                     "Los datos representados en este mapa corresponden al
                     total de casos de deitos sexuales por región del
-                    Negociado de la Policia desde el año 2019 al 2024.",
+                    Negociado de la Policia desde el año 2019 al 2025.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1816,7 +1816,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a los
                      datos de casos de víctimas de delitos sexuales (por sexo y tipo de delito) 
-                     a nivel Isla desde el año natural 2019 al 2024.",
+                     a nivel Isla desde el año natural 2019 al 2025.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -3485,7 +3485,7 @@ ui <-
                   "Los datos representados en esta gráfica corresponden a la
                   tendencia del equipo de recolecta de evidencia de los
                   Rape Kits en casos de violencia sexual, según el estado de querella,
-                  desde el año 2019 al 2025. Los datos del 2025 son preliminares.",
+                  desde el año 2019 al 2025.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -3567,7 +3567,7 @@ ui <-
                   tendencia del equipo de recolecta de evidencia de los
                   Rape Kits en casos de violencia sexual para aquellos casos con querellas
                   segun la clasificacion del individuo (menor de edad o mayor de edad)
-                  desde el año 2019 al 2025. Los datos del 2025 son preliminares.",
+                  desde el año 2019 al 2025.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -3647,7 +3647,7 @@ ui <-
                 p(
                   "Los datos representados en esta gráfica corresponden a la
               cantidad de kits de agresión sexual que han sido analizados
-              desde el año 2021 al 2025. Los datos para el año 2025 son preliminares",
+              desde el año 2021 al 2025.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )

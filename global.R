@@ -1269,12 +1269,12 @@ opmAgresores <- read_excel(paste0(opm, "opmAgresores.xlsx"))  %>%
 niveles_completos <- c("Acecho", "Agresión sexual", "Discrimen de género",
                        "Violencia doméstica", "Violencia en cita", "Trata Humana", "Otras")
 
-opm_mes_df <- read_excel(paste0(opm, "opmPartMes.xlsx"), sheet = "mensual")
-opm_anual_df <- read_excel(paste0(opm, "opmPartMes.xlsx"), sheet = "anual")
+# opm_mes_df <- read_excel(paste0(opm, "opmPartMes.xlsx"), sheet = "mensual")
+# opm_anual_df <- read_excel(paste0(opm, "opmPartMes.xlsx"), sheet = "anual")
+opm_anual_df <- read_excel(paste0(opm, "opmVictimas.xlsx"), sheet = "anual")
 
 # Limpiar con la función
 opmCasos_list <- list(
-  cleanSheet_OPM(opm_mes_df, "mensual", niveles_completos),
   cleanSheet_OPM(opm_anual_df, "anual", niveles_completos)
 )
 
@@ -1283,7 +1283,7 @@ opmCasos <- reduce(opmCasos_list, full_join)
 
 #### opmVic ####
 opmVic <- read_excel(paste0(opm, "opmVicGraf.xlsx")) %>% 
-  rename_at(vars(1,2,3,4,5,6), ~ c("género","2020", "2021", "2022", "2023", "2024")) %>%
+  rename_at(vars(1,2,3,4,5,6,7), ~ c("género","2020", "2021", "2022", "2023", "2024", "2025")) %>%
   pivot_longer(!género, names_to = "año", values_to = "víctimas") %>%
   mutate(
     género = factor(género,
@@ -1300,8 +1300,8 @@ opmVic <- read_excel(paste0(opm, "opmVicGraf.xlsx")) %>%
 
 #### opmMedio ####
 opmMedio <- read_excel(paste0(opm, "opmMedio.xlsx")) %>% 
-  rename_at(vars(2,3,4,5,6), ~ c("2020", "2021", "2022", "2023", "2024")) %>%
-  mutate(across(c("2020", "2021", "2022", "2023", "2024"), as.numeric)) %>%
+  rename_at(vars(2,3,4,5,6,7), ~ c("2020", "2021", "2022", "2023", "2024", "2025")) %>%
+  mutate(across(c("2020", "2021", "2022", "2023", "2024", "2025"), as.numeric)) %>%
   pivot_longer(!`Medio de orientación`, names_to = "año", values_to = "personas atendidas") %>% 
   filter(`Medio de orientación` != "Total") %>%
   mutate(
@@ -1319,17 +1319,17 @@ opmMedio <- read_excel(paste0(opm, "opmMedio.xlsx")) %>%
 
 #### opmServiciosMes ####
 opmServiciosMes <-  read_excel(paste0(opm, "opmServiciosMes.xlsx")) %>%
-  select(-c(month)) %>%
-  group_by(tipo, year) %>%
-  summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
-  ungroup() %>%
+  # select(-c(month)) %>%
+  # group_by(tipo, year) %>%
+  # summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
+  # ungroup() %>%
   mutate(
-    tipo = factor(tipo),
-    year = factor(year)
+    `Tipo de Servicio` = factor(`Tipo de Servicio`),
+    Año = factor(Año)
   ) %>%
-  rename(Año = year) %>%
-  rename(Servicio = tipo) %>%
-  rename(Cantidad = cantidad) %>%
+  rename(Año = Año) %>%
+  rename(Servicio = `Tipo de Servicio`) %>%
+  rename(Cantidad = `Servicios Ofrecidos`) %>%
   replace_na(list(Cantidad = 0)) %>%
   relocate(
     Año, Servicio, Cantidad
@@ -1751,6 +1751,32 @@ safekitsDF_analizados <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
   )
 
 
+#### kits recibidos por region policiaca ####
+
+safekits_region <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
+                              sheet = "Región Policiaca") %>%
+  pivot_longer(
+    cols = 2:6,
+    names_to = "Año",
+    values_to = "Cantidad"
+  ) %>%
+  filter(
+    `Región Policiaca` != "Total"
+  ) %>% 
+  rename(Región = `Región Policiaca`) %>%
+  mutate(
+    Región = factor(Región),
+    Año = factor(Año)
+  )
+
+mapa_cavv <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
+  merge(safekits_region, by.x = "GROUP", by.y = "Región") %>%
+  rename(Región = GROUP) %>%
+  relocate(
+    Año, Región, geometry, Cantidad
+  )
+
+
 #### Guardar datos procesados de CAVV ####
 # dataframes <- list(safekitsDF) # Lista de dataframes 
 # 
@@ -1770,7 +1796,7 @@ safekitsDF_analizados <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
 actualizacion_snmv1 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion de los datos de SNMV tab2
-actualizacion_snmv2 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_snmv2 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion familia
 actualizacion_familia <- "Última actualización: 31 de diciembre de 2022"
@@ -1791,7 +1817,7 @@ actualizacion_avp2 <- "Última actualización: 31 de diciembre de 2024"
 actualizacion_avp3 <- "Última actualización: 31 de diciembre de 2024"
 
 # Fecha actualizacion policia tab1
-actualizacion_policia1 <- "Última actualización: 30 de noviembre de 2025"
+actualizacion_policia1 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion policia tab2
 actualizacion_policia2 <- "Última actualización: 20 de septiembre de 2024"
@@ -1800,34 +1826,34 @@ actualizacion_policia2 <- "Última actualización: 20 de septiembre de 2024"
 actualizacion_policia3 <- "Última actualización: 31 de mayo de 2025"
 
 # Fecha actualizacion policia tab4
-actualizacion_policia4 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_policia4 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion policia tab5
-actualizacion_policia5 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_policia5 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion policia tab6
-actualizacion_policia6 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_policia6 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion policia tab7
-actualizacion_policia7 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_policia7 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion opm tab1
 actualizacion_opm1 <- "Última actualización: 31 de julio de 2024"
 
 # Fecha actualizacion opm tab2
-actualizacion_opm2 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_opm2 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion opm tab3
-actualizacion_opm3 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_opm3 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion opm tab4
-actualizacion_opm4 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_opm4 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion opm tab5
-actualizacion_opm5 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_opm5 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion opm tab6
-actualizacion_opm6 <- "Última actualización: 31 de diciembre de 2023"
+actualizacion_opm6 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion correccion y rehabilitacion tab1
 actualizacion_dcr1 <- "Última actualización: 31 de diciembre de 2024"
@@ -1857,13 +1883,13 @@ actualizacion_tribunales6 <- "Última actualización: 15 de octubre de 2024"
 actualizacion_tribunales7 <- "Última actualización: 27 de marzo de 2025"
 
 # Fecha actualizacion datos cavv tab1
-actualizacion_cavv1 <- "Última actualización: 31 de mayo de 2025"
+actualizacion_cavv1 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion datos cavv tab2
-actualizacion_cavv2 <- "Última actualización: 31 de mayo de 2025"
+actualizacion_cavv2 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion datos cavv tab3
-actualizacion_cavv3 <- "Última actualización: 31 de mayo de 2025"
+actualizacion_cavv3 <- "Última actualización: 31 de diciembre de 2025"
 
 ##################################################################################
 ##### Credenciales para el web hosting #####
