@@ -1837,6 +1837,9 @@ actualizacion_policia6 <- "Última actualización: 31 de diciembre de 2025"
 # Fecha actualizacion policia tab7
 actualizacion_policia7 <- "Última actualización: 31 de diciembre de 2025"
 
+# Fecha actualizacion policia tab8
+actualizacion_policia8 <- "Última actualización: 31 de diciembre de 2025"
+
 # Fecha actualizacion opm tab1
 actualizacion_opm1 <- "Última actualización: 31 de julio de 2024"
 

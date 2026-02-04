@@ -1638,7 +1638,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong(actualizacion_avp2, style="margin: 0px;") 
+                    strong(actualizacion_policia6, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en este mapa corresponden al
