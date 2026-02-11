@@ -3657,60 +3657,60 @@ ui <-
         )
       ),
       #### tab con datos del mapa SAFE Kits recibidos por region (mapa_cavv) ####
-      # tabPanel(
-      #   lowercaseTitle("Mapas de Rape Kits recibidos por región policiaca"),
-      #   br(), br(),
-      #   
-      #   # Menu sidebar con widgets
-      #   sidebarLayout(
-      #     sidebarPanel(
-      #       # botón para seleccionar año
-      #       selectInput("select_mapaCAVV_año", "Seleccione Año:",
-      #                   choices = levels(mapa_cavv$Año),
-      #                   selected = 1),
-      #       
-      #       # Centrar el checkbox y la tabla
-      #       div(
-      #         style = "flex: 0.7; display: flex; justify-content: center;",
-      #         
-      #         # Checkbox para mostrar/ocultar la tabla de datos
-      #         showDataCheckbox("showTable_mapaCAVV"),
-      #       ),
-      # 
-      #       # Output UI para la tabla de datos
-      #       uiOutput("dataTableUI_mapaCAVV")
-      #     ),
-      #     
-      #     # Sección principal con los gráficos
-      #     mainPanel(
-      #       fluidRow(
-      #         column(12, 
-      #                div(id = "scrollable-plot", 
-      #                    div(id = "plot-title", uiOutput("plot_title_mapaCAVV")),
-      #                    leafletOutput("map_mapaCAVV", height = "450px"),  height = "100%"))
-      #       ),
-      #       #plotlyOutput("map_just_mapaDeli"),
-      #       tags$div(style = "padding-bottom: 10px;"),
-      #       tags$div(
-      #         style = "padding-bottom: 10px;",
-      #         div(
-      #           class = "card",
-      #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
-      #           h4(
-      #             strong(actualizacion_cavv4, style="margin: 0px;") 
-      #           ),
-      #           p(
-      #             "Los datos representados en este mapa corresponden a
-      #             la cantidad de kits recibidos por región policiaca
-      #             desde el 2021 al 2025.",
-      #             
-      #             style = "font-size: 16px;padding: 0px;" 
-      #           )
-      #         )
-      #       )
-      #     )
-      #   )
-      # ), 
+      tabPanel(
+        lowercaseTitle("Mapas de Rape Kits recibidos por región policiaca"),
+        br(), br(),
+        
+        # Menu sidebar con widgets
+        sidebarLayout(
+          sidebarPanel(
+            # botón para seleccionar año
+            selectInput("select_mapaCAVV_año", "Seleccione Año:",
+                        choices = levels(mapa_cavv$Año),
+                        selected = 1),
+            
+            # Centrar el checkbox y la tabla
+            div(
+              style = "flex: 0.7; display: flex; justify-content: center;",
+              
+              # Checkbox para mostrar/ocultar la tabla de datos
+              showDataCheckbox("showTable_mapaCAVV"),
+            ),
+ 
+            # Output UI para la tabla de datos
+            uiOutput("dataTableUI_mapaCAVV")
+          ),
+          
+          # Sección principal con los gráficos
+          mainPanel(
+            fluidRow(
+              column(12, 
+                     div(id = "scrollable-plot", 
+                         div(id = "plot-title", uiOutput("plot_title_mapaCAVV")),
+                         leafletOutput("map_mapaCAVV", height = "450px"),  height = "100%"))
+            ),
+            #plotlyOutput("map_just_mapaDeli"),
+            tags$div(style = "padding-bottom: 10px;"),
+            tags$div(
+              style = "padding-bottom: 10px;",
+              div(
+                class = "card",
+                style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                h4(
+                  strong(actualizacion_cavv4, style="margin: 0px;") 
+                ),
+                p(
+                  "Los datos representados en este mapa corresponden a
+                  la cantidad de kits recibidos por región policiaca
+                  desde el 2021 al 2025.",
+                  
+                  style = "font-size: 16px;padding: 0px;" 
+                )
+              )
+            )
+          )
+        )
+      ), 
       #### tab de Publicaciones del CAVV ####
       # tabPanel(
       #   lowercaseTitle("Publicaciones"),
