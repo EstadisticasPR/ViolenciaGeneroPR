@@ -1894,6 +1894,9 @@ actualizacion_cavv2 <- "Última actualización: 31 de diciembre de 2025"
 # Fecha actualizacion datos cavv tab3
 actualizacion_cavv3 <- "Última actualización: 31 de diciembre de 2025"
 
+# Fecha actualizacion datos cavv tab4
+actualizacion_cavv4 <- "Última actualización: 31 de diciembre de 2025"
+
 ##################################################################################
 ##### Credenciales para el web hosting #####
 ##################################################################################

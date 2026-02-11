@@ -1998,8 +1998,8 @@ server <- function(input, output, session) {
   })
   
   # Data Table para el mapa de despDF
-  output$dataTable_poli_despDF <- renderDT({
-    renderDataTable(despDF_filt_rename(), "Datos: Mujeres desaparecidad y localizadas")
+  output$dataTable_poli_despDF <- renderDT(server = FALSE, {
+    renderDataTable(despDF_filt_rename(), "Datos: Mujeres desaparecidas y localizadas")
   })
   
   # Crear Card con Fuentes
@@ -3011,7 +3011,7 @@ server <- function(input, output, session) {
     )
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar el sexo
+  ### funcion para el boton de deseleccionar/seleccionar el sexo 
   observeEvent(input$deselectAll_npprDS_relacion_region, {
     updateCheckboxGroup(session, "checkGroup_npprDS_relacion_region", input, npprDS_relacion$Región)
   })
@@ -3498,7 +3498,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title_opmFemiVD <- renderUI({
-    title <- "Tasa anual de asesinatos de mujeres por violencia doméstica del año 1990 al 2021"
+    title <- "Tasa anual de asesinatos de mujeres por violencia doméstica del año 1990 al 2024"
   })
 
   # Data Table para el mapa de despDF
@@ -7301,6 +7301,70 @@ server <- function(input, output, session) {
           div(
             style = "width: 98%; max-width: 800px; overflow-x: auto;", 
             DTOutput("dataTable_safekitsDF_analizados")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  #### Tab del Mapa de SAFE Kits recibidos por region policiaca (mapa_cavv) ####
+  
+  # Filtrar el conjunto de datos según el año, delito o distrito seleccionado
+  mapaCAVV_filt <- reactive({
+    filter(mapa_cavv, 
+           Año %in% input$select_mapaCAVV_año)
+  })
+  
+  # funcion para el boton de deseleccionar/seleccionar el año
+  observeEvent(input$deselectAll_mapaCAVV_año, {
+    updateCheckboxGroup(session, "checkGroup_mapaCAVV_año", input, mapa_cavv$Año)
+  })
+  
+
+  # Renderizar el mapa con Leaflet
+  output$map_mapaCAVV <- renderLeaflet({
+    data <- mapaCAVV_filt()
+    renderMap(data, value_col = "Cantidad",
+              value_col_region = "Región",
+              map_zoom = 8.5,
+              provider = providers$CartoDB.Positron,
+              municipios_geo = municipios_geo)
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title_mapaCAVV <- renderUI({
+    title <- HTML("<i>Rape Kits</i> recibidos por región policiaca")
+  })
+    
+  mapaCAVV_filt_rename <- reactive({
+    st_drop_geometry(mapaCAVV_filt())%>%
+      rename(`Cantidad de Kits recibidos` = Cantidad)
+  })
+  
+  # Data Table
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_mapaCAVV <- renderDT(server = FALSE, {
+    renderDataTable(mapaCAVV_filt_rename(), "Datos: Cantidad de kits recibidos por region policiaca")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_mapaCAVV  <- renderUI({
+    if (input$showTable_mapaCAVV) {
+      hyperlinks <- c("https://www.icf.pr.gov/")
+      texts <- c("Instituto de Ciencias Forenses")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
+            DTOutput("dataTable_mapaCAVV")
           )
         ),
         
