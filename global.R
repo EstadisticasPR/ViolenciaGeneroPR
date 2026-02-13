@@ -1859,7 +1859,7 @@ actualizacion_opm5 <- "Última actualización: 31 de diciembre de 2025"
 actualizacion_opm6 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion correccion y rehabilitacion tab1
-actualizacion_dcr1 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_dcr1 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion correccion y rehabilitacion tab2
 actualizacion_dcr2 <- "Última actualización: 28 de febrero de 2023"

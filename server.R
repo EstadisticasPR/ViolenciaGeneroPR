@@ -7017,7 +7017,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title_safekitsDF <- renderUI({
-    title <- HTML("Tendencia anual de <i>Rape Kits</i> por estado de querella")
+    title <- HTML("Tendencia anual de <i>SAKs Kits</i> por estado de querella")
   })
  
   safekitsDF_filt_rename <- reactive({
@@ -7030,11 +7030,11 @@ server <- function(input, output, session) {
   # Data Table
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_safekitsDF <- renderDT(server = FALSE, {
-    renderDataTable(safekitsDF_filt_rename(), "Datos: Tendencia anual del equipo de recolecta de evidencia de Rape Kits en casos de violencia sexual")
+    renderDataTable(safekitsDF_filt_rename(), "Datos: Tendencia anual del equipo de recolecta de evidencia de SAKs Kits en casos de violencia sexual")
   })
   
   # Crear Card con Fuentes
-  output$dataTableUI_safekitsDF  <- renderUI({
+  output$dataTableUI_safekitsDF <- renderUI({
     if (input$showTable_safekitsDF) {
       hyperlinks <- c("https://www.icf.pr.gov/")
       texts <- c("Instituto de Ciencias Forenses")
@@ -7148,7 +7148,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title_safekitsDF_edades <- renderUI({
-    title <- HTML("Tendencia anual de <i>Rape Kits</i> con querella en menores y mayores de edad")
+    title <- HTML("Tendencia anual de <i>SAKs Kits</i> con querella en menores y mayores de edad")
   })
   
   safekitsDF_edades_filt_rename <- reactive({
@@ -7160,7 +7160,7 @@ server <- function(input, output, session) {
   # Data Table
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_safekitsDF_edades <- renderDT(server = FALSE, {
-    renderDataTable(safekitsDF_edades_filt_rename(), "Datos: Tendencia anual del equipo de recolecta de evidencia de Rape Kits en casos de violencia sexual")
+    renderDataTable(safekitsDF_edades_filt_rename(), "Datos: Tendencia anual del equipo de recolecta de evidencia de SAKs Kits en casos de violencia sexual")
   })
   
   # Crear Card con Fuentes
@@ -7186,6 +7186,7 @@ server <- function(input, output, session) {
       )
     }
   })
+  
   
   
   ####  (safekitsDF_analizados) ####
@@ -7335,7 +7336,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title_mapaCAVV <- renderUI({
-    title <- HTML("<i>Rape Kits</i> recibidos por región policiaca")
+    title <- HTML("<i>SAKs Kits</i> recibidos por región policiaca")
   })
     
   mapaCAVV_filt_rename <- reactive({
