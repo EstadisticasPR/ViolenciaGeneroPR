@@ -2462,17 +2462,17 @@ ui <-
                 # botón para seleccionar el sexo
                 createDropdownCheckbox(
                   label = "Seleccione el Sexo:",
-                  choices = dcrCasosInv$Sexo,
+                  choices = dcrCasosInv_supervision$Sexo,
                   selected = 1,
                   id = "dcr_dcrCasosInv_sexo"
                 ),
                 # botón para seleccionar el tipo de investigación 
-                createDropdownCheckbox(
-                  label = HTML("Seleccione  el<br> Estado de Investigación:"),
-                  choices = dcrCasosInv$Estado,
-                  selected = dcrCasosInv$Estado,
-                  id = "dcr_dcrCasosInv_tipo"
-                )
+                # createDropdownCheckbox(
+                #   label = HTML("Seleccione  el<br> Estado de Investigación:"),
+                #   choices = dcrCasosInv_supervision$Estado,
+                #   selected = dcrCasosInv_supervision$Estado,
+                #   id = "dcr_dcrCasosInv_tipo"
+                # )
               )
             ),
             
@@ -2485,8 +2485,8 @@ ui <-
                   # botón para seleccionar el año
                   createDropdownCheckbox(
                     label = "Seleccione Año(s):",
-                    choices = dcrCasosInv$Año,
-                    selected = dcrCasosInv$Año,
+                    choices = dcrCasosInv_supervision$Año,
+                    selected = dcrCasosInv_supervision$Año,
                     id = "dcr_dcrCasosInv_year"
                   )
                 ),

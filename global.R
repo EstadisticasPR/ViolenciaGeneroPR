@@ -546,24 +546,66 @@ dcr <- here::here("data", "Departamento_de_correccion_y_rehabilitacion", "/")
 
 #### dcrCasosInv ####
 # importando el dataset de Casos en Supervisión de Ley 54
+# dcrCasosInv <- read_excel(paste0(dcr, "dcrCasosInv.xlsx")) %>%
+#   select(-c(mes)) %>%
+#   group_by(tipo, year, sexo) %>%
+#   summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
+#   ungroup() %>%
+#   mutate(
+#     year = factor(year),
+#     sexo = factor(sexo),
+#     tipo = factor(tipo)
+#   ) %>%
+#   rename(Año = year) %>%
+#   rename(Sexo = sexo) %>%
+#   rename(Estado = tipo) %>%
+#   rename(Cantidad = cantidad) %>%
+#   replace_na(list(Cantidad = 0)) %>%
+#   relocate(
+#     Año, Sexo, Estado, Cantidad
+#   )
 dcrCasosInv <- read_excel(paste0(dcr, "dcrCasosInv.xlsx")) %>%
-  select(-c(mes)) %>%
   group_by(tipo, year, sexo) %>%
-  summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
-  ungroup() %>%
+  summarise(
+    Cantidad = round(sum(cantidad, na.rm = TRUE) / 12),
+    .groups = "drop"
+  ) %>%
   mutate(
     year = factor(year),
     sexo = factor(sexo),
     tipo = factor(tipo)
   ) %>%
-  rename(Año = year) %>%
-  rename(Sexo = sexo) %>%
-  rename(Estado = tipo) %>%
-  rename(Cantidad = cantidad) %>%
+  rename(
+    Año = year,
+    Sexo = sexo,
+    Estado = tipo
+  ) %>%
   replace_na(list(Cantidad = 0)) %>%
-  relocate(
-    Año, Sexo, Estado, Cantidad
-  )
+  relocate(Año, Sexo, Estado, Cantidad)
+
+dcrCasosInv_supervision <- read_excel(paste0(dcr, "dcrCasosInv.xlsx")) %>%
+  filter(!grepl("Investigaciones", tipo, ignore.case = TRUE)) %>%
+  group_by(tipo, year, sexo) %>%
+  summarise(
+    Cantidad = round(sum(cantidad, na.rm = TRUE) / 12),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    year = factor(year),
+    sexo = factor(sexo),
+    tipo = factor(tipo)
+  ) %>%
+  rename(
+    Año = year,
+    Sexo = sexo,
+    Estado = tipo
+  ) %>%
+  replace_na(list(Cantidad = 0)) %>%
+  relocate(Año, Sexo, Estado, Cantidad)
+
+
+
+
 
 #### dcrSentenciadas ####
 

@@ -4258,13 +4258,23 @@ server <- function(input, output, session) {
   #### tab con datos de los servicios ofrecidos (dcrCasosInv) ####
   
   # Filtrar el conjunto de datos según los valores seleccionados del año, el tipo de servicio y el sexo
+  # dcrCasosInv_filt <- reactive({
+  #   filter(dcrCasosInv,
+  #          Año %in% input$checkGroup_dcr_dcrCasosInv_year,
+  #          Estado %in% input$checkGroup_dcr_dcrCasosInv_tipo,
+  #          Sexo %in% input$checkGroup_dcr_dcrCasosInv_sexo
+  #   )
+  # })
+  
   dcrCasosInv_filt <- reactive({
-    filter(dcrCasosInv,
+    filter(dcrCasosInv_supervision,
            Año %in% input$checkGroup_dcr_dcrCasosInv_year,
-           Estado %in% input$checkGroup_dcr_dcrCasosInv_tipo,
+           # Estado %in% input$checkGroup_dcr_dcrCasosInv_tipo,
            Sexo %in% input$checkGroup_dcr_dcrCasosInv_sexo
     )
   })
+  
+  
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
   observeEvent(input$deselectAll_dcr_dcrCasosInv_year, {
@@ -4286,25 +4296,25 @@ server <- function(input, output, session) {
     )
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar del botón del estado de investigación
-  observeEvent(input$deselectAll_dcr_dcrCasosInv_tipo, {
-    updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_tipo", input, dcrCasosInv$Estado)
-  })
-  
-  observe({
-    inputId <- "checkGroup_dcr_dcrCasosInv_tipo"
-    buttonId <- "deselectAll_dcr_dcrCasosInv_tipo"
-    all_choices <- levels(dcrCasosInv$Estado)
-    selected <- input[[inputId]]
-    
-    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
-    
-    updateActionButton(
-      session,
-      inputId = buttonId,
-      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
-    )
-  })
+  # ### funcion para el boton de deseleccionar/seleccionar del botón del estado de investigación
+  # observeEvent(input$deselectAll_dcr_dcrCasosInv_tipo, {
+  #   updateCheckboxGroup(session, "checkGroup_dcr_dcrCasosInv_tipo", input, dcrCasosInv$Estado)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_dcr_dcrCasosInv_tipo"
+  #   buttonId <- "deselectAll_dcr_dcrCasosInv_tipo"
+  #   all_choices <- levels(dcrCasosInv$Estado)
+  #   selected <- input[[inputId]]
+  #   
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  #   
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de sexo
   observeEvent(input$deselectAll_dcr_dcrCasosInv_sexo, {
@@ -4333,16 +4343,16 @@ server <- function(input, output, session) {
   output$barPlot_dcr_dcrCasosInv <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
     has_año <- length(input$checkGroup_dcr_dcrCasosInv_year) > 0
-    has_tipo <- length(input$checkGroup_dcr_dcrCasosInv_tipo) > 0
+    # has_tipo <- length(input$checkGroup_dcr_dcrCasosInv_tipo) > 0
     has_sexo <- length(input$checkGroup_dcr_dcrCasosInv_sexo) > 0
     
     # Crear mensaje si faltan opciones seleccionadas
-    if (!has_año || !has_tipo || !has_sexo) {
+    if (!has_año || !has_sexo) {
       message <- HTML("Seleccione Estado de la investigación, \n Sexo y Año(s) a visualizar")
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                         xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", fillLab = "Estado de Investigación",
+                         xlab = "Año", ylab = "Promedio de casos sentenciados", fillLab = "Estado de Investigación",
                          colorFill = dcrCasosInv_fill_tipo,
                          emptyMessage = HTML("Seleccione Estado de la investigación, \n Sexo y Año(s) a visualizar"))
       #Altura predeterminada para la grafica.
@@ -4361,14 +4371,18 @@ server <- function(input, output, session) {
     
     # Crear la gráfica vacía con mensaje
     empty_plot <- create_empty_plot_with_message(data = dcrCasosInv_filt, x = "Año", y = "Cantidad", fill = "Estado",
-                                                 xlab = "Año", ylab = "Cantidad de Servicios Ofrecidos", message)
+                                                 xlab = "Año", ylab = "Promedio de casos sentenciados", message)
     convert_to_plotly(empty_plot, tooltip = "text")
   })
   
   #Titulo de la Grafica
   output$plot_title_dcrCasosInv <- renderUI({
-    title <- "Casos en supervisión de Ley 54: Programas Alternativos al Confinamiento"
+    HTML(paste0(
+      "Promedio de casos sentenciados bajo el programa de supervisión electrónica por<br>",
+      "Ley 54 dentro del Programa de la comunidad"
+    ))
   })
+  
   dcrCasosInv_filt_rename <- reactive({
     dcrCasosInv_filt() %>% 
       rename(`Estado de Investigación` = Estado) 
@@ -4499,7 +4513,7 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title_dcrSentenciadas <- renderUI({
-    title <- "Sentenciados por violencia doméstica bajo supervisión electrónica"
+    title <- "Sentenciados por violencia doméstica bajo supervisión electrónica del programa de la comunidad"
   })
   
   dcrSentenciadas_filt_rename <- reactive({

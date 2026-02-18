@@ -947,7 +947,8 @@ renderBarPlot_facets <- function(data, x, y, fill, xlab, ylab, fillLab = fill, c
                width = 0.7,
                aes(
                  text = paste(
-                   paste0("<b>", ylab, ":</b> ", after_stat(y)), "<br>",
+                   # paste0("<b>", ylab, ":</b> ", after_stat(y)), "<br>",
+                   paste0("<b>", ylab, ":</b> ", scales::comma(after_stat(y), big.mark = ","),"<br>"),
                    paste0("<b>", fillLab, ":</b> ", after_stat(fill)), "<br>"
                  )
                )) +
