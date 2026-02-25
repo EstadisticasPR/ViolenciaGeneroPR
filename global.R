@@ -271,7 +271,7 @@ djus <- here::here("data", "Departamento_de_Justicia", "/")
 maps_fol <- here::here("data", "mapas/")
 
 # Años a importar
-years <- 2020:2023
+years <- 2020:2025
 
 # Importar y combinar todos los archivos
 dfDeli <- lapply(years, function(year) {
@@ -1844,10 +1844,10 @@ actualizacion_snmv2 <- "Última actualización: 31 de diciembre de 2024"
 actualizacion_familia <- "Última actualización: 31 de diciembre de 2022"
 
 # Fecha actualizacion justicia tab1
-actualizacion_justicia1 <- "Última actualización: 31 de diciembre de 2023"
+actualizacion_justicia1 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion justicia tab2
-actualizacion_justicia2 <- "Última actualización: 31 de diciembre de 2023"
+actualizacion_justicia2 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion avp tab1
 actualizacion_avp1 <- "Última actualización: 31 de diciembre de 2024"

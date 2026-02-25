@@ -704,7 +704,7 @@ server <- function(input, output, session) {
     if (!has_año || !has_delito) {
       message <- HTML("Seleccione Delito y Año(s) a visualizar")
       empty_plot <- create_empty_plot_with_message(data = dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
-                                                   xlab = "Año", ylab = "Cantidad de víctimas", message)
+                                                   xlab = "Año", ylab = "Cantidad de casos", message)
       
       #Titulo de la Grafica
       output$plot_title_dfDeli <- renderUI({
@@ -717,7 +717,7 @@ server <- function(input, output, session) {
     # Si NO hay región seleccionada, usar el dataset agregado
     if (!has_distrito) {
       p <- renderBarPlot_facets(dfDeli_filt_total, x = "Año", y = "Casos", fill = "Delito",
-                                xlab = "Año", ylab = "Cantidad de víctimas",
+                                xlab = "Año", ylab = "Cantidad de casos",
                                 fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito,
                                 emptyMessage = HTML("Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)"))
       
@@ -739,7 +739,7 @@ server <- function(input, output, session) {
     })
     
     p <- renderBarPlot_facets(dfDeli_filt, x = "Año", y = "Casos", fill = "Delito",
-                              xlab = "Año", ylab = "Cantidad de víctimas",
+                              xlab = "Año", ylab = "Cantidad de casos",
                               fillLab = "Artículo de Ley 54", colorFill = dfDeli_fill_Delito,
                               emptyMessage = HTML("Seleccione Articulo(s) de Ley 54, Año(s) y Distrito(s)"))
     #Altura predeterminada para la grafica.
@@ -813,7 +813,7 @@ server <- function(input, output, session) {
         "<p style='font-size: 16px;padding: 0px;'>
         Los datos representados en esta gráfica corresponden al
         total de casos radicados por Artículo
-        de la Ley 54 desde el año natural 2020 al 2023.
+        de la Ley 54 desde el año natural 2020 al 2025.
       </p>"
       )
     } else {
@@ -821,7 +821,7 @@ server <- function(input, output, session) {
         "<p style='font-size: 16px;padding: 0px;'>
         Los datos representados en esta gráfica corresponden al
         número de casos radicados por distrito fiscal y Artículo
-        de la Ley 54 desde el año natural 2020 al 2023.
+        de la Ley 54 desde el año natural 2020 al 2025.
       </p>"
       )
     }

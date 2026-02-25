@@ -649,7 +649,7 @@ ui <-
                   p(
                     "Los datos representados en este mapa corresponden al
                     número de casos radicados por distrito fiscal y Artículo 
-                    de la Ley 54 desde el año natural 2020 al 2023.",
+                    de la Ley 54 desde el año natural 2020 al 2025.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -2522,12 +2522,8 @@ ui <-
               ),
               p(
                 "Los datos representados en esta gráfica corresponden a
-                 los casos en supervisión de ley 54 en programas alternos
-                al confinamiento (por estado de investigación): Programas de Comunidad
-                desde el año natural 2021 al 2024. Los datos de Investigaciones realizadas
-                se encuentran hasta febrero del 2023 por el cambio de formato en sus datos.
-                El Departamento de Corrección y Rehabilitación se encuentra trabajando
-                con la actualización de estos.",
+                 los casos sentenciados en supervisión electrónica de ley 54 en programas alternos
+                al confinamiento: Programas de Comunidad desde el año natural 2021 al 2025.",
                 
                 style = "font-size: 16px;padding: 0px;" 
               )
