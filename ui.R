@@ -470,8 +470,14 @@ ui <-
                   div(
                     style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
                     # botón para seleccionar el año
-                    createDropdownCheckbox_añoFiscal(
-                      label = HTML("Seleccione <br> Año(s) Fiscal:"),
+                    # createDropdownCheckbox_añoFiscal(
+                    #   label = HTML("Seleccione <br> Año(s) Fiscal:"),
+                    #   choices = dfDeli$Año,
+                    #   selected = dfDeli$Año,
+                    #   id = "just_dfDeli_año"
+                    # )
+                    createDropdownCheckbox(
+                      label = "Seleccione Año(s):",
                       choices = dfDeli$Año,
                       selected = dfDeli$Año,
                       id = "just_dfDeli_año"
