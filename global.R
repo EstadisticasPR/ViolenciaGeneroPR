@@ -273,11 +273,11 @@ maps_fol <- here::here("data", "mapas/")
 # Años a importar
 years <- 2020:2025
 
-# Importar y combinar todos los archivos
-dfDeli <- lapply(years, function(year) {
-  read_excel(paste0(djus, "djDelitos", year, ".xlsx")) %>%
+# Leer y limpiar los datos por hoja
+dfDeli <- lapply(as.character(years), function(sheet_name) {
+  read_excel(paste0(djus, "djDelitos.xlsx"), sheet = sheet_name) %>%
     convert_mixed_columns() %>%
-    mutate(Año = as.character(year))
+    mutate(Año = sheet_name)
 }) %>%
   bind_rows() %>%
   filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE)) %>%
@@ -301,6 +301,38 @@ dfDeli <- lapply(years, function(year) {
   relocate(
     Año, Distrito, Delito, Casos
   )
+
+
+
+
+# # Importar y combinar todos los archivos
+# dfDeli <- lapply(years, function(year) {
+#   read_excel(paste0(djus, "djDelitos", year, ".xlsx")) %>%
+#     convert_mixed_columns() %>%
+#     mutate(Año = as.character(year))
+# }) %>%
+#   bind_rows() %>%
+#   filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE)) %>%
+#   select(-TOTAL) %>%
+#   pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
+#   mutate(
+#     Año = factor(Año),
+#     Delito = factor(Delito),
+#     `FISCALIA DISTRITO` = factor(str_to_title(tolower(`FISCALIA DISTRITO`))
+#     ),
+#     Delito = recode(Delito,
+#                     "Art3.5" = "Agresión Sexual Conyugal",
+#                     "Art3.2" = "Maltrato Agravado",
+#                     "Art3.1" = "Maltrato",
+#                     "Art3.3" = "Maltrato por Amenaza",
+#                     "Art3.4" = "Maltrato por Restricción de Libertad",
+#                     "Art2.8" = "Incumplimiento de la Órden de Protección")
+#   ) %>%
+#   replace_na(list(Casos = 0)) %>%
+#   rename(Distrito = `FISCALIA DISTRITO`) %>%
+#   relocate(
+#     Año, Distrito, Delito, Casos
+#   )
 
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar 
