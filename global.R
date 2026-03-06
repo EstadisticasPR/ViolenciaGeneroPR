@@ -303,8 +303,6 @@ dfDeli <- lapply(as.character(years), function(sheet_name) {
   )
 
 
-
-
 # # Importar y combinar todos los archivos
 # dfDeli <- lapply(years, function(year) {
 #   read_excel(paste0(djus, "djDelitos", year, ".xlsx")) %>%
