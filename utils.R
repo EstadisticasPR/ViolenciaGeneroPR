@@ -3,13 +3,199 @@ cat("Loading helper functions from utils.R...\n")
 ##################################
 #### Helper Functions: Global ####
 ##################################
-#### cleanSheet_npprDesp ####
-# cleanSheet_npprDesp <- function(data, sheet_name) {
-#   total_column <- paste0("Total Año ", sheet_name)  # Crear el nombre dinámico
-#   data %>%
-#     mutate(Año = sheet_name) %>%
-#     rename(Categoria = Mes, Total = !!sym(total_column)) # Usar el nombre dinámico
-# }
+######## Sistema de Notificacion de Muertes Violentas ########
+#### cleanSheet_homiEdad ####
+cleanSheet_homiEdad <- function(data) {
+  
+  data %>%
+    select(-Total) %>%
+    filter(!grepl("Total", `Grupo de edad`) & `Grupo de edad` != "Desconocido") %>%
+    pivot_longer(
+      cols = -`Grupo de edad`,
+      names_to = "Año",
+      values_to = "Casos"
+    ) %>%
+    rename(
+      Edad = `Grupo de edad`
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    mutate(
+      Edad = str_replace(Edad, "^Menos de 15 años$", "menos de 15 años"),
+      Edad = factor(Edad, levels = unique(Edad)),
+      Año = factor(Año)
+    ) %>%
+    relocate(Año, Edad, Casos)
+}
+
+#### cleanSheet_inci ####
+cleanSheet_inci <- function(data) {
+  
+  data %>%
+    select(-total) %>%
+    pivot_longer(
+      cols = -`Tipo de Incidente`,
+      names_to = "Año",
+      values_to = "Casos"
+    ) %>%
+    filter(
+      !grepl("Total de víctimas mujeres", `Tipo de Incidente`),
+      `Tipo de Incidente` != "Total de incidentes"
+    ) %>%
+    rename(
+      Incidente = `Tipo de Incidente`
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    mutate(
+      Incidente = factor(Incidente),
+      Año = factor(Año)
+    ) %>%
+    relocate(Año, Incidente, Casos)
+}
+
+######## Departamento de la Familia ########
+#### cleanSheet_dfMalt ####
+cleanSheet_dfMalt <- function(data, years) {
+  
+  dfMalt <- lapply(as.character(years), function(sheet_name) {
+    read_excel(data, sheet = sheet_name) %>%
+      mutate(Año = sheet_name)
+  }) %>%
+    bind_rows() %>%
+    rename(
+      Masculino = `Cantidad Masculino`,
+      Femenino = `Cantidad Femenino`
+    ) %>%
+    mutate(
+      `Ambos Sexos` = Masculino + Femenino
+    ) %>%
+    pivot_longer(
+      !c(`Tipo de Maltrato`, Año),
+      names_to = "Sexo",
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      `Tipo de Maltrato` = factor(`Tipo de Maltrato`,
+                                  levels = c(
+                                    "Abuso Sexual", "Explotación", "Maltrato Físico",
+                                    "Negligencia", "Negligencia Educativa", "Negligencia Emocional",
+                                    "Negligencia Médica", "Trata Humana", "Otro"
+                                  ),
+                                  ordered = TRUE
+      ),
+      Año = factor(Año),
+      Sexo = factor(Sexo)
+    ) %>%
+    rename(
+      Maltrato = `Tipo de Maltrato`
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    distinct() %>%
+    relocate(Año, Maltrato, Sexo, Casos)
+  
+  # Crear dataset de negligencia agregada
+  negligencia_sum <- dfMalt %>%
+    filter(grepl("Negligencia", Maltrato, ignore.case = TRUE)) %>%
+    group_by(Año, Sexo) %>%
+    summarise(Casos = sum(Casos), .groups = "drop") %>%
+    mutate(Maltrato = "Negligencia")
+  
+  dfMalt %>%
+    filter(!grepl("Negligencia", Maltrato, ignore.case = TRUE)) %>%
+    bind_rows(negligencia_sum) %>%
+    mutate(
+      Maltrato = factor(
+        Maltrato,
+        levels = c(
+          "Abuso Sexual", "Explotación", "Maltrato Físico",
+          "Trata Humana", "Negligencia", "Otro"
+        ),
+        ordered = TRUE
+      )
+    )
+}
+
+######## Departamento de Justicia ########
+#### cleanSheet_dfDeli ####
+cleanSheet_dfDeli <- function(file_path, years) {
+  library(readxl)
+  library(dplyr)
+  library(tidyr)
+  library(stringr)
+  
+  df <- purrr::map_dfr(as.character(years), function(sheet_name) {
+    read_excel(file_path, sheet = sheet_name) %>%
+      convert_mixed_columns() %>%       # función que ya usas para normalizar tipos
+      mutate(Año = sheet_name)
+  }) %>%
+    filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE)) %>%
+    select(-TOTAL) %>%
+    pivot_longer(
+      -c(`FISCALIA DISTRITO`, Año),
+      names_to = "Delito",
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      Año = factor(Año),
+      Delito = factor(Delito),
+      Distrito = factor(str_to_title(tolower(`FISCALIA DISTRITO`))),
+      Delito = recode(Delito,
+                      "Art3.5" = "Agresión Sexual Conyugal",
+                      "Art3.2" = "Maltrato Agravado",
+                      "Art3.1" = "Maltrato",
+                      "Art3.3" = "Maltrato por Amenaza",
+                      "Art3.4" = "Maltrato por Restricción de Libertad",
+                      "Art2.8" = "Incumplimiento de la Órden de Protección"
+      )
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    select(-`FISCALIA DISTRITO`) %>%
+    relocate(Año, Distrito, Delito, Casos)
+  
+  return(df)
+}
+
+#### cleanMap_dfDeli ####
+cleanMap_dfDeli <- function(shp_distritos, dfDeli, shp_municipios) {
+  library(sf)
+  library(dplyr)
+  
+  # Leer shapefile de distritos y unir con los datos
+  mapaDeli <- st_read(shp_distritos) %>%
+    merge(dfDeli, by.x = "GROUP", by.y = "Distrito") %>%
+    rename(`Distrito Fiscal` = GROUP) %>%
+    relocate(Año, `Distrito Fiscal`, Delito, geometry, Casos)
+  
+  # Leer shapefile de municipios y estandarizar CRS
+  municipios_geo <- st_read(shp_municipios) %>%
+    st_transform(crs = 4326) %>% # WGS84
+    mutate(municipio = case_when(
+      municipio == "A??asco" ~ "Añasco",
+      municipio == "Bayam??n" ~ "Bayamón",
+      municipio == "Can??vanas" ~ "Canóvanas",
+      municipio == "Cata??o" ~ "Cataño",
+      municipio == "Comer??o" ~ "Comerío",
+      municipio == "Gu??nica" ~ "Guánica",
+      municipio == "Juana D??az" ~ "Juana Díaz",
+      municipio == "Las Mar??as" ~ "Las Marias",
+      municipio == "Lo??za" ~ "Loíza",
+      municipio == "Manat??" ~ "Manatí",
+      municipio == "Mayag??ez" ~ "Mayagüez",
+      municipio == "Pe??uelas" ~ "Peñuelas",
+      municipio == "Rinc??n" ~ "Rincón",
+      municipio == "R??o Grande" ~ "Rio Grande",
+      municipio == "San Germ??n" ~ "San Germán",
+      municipio == "San Sebasti??n" ~ "San Sebastián",
+      TRUE ~ municipio
+    )) %>%
+    dplyr::select(municipio, geometry)
+  
+  return(list(
+    mapaDeli = mapaDeli,
+    municipios_geo = municipios_geo
+  ))
+}
+
+
 
 #### cleanSheet_npprDesp ####
 cleanSheet_npprDesp <- function(data) {

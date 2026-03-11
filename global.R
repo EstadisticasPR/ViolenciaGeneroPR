@@ -125,50 +125,13 @@ snmv <- here::here("data", "Sistema_de_Notificacion_de_Muertes_Violentas")
 #### homiEdad ####
 # importar los datos de homicidios por grupo de edad; homiEdad
 homiEdad <- read_excel(paste0(snmv, "/svmvHomiEdad.xlsx")) %>%
-  select(-Total) %>%
-  filter(!grepl("Total", `Grupo de edad`) & `Grupo de edad` != "Desconocido") %>%
-  pivot_longer(!`Grupo de edad`, names_to = "año", values_to = "casos") %>%
-  rename(Edad = `Grupo de edad`) %>%
-  rename(Año = año) %>%
-  rename(Casos = casos) %>%
-  replace_na(list(Casos = 0)) %>%
-  mutate(
-    Edad = str_replace(Edad, "^Menos de 15 años$", "menos de 15 años"),
-    Edad = factor(Edad, levels = unique(Edad)),
-    Año = factor(Año)
-  ) %>%
-  relocate(
-    Año, Edad, Casos
-  )
-
-# Definir una paleta de colores personalizada
-colores_homiEdad <- setNames(
-  unique(homiEdad$Edad), 
-  scales::hue_pal()(length(unique(homiEdad$Edad)))
-)
+               cleanSheet_homiEdad()
 
 #### inci ####
-# importar los datos de incidentes violentos segun tipo de muerte según el año, desde 2017-2020
+# importar los datos de incidentes violentos segun tipo de muerte según el año
 inci <- read_excel(file.path(snmv, "svmvIncidentes.xlsx")) %>%
-  # Seleccionar columnas y pivote largo
-  select(-total) %>%
-  pivot_longer(!`Tipo de Incidente`, names_to = "año", values_to = "casos") %>%
-  # Filtrar datos no deseados
-  filter(
-    !grepl("Total de víctimas mujeres", `Tipo de Incidente`),
-    `Tipo de Incidente` != "Total de incidentes"
-  ) %>%
-  mutate(
-    `Tipo de Incidente` = factor(`Tipo de Incidente`),
-    año = factor(año)
-  ) %>%
-  rename(Incidente = `Tipo de Incidente`) %>%
-  rename(Año = año) %>%
-  rename(Casos = casos) %>%
-  replace_na(list(Casos = 0)) %>%
-  relocate(
-    Año, Incidente, Casos
-  )
+  cleanSheet_inci()
+
 
 #### Guardar datos procesados de Sistema de Notificacion de Muertes Violentas ####
 # dataframes <- list(homiEdad, inci) # Lista de dataframes (por ejemplo: homiEdad y inci)
@@ -188,64 +151,11 @@ inci <- read_excel(file.path(snmv, "svmvIncidentes.xlsx")) %>%
 #### Directorio ####
 dfam <- here::here("data", "Departamento_de_Familia", "/")
 
-
 #### dfMalt ####
-# Años a importar
-years <- 2018:2022
-
-# Leer y limpiar los datos por hoja
-dfMalt <- lapply(as.character(years), function(sheet_name) {
-  read_excel(paste0(dfam, "dfMalt.xlsx"), sheet = sheet_name) %>%
-    mutate(Año = sheet_name)
-}) %>%
-  bind_rows() %>%
-  rename(
-    Masculino = `Cantidad Masculino`,
-    Femenino = `Cantidad Femenino`
-  ) %>%
-  mutate(
-    `Ambos Sexos` = Masculino + Femenino
-  ) %>%
-  pivot_longer(
-    !c(`Tipo de Maltrato`, Año),
-    names_to = "Sexo",
-    values_to = "Casos"
-  ) %>%
-  mutate(
-    `Tipo de Maltrato` = factor(`Tipo de Maltrato`,
-                                levels = c("Abuso Sexual", "Explotación", "Maltrato Físico",      
-                                           "Negligencia", "Negligencia Educativa", "Negligencia Emocional",
-                                           "Negligencia Médica", "Trata Humana", "Otro"),
-                                ordered = TRUE),
-    Año = factor(Año),
-    Sexo = factor(Sexo)
-  ) %>%
-  rename(
-    Maltrato = `Tipo de Maltrato`
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  distinct() %>%
-  relocate(
-    Año, Maltrato, Sexo, Casos
-  )
-
-# Crear el dataset filtrado y sumarizado de negligencia
-negligencia_sum <- dfMalt %>%
-  filter(grepl("Negligencia", Maltrato, ignore.case = TRUE)) %>%
-  group_by(Año, Sexo) %>%
-  summarise(total_casos = sum(Casos)) %>%
-  mutate(Maltrato = "Negligencia") %>%
-  rename(Casos = total_casos)
-
-# Añadir el dataset de negligencia al dataset original
-dfMalt <- dfMalt %>%
-  filter(!grepl("Negligencia", Maltrato, ignore.case = TRUE)) %>% # Eliminar las filas de negligencia existentes
-  bind_rows(negligencia_sum) %>% # Unir el dataset original con el dataset de negligencia 
-  mutate(Maltrato = factor(Maltrato,
-                                levels = c("Abuso Sexual", "Explotación", "Maltrato Físico",      
-                                           "Trata Humana", "Negligencia" ,"Otro"),
-                                ordered = TRUE))
-
+dfMalt <- cleanSheet_dfMalt(
+  paste0(dfam, "dfMalt.xlsx"),
+  years = 2018:2022
+)
 
 #### Guardar datos procesados de Departamento de Familia ####
 # dataframes <- list(dfMalt) # Lista de dataframes (por ejemplo: homiEdad y inci)
@@ -270,104 +180,22 @@ djus <- here::here("data", "Departamento_de_Justicia", "/")
 #### dfDeli ####
 maps_fol <- here::here("data", "mapas/")
 
-# Años a importar
-years <- 2020:2025
-
-# Leer y limpiar los datos por hoja
-dfDeli <- lapply(as.character(years), function(sheet_name) {
-  read_excel(paste0(djus, "djDelitos.xlsx"), sheet = sheet_name) %>%
-    convert_mixed_columns() %>%
-    mutate(Año = sheet_name)
-}) %>%
-  bind_rows() %>%
-  filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE)) %>%
-  select(-TOTAL) %>%
-  pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
-  mutate(
-    Año = factor(Año),
-    Delito = factor(Delito),
-    `FISCALIA DISTRITO` = factor(str_to_title(tolower(`FISCALIA DISTRITO`))
-    ),
-    Delito = recode(Delito,
-                    "Art3.5" = "Agresión Sexual Conyugal",
-                    "Art3.2" = "Maltrato Agravado",
-                    "Art3.1" = "Maltrato",
-                    "Art3.3" = "Maltrato por Amenaza",
-                    "Art3.4" = "Maltrato por Restricción de Libertad",
-                    "Art2.8" = "Incumplimiento de la Órden de Protección")
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  rename(Distrito = `FISCALIA DISTRITO`) %>%
-  relocate(
-    Año, Distrito, Delito, Casos
-  )
-
-
-# # Importar y combinar todos los archivos
-# dfDeli <- lapply(years, function(year) {
-#   read_excel(paste0(djus, "djDelitos", year, ".xlsx")) %>%
-#     convert_mixed_columns() %>%
-#     mutate(Año = as.character(year))
-# }) %>%
-#   bind_rows() %>%
-#   filter(!grepl("TOTAL", `FISCALIA DISTRITO`, ignore.case = TRUE)) %>%
-#   select(-TOTAL) %>%
-#   pivot_longer(-c(`FISCALIA DISTRITO`, Año), names_to = "Delito", values_to = "Casos") %>%
-#   mutate(
-#     Año = factor(Año),
-#     Delito = factor(Delito),
-#     `FISCALIA DISTRITO` = factor(str_to_title(tolower(`FISCALIA DISTRITO`))
-#     ),
-#     Delito = recode(Delito,
-#                     "Art3.5" = "Agresión Sexual Conyugal",
-#                     "Art3.2" = "Maltrato Agravado",
-#                     "Art3.1" = "Maltrato",
-#                     "Art3.3" = "Maltrato por Amenaza",
-#                     "Art3.4" = "Maltrato por Restricción de Libertad",
-#                     "Art2.8" = "Incumplimiento de la Órden de Protección")
-#   ) %>%
-#   replace_na(list(Casos = 0)) %>%
-#   rename(Distrito = `FISCALIA DISTRITO`) %>%
-#   relocate(
-#     Año, Distrito, Delito, Casos
-#   )
-
+dfDeli <- cleanSheet_dfDeli(
+  file_path = paste0(djus, "djDelitos.xlsx"),
+  years = 2020:2025
+)
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar 
 # los datos de delitos con los datos geográficos de los distritos fiscales
 #### mapaDeli ####
-mapaDeli <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
-  merge(dfDeli, by.x = "GROUP", by.y = "Distrito") %>%
-  rename(`Distrito Fiscal` = GROUP) %>%
-  relocate(Año, `Distrito Fiscal`, Delito, geometry, Casos)
+maps <- cleanMap_dfDeli(
+  shp_distritos = paste0(maps_fol, "/distritos_fiscales.shp"),
+  dfDeli = dfDeli,
+  shp_municipios = paste0(maps_fol, "/municipios.shp")
+)
 
-# Cargar el shapefile de municipios
-municipios_geo <- st_read(paste0(maps_fol, "/municipios.shp"))
-
-# Asegúrate de que los datos tengan el mismo sistema de coordenadas que tus datos
-municipios_geo <- st_transform(municipios_geo, crs = 4326) # WGS84
-
-municipios_geo <- municipios_geo %>%
-  mutate(municipio = case_when(
-    municipio == "A??asco" ~ "Añasco",
-    municipio == "Bayam??n" ~ "Bayamón",
-    municipio == "Can??vanas" ~ "Canóvanas",
-    municipio == "Cata??o" ~ "Cataño",
-    municipio == "Comer??o" ~ "Comerío",
-    municipio == "Gu??nica" ~ "Guánica",
-    municipio == "Juana D??az" ~ "Juana Díaz",
-    municipio == "Las Mar??as" ~ "Las Marias",
-    municipio == "Lo??za" ~ "Loíza",
-    municipio == "Manat??" ~ "Manatí",
-    municipio == "Mayag??ez" ~ "Mayagüez",
-    municipio == "Pe??uelas" ~ "Peñuelas",
-    municipio == "Rinc??n" ~ "Rincón",
-    municipio == "R??o Grande" ~ "Rio Grande",
-    municipio == "San Germ??n" ~ "San Germán",
-    municipio == "San Sebasti??n" ~ "San Sebastián",
-    TRUE ~ municipio  # mantiene los demás sin cambios
-  ))%>%
-  dplyr::select(municipio, geometry)
+mapaDeli <- maps$mapaDeli
+municipios_geo <- maps$municipios_geo
 
 #### Guardar datos procesados de Departamento de Justicia ####
 # dataframes <- list(dfDeli) # Lista de dataframes (por ejemplo: homiEdad y inci)
@@ -383,30 +211,6 @@ municipios_geo <- municipios_geo %>%
 
 
 
-
-
-
-##################################################################################
-#### Procesamiento de datos el Departamento del Trabajo y Recursos Humanos ####
-##################################################################################
-#### Directorio ####
-dtra <- here::here("data", "departamento_de_trabajo", "/")
-
-#### parLab ####
-# importando el dataset de Casos en Supervisión de Ley 54
-parLab <- read_excel(paste0(dtra, "dtpartlab.xlsx")) %>%
-  rename(
-    Sexo = Género
-  ) %>%
-  filter(Sexo != "Ambos") %>%
-  pivot_longer(!Sexo, names_to = "Año", values_to = "Tasa") %>%
-  mutate(
-    Año = factor(Año),
-    Sexo = factor(Sexo)
-  ) %>%
-  relocate(
-    Año, Sexo, Tasa
-  )
 
 
 
