@@ -195,8 +195,94 @@ cleanMap_dfDeli <- function(shp_distritos, dfDeli, shp_municipios) {
   ))
 }
 
+######## Administracion de Vivienda Publica ########
+#### cleanSheet_avp ####
+cleanSheet_avp <- function(file){
+  
+  df <- read_excel(file) %>%
+    mutate(
+      Región = factor(Región),
+      Estado = factor(Estado, levels = c("solicitadas","asignadas"))
+    ) %>%
+    replace_na(list(Cantidad = 0))
+  
+  df$Año <- as.factor(sub("\\*", "", df$Año))
+  
+  return(df)
+  
+}
+
+#### cleanSheet_avp_region ####
+cleanSheet_avp_region <- function(file, sheet_name){
+  
+  df <- read_excel(file, sheet = sheet_name)
+  
+  year_cols <- names(df)[grepl("^[0-9]{4}$", names(df))]
+  
+  estado <- ifelse(grepl("soli", sheet_name), "solicitadas", "asignadas")
+  
+  df_long <- df %>%
+    pivot_longer(
+      cols = all_of(year_cols),
+      names_to = "Año",
+      values_to = "Cantidad"
+    ) %>%
+    mutate(
+      Estado = factor(estado),
+      Región = factor(Región),
+      Año = factor(Año)
+    ) %>%
+    relocate(Año, .before = everything()) %>%
+    relocate(Estado, .before = Cantidad)
+  
+  return(df_long)
+  
+}
+
+#### cleanSheet_avp_municipios ####
+cleanSheet_avp_municipios <- function(file, sheet_name){
+  
+  df <- read_excel(file, sheet = sheet_name)
+  
+  year_cols <- names(df)[grepl("^[0-9]{4}$", names(df))]
+  
+  estado <- ifelse(grepl("soli", sheet_name), "solicitadas", "asignadas")
+  
+  df_long <- df %>%
+    pivot_longer(
+      cols = all_of(year_cols),
+      names_to = "Año",
+      values_to = "Cantidad"
+    ) %>%
+    mutate(
+      Estado = factor(estado),
+      municipio = factor(municipio),
+      Región = factor(Región),
+      Año = factor(Año)
+    ) %>%
+    relocate(Año, .before = everything()) %>%
+    relocate(Estado, .before = Cantidad)
+  
+  return(df_long)
+  
+}
+
+#### create_map_avp_region ####
+create_map_avp_region <- function(shapefile, df){
+  
+  mapa <- st_read(shapefile) %>%
+    merge(df, by.x = "GROUP", by.y = "Región") %>%
+    rename(Región = GROUP) %>%
+    relocate(Año, Región, Estado, geometry, Cantidad)
+  
+  return(mapa)
+  
+}
 
 
+
+########################## LIMPIAR ##################################
+#### Policia de Puerto Rico ####
 #### cleanSheet_npprDesp ####
 cleanSheet_npprDesp <- function(data) {
   
@@ -238,6 +324,275 @@ cleanSheet_npprDS <- function(data, sheet_name) {
     mutate(Año = sheet_name)
 }
 
+
+#### Oficina de la Procuradora de la Mujer ####
+#### cleansheet_opmFemiVD ####
+cleansheet_opmFemiVD <- function(file){
+  
+  df <- read_excel(file) %>%
+    mutate(
+      Año = factor(Año),
+      Tasa = round(`Tasa_IE`, 2)
+    ) %>%
+    rename(
+      Asesinatos = `Asesinatos`
+    ) %>%
+    select(Año, Asesinatos, Tasa) %>%
+    relocate(Año, Asesinatos, Tasa)
+  
+  return(df)
+  
+}
+
+#### cleansheet_opmAgresores ####
+cleansheet_opmAgresores <- function(file){
+  
+  df <- read_excel(file) %>%
+    rename(
+      Razón = tipo,
+      Año = year,
+      Cantidad = cantidad
+    ) %>%
+    mutate(
+      Año = factor(Año),
+      Razón = factor(
+        Razón,
+        levels = c(
+          "Acecho",
+          "Agresión sexual",
+          "Discrimen de género",
+          "Violencia doméstica",
+          "Violencia en cita",
+          "Trata Humana",
+          "Otras"
+        )
+      )
+    )
+  
+  return(df)
+  
+}
+
+
+#### cleanSheet_OPM ####
+cleanSheet_OPM <- function(df, hoja, niveles) {
+  df %>%
+    mutate(
+      Año = factor(Año),
+      `Razón para Consulta` = factor(`Razón para Consulta`, levels = niveles)
+    ) %>%
+    rename(Año = Año, Razón = `Razón para Consulta`, Cantidad = `Personas Atendidas`) %>%
+    replace_na(list(Cantidad = 0)) %>%
+    relocate(Año, Razón, Cantidad)
+}
+
+
+#### cleansheet_opmCasos ####
+cleansheet_opmCasos <- function(file){
+  
+  niveles_completos <- c(
+    "Acecho",
+    "Agresión sexual",
+    "Discrimen de género",
+    "Violencia doméstica",
+    "Violencia en cita",
+    "Trata Humana",
+    "Otras"
+  )
+  
+  opm_anual_df <- read_excel(file, sheet = "anual")
+  
+  df_list <- list(
+    cleanSheet_OPM(opm_anual_df, "anual", niveles_completos)
+  )
+  
+  df <- reduce(df_list, full_join)
+  
+  return(df)
+  
+}
+#### cleansheet_opmVic ####
+cleansheet_opmVic <- function(file){
+  
+  df <- read_excel(file) %>%
+    rename_at(
+      vars(1,2,3,4,5,6,7),
+      ~ c("género","2020","2021","2022","2023","2024","2025")
+    ) %>%
+    pivot_longer(!género, names_to = "año", values_to = "víctimas") %>%
+    mutate(
+      género = factor(
+        género,
+        levels = c("Femenino","Masculino","Trans","No informó")
+      ),
+      año = factor(año)
+    ) %>%
+    rename(
+      Año = año,
+      Género = género,
+      Víctimas = víctimas
+    ) %>%
+    replace_na(list(Víctimas = 0)) %>%
+    relocate(Año, Género, Víctimas)
+  
+  return(df)
+  
+}
+#### cleansheet_opmMedio ####
+cleansheet_opmMedio <- function(file){
+  
+  df <- read_excel(file) %>%
+    rename_at(
+      vars(2,3,4,5,6,7),
+      ~ c("2020","2021","2022","2023","2024","2025")
+    ) %>%
+    mutate(
+      across(
+        c("2020","2021","2022","2023","2024","2025"),
+        as.numeric
+      )
+    ) %>%
+    pivot_longer(
+      !`Medio de orientación`,
+      names_to = "año",
+      values_to = "personas atendidas"
+    ) %>%
+    filter(`Medio de orientación` != "Total") %>%
+    mutate(
+      `Medio de orientación` = factor(`Medio de orientación`),
+      año = factor(año)
+    ) %>%
+    rename(
+      Año = año,
+      Orientación = `Medio de orientación`,
+      Cantidad = `personas atendidas`
+    ) %>%
+    replace_na(list(Cantidad = 0)) %>%
+    relocate(Año, Orientación, Cantidad)
+  
+  return(df)
+  
+}
+#### cleansheet_opmServiciosMes ####
+cleansheet_opmServiciosMes <- function(file){
+  
+  df <- read_excel(file) %>%
+    mutate(
+      `Tipo de Servicio` = factor(`Tipo de Servicio`),
+      Año = factor(Año)
+    ) %>%
+    rename(
+      Servicio = `Tipo de Servicio`,
+      Cantidad = `Servicios Ofrecidos`
+    ) %>%
+    replace_na(list(Cantidad = 0)) %>%
+    relocate(Año, Servicio, Cantidad)
+  
+  return(df)
+  
+}
+
+
+
+
+
+
+#### Departamento de Corrección y Rehabilitación ####
+#### cleansheet_dcrCasosInv ####
+cleansheet_dcrCasosInv <- function(file){
+  
+  df <- read_excel(file)
+  
+  df_clean <- df %>%
+    group_by(tipo, year, sexo) %>%
+    summarise(
+      Cantidad = round(sum(cantidad, na.rm = TRUE) / 12),
+      .groups = "drop"
+    ) %>%
+    mutate(
+      year = factor(year),
+      sexo = factor(sexo),
+      tipo = factor(tipo)
+    ) %>%
+    rename(
+      Año = year,
+      Sexo = sexo,
+      Estado = tipo
+    ) %>%
+    replace_na(list(Cantidad = 0)) %>%
+    relocate(Año, Sexo, Estado, Cantidad)
+  
+  return(df_clean)
+  
+}
+
+#### cleansheet_dcrCasosInv_supervision ####
+cleansheet_dcrCasosInv_supervision <- function(file){
+  
+  df <- read_excel(file)
+  
+  df_clean <- df %>%
+    filter(!grepl("Investigaciones", tipo, ignore.case = TRUE)) %>%
+    group_by(tipo, year, sexo) %>%
+    summarise(
+      Cantidad = round(sum(cantidad, na.rm = TRUE) / 12),
+      .groups = "drop"
+    ) %>%
+    mutate(
+      year = factor(year),
+      sexo = factor(sexo),
+      tipo = factor(tipo)
+    ) %>%
+    rename(
+      Año = year,
+      Sexo = sexo,
+      Estado = tipo
+    ) %>%
+    replace_na(list(Cantidad = 0)) %>%
+    relocate(Año, Sexo, Estado, Cantidad)
+  
+  return(df_clean)
+  
+}
+#### cleansheet_dcrSentenciadas ####
+cleansheet_dcrSentenciadas <- function(file){
+  
+  meses_es <- c(
+    "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+    "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+  )
+  
+  df <- read_excel(file) %>%
+    mutate(
+      tipo = factor(tipo),
+      year = factor(year)
+    )
+  
+  df$fecha <- as.Date(paste0(df$year, "-", df$mes, "-01"))
+  
+  df_clean <- df %>%
+    mutate(
+      mes = factor(mes, levels = 1:12, labels = meses_es)
+    ) %>%
+    rename(
+      Año = year,
+      Mes = mes,
+      Fecha = fecha,
+      Estado = tipo,
+      Cantidad = cantidad
+    ) %>%
+    replace_na(list(Cantidad = 0)) %>%
+    select(
+      Mes, Año, Fecha, Estado, Cantidad
+    )
+  
+  return(df_clean)
+  
+}
+
+
+
+#### Administración de Tribunales ####
 #### cleanSheet_OP_148_SoliGrupEdad ####
 cleanSheet_OP_148_SoliGrupEdad <- function(data, sheet_name, new_names) {
   data %>%
@@ -378,37 +733,8 @@ cleanSheet_tribCasosCrim <- function(data, sheet_name, new_names) {
 
 
 
-#### cleanSheet_OPM ####
-cleanSheet_OPM <- function(df, hoja, niveles) {
-  # if (hoja == "mensual") {
-  #   df <- df %>%
-  #     select(-month) %>%
-  #     group_by(tipo, year) %>%
-  #     summarise(cantidad = sum(cantidad, na.rm = TRUE), .groups = "drop") %>%
-  #     mutate(tipo = str_remove(tipo, " \\(.*\\)"))
-  #   
-  #   # Asegurar que 'Trata Humana' esté presente para todos los años
-  #   años_completos <- sort(unique(df$year))
-  #   df <- df %>%
-  #     bind_rows(expand_grid(
-  #       tipo = "Trata Humana",
-  #       year = años_completos,
-  #       cantidad = 0
-  #     ))
-  # } else if (hoja == "anual") {
-  #   df <- df %>%
-  #     mutate(tipo = str_remove(tipo, " \\(.*\\)"))
-  # }
-  
-  df %>%
-    mutate(
-      Año = factor(Año),
-      `Razón para Consulta` = factor(`Razón para Consulta`, levels = niveles)
-    ) %>%
-    rename(Año = Año, Razón = `Razón para Consulta`, Cantidad = `Personas Atendidas`) %>%
-    replace_na(list(Cantidad = 0)) %>%
-    relocate(Año, Razón, Cantidad)
-}
+
+
 
 ###############################
 #### Helper Functions: UI  ####

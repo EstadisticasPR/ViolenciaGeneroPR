@@ -223,141 +223,35 @@ municipios_geo <- maps$municipios_geo
 avp <- here::here("data", "Administracion_de_viviendas_publicas/")
 
 #### dfAvp ####
-dfAvp <- read_excel(paste0(avp, "/administracion_vivienda_publica.xlsx"))%>%
-    mutate(
-      Región = factor(Región),
-      Estado = factor(Estado, levels = c("solicitadas", "asignadas"))) %>%
-    replace_na(list(Cantidad = 0))
+archivo_avp <- paste0(avp, "/administracion_vivienda_publica.xlsx")
+dfAvp <- cleanSheet_avp(archivo_avp)
 
+archivo_datos_avp <- paste0(avp, "/datos_vivienda.xlsx")
+dfAvp_region_soli <- cleanSheet_avp_region(archivo_datos_avp, "region_soli")
+dfAvp_region_asig <- cleanSheet_avp_region(archivo_datos_avp, "region_asig")
 
-# sheet_names <- list("region_soli", "region_asig", "municipios_soli", "municipios_asig")
-sheet_names <- list("region_soli", "region_asig")
+dfAvp_municipios_soli <- cleanSheet_avp_municipios(archivo_datos_avp, "municipios_soli")
+dfAvp_municipios_asig <- cleanSheet_avp_municipios(archivo_datos_avp, "municipios_asig")
 
-for (sheet_name in sheet_names) {
-  
-  df <- read_excel(paste0(avp, "/datos_vivienda.xlsx"), sheet = sheet_name)
-  
-  # Detectar columnas de años (números)
-  year_cols <- names(df)[grepl("^[0-9]{4}$", names(df))]
-  
-  # Extraer estado desde el nombre de la hoja
-  estado <- ifelse(grepl("soli", sheet_name), "solicitadas", "asignadas")
-  
-  # Convertir formato ancho → largo
-  df_long <- df %>%
-    pivot_longer(
-      cols = all_of(year_cols),
-      names_to = "Año",
-      values_to = "Cantidad"
-    ) %>%
-    mutate(
-      Estado = factor(estado),
-      Región = factor(Región),
-      Año = factor(Año)
-    ) %>%
-    relocate(Año, .before = everything()) %>%
-    relocate(Estado, .before = Cantidad)
-  
-  # Guardar como dfAvp_region_soli, dfAvp_region_asig, etc.
-  assign(paste0("dfAvp_", sheet_name), df_long)
-}
+#### mapa_avp ####
+mapaAvp_region_soli <- create_map_avp_region(
+  paste0(maps_fol, "/regiones_vivienda.shp"),
+  dfAvp_region_soli
+)
 
-# sheet_names <- list("region_soli", "region_asig", "municipios_soli", "municipios_asig")
-sheet_names <- list("municipios_soli", "municipios_asig")
+mapaAvp_region_asig <- create_map_avp_region(
+  paste0(maps_fol, "/regiones_vivienda.shp"),
+  dfAvp_region_asig
+)
 
-for (sheet_name in sheet_names) {
-  
-  df <- read_excel(paste0(avp, "/datos_vivienda.xlsx"), sheet = sheet_name)
-  
-  # Detectar columnas de años (números)
-  year_cols <- names(df)[grepl("^[0-9]{4}$", names(df))]
-  
-  # Extraer estado desde el nombre de la hoja
-  estado <- ifelse(grepl("soli", sheet_name), "solicitadas", "asignadas")
-  
-  # Convertir formato ancho → largo
-  df_long <- df %>%
-    pivot_longer(
-      cols = all_of(year_cols),
-      names_to = "Año",
-      values_to = "Cantidad"
-    ) %>%
-    mutate(
-      Estado = factor(estado),
-      municipio = factor(municipio),
-      Región = factor(Región),
-      Año = factor(Año)
-    ) %>%
-    relocate(Año, .before = everything()) %>%
-    relocate(Estado, .before = Cantidad)
-  
-  # Guardar como dfAvp_region_soli, dfAvp_region_asig, etc.
-  assign(paste0("dfAvp_", sheet_name), df_long)
-}
+mapaAvp <- create_map_avp_region(
+  paste0(maps_fol, "/regiones_vivienda.shp"),
+  dfAvp
+)
 
-# Ruta al archivo
-# archivo <- paste0(avp, "/avp_municipios.xlsx")
-# 
-# # Años de los sheets
-# años <- as.character(2017:2024)
-# 
-# # Leer y guardar cada hoja en una variable distinta con la columna Año agregada
-# for (año in años) {
-#   df <- read_excel(archivo, sheet = año)
-#   df$Año <- año
-#   assign(paste0("dfAvp_municipio", año), df)
-# }
-# 
-# # Lista de data.frames
-# lista_df <- mget(paste0("dfAvp_municipio", 2017:2024))
-# 
-# # Unión completa de todos
-# dfAvp_municipios <- reduce(lista_df, full_join)
-# 
-# dfAvp_municipios_asignadas <- dfAvp_municipios %>%
-#   dplyr::select(municipio = Municipios, Región, Cantidad = Asignadas, Año)
-# 
-# dfAvp_municipios_solicitadas <- dfAvp_municipios %>%
-#   dplyr::select(municipio = Municipios, Región, Cantidad = Solicitadas, Año)
-
-municipios_geo_asig <- municipios_geo %>%
-  left_join(dfAvp_municipios_asig, by = "municipio")
-
-municipios_geo_sol <- municipios_geo %>%
-  left_join(dfAvp_municipios_soli, by = "municipio")
-
-
-# Convertir el año a numérico para eliminar el asterisco y convertirlo a int
-dfAvp$Año <- as.factor(sub("\\*", "", dfAvp$Año))
-
-# Crear un dataframe con las coordenadas de las fiscalías policiacas y 
-# combinar los datos de delitos con los datos geográficos de los distritos fiscales
-mapaAvp_region_soli <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
-  merge(dfAvp_region_soli, by.x = "GROUP", by.y = "Región") %>%
-  rename(Región = GROUP) %>%
-  relocate(
-    Año, Región, Estado, geometry, Cantidad 
-  )
-
-mapaAvp_region_asig <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
-  merge(dfAvp_region_asig, by.x = "GROUP", by.y = "Región") %>%
-  rename(Región = GROUP) %>%
-  relocate(
-    Año, Región, Estado, geometry, Cantidad 
-  )
-
-mapaAvp <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
-  merge(dfAvp, by.x = "GROUP", by.y = "Región") %>%
-  rename(Región = GROUP) %>%
-  relocate(
-    Año, Región, Estado, geometry, Cantidad
-  )
-
-# Filtrar para "asignadas"
 mapaAvp_asig <- mapaAvp %>%
   filter(Estado == "asignadas")
 
-# Filtrar para "solicitadas"
 mapaAvp_sol <- mapaAvp %>%
   filter(Estado == "solicitadas")
 
@@ -370,111 +264,6 @@ mapaAvp_sol <- mapaAvp %>%
 # # Uso de la función
 # guardarDatos(dataframes, nombres_sheets, "administracion_vivienda_publica")
 
-
-
-##################################################################################
-#### Procesamiento de datos Departamento de Corrección y Rehabilitación ####
-##################################################################################
-#### Directorio ####
-dcr <- here::here("data", "Departamento_de_correccion_y_rehabilitacion", "/")
-
-#### dcrCasosInv ####
-# importando el dataset de Casos en Supervisión de Ley 54
-# dcrCasosInv <- read_excel(paste0(dcr, "dcrCasosInv.xlsx")) %>%
-#   select(-c(mes)) %>%
-#   group_by(tipo, year, sexo) %>%
-#   summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
-#   ungroup() %>%
-#   mutate(
-#     year = factor(year),
-#     sexo = factor(sexo),
-#     tipo = factor(tipo)
-#   ) %>%
-#   rename(Año = year) %>%
-#   rename(Sexo = sexo) %>%
-#   rename(Estado = tipo) %>%
-#   rename(Cantidad = cantidad) %>%
-#   replace_na(list(Cantidad = 0)) %>%
-#   relocate(
-#     Año, Sexo, Estado, Cantidad
-#   )
-dcrCasosInv <- read_excel(paste0(dcr, "dcrCasosInv.xlsx")) %>%
-  group_by(tipo, year, sexo) %>%
-  summarise(
-    Cantidad = round(sum(cantidad, na.rm = TRUE) / 12),
-    .groups = "drop"
-  ) %>%
-  mutate(
-    year = factor(year),
-    sexo = factor(sexo),
-    tipo = factor(tipo)
-  ) %>%
-  rename(
-    Año = year,
-    Sexo = sexo,
-    Estado = tipo
-  ) %>%
-  replace_na(list(Cantidad = 0)) %>%
-  relocate(Año, Sexo, Estado, Cantidad)
-
-dcrCasosInv_supervision <- read_excel(paste0(dcr, "dcrCasosInv.xlsx")) %>%
-  filter(!grepl("Investigaciones", tipo, ignore.case = TRUE)) %>%
-  group_by(tipo, year, sexo) %>%
-  summarise(
-    Cantidad = round(sum(cantidad, na.rm = TRUE) / 12),
-    .groups = "drop"
-  ) %>%
-  mutate(
-    year = factor(year),
-    sexo = factor(sexo),
-    tipo = factor(tipo)
-  ) %>%
-  rename(
-    Año = year,
-    Sexo = sexo,
-    Estado = tipo
-  ) %>%
-  replace_na(list(Cantidad = 0)) %>%
-  relocate(Año, Sexo, Estado, Cantidad)
-
-
-
-
-
-#### dcrSentenciadas ####
-
-dcrSentenciadas <- read_excel(paste0(dcr, "dcrSentenciadas.xlsx"))  %>%
-  mutate(
-    tipo = factor(tipo),
-    year = factor(year)
-  ) 
-# Combinar mes y año en una nueva columna
-dcrSentenciadas$fecha <- as.Date(paste0(dcrSentenciadas$year, "-", dcrSentenciadas$mes, "-01"))
-
-# Convertir los valores de mes de numérico a nombre del mes en español
-meses_es <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
-              "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
-
-dcrSentenciadas <- dcrSentenciadas %>%
-  mutate(mes = factor(mes, levels = 1:12, labels = meses_es)) %>%
-  rename(Año = year) %>%
-  rename(Mes = mes) %>%
-  rename(Fecha = fecha) %>%
-  rename(Estado = tipo) %>%
-  rename(Cantidad = cantidad) %>%
-  replace_na(list(Cantidad = 0)) %>%
-  select(
-    Mes, Año, Fecha, Estado, Cantidad
-  )
-
-#### Guardar datos procesados de Departamento de Corrección y Rehabilitación ####
-# dataframes <- list(dcrCasosInv, dcrSentenciadas) # Lista de dataframes (por ejemplo: homiEdad y inci)
-# 
-# # Lista de nombres de hojas correspondientes a los dataframes
-# nombres_sheets <- list("casos_supervision_ley54", "casos_sentenciados_violencia_domestica")
-# 
-# # Uso de la función
-# guardarDatos(dataframes, nombres_sheets, "departamento_correcion")
 
 
 
@@ -1107,6 +896,8 @@ inciMapa <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
 
 
 
+
+
 ##################################################################################
 #### Procesamiento de datos de la Oficina de la Procuradora de las Mujeres ####
 ##################################################################################
@@ -1114,102 +905,133 @@ inciMapa <- st_read(paste0(maps_fol, "/distritos_fiscales.shp")) %>%
 opm <- here::here("data", "Oficina_de_procuradora_de_mujeres", "/")
 
 #### opmFemiVD ####
-opmFemiVD <- read_excel(paste0(opm, "opmTasas.xlsx")) %>%
-  mutate(Año = factor(Año)) %>%
-  mutate(
-    Año = factor(Año),
-    Tasa = round(`Tasa_IE`, 2)   # Redondear a 2 decimales
-  ) %>%
-  rename(
-    Asesinatos = `Asesinatos`
-  ) %>%
-  select(Año, Asesinatos, Tasa)%>%
-  relocate(
-    Año, Asesinatos, Tasa
-  )
-
-
-#### opmAgresores ####
-opmAgresores <- read_excel(paste0(opm, "opmAgresores.xlsx"))  %>%
-  rename(
-    Razón = `tipo`,
-    Año = `year`,
-    Cantidad = `cantidad`
-  ) %>%
-  mutate(Año = factor(Año),
-         Razón = factor(Razón, levels = c("Acecho", "Agresión sexual", "Discrimen de género",
-                                          "Violencia doméstica", "Violencia en cita", "Trata Humana", "Otras")))
-
-#### opmCasos ####
-# Niveles con "Otras" al final
-niveles_completos <- c("Acecho", "Agresión sexual", "Discrimen de género",
-                       "Violencia doméstica", "Violencia en cita", "Trata Humana", "Otras")
-
-# opm_mes_df <- read_excel(paste0(opm, "opmPartMes.xlsx"), sheet = "mensual")
-# opm_anual_df <- read_excel(paste0(opm, "opmPartMes.xlsx"), sheet = "anual")
-opm_anual_df <- read_excel(paste0(opm, "opmVictimas.xlsx"), sheet = "anual")
-
-# Limpiar con la función
-opmCasos_list <- list(
-  cleanSheet_OPM(opm_anual_df, "anual", niveles_completos)
+opmFemiVD <- cleansheet_opmFemiVD(
+  paste0(opm, "opmTasas.xlsx")
 )
 
-# Unir todo
-opmCasos <- reduce(opmCasos_list, full_join)
+#### opmAgresores ####
+opmAgresores <- cleansheet_opmAgresores(
+  paste0(opm, "opmAgresores.xlsx")
+)
+
+#### opmCasos ####
+opmCasos <- cleansheet_opmCasos(
+  paste0(opm, "opmVictimas.xlsx")
+)
 
 #### opmVic ####
-opmVic <- read_excel(paste0(opm, "opmVicGraf.xlsx")) %>% 
-  rename_at(vars(1,2,3,4,5,6,7), ~ c("género","2020", "2021", "2022", "2023", "2024", "2025")) %>%
-  pivot_longer(!género, names_to = "año", values_to = "víctimas") %>%
-  mutate(
-    género = factor(género,
-                    levels = c("Femenino", "Masculino", "Trans", "No informó")),
-    año = factor(año)
-  ) %>%
-  rename(Año = año) %>%
-  rename(Género = género) %>%
-  rename(Víctimas = víctimas) %>%
-  replace_na(list(Víctimas = 0)) %>%
-  relocate(
-    Año, Género, Víctimas
-  )
+opmVic <- cleansheet_opmVic(
+  paste0(opm, "opmVicGraf.xlsx")
+)
 
 #### opmMedio ####
-opmMedio <- read_excel(paste0(opm, "opmMedio.xlsx")) %>% 
-  rename_at(vars(2,3,4,5,6,7), ~ c("2020", "2021", "2022", "2023", "2024", "2025")) %>%
-  mutate(across(c("2020", "2021", "2022", "2023", "2024", "2025"), as.numeric)) %>%
-  pivot_longer(!`Medio de orientación`, names_to = "año", values_to = "personas atendidas") %>% 
-  filter(`Medio de orientación` != "Total") %>%
-  mutate(
-    `Medio de orientación` = factor(`Medio de orientación`),
-    año = factor(año)
-  ) %>%
-  rename(Año = año) %>%
-  rename(Orientación = `Medio de orientación`) %>%
-  rename(Cantidad = `personas atendidas`) %>%
-  replace_na(list(Cantidad = 0)) %>%
-  relocate(
-    Año, Orientación, Cantidad
-  )
-
+opmMedio <- cleansheet_opmMedio(
+  paste0(opm, "opmMedio.xlsx")
+)
 
 #### opmServiciosMes ####
-opmServiciosMes <-  read_excel(paste0(opm, "opmServiciosMes.xlsx")) %>%
-  # select(-c(month)) %>%
-  # group_by(tipo, year) %>%
-  # summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
-  # ungroup() %>%
-  mutate(
-    `Tipo de Servicio` = factor(`Tipo de Servicio`),
-    Año = factor(Año)
-  ) %>%
-  rename(Año = Año) %>%
-  rename(Servicio = `Tipo de Servicio`) %>%
-  rename(Cantidad = `Servicios Ofrecidos`) %>%
-  replace_na(list(Cantidad = 0)) %>%
-  relocate(
-    Año, Servicio, Cantidad
-  )
+opmServiciosMes <- cleansheet_opmServiciosMes(
+  paste0(opm, "opmServiciosMes.xlsx")
+)
+
+
+# 
+# opmFemiVD <- read_excel(paste0(opm, "opmTasas.xlsx")) %>%
+#   mutate(Año = factor(Año)) %>%
+#   mutate(
+#     Año = factor(Año),
+#     Tasa = round(`Tasa_IE`, 2)   # Redondear a 2 decimales
+#   ) %>%
+#   rename(
+#     Asesinatos = `Asesinatos`
+#   ) %>%
+#   select(Año, Asesinatos, Tasa)%>%
+#   relocate(
+#     Año, Asesinatos, Tasa
+#   )
+# 
+# 
+# #### opmAgresores ####
+# opmAgresores <- read_excel(paste0(opm, "opmAgresores.xlsx"))  %>%
+#   rename(
+#     Razón = `tipo`,
+#     Año = `year`,
+#     Cantidad = `cantidad`
+#   ) %>%
+#   mutate(Año = factor(Año),
+#          Razón = factor(Razón, levels = c("Acecho", "Agresión sexual", "Discrimen de género",
+#                                           "Violencia doméstica", "Violencia en cita", "Trata Humana", "Otras")))
+# 
+# #### opmCasos ####
+# # Niveles con "Otras" al final
+# niveles_completos <- c("Acecho", "Agresión sexual", "Discrimen de género",
+#                        "Violencia doméstica", "Violencia en cita", "Trata Humana", "Otras")
+# 
+# # opm_mes_df <- read_excel(paste0(opm, "opmPartMes.xlsx"), sheet = "mensual")
+# # opm_anual_df <- read_excel(paste0(opm, "opmPartMes.xlsx"), sheet = "anual")
+# opm_anual_df <- read_excel(paste0(opm, "opmVictimas.xlsx"), sheet = "anual")
+# 
+# # Limpiar con la función
+# opmCasos_list <- list(
+#   cleanSheet_OPM(opm_anual_df, "anual", niveles_completos)
+# )
+# 
+# # Unir todo
+# opmCasos <- reduce(opmCasos_list, full_join)
+# 
+# #### opmVic ####
+# opmVic <- read_excel(paste0(opm, "opmVicGraf.xlsx")) %>% 
+#   rename_at(vars(1,2,3,4,5,6,7), ~ c("género","2020", "2021", "2022", "2023", "2024", "2025")) %>%
+#   pivot_longer(!género, names_to = "año", values_to = "víctimas") %>%
+#   mutate(
+#     género = factor(género,
+#                     levels = c("Femenino", "Masculino", "Trans", "No informó")),
+#     año = factor(año)
+#   ) %>%
+#   rename(Año = año) %>%
+#   rename(Género = género) %>%
+#   rename(Víctimas = víctimas) %>%
+#   replace_na(list(Víctimas = 0)) %>%
+#   relocate(
+#     Año, Género, Víctimas
+#   )
+# 
+# #### opmMedio ####
+# opmMedio <- read_excel(paste0(opm, "opmMedio.xlsx")) %>% 
+#   rename_at(vars(2,3,4,5,6,7), ~ c("2020", "2021", "2022", "2023", "2024", "2025")) %>%
+#   mutate(across(c("2020", "2021", "2022", "2023", "2024", "2025"), as.numeric)) %>%
+#   pivot_longer(!`Medio de orientación`, names_to = "año", values_to = "personas atendidas") %>% 
+#   filter(`Medio de orientación` != "Total") %>%
+#   mutate(
+#     `Medio de orientación` = factor(`Medio de orientación`),
+#     año = factor(año)
+#   ) %>%
+#   rename(Año = año) %>%
+#   rename(Orientación = `Medio de orientación`) %>%
+#   rename(Cantidad = `personas atendidas`) %>%
+#   replace_na(list(Cantidad = 0)) %>%
+#   relocate(
+#     Año, Orientación, Cantidad
+#   )
+# 
+# 
+# #### opmServiciosMes ####
+# opmServiciosMes <-  read_excel(paste0(opm, "opmServiciosMes.xlsx")) %>%
+#   # select(-c(month)) %>%
+#   # group_by(tipo, year) %>%
+#   # summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
+#   # ungroup() %>%
+#   mutate(
+#     `Tipo de Servicio` = factor(`Tipo de Servicio`),
+#     Año = factor(Año)
+#   ) %>%
+#   rename(Año = Año) %>%
+#   rename(Servicio = `Tipo de Servicio`) %>%
+#   rename(Cantidad = `Servicios Ofrecidos`) %>%
+#   replace_na(list(Cantidad = 0)) %>%
+#   relocate(
+#     Año, Servicio, Cantidad
+#   )
 
 #### Guardar datos procesados de Oficina de la Procuradora de las Mujeres ####
 # dataframes <- list(opmFemiVD, opmCasos, opmVic, opmMedio, opmServiciosMes) # Lista de dataframes (por ejemplo: homiEdad y inci)
@@ -1222,6 +1044,38 @@ opmServiciosMes <-  read_excel(paste0(opm, "opmServiciosMes.xlsx")) %>%
 # # Uso de la función
 # guardarDatos(dataframes, nombres_sheets, "oficina_procuradora_mujeres")
 # 
+
+
+
+
+
+##################################################################################
+#### Procesamiento de datos Departamento de Corrección y Rehabilitación ####
+##################################################################################
+#### Directorio ####
+dcr <- here::here("data", "Departamento_de_correccion_y_rehabilitacion", "/")
+
+#### dcrCasosInv ####
+archivo_dcrCasos <- paste0(dcr, "dcrCasosInv.xlsx")
+dcrCasosInv <- cleansheet_dcrCasosInv(archivo_dcrCasos)
+dcrCasosInv_supervision <- cleansheet_dcrCasosInv_supervision(archivo_dcrCasos)
+
+
+#### dcrSentenciadas ####
+archivo_dcrSent <- paste0(dcr, "dcrSentenciadas.xlsx")
+dcrSentenciadas <- cleansheet_dcrSentenciadas(archivo_dcrSent)
+
+
+#### Guardar datos procesados de Departamento de Corrección y Rehabilitación ####
+# dataframes <- list(dcrCasosInv, dcrSentenciadas) # Lista de dataframes (por ejemplo: homiEdad y inci)
+# 
+# # Lista de nombres de hojas correspondientes a los dataframes
+# nombres_sheets <- list("casos_supervision_ley54", "casos_sentenciados_violencia_domestica")
+# 
+# # Uso de la función
+# guardarDatos(dataframes, nombres_sheets, "departamento_correcion")
+
+
 
 
 
