@@ -3262,7 +3262,7 @@ ui <-
                     fiscal se identifican con el año en que finaliza el mismo,
                     por ejemplo, para los datos del año fiscal 2020-2021, 
                     los datos son presentados como año fiscal 2021. Los datos 
-                    del 2025 son preliminares.",
+                    del 2026 son preliminares.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )

@@ -1307,7 +1307,7 @@ new_names <- c("Delito", "Pendiente Inicio", "Presentados",
                "A Resolver", "Condenas", "Absoluciones", 
                "Archivos", "Traslados", "Otros", "Total", "Pendiente Final")
 
-years <- c("2019-2020", "2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
+years <- c("2019-2020", "2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025", "2025-2026")
 
 tribCasosCrim_list <- map(years, ~ {
   read_excel(paste0(trib, "tribCasosCrim.xlsx"), sheet = .x) %>%
@@ -1326,7 +1326,8 @@ tribCasosCrim <- reduce(tribCasosCrim_list, full_join) %>%
                        "2021-2022" = "2022",
                        "2022-2023" = "2023",
                        "2023-2024" = "2024",
-                       "2024-2025" = "2025"),
+                       "2024-2025" = "2025",
+                       "2025-2026" = "2026"),
     AñoFiscal = factor(AñoFiscal),
   ) %>%
   replace_na(list(Cantidad = 0)) %>%
@@ -1613,7 +1614,7 @@ actualizacion_tribunales5 <- "Última actualización: 15 de octubre de 2024"
 actualizacion_tribunales6 <- "Última actualización: 15 de octubre de 2024"
 
 # Fecha actualizacion Tribunales tab1
-actualizacion_tribunales7 <- "Última actualización: 27 de marzo de 2025"
+actualizacion_tribunales7 <- "Última actualización: 31 de octubre de 2025"
 
 # Fecha actualizacion datos cavv tab1
 actualizacion_cavv1 <- "Última actualización: 31 de diciembre de 2025"
