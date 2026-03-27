@@ -532,7 +532,7 @@ maltPoli <- maltPoli_list %>%
                                                                "Psicológico o emocional", "Físico", "Amenaza","Otro"),
                                 ordered = TRUE),
     Año = factor(Año),
-    Sexo = factor(Sexo, levels = c("Hombres", "Mujeres", "Hombre Trans", "Desconocido"),
+    Sexo = factor(Sexo, levels = c("Hombres", "Mujeres", "Mujer Trans", "Hombre Trans", "No Binario", "Desconocido"),
                   ordered = TRUE)
   ) %>%
   replace_na(list(Casos = 0)) %>%
@@ -1554,7 +1554,7 @@ actualizacion_policia1 <- "Última actualización: 31 de diciembre de 2025"
 actualizacion_policia2 <- "Última actualización: 20 de septiembre de 2024"
 
 # Fecha actualizacion policia tab3
-actualizacion_policia3 <- "Última actualización: 31 de mayo de 2025"
+actualizacion_policia3 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion policia tab4
 actualizacion_policia4 <- "Última actualización: 31 de diciembre de 2025"

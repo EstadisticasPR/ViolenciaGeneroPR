@@ -2230,6 +2230,68 @@ server <- function(input, output, session) {
            Sexo %in% input$checkGroup_poli_Malt_sexo)
   })
   
+  # Categorías mayoritarias y minoritarias
+  mayoritarias <- c("Hombres", "Mujeres")  # Ajusta los nombres exactos como aparecen en maltPoli$Sexo
+  minoritarias <- c("Mujer Trans", "Hombre Trans", "No Binario", "Desconocido")  # Igual aquí
+  
+  # Fuera del observeEvent, al inicio del server
+  sexo_previo <- reactiveVal(levels(maltPoli$Sexo)[1:2])  # valor inicial
+  
+  observeEvent(input$checkGroup_poli_Malt_sexo, {
+    seleccionadas <- input$checkGroup_poli_Malt_sexo
+    previas    <- sexo_previo()  # estado antes del clic
+    
+    hay_minoritaria <- any(seleccionadas %in% minoritarias)
+    hay_mayoritaria <- any(seleccionadas %in% mayoritarias)
+    
+    if (hay_minoritaria && hay_mayoritaria) {
+      # Qué se añadió en este clic
+      recien_seleccionada <- setdiff(seleccionadas, previas)
+      
+      if (any(recien_seleccionada %in% mayoritarias)) {
+        # Seleccionó mayoritaria -> quitar minoritarias
+        nuevas_seleccionadas <- seleccionadas[!seleccionadas %in% minoritarias]
+      } else {
+        # Seleccionó minoritaria -> quitar mayoritarias
+        nuevas_seleccionadas <- seleccionadas[!seleccionadas %in% mayoritarias]
+      }
+      
+      updateCheckboxGroupInput(
+        session,
+        inputId = "checkGroup_poli_Malt_sexo",
+        selected = nuevas_seleccionadas
+      )
+    }
+    
+    # Actualizar el estado previo
+    sexo_previo(seleccionadas)
+    
+  }, ignoreInit = TRUE)
+  
+  # Auto-deseleccionar Hombre/Mujer al seleccionar categoría minoritaria
+  # observeEvent(input$checkGroup_poli_Malt_sexo, {
+  #   seleccionadas <- input$checkGroup_poli_Malt_sexo
+  #   
+  #   hay_minoritaria <- any(seleccionadas %in% minoritarias)
+  #   hay_mayoritaria <- any(seleccionadas %in% mayoritarias)
+  #   
+  #   if (hay_minoritaria && hay_mayoritaria) {
+  #     nuevas_seleccionadas <- seleccionadas[!seleccionadas %in% mayoritarias]
+  #     
+  #     updateCheckboxGroupInput(
+  #       session, 
+  #       inputId = "checkGroup_poli_Malt_sexo",
+  #       selected = nuevas_seleccionadas
+  #     )
+  #     
+  #     showNotification(
+  #       "'Hombre' y 'Mujer' fueron deseleccionados para mejor visualización.",
+  #       type = "message",
+  #       duration = 4
+  #     )
+  #   }
+  # }, ignoreInit = TRUE)
+  # 
   ### funcion para el boton de deseleccionar/seleccionar el grupo de edad
   observeEvent(input$deselectAll_poli_Malt, {
     updateCheckboxGroup(session, "checkGroup_poli_Malt", input, maltPoli$Maltrato)

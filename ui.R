@@ -1377,8 +1377,10 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a los
                     incidentes de maltrato (por sexo de la víctima)
-                    desde el año natural 2021 al 2025. Los datos del 2025
-                    son preliminares.",
+                    desde el año natural 2021 al 2025. Los datos de los incidentes en
+                    mujeres trans, hombres trans, no binario y desconocido son visualizados
+                    independientes de las categorias hombres y mujeres debido a la gran
+                    diferencia en cantidad de casos entre las categorias.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
