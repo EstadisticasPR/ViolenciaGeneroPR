@@ -3,6 +3,8 @@ cat("Loading helper functions from utils.R...\n")
 ##################################
 #### Helper Functions: Global ####
 ##################################
+
+
 ######## Sistema de Notificacion de Muertes Violentas ########
 #### cleanSheet_homiEdad ####
 cleanSheet_homiEdad <- function(data) {
@@ -51,6 +53,9 @@ cleanSheet_inci <- function(data) {
     ) %>%
     relocate(Año, Incidente, Casos)
 }
+
+
+
 
 ######## Departamento de la Familia ########
 #### cleanSheet_dfMalt ####
@@ -113,6 +118,9 @@ cleanSheet_dfMalt <- function(data, years) {
       )
     )
 }
+
+
+
 
 ######## Departamento de Justicia ########
 #### cleanSheet_dfDeli ####
@@ -195,6 +203,9 @@ cleanMap_dfDeli <- function(shp_distritos, dfDeli, shp_municipios) {
   ))
 }
 
+
+
+
 ######## Administracion de Vivienda Publica ########
 #### cleanSheet_avp ####
 cleanSheet_avp <- function(file){
@@ -217,7 +228,8 @@ cleanSheet_avp_region <- function(file, sheet_name){
   
   df <- read_excel(file, sheet = sheet_name)
   
-  year_cols <- names(df)[grepl("^[0-9]{4}$", names(df))]
+  # year_cols <- names(df)[grepl("^[0-9]{4}$", names(df))]
+  year_cols <- names(df)[2:10]
   
   estado <- ifelse(grepl("soli", sheet_name), "solicitadas", "asignadas")
   
@@ -244,7 +256,8 @@ cleanSheet_avp_municipios <- function(file, sheet_name){
   
   df <- read_excel(file, sheet = sheet_name)
   
-  year_cols <- names(df)[grepl("^[0-9]{4}$", names(df))]
+  # year_cols <- names(df)[grepl("^[0-9]{4}$", names(df))]
+  year_cols <- names(df)[3:11]
   
   estado <- ifelse(grepl("soli", sheet_name), "solicitadas", "asignadas")
   
@@ -491,6 +504,8 @@ cleansheet_opmServiciosMes <- function(file){
   return(df)
   
 }
+
+
 
 
 

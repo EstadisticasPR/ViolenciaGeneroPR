@@ -1126,7 +1126,7 @@ casosCrimLey148 <- casosCrimLey148_list %>%
 # Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, 
 # por Región Judicial y grupo de edad de la parte peticionaria
 new_names <- c("Total", "20 años o menos", "21-29", "30-39", "40-49", "50-59", "60 años o más", "No Indica")
-sheet_years <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
+sheet_years <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025", "2025-2026")
 
 # Leer y limpiar todos los datos
 OP_148_SoliGrupEdad_list <- lapply(sheet_years, function(year) {
@@ -1142,7 +1142,8 @@ OP_148_SoliGrupEdad <- bind_rows(OP_148_SoliGrupEdad_list) %>%
                        "2021-2022" = "2022",
                        "2022-2023" = "2023",
                        "2023-2024" = "2024",
-                       "2024-2025" = "2025"),
+                       "2024-2025" = "2025",
+                       "2025-2026" = "2026"),
     AñoFiscal = factor(AñoFiscal),
     Región = factor(Región)
   ) %>%
@@ -1218,7 +1219,7 @@ OP_LEY148Archivadas <- OP_LEY148Archivadas_list %>%
 # Cantidad de solicitudes de órdenes de protección denegadas al amparo de la Ley 148 - Violencia Sexual denegadas por Región Judicial
 # lista con nuevos nombres de columnas para mejor interpretación
 new_names <- c("No Aplican Disposiciones Ley148", "No Prueban Elementos")
-sheet_names <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024")
+sheet_names <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
 
 OP_LEY148Denegadas_list <- map(sheet_names, ~ {
   read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"), sheet = .x) %>%
@@ -1235,6 +1236,7 @@ OP_LEY148Denegadas <- OP_LEY148Denegadas_list %>%
       AñoFiscal == "2021-2022" ~ "2022",
       AñoFiscal == "2022-2023" ~ "2023",
       AñoFiscal == "2023-2024" ~ "2024",
+      AñoFiscal == "2024-2025" ~ "2025",
       TRUE ~ as.character(AñoFiscal)
     )),
     ÓrdenesDenegadas = replace_na(ÓrdenesDenegadas, 0)
@@ -1539,13 +1541,13 @@ actualizacion_justicia1 <- "Última actualización: 31 de diciembre de 2025"
 actualizacion_justicia2 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion avp tab1
-actualizacion_avp1 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_avp1 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion avp tab2
-actualizacion_avp2 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_avp2 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion avp tab3
-actualizacion_avp3 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_avp3 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion policia tab1
 actualizacion_policia1 <- "Última actualización: 31 de diciembre de 2025"
@@ -1596,19 +1598,19 @@ actualizacion_dcr1 <- "Última actualización: 31 de diciembre de 2025"
 actualizacion_dcr2 <- "Última actualización: 28 de febrero de 2023"
 
 # Fecha actualizacion Tribunales tab1
-actualizacion_tribunales1 <- "Última actualización: 15 de octubre de 2024"
+actualizacion_tribunales1 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion Tribunales tab2
-actualizacion_tribunales2 <- "Última actualización: 15 de octubre de 2024"
+actualizacion_tribunales2 <- "Última actualización: 30 de junio de 2025"
 
 # Fecha actualizacion Tribunales tab3
-actualizacion_tribunales3 <- "Última actualización: 15 de octubre de 2024"
+actualizacion_tribunales3 <- "Última actualización: 30 de junio de 2025"
 
 # Fecha actualizacion Tribunales tab4
-actualizacion_tribunales4 <- "Última actualización: 15 de octubre de 2024"
+actualizacion_tribunales4 <- "Última actualización: 30 de junio de 2025"
 
 # Fecha actualizacion Tribunales tab5
-actualizacion_tribunales5 <- "Última actualización: 15 de octubre de 2024"
+actualizacion_tribunales5 <- "Última actualización: 30 de junio de 2025"
 
 # Fecha actualizacion Tribunales tab6
 actualizacion_tribunales6 <- "Última actualización: 15 de octubre de 2024"

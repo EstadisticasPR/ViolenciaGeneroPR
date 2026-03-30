@@ -1247,7 +1247,7 @@ server <- function(input, output, session) {
         Los datos representados en esta gráfica corresponden al
         total de viviendas públicas solicitadas por
         violencia de la Administración de Vivienda Pública
-        desde el año natural 2017 al 2024.
+        desde el año natural 2017 al 2025.
       </p>"
       )
     } else {
@@ -1256,7 +1256,7 @@ server <- function(input, output, session) {
         Los datos representados en esta gráfica corresponden al
         total de viviendas públicas solicitadas por
         violencia doméstica por región de la Administración de Vivienda Pública
-        desde el año natural 2017 al 2024.
+        desde el año natural 2017 al 2025.
       </p>"
       )
     }
@@ -1493,7 +1493,7 @@ server <- function(input, output, session) {
         Los datos representados en esta gráfica corresponden al
         total de viviendas públicas asignadas por
         violencia de la Administración de Vivienda Pública
-        desde el año natural 2017 al 2024.
+        desde el año natural 2017 al 2025.
       </p>"
       )
     } else {
@@ -1502,7 +1502,7 @@ server <- function(input, output, session) {
         Los datos representados en esta gráfica corresponden al
         total de viviendas públicas asignadas por
         violencia doméstica por región de la Administración de Vivienda Pública
-        desde el año natural 2017 al 2024.
+        desde el año natural 2017 al 2025.
       </p>"
       )
     }
@@ -4854,7 +4854,7 @@ server <- function(input, output, session) {
         Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021. Los datos del 2025 son preliminares.
+        año fiscal 2021. Los datos del 2026 son preliminares.
       </p>"
       )
     } else {
@@ -4866,7 +4866,7 @@ server <- function(input, output, session) {
         Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021. Los datos del 2025 son preliminares.
+        año fiscal 2021. Los datos del 2026 son preliminares.
       </p>"
       )
     }
@@ -5089,7 +5089,7 @@ server <- function(input, output, session) {
         Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021. Los datos del 2025 son preliminares.
+        año fiscal 2021. 
       </p>"
       )
     } else {
@@ -5101,7 +5101,7 @@ server <- function(input, output, session) {
         Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021. Los datos del 2025 son preliminares.
+        año fiscal 2021. 
       </p>"
       )
     }
@@ -5316,7 +5316,7 @@ server <- function(input, output, session) {
         a nivel de Puerto Rico. Los datos para cada año fiscal se
         identifican con el año en que finaliza el mismo, por 
         ejemplo, para los datos del año fiscal 2020-2021, los datos
-        son presentados como año fiscal 2021. Los datos del 2025 son preliminares.
+        son presentados como año fiscal 2021.
       </p>"
       )
     } else {
@@ -5328,7 +5328,7 @@ server <- function(input, output, session) {
         Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021. Los datos del 2025 son preliminares.
+        año fiscal 2021.
       </p>"
       )
     }
@@ -5549,7 +5549,7 @@ server <- function(input, output, session) {
         Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021. Los datos del 2025 son preliminares.
+        año fiscal 2021.
       </p>"
       )
     } else {
@@ -5561,7 +5561,7 @@ server <- function(input, output, session) {
         fiscal. Los datos para cada año fiscal se identifican con el
         año en que finaliza el mismo, por ejemplo, para los datos
         del año fiscal 2020-2021, los datos son presentados como 
-        año fiscal 2021. Los datos del 2025 son preliminares.
+        año fiscal 2021. 
       </p>"
       )
     }
@@ -5782,7 +5782,7 @@ server <- function(input, output, session) {
         de Puerto Rico. Los datos para cada
         año fiscal se identifican con el año en que finaliza
         el mismo, por ejemplo, para los datos del año fiscal 2020-2021,
-        los datos son presentados como año fiscal 2021. Los datos del 2025 son preliminares.
+        los datos son presentados como año fiscal 2021.
       </p>"
       )
     } else {
@@ -5793,7 +5793,7 @@ server <- function(input, output, session) {
         cometido, región judicial y año fiscal. Los datos para cada
         año fiscal se identifican con el año en que finaliza
         el mismo, por ejemplo, para los datos del año fiscal 2020-2021,
-        los datos son presentados como año fiscal 2021. Los datos del 2025 son preliminares.
+        los datos son presentados como año fiscal 2021. 
       </p>"
       )
     }
