@@ -275,609 +275,68 @@ mapaAvp_sol <- mapaAvp %>%
 poli <- here::here("data", "Negociado_de_Policia", "/")
 
 #### despDF ####
-# meses <- c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
-# 
-# # Años a importar
-# years <- 2020:2024
-# 
-# # Leer y limpiar los datos por hoja
-# despDF_list <- lapply(as.character(years), function(sheet_name) {
-#   read_excel(paste0(poli, "npprDesp.xlsx"), sheet = sheet_name) %>%
-#     cleanSheet_npprDesp(sheet_name)
-# })
+despDF_Adultas <- cleanSheet_despDF(paste0(poli, "npprDesp.xlsx"), "Adultas")
+despDF_Menores <- cleanSheet_despDF(paste0(poli, "npprDesp.xlsx"), "Menores")
 
-despDF_Adultas <- read_excel(paste0(poli, "npprDesp.xlsx")) %>%
-  cleanSheet_npprDesp() %>%
-  filter(!grepl("Adultas Desaparecidas", Estado, ignore.case = TRUE)) %>%
-  filter(!grepl("Menores Desaparecidas", Estado, ignore.case = TRUE)) %>%
-  filter(!grepl("Menores Localizadas", Estado, ignore.case = TRUE)) %>%
-  filter(!grepl("Menores sin Localizar", Estado, ignore.case = TRUE))%>%
-  mutate(
-    Año = factor(Año),
-    Estado = factor(Estado)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(Año, Estado, Casos)
-
-despDF_Menores <- read_excel(paste0(poli, "npprDesp.xlsx")) %>%
-  cleanSheet_npprDesp() %>%
-  filter(!grepl("Adultas Desaparecidas", Estado, ignore.case = TRUE)) %>%
-  filter(!grepl("Menores Desaparecidas", Estado, ignore.case = TRUE)) %>%
-  filter(!grepl("Adultas Localizadas", Estado, ignore.case = TRUE)) %>%
-  filter(!grepl("Adultas Sin Localizar", Estado, ignore.case = TRUE))%>%
-  mutate(
-    Año = factor(Año),
-    Estado = factor(Estado)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(Año, Estado, Casos)
-
-# Unir y transformar los datos
-# despDF_Adultas <- despDF_list %>%
-#   reduce(full_join) %>%
-#   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
-#   filter(!grepl("Total", Meses, ignore.case = TRUE)) %>%
-#   filter(!grepl("Adultas Desaparecidas", Categoria, ignore.case = TRUE)) %>%
-#   filter(!grepl("Menores Desaparecidas", Categoria, ignore.case = TRUE)) %>%
-#   filter(!grepl("Menores Localizadas", Categoria, ignore.case = TRUE)) %>%
-#   filter(!grepl("Menores sin Localizar", Categoria, ignore.case = TRUE)) %>%
-#   group_by(Categoria, Año) %>%
-#   summarise(Casos = sum(Casos, na.rm = TRUE), .groups = "drop") %>%
-#   mutate(
-#     Año = factor(Año),
-#     Estado = factor(Categoria)
-#   ) %>%
-#   replace_na(list(Casos = 0)) %>%
-#   select(Año, Estado, Casos)
-# 
-# despDF_Menores <- despDF_list %>%
-#   reduce(full_join) %>%
-#   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
-#   filter(!grepl("Total", Meses, ignore.case = TRUE)) %>%
-#   filter(!grepl("Adultas Desaparecidas", Categoria, ignore.case = TRUE)) %>%
-#   filter(!grepl("Menores Desaparecidas", Categoria, ignore.case = TRUE)) %>%
-#   filter(!grepl("Adultas Localizadas", Categoria, ignore.case = TRUE)) %>%
-#   filter(!grepl("Adultas Sin Localizar", Categoria, ignore.case = TRUE)) %>%
-#   group_by(Categoria, Año) %>%
-#   summarise(Casos = sum(Casos, na.rm = TRUE), .groups = "drop") %>%
-#   mutate(
-#     Año = factor(Año),
-#     Estado = factor(Categoria)
-#   ) %>%
-#   replace_na(list(Casos = 0)) %>%
-#   select(Año, Estado, Casos)
-# 
-
-despDF <- bind_rows(
-  despDF_Adultas,
-  despDF_Menores
-)
-
-# despDF <- despDF_list %>%
-#   reduce(full_join) %>%
-#   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
-#   filter(!grepl("Total", Meses, ignore.case = TRUE)) %>%
-#   group_by(Categoria, Año) %>%
-#   summarise(Casos = sum(Casos, na.rm = TRUE), .groups = "drop") %>%
-#   mutate(
-#     Año = factor(Año),
-#     Estado = factor(Categoria)
-#   ) %>%
-#   replace_na(list(Casos = 0)) %>%
-#   select(Año, Estado, Casos)
-
-# sheet_name = "2020"
-# desp2020 <- read_excel(paste0(poli, "npprDesp.xlsx"),
-#                        sheet = sheet_name) %>%
-#   cleanSheet_npprDesp(sheet_name)
-# 
-# sheet_name = "2021"
-# desp2021 <- read_excel(paste0(poli, "npprDesp.xlsx"),
-#                        sheet = sheet_name) %>%
-#   cleanSheet_npprDesp(sheet_name)
-# 
-# sheet_name = "2022"
-# desp2022 <- read_excel(paste0(poli, "npprDesp.xlsx"),
-#                        sheet = sheet_name) %>%
-#   cleanSheet_npprDesp(sheet_name)
-# 
-# sheet_name = "2023"
-# desp2023 <- read_excel(paste0(poli, "npprDesp.xlsx"),
-#                        sheet = sheet_name) %>%
-#   cleanSheet_npprDesp(sheet_name)
-# 
-# sheet_name = "2024"
-# desp2024 <- read_excel(paste0(poli, "npprDesp.xlsx"),
-#                        sheet = sheet_name) %>%
-#   cleanSheet_npprDesp(sheet_name)
-# 
-# despDF_list <- list(desp2020,
-#                     desp2021,
-#                     desp2022,
-#                     desp2023,
-#                     desp2024)
-# 
-# # Unir todos los data frames en la lista usando full_join
-# despDF <- despDF_list %>%
-#   reduce(full_join) %>%
-#   pivot_longer(cols = -c(Categoria, Año), names_to = "Meses", values_to = "Casos") %>%
-#   filter(!grepl("Total", Meses)) %>%
-#   group_by(Categoria, Año) %>%
-#   summarise(Casos = sum(Casos, na.rm = TRUE)) %>%
-#   ungroup() %>%
-#   mutate(
-#     Año = factor(Año),
-#     Estado = factor(Categoria)
-#   ) %>%
-#   replace_na(list(Casos = 0)) %>%
-#   select(
-#     Año, Estado, Casos
-#   )
 
 #### vEdad ####
-# Años a importar
-years <- 2021:2024
-
-# Leer y limpiar los datos por hoja
-vEdad_list <- lapply(as.character(years), function(sheet_name) {
-  read_excel(paste0(poli, "npprVDedad.xlsx"), sheet = sheet_name) %>%
-    cleanSheet_npprVDedad(sheet_name)
-})
-
-# Unir y transformar los datos
-vEdad <- vEdad_list %>%
-  reduce(full_join) %>%
-  rename(
-    Edad = `Grupos de Edad`,
-    `Ambos Sexos` = Total,
-    Mujeres = `Cantidad de mujeres víctimas`,
-    Hombres = Masculino,
-    Año = Año
-  ) %>%
-  pivot_longer(
-    !c(Edad, Año), names_to = "Sexo", values_to = "Casos"
-  ) %>%
-  mutate(
-    Edad = str_replace_all(Edad, c("^< 16$" = "menos de 16 años", "^65 o más$" = "65 años o más")),
-    Edad = factor(Edad, levels = c("menos de 16 años", "16-17", "18-19", "20-24", "25-29", "30-34",
-                                   "35-39","40-44","45-49","50-54","55-59","60-64","65 años o más",
-                                   "Desconocida"),
-                  ordered = TRUE),
-    Año = factor(Año),
-    Sexo = factor(Sexo, levels = c("Hombres", "Mujeres", "Ambos Sexos", "Desconocido"),
-                  ordered = TRUE)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(
-    Año, Edad, Sexo, Casos
-  )
-
-# sheet_name = "2021"
-# vEdad2021 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
-#                        sheet = sheet_name) %>%
-#   cleanSheet_npprVDedad(sheet_name)
-# 
-# sheet_name = "2022"
-# vEdad2022 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
-#                         sheet = sheet_name) %>%
-#   cleanSheet_npprVDedad(sheet_name)
-# 
-# sheet_name = "2023"
-# vEdad2023 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
-#                         sheet = sheet_name) %>%
-#   cleanSheet_npprVDedad(sheet_name)
-# 
-# sheet_name = "2024"
-# vEdad2024 <- read_excel(paste0(poli, "npprVDedad.xlsx"),
-#                         sheet = sheet_name) %>%
-#   cleanSheet_npprVDedad(sheet_name)
-# 
-# vEdad_list <- list(vEdad2021,
-#                     vEdad2022,
-#                     vEdad2023,
-#                     vEdad2024)
-# 
-# # Unir todos los data frames en la lista usando full_join
-# vEdad <- vEdad_list %>%
-#   reduce(full_join) %>%
-#   rename(
-#     Edad = `Grupos de Edad`,
-#     `Ambos Sexos` = Total,
-#     Mujeres = `Cantidad de mujeres víctimas`,
-#     Hombres = Masculino,
-#     Año = Año
-#   ) %>%
-#   pivot_longer(
-#     !c(Edad, Año), names_to = "Sexo", values_to = "Casos"
-#   ) %>%
-#   mutate(
-#     Edad = str_replace_all(Edad, c("^< 16$" = "menos de 16 años", "^65 o más$" = "65 años o más")),
-#     Edad = factor(Edad, levels = c("menos de 16 años", "16-17", "18-19", "20-24", "25-29", "30-34",
-#                                    "35-39","40-44","45-49","50-54","55-59","60-64","65 años o más",
-#                                    "Desconocida"),
-#                   ordered = TRUE),
-#     Año = factor(Año),
-#     Sexo = factor(Sexo, levels = c("Hombres", "Mujeres", "Ambos Sexos", "Desconocido"),
-#                   ordered = TRUE)
-#   ) %>%
-#   replace_na(list(Casos = 0)) %>%
-#   select(
-#     Año, Edad, Sexo, Casos
-#   )
+vEdad <- cleanSheet_vEdad(paste0(poli, "npprVDedad.xlsx"))
 
 #### maltPoli ####
-# Años a importar
-years <- 2021:2025
-
-# Leer y limpiar los datos por hoja
-maltPoli_list <- lapply(as.character(years), function(sheet_name) {
-  read_excel(paste0(poli, "nppr_maltrato.xlsx"), sheet = sheet_name) %>%
-    cleanSheet_npprMalt(sheet_name)
-})
-
-# Unir y transformar los datos
-maltPoli <- maltPoli_list %>%
-  reduce(full_join) %>%
-  rename(
-    Maltrato = `Tipo de Maltrato`,
-    Mujeres = Femenino,
-    Hombres = Masculino,
-    Año = Año
-  ) %>%
-  pivot_longer(
-    !c(Maltrato, Año), names_to = "Sexo", values_to = "Casos"
-  ) %>%
-  mutate(
-    Maltrato = factor(Maltrato, levels = c("Violación Orden de Protección", "Sexual", "Restricción de libertad", 
-                                                               "Psicológico o emocional", "Físico", "Amenaza","Otro"),
-                                ordered = TRUE),
-    Año = factor(Año),
-    Sexo = factor(Sexo, levels = c("Hombres", "Mujeres", "Mujer Trans", "Hombre Trans", "No Binario", "Desconocido"),
-                  ordered = TRUE)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(
-    Año, Maltrato, Sexo, Casos
-  )
+maltPoli <- cleanSheet_maltPoli(paste0(poli, "nppr_maltrato.xlsx"))
 
 #### npprDS_totales ####
-# sheets a importar
-sheets <- c("Victimas", "Ofensores")
-
-# Leer y limpiar los datos por hoja
-npprDS_totales_list <- lapply(sheets, function(sheet_name) {
-  read_excel(paste0(poli, "npprDS_totales.xlsx"), sheet = sheet_name) %>%
-    cleanSheet_npprDS_totales(sheet_name)
-})
-
-npprDS_totales <- npprDS_totales_list %>%
-  reduce(full_join)  %>%
-  pivot_longer(
-    cols = c(Mujeres, Hombres),   # columnas a pivotear
-    names_to = "Sexo",            # nombre de la nueva columna
-    values_to = "Casos"           # valores
-  )%>%
-  mutate(
-    Rol = factor(Rol),
-    Año = factor(Año),
-    Sexo = factor(Sexo)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(
-    Año, Sexo, Casos, Rol
-  )
-
-
+npprDS_totales <- cleanSheet_npprDS_totales(paste0(poli, "npprDS_totales.xlsx"))
 
 #### npprDS_victima ####
-# Años a importar
-years <- 2019:2025
+npprDS_victima <- cleanSheet_npprDS_victima(paste0(poli, "npprDS_victima.xlsx"))
 
-# Leer y limpiar los datos por hoja
-npprDS_victima_list <- lapply(as.character(years), function(sheet_name) {
-  read_excel(paste0(poli, "npprDS_victima.xlsx"), sheet = sheet_name) %>%
-    cleanSheet_npprDS(sheet_name)
-})
-
-npprDS_victima <- npprDS_victima_list %>%
-  reduce(full_join) %>%
-  #filter(Año != 2025) %>%
-  rename(
-    Edad = `Grupos de Edad`
-  ) %>%
-  pivot_longer(
-    !c(Edad, Año), names_to = "Sexo", values_to = "Casos"
-  ) %>%
-  mutate(
-    Edad = str_replace(Edad, "^10 años o menos$", "menos de 10 años"),
-    Edad = factor(Edad, levels = unique(Edad)),
-    Año = factor(Año),
-    Sexo = factor(Sexo)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(
-    Año, Edad, Sexo, Casos
-  )
-
-npprDS_victima_rol <- npprDS_victima  %>%
-  mutate(Rol = "Víctima")
 
 #### npprDS_ofensores ####
-# Años a importar
-years <- 2019:2025
+npprDS_ofensores <- cleanSheet_npprDS_ofensores(paste0(poli, "npprDS_ofensores.xlsx"))
 
-# Leer y limpiar los datos por hoja
-npprDS_ofensores_list <- lapply(as.character(years), function(sheet_name) {
-  read_excel(paste0(poli, "npprDS_ofensores.xlsx"), sheet = sheet_name) %>%
-    cleanSheet_npprDS(sheet_name)
-})
-
-npprDS_ofensores <- npprDS_ofensores_list %>%
-  reduce(full_join) %>%
-  #filter(Año != 2025) %>%
-  rename(
-    Edad = `Grupos de Edad`
-  ) %>%
-  pivot_longer(
-    !c(Edad, Año), names_to = "Sexo", values_to = "Casos"
-  ) %>%
-  mutate(
-    Edad = str_replace(Edad, "^10 años o menos$", "menos de 10 años"),
-    Edad = factor(Edad, levels = unique(Edad)),
-    Año = factor(Año),
-    Sexo = factor(Sexo)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(
-    Año, Edad, Sexo, Casos
-  )
-
-npprDS_ofensores_rol <- npprDS_ofensores  %>%
-  mutate(Rol = "Ofensor")
-
-# Juntar dataframe de victima y ofensores para la descarga de datos
-npprDS_rol <- dplyr::bind_rows(npprDS_victima_rol, npprDS_ofensores_rol)
+# Unir víctimas y ofensores en un solo dataframe para descarga
+npprDS_rol <- dplyr::bind_rows(npprDS_victima, npprDS_ofensores)
 
 #### npprDS_region ####
+npprDS_region <- cleanSheet_npprDS_region(paste0(poli, "npprDS_region.xlsx"))
 
-# Años a importar
-years <- 2019:2025
-
-# Leer y limpiar los datos por hoja
-npprDS_region_list <- lapply(as.character(years), function(sheet_name) {
-  read_excel(paste0(poli, "npprDS_region.xlsx"), sheet = sheet_name) %>%
-    cleanSheet_npprDS(sheet_name)
-})
-
-npprDS_region <- npprDS_region_list %>%
-  reduce(full_join) %>%
-  pivot_longer(
-    !c(Región, Año), names_to = "Categoría", values_to = "Casos"
-  ) %>%
-  mutate(
-    Región = factor(Región, levels = unique(Región)),
-    Año = factor(Año),
-    Categoría = factor(Categoría, levels = c("Víctimas: Mujeres", "Víctimas: Hombres", "Ofensores: Mujeres", 
-                                         "Ofensores: Hombres"),
-                     ordered = TRUE)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(
-    Año, Región, Categoría, Casos
-  )
-
-# Crear un dataframe con las coordenadas de las fiscalías policiacas y 
-# combinar los datos de delitos con los datos geográficos de los distritos fiscales
+# ---- Combinar con shapefile ----
 mapa_npprDS_region <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
   merge(npprDS_region, by.x = "GROUP", by.y = "Región") %>%
   rename(Región = GROUP) %>%
-  relocate(
-    Año, Región, Categoría, geometry, Casos 
-  )
+  relocate(Año, Región, Categoría, geometry, Casos)
 
-# Filtrar para "victimas mujeres"
-mapa_npprDS_victimas_mujeres <- mapa_npprDS_region %>%
-  filter(Categoría == "Víctimas: Mujeres")
-
-# Filtrar para "victimas mujeres"
-mapa_npprDS_victimas_hombres <- mapa_npprDS_region %>%
-  filter(Categoría == "Víctimas: Hombres")
-
-# Filtrar para "victimas mujeres"
-mapa_npprDS_ofensores_mujeres <- mapa_npprDS_region %>%
-  filter(Categoría == "Ofensores: Mujeres")
-
-# Filtrar para "victimas mujeres"
-mapa_npprDS_ofensores_hombres <- mapa_npprDS_region %>%
-  filter(Categoría == "Ofensores: Hombres")
-
+# ---- Filtrar según Categoría ----
+mapa_npprDS_victimas_mujeres   <- mapa_npprDS_region %>% filter(Categoría == "Víctimas: Mujeres")
+mapa_npprDS_victimas_hombres   <- mapa_npprDS_region %>% filter(Categoría == "Víctimas: Hombres")
+mapa_npprDS_ofensores_mujeres  <- mapa_npprDS_region %>% filter(Categoría == "Ofensores: Mujeres")
+mapa_npprDS_ofensores_hombres  <- mapa_npprDS_region %>% filter(Categoría == "Ofensores: Hombres")
 
 #### npprDS_victimas_agrupados ####
-# Años a importar
-years <- 2019:2025
+npprDS_victimas_agrupados <- cleanSheet_npprDS_victimas_agrupados(
+  paste0(poli, "npprDS_victimas_agrupados.xlsx")
+)
 
-# Leer y limpiar los datos por hoja
-npprDS_victimas_agrupados_list <- lapply(as.character(years), function(sheet_name) {
-  read_excel(paste0(poli, "npprDS_victimas_agrupados.xlsx"), sheet = sheet_name) %>%
-    cleanSheet_npprDS(sheet_name)
-})
 
-npprDS_victimas_agrupados <- npprDS_victimas_agrupados_list %>%
-  reduce(full_join) %>%
-  rename(
-    Edad = `Grupos de Edad`
-  ) %>%
-  pivot_longer(
-    !c(Edad, Año), names_to = "Sexo", values_to = "Casos"
-  ) %>%
-  mutate(
-    Edad = factor(Edad, levels = unique(Edad)),
-    Año = factor(Año),
-    Sexo = factor(Sexo)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(
-    Año, Edad, Sexo, Casos
-  )
-
-#### npprDS_victimas_agrupados ####
-# Años a importar
-years <- 2019:2025
-
-# Leer y limpiar los datos por hoja
-npprDS_ofensores_agrupados_list <- lapply(as.character(years), function(sheet_name) {
-  read_excel(paste0(poli, "npprDS_ofensores_agrupados.xlsx"), sheet = sheet_name) %>%
-    cleanSheet_npprDS(sheet_name)
-})
-
-npprDS_ofensores_agrupados <- npprDS_ofensores_agrupados_list %>%
-  reduce(full_join) %>%
-  rename(
-    Edad = `Grupos de Edad`
-  ) %>%
-  pivot_longer(
-    !c(Edad, Año), names_to = "Sexo", values_to = "Casos"
-  ) %>%
-  mutate(
-    Edad = factor(Edad, levels = unique(Edad)),
-    Año = factor(Año),
-    Sexo = factor(Sexo)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(
-    Año, Edad, Sexo, Casos
-  )
+#### npprDS_ofensores_agrupados ####
+npprDS_ofensores_agrupados <- cleanSheet_npprDS_ofensores_agrupados(
+  paste0(poli, "npprDS_ofensores_agrupados.xlsx")
+)
 
 #### npprDS_relacion ####
-# Años a importar
-years <- 2019:2025
-
-# Leer y limpiar los datos por hoja
-npprDS_relacion_list <- lapply(as.character(years), function(sheet_name) {
-  read_excel(paste0(poli, "npprDS_relacion.xlsx"), sheet = sheet_name) %>%
-    cleanSheet_npprDS(sheet_name)
-})
-
-npprDS_relacion <- npprDS_relacion_list %>%
-  reduce(full_join) %>%
-  pivot_longer(
-    c(Familiar, `No Familiar`),
-    names_to = "Relación", 
-    values_to = "Casos"
-  ) %>%
-  mutate(
-    Relación = factor(Relación),
-    Año = factor(Año),
-    Región = factor(Región)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(
-    Año, Región, Relación, Casos
-  )
+npprDS_relacion <- cleanSheet_npprDS_relacion(
+  paste0(poli, "npprDS_relacion.xlsx")
+)
 
 #### npprDS_tiposdelitos ####
-# Años a importar
-years <- 2019:2025
-
-# Leer y limpiar los datos por hoja
-npprDS_tiposdelitos_list <- lapply(as.character(years), function(sheet_name) {
-  read_excel(paste0(poli, "npprDS_tiposdelitos.xlsx"), sheet = sheet_name) %>%
-    cleanSheet_npprDS(sheet_name)
-})
-
-npprDS_tiposdelitos <- npprDS_tiposdelitos_list %>%
-  reduce(full_join) %>%
-  pivot_longer(
-    cols = c(Mujeres, Hombres),   # columnas a pivotear
-    names_to = "Sexo",            # nombre de la nueva columna
-    values_to = "Casos"           # valores
-  ) %>%
-  mutate(
-    Delitos = factor(Delitos, levels = c("Violación", "Sodomia", "Actos Lascivos", 
-                                         "Incesto", "Violación Técnica", "Ley 54 (3.5)","Agresión Sexual",
-                                         "Maltrato", "Pornografia infantil", "Hostigamiento Sexual", "Maltrato Institucional",
-                                         "Trata Humana", "Agresión"),
-                    ordered = TRUE),
-    Año = factor(Año),
-    Sexo = factor(Sexo)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(
-    Año, Delitos, Sexo, Casos
-  )
-
+npprDS_tiposdelitos <- cleanSheet_npprDS_tiposdelitos(
+  paste0(poli, "npprDS_tiposdelitos.xlsx")
+)
 
 
 #### inciDF ####
-# Vector de años
-años <- c("2021", "2022", "2023")
-
-# Función para leer y procesar cada archivo
-leer_datos_incidentes <- function(año) {
-  data <- read_excel(paste0(poli, "NPPRincidentes_", año, ".xlsx")) %>%
-    rename_with(~ gsub(año, "", .), contains(año)) %>%
-    rename_at(vars(2), ~ "Población") %>%
-    mutate(Año = año)
-  
-  # Para el año 2023, también hay columnas con "2022"
-  if (año == "2023") {
-    data <- data %>%
-      rename_with(~ gsub("2022", "", .), contains("2022"))
-  }
-  
-  return(data)
-}
-
-# Leer y combinar todos los años
-inciDF <- lapply(años, leer_datos_incidentes) %>%
-  bind_rows() %>%
-  filter(`Áreas Policiacas` != "Total") %>%
-  pivot_longer(cols = -c(`Áreas Policiacas`, Población, Año), names_to = "Mes", values_to = "Casos") %>%
-  mutate(
-    `Áreas Policiacas` = factor(str_trim(`Áreas Policiacas`)),
-    Año = factor(Año),
-    Meses = factor(Mes),
-    Meses_Numéricos = match(Meses, Mes),
-    Fecha = as.yearmon(paste(Año, Meses_Numéricos), "%Y %m")
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  select(-c(Meses_Numéricos, Mes, Meses)) %>%
-  relocate(Año, `Áreas Policiacas`, Población, Casos)
-
-# inci2021 <- read_excel(paste0(poli, "NPPRincidentes_2021.xlsx")) %>% 
-#   rename_with(~gsub("2021", "",.), contains("2021")) %>%
-#   rename_at(vars(2), ~ "Población") %>% 
-#   mutate(Año = "2021")
-# 
-# # faltan datos para el 2022
-# inci2022 <- read_excel(paste0(poli, "NPPRincidentes_2022.xlsx")) %>% 
-#   rename_with(~gsub("2022", "",.), contains("2022")) %>%
-#   rename_at(vars(2), ~"Población") %>% 
-#   mutate(Año = "2022")
-# 
-# # faltan datos desde mayo en adelante
-# inci2023 <- read_excel(paste0(poli,"NPPRincidentes_2023.xlsx")) %>% 
-#   rename_with(~gsub("2022", "",.), contains("2022")) %>%
-#   rename_with(~gsub("2023", "",.), contains("2023")) %>%
-#   rename_at(vars(2), ~ "Población") %>%
-#   mutate(Año = "2023")
-# 
-# # dataframe con toda la data combinada
-# inciDF <- bind_rows(inci2021, inci2022, inci2023) %>%
-#   filter(`Áreas Policiacas` != "Total") %>%
-#   pivot_longer(cols = -c(`Áreas Policiacas`, Población, Año), names_to = "Mes", values_to = "Casos") %>%
-#   mutate(
-#     `Áreas Policiacas` = factor(str_trim(`Áreas Policiacas`)),
-#     Año = factor(Año),
-#     Meses = factor(Mes), 
-#     Meses_Numéricos = match(Meses, Mes),
-#     Fecha = as.yearmon(paste(Año, Meses_Numéricos), "%Y %m")
-#   ) %>%
-#   replace_na(list(Casos = 0)) %>%
-#   select(-c(Meses_Numéricos, Mes, Meses)) %>%
-#   relocate(
-#     Año, `Áreas Policiacas`, Población, Casos
-#   )
+inciDF <- cleanSheet_inciDF(paste0(poli, "NPPRincidentes"))
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y 
 # combinar los datos de delitos con los datos geográficos de los distritos fiscales

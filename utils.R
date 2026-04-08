@@ -294,48 +294,438 @@ create_map_avp_region <- function(shapefile, df){
 
 
 
+
+
 ########################## LIMPIAR ##################################
 #### Policia de Puerto Rico ####
-#### cleanSheet_npprDesp ####
-cleanSheet_npprDesp <- function(data) {
+#### cleanSheet_despDF ####
+cleanSheet_despDF <- function(file, tipo = c("Adultas", "Menores")) {
   
-  data %>%
-    rename(Estado = Año) %>%        # La columna Año realmente es la categoría
+  tipo <- match.arg(tipo)
+  
+  df <- read_excel(file) %>%
+    # ---- Limpieza base (antes estaba en cleanSheet_npprDesp) ----
+  rename(Estado = Año) %>%
     pivot_longer(
-      cols = -Estado,               # Todo menos Categoria son años
+      cols = -Estado,
       names_to = "Año",
       values_to = "Casos"
     )
-  # %>%
-  #   mutate(
-  #     Año = factor(Año),
-  #     Estado = factor(Estado)
-  #   )
+  
+  # ---- Filtros según tipo ----
+  if (tipo == "Adultas") {
+    df <- df %>%
+      filter(!grepl("Adultas Desaparecidas", Estado, ignore.case = TRUE)) %>%
+      filter(!grepl("Menores Desaparecidas", Estado, ignore.case = TRUE)) %>%
+      filter(!grepl("Menores Localizadas", Estado, ignore.case = TRUE)) %>%
+      filter(!grepl("Menores sin Localizar", Estado, ignore.case = TRUE))
+    
+  } else if (tipo == "Menores") {
+    df <- df %>%
+      filter(!grepl("Adultas Desaparecidas", Estado, ignore.case = TRUE)) %>%
+      filter(!grepl("Menores Desaparecidas", Estado, ignore.case = TRUE)) %>%
+      filter(!grepl("Adultas Localizadas", Estado, ignore.case = TRUE)) %>%
+      filter(!grepl("Adultas Sin Localizar", Estado, ignore.case = TRUE))
+  }
+  
+  # ---- Limpieza final ----
+  df <- df %>%
+    mutate(
+      Año = factor(Año),
+      Estado = factor(Estado)
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    select(Año, Estado, Casos)
+  
+  return(df)
 }
 
 #### cleanSheet_npprVDedad ####
-cleanSheet_npprVDedad <- function(data, sheet_name) {
-  data %>%
-    mutate(Año = sheet_name)
+cleanSheet_vEdad <- function(file, years = 2021:2024) {
+  
+  # ---- Leer y limpiar cada hoja ----
+  vEdad_list <- lapply(as.character(years), function(sheet_name) {
+    read_excel(file, sheet = sheet_name) %>%
+      mutate(Año = sheet_name)
+  })
+  
+  # ---- Unir y transformar ----
+  df <- vEdad_list %>%
+    reduce(full_join) %>%
+    rename(
+      Edad = `Grupos de Edad`,
+      `Ambos Sexos` = Total,
+      Mujeres = `Cantidad de mujeres víctimas`,
+      Hombres = Masculino
+    ) %>%
+    pivot_longer(
+      !c(Edad, Año),
+      names_to = "Sexo",
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      Edad = str_replace_all(Edad, c(
+        "^< 16$" = "menos de 16 años",
+        "^65 o más$" = "65 años o más"
+      )),
+      Edad = factor(
+        Edad,
+        levels = c(
+          "menos de 16 años", "16-17", "18-19", "20-24", "25-29", "30-34",
+          "35-39", "40-44", "45-49", "50-54", "55-59", "60-64",
+          "65 años o más", "Desconocida"
+        ),
+        ordered = TRUE
+      ),
+      Año = factor(Año),
+      Sexo = factor(
+        Sexo,
+        levels = c("Hombres", "Mujeres", "Ambos Sexos", "Desconocido"),
+        ordered = TRUE
+      )
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    select(Año, Edad, Sexo, Casos)
+  
+  return(df)
 }
 
+
 #### cleanSheet_npprMalt ####
-cleanSheet_npprMalt <- function(data, sheet_name) {
-  data %>%
-    mutate(Año = sheet_name)
+cleanSheet_maltPoli <- function(file, years = 2021:2025) {
+  
+  # ---- Leer y añadir año por hoja ----
+  malt_list <- lapply(as.character(years), function(sheet_name) {
+    read_excel(file, sheet = sheet_name) %>%
+      mutate(Año = sheet_name)
+  })
+  
+  # ---- Unir y transformar ----
+  df <- malt_list %>%
+    bind_rows() %>%   # mejor que full_join en este caso
+    rename(
+      Maltrato = `Tipo de Maltrato`,
+      Mujeres = Femenino,
+      Hombres = Masculino
+    ) %>%
+    pivot_longer(
+      !c(Maltrato, Año),
+      names_to = "Sexo",
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      Maltrato = factor(
+        Maltrato,
+        levels = c(
+          "Violación Orden de Protección", "Sexual", "Restricción de libertad",
+          "Psicológico o emocional", "Físico", "Amenaza", "Otro"
+        ),
+        ordered = TRUE
+      ),
+      Año = factor(Año),
+      Sexo = factor(
+        Sexo,
+        levels = c(
+          "Hombres", "Mujeres", "Mujer Trans", "Hombre Trans",
+          "No Binario", "Desconocido"
+        ),
+        ordered = TRUE
+      )
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    select(Año, Maltrato, Sexo, Casos)
+  
+  return(df)
 }
 
 #### cleanSheet_npprDS_totales ####
-cleanSheet_npprDS_totales <- function(data, sheet_name) {
-  data %>%
-    mutate(Rol = sheet_name)
+cleanSheet_npprDS_totales <- function(file, sheets = c("Victimas", "Ofensores")) {
+  
+  # ---- Leer y añadir Rol por hoja ----
+  ds_list <- lapply(sheets, function(sheet_name) {
+    read_excel(file, sheet = sheet_name) %>%
+      mutate(Rol = sheet_name)
+  })
+  
+  # ---- Unir y transformar ----
+  df <- ds_list %>%
+    bind_rows() %>%   # mejor que full_join
+    pivot_longer(
+      cols = c(Mujeres, Hombres),
+      names_to = "Sexo",
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      Rol = factor(Rol),
+      Año = factor(Año),
+      Sexo = factor(Sexo)
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    select(Año, Sexo, Casos, Rol)
+  
+  return(df)
 }
 
-#### cleanSheet_npprDS ####
-cleanSheet_npprDS <- function(data, sheet_name) {
-  data %>%
-    mutate(Año = sheet_name)
+#### cleanSheet_npprDS_victima ####
+cleanSheet_npprDS_victima <- function(file, years = 2019:2025) {
+  
+  # ---- Leer y añadir Año por hoja ----
+  vict_list <- lapply(as.character(years), function(sheet_name) {
+    read_excel(file, sheet = sheet_name) %>%
+      mutate(Año = sheet_name)
+  })
+  
+  # ---- Unir y transformar ----
+  df <- vict_list %>%
+    bind_rows() %>%   # apilar todas las hojas
+    rename(Edad = `Grupos de Edad`) %>%
+    pivot_longer(
+      !c(Edad, Año),
+      names_to = "Sexo",
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      Edad = str_replace(Edad, "^10 años o menos$", "menos de 10 años"),
+      Edad = factor(Edad, levels = unique(Edad)),
+      Año = factor(Año),
+      Sexo = factor(Sexo),
+      Rol = "Víctima"
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    select(Año, Edad, Sexo, Casos, Rol)
+  
+  return(df)
 }
+
+#### cleanSheet_npprDS_ofensores ####
+cleanSheet_npprDS_ofensores <- function(file, years = 2019:2025) {
+  
+  # ---- Leer y añadir Año por hoja ----
+  ofens_list <- lapply(as.character(years), function(sheet_name) {
+    read_excel(file, sheet = sheet_name) %>%
+      mutate(Año = sheet_name)
+  })
+  
+  # ---- Unir y transformar ----
+  df <- ofens_list %>%
+    bind_rows() %>%
+    rename(Edad = `Grupos de Edad`) %>%
+    pivot_longer(
+      !c(Edad, Año),
+      names_to = "Sexo",
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      Edad = str_replace(Edad, "^10 años o menos$", "menos de 10 años"),
+      Edad = factor(Edad, levels = unique(Edad)),
+      Año = factor(Año),
+      Sexo = factor(Sexo),
+      Rol = "Ofensor"
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    select(Año, Edad, Sexo, Casos, Rol)
+  
+  return(df)
+}
+
+#### cleanSheet_npprDS_region ####
+cleanSheet_npprDS_region <- function(file, years = 2019:2025) {
+  
+  # ---- Leer y añadir Año por hoja ----
+  region_list <- lapply(as.character(years), function(sheet_name) {
+    read_excel(file, sheet = sheet_name) %>%
+      mutate(Año = sheet_name)
+  })
+  
+  # ---- Unir y transformar ----
+  df <- region_list %>%
+    bind_rows() %>%
+    pivot_longer(
+      !c(Región, Año),
+      names_to = "Categoría",
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      Región = factor(Región, levels = unique(Región)),
+      Año = factor(Año),
+      Categoría = factor(
+        Categoría,
+        levels = c("Víctimas: Mujeres", "Víctimas: Hombres", "Ofensores: Mujeres", "Ofensores: Hombres"),
+        ordered = TRUE
+      )
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    select(Año, Región, Categoría, Casos)
+  
+  return(df)
+}
+
+#### cleanSheet_npprDS_victimas_agrupados ####
+cleanSheet_npprDS_victimas_agrupados <- function(file, years = 2019:2025) {
+  
+  # ---- Leer y añadir Año por hoja ----
+  vict_list <- lapply(as.character(years), function(sheet_name) {
+    read_excel(file, sheet = sheet_name) %>%
+      mutate(Año = sheet_name)
+  })
+  
+  # ---- Unir y transformar ----
+  df <- vict_list %>%
+    bind_rows() %>%   # apilar hojas por año
+    rename(Edad = `Grupos de Edad`) %>%
+    pivot_longer(
+      !c(Edad, Año),
+      names_to = "Sexo",
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      Edad = factor(Edad, levels = unique(Edad)),
+      Año = factor(Año),
+      Sexo = factor(Sexo)
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    select(Año, Edad, Sexo, Casos)
+  
+  return(df)
+}
+
+#### cleanSheet_npprDS_ofensores_agrupados ####
+cleanSheet_npprDS_ofensores_agrupados <- function(file, years = 2019:2025) {
+  
+  # ---- Leer y añadir Año por hoja ----
+  ofens_list <- lapply(as.character(years), function(sheet_name) {
+    read_excel(file, sheet = sheet_name) %>%
+      mutate(Año = sheet_name)
+  })
+  
+  # ---- Unir y transformar ----
+  df <- ofens_list %>%
+    bind_rows() %>%   # apilar hojas por año
+    rename(Edad = `Grupos de Edad`) %>%
+    pivot_longer(
+      !c(Edad, Año),
+      names_to = "Sexo",
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      Edad = factor(Edad, levels = unique(Edad)),
+      Año = factor(Año),
+      Sexo = factor(Sexo)
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    select(Año, Edad, Sexo, Casos)
+  
+  return(df)
+}
+
+#### cleanSheet_npprDS_relacion ####
+cleanSheet_npprDS_relacion <- function(file, years = 2019:2025) {
+  
+  # ---- Leer y añadir Año por hoja ----
+  relacion_list <- lapply(as.character(years), function(sheet_name) {
+    read_excel(file, sheet = sheet_name) %>%
+      mutate(Año = sheet_name)
+  })
+  
+  # ---- Unir y transformar ----
+  df <- relacion_list %>%
+    bind_rows() %>%
+    pivot_longer(
+      c(Familiar, `No Familiar`),
+      names_to = "Relación",
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      Relación = factor(Relación),
+      Año = factor(Año),
+      Región = factor(Región)
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    select(Año, Región, Relación, Casos)
+  
+  return(df)
+}
+
+#### cleanSheet_npprDS_tiposdelitos ####
+cleanSheet_npprDS_tiposdelitos <- function(file, years = 2019:2025) {
+  
+  # ---- Leer y añadir Año por hoja ----
+  delitos_list <- lapply(as.character(years), function(sheet_name) {
+    read_excel(file, sheet = sheet_name) %>%
+      mutate(Año = sheet_name)
+  })
+  
+  # ---- Unir y transformar ----
+  df <- delitos_list %>%
+    bind_rows() %>%
+    pivot_longer(
+      cols = c(Mujeres, Hombres),
+      names_to = "Sexo",
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      Delitos = factor(
+        Delitos,
+        levels = c(
+          "Violación", "Sodomia", "Actos Lascivos", "Incesto", "Violación Técnica",
+          "Ley 54 (3.5)", "Agresión Sexual", "Maltrato", "Pornografia infantil",
+          "Hostigamiento Sexual", "Maltrato Institucional", "Trata Humana", "Agresión"
+        ),
+        ordered = TRUE
+      ),
+      Año = factor(Año),
+      Sexo = factor(Sexo)
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    select(Año, Delitos, Sexo, Casos)
+  
+  return(df)
+}
+
+#### cleanSheet_inciDF ####
+cleanSheet_inciDF <- function(file_path, años = c("2021", "2022", "2023")) {
+  library(zoo)  # para as.yearmon
+  
+  # Función interna para leer y limpiar cada archivo
+  leer_datos <- function(año) {
+    data <- read_excel(paste0(file_path, "_", año, ".xlsx")) %>%
+      rename_with(~ gsub(año, "", .), contains(año)) %>%
+      rename_at(vars(2), ~ "Población") %>%
+      mutate(Año = año)
+    
+    # Para el año 2023, también renombrar columnas con "2022"
+    if (año == "2023") {
+      data <- data %>%
+        rename_with(~ gsub("2022", "", .), contains("2022"))
+    }
+    
+    return(data)
+  }
+  
+  # Leer todos los años y combinar
+  df <- lapply(años, leer_datos) %>%
+    bind_rows() %>%
+    filter(`Áreas Policiacas` != "Total") %>%
+    pivot_longer(
+      cols = -c(`Áreas Policiacas`, Población, Año),
+      names_to = "Mes",
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      `Áreas Policiacas` = factor(str_trim(`Áreas Policiacas`)),
+      Año = factor(Año),
+      Meses = factor(Mes),
+      Meses_Numéricos = match(Meses, Mes),
+      Fecha = as.yearmon(paste(Año, Meses_Numéricos), "%Y %m")
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    select(-c(Meses_Numéricos, Mes, Meses)) %>%
+    relocate(Año, `Áreas Policiacas`, Población, Casos)
+  
+  return(df)
+}
+
+
 
 
 #### Oficina de la Procuradora de la Mujer ####
@@ -1971,22 +2361,22 @@ renderHeatmap_facets <- function(data,
 
 
 #### renderMap ####
-renderMap <- function(data, value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron, municipios_geo) {
+renderMap <- function(data, value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron, 
+                      municipios_geo) {
+  
   # Verificar que hay datos disponibles
   if (nrow(data) == 0 || !value_col %in% colnames(data)) {
     return(leaflet() %>% addTiles())
   }
   
-  # Obtener valores de la columna dinámica
+  # Valores dinámicos
   values <- data[[value_col]]
   regiones <- data[[value_col_region]]
   
-  # Calcular límites para la escala de colores
+  # Escala de colores
   min_val <- min(values, na.rm = TRUE)
   max_val <- max(values, na.rm = TRUE)
   rango <- max_val - min_val
-  
-  # Garantizar al menos 3 rangos
   num_bins <- 3
   if (rango < num_bins) {
     step <- 1
@@ -1995,43 +2385,34 @@ renderMap <- function(data, value_col, value_col_region, map_zoom, provider = pr
     step <- ceiling(rango / num_bins)
   }
   
-  # Crear los límites de los bins
   bins <- seq(
     floor(min_val / step) * step, 
     ceiling(max_val / step) * step, 
     by = step
   )
   
-  violet_colors <- c(
-    "#f9f5ff", "#e2b3ff", 
-    "#cc80ff", "#a64dff", 
-    "#8c33ff"
-  )
-  
-  
-  # Seleccionar colores según el número de categorías
+  violet_colors <- c("#f9f5ff", "#e2b3ff", "#cc80ff", "#a64dff", "#8c33ff")
   num_bins <- length(bins) - 1
   colors <- violet_colors[seq_len(num_bins)]
-  
-  # Crear la paleta de colores personalizada
   pal <- colorBin(colors, domain = values, bins = bins, na.color = "transparent")
-
-  # Crear el mapa
+  
+  # Labels dinámicos
+  labels <- paste0(value_col_region, ": ", regiones, "<br>",
+                   value_col, ": ", values) %>%
+    lapply(htmltools::HTML)
+  
+  # Crear mapa
   leaflet(data) %>%
     setView(lng = -66.5, lat = 18.2, zoom = map_zoom) %>%
     addProviderTiles(provider) %>%
-    # Polígonos de las regiones coloreadas
     addPolygons(
-      fillColor = ~pal(values), 
-      weight = 1, 
+      fillColor = pal(values),
+      weight = 1,
       opacity = 1,
-      color = "#666", 
-      dashArray = "", 
+      color = "#666",
+      dashArray = "",
       fillOpacity = 0.7,
-      label = ~paste0(
-        value_col_region, ": ", regiones, "<br>",
-        value_col, ": ", values
-      ) %>% lapply(htmltools::HTML), 
+      label = labels,
       highlightOptions = highlightOptions(
         weight = 2,
         color = "#666",
@@ -2040,22 +2421,107 @@ renderMap <- function(data, value_col, value_col_region, map_zoom, provider = pr
         bringToFront = TRUE
       )
     ) %>%
-    # Fronteras de los municipios
     addPolylines(
       data = municipios_geo,
-      weight = 1, # Grosor de las líneas
-      color = "#666", # Color de las líneas de los municipios
+      weight = 1,
+      color = "#666",
       opacity = 1
     ) %>%
     addLegend(
       pal = pal,
-      values = ~values,
+      values = values,
       opacity = 0.7,
       title = value_col,
       position = "bottomright",
       labFormat = labelFormat(digits = 0)
     )
 }
+# renderMap <- function(data, value_col, value_col_region, map_zoom, provider = providers$CartoDB.Positron, 
+#                       municipios_geo) {
+#   # Verificar que hay datos disponibles
+#   if (nrow(data) == 0 || !value_col %in% colnames(data)) {
+#     return(leaflet() %>% addTiles())
+#   }
+#   
+#   # Obtener valores de la columna dinámica
+#   values <- data[[value_col]]
+#   regiones <- data[[value_col_region]]
+#   
+#   # Calcular límites para la escala de colores
+#   min_val <- min(values, na.rm = TRUE)
+#   max_val <- max(values, na.rm = TRUE)
+#   rango <- max_val - min_val
+#   
+#   # Garantizar al menos 3 rangos
+#   num_bins <- 3
+#   if (rango < num_bins) {
+#     step <- 1
+#     max_val <- min_val + (num_bins - 1) * step
+#   } else {
+#     step <- ceiling(rango / num_bins)
+#   }
+#   
+#   # Crear los límites de los bins
+#   bins <- seq(
+#     floor(min_val / step) * step, 
+#     ceiling(max_val / step) * step, 
+#     by = step
+#   )
+#   
+#   violet_colors <- c(
+#     "#f9f5ff", "#e2b3ff", 
+#     "#cc80ff", "#a64dff", 
+#     "#8c33ff"
+#   )
+#   
+#   
+#   # Seleccionar colores según el número de categorías
+#   num_bins <- length(bins) - 1
+#   colors <- violet_colors[seq_len(num_bins)]
+#   
+#   # Crear la paleta de colores personalizada
+#   pal <- colorBin(colors, domain = values, bins = bins, na.color = "transparent")
+# 
+#   # Crear el mapa
+#   leaflet(data) %>%
+#     setView(lng = -66.5, lat = 18.2, zoom = map_zoom) %>%
+#     addProviderTiles(provider) %>%
+#     # Polígonos de las regiones coloreadas
+#     addPolygons(
+#       fillColor = ~pal(values), 
+#       weight = 1, 
+#       opacity = 1,
+#       color = "#666", 
+#       dashArray = "", 
+#       fillOpacity = 0.7,
+#       label = ~paste0(
+#         value_col_region, ": ", regiones, "<br>",
+#         value_col, ": ", values
+#       ) %>% lapply(htmltools::HTML), 
+#       highlightOptions = highlightOptions(
+#         weight = 2,
+#         color = "#666",
+#         dashArray = "",
+#         fillOpacity = 0.9,
+#         bringToFront = TRUE
+#       )
+#     ) %>%
+#     # Fronteras de los municipios
+#     addPolylines(
+#       data = municipios_geo,
+#       weight = 1, # Grosor de las líneas
+#       color = "#666", # Color de las líneas de los municipios
+#       opacity = 1
+#     ) %>%
+#     addLegend(
+#       pal = pal,
+#       values = ~values,
+#       opacity = 0.7,
+#       title = value_col,
+#       position = "bottomright",
+#       labFormat = labelFormat(digits = 0)
+#     )
+# }
 
 #### renderMap_npprDS ####
 

@@ -1837,39 +1837,39 @@ ui <-
         #### tab para el mapa de incidentes de violencia doméstica por área policiaca (inciMapa) ####
         # tabPanel(
         #   lowercaseTitle("inciMapa"),
-        #   
+        # 
         #   # Título del Tab
         #   titlePanel("Incidentes de violencia doméstica por área policíaca (desde enero de 2021 a abril de 2023)"),
-        #   
+        # 
         #   # Fuente de Datos, Actualización
         #   tags$span("Fuente: Negociado de Policía de Puerto Rico"), tags$br(),
         #   #tags$span("Actualización Datos:  ", actualizacion_policiaA), tags$br(),
-        #   
+        # 
         #   # Menu sidebar con widgets
         #   sidebarLayout(
         #     sidebarPanel(
-        #       
+        # 
         #       # botón para seleccionar año
         #       selectInput("select_poli_inciMapa_año", "Seleccione Año:",
         #                   choices = levels(inciMapa$Año),
         #                   selected = 1),
-        #       
+        # 
         #       # createDropdownCheckbox(
         #       #   label = "Seleccionar Año:",
         #       #   choices = mapaDeli$Año,
         #       #   selected = NULL,
         #       #   id = "just_mapaDeli_año"
         #       # ),
-        #       
+        # 
         #     ),
-        #     
+        # 
         #     # Sección principal con los gráficos
         #     mainPanel(
         #       plotlyOutput("map_poli_inciMapa")
         #       #DTOutput("dataTable_poli_inciMapa")
         #     )
         #   )
-        # ), 
+        # ),
         
         #### tab de Publicaciones del Negociado de la Policia ####
         # tabPanel(

@@ -3405,19 +3405,35 @@ server <- function(input, output, session) {
            Año %in% input$select_poli_inciMapa_año)
   })
   
+  # ### mapa 
+  # output$map_poli_inciMapa <- renderPlotly({
+  #   p <- renderMap(
+  #     data = inciMapa_filt, fill = Casos,
+  #     title = paste0("Incidentes de violencia doméstica por área policíaca en el año ", input$select_poli_inciMapa_año),
+  #     group = GROUP,
+  #     fill_lab = "Número de incidentes de violencia doméstica",
+  #     light_color = "lightblue",
+  #     dark_color = "darkblue"
+  #   )
+  #   ggplotly(p, tooltip = c("all"))
+  # })
   ### mapa 
-  output$map_poli_inciMapa <- renderPlotly({
-    p <- renderMap(
-      data = inciMapa_filt, fill = Casos,
-      title = paste0("Incidentes de violencia doméstica por área policíaca en el año ", input$select_poli_inciMapa_año),
-      group = GROUP,
-      fill_lab = "Número de incidentes de violencia doméstica",
-      light_color = "lightblue",
-      dark_color = "darkblue"
+  output$map_poli_inciMapa <- renderLeaflet({
+    
+    # Filtrar datos por año
+    inciMapa_filt <- inciMapa %>% 
+      filter(Año == input$select_poli_inciMapa_año)
+    
+    # Llamada a renderMap con los argumentos correctos
+    renderMap(
+      data = inciMapa_filt,
+      value_col = "Casos",
+      value_col_region = "GROUP",
+      map_zoom = 9,
+      municipios_geo = municipios_geo   # aquí usamos el objeto correcto
     )
-    ggplotly(p, tooltip = c("all"))
+    
   })
-  
 
   #### Tab de Publicaciones ####
   # # PDF 1
