@@ -296,7 +296,6 @@ create_map_avp_region <- function(shapefile, df){
 
 
 
-########################## LIMPIAR ##################################
 #### Policia de Puerto Rico ####
 #### cleanSheet_despDF ####
 cleanSheet_despDF <- function(file, tipo = c("Adultas", "Menores")) {
@@ -997,140 +996,372 @@ cleansheet_dcrSentenciadas <- function(file){
 
 
 
+
+
 #### Administración de Tribunales ####
+#### cleanSheet_casosCrimLey148 ####
+cleanSheet_casosCrimLey148 <- function(file, sheets = c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")) {
+  
+  df_list <- lapply(sheets, function(sheet_name) {
+    
+    read_excel(file, sheet = sheet_name) %>%
+      rename(Delito = `Año fiscal/delitos`) %>%
+      pivot_longer(!Delito, names_to = "Status", values_to = "Casos") %>%
+      mutate(AñoFiscal = sheet_name) %>%
+      filter(Delito != sheet_name)
+    
+  })
+  
+  df <- df_list %>%
+    bind_rows() %>%
+    mutate(
+      AñoFiscal = recode(AñoFiscal,
+                         "2020-2021" = "2021",
+                         "2021-2022" = "2022",
+                         "2022-2023" = "2023",
+                         "2023-2024" = "2024",
+                         "2024-2025" = "2025"),
+      AñoFiscal = factor(AñoFiscal),
+      Status = factor(Status),
+      Delito = factor(Delito)
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    relocate(AñoFiscal, Status, Delito, Casos)
+  
+  return(df)
+}
+
+
+
 #### cleanSheet_OP_148_SoliGrupEdad ####
-cleanSheet_OP_148_SoliGrupEdad <- function(data, sheet_name, new_names) {
-  data %>%
-    rename_at(vars(2:9), ~ new_names) %>%       # Renombra las columnas de la 2 a la 9
-    pivot_longer(                                # Convierte las columnas a formato largo
-      !Región, 
-      names_to = "Edad", 
-      values_to = "Solicitudes"
-    ) %>%
+cleanSheet_OP_148_SoliGrupEdad <- function(file, 
+                                           sheets = c("2020-2021", "2021-2022", "2022-2023", 
+                                                      "2023-2024", "2024-2025", "2025-2026"),
+                                           new_names = c("Total", "20 años o menos", "21-29", "30-39",
+                                                         "40-49", "50-59", "60 años o más", "No Indica")) {
+  
+  df_list <- lapply(sheets, function(sheet_name) {
+    
+    read_excel(file, sheet = sheet_name) %>%
+      rename_at(vars(2:9), ~ new_names) %>%       # Renombra las columnas de la 2 a la 9
+      pivot_longer(                                # Convierte las columnas a formato largo
+        !Región, 
+        names_to = "Edad", 
+        values_to = "Solicitudes"
+      ) %>%
+      mutate(
+        Edad = as.character(Edad),                # Convierte Edad a carácter para asegurar el filtrado
+        AñoFiscal = sheet_name                     # Asigna el año fiscal desde sheet_name
+      ) %>%
+      filter(
+        Edad != "Total",                           # Filtra filas con 'Total' en Edad
+        Región != "Total"                          # Filtra filas con 'Total' en Región
+      ) %>%
+      mutate(
+        Edad = factor(Edad, levels = unique(Edad)) # Convierte Edad de nuevo a factor con niveles únicos
+      )
+    
+  })
+  
+  df <- df_list %>%
+    bind_rows() %>%
     mutate(
-      Edad = as.character(Edad),                # Convierte Edad a carácter para asegurar el filtrado
-      AñoFiscal = sheet_name                     # Asigna el año fiscal desde sheet_name
+      AñoFiscal = recode(AñoFiscal,
+                         "2020-2021" = "2021",
+                         "2021-2022" = "2022",
+                         "2022-2023" = "2023",
+                         "2023-2024" = "2024",
+                         "2024-2025" = "2025",
+                         "2025-2026" = "2026"),
+      AñoFiscal = factor(AñoFiscal),
+      Región = factor(Región)
     ) %>%
-    filter(
-      Edad != "Total",                           # Filtra filas con 'Total' en Edad
-      Región != "Total"                          # Filtra filas con 'Total' en Región
-    ) %>%
-    mutate(
-      Edad = factor(Edad, levels = unique(Edad)) # Convierte Edad de nuevo a factor con niveles únicos
-    )
+    replace_na(list(Solicitudes = 0)) %>%
+    relocate(AñoFiscal, Región, Edad, Solicitudes)
+  
+  return(df)
 }
 
 #### cleanSheet_OP_Ley148_ex_parteEmitidas ####
-cleanSheet_OP_Ley148_ex_parteEmitidas <- function(data, sheet_name, new_names) {
-  data %>%
-    rename_at(vars(2:6), ~ new_names) %>%       # Renombra las columnas de la 2 a la 6
-    pivot_longer(                                # Convierte las columnas a formato largo
-      !Región, 
-      names_to = "Delito", 
-      values_to = "ÓrdenesEmitidas"
-    ) %>%
+cleanSheet_OP_Ley148_ex_parteEmitidas <- function(file, 
+                                           sheets = c("2020-2021", "2021-2022", "2022-2023", 
+                                                      "2023-2024", "2024-2025"),
+                                           new_names = c("Total", "Agresión Sexual", "Acoso Sexual",
+                                                         "Actos Lascivos", "Incesto") ) {
+  
+  df_list <- lapply(sheets, function(sheet_name) {
+    
+    read_excel(file, sheet = sheet_name) %>%
+      rename_at(vars(2:6), ~ new_names) %>%       # Renombra las columnas de la 2 a la 6
+      pivot_longer(                                # Convierte las columnas a formato largo
+        !Región, 
+        names_to = "Delito", 
+        values_to = "ÓrdenesEmitidas"
+      ) %>%
+      mutate(
+        Delito = as.character(Delito),             # Convierte Delito a carácter para asegurar el filtrado
+        AñoFiscal = factor(sheet_name)             # Asigna el año fiscal desde sheet_name
+      ) %>%
+      filter(
+        Delito != "Total",                         # Filtra filas con 'Total' en Delito
+        Región != "Total"                          # Filtra filas con 'Total' en Región
+      ) %>%
+      mutate(
+        Delito = factor(Delito, levels = unique(Delito)) # Convierte Delito de nuevo a factor con niveles únicos
+      )
+    
+  })
+  
+  df <- df_list %>%
+    bind_rows() %>%
     mutate(
-      Delito = as.character(Delito),             # Convierte Delito a carácter para asegurar el filtrado
-      AñoFiscal = factor(sheet_name)             # Asigna el año fiscal desde sheet_name
+      AñoFiscal = recode(AñoFiscal,
+                         "2020-2021" = "2021",
+                         "2021-2022" = "2022",
+                         "2022-2023" = "2023",
+                         "2023-2024" = "2024",
+                         "2024-2025" = "2025"),
+      Región = factor(Región),
+      Delito = factor(Delito),
+      AñoFiscal = factor(AñoFiscal)
     ) %>%
-    filter(
-      Delito != "Total",                         # Filtra filas con 'Total' en Delito
-      Región != "Total"                          # Filtra filas con 'Total' en Región
-    ) %>%
-    mutate(
-      Delito = factor(Delito, levels = unique(Delito)) # Convierte Delito de nuevo a factor con niveles únicos
-    )
+    filter(Región != "Total") %>%
+    replace_na(list(ÓrdenesEmitidas = 0)) %>%
+    relocate(AñoFiscal, Delito, Región, ÓrdenesEmitidas)
+  
+  return(df)
 }
+
 
 #### cleanSheet_OP_LEY148Archivadas ####
-cleanSheet_OP_LEY148Archivadas <- function(data, sheet_name, new_names) {
-  data %>%
-    rename_at(vars(2:4), ~ new_names) %>%
-    pivot_longer(
-      !Región, 
-      names_to = "Razón", 
-      values_to = "ÓrdenesArchivadas"
-    ) %>%
+cleanSheet_OP_LEY148Archivadas <- function(file, 
+                                                  sheets = c("2020-2021", "2021-2022", "2022-2023",
+                                                             "2023-2024", "2024-2025"),
+                                                  new_names = c("Total", "Solicitud Peticionaria",
+                                                                "Otra Razón")) {
+  
+  df_list <- lapply(sheets, function(sheet_name) {
+    
+    read_excel(file, sheet = sheet_name) %>%
+      rename_at(vars(2:4), ~ new_names) %>%
+      pivot_longer(
+        !Región, 
+        names_to = "Razón", 
+        values_to = "ÓrdenesArchivadas"
+      ) %>%
+      mutate(
+        Región = as.character(Región), 
+        AñoFiscal = factor(sheet_name)
+      ) %>%
+      filter(
+        Razón != "Total",
+        Región != "Total"
+      ) %>%
+      mutate(
+        Región = factor(Región, levels = unique(Región)) # Convierte Región de nuevo a factor con niveles únicos
+      )
+    
+  })
+  
+  df <- df_list %>%
+    bind_rows() %>%
     mutate(
-      Región = as.character(Región), 
-      AñoFiscal = factor(sheet_name)
+      Razón = factor(Razón, levels = c("Solicitud Peticionaria", "Otra Razón")),
+      Región = factor(Región),
+      AñoFiscal = factor(case_when(
+        AñoFiscal == "2020-2021" ~ "2021",
+        AñoFiscal == "2021-2022" ~ "2022",
+        AñoFiscal == "2022-2023" ~ "2023",
+        AñoFiscal == "2023-2024" ~ "2024",
+        AñoFiscal == "2024-2025" ~ "2025",
+        TRUE ~ as.character(AñoFiscal)
+      ))
     ) %>%
-    filter(
-      Razón != "Total",
-      Región != "Total"
-    ) %>%
-    mutate(
-      Región = factor(Región, levels = unique(Región)) # Convierte Región de nuevo a factor con niveles únicos
-    )
+    filter(Región != "Total") %>%
+    replace_na(list(ÓrdenesArchivadas = 0)) %>%
+    relocate(AñoFiscal, Razón, Región, ÓrdenesArchivadas)
+  return(df)
 }
+
 
 #### cleanSheet_OP_LEY148Denegadas ####
-cleanSheet_OP_LEY148Denegadas <- function(data, sheet_name, new_names) {
-  data %>%
-    rename_at(vars(3:4), ~ new_names) %>%
-    pivot_longer(
-      !Región, 
-      names_to = "Razón", 
-      values_to = "ÓrdenesDenegadas"
-    ) %>%
+cleanSheet_OP_LEY148Denegadas <- function(file, 
+                                           sheets = c("2020-2021", "2021-2022", "2022-2023", 
+                                                      "2023-2024", "2024-2025"),
+                                           new_names = c("No Aplican Disposiciones Ley148", 
+                                                         "No Prueban Elementos")) {
+  
+  df_list <- lapply(sheets, function(sheet_name) {
+    read_excel(file, sheet = sheet_name) %>%
+      rename_at(vars(3:4), ~ new_names) %>%
+      pivot_longer(
+        !Región, 
+        names_to = "Razón", 
+        values_to = "ÓrdenesDenegadas"
+      ) %>%
+      mutate(
+        AñoFiscal = factor(sheet_name)
+      ) %>%
+      filter(
+        Región != "Total",
+        Razón != "Total"
+      )
+    
+  })
+  
+  df <- df_list %>%
+    bind_rows() %>%
     mutate(
-      AñoFiscal = factor(sheet_name)
+      Región = factor(Región),
+      Razón = factor(Razón),
+      AñoFiscal = factor(case_when(
+        AñoFiscal == "2020-2021" ~ "2021",
+        AñoFiscal == "2021-2022" ~ "2022",
+        AñoFiscal == "2022-2023" ~ "2023",
+        AñoFiscal == "2023-2024" ~ "2024",
+        AñoFiscal == "2024-2025" ~ "2025",
+        TRUE ~ as.character(AñoFiscal)
+      )),
+      ÓrdenesDenegadas = replace_na(ÓrdenesDenegadas, 0)
     ) %>%
-    filter(
-      Región != "Total",
-      Razón != "Total"
-    )
+    relocate(AñoFiscal, Razón, Región, ÓrdenesDenegadas)
+  
+  return(df)
 }
 
+
 #### cleanSheet_OP_LEY148FinalEmitidas ####
-cleanSheet_OP_LEY148FinalEmitidas <- function(data, sheet_name, new_names) {
-  data %>%
-    rename_at(vars(2:6), ~ new_names) %>%
-    pivot_longer(
-      !Región, 
-      names_to = "Delito", 
-      values_to = "ÓrdenesEmitidas"
-    ) %>%
+cleanSheet_OP_LEY148FinalEmitidas <- function(file, 
+                                          sheets = c("2020-2021", "2021-2022", "2022-2023",
+                                                     "2023-2024", "2024-2025"),
+                                          new_names = c("Total", "Agresión Sexual", "Acoso Sexual",
+                                                        "Actos Lascivos", "Incesto")) {
+  
+  df_list <- lapply(sheets, function(sheet_name) {
+    read_excel(file, sheet = sheet_name) %>%
+      rename_at(vars(2:6), ~ new_names) %>%
+      pivot_longer(
+        !Región, 
+        names_to = "Delito", 
+        values_to = "ÓrdenesEmitidas"
+      ) %>%
+      mutate(
+        AñoFiscal = factor(sheet_name)
+      ) %>%
+      filter(
+        Región != "Total",
+        Delito != "Total"
+      )
+    
+  })
+  
+  df <- df_list %>%
+    bind_rows() %>%
     mutate(
-      AñoFiscal = factor(sheet_name)
+      Región = factor(Región),
+      Delito = factor(Delito),
+      AñoFiscal = factor(case_when(
+        AñoFiscal == "2020-2021" ~ "2021",
+        AñoFiscal == "2021-2022" ~ "2022",
+        AñoFiscal == "2022-2023" ~ "2023",
+        AñoFiscal == "2023-2024" ~ "2024",
+        AñoFiscal == "2024-2025" ~ "2025",
+        TRUE ~ as.character(AñoFiscal)
+      )),
+      ÓrdenesEmitidas = replace_na(ÓrdenesEmitidas, 0)
     ) %>%
-    filter(
-      Región != "Total",
-      Delito != "Total"
-    )
+    relocate(AñoFiscal, Delito, Región, ÓrdenesEmitidas)
+  
+  return(df)
 }
 
 #### cleanSheet_OP_LEY148Genero ####
-cleanSheet_OP_LEY148Genero <- function(data, sheet_name) {
-  data %>%
-    pivot_longer(
-      !Sexo, 
-      names_to = "Parte", 
-      values_to = "Solicitudes"
-    ) %>%
+cleanSheet_OP_LEY148Genero <- function(file, sheets = c("2020-2021", "2021-2022", 
+                                                        "2022-2023", "2023-2024")) {
+  
+  df_list <- lapply(sheets, function(sheet_name) {
+    
+    read_excel(file, sheet = sheet_name) %>%
+      pivot_longer(
+        !Sexo, 
+        names_to = "Parte", 
+        values_to = "Solicitudes"
+      ) %>%
+      mutate(
+        AñoFiscal = factor(sheet_name)
+      ) %>%
+      filter(
+        Sexo != "Total"
+      )
+    
+  })
+  
+  df <- df_list %>%
+    bind_rows() %>%
     mutate(
-      AñoFiscal = factor(sheet_name)
+      Sexo = factor(Sexo),
+      Parte = factor(Parte),
+      AñoFiscal = factor(case_when(
+        AñoFiscal == "2020-2021" ~ "2021",
+        AñoFiscal == "2021-2022" ~ "2022",
+        AñoFiscal == "2022-2023" ~ "2023",
+        AñoFiscal == "2023-2024" ~ "2024",
+        TRUE ~ as.character(AñoFiscal)
+      ))
     ) %>%
-    filter(
-      Sexo != "Total"
-    )
+    replace_na(list(Solicitudes = 0)) %>%
+    relocate(AñoFiscal, Parte, Sexo, Solicitudes)
+  
+  return(df)
 }
+
 
 #### cleanSheet_tribCasosCrim ####
-cleanSheet_tribCasosCrim <- function(data, sheet_name, new_names) {
-  data %>%
-    rename_at(vars(1:11), ~ new_names) %>%      # Renombra las primeras 11 columnas
-    pivot_longer(                                # Convierte las columnas a formato largo
-      !Delito, 
-      names_to = "Casos", 
-      values_to = "Cantidad"
-    ) %>%
+cleanSheet_tribCasosCrim <- function(file, 
+                                     sheets = c("2019-2020", "2020-2021", "2021-2022", 
+                                               "2022-2023", "2023-2024", "2024-2025", "2025-2026"),
+                                     new_names = c("Delito", "Pendiente Inicio", "Presentados", 
+                                                  "A Resolver", "Condenas", "Absoluciones", 
+                                                            "Archivos", "Traslados", "Otros", "Total", "Pendiente Final")) {
+  
+  df_list <- lapply(sheets, function(sheet_name) {
+    read_excel(file, sheet = sheet_name) %>%
+      rename_at(vars(1:11), ~ new_names) %>%      # Renombra las primeras 11 columnas
+      pivot_longer(                                # Convierte las columnas a formato largo
+        !Delito, 
+        names_to = "Casos", 
+        values_to = "Cantidad"
+      ) %>%
+      mutate(
+        AñoFiscal = factor(sheet_name)             # Añade el año fiscal como factor
+      ) %>%
+      filter(
+        !(Casos %in% c("Total"))                   # Filtra las filas con 'Total' en Casos
+      )
+    
+  })
+  
+  df <- df_list %>%
+    bind_rows() %>%
     mutate(
-      AñoFiscal = factor(sheet_name)             # Añade el año fiscal como factor
+      Delito = factor(Delito),
+      Casos = factor(Casos, levels = c("A Resolver", "Absoluciones", "Archivos", "Condenas", 
+                                       "Pendiente Inicio", "Pendiente Final", "Presentados",
+                                       "Traslados", "Otros"), ordered = TRUE),
+      AñoFiscal = recode(AñoFiscal,
+                         "2019-2020" = "2020",
+                         "2020-2021" = "2021",
+                         "2021-2022" = "2022",
+                         "2022-2023" = "2023",
+                         "2023-2024" = "2024",
+                         "2024-2025" = "2025",
+                         "2025-2026" = "2026"),
+      AñoFiscal = factor(AñoFiscal),
     ) %>%
-    filter(
-      !(Casos %in% c("Total"))                   # Filtra las filas con 'Total' en Casos
-    )
+    replace_na(list(Cantidad = 0)) %>%
+    relocate(AñoFiscal, Delito, Casos, Cantidad)
+  
+  return(df)
 }
 
 
@@ -1138,8 +1369,167 @@ cleanSheet_tribCasosCrim <- function(data, sheet_name, new_names) {
 
 
 
+#### Centro de Ayuda a Victimas de Violencia ####
+#### cleansheet_safekitsDF ####
+cleansheet_safekitsDF <- function(file){
+  
+  df <- read_excel(file, sheet = "Data")
+  
+  df_clean <- df %>%
+    mutate(
+      `Total de Kits` = `Total con querella` + `Total sin querella`
+    ) %>%
+    pivot_longer(
+      !Año,
+      names_to = "Kits",
+      values_to = "Total"
+    ) %>%
+    filter(
+      Kits != "Total de Kits"
+    ) %>% 
+    mutate(
+      Kits = factor(Kits, 
+                    levels = c("Total con querella", "Total sin querella")),
+      Año = factor(Año)
+    )
+  
+  return(df_clean)
+  
+}
 
+#### cleansheet_safekitsDF_edades ####
+cleansheet_safekitsDF_edades <- function(file){
+  
+  df <- read_excel(file, sheet = "Edades")
+  
+  df_clean <- df %>%
+    mutate(
+      `Total de Kits con querella` = `Cantidad de menores` + `Cantidad de mayores` + `No identificado`
+    ) %>%
+    pivot_longer(
+      !Año,
+      names_to = "Categoria",
+      values_to = "Total"
+    ) %>%
+    filter(
+      Categoria != "Total de Kits con querella"
+    ) %>%
+    mutate(
+      Categoria = case_when(
+        Categoria == "Cantidad de menores" ~ "Menores de edad",
+        Categoria == "Cantidad de mayores" ~ "Mayores de edad",
+        Categoria == "No identificado" ~ "No identificado",
+        TRUE ~ Categoria # Opción para manejar cualquier valor inesperado
+      ),
+      Categoria = factor(Categoria, 
+                         levels = c("Menores de edad", "Mayores de edad", "No identificado")),
+      Año = factor(Año))
+  
+  return(df_clean)
+  
+}
 
+#### cleansheet_safekitsDF_edades ####
+cleansheet_safekitsDF_edades <- function(file){
+  
+  df <- read_excel(file, sheet = "Edades")
+  
+  df_clean <- df %>%
+    mutate(
+      `Total de Kits con querella` = `Cantidad de menores` + `Cantidad de mayores` + `No identificado`
+    ) %>%
+    pivot_longer(
+      !Año,
+      names_to = "Categoria",
+      values_to = "Total"
+    ) %>%
+    filter(
+      Categoria != "Total de Kits con querella"
+    ) %>%
+    mutate(
+      Categoria = case_when(
+        Categoria == "Cantidad de menores" ~ "Menores de edad",
+        Categoria == "Cantidad de mayores" ~ "Mayores de edad",
+        Categoria == "No identificado" ~ "No identificado",
+        TRUE ~ Categoria # Opción para manejar cualquier valor inesperado
+      ),
+      Categoria = factor(Categoria, 
+                         levels = c("Menores de edad", "Mayores de edad", "No identificado")),
+      Año = factor(Año))
+  
+  return(df_clean)
+  
+}
+
+#### cleansheet_safekitsDF_analizados ####
+cleansheet_safekitsDF_analizados <- function(file){
+  
+  df <- read_excel(file, sheet = "Kit Analizados")
+  
+  df_clean <- df %>%
+    pivot_longer(
+      !Año,
+      names_to = "Laboratorio",
+      values_to = "Total"
+    ) %>%
+    mutate(
+      Laboratorio = factor(Laboratorio, 
+                           levels = c("Laboratorio Forense", 
+                                      "Laboratorios Externos: BODE",
+                                      "Laboratorios Externos: DNA Solutions")),
+      Año = factor(Año)
+    )
+  
+  return(df_clean)
+  
+}
+
+#### cleansheet_safekitsDF_analizados ####
+cleansheet_safekitsDF_analizados <- function(file){
+  
+  df <- read_excel(file, sheet = "Kit Analizados")
+  
+  df_clean <- df %>%
+    pivot_longer(
+      !Año,
+      names_to = "Laboratorio",
+      values_to = "Total"
+    ) %>%
+    mutate(
+      Laboratorio = factor(Laboratorio, 
+                           levels = c("Laboratorio Forense", 
+                                      "Laboratorios Externos: BODE",
+                                      "Laboratorios Externos: DNA Solutions")),
+      Año = factor(Año)
+    )
+  
+  return(df_clean)
+  
+}
+
+#### cleansheet_safekits_region ####
+cleansheet_safekits_region <- function(file){
+  
+  df <- read_excel(file, sheet = "Región Policiaca")
+  
+  df_clean <- df %>%
+    pivot_longer(
+      cols = 2:6,
+      names_to = "Año",
+      values_to = "Cantidad"
+    ) %>%
+    filter(
+      `Región Policiaca` != "Total"
+    ) %>%
+    rename(Región = `Región Policiaca`) %>%
+    mutate(
+      Región = factor(Región),
+      Año = factor(Año)
+    )
+  
+  return(df_clean)
+  
+}
 
 ###############################
 #### Helper Functions: UI  ####

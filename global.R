@@ -393,105 +393,6 @@ opmServiciosMes <- cleansheet_opmServiciosMes(
   paste0(opm, "opmServiciosMes.xlsx")
 )
 
-
-# 
-# opmFemiVD <- read_excel(paste0(opm, "opmTasas.xlsx")) %>%
-#   mutate(Año = factor(Año)) %>%
-#   mutate(
-#     Año = factor(Año),
-#     Tasa = round(`Tasa_IE`, 2)   # Redondear a 2 decimales
-#   ) %>%
-#   rename(
-#     Asesinatos = `Asesinatos`
-#   ) %>%
-#   select(Año, Asesinatos, Tasa)%>%
-#   relocate(
-#     Año, Asesinatos, Tasa
-#   )
-# 
-# 
-# #### opmAgresores ####
-# opmAgresores <- read_excel(paste0(opm, "opmAgresores.xlsx"))  %>%
-#   rename(
-#     Razón = `tipo`,
-#     Año = `year`,
-#     Cantidad = `cantidad`
-#   ) %>%
-#   mutate(Año = factor(Año),
-#          Razón = factor(Razón, levels = c("Acecho", "Agresión sexual", "Discrimen de género",
-#                                           "Violencia doméstica", "Violencia en cita", "Trata Humana", "Otras")))
-# 
-# #### opmCasos ####
-# # Niveles con "Otras" al final
-# niveles_completos <- c("Acecho", "Agresión sexual", "Discrimen de género",
-#                        "Violencia doméstica", "Violencia en cita", "Trata Humana", "Otras")
-# 
-# # opm_mes_df <- read_excel(paste0(opm, "opmPartMes.xlsx"), sheet = "mensual")
-# # opm_anual_df <- read_excel(paste0(opm, "opmPartMes.xlsx"), sheet = "anual")
-# opm_anual_df <- read_excel(paste0(opm, "opmVictimas.xlsx"), sheet = "anual")
-# 
-# # Limpiar con la función
-# opmCasos_list <- list(
-#   cleanSheet_OPM(opm_anual_df, "anual", niveles_completos)
-# )
-# 
-# # Unir todo
-# opmCasos <- reduce(opmCasos_list, full_join)
-# 
-# #### opmVic ####
-# opmVic <- read_excel(paste0(opm, "opmVicGraf.xlsx")) %>% 
-#   rename_at(vars(1,2,3,4,5,6,7), ~ c("género","2020", "2021", "2022", "2023", "2024", "2025")) %>%
-#   pivot_longer(!género, names_to = "año", values_to = "víctimas") %>%
-#   mutate(
-#     género = factor(género,
-#                     levels = c("Femenino", "Masculino", "Trans", "No informó")),
-#     año = factor(año)
-#   ) %>%
-#   rename(Año = año) %>%
-#   rename(Género = género) %>%
-#   rename(Víctimas = víctimas) %>%
-#   replace_na(list(Víctimas = 0)) %>%
-#   relocate(
-#     Año, Género, Víctimas
-#   )
-# 
-# #### opmMedio ####
-# opmMedio <- read_excel(paste0(opm, "opmMedio.xlsx")) %>% 
-#   rename_at(vars(2,3,4,5,6,7), ~ c("2020", "2021", "2022", "2023", "2024", "2025")) %>%
-#   mutate(across(c("2020", "2021", "2022", "2023", "2024", "2025"), as.numeric)) %>%
-#   pivot_longer(!`Medio de orientación`, names_to = "año", values_to = "personas atendidas") %>% 
-#   filter(`Medio de orientación` != "Total") %>%
-#   mutate(
-#     `Medio de orientación` = factor(`Medio de orientación`),
-#     año = factor(año)
-#   ) %>%
-#   rename(Año = año) %>%
-#   rename(Orientación = `Medio de orientación`) %>%
-#   rename(Cantidad = `personas atendidas`) %>%
-#   replace_na(list(Cantidad = 0)) %>%
-#   relocate(
-#     Año, Orientación, Cantidad
-#   )
-# 
-# 
-# #### opmServiciosMes ####
-# opmServiciosMes <-  read_excel(paste0(opm, "opmServiciosMes.xlsx")) %>%
-#   # select(-c(month)) %>%
-#   # group_by(tipo, year) %>%
-#   # summarise(cantidad = sum(cantidad, na.rm = TRUE)) %>%
-#   # ungroup() %>%
-#   mutate(
-#     `Tipo de Servicio` = factor(`Tipo de Servicio`),
-#     Año = factor(Año)
-#   ) %>%
-#   rename(Año = Año) %>%
-#   rename(Servicio = `Tipo de Servicio`) %>%
-#   rename(Cantidad = `Servicios Ofrecidos`) %>%
-#   replace_na(list(Cantidad = 0)) %>%
-#   relocate(
-#     Año, Servicio, Cantidad
-#   )
-
 #### Guardar datos procesados de Oficina de la Procuradora de las Mujeres ####
 # dataframes <- list(opmFemiVD, opmCasos, opmVic, opmMedio, opmServiciosMes) # Lista de dataframes (por ejemplo: homiEdad y inci)
 # 
@@ -538,6 +439,10 @@ dcrSentenciadas <- cleansheet_dcrSentenciadas(archivo_dcrSent)
 
 
 
+
+
+
+
 ##################################################################################
 #### Procesamiento de datos de la Administración de Tribunales ####
 ##################################################################################
@@ -545,317 +450,57 @@ dcrSentenciadas <- cleansheet_dcrSentenciadas(archivo_dcrSent)
 trib <- here::here("data", "administracion_de_tribunales", "/")
 
 #### casosCrimLey148 ####
-## Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual,
-## por Región Judicial y grupo de edad de la parte peticionaria
-
-#### Función para importar y procesar datos ####
-leer_y_procesar <- function(sheet_name) {
-  read_excel(paste0(trib, "casosCrimLey148.xlsx"), sheet = sheet_name) %>%
-    rename(Delito = `Año fiscal/delitos`) %>%
-    pivot_longer(!Delito, names_to = "Status", values_to = "Casos") %>%
-    mutate(AñoFiscal = sheet_name) %>%
-    filter(Delito != sheet_name)
-}
+## Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y grupo de edad de la parte peticionaria
 
 #### Leer todos los años fiscales ####
-años <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
-casosCrimLey148_list <- lapply(años, leer_y_procesar)
-
-#### Unir todos los data frames y ajustar variables ####
-casosCrimLey148 <- casosCrimLey148_list %>%
-  reduce(full_join) %>%
-  mutate(
-    AñoFiscal = recode(AñoFiscal,
-                       "2020-2021" = "2021",
-                       "2021-2022" = "2022",
-                       "2022-2023" = "2023",
-                       "2023-2024" = "2024",
-                       "2024-2025" = "2025"),
-    AñoFiscal = factor(AñoFiscal),
-    Status = factor(Status),
-    Delito = factor(Delito)
-  ) %>%
-  replace_na(list(Casos = 0)) %>%
-  relocate(AñoFiscal, Status, Delito, Casos)
-
+archivo_casosCrimLey148 <- paste0(trib, "casosCrimLey148.xlsx")
+casosCrimLey148 <- cleanSheet_casosCrimLey148(archivo_casosCrimLey148)
 
 
 #### OP_148_SoliGrupEdad ####
-
 # Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, 
 # por Región Judicial y grupo de edad de la parte peticionaria
-new_names <- c("Total", "20 años o menos", "21-29", "30-39", "40-49", "50-59", "60 años o más", "No Indica")
-sheet_years <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025", "2025-2026")
-
-# Leer y limpiar todos los datos
-OP_148_SoliGrupEdad_list <- lapply(sheet_years, function(year) {
-  read_excel(paste0(trib, "OP_148_SoliGrupEdad.xlsx"), sheet = year) %>%
-    cleanSheet_OP_148_SoliGrupEdad(year, new_names)
-})
-
-# Unir los data frames y limpiar datos
-OP_148_SoliGrupEdad <- bind_rows(OP_148_SoliGrupEdad_list) %>%
-  mutate(
-    AñoFiscal = recode(AñoFiscal,
-                       "2020-2021" = "2021",
-                       "2021-2022" = "2022",
-                       "2022-2023" = "2023",
-                       "2023-2024" = "2024",
-                       "2024-2025" = "2025",
-                       "2025-2026" = "2026"),
-    AñoFiscal = factor(AñoFiscal),
-    Región = factor(Región)
-  ) %>%
-  replace_na(list(Solicitudes = 0)) %>%
-  relocate(AñoFiscal, Región, Edad, Solicitudes)
-
-
+archivo_OP_148_SoliGrupEdad <- paste0(trib, "OP_148_SoliGrupEdad.xlsx")
+OP_148_SoliGrupEdad <- cleanSheet_OP_148_SoliGrupEdad(archivo_OP_148_SoliGrupEdad)
 
 
 #### OP_Ley148_ex_parteEmitidas ####
 # Órdenes de protección ex parte emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
-# Nuevos nombres de columnas
-new_names <- c("Total", "Agresión Sexual", "Acoso Sexual", "Actos Lascivos", "Incesto") 
-sheet_years <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
-
-# Leer y limpiar los datos
-OP_Ley148_ex_parteEmitidas_list <- lapply(sheet_years, function(year) {
-  read_excel(paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx"), sheet = year) %>%
-    cleanSheet_OP_Ley148_ex_parteEmitidas(year, new_names)
-})
-
-# Unir los data frames y procesar
-OP_Ley148_ex_parteEmitidas <- bind_rows(OP_Ley148_ex_parteEmitidas_list) %>%
-  mutate(
-    AñoFiscal = recode(AñoFiscal,
-                       "2020-2021" = "2021",
-                       "2021-2022" = "2022",
-                       "2022-2023" = "2023",
-                       "2023-2024" = "2024",
-                       "2024-2025" = "2025"),
-    Región = factor(Región),
-    Delito = factor(Delito),
-    AñoFiscal = factor(AñoFiscal)
-  ) %>%
-  filter(Región != "Total") %>%
-  replace_na(list(ÓrdenesEmitidas = 0)) %>%
-  relocate(AñoFiscal, Delito, Región, ÓrdenesEmitidas)
-
-
-
+archivo_OP_Ley148_ex_parteEmitidas <- paste0(trib, "OP_Ley148_ex_parteEmitidas.xlsx")
+OP_Ley148_ex_parteEmitidas <- cleanSheet_OP_Ley148_ex_parteEmitidas(archivo_OP_Ley148_ex_parteEmitidas)
 
 #### OP_LEY148Archivadas ####
-# Cantidad de solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual archivadas por Región Judicial
-new_names <- c("Total", "Solicitud Peticionaria", "Otra Razón")
-years <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
-
-OP_LEY148Archivadas_list <- map(years, ~ {
-  read_excel(paste0(trib, "OP_LEY148Archivadas.xlsx"), sheet = .x) %>%
-    cleanSheet_OP_LEY148Archivadas(.x, new_names)
-})
-
-OP_LEY148Archivadas <- OP_LEY148Archivadas_list %>%
-  reduce(full_join) %>%
-  mutate(
-    Razón = factor(Razón, levels = c("Solicitud Peticionaria", "Otra Razón")),
-    Región = factor(Región),
-    AñoFiscal = factor(case_when(
-      AñoFiscal == "2020-2021" ~ "2021",
-      AñoFiscal == "2021-2022" ~ "2022",
-      AñoFiscal == "2022-2023" ~ "2023",
-      AñoFiscal == "2023-2024" ~ "2024",
-      AñoFiscal == "2024-2025" ~ "2025",
-      TRUE ~ as.character(AñoFiscal)
-    ))
-  ) %>%
-  filter(Región != "Total") %>%
-  replace_na(list(ÓrdenesArchivadas = 0)) %>%
-  relocate(AñoFiscal, Razón, Región, ÓrdenesArchivadas)
-
+# Cantidad de órdenes de protección archivadas al amparo de la Ley 148 - Violencia Sexual archivadas por Región Judicial
+archivo_OP_LEY148Archivadas <- paste0(trib, "OP_LEY148Archivadas.xlsx")
+OP_LEY148Archivadas <- cleanSheet_OP_LEY148Archivadas(archivo_OP_LEY148Archivadas)
 
 #### OP_LEY148Denegadas ####
-
 # Cantidad de solicitudes de órdenes de protección denegadas al amparo de la Ley 148 - Violencia Sexual denegadas por Región Judicial
 # lista con nuevos nombres de columnas para mejor interpretación
-new_names <- c("No Aplican Disposiciones Ley148", "No Prueban Elementos")
-sheet_names <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
+archivo_OP_LEY148Denegadas <- paste0(trib, "OP_LEY148Denegadas.xlsx")
+OP_LEY148Denegadas <- cleanSheet_OP_LEY148Denegadas(archivo_OP_LEY148Denegadas)
 
-OP_LEY148Denegadas_list <- map(sheet_names, ~ {
-  read_excel(paste0(trib, "OP_LEY148Denegadas.xlsx"), sheet = .x) %>%
-    cleanSheet_OP_LEY148Denegadas(.x, new_names)
-})
 
-OP_LEY148Denegadas <- OP_LEY148Denegadas_list %>%
-  reduce(full_join) %>%
-  mutate(
-    Región = factor(Región),
-    Razón = factor(Razón),
-    AñoFiscal = factor(case_when(
-      AñoFiscal == "2020-2021" ~ "2021",
-      AñoFiscal == "2021-2022" ~ "2022",
-      AñoFiscal == "2022-2023" ~ "2023",
-      AñoFiscal == "2023-2024" ~ "2024",
-      AñoFiscal == "2024-2025" ~ "2025",
-      TRUE ~ as.character(AñoFiscal)
-    )),
-    ÓrdenesDenegadas = replace_na(ÓrdenesDenegadas, 0)
-  ) %>%
-  relocate(AñoFiscal, Razón, Región, ÓrdenesDenegadas)
 
 #### OP_LEY148FinalEmitidas ####
-
 # Órdenes de protección finales emitidas al amparo de la Ley 148 - Violencia Sexual, por Región Judicial y delito
+archivo_OP_LEY148FinalEmitidas <- paste0(trib, "OP_LEY148FinalEmitidas.xlsx")
+OP_LEY148FinalEmitidas <- cleanSheet_OP_LEY148FinalEmitidas(archivo_OP_LEY148FinalEmitidas)
 
-new_names <- c("Total", "Agresión Sexual", "Acoso Sexual", "Actos Lascivos", "Incesto")
-sheets <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
-
-# Leer y limpiar todos los sheets en una lista
-OP_LEY148FinalEmitidas_list <- lapply(sheets, function(sheet_name) {
-  read_excel(paste0(trib, "OP_LEY148FinalEmitidas.xlsx"), sheet = sheet_name) %>%
-    cleanSheet_OP_LEY148FinalEmitidas(sheet_name, new_names)
-})
-
-# Unir todos los data frames y ajustar variables
-OP_LEY148FinalEmitidas <- OP_LEY148FinalEmitidas_list %>%
-  reduce(full_join) %>%
-  mutate(
-    Región = factor(Región),
-    Delito = factor(Delito),
-    AñoFiscal = factor(case_when(
-      AñoFiscal == "2020-2021" ~ "2021",
-      AñoFiscal == "2021-2022" ~ "2022",
-      AñoFiscal == "2022-2023" ~ "2023",
-      AñoFiscal == "2023-2024" ~ "2024",
-      AñoFiscal == "2024-2025" ~ "2025",
-      TRUE ~ as.character(AñoFiscal)
-    )),
-    ÓrdenesEmitidas = replace_na(ÓrdenesEmitidas, 0)
-  ) %>%
-  relocate(AñoFiscal, Delito, Región, ÓrdenesEmitidas)
 
 
 
 #### OP_LEY148Genero ####
 # Solicitudes de órdenes de protección al amparo de la Ley 148 - Violencia Sexual, por sexo de la parte
-sheet_names <- c("2020-2021", "2021-2022", "2022-2023", "2023-2024")
-
-OP_LEY148Genero_list <- lapply(sheet_names, function(sheet) {
-  read_excel(paste0(trib, "OP_LEY148Genero.xlsx"), sheet = sheet) %>%
-    cleanSheet_OP_LEY148Genero(sheet)
-})
-
-OP_LEY148Genero <- OP_LEY148Genero_list %>%
-  reduce(full_join) %>%
-  mutate(
-    Sexo = factor(Sexo),
-    Parte = factor(Parte),
-    AñoFiscal = factor(case_when(
-      AñoFiscal == "2020-2021" ~ "2021",
-      AñoFiscal == "2021-2022" ~ "2022",
-      AñoFiscal == "2022-2023" ~ "2023",
-      AñoFiscal == "2023-2024" ~ "2024",
-      TRUE ~ as.character(AñoFiscal)
-    ))
-  ) %>%
-  replace_na(list(Solicitudes = 0)) %>%
-  relocate(AñoFiscal, Parte, Sexo, Solicitudes)
+archivo_OP_LEY148Genero <- paste0(trib, "OP_LEY148Genero.xlsx")
+OP_LEY148Genero <- cleanSheet_OP_LEY148Genero(archivo_OP_LEY148Genero)
 
 
 #### tribCasosCrim ####
 
 # Tribunal de Primera Instancia: Movimiento de casos criminales al amparo de la Ley Núm. 54-1989 para la prevención e intervención con la violencia doméstica
-new_names <- c("Delito", "Pendiente Inicio", "Presentados", 
-               "A Resolver", "Condenas", "Absoluciones", 
-               "Archivos", "Traslados", "Otros", "Total", "Pendiente Final")
-
-years <- c("2019-2020", "2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025", "2025-2026")
-
-tribCasosCrim_list <- map(years, ~ {
-  read_excel(paste0(trib, "tribCasosCrim.xlsx"), sheet = .x) %>%
-    cleanSheet_tribCasosCrim(.x, new_names)
-})
-
-tribCasosCrim <- reduce(tribCasosCrim_list, full_join) %>%
-  mutate(
-    Delito = factor(Delito),
-    Casos = factor(Casos, levels = c("A Resolver", "Absoluciones", "Archivos", "Condenas", 
-                                     "Pendiente Inicio", "Pendiente Final", "Presentados",
-                                     "Traslados", "Otros"), ordered = TRUE),
-    AñoFiscal = recode(AñoFiscal,
-                       "2019-2020" = "2020",
-                       "2020-2021" = "2021",
-                       "2021-2022" = "2022",
-                       "2022-2023" = "2023",
-                       "2023-2024" = "2024",
-                       "2024-2025" = "2025",
-                       "2025-2026" = "2026"),
-    AñoFiscal = factor(AñoFiscal),
-  ) %>%
-  replace_na(list(Cantidad = 0)) %>%
-  relocate(AñoFiscal, Delito, Casos, Cantidad)
-
-# # Tribunal de Primera Instancia: Movimiento de casos criminales al amparo de la Ley Núm. 54-1989 para la prevención e intervención con la violencia doméstica
-# new_names <- c("Delito", "Pendiente Inicio", "Presentados", 
-#                "A Resolver", "Condenas", "Absoluciones", 
-#                "Archivos", "Traslados", "Otros", "Total", "Pendiente Final")
-# 
-# years <- c("2019-2020", "2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025")
-# 
-# tribCasosCrim_list <- map(years, ~ {
-#   read_excel(paste0(trib, "tribCasosCrim2.xlsx"), sheet = .x) %>%
-#     cleanSheet_tribCasosCrim(.x, new_names)
-# })
-# 
-# tribCasosCrim_grande <- reduce(tribCasosCrim_list, full_join) %>%
-#   mutate(
-#     Delito = factor(Delito),
-#     Casos = factor(Casos, levels = c("A Resolver", "Absoluciones", "Archivos", "Condenas", 
-#                                      "Pendiente Inicio", "Pendiente Final", "Presentados",
-#                                      "Traslados", "Otros"), ordered = TRUE),
-#     AñoFiscal = recode(AñoFiscal,
-#                        "2019-2020" = "2020",
-#                        "2020-2021" = "2021",
-#                        "2021-2022" = "2022",
-#                        "2022-2023" = "2023",
-#                        "2023-2024" = "2024",
-#                        "2024-2025" = "2025"),
-#     AñoFiscal = factor(AñoFiscal),
-#     DelitoAgrupado = case_when(
-#       Delito %in% c(
-#         "Agresión sexual conyugal Art. 3.5", 
-#         "Tentativa de agresión sexual conyugal Art 3.5"
-#       ) ~ "Agresión sexual/Tentativa",
-#       
-#       Delito %in% c(
-#         "Maltrato agravado Art. 3.2",
-#         "Maltrato Art 3.1",
-#         "Maltrato mediante amenaza Art 3.3",
-#         "Maltrato mediante restricción de libertad Art. 3.4",
-#         "Tentativa de maltrato agravado Art 3.2",
-#         "Tentativa de maltrato Art 3.1",
-#         "Tentativa de maltrato mediante amenaza Art 3.3",
-#         "Tentativa de maltrato mediante restricción de libertad Art 3.4"
-#       ) ~ "Maltrato/Tentativa",
-#       
-#       Delito %in% c(
-#         "Tentativa de violación orden de protección Art 2.8",
-#         "Violación orden de protección Art 2.8"
-#       ) ~ "Violación órden de protección/Tentativa",
-#       
-#       TRUE ~ as.character(Delito)  # mantener los demás como están
-#     ),
-#     DelitoAgrupado = factor(DelitoAgrupado),
-#   ) %>%
-#   replace_na(list(Cantidad = 0)) %>%
-#   relocate(AñoFiscal, Delito, Casos, Cantidad)
-# 
-# tribCasosCrim <- tribCasosCrim_grande %>%
-#   group_by(AñoFiscal, DelitoAgrupado, Casos) %>%
-#   summarise(Cantidad = sum(Cantidad, na.rm = TRUE), .groups = "drop") %>%
-#   rename(Delito = DelitoAgrupado)
-# 
-
-
+archivo_tribCasosCrim <- paste0(trib, "tribCasosCrim.xlsx")
+tribCasosCrim <- cleanSheet_tribCasosCrim(archivo_tribCasosCrim)
 
 #### Guardar datos procesados de Administración de Tribunales ####
 # dataframes <- list(OP_148_SoliGrupEdad, OP_Ley148_ex_parteEmitidas,
@@ -877,89 +522,64 @@ tribCasosCrim <- reduce(tribCasosCrim_list, full_join) %>%
 
 
 
+
+
+
+
 ##################################################################################
 #### Procesamiento de datos del CAVV ####
 ##################################################################################
 #### Directorio ####
 cavv <- here::here("data", "Prevencion_de_violencia_de_genero_CAVV", "/")
 #### safekitsDF ####
-safekitsDF <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
-                         sheet = "Data") %>%
-  mutate(
-    `Total de Kits` = `Total con querella` + `Total sin querella`
-  ) %>%
-  pivot_longer(
-    !Año,
-    names_to = "Kits",
-    values_to = "Total"
-  ) %>%
-  filter(
-    Kits != "Total de Kits"
-  ) %>% 
-  mutate(
-    Kits = factor(Kits, 
-                  levels = c("Total con querella", "Total sin querella")),
-    Año = factor(Año)
-  )
+archivo_safekitsDF <- paste0(cavv, "SAFEkits.xlsx")
+safekitsDF <- cleansheet_safekitsDF(archivo_safekitsDF)
 
-#### edades ####
-safekitsDF_edades <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
-                                sheet = "Edades")  %>%
-  mutate(
-    `Total de Kits con querella` = `Cantidad de menores` + `Cantidad de mayores` + `No identificado`
-  ) %>%
-  pivot_longer(
-    !Año,
-    names_to = "Categoria",
-    values_to = "Total"
-  ) %>%
-  filter(
-    Categoria != "Total de Kits con querella"
-  ) %>%
-  mutate(
-    Categoria = case_when(
-      Categoria == "Cantidad de menores" ~ "Menores de edad",
-      Categoria == "Cantidad de mayores" ~ "Mayores de edad",
-      Categoria == "No identificado" ~ "No identificado",
-      TRUE ~ Categoria # Opción para manejar cualquier valor inesperado
-    ),
-    Categoria = factor(Categoria, 
-                       levels = c("Menores de edad", "Mayores de edad", "No identificado")),
-    Año = factor(Año)
-  )
 
-#### kits analizados ####
-safekitsDF_analizados <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
-                                sheet = "Kit Analizados")  %>%
-  pivot_longer(
-    !Año,
-    names_to = "Laboratorio",
-    values_to = "Total"
-  ) %>%
-  mutate(
-    Laboratorio = factor(Laboratorio, 
-                       levels = c("Laboratorio Forense", "Laboratorios Externos: BODE", "Laboratorios Externos: DNA Solutions")),
-    Año = factor(Año)
-  )
+#### safekitsDF_edades ####
+archivo_safekitsDF_edades <- paste0(cavv, "SAFEkits.xlsx")
+safekitsDF_edades <- cleansheet_safekitsDF_edades(archivo_safekitsDF_edades)
 
+
+#### safekitsDF_analizados ####
+archivo_safekitsDF_analizados <- paste0(cavv, "SAFEkits.xlsx")
+safekitsDF_analizados <- cleansheet_safekitsDF_analizados(archivo_safekitsDF_analizados)
+# 
+# safekitsDF_analizados <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
+#                                 sheet = "Kit Analizados")  %>%
+#   pivot_longer(
+#     !Año,
+#     names_to = "Laboratorio",
+#     values_to = "Total"
+#   ) %>%
+#   mutate(
+#     Laboratorio = factor(Laboratorio, 
+#                        levels = c("Laboratorio Forense", "Laboratorios Externos: BODE", "Laboratorios Externos: DNA Solutions")),
+#     Año = factor(Año)
+#   )
+
+#### safekits_region ####
+# kits recibidos por region policiaca
+archivo_safekits_region <- paste0(cavv, "SAFEkits.xlsx")
+safekits_region <- cleansheet_safekits_region(archivo_safekits_region)
 
 #### kits recibidos por region policiaca ####
 
-safekits_region <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
-                              sheet = "Región Policiaca") %>%
-  pivot_longer(
-    cols = 2:6,
-    names_to = "Año",
-    values_to = "Cantidad"
-  ) %>%
-  filter(
-    `Región Policiaca` != "Total"
-  ) %>% 
-  rename(Región = `Región Policiaca`) %>%
-  mutate(
-    Región = factor(Región),
-    Año = factor(Año)
-  )
+# safekits_region <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
+#                               sheet = "Región Policiaca") %>%
+#   pivot_longer(
+#     cols = 2:6,
+#     names_to = "Año",
+#     values_to = "Cantidad"
+#   ) %>%
+#   filter(
+#     `Región Policiaca` != "Total"
+#   ) %>% 
+#   rename(Región = `Región Policiaca`) %>%
+#   mutate(
+#     Región = factor(Región),
+#     Año = factor(Año)
+#   )
 
 mapa_cavv <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
   merge(safekits_region, by.x = "GROUP", by.y = "Región") %>%
@@ -977,6 +597,10 @@ mapa_cavv <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
 # 
 # # Uso de la función
 # guardarDatos(dataframes, nombres_sheets, "centro_ayuda_victimas_violacion")
+
+
+
+
 
 
 
