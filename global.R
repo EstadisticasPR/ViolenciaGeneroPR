@@ -154,7 +154,7 @@ dfam <- here::here("data", "Departamento_de_Familia", "/")
 #### dfMalt ####
 dfMalt <- cleanSheet_dfMalt(
   paste0(dfam, "dfMalt.xlsx"),
-  years = 2018:2022
+  years = 2018:2024
 )
 
 #### Guardar datos procesados de Departamento de Familia ####
@@ -535,51 +535,18 @@ cavv <- here::here("data", "Prevencion_de_violencia_de_genero_CAVV", "/")
 archivo_safekitsDF <- paste0(cavv, "SAFEkits.xlsx")
 safekitsDF <- cleansheet_safekitsDF(archivo_safekitsDF)
 
-
 #### safekitsDF_edades ####
 archivo_safekitsDF_edades <- paste0(cavv, "SAFEkits.xlsx")
 safekitsDF_edades <- cleansheet_safekitsDF_edades(archivo_safekitsDF_edades)
 
-
 #### safekitsDF_analizados ####
 archivo_safekitsDF_analizados <- paste0(cavv, "SAFEkits.xlsx")
 safekitsDF_analizados <- cleansheet_safekitsDF_analizados(archivo_safekitsDF_analizados)
-# 
-# safekitsDF_analizados <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
-#                                 sheet = "Kit Analizados")  %>%
-#   pivot_longer(
-#     !Año,
-#     names_to = "Laboratorio",
-#     values_to = "Total"
-#   ) %>%
-#   mutate(
-#     Laboratorio = factor(Laboratorio, 
-#                        levels = c("Laboratorio Forense", "Laboratorios Externos: BODE", "Laboratorios Externos: DNA Solutions")),
-#     Año = factor(Año)
-#   )
 
 #### safekits_region ####
 # kits recibidos por region policiaca
 archivo_safekits_region <- paste0(cavv, "SAFEkits.xlsx")
 safekits_region <- cleansheet_safekits_region(archivo_safekits_region)
-
-#### kits recibidos por region policiaca ####
-
-# safekits_region <- read_excel(paste0(cavv, "SAFEkits.xlsx"),
-#                               sheet = "Región Policiaca") %>%
-#   pivot_longer(
-#     cols = 2:6,
-#     names_to = "Año",
-#     values_to = "Cantidad"
-#   ) %>%
-#   filter(
-#     `Región Policiaca` != "Total"
-#   ) %>% 
-#   rename(Región = `Región Policiaca`) %>%
-#   mutate(
-#     Región = factor(Región),
-#     Año = factor(Año)
-#   )
 
 mapa_cavv <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
   merge(safekits_region, by.x = "GROUP", by.y = "Región") %>%
