@@ -172,7 +172,7 @@ ui <-
                     createDropdownCheckbox(
                       label = HTML("Seleccione<br>Tipo(s) de Incidente:"),
                       choices = inci$Incidente,
-                      selected = 7,
+                      selected = 1,
                       id = "snmv_inci_tipo"
                     )
                   )
