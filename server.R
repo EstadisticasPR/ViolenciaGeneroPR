@@ -4630,6 +4630,280 @@ server <- function(input, output, session) {
     }
   })
   
+  #### tab con datos de casos activos al finalizar año del Programa de Evaluación y Asesoramiento (dcrPEA) ####
+  
+  # Filtrar el conjunto de datos según los valores seleccionados del año y el estado del caso
+  dcrPEA_filt <- reactive({
+    filter(dcrPEA,
+           Año %in% input$checkGroup_dcr_dcrPEA_year,
+           Programa %in% input$checkGroup_dcr_dcrPEA_programa
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_dcr_dcrPEA_year, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrPEA_year", input, dcrPEA$Año)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrPEA_year"
+    buttonId <- "deselectAll_dcr_dcrPEA_year"
+    all_choices <- levels(dcrPEA$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón del estado de caso 
+  observeEvent(input$deselectAll_dcr_dcrPEA_programa, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrPEA_programa", input, dcrPEA$Programa)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrPEA_programa"
+    buttonId <- "deselectAll_dcr_dcrPEA_programa"
+    all_choices <- levels(dcrPEA$Programa)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  # Colores del status
+  dcrPEA_fill_programa <- setColorFill(dcrPEA, "Programa")
+  #dcrSentenciadas_fill_tipo <- setColorFill(dcrSentenciadas, "Estado")
+  
+  # # Grafico de barras
+  
+  output$barPlot_dcr_dcrPEA <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_año <- length(input$checkGroup_dcr_dcrPEA_year) > 0
+    has_programa <- length(input$checkGroup_dcr_dcrPEA_programa) > 0
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_año || !has_programa) {
+      message <- "Seleccione Programa y Año(s) a visualizar"
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderBarPlot_facets(dcrPEA_filt, x = "Año", y = "Casos", fill = "Programa",
+                                xlab = "Año", ylab = "Casos activos a final de año", fillLab = "Programa", 
+                                colorFill = dcrPEA_fill_programa, 
+                                emptyMessage = "Seleccione Programa y Año(s) a visualizar")
+      p <- convert_to_plotly(p, tooltip = "text") %>% layout(height = 450)
+      
+      return(p)
+    }
+    
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(data = dcrPEA_filt, x = "Año", y = "Casos", fill = "programa",
+                                                 xlab = "Año", ylab = "Casos activos a final de año", message)
+    #ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title_dcrPEA <- renderUI({
+    title <- "Casos activos a final de año para el Programa de Evaluación y Asesoramiento"
+  })
+  
+  
+  
+  # Data Table para dcrSentenciadas
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_dcr_dcrPEA <- renderDT(server = FALSE, {
+    renderDataTable(dcrPEA_filt_rename(), "Datos: Casos activos a final de año <br>para el Programa de Evaluación y Asesoramiento")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_dcr_dcrPEA  <- renderUI({
+    if (input$showTable_dcr_dcrPEA) {
+      hyperlinks <- c("https://dcr.pr.gov/")
+      texts <- c("Departamento de Corrección y Rehabilitación")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 90%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 90%; display: flex; justify-content: center;",  
+          div(
+            style = "width: 90%; max-width: 750px; overflow-x: auto;",  
+            DTOutput("dataTable_dcr_dcrPEA")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
+  #### tab con datos de casos activos al finalizar año de Aprendiendo a Vivir sin Violencia (dcrAAVSV)####
+  dcrAAVSV_filt <- reactive({
+    filter(dcrAAVSV,
+           Año %in% input$checkGroup_dcr_dcrAAVSV_año,
+           Sexo %in% input$checkGroup_dcr_dcrAAVSV_sexo,
+           Delito %in% input$checkGroup_dcr_dcrAAVSV_tipo
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_dcr_dcrAAVSV_año, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrAAVSV_año", input, dcrAAVSV$Año)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrAAVSV_año"
+    buttonId <- "deselectAll_dcr_dcrAAVSV_año"
+    all_choices <- levels(dcrAAVSV$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón del estado de caso 
+  observeEvent(input$deselectAll_dcr_dcrAAVSV_sexo, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrAAVSV_sexo", input, dcrAAVSV$Sexo)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrAAVSV_sexo"
+    buttonId <- "deselectAll_dcr_dcrAAVSV_sexo"
+    all_choices <- levels(dcrAAVSV$Sexo)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón del estado de caso 
+  observeEvent(input$deselectAll_dcr_dcrAAVSV_tipo, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrAAVSV_tipo", input, dcrAAVSV$Delito)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrAAVSV_tipo"
+    buttonId <- "deselectAll_dcr_dcrAAVSV_tipo"
+    all_choices <- levels(dcrAAVSV$Delito)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  
+  # Colores del status
+  dcrAAVSV_fill_programa <- setColorFill(dcrAAVSV, "Delito")
+
+  # # Grafico de barras
+  
+  output$barPlot_dcr_dcrAAVSV <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_año <- length(input$checkGroup_dcr_dcrAAVSV_año) > 0
+    has_tipo <- length(input$checkGroup_dcr_dcrAAVSV_tipo) > 0
+    has_sexo <- length(input$checkGroup_dcr_dcrAAVSV_sexo) > 0
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_año || !has_tipo || !has_sexo) {
+      message <- "Seleccione Tipo(s) de delito, Año(s) y Sexo del participante"
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderBarPlot_facets(dcrAAVSV_filt, x = "Año", y = "Casos", fill = "Delito",
+                                xlab = "Año", ylab = "Casos activos a final de año", fillLab = "Tipo de delito", 
+                                colorFill = dcrAAVSV_fill_programa, 
+                                emptyMessage = "Seleccione Tipo(s) de delito, Año(s) y Sexo del participante")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      numPlots = length(input$checkGroup_dcr_dcrAAVSV_sexo)
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, numPlots)
+      p <- p + facet_wrap(~Delito, ncol = 2) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1.5, "lines")) #Espacio entre las facetas en y.
+      
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      
+      return(p)
+    }
+    
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(data = dcrAAVSV_filt, x = "Año", y = "Casos", fill = "Delito",
+                                                 xlab = "Año", ylab = "Casos activos a final de año", message)
+    #ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title_dcrAAVSV <- renderUI({
+    title <- "Casos activos a final de año de Aprendiendo a Vivir sin Violencia"
+  })
+  
+  
+  dcrAAVSV_filt_rename <- reactive({
+    dcrAAVSV_filt() %>% 
+      rename(`Tipo de Delito` = Delito)  
+  })
+  
+  # Data Table del DeptFam
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_dcr_dcrAAVSV<- renderDT(server = FALSE, {
+    renderDataTable(dcrAAVSV_filt_rename(), "Datos: Casos activos a final de año de Aprendiendo a Vivir sin Violencia")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_dcr_dcrAAVSV  <- renderUI({
+    if (input$showTable_dcr_dcrAAVSV) {
+      hyperlinks <- c("https://dcr.pr.gov/")
+      texts <- c("Departamento de Corrección y Rehabilitación")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 90%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 90%; display: flex; justify-content: center;",  
+          div(
+            style = "width: 90%; max-width: 750px; overflow-x: auto;",  
+            DTOutput("dataTable_dcr_dcrAAVSV")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  #### tab con datos de casos activos al finalizar año de Conviviendo sin Violencia en Comunidad (dcrCSVC)####
+  
   
   #### Tab de Publicaciones ####
   # PDF 1

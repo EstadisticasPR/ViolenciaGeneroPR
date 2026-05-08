@@ -1,5 +1,11 @@
 cat("Loading helper functions from utils.R...\n")
 
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(sf)
+
 ##################################
 #### Helper Functions: Global ####
 ##################################
@@ -125,10 +131,6 @@ cleanSheet_dfMalt <- function(data, years) {
 ######## Departamento de Justicia ########
 #### cleanSheet_dfDeli ####
 cleanSheet_dfDeli <- function(file_path, years) {
-  library(readxl)
-  library(dplyr)
-  library(tidyr)
-  library(stringr)
   
   df <- purrr::map_dfr(as.character(years), function(sheet_name) {
     read_excel(file_path, sheet = sheet_name) %>%
@@ -164,8 +166,6 @@ cleanSheet_dfDeli <- function(file_path, years) {
 
 #### cleanMap_dfDeli ####
 cleanMap_dfDeli <- function(shp_distritos, dfDeli, shp_municipios) {
-  library(sf)
-  library(dplyr)
   
   # Leer shapefile de distritos y unir con los datos
   mapaDeli <- st_read(shp_distritos) %>%
@@ -342,13 +342,12 @@ cleanSheet_despDF <- function(file, tipo = c("Adultas", "Menores")) {
 #### cleanSheet_npprVDedad ####
 cleanSheet_vEdad <- function(file, years = 2021:2024) {
   
-  # ---- Leer y limpiar cada hoja ----
+
   vEdad_list <- lapply(as.character(years), function(sheet_name) {
     read_excel(file, sheet = sheet_name) %>%
       mutate(Año = sheet_name)
   })
   
-  # ---- Unir y transformar ----
   df <- vEdad_list %>%
     reduce(full_join) %>%
     rename(
@@ -993,6 +992,132 @@ cleansheet_dcrSentenciadas <- function(file){
   return(df_clean)
   
 }
+
+#### cleansheet_dcrPEA_resumen ####
+cleansheet_dcrPEA_resumen <- function(file){
+  
+  df <- read_excel(file, sheet = "resumen_activos")
+  
+  df_clean <- df %>%
+    filter(Programa != "Total") %>%
+    pivot_longer(                                # Convierte las columnas a formato largo
+      !Programa,
+      names_to = "Año", 
+      values_to = "Casos"
+    ) %>%
+    mutate(
+      Año = factor(Año),
+      Programa = factor(Programa)
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    relocate(Año, Programa, Casos)
+  
+  return(df_clean)
+  
+}
+
+#### cleansheet_dcrAAVSV####
+cleansheet_dcrAAVSV <- function(file){
+  
+  df <- read_excel(file, sheet = "AAVSV")
+  
+  df_clean <- df %>%
+    pivot_longer(
+      cols = starts_with("2"),
+      names_to = "Año",
+      values_to = "Casos"
+    ) %>%
+    rename(
+      Sexo = Género,
+      Delito = `Tipo de delito`
+    ) %>%
+    mutate(
+      Año = factor(Año),
+      Sexo = factor(Sexo),
+      Delito = factor(Delito,
+                                 levels = c(
+                                   "Asesinato", "Delitos graves con arma", "Maltrato de menores",
+                                   "Ofensores Sexuales", "Otros delitos", "Secuestro", "Violencia de genero"
+                                 ),
+                                 ordered = TRUE
+      ),
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    relocate(Año, Delito, Región, Sexo, Casos)
+  
+  return(df_clean)
+  
+}
+
+#### cleanMap_dcrAAVSV ####
+# cleanMap_dcrAAVSV <- function(shp_distritos, dcrAAVSV, shp_municipios) {
+#   
+#   # Leer shapefile de distritos y unir con los datos
+#   mapa_dcrAAVSV <- st_read(shp_distritos) %>%
+#     merge(dcrAAVSV, by.x = "GROUP", by.y = "Región") %>%
+#     rename(`Región` = GROUP) %>%
+#     relocate(Año, Región, `Tipo de delito`, geometry, Casos)
+#   
+#   # Leer shapefile de municipios y estandarizar CRS
+#   municipios_geo <- st_read(shp_municipios) %>%
+#     st_transform(crs = 4326) %>% # WGS84
+#     mutate(municipio = case_when(
+#       municipio == "A??asco" ~ "Añasco",
+#       municipio == "Bayam??n" ~ "Bayamón",
+#       municipio == "Can??vanas" ~ "Canóvanas",
+#       municipio == "Cata??o" ~ "Cataño",
+#       municipio == "Comer??o" ~ "Comerío",
+#       municipio == "Gu??nica" ~ "Guánica",
+#       municipio == "Juana D??az" ~ "Juana Díaz",
+#       municipio == "Las Mar??as" ~ "Las Marias",
+#       municipio == "Lo??za" ~ "Loíza",
+#       municipio == "Manat??" ~ "Manatí",
+#       municipio == "Mayag??ez" ~ "Mayagüez",
+#       municipio == "Pe??uelas" ~ "Peñuelas",
+#       municipio == "Rinc??n" ~ "Rincón",
+#       municipio == "R??o Grande" ~ "Rio Grande",
+#       municipio == "San Germ??n" ~ "San Germán",
+#       municipio == "San Sebasti??n" ~ "San Sebastián",
+#       TRUE ~ municipio
+#     )) %>%
+#     dplyr::select(municipio, geometry)
+#   
+#   return(list(
+#     mapa_dcrAAVSV = mapa_dcrAAVSV,
+#     municipios_geo = municipios_geo
+#   ))
+# }
+
+
+#### cleansheet_dcrPEA_resumen ####
+cleansheet_dcrCSVC <- function(file){
+  
+  df <- read_excel(file, sheet = "CSVC")
+  
+  df_clean <- df %>%
+    pivot_longer(
+      cols = starts_with("2"),
+      names_to = "Año",
+      values_to = "Casos"
+    ) %>%
+    rename(
+      Sexo = Género
+    ) %>%
+    mutate(
+      Año = factor(Año),
+      Sexo = factor(Sexo)
+    ) %>%
+    replace_na(list(Casos = 0)) %>%
+    relocate(Año, `Tipo de delito`, Región, Sexo, Casos)
+  
+  return(df_clean)
+  
+}
+
+
+
+
+
 
 
 

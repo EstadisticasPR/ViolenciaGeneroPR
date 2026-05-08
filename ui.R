@@ -144,7 +144,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a los 
                     homicidios de mujeres por grupo de edad desde el año natural 2017 al 2024.
-                    Los datos del año 2023 y 2024 son preliminares.",
+                    Los datos del año 2024 al 2026 son preliminares.",
                     
                     style = "font-size: 16px; padding: 0px;" 
                   )
@@ -227,7 +227,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a la cantidad de 
                     incidentes violentos (según su tipo) desde el año natural 2017 al 2024.
-                    Los datos del año 2023 y 2024 son preliminares.",
+                    Los datos del año 2024 al 2026 son preliminares.",
                     
                     style = "font-size: 16px; padding: 0px;" 
                   )
@@ -2621,35 +2621,209 @@ ui <-
         )
       )
     ),
-    #### tab de Publicaciones del Departamento de Correccion ####
-    # tabPanel(
-    #   lowercaseTitle("Publicaciones"),
-    #   br(), br(),
-    #   
-    #   sidebarLayout(
-    #     sidebarPanel(
-    #       style = "display: flex; flex-direction: column; align-items: center;",
-    #       
-    #       # Radio buttons
-    #       div(
-    #         style = "width: 100%; margin-bottom: 20px;",
-    #         h4("Seleccione el tipo de contenido:"),
-    #         radioButtons(
-    #           inputId = "dcr_view_option",
-    #           label = NULL,
-    #           choices = c("Publicaciones", "Dashboard de la Agencia"),
-    #           selected = "Publicaciones",
-    #           inline = FALSE
-    #         )
-    #       )
-    #     ),
-    #     
-    #     mainPanel(
-    #       style = "height: 100%; padding-bottom: 10px;",
-    #       uiOutput("dcr_view_content")
-    #     )
-    #   )
-    # ),
+        #### tab con datos de casos activos al finalizar año del Programa de Evaluación y Asesoramiento (dcrPEA) ####
+    tabPanel(
+      lowercaseTitle("Casos activos del Programa de Evaluación y Asesoramiento"),
+      br(), br(),
+      sidebarLayout(
+        sidebarPanel(
+          style = "display: flex; flex-direction: column; align-items: center;",
+          
+          # # seleccionar valor de la variable
+          div(
+            style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+            div(
+              style = "text-align: center; display: inline-block;", 
+              # botón para seleccionar el tipo de investigación
+              createDropdownCheckbox(
+                label = "Seleccione el Programa:",
+                choices = dcrPEA$Programa,
+                selected = dcrPEA$Programa,
+                id = "dcr_dcrPEA_programa"
+              )
+            )
+          ),
+          
+          div(
+            style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+            div(
+              style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+              div(
+                style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                # botón para seleccionar el año
+                createDropdownCheckbox(
+                  label = "Seleccione Año(s):",
+                  choices = dcrPEA$Año,
+                  selected = dcrPEA$Año,
+                  id = "dcr_dcrPEA_year"
+                )
+              ),
+              div(
+                style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                showDataCheckbox("showTable_dcr_dcrPEA")
+              )
+            )
+          ),
+          
+          # Output UI para la tabla de datos
+          uiOutput("dataTableUI_dcr_dcrPEA")
+          
+        ),
+        
+        # Sección principal con los gráficos
+        mainPanel(
+          style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+          fluidRow(
+            column(12, 
+                   div(id = "scrollable-plot", 
+                       div(id = "plot-title", uiOutput("plot_title_dcrPEA")),
+                       plotlyOutput("barPlot_dcr_dcrPEA"),  height = "100%"))
+          ),
+          tags$div(style = "padding-bottom: 10px;"),
+          tags$div(
+            style = "padding-bottom: 10px;",
+            div(
+              class = "card",
+              style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+              h4(
+                strong(actualizacion_dcr3, style="margin: 0px;") 
+              ),
+              p(
+                "Los datos representados en esta gráfica corresponden al
+                resumen de casos activos al finalizar el año para el 
+                Programa de Evaluación y Asesoramiento y los cuatro
+                tipos de tratamientos grupales e individuales. Los datos
+                del 2025 son preliminares (junio)",
+                
+                style = "font-size: 16px;padding: 0px;" 
+              )
+            )
+          )
+        )
+      )
+    ),
+    
+        #### tab con datos de casos activos al finalizar año de Aprendiendo a Vivir sin Violencia (dcrAAVSV) ####
+        tabPanel(
+          lowercaseTitle("Aprendiendo a Vivir sin Violencia"),
+          br(), br(),
+          
+          sidebarLayout(
+            sidebarPanel(
+              style = "display: flex; flex-direction: column; align-items: center;",
+              
+              # # seleccionar valor de la variable
+              div(
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+                div(
+                  style = "text-align: center; display: inline-block;",  
+                  # botón para seleccionar tipo de maltrato
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br>Tipo(s) de Delito:"),
+                    choices = dcrAAVSV$Delito,
+                    selected = 1,
+                    id = "dcr_dcrAAVSV_tipo"
+                  ),
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione <br> Sexo del Participante:"),
+                    choices = dcrAAVSV$Sexo,
+                    selected = 1,
+                    id = "dcr_dcrAAVSV_sexo"
+                  )
+                )
+              ),
+              
+              div(
+                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                div(
+                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                    # botón para seleccionar año
+                    createDropdownCheckbox(
+                      label = "Seleccionar Año:",
+                      choices = dcrAAVSV$Año,
+                      selected = NULL,
+                      id = "dcr_dcrAAVSV_año"
+                    )
+                  ),
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                    showDataCheckbox("showTable_dcr_dcrAAVSV")
+                  )
+                )
+              ),
+              
+              # Output UI para la tabla de datos
+              uiOutput("dataTableUI_dcr_dcrAAVSV")
+              
+            ),
+            
+            # Sección principal con los gráficos
+            mainPanel(
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              fluidRow(
+                column(12, 
+                       div(id = "scrollable-plot", 
+                           div(id = "plot-title", uiOutput("plot_title_dcrAAVSV")),
+                           plotlyOutput("barPlot_dcr_dcrAAVSV"),  height = "100%"))
+              ),
+              tags$div(style = "padding-bottom: 10px;"),
+              tags$div(
+                style = "padding-bottom: 10px;",
+                div(
+                  class = "card",
+                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  h4(
+                    strong(actualizacion_dcr4, style="margin: 0px;") 
+                  ),
+                  p(
+                    "Los datos representados en esta gráfica corresponden al
+                    resumen de casos activos al finalizar el año para el 
+                    tratamiento Aprendiendo a Vivir sin Violencia (AAVSV) bajo
+                    el Programa de Evaluación y Asesoramiento. Los datos
+                    del 2025 son preliminares (junio)",
+                    
+                    style = "font-size: 16px;padding: 0px;" 
+                  )
+                )
+              )
+            )
+          )
+        ),
+        
+        #### tab con datos de casos activos al finalizar año de Conviviendo sin Violencia en Comunidad (dcrCSVC)####
+        
+        
+        #### tab de Publicaciones del Departamento de Correccion ####
+        # tabPanel(
+        #   lowercaseTitle("Publicaciones"),
+        #   br(), br(),
+        #   
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # Radio buttons
+        #       div(
+        #         style = "width: 100%; margin-bottom: 20px;",
+        #         h4("Seleccione el tipo de contenido:"),
+        #         radioButtons(
+        #           inputId = "dcr_view_option",
+        #           label = NULL,
+        #           choices = c("Publicaciones", "Dashboard de la Agencia"),
+        #           selected = "Publicaciones",
+        #           inline = FALSE
+        #         )
+        #       )
+        #     ),
+        #     
+        #     mainPanel(
+        #       style = "height: 100%; padding-bottom: 10px;",
+        #       uiOutput("dcr_view_content")
+        #     )
+        #   )
+        # ),
         #### tab de Definiciones y Metadatos ####
     tabPanel(
       lowercaseTitle("Definiciones y Metadatos"),
@@ -2664,6 +2838,8 @@ ui <-
     ),
   
       
+    
+    
     
     
     

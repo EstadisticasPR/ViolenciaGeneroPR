@@ -426,6 +426,26 @@ archivo_dcrSent <- paste0(dcr, "dcrSentenciadas.xlsx")
 dcrSentenciadas <- cleansheet_dcrSentenciadas(archivo_dcrSent)
 
 
+#### dcrPEA ####
+archivo_dcrPEA <- paste0(dcr, "dcr_PEA.xlsx")
+dcrPEA <- cleansheet_dcrPEA_resumen(archivo_dcrPEA)
+
+#### dcrPEA sheet: AAVSV ####
+dcrAAVSV <- cleansheet_dcrAAVSV(archivo_dcrPEA)
+
+#### mapa_dcrAAVSV ####
+# maps <- cleanMap_dcrAAVSV(
+#   shp_distritos = paste0(maps_fol, "/distritos_fiscales.shp"),
+#   dcrAAVSV = dcrAAVSV,
+#   shp_municipios = paste0(maps_fol, "/municipios.shp")
+# )
+# 
+# mapa_dcrAAVSV <- maps$mapa_dcrAAVSV
+# municipios_geo <- maps$municipios_geo
+
+#### dcrPEA sheet: CSVC ####
+dcrCSVC <- cleansheet_dcrCSVC(archivo_dcrPEA)
+
 #### Guardar datos procesados de Departamento de Corrección y Rehabilitación ####
 # dataframes <- list(dcrCasosInv, dcrSentenciadas) # Lista de dataframes (por ejemplo: homiEdad y inci)
 # 
@@ -576,10 +596,10 @@ mapa_cavv <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
 ##### Actualizaciones de los Datos #####
 ##################################################################################
 # Fecha actualizacion de los datos de SNMV tab1
-actualizacion_snmv1 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_snmv1 <- "Última actualización: 31 de marzo de 2026"
 
 # Fecha actualizacion de los datos de SNMV tab2
-actualizacion_snmv2 <- "Última actualización: 31 de diciembre de 2024"
+actualizacion_snmv2 <- "Última actualización: 31 de marzo de 2026"
 
 # Fecha actualizacion familia
 actualizacion_familia <- "Última actualización: 31 de diciembre de 2022"
@@ -646,6 +666,15 @@ actualizacion_dcr1 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion correccion y rehabilitacion tab2
 actualizacion_dcr2 <- "Última actualización: 28 de febrero de 2023"
+
+# Fecha actualizacion correccion y rehabilitacion tab3
+actualizacion_dcr3<- "Última actualización: 30 de junio de 2025"
+
+# Fecha actualizacion correccion y rehabilitacion tab4
+actualizacion_dcr4 <- "Última actualización: 30 de junio de 2025"
+
+# Fecha actualizacion correccion y rehabilitacion tab5
+actualizacion_dcr5<- "Última actualización: 30 de junio de 2025"
 
 # Fecha actualizacion Tribunales tab1
 actualizacion_tribunales1 <- "Última actualización: 31 de diciembre de 2025"
