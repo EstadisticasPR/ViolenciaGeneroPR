@@ -4722,7 +4722,7 @@ server <- function(input, output, session) {
   # Data Table para dcrSentenciadas
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_dcr_dcrPEA <- renderDT(server = FALSE, {
-    renderDataTable(dcrPEA_filt_rename(), "Datos: Casos activos a final de año <br>para el Programa de Evaluación y Asesoramiento")
+    renderDataTable(dcrPEA_filt(), "Datos: Casos activos a final de año <br>para el Programa de Evaluación y Asesoramiento")
   })
   
   # Crear Card con Fuentes
@@ -4890,16 +4890,12 @@ server <- function(input, output, session) {
     title <- "Casos activos a final de año de Aprendiendo a Vivir sin Violencia"
   })
   
-  
-  dcrAAVSV_filt_rename <- reactive({
-    dcrAAVSV_filt() %>% 
-      rename(`Tipo de Delito` = Delito)  
-  })
+
   
   # Data Table del DeptFam
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_dcr_dcrAAVSV<- renderDT(server = FALSE, {
-    renderDataTable(dcrAAVSV_filt_rename(), "Datos: Casos activos a final de año de Aprendiendo a Vivir sin Violencia")
+    renderDataTable(dcrAAVSV_filt(), "Datos: Casos activos a final de año de Aprendiendo a Vivir sin Violencia")
   })
   
   # Crear Card con Fuentes
@@ -5067,15 +5063,10 @@ server <- function(input, output, session) {
   })
   
   
-  # dcrCSVC_filt_rename <- reactive({
-  #   dcrCSVC_filt() %>% 
-  #     rename(`Tipo de Delito` = Delito)  
-  # })
-  
   # Data Table del DeptFam
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_dcr_dcrCSVC<- renderDT(server = FALSE, {
-    renderDataTable(dcrCSVC_filt_rename(), "Datos: Casos activos a final de año de Conviviendo sin Violencia en Comunidad")
+    renderDataTable(dcrCSVC_filt(), "Datos: Casos activos a final de año de Conviviendo sin Violencia en Comunidad")
   })
   
   # Crear Card con Fuentes
@@ -5142,8 +5133,11 @@ server <- function(input, output, session) {
     list(word = "Ley 54", definition = "Ley Núm. 54-1989, conocida como la “Ley para la Prevención e Intervención con la Violencia Doméstica”, según enmendada, establece la violencia doméstica como delito y lo define como el empleo de fuerza física o violencia psicológica, intimidación o persecución en contra de su pareja o expareja. Esto, para causarle daño físico a su persona, a sus bienes o a otra persona o para causarle grave daño emocional."),
     list(word = "Personas sentenciadas", definition = "Pronunciamiento que hace el juez o la jueza sobre la pena que se le impone a una persona acusada luego de que se determina que es culpable de cometer un delito."),
     list(word = "Programas de Comunidad", definition = "Son programas de tratamientos establecidos para que las personas convictas cumplan parte de su sentencia fuera de la institución penal. Su finalidad es promover que los convictos que estén capacitados para reintegrarse a la sociedad puedan hacerlo como parte de su rehabilitación moral y social."),
-    list(word = "Programa de Supervisión Electrónica", definition = "El Programa de Monitoreo Electrónico cuenta con la Unidad Especializada de Monitoreo Electrónico (Unidad) compuesta por Oficiales Correccionales, la cual tiene la responsabilidad de supervisar y monitorear a los participantes pertenecientes al programa. Esta supervisión conlleva el verificar y atender las alertas que se activan a través del sistema de transmisión electrónica, activar el protocolo, solicitar apoyo interagencial, avisar a la víctima y administrar pruebas toxicológicas, entre otras.")
-  )
+    list(word = "Programa de Supervisión Electrónica", definition = "El Programa de Monitoreo Electrónico cuenta con la Unidad Especializada de Monitoreo Electrónico (Unidad) compuesta por Oficiales Correccionales, la cual tiene la responsabilidad de supervisar y monitorear a los participantes pertenecientes al programa. Esta supervisión conlleva el verificar y atender las alertas que se activan a través del sistema de transmisión electrónica, activar el protocolo, solicitar apoyo interagencial, avisar a la víctima y administrar pruebas toxicológicas, entre otras."),
+    list(word = "Programa de Evaluación y Asesoramiento", definition = "El Programa de Evaluación y Asesoramiento es responsable de administrar y operar el programa en cinco (5) oficinas, para ofrecer sus servicios a nivel institucional en el sistema de adultos y en las oficinas de comunidad del DCR, realizando evaluaciones psicológicas y psicosociales, y desarrollando programas de tratamiento grupal e individual."),
+    list(word = "Programa Aprendiendo a Vivir sin Violencia (AAVSV)", definition = "El programa Aprendiendo a Vivir sin Violencia (AAVSV) provee servicios de tratamiento psicoeducativo a confinados que cumplen delitos de maltrato físico, sexual, asesinato, homicidio y otros delitos violentos y que además presentan historial de adicción al alcohol o drogas."),
+    list(word = "Programa Convivencia sin Violencia en Comunidad (CSVC)", definition = "El programa Convivencia sin Violencia en Comunidad (CSVC) tiene como objetivo ofrecer la oportunidad de reeducar y readiestrar a las personas convictas por delitos de violencia doméstica y ofensores sexuales que estén disfrutando del privilegio de Libertad a Prueba. El tiempo de los participantes en el programa será no menos de un año.")
+    )
   
   # Convertir lista a dataframe
   definitions_df_dcr <- do.call(rbind, lapply(definitions_dcr, as.data.frame))
