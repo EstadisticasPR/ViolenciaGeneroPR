@@ -433,16 +433,6 @@ dcrPEA <- cleansheet_dcrPEA_resumen(archivo_dcrPEA)
 #### dcrPEA sheet: AAVSV ####
 dcrAAVSV <- cleansheet_dcrAAVSV(archivo_dcrPEA)
 
-#### mapa_dcrAAVSV ####
-# maps <- cleanMap_dcrAAVSV(
-#   shp_distritos = paste0(maps_fol, "/distritos_fiscales.shp"),
-#   dcrAAVSV = dcrAAVSV,
-#   shp_municipios = paste0(maps_fol, "/municipios.shp")
-# )
-# 
-# mapa_dcrAAVSV <- maps$mapa_dcrAAVSV
-# municipios_geo <- maps$municipios_geo
-
 #### dcrPEA sheet: CSVC ####
 dcrCSVC <- cleansheet_dcrCSVC(archivo_dcrPEA)
 

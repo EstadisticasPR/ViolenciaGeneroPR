@@ -2718,10 +2718,16 @@ ui <-
                 div(
                   style = "text-align: center; display: inline-block;",  
                   # botón para seleccionar tipo de maltrato
+                  createDropdownCheckbox_region(
+                    label = HTML("Seleccione <br> Región:"),
+                    choices = dcrAAVSV$Región,
+                    selected = 1,
+                    id = "dcr_dcrAAVSV_region"
+                  ),
                   createDropdownCheckbox(
                     label = HTML("Seleccione <br>Tipo(s) de Delito:"),
                     choices = dcrAAVSV$Delito,
-                    selected = 1,
+                    selected = dcrAAVSV$Delito,
                     id = "dcr_dcrAAVSV_tipo"
                   ),
                   createDropdownCheckbox(
@@ -2795,6 +2801,99 @@ ui <-
         #### tab con datos de casos activos al finalizar año de Conviviendo sin Violencia en Comunidad (dcrCSVC)####
         
         
+    tabPanel(
+      lowercaseTitle("Conviviendo sin Violencia en Comunidad"),
+      br(), br(),
+      
+      sidebarLayout(
+        sidebarPanel(
+          style = "display: flex; flex-direction: column; align-items: center;",
+          
+          # # seleccionar valor de la variable
+          div(
+            style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+            div(
+              style = "text-align: center; display: inline-block;",  
+              # botón para seleccionar tipo de maltrato
+              createDropdownCheckbox_region(
+                label = HTML("Seleccione <br> Región:"),
+                choices = dcrCSVC$Región,
+                selected = 1,
+                id = "dcr_dcrCSVC_region"
+              ),
+              createDropdownCheckbox(
+                label = HTML("Seleccione <br>Tipo(s) de Delito:"),
+                choices = dcrCSVC$Delito,
+                selected = dcrCSVC$Delito,
+                id = "dcr_dcrCSVC_tipo"
+              ),
+              createDropdownCheckbox(
+                label = HTML("Seleccione <br> Sexo del Participante:"),
+                choices = dcrCSVC$Sexo,
+                selected = 1,
+                id = "dcr_dcrCSVC_sexo"
+              )
+            )
+          ),
+          
+          div(
+            style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+            div(
+              style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+              div(
+                style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                # botón para seleccionar año
+                createDropdownCheckbox(
+                  label = "Seleccionar Año:",
+                  choices = dcrCSVC$Año,
+                  selected = NULL,
+                  id = "dcr_dcrCSVC_año"
+                )
+              ),
+              div(
+                style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                showDataCheckbox("showTable_dcr_dcrCSVC")
+              )
+            )
+          ),
+          
+          # Output UI para la tabla de datos
+          uiOutput("dataTableUI_dcr_dcrCSVC")
+          
+        ),
+        
+        # Sección principal con los gráficos
+        mainPanel(
+          style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+          fluidRow(
+            column(12, 
+                   div(id = "scrollable-plot", 
+                       div(id = "plot-title", uiOutput("plot_title_dcrCSVC")),
+                       plotlyOutput("barPlot_dcr_dcrCSVC"),  height = "100%"))
+          ),
+          tags$div(style = "padding-bottom: 10px;"),
+          tags$div(
+            style = "padding-bottom: 10px;",
+            div(
+              class = "card",
+              style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+              h4(
+                strong(actualizacion_dcr5, style="margin: 0px;") 
+              ),
+              p(
+                "Los datos representados en esta gráfica corresponden al
+                    resumen de casos activos al finalizar el año para el 
+                    tratamiento Conviviendo sin Violencia en Comunidad (CSVC) bajo
+                    el Programa de Evaluación y Asesoramiento. Los datos
+                    del 2025 son preliminares (junio)",
+                
+                style = "font-size: 16px;padding: 0px;" 
+              )
+            )
+          )
+        )
+      )
+    ),
         #### tab de Publicaciones del Departamento de Correccion ####
         # tabPanel(
         #   lowercaseTitle("Publicaciones"),

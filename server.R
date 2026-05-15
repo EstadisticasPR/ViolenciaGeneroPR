@@ -4755,9 +4755,11 @@ server <- function(input, output, session) {
     filter(dcrAAVSV,
            Año %in% input$checkGroup_dcr_dcrAAVSV_año,
            Sexo %in% input$checkGroup_dcr_dcrAAVSV_sexo,
-           Delito %in% input$checkGroup_dcr_dcrAAVSV_tipo
+           Delito %in% input$checkGroup_dcr_dcrAAVSV_tipo,
+           Región %in% input$checkGroup_dcr_dcrAAVSV_region
     )
   })
+  
   
   ### funcion para el boton de deseleccionar/seleccionar del botón de año
   observeEvent(input$deselectAll_dcr_dcrAAVSV_año, {
@@ -4779,7 +4781,7 @@ server <- function(input, output, session) {
     )
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar del botón del estado de caso 
+  ### funcion para el boton de deseleccionar/seleccionar del botón del sexo 
   observeEvent(input$deselectAll_dcr_dcrAAVSV_sexo, {
     updateCheckboxGroup(session, "checkGroup_dcr_dcrAAVSV_sexo", input, dcrAAVSV$Sexo)
   })
@@ -4799,7 +4801,7 @@ server <- function(input, output, session) {
     )
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar del botón del estado de caso 
+  ### funcion para el boton de deseleccionar/seleccionar del botón del delito
   observeEvent(input$deselectAll_dcr_dcrAAVSV_tipo, {
     updateCheckboxGroup(session, "checkGroup_dcr_dcrAAVSV_tipo", input, dcrAAVSV$Delito)
   })
@@ -4819,33 +4821,55 @@ server <- function(input, output, session) {
     )
   })
   
+  ### funcion para el boton de deseleccionar/seleccionar del botón del delito
+  observeEvent(input$deselectAll_dcr_dcrAAVSV_region, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrAAVSV_region", input, dcrAAVSV$Región)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrAAVSV_region"
+    buttonId <- "deselectAll_dcr_dcrAAVSV_region"
+    all_choices <- levels(dcrAAVSV$Región)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
   
   # Colores del status
   dcrAAVSV_fill_programa <- setColorFill(dcrAAVSV, "Delito")
-
-  # # Grafico de barras
   
+  # # Grafico de barras
   output$barPlot_dcr_dcrAAVSV <- renderPlotly({
     # Verificar si hay opciones seleccionadas en cada grupo
     has_año <- length(input$checkGroup_dcr_dcrAAVSV_año) > 0
     has_tipo <- length(input$checkGroup_dcr_dcrAAVSV_tipo) > 0
     has_sexo <- length(input$checkGroup_dcr_dcrAAVSV_sexo) > 0
+    has_region <- length(input$checkGroup_dcr_dcrAAVSV_region) > 0
     
     # Crear mensaje si faltan opciones seleccionadas
-    if (!has_año || !has_tipo || !has_sexo) {
-      message <- "Seleccione Tipo(s) de delito, Año(s) y Sexo del participante"
+    if (!has_año || !has_tipo || !has_sexo || !has_region) {
+      message <- "Seleccione Tipo(s) de delito, Año(s), Región y Sexo del participante"
     } else {
       # Si todas las opciones están seleccionadas, crear la gráfica
       p <- renderBarPlot_facets(dcrAAVSV_filt, x = "Año", y = "Casos", fill = "Delito",
                                 xlab = "Año", ylab = "Casos activos a final de año", fillLab = "Tipo de delito", 
                                 colorFill = dcrAAVSV_fill_programa, 
-                                emptyMessage = "Seleccione Tipo(s) de delito, Año(s) y Sexo del participante")
+                                emptyMessage = "Seleccione Tipo(s) de delito, Año(s), Región y Sexo del participante")
       #Altura predeterminada para la grafica.
       plot_height = 500
       numPlots = length(input$checkGroup_dcr_dcrAAVSV_sexo)
       #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
       total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Delito, ncol = 2) +
+      p <- p +
+        # facet_wrap(~Región, ncol = 2) +
+        facet_grid(Sexo ~ Región) +
         theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
               panel.spacing.y = unit(1.5, "lines")) #Espacio entre las facetas en y.
       
@@ -4903,6 +4927,182 @@ server <- function(input, output, session) {
   })
   
   #### tab con datos de casos activos al finalizar año de Conviviendo sin Violencia en Comunidad (dcrCSVC)####
+  dcrCSVC_filt <- reactive({
+    filter(dcrCSVC,
+           Año %in% input$checkGroup_dcr_dcrCSVC_año,
+           Sexo %in% input$checkGroup_dcr_dcrCSVC_sexo,
+           Delito %in% input$checkGroup_dcr_dcrCSVC_tipo,
+           Región %in% input$checkGroup_dcr_dcrCSVC_region
+    )
+  })
+  
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_dcr_dcrCSVC_año, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrCSVC_año", input, dcrCSVC$Año)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrCSVC_año"
+    buttonId <- "deselectAll_dcr_dcrCSVC_año"
+    all_choices <- levels(dcrCSVC$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón del sexo 
+  observeEvent(input$deselectAll_dcr_dcrCSVC_sexo, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrCSVC_sexo", input, dcrCSVC$Sexo)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrCSVC_sexo"
+    buttonId <- "deselectAll_dcr_dcrCSVC_sexo"
+    all_choices <- levels(dcrCSVC$Sexo)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón del delito
+  observeEvent(input$deselectAll_dcr_dcrCSVC_tipo, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrCSVC_tipo", input, dcrCSVC$Delito)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrCSVC_tipo"
+    buttonId <- "deselectAll_dcr_dcrCSVC_tipo"
+    all_choices <- levels(dcrCSVC$Delito)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón del delito
+  observeEvent(input$deselectAll_dcr_dcrCSVC_region, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrCSVC_region", input, dcrCSVC$Región)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrCSVC_region"
+    buttonId <- "deselectAll_dcr_dcrCSVC_region"
+    all_choices <- levels(dcrCSVC$Región)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  
+  # Colores del status
+  dcrCSVC_fill_programa <- setColorFill(dcrCSVC, "Delito")
+  
+  # # Grafico de barras
+  output$barPlot_dcr_dcrCSVC <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_año <- length(input$checkGroup_dcr_dcrCSVC_año) > 0
+    has_tipo <- length(input$checkGroup_dcr_dcrCSVC_tipo) > 0
+    has_sexo <- length(input$checkGroup_dcr_dcrCSVC_sexo) > 0
+    has_region <- length(input$checkGroup_dcr_dcrCSVC_region) > 0
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_año || !has_tipo || !has_sexo || !has_region) {
+      message <- "Seleccione Tipo(s) de delito, Año(s), Región y Sexo del participante"
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderBarPlot_facets(dcrCSVC_filt, x = "Año", y = "Casos", fill = "Delito",
+                                xlab = "Año", ylab = "Casos activos a final de año", fillLab = "Tipo de delito", 
+                                colorFill = dcrCSVC_fill_programa, 
+                                emptyMessage = "Seleccione Tipo(s) de delito, Año(s), Región y Sexo del participante")
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      numPlots = length(input$checkGroup_dcr_dcrCSVC_sexo)
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, numPlots)
+      p <- p + 
+        # facet_wrap(~Región, ncol = 2) +
+        facet_grid(Sexo ~ Región) +
+        theme(panel.spacing.x = unit(0.2, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1.5, "lines")) #Espacio entre las facetas en y.
+      
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      
+      return(p)
+    }
+    
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(data = dcrCSVC_filt, x = "Año", y = "Casos", fill = "Delito",
+                                                 xlab = "Año", ylab = "Casos activos a final de año", message)
+    #ggplotly(empty_plot)
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title_dcrCSVC <- renderUI({
+    title <- "Casos activos a final de año de Conviviendo sin Violencia en Comunidad"
+  })
+  
+  
+  # dcrCSVC_filt_rename <- reactive({
+  #   dcrCSVC_filt() %>% 
+  #     rename(`Tipo de Delito` = Delito)  
+  # })
+  
+  # Data Table del DeptFam
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_dcr_dcrCSVC<- renderDT(server = FALSE, {
+    renderDataTable(dcrCSVC_filt_rename(), "Datos: Casos activos a final de año de Conviviendo sin Violencia en Comunidad")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_dcr_dcrCSVC  <- renderUI({
+    if (input$showTable_dcr_dcrCSVC) {
+      hyperlinks <- c("https://dcr.pr.gov/")
+      texts <- c("Departamento de Corrección y Rehabilitación")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 90%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 90%; display: flex; justify-content: center;",  
+          div(
+            style = "width: 90%; max-width: 750px; overflow-x: auto;",  
+            DTOutput("dataTable_dcr_dcrCSVC")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
+  
   
   
   #### Tab de Publicaciones ####
