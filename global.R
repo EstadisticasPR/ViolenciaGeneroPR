@@ -416,10 +416,12 @@ opmServiciosMes <- cleansheet_opmServiciosMes(
 dcr <- here::here("data", "Departamento_de_correccion_y_rehabilitacion", "/")
 
 #### dcrCasosInv ####
-archivo_dcrCasos <- paste0(dcr, "dcrCasosInv.xlsx")
-dcrCasosInv <- cleansheet_dcrCasosInv(archivo_dcrCasos)
-dcrCasosInv_supervision <- cleansheet_dcrCasosInv_supervision(archivo_dcrCasos)
+# archivo_dcrCasos <- paste0(dcr, "dcrCasosInv.xlsx")
+# dcrCasosInv <- cleansheet_dcrCasosInv(archivo_dcrCasos)
+# dcrCasosInv_supervision <- cleansheet_dcrCasosInv_supervision(archivo_dcrCasos)
 
+archivo_dcrAlternos <- paste0(dcr, "dcr_Alternos.xlsx")
+dcrAlternos <- cleansheet_dcrAlternos(archivo_dcrAlternos)
 
 #### dcrSentenciadas ####
 archivo_dcrSent <- paste0(dcr, "dcrSentenciadas.xlsx")

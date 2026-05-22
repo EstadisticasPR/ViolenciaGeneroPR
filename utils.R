@@ -957,6 +957,26 @@ cleansheet_dcrCasosInv_supervision <- function(file){
   return(df_clean)
   
 }
+
+#### cleansheet_dcrAlternos ####
+cleansheet_dcrAlternos <- function(file){
+  
+  df <- read_excel(file)
+  
+  df_clean <- df %>%
+    mutate(
+      Año = factor(Año),
+      Sexo = factor(Sexo),
+      Tipo = factor(Tipo)
+    ) %>%
+    replace_na(list(Promedio = 0)) %>%
+    relocate(Año, Sexo, Tipo, Promedio)
+  
+  return(df_clean)
+  
+}
+
+
 #### cleansheet_dcrSentenciadas ####
 cleansheet_dcrSentenciadas <- function(file){
   

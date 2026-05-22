@@ -2454,61 +2454,229 @@ ui <-
       lowercaseTitle("Departamento de Corrección y Rehabilitación"),
       icon = icon("door-open"),
       tabsetPanel(
-        #### tab con datos del género de las víctimas (dcrCasosInv) ####
-        tabPanel(
-        lowercaseTitle("Supervisión Ley 54: programas comunitarios"), 
-        br(), br(),
-        sidebarLayout(
-          sidebarPanel(
-            style = "display: flex; flex-direction: column; align-items: center;",
-            
-            # # seleccionar valor de la variable
+    #     #### tab con datos del género de las víctimas (dcrCasosInv) ####
+    #     tabPanel(
+    #     lowercaseTitle("Supervisión Ley 54: programas comunitarios"), 
+    #     br(), br(),
+    #     sidebarLayout(
+    #       sidebarPanel(
+    #         style = "display: flex; flex-direction: column; align-items: center;",
+    #         
+    #         # # seleccionar valor de la variable
+    #         div(
+    #           style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+    #           div(
+    #             style = "text-align: center; display: inline-block;", 
+    #             # botón para seleccionar el sexo
+    #             createDropdownCheckbox(
+    #               label = "Seleccione el Sexo:",
+    #               choices = dcrCasosInv_supervision$Sexo,
+    #               selected = 1,
+    #               id = "dcr_dcrCasosInv_sexo"
+    #             ),
+    #             # botón para seleccionar el tipo de investigación 
+    #             # createDropdownCheckbox(
+    #             #   label = HTML("Seleccione  el<br> Estado de Investigación:"),
+    #             #   choices = dcrCasosInv_supervision$Estado,
+    #             #   selected = dcrCasosInv_supervision$Estado,
+    #             #   id = "dcr_dcrCasosInv_tipo"
+    #             # )
+    #           )
+    #         ),
+    #         
+    #         div(
+    #           style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+    #           div(
+    #             style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+    #             div(
+    #               style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+    #               # botón para seleccionar el año
+    #               createDropdownCheckbox(
+    #                 label = "Seleccione Año(s):",
+    #                 choices = dcrCasosInv_supervision$Año,
+    #                 selected = dcrCasosInv_supervision$Año,
+    #                 id = "dcr_dcrCasosInv_year"
+    #               )
+    #             ),
+    #             div(
+    #               style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+    #               showDataCheckbox("showTable_dcr_dcrCasosInv")
+    #             )
+    #           )
+    #         ),
+    #         
+    #         # Output UI para la tabla de datos
+    #         uiOutput("dataTableUI_dcr_dcrCasosInv")
+    #         
+    #       ),
+    #     
+    #     # Sección principal con los gráficos
+    #     mainPanel(
+    #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+    #       fluidRow(
+    #         column(12, 
+    #                div(id = "scrollable-plot", 
+    #                    div(id = "plot-title", uiOutput("plot_title_dcrCasosInv")),
+    #                    plotlyOutput("barPlot_dcr_dcrCasosInv"),  height = "100%"))
+    #       ),
+    #       tags$div(style = "padding-bottom: 10px;"),
+    #       tags$div(
+    #         style = "padding-bottom: 10px;",
+    #         div(
+    #           class = "card",
+    #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+    #           h4(
+    #             strong(actualizacion_dcr1, style="margin: 0px;") 
+    #           ),
+    #           p(
+    #             "Los datos representados en esta gráfica corresponden a
+    #              los casos sentenciados en supervisión electrónica de ley 54 en programas alternos
+    #             al confinamiento: Programas de Comunidad desde el año natural 2021 al 2025.",
+    #             
+    #             style = "font-size: 16px;padding: 0px;" 
+    #           )
+    #         )
+    #       )
+    #     )
+    #   ),
+    # ),
+    
+        #### tab con datos personas sentenciadas al Programa de Supervisión Electrónica (dcrSentenciadas) ####
+    # tabPanel(
+    #   lowercaseTitle("Sentencias por violencia doméstica"),
+    #   br(), br(),
+    #     sidebarLayout(
+    #       sidebarPanel(
+    #         style = "display: flex; flex-direction: column; align-items: center;",
+    #         
+    #         # # seleccionar valor de la variable
+    #         div(
+    #           style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+    #           div(
+    #             style = "text-align: center; display: inline-block;", 
+    #             # botón para seleccionar el tipo de investigación
+    #             createDropdownCheckbox(
+    #               label = "Seleccione el Estado del Caso:",
+    #               choices = dcrSentenciadas$Estado,
+    #               selected = dcrSentenciadas$Estado,
+    #               id = "dcr_dcrSentenciadas_tipo"
+    #             )
+    #           )
+    #         ),
+    #         
+    #         div(
+    #           style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+    #           div(
+    #             style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+    #             div(
+    #               style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+    #               # botón para seleccionar el año
+    #               createDropdownCheckbox(
+    #                 label = "Seleccione Año(s):",
+    #                 choices = dcrSentenciadas$Año,
+    #                 selected = dcrSentenciadas$Año,
+    #                 id = "dcr_dcrSentenciadas_year"
+    #               )
+    #             ),
+    #             div(
+    #               style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+    #               showDataCheckbox("showTable_dcr_dcrSentenciadas")
+    #             )
+    #           )
+    #         ),
+    #         
+    #         # Output UI para la tabla de datos
+    #         uiOutput("dataTableUI_dcr_dcrSentenciadas")
+    #         
+    #       ),
+    #     
+    #     # Sección principal con los gráficos
+    #     mainPanel(
+    #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+    #       fluidRow(
+    #         column(12, 
+    #                div(id = "scrollable-plot", 
+    #                    div(id = "plot-title", uiOutput("plot_title_dcrSentenciadas")),
+    #                    plotlyOutput("barPlot_dcr_dcrSentenciadas"),  height = "100%"))
+    #       ),
+    #       tags$div(style = "padding-bottom: 10px;"),
+    #       tags$div(
+    #         style = "padding-bottom: 10px;",
+    #         div(
+    #           class = "card",
+    #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+    #           h4(
+    #             strong(actualizacion_dcr2, style="margin: 0px;") 
+    #           ),
+    #           p(
+    #             "Los datos representados en esta gráfica corresponden a
+    #              las personas sentenciadas en programa de supervisión 
+    #             electrónica por delitos de violencia doméstica por estado del caso 
+    #             desde el año natural 2020 al 2023.",
+    #             
+    #             style = "font-size: 16px;padding: 0px;" 
+    #           )
+    #         )
+    #       )
+    #     )
+    #   )
+    # ),
+    
+    #### tab con datos de Programas Alternos al Confinamiento (Comunidad) (dcrAlternos) ####
+    tabPanel(
+      lowercaseTitle("Programas Alternos al Confinamiento (Comunidad)"), 
+      br(), br(),
+      sidebarLayout(
+        sidebarPanel(
+          style = "display: flex; flex-direction: column; align-items: center;",
+          
+          # # seleccionar valor de la variable
+          div(
+            style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
             div(
-              style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
-              div(
-                style = "text-align: center; display: inline-block;", 
-                # botón para seleccionar el sexo
-                createDropdownCheckbox(
-                  label = "Seleccione el Sexo:",
-                  choices = dcrCasosInv_supervision$Sexo,
-                  selected = 1,
-                  id = "dcr_dcrCasosInv_sexo"
-                ),
-                # botón para seleccionar el tipo de investigación 
-                # createDropdownCheckbox(
-                #   label = HTML("Seleccione  el<br> Estado de Investigación:"),
-                #   choices = dcrCasosInv_supervision$Estado,
-                #   selected = dcrCasosInv_supervision$Estado,
-                #   id = "dcr_dcrCasosInv_tipo"
-                # )
+              style = "text-align: center; display: inline-block;", 
+              # botón para seleccionar el sexo
+              createDropdownCheckbox(
+                label = "Seleccione el Sexo:",
+                choices = dcrAlternos$Sexo,
+                selected = 1,
+                id = "dcr_dcrAlternos_sexo"
+              ),
+              # botón para seleccionar el tipo de investigación 
+              createDropdownCheckbox(
+                label = HTML("Seleccione  el<br> Tipo de Supervisión:"),
+                choices = dcrAlternos$Tipo,
+                selected = dcrAlternos$Tipo,
+                id = "dcr_dcrAlternos_tipo"
               )
-            ),
-            
-            div(
-              style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
-              div(
-                style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-                div(
-                  style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
-                  # botón para seleccionar el año
-                  createDropdownCheckbox(
-                    label = "Seleccione Año(s):",
-                    choices = dcrCasosInv_supervision$Año,
-                    selected = dcrCasosInv_supervision$Año,
-                    id = "dcr_dcrCasosInv_year"
-                  )
-                ),
-                div(
-                  style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-                  showDataCheckbox("showTable_dcr_dcrCasosInv")
-                )
-              )
-            ),
-            
-            # Output UI para la tabla de datos
-            uiOutput("dataTableUI_dcr_dcrCasosInv")
-            
+            )
           ),
+          
+          div(
+            style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+            div(
+              style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+              div(
+                style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                # botón para seleccionar el año
+                createDropdownCheckbox(
+                  label = "Seleccione Año(s):",
+                  choices = dcrAlternos$Año,
+                  selected = dcrAlternos$Año,
+                  id = "dcr_dcrAlternos_year"
+                )
+              ),
+              div(
+                style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                showDataCheckbox("showTable_dcr_dcrAlternos")
+              )
+            )
+          ),
+          
+          # Output UI para la tabla de datos
+          uiOutput("dataTableUI_dcr_dcrAlternos")
+          
+        ),
         
         # Sección principal con los gráficos
         mainPanel(
@@ -2516,8 +2684,8 @@ ui <-
           fluidRow(
             column(12, 
                    div(id = "scrollable-plot", 
-                       div(id = "plot-title", uiOutput("plot_title_dcrCasosInv")),
-                       plotlyOutput("barPlot_dcr_dcrCasosInv"),  height = "100%"))
+                       div(id = "plot-title", uiOutput("plot_title_dcrAlternos")),
+                       plotlyOutput("barPlot_dcr_dcrAlternos"),  height = "100%"))
           ),
           tags$div(style = "padding-bottom: 10px;"),
           tags$div(
@@ -2529,9 +2697,10 @@ ui <-
                 strong(actualizacion_dcr1, style="margin: 0px;") 
               ),
               p(
-                "Los datos representados en esta gráfica corresponden a
-                 los casos sentenciados en supervisión electrónica de ley 54 en programas alternos
-                al confinamiento: Programas de Comunidad desde el año natural 2021 al 2025.",
+                "Los datos representados en esta gráfica corresponden al
+                 promedio anual de confinados por delito de violencia doméstica
+                 y tipo de supervisión bajo Programas Alternos al Confinamiento
+                 (Comunidad) desde el año natural 2024 al 2026.",
                 
                 style = "font-size: 16px;padding: 0px;" 
               )
@@ -2541,86 +2710,6 @@ ui <-
       ),
     ),
     
-        #### tab con datos personas sentenciadas al Programa de Supervisión Electrónica (dcrSentenciadas) ####
-    tabPanel(
-      lowercaseTitle("Sentencias por violencia doméstica"),
-      br(), br(),
-        sidebarLayout(
-          sidebarPanel(
-            style = "display: flex; flex-direction: column; align-items: center;",
-            
-            # # seleccionar valor de la variable
-            div(
-              style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
-              div(
-                style = "text-align: center; display: inline-block;", 
-                # botón para seleccionar el tipo de investigación
-                createDropdownCheckbox(
-                  label = "Seleccione el Estado del Caso:",
-                  choices = dcrSentenciadas$Estado,
-                  selected = dcrSentenciadas$Estado,
-                  id = "dcr_dcrSentenciadas_tipo"
-                )
-              )
-            ),
-            
-            div(
-              style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
-              div(
-                style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-                div(
-                  style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
-                  # botón para seleccionar el año
-                  createDropdownCheckbox(
-                    label = "Seleccione Año(s):",
-                    choices = dcrSentenciadas$Año,
-                    selected = dcrSentenciadas$Año,
-                    id = "dcr_dcrSentenciadas_year"
-                  )
-                ),
-                div(
-                  style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-                  showDataCheckbox("showTable_dcr_dcrSentenciadas")
-                )
-              )
-            ),
-            
-            # Output UI para la tabla de datos
-            uiOutput("dataTableUI_dcr_dcrSentenciadas")
-            
-          ),
-        
-        # Sección principal con los gráficos
-        mainPanel(
-          style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-          fluidRow(
-            column(12, 
-                   div(id = "scrollable-plot", 
-                       div(id = "plot-title", uiOutput("plot_title_dcrSentenciadas")),
-                       plotlyOutput("barPlot_dcr_dcrSentenciadas"),  height = "100%"))
-          ),
-          tags$div(style = "padding-bottom: 10px;"),
-          tags$div(
-            style = "padding-bottom: 10px;",
-            div(
-              class = "card",
-              style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
-              h4(
-                strong(actualizacion_dcr2, style="margin: 0px;") 
-              ),
-              p(
-                "Los datos representados en esta gráfica corresponden a
-                 las personas sentenciadas en programa de supervisión 
-                electrónica por delitos de violencia doméstica por estado del caso 
-                desde el año natural 2020 al 2023.",
-                
-                style = "font-size: 16px;padding: 0px;" 
-              )
-            )
-          )
-        )
-      )
-    ),
         #### tab con datos de casos activos al finalizar año del Programa de Evaluación y Asesoramiento (dcrPEA) ####
     tabPanel(
       lowercaseTitle("Casos activos del Programa de Evaluación y Asesoramiento"),
