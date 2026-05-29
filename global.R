@@ -639,16 +639,16 @@ actualizacion_policia8 <- "Última actualización: 31 de diciembre de 2025"
 actualizacion_opm1 <- "Última actualización: 31 de julio de 2024"
 
 # Fecha actualizacion opm tab2
-actualizacion_opm2 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_opm2 <- "Última actualización: 30 de abril de 2026"
 
 # Fecha actualizacion opm tab3
-actualizacion_opm3 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_opm3 <- "Última actualización: 30 de abril de 2026"
 
 # Fecha actualizacion opm tab4
-actualizacion_opm4 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_opm4 <- "Última actualización: 30 de abril de 2026"
 
 # Fecha actualizacion opm tab5
-actualizacion_opm5 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_opm5 <- "Última actualización: 30 de abril de 2026"
 
 # Fecha actualizacion opm tab6
 actualizacion_opm6 <- "Última actualización: 31 de diciembre de 2025"

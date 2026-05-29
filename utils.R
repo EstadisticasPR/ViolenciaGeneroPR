@@ -817,8 +817,8 @@ cleansheet_opmVic <- function(file){
   
   df <- read_excel(file) %>%
     rename_at(
-      vars(1,2,3,4,5,6,7),
-      ~ c("género","2020","2021","2022","2023","2024","2025")
+      vars(1,2,3,4,5,6,7,8),
+      ~ c("género","2020","2021","2022","2023","2024","2025","2026")
     ) %>%
     pivot_longer(!género, names_to = "año", values_to = "víctimas") %>%
     mutate(
@@ -844,12 +844,12 @@ cleansheet_opmMedio <- function(file){
   
   df <- read_excel(file) %>%
     rename_at(
-      vars(2,3,4,5,6,7),
-      ~ c("2020","2021","2022","2023","2024","2025")
+      vars(2,3,4,5,6,7,8),
+      ~ c("2020","2021","2022","2023","2024","2025", "2026")
     ) %>%
     mutate(
       across(
-        c("2020","2021","2022","2023","2024","2025"),
+        c("2020","2021","2022","2023","2024","2025", "2026"),
         as.numeric
       )
     ) %>%
