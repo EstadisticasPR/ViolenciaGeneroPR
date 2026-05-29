@@ -2137,7 +2137,7 @@ server <- function(input, output, session) {
 
   #Titulo de la Grafica
   output$plot_title_vEdad <- renderUI({
-    title <- "Incidencia de violencia doméstica por edad de la víctima"
+    title <- "Víctimas de violencia doméstica por edad de la víctima"
   })
   
   
@@ -2193,7 +2193,7 @@ server <- function(input, output, session) {
   # Data Table para el mapa de despDF
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_poli_vEdad <- renderDT(server = FALSE, {
-    renderDataTable(vEdad_filt(), "Datos: Incidentes de violencia doméstica")
+    renderDataTable(vEdad_filt(), "Datos: Víctimas de violencia doméstica")
   })
   
   # Crear Card con Fuentes
@@ -2394,13 +2394,13 @@ server <- function(input, output, session) {
   
   #Titulo de la Grafica
   output$plot_title_maltPoli <- renderUI({
-    title <- "Incidencia de casos de maltrato por sexo de la víctima"
+    title <- "Víctimas de casos de maltrato por sexo de la víctima"
   })
   
   # Data Table para el mapa de despDF
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_poli_Malt <- renderDT(server = FALSE, {
-    renderDataTable(maltPoli_filt(), "Datos: Incidentes de maltrato")
+    renderDataTable(maltPoli_filt(), "Datos: Víctimas de maltrato")
   })
   
   # Crear Card con Fuentes
