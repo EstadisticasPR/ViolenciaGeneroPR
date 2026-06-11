@@ -1288,7 +1288,11 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a las
                     víctimas de violencia doméstica (por edad de la víctima)
-                    desde el año natural 2021 al 2024. Datos del 2024 son preliminares.",
+                    desde el año natural 2021 al 2026. Se reportaron otros casos: 
+                    Hombre trans: para el 2024 (2 víctimas), 2025 (5 víctimas) y 
+                    2026 (3 víctimas), Mujer trans: para el 2024 (1 víctima), 2025 
+                    (3 víctimas) y No binario: para el 2025 (1 víctima). 
+                    Datos del 2026 son preliminares.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
