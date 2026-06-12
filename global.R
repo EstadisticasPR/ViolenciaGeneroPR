@@ -420,6 +420,7 @@ dcr <- here::here("data", "Departamento_de_correccion_y_rehabilitacion", "/")
 # dcrCasosInv <- cleansheet_dcrCasosInv(archivo_dcrCasos)
 # dcrCasosInv_supervision <- cleansheet_dcrCasosInv_supervision(archivo_dcrCasos)
 
+#### dcrAlternos ####
 archivo_dcrAlternos <- paste0(dcr, "dcr_Alternos.xlsx")
 dcrAlternos <- cleansheet_dcrAlternos(archivo_dcrAlternos)
 
@@ -427,6 +428,9 @@ dcrAlternos <- cleansheet_dcrAlternos(archivo_dcrAlternos)
 archivo_dcrSent <- paste0(dcr, "dcrSentenciadas.xlsx")
 dcrSentenciadas <- cleansheet_dcrSentenciadas(archivo_dcrSent)
 
+#### dcrAlternos ####
+archivo_dcrPSAJ <- paste0(dcr, "dcr_PSAJ.xlsx")
+dcrPSAJ <- cleansheet_dcrPSAJ(archivo_dcrPSAJ)
 
 #### dcrPEA ####
 archivo_dcrPEA <- paste0(dcr, "dcr_PEA.xlsx")
@@ -657,16 +661,19 @@ actualizacion_opm6 <- "Última actualización: 31 de diciembre de 2025"
 actualizacion_dcr1 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion correccion y rehabilitacion tab2
-actualizacion_dcr2 <- "Última actualización: 28 de febrero de 2023"
+actualizacion_dcr2 <- "Última actualización: 30 de abril de 2026"
 
 # Fecha actualizacion correccion y rehabilitacion tab3
-actualizacion_dcr3<- "Última actualización: 30 de junio de 2025"
+actualizacion_dcr3 <- "Última actualización: 28 de febrero de 2023"
 
 # Fecha actualizacion correccion y rehabilitacion tab4
-actualizacion_dcr4 <- "Última actualización: 30 de junio de 2025"
+actualizacion_dcr4<- "Última actualización: 30 de junio de 2025"
 
 # Fecha actualizacion correccion y rehabilitacion tab5
-actualizacion_dcr5<- "Última actualización: 30 de junio de 2025"
+actualizacion_dcr5 <- "Última actualización: 30 de junio de 2025"
+
+# Fecha actualizacion correccion y rehabilitacion tab6
+actualizacion_dcr6<- "Última actualización: 30 de junio de 2025"
 
 # Fecha actualizacion Tribunales tab1
 actualizacion_tribunales1 <- "Última actualización: 31 de diciembre de 2025"

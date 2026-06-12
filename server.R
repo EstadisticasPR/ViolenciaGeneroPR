@@ -4783,6 +4783,159 @@ server <- function(input, output, session) {
       )
     }
   })
+  #### tab con datos de Programa de Servicios con Antelación al Juicio (dcr_PSAJ) ####
+  
+  dcrPSAJ_filt <- reactive({
+    filter(dcrPSAJ,
+           Año %in% input$checkGroup_dcr_dcrPSAJ_year,
+           Tipo %in% input$checkGroup_dcr_dcrPSAJ_tipo,
+           Sexo %in% input$checkGroup_dcr_dcrPSAJ_sexo
+    )
+  })
+  
+  
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  observeEvent(input$deselectAll_dcr_dcrPSAJ_year, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrPSAJ_year", input, dcrPSAJ$Año)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrPSAJ_year"
+    buttonId <- "deselectAll_dcr_dcrPSAJ_year"
+    all_choices <- levels(dcrPSAJ$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón del estado de investigación
+  observeEvent(input$deselectAll_dcr_dcrPSAJ_tipo, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrPSAJ_tipo", input, dcrPSAJ$Tipo)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrPSAJ_tipo"
+    buttonId <- "deselectAll_dcr_dcrPSAJ_tipo"
+    all_choices <- levels(dcrPSAJ$Tipo)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  ### funcion para el boton de deseleccionar/seleccionar del botón de sexo
+  observeEvent(input$deselectAll_dcr_dcrPSAJ_sexo, {
+    updateCheckboxGroup(session, "checkGroup_dcr_dcrPSAJ_sexo", input, dcrPSAJ$Sexo)
+  })
+  
+  observe({
+    inputId <- "checkGroup_dcr_dcrPSAJ_sexo"
+    buttonId <- "deselectAll_dcr_dcrPSAJ_sexo"
+    all_choices <- levels(dcrPSAJ$Sexo)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+    )
+  })
+  
+  # Colores del status
+  dcrPSAJ_fill_tipo <- setColorFill(dcrPSAJ, "Tipo")
+  
+  # Grafico de barras
+  output$barPlot_dcr_dcrPSAJ <- renderPlotly({
+    # Verificar si hay opciones seleccionadas en cada grupo
+    has_año <- length(input$checkGroup_dcr_dcrPSAJ_year) > 0
+    has_tipo <- length(input$checkGroup_dcr_dcrPSAJ_tipo) > 0
+    has_sexo <- length(input$checkGroup_dcr_dcrPSAJ_sexo) > 0
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_año || !has_sexo || !has_tipo) {
+      message <- HTML("Seleccione Tipo de supervisión, \n Sexo y Año(s) a visualizar")
+    } else {
+      # Si todas las opciones están seleccionadas, crear la gráfica
+      p <- renderBarPlot_facets(dcrPSAJ_filt, x = "Año", y = "Promedio", fill = "Tipo",
+                                xlab = "Año", ylab = "Promedio anual", fillLab = "Tipo de Supervisión",
+                                colorFill = dcrPSAJ_fill_tipo,
+                                emptyMessage = HTML("Seleccione Tipo de supervisión, \n Sexo y Año(s) a visualizar"))
+      #Altura predeterminada para la grafica.
+      plot_height = 500
+      numPlots = length(input$checkGroup_dcr_dcrPSAJ_tipo)
+      #Llamado a la funcion calcPlotHeight para calcular la altura basado en el numero de filas.
+      total_height = plotHeight(plot_height, numPlots)
+      p <- p + facet_wrap(~Sexo, ncol = 2) +
+        theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+              panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
+      
+      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      
+      return(p)
+    }
+    
+    # Crear la gráfica vacía con mensaje
+    empty_plot <- create_empty_plot_with_message(data = dcrPSAJ_filt, x = "Año", y = "Promedio", fill = "Tipo",
+                                                 xlab = "Año", ylab = "Promedio anual", message)
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  #Titulo de la Grafica
+  output$plot_title_dcrPSAJ <- renderUI({
+    HTML(paste0(
+      "Promedio anual de confinados por delito de violencia doméstica y tipo de supervisión<br>",
+      "bajo Programa de Servicios con Antelación al Juicio"
+    ))
+  })
+  
+  dcrPSAJ_filt_rename <- reactive({
+    dcrPSAJ_filt() %>% 
+      rename(`Tipo de Supervisión` = Tipo) 
+  })
+  
+  # Data Table para dcrCasosInv
+  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  output$dataTable_dcr_dcrPSAJ <- renderDT(server = FALSE, {
+    renderDataTable(dcrPSAJ_filt_rename(), "Datos: Promedio anual de confinados por delito de violencia doméstica y tipo de supervisión")
+  })
+  
+  # Crear Card con Fuentes
+  output$dataTableUI_dcr_dcrPSAJ  <- renderUI({
+    if (input$showTable_dcr_dcrPSAJ) {
+      hyperlinks <- c("https://dcr.pr.gov/")
+      texts <- c("Departamento de Corrección y Rehabilitación")
+      
+      tags$div(
+        class = "card",
+        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        
+        # Contenedor centrado para la tabla
+        div(
+          style = "padding: 5px; width: 98%; display: flex; justify-content: center;",  
+          div(
+            style = "width: 98%; max-width: 800px; overflow-x: auto;", 
+            DTOutput("dataTable_dcr_dcrPSAJ")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
   
   #### tab con datos de casos activos al finalizar año del Programa de Evaluación y Asesoramiento (dcrPEA) ####
   

@@ -2626,6 +2626,8 @@ ui <-
     #   )
     # ),
     
+    
+    
     #### tab con datos de Programas Alternos al Confinamiento (Comunidad) (dcrAlternos) ####
     tabPanel(
       lowercaseTitle("Programas Alternos al Confinamiento (Comunidad)"), 
@@ -2714,6 +2716,94 @@ ui <-
       ),
     ),
     
+    #### tab con datos de Programa de Servicios con Antelación al Juicio (dcr_PSAJ) ####
+    tabPanel(
+      lowercaseTitle("Programa de Servicios con Antelación al Juicio"), 
+      br(), br(),
+      sidebarLayout(
+        sidebarPanel(
+          style = "display: flex; flex-direction: column; align-items: center;",
+          
+          # # seleccionar valor de la variable
+          div(
+            style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+            div(
+              style = "text-align: center; display: inline-block;", 
+              # botón para seleccionar el sexo
+              createDropdownCheckbox(
+                label = "Seleccione el Sexo:",
+                choices = dcrPSAJ$Sexo,
+                selected = 1,
+                id = "dcr_dcrPSAJ_sexo"
+              ),
+              # botón para seleccionar el tipo de investigación 
+              createDropdownCheckbox(
+                label = HTML("Seleccione  el<br> Tipo de Supervisión:"),
+                choices = dcrPSAJ$Tipo,
+                selected = dcrPSAJ$Tipo,
+                id = "dcr_dcrPSAJ_tipo"
+              )
+            )
+          ),
+          
+          div(
+            style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+            div(
+              style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+              div(
+                style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+                # botón para seleccionar el año
+                createDropdownCheckbox(
+                  label = "Seleccione Año(s):",
+                  choices = dcrPSAJ$Año,
+                  selected = dcrPSAJ$Año,
+                  id = "dcr_dcrPSAJ_year"
+                )
+              ),
+              div(
+                style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+                showDataCheckbox("showTable_dcr_dcrPSAJ")
+              )
+            )
+          ),
+          
+          # Output UI para la tabla de datos
+          uiOutput("dataTableUI_dcr_dcrPSAJ")
+          
+        ),
+        
+        # Sección principal con los gráficos
+        mainPanel(
+          style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+          fluidRow(
+            column(12, 
+                   div(id = "scrollable-plot", 
+                       div(id = "plot-title", uiOutput("plot_title_dcrPSAJ")),
+                       plotlyOutput("barPlot_dcr_dcrPSAJ"),  height = "100%"))
+          ),
+          tags$div(style = "padding-bottom: 10px;"),
+          tags$div(
+            style = "padding-bottom: 10px;",
+            div(
+              class = "card",
+              style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+              h4(
+                strong(actualizacion_dcr2, style="margin: 0px;") 
+              ),
+              p(
+                "Los datos representados en esta gráfica corresponden al
+                 promedio anual de confinados por delito de violencia doméstica
+                 y tipo de supervisión bajo Programa de Servicios con Antelación
+                al Juicio desde el año natural 2024 al 2026.",
+                
+                style = "font-size: 16px;padding: 0px;" 
+              )
+            )
+          )
+        )
+      ),
+    ),
+    
         #### tab con datos de casos activos al finalizar año del Programa de Evaluación y Asesoramiento (dcrPEA) ####
     tabPanel(
       lowercaseTitle("Casos activos del Programa de Evaluación y Asesoramiento"),
@@ -2779,7 +2869,7 @@ ui <-
               class = "card",
               style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
               h4(
-                strong(actualizacion_dcr3, style="margin: 0px;") 
+                strong(actualizacion_dcr4, style="margin: 0px;") 
               ),
               p(
                 "Los datos representados en esta gráfica corresponden al
@@ -2874,7 +2964,7 @@ ui <-
                   class = "card",
                   style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
                   h4(
-                    strong(actualizacion_dcr4, style="margin: 0px;") 
+                    strong(actualizacion_dcr5, style="margin: 0px;") 
                   ),
                   p(
                     "Los datos representados en esta gráfica corresponden al
@@ -2971,7 +3061,7 @@ ui <-
               class = "card",
               style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
               h4(
-                strong(actualizacion_dcr5, style="margin: 0px;") 
+                strong(actualizacion_dcr6, style="margin: 0px;") 
               ),
               p(
                 "Los datos representados en esta gráfica corresponden al
