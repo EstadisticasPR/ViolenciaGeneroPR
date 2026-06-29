@@ -229,7 +229,7 @@ cleanSheet_avp_region <- function(file, sheet_name){
   df <- read_excel(file, sheet = sheet_name)
   
   # year_cols <- names(df)[grepl("^[0-9]{4}$", names(df))]
-  year_cols <- names(df)[2:10]
+  year_cols <- names(df)[2:11]
   
   estado <- ifelse(grepl("soli", sheet_name), "solicitadas", "asignadas")
   
@@ -257,7 +257,7 @@ cleanSheet_avp_municipios <- function(file, sheet_name){
   df <- read_excel(file, sheet = sheet_name)
   
   # year_cols <- names(df)[grepl("^[0-9]{4}$", names(df))]
-  year_cols <- names(df)[3:11]
+  year_cols <- names(df)[3:12]
   
   estado <- ifelse(grepl("soli", sheet_name), "solicitadas", "asignadas")
   
@@ -292,7 +292,16 @@ create_map_avp_region <- function(shapefile, df){
   
 }
 
-
+create_map_avp_municipio <- function(shapefile, df){
+  
+  mapa <- shapefile %>%
+    merge(df, by.x = "municipio", by.y = "municipio") %>%
+    # rename(Municipio = municipio) %>%
+    relocate(Año, municipio, Región, Estado, geometry, Cantidad)
+  
+  return(mapa)
+  
+}
 
 
 
@@ -465,7 +474,7 @@ cleanSheet_npprDS_totales <- function(file, sheets = c("Victimas", "Ofensores"))
 }
 
 #### cleanSheet_npprDS_victima ####
-cleanSheet_npprDS_victima <- function(file, years = 2019:2025) {
+cleanSheet_npprDS_victima <- function(file, years = 2019:2026) {
   
   # ---- Leer y añadir Año por hoja ----
   vict_list <- lapply(as.character(years), function(sheet_name) {
@@ -496,7 +505,7 @@ cleanSheet_npprDS_victima <- function(file, years = 2019:2025) {
 }
 
 #### cleanSheet_npprDS_ofensores ####
-cleanSheet_npprDS_ofensores <- function(file, years = 2019:2025) {
+cleanSheet_npprDS_ofensores <- function(file, years = 2019:2026) {
   
   # ---- Leer y añadir Año por hoja ----
   ofens_list <- lapply(as.character(years), function(sheet_name) {
@@ -527,7 +536,7 @@ cleanSheet_npprDS_ofensores <- function(file, years = 2019:2025) {
 }
 
 #### cleanSheet_npprDS_region ####
-cleanSheet_npprDS_region <- function(file, years = 2019:2025) {
+cleanSheet_npprDS_region <- function(file, years = 2019:2026) {
   
   # ---- Leer y añadir Año por hoja ----
   region_list <- lapply(as.character(years), function(sheet_name) {
@@ -559,7 +568,7 @@ cleanSheet_npprDS_region <- function(file, years = 2019:2025) {
 }
 
 #### cleanSheet_npprDS_victimas_agrupados ####
-cleanSheet_npprDS_victimas_agrupados <- function(file, years = 2019:2025) {
+cleanSheet_npprDS_victimas_agrupados <- function(file, years = 2019:2026) {
   
   # ---- Leer y añadir Año por hoja ----
   vict_list <- lapply(as.character(years), function(sheet_name) {
@@ -588,7 +597,7 @@ cleanSheet_npprDS_victimas_agrupados <- function(file, years = 2019:2025) {
 }
 
 #### cleanSheet_npprDS_ofensores_agrupados ####
-cleanSheet_npprDS_ofensores_agrupados <- function(file, years = 2019:2025) {
+cleanSheet_npprDS_ofensores_agrupados <- function(file, years = 2019:2026) {
   
   # ---- Leer y añadir Año por hoja ----
   ofens_list <- lapply(as.character(years), function(sheet_name) {
@@ -617,7 +626,7 @@ cleanSheet_npprDS_ofensores_agrupados <- function(file, years = 2019:2025) {
 }
 
 #### cleanSheet_npprDS_relacion ####
-cleanSheet_npprDS_relacion <- function(file, years = 2019:2025) {
+cleanSheet_npprDS_relacion <- function(file, years = 2019:2026) {
   
   # ---- Leer y añadir Año por hoja ----
   relacion_list <- lapply(as.character(years), function(sheet_name) {
@@ -645,7 +654,7 @@ cleanSheet_npprDS_relacion <- function(file, years = 2019:2025) {
 }
 
 #### cleanSheet_npprDS_tiposdelitos ####
-cleanSheet_npprDS_tiposdelitos <- function(file, years = 2019:2025) {
+cleanSheet_npprDS_tiposdelitos <- function(file, years = 2019:2026) {
   
   # ---- Leer y añadir Año por hoja ----
   delitos_list <- lapply(as.character(years), function(sheet_name) {
@@ -667,7 +676,8 @@ cleanSheet_npprDS_tiposdelitos <- function(file, years = 2019:2025) {
         levels = c(
           "Violación", "Sodomia", "Actos Lascivos", "Incesto", "Violación Técnica",
           "Ley 54 (3.5)", "Agresión Sexual", "Maltrato", "Pornografia infantil",
-          "Hostigamiento Sexual", "Maltrato Institucional", "Trata Humana", "Agresión"
+          "Hostigamiento Sexual", "Maltrato Institucional", "Trata Humana", "Agresión",
+          "Maltrato a menores"
         ),
         ordered = TRUE
       ),

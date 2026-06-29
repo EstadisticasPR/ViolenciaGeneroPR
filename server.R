@@ -1631,12 +1631,15 @@ server <- function(input, output, session) {
 
   ## PARA REGION Y MUNICIPIOS
   municipios_filt_asig <- reactive({
-    filter(municipios_geo_asig,
+    filter(mapaAvp_municipio_asig,
+      # municipios_geo_asig,
+      #      
            Año %in% input$select_avp_mapaAvp_año)
   })
 
   municipios_filt_sol <- reactive({
-    filter(municipios_geo_sol,
+    filter(mapaAvp_municipio_soli,
+      # municipios_geo_sol,
            Año %in% input$select_avp_mapaAvp_año)
   })
 
@@ -1645,7 +1648,9 @@ server <- function(input, output, session) {
     municipios_geo_asig <- municipios_filt_asig()
 
     if (input$select_avp_mapaAvp_visualizacion == "Municipios") {
-      renderMap_vivienda_municipio(municipios_geo_asig,
+      renderMap_vivienda_municipio(
+                                municipios_geo_asig,
+                                   # dfAvp_municipios_asig,
                                    value_col = "Cantidad",
                                    value_col_region = "Municipio",
                                    map_zoom = 8,
@@ -1664,7 +1669,9 @@ server <- function(input, output, session) {
     municipios_geo_sol <-municipios_filt_sol()
 
     if (input$select_avp_mapaAvp_visualizacion == "Municipios") {
-      renderMap_vivienda_municipio(municipios_geo_sol,
+      renderMap_vivienda_municipio(
+                                 municipios_geo_sol,
+                                   # dfAvp_municipios_soli,
                                    value_col = "Cantidad",
                                    value_col_region = "Municipio",
                                    map_zoom = 8,
@@ -3213,7 +3220,8 @@ server <- function(input, output, session) {
         "<p style='font-size: 16px;padding: 0px;'>
         Los datos representados en esta gráfica corresponden a los
         datos de delitos sexuales según el tipo de relación
-        ofensor/víctima desde el año natural 2019 al 2025.
+        ofensor/víctima desde el año natural 2019 al 2026. 
+        Los datos del 2026 son preliminares.
         
       </p>"
       )
@@ -3222,7 +3230,8 @@ server <- function(input, output, session) {
         "<p style='font-size: 16px;padding: 0px;'>
         Los datos representados en esta gráfica corresponden a los
         datos de delitos sexuales según región y tipo de relación
-        ofensor/víctima desde el año natural 2019 al 2025.
+        ofensor/víctima desde el año natural 2019 al 2026.
+        Los datos del 2026 son preliminares.
       </p>"
       )
     }

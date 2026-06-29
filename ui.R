@@ -1486,7 +1486,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a los
                      datos de víctimas y ofensores de delitos sexuales (por sexo)
-                     desde el año natural 2019 al 2025.",
+                     desde el año natural 2019 al 2026. Los datos del 2026 son preliminares.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1581,7 +1581,8 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a los
                      datos de casos de víctimas de delitos sexuales (por sexo y cat) 
-                     a nivel Isla desde el año natural 2019 al 2025.",
+                     a nivel Isla desde el año natural 2019 al 2026. Los datos 
+                    del 2026 son preliminares.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1655,7 +1656,8 @@ ui <-
                   p(
                     "Los datos representados en este mapa corresponden al
                     total de casos de deitos sexuales por región del
-                    Negociado de la Policia desde el año 2019 al 2025.",
+                    Negociado de la Policia desde el año 2019 al 2026. 
+                    Los datos del 2026 son preliminares.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -1828,7 +1830,8 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a los
                      datos de casos de víctimas de delitos sexuales (por sexo y tipo de delito) 
-                     a nivel Isla desde el año natural 2019 al 2025.",
+                     a nivel Isla desde el año natural 2019 al 2026. Los datos 
+                    del 2026 son preliminares.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )

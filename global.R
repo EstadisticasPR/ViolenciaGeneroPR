@@ -255,6 +255,29 @@ mapaAvp_asig <- mapaAvp %>%
 mapaAvp_sol <- mapaAvp %>%
   filter(Estado == "solicitadas")
 
+
+# Municipio
+mapaAvp_municipio_soli <- create_map_avp_municipio(
+  # paste0(maps_fol, "/municipios.shp"),
+  municipios_geo,
+  dfAvp_municipios_soli
+)
+
+mapaAvp_municipio_asig <- create_map_avp_municipio(
+  # paste0(maps_fol, "/municipios.shp"),
+  municipios_geo,
+  dfAvp_municipios_asig
+)
+
+# 
+# mapaAvp_asig_municipio <- mapaAvp_municipio_asig %>%
+#   filter(Estado == "asignadas")
+# 
+# mapaAvp_sol_municipio <- mapaAvp_municipio_soli %>%
+#   filter(Estado == "solicitadas")
+
+
+
 #### Guardar datos procesados de Administración de Vivienda Pública ####
 # dataframes <- list(dfAvp) # Lista de dataframes (por ejemplo: homiEdad y inci)
 # 
@@ -607,13 +630,13 @@ actualizacion_justicia1 <- "Última actualización: 31 de diciembre de 2025"
 actualizacion_justicia2 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion avp tab1
-actualizacion_avp1 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_avp1 <- "Última actualización: 30 de abril de 2026"
 
 # Fecha actualizacion avp tab2
-actualizacion_avp2 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_avp2 <- "Última actualización: 30 de abril de 2026"
 
 # Fecha actualizacion avp tab3
-actualizacion_avp3 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_avp3 <- "Última actualización: 30 de abril de 2026"
 
 # Fecha actualizacion policia tab1
 actualizacion_policia1 <- "Última actualización: 31 de diciembre de 2025"
@@ -625,19 +648,19 @@ actualizacion_policia2 <- "Última actualización: 20 de septiembre de 2024"
 actualizacion_policia3 <- "Última actualización: 31 de diciembre de 2025"
 
 # Fecha actualizacion policia tab4
-actualizacion_policia4 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_policia4 <- "Última actualización: 31 de mayo de 2026"
 
 # Fecha actualizacion policia tab5
-actualizacion_policia5 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_policia5 <- "Última actualización: 31 de mayo de 2026"
 
 # Fecha actualizacion policia tab6
-actualizacion_policia6 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_policia6 <- "Última actualización: 31 de mayo de 2026"
 
 # Fecha actualizacion policia tab7
-actualizacion_policia7 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_policia7 <- "Última actualización: 31 de mayo de 2026"
 
 # Fecha actualizacion policia tab8
-actualizacion_policia8 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_policia8 <- "Última actualización: 31 de mayo de 2026"
 
 # Fecha actualizacion opm tab1
 actualizacion_opm1 <- "Última actualización: 31 de julio de 2024"
