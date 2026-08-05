@@ -30,7 +30,7 @@ ui <-
       tags$ul(
         
         ### Foto con enlace a la página de IEPR ###
-        embedImage("logo_IEPR", "iepr_logo.png", "https://estadisticas.pr/", "estadisticas.pr"),
+        embedImage("logo_IEPR", "iepr_logo.png", "https://www.estadisticas.pr.gov/", "estadisticas.pr.gov"),
         
         ### Foto con enlace a la página de PARE ###
         # embedImage("logo_PARE", "logo_PARE.png", "https://parelaviolencia.pr.gov/", "PARE.gov"),

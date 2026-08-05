@@ -7,6 +7,26 @@ library(stringr)
 library(sf)
 
 ##################################
+### Helper Functions: Limpieza ###
+##################################
+
+#### Funcion para convertir columna con varios tipos de datos a numerico #####
+#### convert_mixed_columns####
+convert_mixed_columns <- function(data) {
+  mixed_columns <- sapply(data, function(col) any(is.character(col) & !is.na(as.numeric(col))))
+  mixed_columns_names <- names(mixed_columns)[mixed_columns]
+  
+  for (col in mixed_columns_names) {
+    suppressWarnings({
+      data[[col]] <- ifelse(data[[col]] == "N/A", NA, as.character(data[[col]]))
+      data[[col]] <- as.numeric(data[[col]])
+    })
+  }
+  
+  return(data)
+}
+
+##################################
 #### Helper Functions: Global ####
 ##################################
 

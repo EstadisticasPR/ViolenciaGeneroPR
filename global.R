@@ -62,21 +62,7 @@ source("utils.R")
 # cargando el dataset starwars para testing
 #data("starwars")
 
-#### Funcion para convertir columna con varios tipos de datos a numerico #####
-#### convert_mixed_columns####
-convert_mixed_columns <- function(data) {
-  mixed_columns <- sapply(data, function(col) any(is.character(col) & !is.na(as.numeric(col))))
-  mixed_columns_names <- names(mixed_columns)[mixed_columns]
-  
-  for (col in mixed_columns_names) {
-    suppressWarnings({
-      data[[col]] <- ifelse(data[[col]] == "N/A", NA, as.character(data[[col]]))
-      data[[col]] <- as.numeric(data[[col]])
-    })
-  }
-  
-  return(data)
-}
+
 
 
 ##################################################################
@@ -141,7 +127,7 @@ inci <- read_excel(file.path(snmv, "svmvIncidentes.xlsx")) %>%
 # 
 # # Uso de la función
 # guardarDatos(dataframes, nombres_sheets, "sistema_notificacion_muertes_violentas")
-
+# 
 
 
 
@@ -199,14 +185,14 @@ municipios_geo <- maps$municipios_geo
 
 #### Guardar datos procesados de Departamento de Justicia ####
 # dataframes <- list(dfDeli) # Lista de dataframes (por ejemplo: homiEdad y inci)
-# 
+# #
 # # Lista de nombres de hojas correspondientes a los dataframes
 # nombres_sheets <- list("delitos_ArticuloLey54")
-# 
+# #
 # # Uso de la función
 # guardarDatos(dataframes, nombres_sheets, "departamento_justicia")
-
-# Uso de la función
+# 
+# # Uso de la función
 # guardarDatos_Polygons(mapaDeli, "departamento_justicia_distritosfiscales")
 
 
