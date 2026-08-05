@@ -31,6 +31,9 @@ convert_mixed_columns <- function(data) {
 ##################################
 
 
+
+
+
 ######## Sistema de Notificacion de Muertes Violentas ########
 #### cleanSheet_homiEdad ####
 cleanSheet_homiEdad <- function(data) {
@@ -79,6 +82,10 @@ cleanSheet_inci <- function(data) {
     ) %>%
     relocate(Año, Incidente, Casos)
 }
+
+
+
+
 
 
 
@@ -144,6 +151,10 @@ cleanSheet_dfMalt <- function(data, years) {
       )
     )
 }
+
+
+
+
 
 
 
@@ -222,6 +233,11 @@ cleanMap_dfDeli <- function(shp_distritos, dfDeli, shp_municipios) {
     municipios_geo = municipios_geo
   ))
 }
+
+
+
+
+
 
 
 
@@ -322,6 +338,9 @@ create_map_avp_municipio <- function(shapefile, df){
   return(mapa)
   
 }
+
+
+
 
 
 
@@ -756,6 +775,9 @@ cleanSheet_inciDF <- function(file_path, años = c("2021", "2022", "2023")) {
 
 
 
+
+
+
 #### Oficina de la Procuradora de la Mujer ####
 #### cleansheet_opmFemiVD ####
 cleansheet_opmFemiVD <- function(file){
@@ -1160,6 +1182,10 @@ cleansheet_dcrCSVC <- function(file){
   return(df_clean)
   
 }
+
+
+
+
 
 
 
@@ -1702,6 +1728,9 @@ cleansheet_safekits_region <- function(file){
   return(df_clean)
   
 }
+
+
+
 
 ###############################
 #### Helper Functions: UI  ####
@@ -2420,6 +2449,27 @@ renderBarPlot_facets <- function(data, x, y, fill, xlab, ylab, fillLab = fill, c
     
     upper_y_limit <- ceiling(max(eval(parse(text = paste0("data()$", y))), na.rm = TRUE) * 1.5)
     
+    if (upper_y_limit < 20) {
+      
+      y_scale <- scale_y_continuous(
+        breaks = seq(0, upper_y_limit, by = 2),
+        # labels = scales::label_number(accuracy = 1),
+        labels = function(x)
+          scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+        expand = expansion(mult = c(0, 0.1))
+      )
+      
+    } else {
+      
+      y_scale <- scale_y_continuous(
+        labels = function(x)
+          scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+        expand = expansion(mult = c(0, 0.1))
+      )
+      
+    }
+    
+    
     p <- ggplot(data_df, aes_string(x = x, y = y, fill = fill)) +
       geom_bar(stat = "identity",
                position = position_dodge2(width = barWidth, padding = xGap),
@@ -2432,8 +2482,9 @@ renderBarPlot_facets <- function(data, x, y, fill, xlab, ylab, fillLab = fill, c
                  )
                )) +
       scale_fill_manual(values = colorFill) +
-      scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
-                         expand = expansion(mult = c(0, 0.1))) +
+      y_scale +
+      # scale_y_continuous(labels = function(x) scales::comma_format(big.mark = ",", decimal.mark = ".")(x) %>% paste0(" "),
+      #                    expand = expansion(mult = c(0, 0.1))) +
       coord_cartesian(ylim = c(0, upper_y_limit)) +
       labs(x = xlab, y = ylab, fill = fillLab) +
       theme_minimal() +
