@@ -813,7 +813,8 @@ server <- function(input, output, session) {
         "<p style='font-size: 16px;padding: 0px;'>
         Los datos representados en esta gráfica corresponden al
         total de casos radicados por Artículo
-        de la Ley 54 desde el año natural 2020 al 2025.
+        de la Ley 54 desde el año natural 2020 al 2026.
+        Los datos para el año 2026 son preliminares.
       </p>"
       )
     } else {
@@ -821,7 +822,8 @@ server <- function(input, output, session) {
         "<p style='font-size: 16px;padding: 0px;'>
         Los datos representados en esta gráfica corresponden al
         número de casos radicados por distrito fiscal y Artículo
-        de la Ley 54 desde el año natural 2020 al 2025.
+        de la Ley 54 desde el año natural 2020 al 2026.
+        Los datos para el año 2026 son preliminares.
       </p>"
       )
     }

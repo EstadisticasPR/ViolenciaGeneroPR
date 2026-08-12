@@ -168,7 +168,7 @@ maps_fol <- here::here("data", "mapas/")
 
 dfDeli <- cleanSheet_dfDeli(
   file_path = paste0(djus, "djDelitos.xlsx"),
-  years = 2020:2025
+  years = 2020:2026
 )
 
 # Crear un dataframe con las coordenadas de las fiscalías policiacas y combinar 
@@ -601,10 +601,10 @@ mapa_cavv <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
 ##### Actualizaciones de los Datos #####
 ##################################################################################
 # Fecha actualizacion de los datos de SNMV tab1
-actualizacion_snmv1 <- "Última actualización: 31 de marzo de 2026"
+actualizacion_snmv1 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion de los datos de SNMV tab2
-actualizacion_snmv2 <- "Última actualización: 31 de marzo de 2026"
+actualizacion_snmv2 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion familia
 actualizacion_familia <- "Última actualización: 31 de diciembre de 2022"

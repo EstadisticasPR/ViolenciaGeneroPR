@@ -655,7 +655,8 @@ ui <-
                   p(
                     "Los datos representados en este mapa corresponden al
                     número de casos radicados por distrito fiscal y Artículo 
-                    de la Ley 54 desde el año natural 2020 al 2025.",
+                    de la Ley 54 desde el año natural 2020 al 2026. Los 
+                    datos para el año 2026 son preliminares",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
