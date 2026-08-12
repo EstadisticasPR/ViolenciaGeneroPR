@@ -1193,7 +1193,8 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a la
                     cantidad de mujeres desaparecidas y localizadas (adultas y menores)
-                    desde el año natural 2020 al 2025.",
+                    desde el año natural 2020 al 2026. Los datos para el año 2026 son
+                    preliminares.",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )
@@ -2004,7 +2005,7 @@ ui <-
                   p(
                     "Los datos representados en esta gráfica corresponden a
                     la tasa de asesinatos de mujeres por violencia doméstica, 
-                    desde el año natural 1990 al 2024 (Tasa x100,000 mujeres).",
+                    desde el año natural 1990 al 2025 (Tasa x100,000 mujeres).",
                     
                     style = "font-size: 16px;padding: 0px;" 
                   )

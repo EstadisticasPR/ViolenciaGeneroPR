@@ -140,7 +140,7 @@ dfam <- here::here("data", "Departamento_de_Familia", "/")
 #### dfMalt ####
 dfMalt <- cleanSheet_dfMalt(
   paste0(dfam, "dfMalt.xlsx"),
-  years = 2018:2024
+  years = 2018:2025
 )
 
 #### Guardar datos procesados de Departamento de Familia ####
@@ -607,13 +607,13 @@ actualizacion_snmv1 <- "Última actualización: 30 de junio de 2026"
 actualizacion_snmv2 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion familia
-actualizacion_familia <- "Última actualización: 31 de diciembre de 2022"
+actualizacion_familia <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion justicia tab1
-actualizacion_justicia1 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_justicia1 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion justicia tab2
-actualizacion_justicia2 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_justicia2 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion avp tab1
 actualizacion_avp1 <- "Última actualización: 30 de abril de 2026"
@@ -625,7 +625,7 @@ actualizacion_avp2 <- "Última actualización: 30 de abril de 2026"
 actualizacion_avp3 <- "Última actualización: 30 de abril de 2026"
 
 # Fecha actualizacion policia tab1
-actualizacion_policia1 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_policia1 <- "Última actualización: 31 de julio de 2026"
 
 # Fecha actualizacion policia tab2
 actualizacion_policia2 <- "Última actualización: 20 de septiembre de 2024"
@@ -649,7 +649,7 @@ actualizacion_policia7 <- "Última actualización: 31 de mayo de 2026"
 actualizacion_policia8 <- "Última actualización: 31 de mayo de 2026"
 
 # Fecha actualizacion opm tab1
-actualizacion_opm1 <- "Última actualización: 31 de julio de 2024"
+actualizacion_opm1 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion opm tab2
 actualizacion_opm2 <- "Última actualización: 30 de abril de 2026"
