@@ -706,16 +706,16 @@ actualizacion_tribunales6 <- "Última actualización: 15 de octubre de 2024"
 actualizacion_tribunales7 <- "Última actualización: 31 de octubre de 2025"
 
 # Fecha actualizacion datos cavv tab1
-actualizacion_cavv1 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_cavv1 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion datos cavv tab2
-actualizacion_cavv2 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_cavv2 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion datos cavv tab3
-actualizacion_cavv3 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_cavv3 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion datos cavv tab4
-actualizacion_cavv4 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_cavv4 <- "Última actualización: 30 de junio de 2026"
 
 ##################################################################################
 ##### Credenciales para el web hosting #####

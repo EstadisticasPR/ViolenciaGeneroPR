@@ -1712,7 +1712,7 @@ cleansheet_safekits_region <- function(file){
   
   df_clean <- df %>%
     pivot_longer(
-      cols = 2:6,
+      cols = 2:7,
       names_to = "Año",
       values_to = "Cantidad"
     ) %>%

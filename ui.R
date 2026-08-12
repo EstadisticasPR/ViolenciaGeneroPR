@@ -3950,7 +3950,8 @@ ui <-
                   "Los datos representados en esta gráfica corresponden a la
                   tendencia del equipo de recolecta de evidencia de los
                   SAKs Kits en casos de violencia sexual, según el estado de querella,
-                  desde el año 2019 al 2025.",
+                  desde el año 2019 al 2026.Los datos para el año 2026 
+                  son preliminares.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -4032,7 +4033,8 @@ ui <-
                   tendencia del equipo de recolecta de evidencia de los
                   SAKs Kits en casos de violencia sexual para aquellos casos con querellas
                   segun la clasificacion del individuo (menor de edad o mayor de edad)
-                  desde el año 2019 al 2025.",
+                  desde el año 2019 al 2026. Los datos para el año 2026 
+                  son preliminares.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -4112,7 +4114,7 @@ ui <-
                 p(
                   "Los datos representados en esta gráfica corresponden a la
               cantidad de kits de agresión sexual que han sido analizados
-              desde el año 2021 al 2025.",
+              desde el año 2021 al 2026.Los datos para el año 2026 son preliminares.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
@@ -4167,7 +4169,8 @@ ui <-
                 p(
                   "Los datos representados en este mapa corresponden a
                   la cantidad de kits recibidos por región policiaca
-                  desde el 2021 al 2025.",
+                  desde el 2021 al 2026. Los datos para el año 2026 
+                  son preliminares.",
                   
                   style = "font-size: 16px;padding: 0px;" 
                 )
