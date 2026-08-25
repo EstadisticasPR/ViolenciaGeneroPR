@@ -1387,11 +1387,13 @@ cleanSheet_OP_LEY148Denegadas <- function(file,
                                            sheets = c("2020-2021", "2021-2022", "2022-2023", 
                                                       "2023-2024", "2024-2025"),
                                            new_names = c("No Aplican Disposiciones Ley148", 
-                                                         "No Prueban Elementos")) {
+                                                         "No ha lugar archivo de petición",
+                                                         "No Prueban Elementos",
+                                                         "Otros")) {
   
   df_list <- lapply(sheets, function(sheet_name) {
     read_excel(file, sheet = sheet_name) %>%
-      rename_at(vars(3:4), ~ new_names) %>%
+      rename_at(vars(3:6), ~ new_names) %>%
       pivot_longer(
         !Región, 
         names_to = "Razón", 
@@ -2559,7 +2561,8 @@ renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = f
 
 #### convert_to_plotly ####
 # Transforma un gráfico ggplot en un gráfico interactivo plotly y configura el tooltip.
-convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1, width= "100%", height= "100%") {
+convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1,
+                              width= "100%", height= "100%") {
   # Obtener los títulos de los ejes y el título del gráfico desde el objeto ggplot
   x_axis_title <- p$labels$x
   y_axis_title <- p$labels$y
@@ -3569,18 +3572,42 @@ setColorFill <- function(df, variable) {
 #### plotHeight ####
 # Función para calcular el numero de facetas en una grafica basado
 # en la cantidad de filas.
+# plotHeight <- function(plot_height, selected_plots) {
+# 
+#   height <- plot_height * selected_plots
+# 
+#   print(height)
+# 
+#   return(height)
+# }
+
+# plotHeight <- function(plot_height, selected_plots){
+#   
+#   num_selected_plots = selected_plots
+#   num_rows = (num_selected_plots)
+#   
+#   if(num_selected_plots > 1){
+#     height = (350*num_rows)
+#   } else {
+#     height = plot_height
+#   }
+#   print(height)
+#   
+#   return(height)
+# }
+# 
 plotHeight <- function(plot_height, selected_plots){
-  
+
   num_selected_plots = selected_plots
   num_rows = (num_selected_plots/2)
-  
+
   if(num_selected_plots > 4){
     height = (350*num_rows)
   } else {
     height = plot_height
   }
   print(height)
-  
+
   return(height)
 }
 
