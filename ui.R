@@ -63,8 +63,11 @@ ui <-
   # Titulo de la app
   navbarPage(
     
+    title = "Estadísticas de Violencia de Género PR",
+    windowTitle = "Estadísticas de Violencia de Género PR",
+    
     # elimina el espacio vacío del título
-    tags$style(HTML(".navbar-brand { display: none; } .navbar { min-height: 0; padding-top: 0; padding-bottom: 0; }")),
+    # tags$style(HTML(".navbar-brand { display: none; } .navbar { min-height: 0; padding-top: 0; padding-bottom: 0; }")),
     
     
     #### Tab del Sistema de Notificación de Muertes Violentas ####

@@ -412,14 +412,13 @@ cleanSheet_vEdad <- function(file, years = 2021:2026) {
     mutate(
       Edad = str_replace_all(Edad, c(
         "^< 16$" = "menos de 16 años",
-        "^65 o más$" = "65 años o más"
+        ">60$" = "60 años o más"
       )),
       Edad = factor(
         Edad,
         levels = c(
-          "menos de 16 años", "16-17", "18-19", "20-24", "25-29", "30-34",
-          "35-39", "40-44", "45-49", "50-54", "55-59", "60-64",
-          "65 años o más", "Desconocida"
+          "menos de 16 años", "16-29 años", "30-44 años", 
+          "45-59 años","60 años o más", "Desconocida"
         ),
         ordered = TRUE
       ),
@@ -1235,13 +1234,13 @@ cleanSheet_casosCrimLey148 <- function(file, sheets = c("2020-2021", "2021-2022"
 cleanSheet_OP_148_SoliGrupEdad <- function(file, 
                                            sheets = c("2020-2021", "2021-2022", "2022-2023", 
                                                       "2023-2024", "2024-2025", "2025-2026"),
-                                           new_names = c("Total", "20 años o menos", "21-29", "30-39",
-                                                         "40-49", "50-59", "60 años o más", "No Indica")) {
+                                           new_names = c("Total", "20 años o menos", "21-39 años",
+                                                         "40-59 años","60 años o más", "No Indica")) {
   
   df_list <- lapply(sheets, function(sheet_name) {
     
     read_excel(file, sheet = sheet_name) %>%
-      rename_at(vars(2:9), ~ new_names) %>%       # Renombra las columnas de la 2 a la 9
+      rename_at(vars(2:7), ~ new_names) %>%       # Renombra las columnas de la 2 a la 9
       pivot_longer(                                # Convierte las columnas a formato largo
         !Región, 
         names_to = "Edad", 
