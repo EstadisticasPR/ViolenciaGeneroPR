@@ -530,7 +530,7 @@ cleanSheet_npprDS_victima <- function(file, years = 2019:2026) {
       values_to = "Casos"
     ) %>%
     mutate(
-      Edad = str_replace(Edad, "^10 años o menos$", "menos de 10 años"),
+      Edad = str_replace(Edad, "^15 años o menos$", "menos de 15 años"),
       Edad = factor(Edad, levels = unique(Edad)),
       Año = factor(Año),
       Sexo = factor(Sexo),
@@ -561,7 +561,7 @@ cleanSheet_npprDS_ofensores <- function(file, years = 2019:2026) {
       values_to = "Casos"
     ) %>%
     mutate(
-      Edad = str_replace(Edad, "^10 años o menos$", "menos de 10 años"),
+      Edad = str_replace(Edad, "^15 años o menos$", "menos de 15 años"),
       Edad = factor(Edad, levels = unique(Edad)),
       Año = factor(Año),
       Sexo = factor(Sexo),
