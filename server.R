@@ -897,7 +897,7 @@ server <- function(input, output, session) {
     renderMap(data, value_col = "Casos",
               value_col_region = "Distrito Fiscal",
               map_zoom = 8.5,
-              provider = providers$CartoDB.Positron,
+              # provider = providers$CartoDB.Positron,
               municipios_geo = municipios_geo)
   })
 
@@ -1616,7 +1616,7 @@ server <- function(input, output, session) {
                        value_col = "Cantidad",
                        value_col_region = "Región",
                        map_zoom = 8,
-                       provider = providers$CartoDB.Positron,
+                       # provider = providers$CartoDB.Positron,
                        municipios_geo = municipios_geo_asig)
   })
 
@@ -1627,7 +1627,7 @@ server <- function(input, output, session) {
                        value_col = "Cantidad",
                        value_col_region = "Región",
                        map_zoom = 8,
-                       provider = providers$CartoDB.Positron,
+                       # provider = providers$CartoDB.Positron,
                        municipios_geo = municipios_geo_sol)
   })
 
@@ -1655,14 +1655,18 @@ server <- function(input, output, session) {
                                    # dfAvp_municipios_asig,
                                    value_col = "Cantidad",
                                    value_col_region = "Municipio",
-                                   map_zoom = 8,
-                                   provider = providers$CartoDB.Positron)
+                                   map_zoom = 8
+                                # ,
+                                #    provider = providers$CartoDB.Positron
+                                )
     } else {
       renderMap_vivienda_new(data,
                          value_col = "Cantidad",
                          value_col_region = "Región",
-                         map_zoom = 8,
-                         provider = providers$CartoDB.Positron)
+                         map_zoom = 8
+                         # ,
+                         # provider = providers$CartoDB.Positron
+                         )
     }
   })
 
@@ -1676,14 +1680,18 @@ server <- function(input, output, session) {
                                    # dfAvp_municipios_soli,
                                    value_col = "Cantidad",
                                    value_col_region = "Municipio",
-                                   map_zoom = 8,
-                                   provider = providers$CartoDB.Positron)
+                                   map_zoom = 8
+                                 # ,
+                                 #   provider = providers$CartoDB.Positron
+                                 )
     } else {
       renderMap_vivienda_new(data,
                          value_col = "Cantidad",
                          value_col_region = "Región",
-                         map_zoom = 8,
-                         provider = providers$CartoDB.Positron)
+                         map_zoom = 8
+                         # ,
+                         # provider = providers$CartoDB.Positron
+                         )
     }
   })
 
@@ -2715,7 +2723,7 @@ server <- function(input, output, session) {
                        value_col = "Casos",
                        value_col_region = "Región",
                        map_zoom = 8,
-                       provider = providers$CartoDB.Positron,
+                       # provider = providers$CartoDB.Positron,
                        municipios_geo = municipios_geo_asig)
   })
   
@@ -2726,7 +2734,7 @@ server <- function(input, output, session) {
                        value_col = "Casos",
                        value_col_region = "Región",
                        map_zoom = 8,
-                       provider = providers$CartoDB.Positron,
+                       # provider = providers$CartoDB.Positron,
                        municipios_geo = municipios_geo_sol)
   })
   
@@ -2736,7 +2744,7 @@ server <- function(input, output, session) {
                        value_col = "Casos",
                        value_col_region = "Región",
                        map_zoom = 8,
-                       provider = providers$CartoDB.Positron,
+                       # provider = providers$CartoDB.Positron,
                        municipios_geo = municipios_geo_asig)
   })
   
@@ -2747,7 +2755,7 @@ server <- function(input, output, session) {
                        value_col = "Casos",
                        value_col_region = "Región",
                        map_zoom = 8,
-                       provider = providers$CartoDB.Positron,
+                       # provider = providers$CartoDB.Positron,
                        municipios_geo = municipios_geo_sol)
   })
   
@@ -8208,7 +8216,7 @@ server <- function(input, output, session) {
     renderMap(data, value_col = "Cantidad",
               value_col_region = "Región",
               map_zoom = 8.5,
-              provider = providers$CartoDB.Positron,
+              # provider = providers$CartoDB.Positron,
               municipios_geo = municipios_geo)
   })
   

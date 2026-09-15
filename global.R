@@ -26,6 +26,8 @@ library(pdftools)
 library(htmltools)
 source("utils.R")
 
+
+
 # packages <- c(
 #   #"tidyverse",
 #   #"testthat",
@@ -63,7 +65,16 @@ source("utils.R")
 #data("starwars")
 
 
+readRenviron(".Renviron")
 
+carto_api_key <- Sys.getenv("CARTO_API_KEY")
+
+if (!nzchar(carto_api_key)) {
+  stop(
+    "No se encontró CARTO_API_KEY. ",
+    "Verifica que el archivo .Renviron exista en la carpeta de la aplicación."
+  )
+}
 
 ##################################################################
 #### Funcion para guardar dataframes por agencias #####
@@ -652,28 +663,28 @@ actualizacion_policia8 <- "Última actualización: 31 de mayo de 2026"
 actualizacion_opm1 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion opm tab2
-actualizacion_opm2 <- "Última actualización: 30 de abril de 2026"
+actualizacion_opm2 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion opm tab3
-actualizacion_opm3 <- "Última actualización: 30 de abril de 2026"
+actualizacion_opm3 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion opm tab4
-actualizacion_opm4 <- "Última actualización: 30 de abril de 2026"
+actualizacion_opm4 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion opm tab5
-actualizacion_opm5 <- "Última actualización: 30 de abril de 2026"
+actualizacion_opm5 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion opm tab6
-actualizacion_opm6 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_opm6 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion correccion y rehabilitacion tab1
-actualizacion_dcr1 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_dcr1 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion correccion y rehabilitacion tab2
-actualizacion_dcr2 <- "Última actualización: 30 de abril de 2026"
+actualizacion_dcr2 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion correccion y rehabilitacion tab3
-actualizacion_dcr3 <- "Última actualización: 28 de febrero de 2023"
+actualizacion_dcr3 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion correccion y rehabilitacion tab4
 actualizacion_dcr4<- "Última actualización: 30 de junio de 2025"
@@ -685,25 +696,25 @@ actualizacion_dcr5 <- "Última actualización: 30 de junio de 2025"
 actualizacion_dcr6<- "Última actualización: 30 de junio de 2025"
 
 # Fecha actualizacion Tribunales tab1
-actualizacion_tribunales1 <- "Última actualización: 31 de diciembre de 2025"
+actualizacion_tribunales1 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion Tribunales tab2
-actualizacion_tribunales2 <- "Última actualización: 30 de junio de 2025"
+actualizacion_tribunales2 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion Tribunales tab3
-actualizacion_tribunales3 <- "Última actualización: 30 de junio de 2025"
+actualizacion_tribunales3 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion Tribunales tab4
-actualizacion_tribunales4 <- "Última actualización: 30 de junio de 2025"
+actualizacion_tribunales4 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion Tribunales tab5
-actualizacion_tribunales5 <- "Última actualización: 30 de junio de 2025"
+actualizacion_tribunales5 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion Tribunales tab6
 actualizacion_tribunales6 <- "Última actualización: 15 de octubre de 2024"
 
 # Fecha actualizacion Tribunales tab1
-actualizacion_tribunales7 <- "Última actualización: 31 de octubre de 2025"
+actualizacion_tribunales7 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion datos cavv tab1
 actualizacion_cavv1 <- "Última actualización: 30 de junio de 2026"

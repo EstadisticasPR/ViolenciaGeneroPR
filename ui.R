@@ -85,12 +85,12 @@ ui <-
         # tabPanel(
         #   lowercaseTitle("Homicidios de mujeres por edad"),
         #   br(), br(),
-        # 
+        #
         #   # Menu sidebar con widgets
         #     sidebarLayout(
         #       sidebarPanel(
         #         style = "display: flex; flex-direction: column; align-items: center;",
-        # 
+        #
         #         # Seleccionar valor de la variable
         #         div(
         #           style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",
@@ -104,12 +104,12 @@ ui <-
         #             )
         #           )
         #         ),
-        # 
+        #
         #         div(
         #           style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
         #           div(
         #             style = "width: 100%; display: flex; justify-content: space-between; align-items: center;",
-        # 
+        #
         #             div(
         #               style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
         #               createDropdownCheckbox(
@@ -125,12 +125,12 @@ ui <-
         #             )
         #           )
         #         ),
-        # 
+        #
         #         # Output UI para la tabla de datos
         #         uiOutput("dataTableUI_snmv")
         #       ),
-        # 
-        # 
+        #
+        #
         #     # Sección principal con los gráficos
         #     mainPanel(
         #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
@@ -153,7 +153,7 @@ ui <-
         #             "Los datos representados en esta gráfica corresponden a los
         #             homicidios de mujeres por grupo de edad desde el año natural 2017 al 2024.
         #             Los datos del año 2024 al 2026 son preliminares.",
-        # 
+        #
         #             style = "font-size: 16px; padding: 0px;"
         #           )
         #         )
@@ -163,152 +163,1625 @@ ui <-
         # ),
 
 
-            
-        #### tab con datos de Homicidios por grupo de Edad ####
-        tabPanel(
-          lowercaseTitle("Homicidios de mujeres por edad"),
-          br(), br(),
+      #
+      #   #### tab con datos de Homicidios por grupo de Edad ####
+      #   tabPanel(
+      #     lowercaseTitle("Homicidios de mujeres por edad"),
+      #     br(), br(),
+      #
+      #     # ==========================================================
+      #     # CONTROLES ARRIBA DEL MAIN PANEL
+      #     # ==========================================================
+      #
+      #     fluidRow(
+      #
+      #       # Selección de grupo de edad
+      #       column(
+      #         width = 4,
+      #         div(
+      #           style = "
+      #     display: flex;
+      #     justify-content: center;
+      #     align-items: center;
+      #     width: 100%;
+      #     height: 100%;
+      #   ",
+      #
+      #           createDropdownCheckbox(
+      #             label = HTML("Seleccione<br>Grupo(s) de Edad:"),
+      #             choices = homiEdad$Edad,
+      #             selected = homiEdad$Edad,
+      #             id = "snmv_homiEdad_edad"
+      #           )
+      #         )
+      #       ),
+      #
+      #       # Selección de año
+      #       column(
+      #         width = 4,
+      #         div(
+      #           style = "
+      #     display: flex;
+      #     justify-content: center;
+      #     align-items: center;
+      #     width: 100%;
+      #     height: 100%;
+      #   ",
+      #
+      #           createDropdownCheckbox(
+      #             label = "Seleccione Año(s):",
+      #             choices = homiEdad$Año,
+      #             selected = NULL,
+      #             id = "snmv_homiEdad_año"
+      #           )
+      #         )
+      #       ),
+      #
+      #       # Mostrar tabla
+      #       column(
+      #         width = 4,
+      #         div(
+      #           style = "
+      #     display: flex;
+      #     justify-content: center;
+      #     align-items: center;
+      #     width: 100%;
+      #     height: 100%;
+      #   ",
+      #
+      #           showDataCheckbox("showTable_snmv")
+      #         )
+      #       )
+      #     ),
+      #
+      #     br(),
+      #
+      #
+      #
+      #     # ==========================================================
+      #     # SECCIÓN PRINCIPAL CON EL GRÁFICO
+      #     # ==========================================================
+      #
+      #     fluidRow(
+      #       column(
+      #         width = 12,
+      #
+      #         div(
+      #           id = "scrollable-plot",
+      #
+      #           div(
+      #             id = "plot-title",
+      #             uiOutput("plot_title_homiEdad")
+      #           ),
+      #
+      #           plotlyOutput(
+      #             "barPlot_snmv",
+      #             height = "calc(100vh - 350px)"
+      #           )
+      #         )
+      #       )
+      #     ),
+      #
+      #     tags$div(
+      #       style = "padding-bottom: 10px;"
+      #     ),
+      #
+      #     # ==========================================================
+      #     # OUTPUT UI PARA LA TABLA
+      #     # ==========================================================
+      #
+      #     uiOutput("dataTableUI_snmv"),
+      #
+      #     # ==========================================================
+      #     # NOTA / INFORMACIÓN DE ACTUALIZACIÓN
+      #     # ==========================================================
+      #
+      #     tags$div(
+      #       style = "padding-bottom: 10px;",
+      #
+      #       div(
+      #         class = "card",
+      #         style = "
+      #   padding: 15px;
+      #   color: white;
+      #   background-color: #3e3f3a;
+      #   border-radius: 5px;
+      #   margin-top: 0;
+      #   width: 100%;
+      # ",
+      #
+      #         h4(
+      #           strong(
+      #             actualizacion_snmv1,
+      #             style = "margin: 0px;"
+      #           )
+      #         ),
+      #
+      #         p(
+      #           "Los datos representados en esta gráfica corresponden a los
+      #   homicidios de mujeres por grupo de edad desde el año natural 2017 al 2024.
+      #   Los datos del año 2024 al 2026 son preliminares.",
+      #
+      #           style = "font-size: 16px; padding: 0px;"
+      #         )
+      #       )
+      #     )
+      #   ),
+      #
 
-          # ==========================================================
-          # CONTROLES ARRIBA DEL MAIN PANEL
-          # ==========================================================
 
-          fluidRow(
+    #'
+    #### LAYOUT filtros, grafica, dos columnas datos y nota importante tab con datos de Homicidios por grupo de Edad ####
+    #' tabPanel(
+    #'   lowercaseTitle("Homicidios de mujeres por edad"),
+    #' 
+    #'   tags$head(
+    #'     tags$style(HTML("
+    #' 
+    #'   /* =========================================================
+    #'      CONTENEDOR GENERAL DEL TAB
+    #'      ========================================================= */
+    #' 
+    #'   .homi-edad-container {
+    #'     width: 100%;
+    #'     max-width: 1600px;
+    #'     margin: 0 auto;
+    #'     padding: 10px 20px 30px 20px;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      TARJETAS
+    #'      ========================================================= */
+    #' 
+    #'   .dashboard-card {
+    #'     background: #ffffff;
+    #'     border: 1px solid #e1e4e6;
+    #'     border-radius: 8px;
+    #'     padding: 18px;
+    #'     margin-bottom: 20px;
+    #'     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    #'   }
+    #' 
+    #'   .dashboard-card-title {
+    #'     font-size: 15px;
+    #'     font-weight: 600;
+    #'     color: #3e3f3a;
+    #'     margin-bottom: 15px;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      FILTROS
+    #'      ========================================================= */
+    #' 
+    #'   .filters-row {
+    #'     display: flex;
+    #'     align-items: stretch;
+    #'     gap: 15px;
+    #'   }
+    #' 
+    #'   .filter-box {
+    #'     flex: 1;
+    #'     min-width: 0;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      PICKER INPUT
+    #'      ========================================================= */
+    #' 
+    #'   .bootstrap-select > .dropdown-toggle {
+    #'     background-color: #ffffff !important;
+    #'     border: 1px solid #d6d9db !important;
+    #'     border-radius: 6px !important;
+    #'     color: #555 !important;
+    #'     font-size: 13px;
+    #'     min-height: 38px;
+    #'     box-shadow: none !important;
+    #'     transition: all 0.2s ease;
+    #'   }
+    #' 
+    #'   .bootstrap-select > .dropdown-toggle:hover,
+    #'   .bootstrap-select > .dropdown-toggle:focus {
+    #'     border-color: #9a9c99 !important;
+    #'     box-shadow: 0 0 0 2px rgba(62,63,58,0.08) !important;
+    #'   }
+    #' 
+    #'   .bootstrap-select .dropdown-menu {
+    #'     border: 1px solid #e1e4e6;
+    #'     border-radius: 6px;
+    #'     box-shadow: 0 5px 15px rgba(0,0,0,0.10);
+    #'   }
+    #' 
+    #'   .bootstrap-select .dropdown-menu li a {
+    #'     color: #555;
+    #'     font-size: 13px;
+    #'     padding: 8px 12px;
+    #'   }
+    #' 
+    #'   .bootstrap-select .dropdown-menu li a:hover {
+    #'     background-color: #f3f4f4;
+    #'     color: #3e3f3a;
+    #'   }
+    #' 
+    #'   .bootstrap-select .dropdown-menu li.selected a {
+    #'     background-color: #eeeeed;
+    #'     color: #3e3f3a;
+    #'   }
+    #' 
+    #'   .bootstrap-select .bs-actionsbox {
+    #'     padding: 8px;
+    #'   }
+    #' 
+    #'   .bootstrap-select .bs-actionsbox .btn {
+    #'     font-size: 12px;
+    #'     border-radius: 5px;
+    #'     border: 1px solid #d5d7d8;
+    #'     background: #f7f7f7;
+    #'     color: #555;
+    #'     transition: all 0.2s ease;
+    #'   }
+    #' 
+    #'   .bootstrap-select .bs-actionsbox .btn:hover {
+    #'     background: #e9eaea;
+    #'     color: #3e3f3a;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      RADIO GROUP BUTTONS
+    #'      ========================================================= */
+    #' 
+    #'   .btn-group-toggle .btn {
+    #'     border: 1px solid #d6d9db !important;
+    #'     background: #ffffff !important;
+    #'     color: #555 !important;
+    #'     font-size: 13px;
+    #'     font-weight: 500;
+    #'     padding: 8px 16px;
+    #'     transition: all 0.2s ease;
+    #'     box-shadow: none !important;
+    #'   }
+    #' 
+    #'   .btn-group-toggle .btn:hover {
+    #'     background: #f3f4f4 !important;
+    #'     color: #3e3f3a !important;
+    #'   }
+    #' 
+    #'   .btn-group-toggle .btn.active,
+    #'   .btn-group-toggle .btn:active {
+    #'     background: #3e3f3a !important;
+    #'     border-color: #3e3f3a !important;
+    #'     color: #ffffff !important;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      SWITCH MOSTRAR DATOS
+    #'      ========================================================= */
+    #' 
+    #'   .custom-checkbox-wrapper {
+    #'     height: 100%;
+    #'     display: flex;
+    #'     align-items: center;
+    #'     padding-top: 20px;
+    #'   }
+    #' 
+    #'   .custom-checkbox-wrapper .material-switch {
+    #'     margin-bottom: 0;
+    #'   }
+    #' 
+    #'   .custom-checkbox-wrapper label {
+    #'     color: #555 !important;
+    #'     font-size: 11px !important;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      GRAFICA
+    #'      ========================================================= */
+    #' 
+    #'   .plot-card {
+    #'     padding: 15px 20px 10px 20px;
+    #'   }
+    #' 
+    #'   #plot-title {
+    #'     margin-bottom: 5px;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      TABLA + INFORMACION
+    #'      ========================================================= */
+    #' 
+    #'   .bottom-row {
+    #'     display: flex;
+    #'     align-items: flex-start;
+    #'     gap: 20px;
+    #'   }
+    #' 
+    #'   .table-column {
+    #'     width: 66.666%;
+    #'     min-width: 0;
+    #'   }
+    #' 
+    #'   .info-column {
+    #'     width: 33.333%;
+    #'     min-width: 0;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      NOTA IMPORTANTE
+    #'      ========================================================= */
+    #' 
+    #'   .info-card {
+    #'     background-color: #ffffff;
+    #'     color: #555;
+    #'     border-left: 4px solid #8a8c88;
+    #'     border-top: 1px solid #e1e4e6;
+    #'     border-right: 1px solid #e1e4e6;
+    #'     border-bottom: 1px solid #e1e4e6;
+    #'     border-radius: 6px;
+    #'     padding: 18px 20px;
+    #'     margin-bottom: 20px;
+    #'     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    #'   }
+    #' 
+    #'   .info-card-title {
+    #'     font-size: 15px;
+    #'     font-weight: 600;
+    #'     color: #3e3f3a;
+    #'     margin-top: 0;
+    #'     margin-bottom: 8px;
+    #'   }
+    #' 
+    #'   .info-card p {
+    #'     font-size: 13px;
+    #'     color: #555;
+    #'     line-height: 1.5;
+    #'     margin-bottom: 0;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      FUENTE
+    #'      ========================================================= */
+    #' 
+    #'   .source-card {
+    #'     background-color: #f5f6f6;
+    #'     border-left: 4px solid #3e3f3a;
+    #'     border-radius: 6px;
+    #'     padding: 18px 20px;
+    #'   }
+    #' 
+    #'   .source-card-title {
+    #'     font-size: 15px;
+    #'     font-weight: 600;
+    #'     color: #3e3f3a;
+    #'     margin-top: 0;
+    #'     margin-bottom: 8px;
+    #'   }
+    #' 
+    #'   .source-card p {
+    #'     font-size: 13px;
+    #'     color: #555;
+    #'     line-height: 1.5;
+    #'     margin-bottom: 0;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      LINKS
+    #'      ========================================================= */
+    #' 
+    #'   .source-link {
+    #'     color: #555 !important;
+    #'     text-decoration: none !important;
+    #'   }
+    #' 
+    #'   .source-link:hover {
+    #'     color: #3e3f3a !important;
+    #'     text-decoration: underline !important;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      RESPONSIVE
+    #'      ========================================================= */
+    #' 
+    #'   @media (max-width: 900px) {
+    #' 
+    #'     .homi-edad-container {
+    #'       padding: 10px;
+    #'     }
+    #' 
+    #'     .filters-row {
+    #'       flex-direction: column;
+    #'     }
+    #' 
+    #'     .filter-box {
+    #'       width: 100%;
+    #'     }
+    #' 
+    #'     .bottom-row {
+    #'       flex-direction: column;
+    #'     }
+    #' 
+    #'     .table-column,
+    #'     .info-column {
+    #'       width: 100%;
+    #'     }
+    #' 
+    #'   }
+    #' 
+    #' "))
+    #'   ),
+    #' 
+    #' 
+    #'   div(
+    #'     class = "homi-edad-container",
+    #' 
+    #' 
+    #'     # ==========================================================
+    #'     # FILTROS
+    #'     # ==========================================================
+    #' 
+    #'     div(
+    #'       class = "dashboard-card",
+    #' 
+    #'       div(
+    #'         class = "dashboard-card-title",
+    #'         "Filtros"
+    #'       ),
+    #' 
+    #'       div(
+    #'         class = "filters-row",
+    #' 
+    #' 
+    #'         # --------------------------------------------------------
+    #'         # GRUPO DE EDAD
+    #'         # --------------------------------------------------------
+    #' 
+    #'         div(
+    #'           class = "filter-box",
+    #' 
+    #'           createPickerFilter(
+    #'             label = HTML("Seleccione<br>Grupo(s) de Edad:"),
+    #'             choices = homiEdad$Edad,
+    #'             selected = homiEdad$Edad,
+    #'             id = "snmv_homiEdad_edad"
+    #'           )
+    #' 
+    #'         ),
+    #' 
+    #' 
+    #'         # --------------------------------------------------------
+    #'         # AÑO
+    #'         # --------------------------------------------------------
+    #' 
+    #'         div(
+    #'           class = "filter-box",
+    #' 
+    #'           createPickerFilter(
+    #'             label = "Seleccione Año(s):",
+    #'             choices = homiEdad$Año,
+    #'             selected = NULL,
+    #'             id = "snmv_homiEdad_año"
+    #'           )
+    #' 
+    #'         ),
+    #' 
+    #' 
+    #'         # --------------------------------------------------------
+    #'         # MOSTRAR DATOS
+    #'         # --------------------------------------------------------
+    #' 
+    #'         div(
+    #'           class = "filter-box",
+    #' 
+    #'           showDataToggle(
+    #'             inputId = "showTable_snmv"
+    #'           )
+    #' 
+    #'         )
+    #' 
+    #'       )
+    #'     ),
+    #' 
+    #' 
+    #'     # ==========================================================
+    #'     # GRÁFICA
+    #'     # ==========================================================
+    #' 
+    #'     div(
+    #'       class = "dashboard-card plot-card",
+    #' 
+    #'       div(
+    #'         id = "plot-title",
+    #'         uiOutput("plot_title_homiEdad")
+    #'       ),
+    #' 
+    #'       plotlyOutput(
+    #'         "barPlot_snmv",
+    #'         height = "calc(100vh - 350px)"
+    #'       )
+    #'     ),
+    #' 
+    #' 
+    #'     # ==========================================================
+    #'     # TABLA + INFORMACIÓN
+    #'     # ==========================================================
+    #' 
+    #'     div(
+    #'       class = "bottom-row",
+    #' 
+    #' 
+    #'       # --------------------------------------------------------
+    #'       # TABLA - 2/3
+    #'       # --------------------------------------------------------
+    #' 
+    #'       div(
+    #'         class = "table-column",
+    #' 
+    #'         div(
+    #'           class = "dashboard-card",
+    #' 
+    #'           div(
+    #'             class = "dashboard-card-title",
+    #'             "Datos"
+    #'           ),
+    #' 
+    #'           uiOutput(
+    #'             "dataTableUI_snmv"
+    #'           )
+    #' 
+    #'         )
+    #'       ),
+    #' 
+    #' 
+    #'       # --------------------------------------------------------
+    #'       # INFORMACIÓN - 1/3
+    #'       # --------------------------------------------------------
+    #' 
+    #'       div(
+    #'         class = "info-column",
+    #' 
+    #' 
+    #'         # ======================================================
+    #'         # NOTA IMPORTANTE
+    #'         # ======================================================
+    #' 
+    #'         div(
+    #'           class = "info-card",
+    #' 
+    #'           h4(
+    #'             class = "info-card-title",
+    #'             actualizacion_snmv1
+    #'           ),
+    #' 
+    #'           p(
+    #'             "Los datos representados en esta gráfica corresponden a los
+    #'          homicidios de mujeres por grupo de edad desde el año natural
+    #'          2017 al 2024. Los datos del año 2024 al 2026 son preliminares."
+    #'           )
+    #' 
+    #'         ),
+    #' 
+    #' 
+    #'         # ======================================================
+    #'         # FUENTE
+    #'         # ======================================================
+    #' 
+    #'         div(
+    #'           class = "source-card",
+    #' 
+    #'           h4(
+    #'             class = "source-card-title",
+    #'             "Fuente de los datos"
+    #'           ),
+    #' 
+    #'           p(
+    #'             tags$a(
+    #'               href = "https://stacks.cdc.gov/view/cdc/149761",
+    #'               target = "_blank",
+    #'               rel = "noopener noreferrer",
+    #'               "Sistema Nacional de Notificación de Muertes Violentas, ",
+    #'               class = "source-link"
+    #'             ),
+    #' 
+    #'             tags$a(
+    #'               href = "https://estadisticas.pr/",
+    #'               target = "_blank",
+    #'               rel = "noopener noreferrer",
+    #'               "Instituto de Estadísticas de Puerto Rico",
+    #'               class = "source-link"
+    #'             )
+    #'           )
+    #' 
+    #'         )
+    #' 
+    #'       )
+    #' 
+    #'     )
+    #' 
+    #'   )
+    #' 
+    #' ),
+    
+    
+    
+    
+    #'
+    #' #### LAYOUT grafica, filtros, datos y nota importante tab con datos de Homicidios por grupo de Edad ####
+    #' tabPanel(
+    #'   lowercaseTitle("Homicidios de mujeres por edad"),
+    #' 
+    #'   tags$head(
+    #'     tags$style(HTML("
+    #' 
+    #'   /* =========================================================
+    #'      CONTENEDOR GENERAL
+    #'      ========================================================= */
+    #' 
+    #'   .homi-edad-container {
+    #'     width: 100%;
+    #'     max-width: 1600px;
+    #'     margin: 0 auto;
+    #'     padding: 10px 20px 30px 20px;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      TARJETAS
+    #'      ========================================================= */
+    #' 
+    #'   .dashboard-card {
+    #'     background: #ffffff;
+    #'     border: 1px solid #e1e4e6;
+    #'     border-radius: 8px;
+    #'     padding: 18px;
+    #'     margin-bottom: 20px;
+    #'     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    #'   }
+    #' 
+    #'   .dashboard-card-title {
+    #'     font-size: 15px;
+    #'     font-weight: 600;
+    #'     color: #3e3f3a;
+    #'     margin-bottom: 15px;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      GRÁFICA
+    #'      ========================================================= */
+    #' 
+    #'   .plot-card {
+    #'     padding: 15px 20px 10px 20px;
+    #'   }
+    #' 
+    #'   #plot-title {
+    #'     margin-bottom: 5px;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      FILTROS
+    #'      ========================================================= */
+    #' 
+    #'   .filters-card {
+    #'     padding: 16px 18px;
+    #'   }
+    #' 
+    #'   .filters-row {
+    #'     display: flex;
+    #'     align-items: flex-end;
+    #'     gap: 15px;
+    #'   }
+    #' 
+    #'   .filter-box {
+    #'     flex: 1;
+    #'     min-width: 0;
+    #'   }
+    #' 
+    #'   .filter-switch {
+    #'     flex: 0 0 180px;
+    #'     min-width: 180px;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      PICKER INPUT
+    #'      ========================================================= */
+    #' 
+    #'   .bootstrap-select > .dropdown-toggle {
+    #'     background-color: #ffffff !important;
+    #'     border: 1px solid #d6d9db !important;
+    #'     border-radius: 6px !important;
+    #'     color: #555 !important;
+    #'     font-size: 13px;
+    #'     min-height: 38px;
+    #'     box-shadow: none !important;
+    #'     transition: all 0.2s ease;
+    #'   }
+    #' 
+    #'   .bootstrap-select > .dropdown-toggle:hover,
+    #'   .bootstrap-select > .dropdown-toggle:focus {
+    #'     border-color: #9a9c99 !important;
+    #'     box-shadow: 0 0 0 2px rgba(62,63,58,0.08) !important;
+    #'   }
+    #' 
+    #'   .bootstrap-select .dropdown-menu {
+    #'     border: 1px solid #e1e4e6;
+    #'     border-radius: 6px;
+    #'     box-shadow: 0 5px 15px rgba(0,0,0,0.10);
+    #'   }
+    #' 
+    #'   .bootstrap-select .dropdown-menu li a {
+    #'     color: #555;
+    #'     font-size: 13px;
+    #'     padding: 8px 12px;
+    #'   }
+    #' 
+    #'   .bootstrap-select .dropdown-menu li a:hover {
+    #'     background-color: #f3f4f4;
+    #'     color: #3e3f3a;
+    #'   }
+    #' 
+    #'   .bootstrap-select .dropdown-menu li.selected a {
+    #'     background-color: #eeeeed;
+    #'     color: #3e3f3a;
+    #'   }
+    #' 
+    #'   .bootstrap-select .bs-actionsbox {
+    #'     padding: 8px;
+    #'   }
+    #' 
+    #'   .bootstrap-select .bs-actionsbox .btn {
+    #'     font-size: 12px;
+    #'     border-radius: 5px;
+    #'     border: 1px solid #d5d7d8;
+    #'     background: #f7f7f7;
+    #'     color: #555;
+    #'     transition: all 0.2s ease;
+    #'   }
+    #' 
+    #'   .bootstrap-select .bs-actionsbox .btn:hover {
+    #'     background: #e9eaea;
+    #'     color: #3e3f3a;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      SWITCH MOSTRAR DATOS
+    #'      ========================================================= */
+    #' 
+    #'   .custom-checkbox-wrapper {
+    #'     height: 100%;
+    #'     display: flex;
+    #'     align-items: center;
+    #'     padding-top: 20px;
+    #'   }
+    #' 
+    #'   .custom-checkbox-wrapper .material-switch {
+    #'     margin-bottom: 0;
+    #'   }
+    #' 
+    #'   .custom-checkbox-wrapper label {
+    #'     color: #555 !important;
+    #'     font-size: 11px !important;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      TABLA + INFORMACIÓN
+    #'      ========================================================= */
+    #' 
+    #'   .bottom-row {
+    #'     display: flex;
+    #'     align-items: flex-start;
+    #'     gap: 20px;
+    #'   }
+    #' 
+    #'   .table-column {
+    #'     width: 66.666%;
+    #'     min-width: 0;
+    #'   }
+    #' 
+    #'   .info-column {
+    #'     width: 33.333%;
+    #'     min-width: 0;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      NOTA IMPORTANTE
+    #'      ========================================================= */
+    #' 
+    #'   .info-card {
+    #'     background-color: #ffffff;
+    #'     color: #555;
+    #'     border-left: 4px solid #8a8c88;
+    #'     border-top: 1px solid #e1e4e6;
+    #'     border-right: 1px solid #e1e4e6;
+    #'     border-bottom: 1px solid #e1e4e6;
+    #'     border-radius: 6px;
+    #'     padding: 18px 20px;
+    #'     margin-bottom: 20px;
+    #'     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    #'   }
+    #' 
+    #'   .info-card-title {
+    #'     font-size: 15px;
+    #'     font-weight: 600;
+    #'     color: #3e3f3a;
+    #'     margin-top: 0;
+    #'     margin-bottom: 8px;
+    #'   }
+    #' 
+    #'   .info-card p {
+    #'     font-size: 13px;
+    #'     color: #555;
+    #'     line-height: 1.5;
+    #'     margin-bottom: 0;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      FUENTE
+    #'      ========================================================= */
+    #' 
+    #'   .source-card {
+    #'     background-color: #f5f6f6;
+    #'     border-left: 4px solid #3e3f3a;
+    #'     border-radius: 6px;
+    #'     padding: 18px 20px;
+    #'   }
+    #' 
+    #'   .source-card-title {
+    #'     font-size: 15px;
+    #'     font-weight: 600;
+    #'     color: #3e3f3a;
+    #'     margin-top: 0;
+    #'     margin-bottom: 8px;
+    #'   }
+    #' 
+    #'   .source-card p {
+    #'     font-size: 13px;
+    #'     color: #555;
+    #'     line-height: 1.5;
+    #'     margin-bottom: 0;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      LINKS
+    #'      ========================================================= */
+    #' 
+    #'   .source-link {
+    #'     color: #555 !important;
+    #'     text-decoration: none !important;
+    #'   }
+    #' 
+    #'   .source-link:hover {
+    #'     color: #3e3f3a !important;
+    #'     text-decoration: underline !important;
+    #'   }
+    #' 
+    #' 
+    #'   /* =========================================================
+    #'      RESPONSIVE
+    #'      ========================================================= */
+    #' 
+    #'   @media (max-width: 900px) {
+    #' 
+    #'     .homi-edad-container {
+    #'       padding: 10px;
+    #'     }
+    #' 
+    #'     .filters-row {
+    #'       flex-direction: column;
+    #'       align-items: stretch;
+    #'     }
+    #' 
+    #'     .filter-box,
+    #'     .filter-switch {
+    #'       width: 100%;
+    #'       min-width: 0;
+    #'     }
+    #' 
+    #'     .bottom-row {
+    #'       flex-direction: column;
+    #'     }
+    #' 
+    #'     .table-column,
+    #'     .info-column {
+    #'       width: 100%;
+    #'     }
+    #' 
+    #'   }
+    #' 
+    #' "))
+    #'   ),
+    #' 
+    #' 
+    #'   div(
+    #'     class = "homi-edad-container",
+    #' 
+    #' 
+    #'     # ==========================================================
+    #'     # GRÁFICA
+    #'     # ==========================================================
+    #' 
+    #'     div(
+    #'       class = "dashboard-card plot-card",
+    #' 
+    #'       div(
+    #'         id = "plot-title",
+    #'         uiOutput("plot_title_homiEdad")
+    #'       ),
+    #' 
+    #'       plotlyOutput(
+    #'         "barPlot_snmv",
+    #'         height = "calc(100vh - 350px)"
+    #'       )
+    #'     ),
+    #' 
+    #' 
+    #'     # ==========================================================
+    #'     # FILTROS
+    #'     # ==========================================================
+    #' 
+    #'     div(
+    #'       class = "dashboard-card filters-card",
+    #' 
+    #'       div(
+    #'         class = "dashboard-card-title",
+    #'         "Filtros"
+    #'       ),
+    #' 
+    #'       div(
+    #'         class = "filters-row",
+    #' 
+    #' 
+    #'         # --------------------------------------------------------
+    #'         # GRUPO DE EDAD
+    #'         # --------------------------------------------------------
+    #' 
+    #'         div(
+    #'           class = "filter-box",
+    #' 
+    #'           createPickerFilter(
+    #'             label = HTML("Seleccione<br>Grupo(s) de Edad:"),
+    #'             choices = homiEdad$Edad,
+    #'             selected = homiEdad$Edad,
+    #'             id = "snmv_homiEdad_edad"
+    #'           )
+    #' 
+    #'         ),
+    #' 
+    #' 
+    #'         # --------------------------------------------------------
+    #'         # AÑO
+    #'         # --------------------------------------------------------
+    #' 
+    #'         div(
+    #'           class = "filter-box",
+    #' 
+    #'           createPickerFilter(
+    #'             label = "Seleccione Año(s):",
+    #'             choices = homiEdad$Año,
+    #'             selected = NULL,
+    #'             id = "snmv_homiEdad_año"
+    #'           )
+    #' 
+    #'         ),
+    #' 
+    #' 
+    #'         # --------------------------------------------------------
+    #'         # MOSTRAR DATOS
+    #'         # --------------------------------------------------------
+    #' 
+    #'         div(
+    #'           class = "filter-switch",
+    #' 
+    #'           showDataToggle(
+    #'             inputId = "showTable_snmv"
+    #'           )
+    #' 
+    #'         )
+    #' 
+    #'       )
+    #'     ),
+    #' 
+    #' 
+    #'     # ==========================================================
+    #'     # TABLA + INFORMACIÓN
+    #'     # ==========================================================
+    #' 
+    #'     div(
+    #'       class = "bottom-row",
+    #' 
+    #' 
+    #'       # --------------------------------------------------------
+    #'       # TABLA - 2/3
+    #'       # --------------------------------------------------------
+    #' 
+    #'       div(
+    #'         class = "table-column",
+    #' 
+    #'         div(
+    #'           class = "dashboard-card",
+    #' 
+    #'           div(
+    #'             class = "dashboard-card-title",
+    #'             "Datos"
+    #'           ),
+    #' 
+    #'           uiOutput(
+    #'             "dataTableUI_snmv"
+    #'           )
+    #' 
+    #'         )
+    #'       ),
+    #' 
+    #' 
+    #'       # --------------------------------------------------------
+    #'       # INFORMACIÓN - 1/3
+    #'       # --------------------------------------------------------
+    #' 
+    #'       div(
+    #'         class = "info-column",
+    #' 
+    #' 
+    #'         # ======================================================
+    #'         # NOTA IMPORTANTE
+    #'         # ======================================================
+    #' 
+    #'         div(
+    #'           class = "info-card",
+    #' 
+    #'           h4(
+    #'             class = "info-card-title",
+    #'             actualizacion_snmv1
+    #'           ),
+    #' 
+    #'           p(
+    #'             "Los datos representados en esta gráfica corresponden a los
+    #'          homicidios de mujeres por grupo de edad desde el año natural
+    #'          2017 al 2024. Los datos del año 2024 al 2026 son preliminares."
+    #'           )
+    #' 
+    #'         ),
+    #' 
+    #' 
+    #'         # ======================================================
+    #'         # FUENTE
+    #'         # ======================================================
+    #' 
+    #'         div(
+    #'           class = "source-card",
+    #' 
+    #'           h4(
+    #'             class = "source-card-title",
+    #'             "Fuente de los datos"
+    #'           ),
+    #' 
+    #'           p(
+    #'             tags$a(
+    #'               href = "https://stacks.cdc.gov/view/cdc/149761",
+    #'               target = "_blank",
+    #'               rel = "noopener noreferrer",
+    #'               "Sistema Nacional de Notificación de Muertes Violentas, ",
+    #'               class = "source-link"
+    #'             ),
+    #' 
+    #'             tags$a(
+    #'               href = "https://estadisticas.pr/",
+    #'               target = "_blank",
+    #'               rel = "noopener noreferrer",
+    #'               "Instituto de Estadísticas de Puerto Rico",
+    #'               class = "source-link"
+    #'             )
+    #'           )
+    #' 
+    #'         )
+    #' 
+    #'       )
+    #' 
+    #'     )
+    #' 
+    #'   )
+    #' 
+    #' ),
 
-            # Selección de grupo de edad
-            column(
-              width = 4,
-              div(
-                style = "
-          display: flex;
-          justify-content: center;
-          align-items: center;
+ 
+    #### LAYOUT grafica y todo lo demas abajo tab con datos de Homicidios por grupo de Edad ####
+    tabPanel(
+      lowercaseTitle("Homicidios de mujeres por edad"),
+      
+      tags$head(
+        tags$style(HTML("
+    
+      /* =========================================================
+         CONTENEDOR GENERAL
+         ========================================================= */
+    
+      .homi-edad-container {
+        width: 100%;
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 10px 20px 30px 20px;
+      }
+    
+    
+      /* =========================================================
+         TARJETAS
+         ========================================================= */
+    
+      .dashboard-card {
+        background: #ffffff;
+        border: 1px solid #e1e4e6;
+        border-radius: 8px;
+        padding: 18px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      }
+    
+      .dashboard-card-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #3e3f3a;
+        margin-bottom: 15px;
+      }
+    
+    
+      /* =========================================================
+         GRÁFICA
+         ========================================================= */
+    
+      .plot-card {
+        padding: 15px 20px 10px 20px;
+      }
+    
+      #plot-title {
+        margin-bottom: 5px;
+      }
+    
+    
+      /* =========================================================
+         FILA INFERIOR
+         ========================================================= */
+    
+      .bottom-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+      }
+    
+      .table-column {
+        width: 66.666%;
+        min-width: 0;
+      }
+    
+      .info-column {
+        width: 33.333%;
+        min-width: 0;
+      }
+    
+    
+      /* =========================================================
+         FILTROS - COLUMNA DERECHA
+         ========================================================= */
+    
+      .filters-card {
+        padding: 16px 18px;
+      }
+    
+      .filter-box-right {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+    
+      .filter-switch-right {
+        width: 100%;
+        margin-top: 5px;
+      }
+    
+    
+      /* =========================================================
+         PICKER INPUT
+         ========================================================= */
+    
+      .bootstrap-select,
+      .bootstrap-select *,
+      .bootstrap-select .dropdown-toggle,
+      .bootstrap-select .filter-option,
+      .bootstrap-select .dropdown-menu,
+      .bootstrap-select .dropdown-menu li a,
+      .bootstrap-select .bs-actionsbox .btn {
+        text-transform: none !important;
+      }
+    
+      /* Botón principal del picker */
+      .bootstrap-select > .dropdown-toggle {
+        background-color: #ffffff !important;
+        border: 1px solid #d6d9db !important;
+        border-radius: 6px !important;
+        color: #555 !important;
+        font-size: 13px;
+        min-height: 38px;
+        box-shadow: none !important;
+        transition: all 0.2s ease;
+        text-transform: none !important;
+      }
+    
+      .bootstrap-select > .dropdown-toggle:hover,
+      .bootstrap-select > .dropdown-toggle:focus {
+        border-color: #9a9c99 !important;
+        box-shadow: 0 0 0 2px rgba(62,63,58,0.08) !important;
+      }
+    
+      /* Menú desplegable */
+      .bootstrap-select .dropdown-menu {
+        border: 1px solid #e1e4e6;
+        border-radius: 6px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.10);
+        text-transform: none !important;
+      }
+    
+      /* Opciones */
+      .bootstrap-select .dropdown-menu li a {
+        color: #555;
+        font-size: 13px;
+        padding: 8px 12px;
+        text-transform: none !important;
+      }
+    
+      .bootstrap-select .dropdown-menu li a:hover {
+        background-color: #f3f4f4;
+        color: #3e3f3a;
+      }
+    
+      .bootstrap-select .dropdown-menu li.selected a {
+        background-color: #eeeeed;
+        color: #3e3f3a;
+      }
+    
+      /* =========================================================
+         BOTONES:
+         SELECCIONAR TODO / DESELECCIONAR TODO
+         ========================================================= */
+    
+      .bootstrap-select .bs-actionsbox {
+        padding: 8px;
+      }
+    
+      .bootstrap-select .bs-actionsbox .btn {
+        font-size: 12px;
+        border-radius: 5px;
+        border: 1px solid #d5d7d8;
+        background: #f7f7f7;
+        color: #555;
+        transition: all 0.2s ease;
+        text-transform: none !important;
+      }
+    
+      .bootstrap-select .bs-actionsbox .btn:hover {
+        background: #e9eaea;
+        color: #3e3f3a;
+      }
+    
+    
+      /* =========================================================
+         SWITCH MOSTRAR DATOS
+         ========================================================= */
+    
+      .custom-checkbox-wrapper {
+        height: auto;
+        display: flex;
+        align-items: center;
+        padding-top: 0;
+      }
+    
+      .custom-checkbox-wrapper .material-switch {
+        margin-bottom: 0;
+      }
+    
+      .custom-checkbox-wrapper label {
+        color: #555 !important;
+        font-size: 11px !important;
+      }
+    
+    
+      /* =========================================================
+         NOTA IMPORTANTE
+         ========================================================= */
+    
+      .info-card {
+        background-color: #ffffff;
+        color: #555;
+        border-left: 4px solid #8a8c88;
+        border-top: 1px solid #e1e4e6;
+        border-right: 1px solid #e1e4e6;
+        border-bottom: 1px solid #e1e4e6;
+        border-radius: 6px;
+        padding: 18px 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      }
+    
+      .info-card-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #3e3f3a;
+        margin-top: 0;
+        margin-bottom: 8px;
+      }
+    
+      .info-card p {
+        font-size: 13px;
+        color: #555;
+        line-height: 1.5;
+        margin-bottom: 0;
+      }
+    
+    
+      /* =========================================================
+         FUENTE
+         ========================================================= */
+    
+      .source-card {
+        background-color: #f5f6f6;
+        border-left: 4px solid #3e3f3a;
+        border-radius: 6px;
+        padding: 18px 20px;
+      }
+    
+      .source-card-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #3e3f3a;
+        margin-top: 0;
+        margin-bottom: 8px;
+      }
+    
+      .source-card p {
+        font-size: 13px;
+        color: #555;
+        line-height: 1.5;
+        margin-bottom: 0;
+      }
+    
+    
+      /* =========================================================
+         LINKS
+         ========================================================= */
+    
+      .source-link {
+        color: #555 !important;
+        text-decoration: none !important;
+      }
+    
+      .source-link:hover {
+        color: #3e3f3a !important;
+        text-decoration: underline !important;
+      }
+    
+    
+      /* =========================================================
+         RESPONSIVE
+         ========================================================= */
+    
+      @media (max-width: 900px) {
+    
+        .homi-edad-container {
+          padding: 10px;
+        }
+    
+        .bottom-row {
+          flex-direction: column;
+        }
+    
+        .table-column,
+        .info-column {
           width: 100%;
-          height: 100%;
-        ",
-
-                createDropdownCheckbox(
+        }
+    
+      }
+    
+    "))
+      ),
+      
+      
+      div(
+        class = "homi-edad-container",
+        
+        
+        # ==========================================================
+        # GRÁFICA
+        # ==========================================================
+        
+        div(
+          class = "dashboard-card plot-card",
+          
+          div(
+            id = "plot-title",
+            uiOutput("plot_title_homiEdad")
+          ),
+          
+          plotlyOutput(
+            "barPlot_snmv",
+            height = "calc(100vh - 350px)"
+          )
+        ),
+        
+        
+        # ==========================================================
+        # TABLA + COLUMNA DERECHA
+        # ==========================================================
+        
+        div(
+          class = "bottom-row",
+          
+          
+          # ========================================================
+          # TABLA - 2/3
+          # ========================================================
+          
+          div(
+            class = "table-column",
+            
+            div(
+              class = "dashboard-card",
+              
+              div(
+                class = "dashboard-card-title",
+                "Datos"
+              ),
+              
+              uiOutput(
+                "dataTableUI_snmv"
+              )
+              
+            )
+          ),
+          
+          
+          # ========================================================
+          # COLUMNA DERECHA - 1/3
+          # ========================================================
+          
+          div(
+            class = "info-column",
+            
+            
+            # ======================================================
+            # FILTROS
+            # ======================================================
+            
+            div(
+              class = "dashboard-card filters-card",
+              
+              div(
+                class = "dashboard-card-title",
+                "Filtros"
+              ),
+              
+              
+              # ----------------------------------------------------
+              # GRUPO DE EDAD
+              # ----------------------------------------------------
+              
+              div(
+                class = "filter-box-right",
+                
+                createPickerFilter(
                   label = HTML("Seleccione<br>Grupo(s) de Edad:"),
                   choices = homiEdad$Edad,
                   selected = homiEdad$Edad,
                   id = "snmv_homiEdad_edad"
                 )
-              )
-            ),
-
-            # Selección de año
-            column(
-              width = 4,
+                
+              ),
+              
+              
+              # ----------------------------------------------------
+              # AÑO
+              # ----------------------------------------------------
+              
               div(
-                style = "
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-          height: 100%;
-        ",
-
-                createDropdownCheckbox(
+                class = "filter-box-right",
+                
+                createPickerFilter_añoFiscal(
                   label = "Seleccione Año(s):",
                   choices = homiEdad$Año,
                   selected = NULL,
                   id = "snmv_homiEdad_año"
                 )
-              )
-            ),
-
-            # Mostrar tabla
-            column(
-              width = 4,
-              div(
-                style = "
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-          height: 100%;
-        ",
-
-                showDataCheckbox("showTable_snmv")
-              )
-            )
-          ),
-
-          br(),
-
-
-
-          # ==========================================================
-          # SECCIÓN PRINCIPAL CON EL GRÁFICO
-          # ==========================================================
-
-          fluidRow(
-            column(
-              width = 12,
-
-              div(
-                id = "scrollable-plot",
-
-                div(
-                  id = "plot-title",
-                  uiOutput("plot_title_homiEdad")
-                ),
-
-                plotlyOutput(
-                  "barPlot_snmv",
-                  height = "calc(100vh - 350px)"
-                )
-              )
-            )
-          ),
-
-          tags$div(
-            style = "padding-bottom: 10px;"
-          ),
-
-          # ==========================================================
-          # OUTPUT UI PARA LA TABLA
-          # ==========================================================
-
-          uiOutput("dataTableUI_snmv"),
-
-          # ==========================================================
-          # NOTA / INFORMACIÓN DE ACTUALIZACIÓN
-          # ==========================================================
-
-          tags$div(
-            style = "padding-bottom: 10px;",
-
-            div(
-              class = "card",
-              style = "
-        padding: 15px;
-        color: white;
-        background-color: #3e3f3a;
-        border-radius: 5px;
-        margin-top: 0;
-        width: 100%;
-      ",
-
-              h4(
-                strong(
-                  actualizacion_snmv1,
-                  style = "margin: 0px;"
-                )
+                
               ),
-
+              
+              
+              # ----------------------------------------------------
+              # MOSTRAR DATOS
+              # ----------------------------------------------------
+              
+              div(
+                class = "filter-switch-right",
+                
+                showDataToggle(
+                  inputId = "showTable_snmv"
+                )
+                
+              )
+              
+            ),
+            
+            
+            # ======================================================
+            # NOTA IMPORTANTE
+            # ======================================================
+            
+            div(
+              class = "info-card",
+              
+              h4(
+                class = "info-card-title",
+                actualizacion_snmv1
+              ),
+              
               p(
                 "Los datos representados en esta gráfica corresponden a los
-        homicidios de mujeres por grupo de edad desde el año natural 2017 al 2024.
-        Los datos del año 2024 al 2026 son preliminares.",
-
-                style = "font-size: 16px; padding: 0px;"
+             homicidios de mujeres por grupo de edad desde el año natural
+             2017 al 2024. Los datos del año 2024 al 2026 son preliminares."
               )
+              
+            ),
+            
+            
+            # ======================================================
+            # FUENTE DE LOS DATOS
+            # ======================================================
+            
+            div(
+              class = "source-card",
+              
+              h4(
+                class = "source-card-title",
+                "Fuente de los datos"
+              ),
+              
+              p(
+                tags$a(
+                  href = "https://stacks.cdc.gov/view/cdc/149761",
+                  target = "_blank",
+                  rel = "noopener noreferrer",
+                  "Sistema Nacional de Notificación de Muertes Violentas, ",
+                  class = "source-link"
+                ),
+                
+                tags$a(
+                  href = "https://estadisticas.pr/",
+                  target = "_blank",
+                  rel = "noopener noreferrer",
+                  "Instituto de Estadísticas de Puerto Rico",
+                  class = "source-link"
+                )
+              )
+              
             )
+            
           )
-        ),
-
-
+          
+        )
+        
+      )
+      
+    ),
+   
 
         #### tab con datos de Incidentes segun el año ####
         tabPanel(
