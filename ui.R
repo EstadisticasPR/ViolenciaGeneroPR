@@ -3,46 +3,97 @@ cat("Loading User Interface from ui.R...\n")
 source("global.R")
 ui <- 
   fluidPage(
+    
+  # HOJA DE ESTILOS GLOBAL
+  tags$head(
+    
+    # HOJA DE ESTILOS GLOBAL
+    tags$link(
+      rel = "stylesheet",
+      type = "text/css",
+      href = "styles.css"
+    ),
+    
+    
+    # MANEJADORES GLOBALES DE LOS MAPAS LEAFLET
+    tags$script(
+      src = "map-handlers.js"
+    )
+    
+  ),
+  
   ### El theme (colores) de la app ###
   theme = shinytheme("sandstone"),
   
-  #### HTML ####
   tags$style(HTML("
-                    #scrollable-plot {
-                    overflow-y: scroll;
-                    height: 500px;
-                    }
-                    #plot-title {
-                    family: Arial; 
-                    color: black;
-                    text-align: center;
-                    font-size: 16px;
-                    margin-bottom: 1px;
-                    }
-                  ")),
+
+    #scrollable-plot {
+      overflow-y: scroll;
+      height: 500px;
+    }
+
+    #plot-title {
+      font-family: Arial;
+      color: black;
+      text-align: center;
+      font-size: 16px;
+      margin-bottom: 1px;
+    }
+
+  ")),
   
   tags$script(HTML("
-    $(document).on('change', '#showTable_snmv', function() {
-  
-      if ($(this).is(':checked')) {
-        $('.bottom-row').addClass('show-table');
-      } else {
-        $('.bottom-row').removeClass('show-table');
-      }
-  
+
+    // --------------------------------------------------------
+    // MOSTRAR / OCULTAR TABLA
+    // --------------------------------------------------------
+
+    $(document).on('change', '[id^=\"showTable_\"]', function() {
+
+      var $toggle = $(this);
+
+      // Buscar únicamente el tab donde está este switch
+      var $tab = $toggle.closest('.tab-pane');
+
+      // Buscar la fila de tabla correspondiente a ese tab
+      var $bottomRow = $tab.find('.bottom-row');
+
+      // Mostrar / ocultar tabla
+      $bottomRow.toggleClass(
+        'show-table',
+        $toggle.is(':checked')
+      );
+
     });
-  
-    // Verificar el estado inicial al cargar la página
+
+
+    // --------------------------------------------------------
+    // VERIFICAR ESTADO INICIAL
+    // --------------------------------------------------------
+
     $(document).ready(function() {
-  
-      if ($('#showTable_snmv').is(':checked')) {
-        $('.bottom-row').addClass('show-table');
-      } else {
-        $('.bottom-row').removeClass('show-table');
-      }
-  
+
+      $('[id^=\"showTable_\"]').each(function() {
+
+        var $toggle = $(this);
+
+        var $tab = $toggle.closest('.tab-pane');
+
+        var $bottomRow = $tab.find('.bottom-row');
+
+        $bottomRow.toggleClass(
+          'show-table',
+          $toggle.is(':checked')
+        );
+
+      });
+
     });
+
   ")),
+  
+  
+  
   
   
   #### Encabezado ####
@@ -108,12 +159,12 @@ ui <-
         # tabPanel(
         #   lowercaseTitle("Homicidios de mujeres por edad"),
         #   br(), br(),
-        #
+        # 
         #   # Menu sidebar con widgets
         #     sidebarLayout(
         #       sidebarPanel(
         #         style = "display: flex; flex-direction: column; align-items: center;",
-        #
+        # 
         #         # Seleccionar valor de la variable
         #         div(
         #           style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",
@@ -127,12 +178,12 @@ ui <-
         #             )
         #           )
         #         ),
-        #
+        # 
         #         div(
         #           style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
         #           div(
         #             style = "width: 100%; display: flex; justify-content: space-between; align-items: center;",
-        #
+        # 
         #             div(
         #               style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
         #               createDropdownCheckbox(
@@ -148,12 +199,12 @@ ui <-
         #             )
         #           )
         #         ),
-        #
+        # 
         #         # Output UI para la tabla de datos
         #         uiOutput("dataTableUI_snmv")
         #       ),
-        #
-        #
+        # 
+        # 
         #     # Sección principal con los gráficos
         #     mainPanel(
         #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
@@ -176,7 +227,7 @@ ui <-
         #             "Los datos representados en esta gráfica corresponden a los
         #             homicidios de mujeres por grupo de edad desde el año natural 2017 al 2024.
         #             Los datos del año 2024 al 2026 son preliminares.",
-        #
+        # 
         #             style = "font-size: 16px; padding: 0px;"
         #           )
         #         )
@@ -184,783 +235,102 @@ ui <-
         #     )
         #   )
         # ),
-
-
-      #
-      #   #### tab con datos de Homicidios por grupo de Edad ####
-      #   tabPanel(
-      #     lowercaseTitle("Homicidios de mujeres por edad"),
-      #     br(), br(),
-      #
-      #     # ==========================================================
-      #     # CONTROLES ARRIBA DEL MAIN PANEL
-      #     # ==========================================================
-      #
-      #     fluidRow(
-      #
-      #       # Selección de grupo de edad
-      #       column(
-      #         width = 4,
-      #         div(
-      #           style = "
-      #     display: flex;
-      #     justify-content: center;
-      #     align-items: center;
-      #     width: 100%;
-      #     height: 100%;
-      #   ",
-      #
-      #           createDropdownCheckbox(
-      #             label = HTML("Seleccione<br>Grupo(s) de Edad:"),
-      #             choices = homiEdad$Edad,
-      #             selected = homiEdad$Edad,
-      #             id = "snmv_homiEdad_edad"
-      #           )
-      #         )
-      #       ),
-      #
-      #       # Selección de año
-      #       column(
-      #         width = 4,
-      #         div(
-      #           style = "
-      #     display: flex;
-      #     justify-content: center;
-      #     align-items: center;
-      #     width: 100%;
-      #     height: 100%;
-      #   ",
-      #
-      #           createDropdownCheckbox(
-      #             label = "Seleccione Año(s):",
-      #             choices = homiEdad$Año,
-      #             selected = NULL,
-      #             id = "snmv_homiEdad_año"
-      #           )
-      #         )
-      #       ),
-      #
-      #       # Mostrar tabla
-      #       column(
-      #         width = 4,
-      #         div(
-      #           style = "
-      #     display: flex;
-      #     justify-content: center;
-      #     align-items: center;
-      #     width: 100%;
-      #     height: 100%;
-      #   ",
-      #
-      #           showDataCheckbox("showTable_snmv")
-      #         )
-      #       )
-      #     ),
-      #
-      #     br(),
-      #
-      #
-      #
-      #     # ==========================================================
-      #     # SECCIÓN PRINCIPAL CON EL GRÁFICO
-      #     # ==========================================================
-      #
-      #     fluidRow(
-      #       column(
-      #         width = 12,
-      #
-      #         div(
-      #           id = "scrollable-plot",
-      #
-      #           div(
-      #             id = "plot-title",
-      #             uiOutput("plot_title_homiEdad")
-      #           ),
-      #
-      #           plotlyOutput(
-      #             "barPlot_snmv",
-      #             height = "calc(100vh - 350px)"
-      #           )
-      #         )
-      #       )
-      #     ),
-      #
-      #     tags$div(
-      #       style = "padding-bottom: 10px;"
-      #     ),
-      #
-      #     # ==========================================================
-      #     # OUTPUT UI PARA LA TABLA
-      #     # ==========================================================
-      #
-      #     uiOutput("dataTableUI_snmv"),
-      #
-      #     # ==========================================================
-      #     # NOTA / INFORMACIÓN DE ACTUALIZACIÓN
-      #     # ==========================================================
-      #
-      #     tags$div(
-      #       style = "padding-bottom: 10px;",
-      #
-      #       div(
-      #         class = "card",
-      #         style = "
-      #   padding: 15px;
-      #   color: white;
-      #   background-color: #3e3f3a;
-      #   border-radius: 5px;
-      #   margin-top: 0;
-      #   width: 100%;
-      # ",
-      #
-      #         h4(
-      #           strong(
-      #             actualizacion_snmv1,
-      #             style = "margin: 0px;"
-      #           )
-      #         ),
-      #
-      #         p(
-      #           "Los datos representados en esta gráfica corresponden a los
-      #   homicidios de mujeres por grupo de edad desde el año natural 2017 al 2024.
-      #   Los datos del año 2024 al 2026 son preliminares.",
-      #
-      #           style = "font-size: 16px; padding: 0px;"
-      #         )
-      #       )
-      #     )
-      #   ),
-      #
-
+        # 
 
     
     #' #### LAYOUT grafica, filtros, datos y nota importante tab con datos de Homicidios por grupo de Edad ####
     tabPanel(
       lowercaseTitle("Homicidios de mujeres por edad"),
-
-      tags$head(
-        tags$style(HTML("
-
-      /* =========================================================
-         CONTENEDOR GENERAL
-         ========================================================= */
-
-      .homi-edad-container {
-        width: 100%;
-        max-width: 1600px;
-        margin: 0 auto;
-        padding: 10px 20px 30px 20px;
-      }
-
-
-      /* =========================================================
-         TARJETAS
-         ========================================================= */
-
-      .dashboard-card {
-        background: #ffffff;
-        border: 1px solid #e1e4e6;
-        border-radius: 8px;
-        padding: 18px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      }
-
-      .dashboard-card-title {
-        font-size: 15px;
-        font-weight: 600;
-        color: #3e3f3a;
-        margin-bottom: 15px;
-      }
-
-
-      /* =========================================================
-         GRÁFICA
-         ========================================================= */
-
-      .plot-card {
-        padding: 15px 20px 10px 20px;
-      }
-
-      #plot-title {
-        margin-bottom: 5px;
-      }
-
-      /* =========================================================
-         FILA DE FILTROS
-         ========================================================= */
-      
-      .filters-row {
-        display: flex;
-        align-items: flex-end;
-        gap: 15px;
-      }
-      
-      
-      /* =========================================================
-         ICONO DE FILTRADO
-         ========================================================= */
-      
-      .filter-icon {
-        flex: 0 0 35px;
-        width: 35px;
-        height: 38px;
-      
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      
-        color: #555;
-        font-size: 16px;
-      
-        margin-bottom: 0;
-      }
-      
-      .filter-icon i {
-        font-size: 15px;
-      }
-      
-      
-      /* =========================================================
-         CAJAS DE FILTRO
-         ========================================================= */
-      
-      .filter-box {
-        flex: 1;
-        min-width: 0;
-      }
-      
-      .filter-switch {
-        flex: 0 0 180px;
-        min-width: 180px;
-      }
-      
-      
-      /* =========================================================
-         TEXTO DE LOS PICKERS
-         ========================================================= */
-      
-      /* Evita que Bootstrap convierta el texto en mayúsculas */
-      
-      .bootstrap-select,
-      .bootstrap-select *,
-      .bootstrap-select .dropdown-toggle,
-      .bootstrap-select .filter-option,
-      .bootstrap-select .dropdown-menu,
-      .bootstrap-select .dropdown-menu li a,
-      .bootstrap-select .bs-actionsbox .btn {
-        text-transform: none !important;
-      }
-      
-      
-      /* =========================================================
-         BOTONES SELECCIONAR / DESELECCIONAR
-         ========================================================= */
-      
-      .bootstrap-select .bs-actionsbox .btn {
-        text-transform: none !important;
-        font-size: 12px;
-        border-radius: 5px;
-        border: 1px solid #d5d7d8;
-        background: #f7f7f7;
-        color: #555;
-        transition: all 0.2s ease;
-      }
-      
-      .bootstrap-select .bs-actionsbox .btn:hover {
-        background: #e9eaea;
-        color: #3e3f3a;
-      }
-      
-      
-      /* =========================================================
-         TEXTO seleccionados
-         ========================================================= */
-      
-      .bootstrap-select .filter-option-inner-inner {
-        text-transform: none !important;
-      }
-      
-      
-      /* =========================================================
-         RESPONSIVE
-         ========================================================= */
-      
-      @media (max-width: 900px) {
-      
-          .filters-row {
-          flex-direction: column;
-          align-items: stretch;
-          gap: 8px;
-        }
-      
-        .filter-icon {
-          width: 100%;
-          height: 25px;
-          justify-content: flex-start;
-        }
-      
-        .filter-box,
-        .filter-switch {
-          width: 100%;
-          min-width: 0;
-        }
-      
-        /* Elimina el espacio adicional del switch en celular */
-        .custom-checkbox-wrapper {
-          padding-top: 0 !important;
-          height: auto;
-        }
-      
-      }
-
-      /* =========================================================
-         PICKER INPUT
-         ========================================================= */
-
-      .bootstrap-select > .dropdown-toggle {
-        background-color: #ffffff !important;
-        border: 1px solid #d6d9db !important;
-        border-radius: 6px !important;
-        color: #555 !important;
-        font-size: 13px;
-        min-height: 38px;
-        box-shadow: none !important;
-        transition: all 0.2s ease;
-      }
-
-      .bootstrap-select > .dropdown-toggle:hover,
-      .bootstrap-select > .dropdown-toggle:focus {
-        border-color: #9a9c99 !important;
-        box-shadow: 0 0 0 2px rgba(62,63,58,0.08) !important;
-      }
-
-      .bootstrap-select .dropdown-menu {
-        border: 1px solid #e1e4e6;
-        border-radius: 6px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.10);
-      }
-
-      .bootstrap-select .dropdown-menu li a {
-        color: #555;
-        font-size: 13px;
-        padding: 8px 12px;
-      }
-
-      .bootstrap-select .dropdown-menu li a:hover {
-        background-color: #f3f4f4;
-        color: #3e3f3a;
-      }
-
-      .bootstrap-select .dropdown-menu li.selected a {
-        background-color: #eeeeed;
-        color: #3e3f3a;
-      }
-
-      .bootstrap-select .bs-actionsbox {
-        padding: 8px;
-      }
-
-      .bootstrap-select .bs-actionsbox .btn {
-        font-size: 12px;
-        border-radius: 5px;
-        border: 1px solid #d5d7d8;
-        background: #f7f7f7;
-        color: #555;
-        transition: all 0.2s ease;
-      }
-
-      .bootstrap-select .bs-actionsbox .btn:hover {
-        background: #e9eaea;
-        color: #3e3f3a;
-      }
-
-
-      /* =========================================================
-         SWITCH MOSTRAR DATOS
-         ========================================================= */
-
-      .custom-checkbox-wrapper {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        padding-top: 20px;
-      }
-
-      .custom-checkbox-wrapper .material-switch {
-        margin-bottom: 0;
-      }
-
-      .custom-checkbox-wrapper label {
-        color: #555 !important;
-        font-size: 11px !important;
-      }
-
-
-      /* =========================================================
-       TABLA + INFORMACIÓN
-         ========================================================= */
-      
-      .bottom-row {
-        display: flex;
-        align-items: flex-start;
-        gap: 20px;
-        width: 100%;
-      }
-      
-      /* ---------------------------------------------------------
-         TABLA
-         --------------------------------------------------------- */
-      
-      .bottom-row > #dataTableUI_snmv {
-        width: 0;
-        flex: 0 0 0;
-        min-width: 0;
-        overflow: hidden;
-      }
-      
-      /* ---------------------------------------------------------
-         INFORMACIÓN
-         --------------------------------------------------------- */
-      
-      .info-column {
-        width: 100%;
-        flex: 0 0 100%;
-        min-width: 0;
-      }
-      
-      /* =========================================================
-         CUANDO SE MUESTRA LA TABLA
-         ========================================================= */
-      
-      .bottom-row.show-table > #dataTableUI_snmv {
-        width: 66.666%;
-        flex: 0 0 66.666%;
-        min-width: 0;
-        overflow: visible;
-      }
-      
-      .bottom-row.show-table .info-column {
-        width: 33.333%;
-        flex: 0 0 33.333%;
-      }
-      
-      
-      /* =========================================================
-         TABLA RESPONSIVE
-         ========================================================= */
-      
-      #dataTableUI_snmv {
-        max-width: 100%;
-      }
-      
-      #dataTableUI_snmv .dataTables_wrapper {
-        width: 100% !important;
-        max-width: 100% !important;
-      }
-      
-      #dataTableUI_snmv table.dataTable {
-        width: 100% !important;
-      }
-      
-      
-      /* =========================================================
-         RESPONSIVE
-         ========================================================= */
-      
-      @media (max-width: 900px) {
-      
-        .bottom-row {
-          flex-direction: column;
-          gap: 15px;
-        }
-      
-        .bottom-row.show-table > #dataTableUI_snmv,
-        .bottom-row.show-table .info-column,
-        .info-column {
-          width: 100%;
-          flex: 0 0 100%;
-        }
-      
-        #dataTableUI_snmv {
-          width: 100%;
-          overflow-x: auto;
-        }
-      
-      }
-
-
-      /* =========================================================
-         NOTA IMPORTANTE
-         ========================================================= */
-
-      .info-card {
-        background-color: #ffffff;
-        color: #555;
-        border-left: 4px solid #8a8c88;
-        border-top: 1px solid #e1e4e6;
-        border-right: 1px solid #e1e4e6;
-        border-bottom: 1px solid #e1e4e6;
-        border-radius: 6px;
-        padding: 18px 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      }
-
-      .info-card-title {
-        font-size: 15px;
-        font-weight: 600;
-        color: #3e3f3a;
-        margin-top: 0;
-        margin-bottom: 8px;
-      }
-
-      .info-card p {
-        font-size: 13px;
-        color: #555;
-        line-height: 1.5;
-        margin-bottom: 0;
-      }
-
-
-      /* =========================================================
-         FUENTE
-         ========================================================= */
-
-      .source-card {
-        background-color: #f5f6f6;
-        border-left: 4px solid #3e3f3a;
-        border-radius: 6px;
-        padding: 18px 20px;
-      }
-
-      .source-card-title {
-        font-size: 15px;
-        font-weight: 600;
-        color: #3e3f3a;
-        margin-top: 0;
-        margin-bottom: 8px;
-      }
-
-      .source-card p {
-        font-size: 13px;
-        color: #555;
-        line-height: 1.5;
-        margin-bottom: 0;
-      }
-
-
-      /* =========================================================
-         LINKS
-         ========================================================= */
-
-      .source-link {
-        color: #555 !important;
-        text-decoration: none !important;
-      }
-
-      .source-link:hover {
-        color: #3e3f3a !important;
-        text-decoration: underline !important;
-      }
-
-
-      /* =========================================================
-         RESPONSIVE
-         ========================================================= */
-
-      @media (max-width: 900px) {
-
-        .homi-edad-container {
-          padding: 10px;
-        }
-
-        .filters-row {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .filter-box,
-        .filter-switch {
-          width: 100%;
-          min-width: 0;
-        }
-
-        .bottom-row {
-          flex-direction: column;
-        }
-
-        .table-column,
-        .info-column {
-          width: 100%;
-        }
-
-      }
-
-    "))
-      ),
-
-
+      # CONTENEDOR GENERAL
       div(
-        class = "homi-edad-container",
-
-
-        # ==========================================================
+        class = "dashboard-container",
         # GRÁFICA
-        # ==========================================================
-
         div(
           class = "dashboard-card plot-card",
-
+          
           div(
             id = "plot-title",
             uiOutput("plot_title_homiEdad")
           ),
-
+          
           plotlyOutput(
             "barPlot_snmv",
             height = "calc(100vh - 350px)"
           )
         ),
-
-
-        # ==========================================================
         # FILTROS
-        # ==========================================================
-
         div(
           class = "dashboard-card filters-card",
-
+          
           div(
             class = "filters-row",
-
-
-            # --------------------------------------------------------
             # GRUPO DE EDAD
-            # --------------------------------------------------------
-
             div(
               class = "filter-box",
-
+              
               createPickerFilter(
                 label = HTML("Seleccione<br>Grupo(s) de Edad:"),
                 choices = homiEdad$Edad,
                 selected = homiEdad$Edad,
                 id = "snmv_homiEdad_edad"
               )
-
             ),
-
-
-            # --------------------------------------------------------
             # AÑO
-            # --------------------------------------------------------
-
             div(
               class = "filter-box",
-
+              
               createPickerFilter(
                 label = "Seleccione Año(s):",
                 choices = homiEdad$Año,
                 selected = NULL,
                 id = "snmv_homiEdad_año"
               )
-
             ),
-
-
-            # --------------------------------------------------------
             # MOSTRAR DATOS
-            # --------------------------------------------------------
-
             div(
               class = "filter-switch",
-
+              
               showDataToggle(
                 inputId = "showTable_snmv"
               )
-
             )
-
+            
           )
         ),
-
-
-        # ==========================================================
         # TABLA + INFORMACIÓN
-        # ==========================================================
-
         div(
           class = "bottom-row",
-
-
-          # --------------------------------------------------------
-          # TABLA - 2/3
-          # --------------------------------------------------------
-
-          # div(
-          #   class = "table-column",
-          # 
-          #   div(
-          #     class = "dashboard-card",
-          # 
-          #     div(
-          #       class = "dashboard-card-title",
-          #       "Datos"
-          #     ),
-          # 
-          #     uiOutput(
-          #       "dataTableUI_snmv"
-          #     )
-          # 
-          #   )
-          # ),
+          # TABLA
           uiOutput(
             "dataTableUI_snmv"
           ),
-
-
-          # --------------------------------------------------------
-          # INFORMACIÓN - 1/3
-          # --------------------------------------------------------
-
+          # INFORMACIÓN
           div(
             class = "info-column",
-
-
-            # ======================================================
             # NOTA IMPORTANTE
-            # ======================================================
-
             div(
               class = "info-card",
-
+              
               h4(
                 class = "info-card-title",
                 actualizacion_snmv1
               ),
-
+              
               p(
                 "Los datos representados en esta gráfica corresponden a los
-             homicidios de mujeres por grupo de edad desde el año natural
-             2017 al 2024. Los datos del año 2024 al 2026 son preliminares."
+            homicidios de mujeres por grupo de edad desde el año natural
+            2017 al 2024. Los datos del año 2024 al 2026 son preliminares."
               )
-
             ),
-
-
-            # ======================================================
             # FUENTE
-            # ======================================================
-
             div(
               class = "source-card",
-
+              
               h4(
                 class = "source-card-title",
                 "Fuente de los datos"
               ),
-
+              
               p(
                 tags$a(
                   href = "https://stacks.cdc.gov/view/cdc/149761",
@@ -969,7 +339,7 @@ ui <-
                   "Sistema Nacional de Notificación de Muertes Violentas, ",
                   class = "source-link"
                 ),
-
+                
                 tags$a(
                   href = "https://estadisticas.pr/",
                   target = "_blank",
@@ -978,15 +348,12 @@ ui <-
                   class = "source-link"
                 )
               )
-
             )
-
+            
           )
-
         )
-
+        
       )
-
     ),
 
  
@@ -1800,69 +1167,798 @@ ui <-
         #### tab para el mapa de Adminsitración de Vivienda Públicas (mapaAvp) ####
         tabPanel(
           lowercaseTitle("Mapas de viviendas públicas solicitadas y asignadas"),
-          br(), br(),
-          # Menu sidebar con widgets
-          sidebarLayout(
-            sidebarPanel(
-              # botón para seleccionar filtrado
-              selectInput("select_avp_mapaAvp_visualizacion", "Seleccione Visualización:",
-                          choices = c("Región", "Municipios"),
-                          selected = "Región"),
-
-              # Botón para seleccionar el año
-              selectInput("select_avp_mapaAvp_año", "Seleccione Año:",
-                          choices = levels(mapaAvp$Año),
-                          selected = 1),
-              
-              # Centrar el checkbox y la tabla
-              div(
-                style = "flex: 0.7; display: flex; justify-content: center;",
-                
-                # Checkbox para mostrar/ocultar la tabla de datos
-                showDataCheckbox("showTable_avp_mapaAvp"),
-                ),
-                # Output UI para la tabla de datos
-                uiOutput("dataTableUI_avp_mapaAvp")
-              
-            ),
+          
+          div(
+            class = "dashboard-container",
             
-            # Sección principal con los gráficos
-            mainPanel(
-              fluidRow(
-                column(12, 
-                       div(id = "scrollable-plot", 
-                           div(id = "plot-title", uiOutput("plot_title_mapaAvp")),
-                           # Mapa 1: Solicitadas
-                           h5("Solicitadas", style = "text-align: center; margin-top: 10px;"),
-                           leafletOutput("map_avp_mapaAvp_solicitadas", height = "200px"),
-                           tags$div(style = "margin-top: 10px;"),
-                           # Mapa 2: Asignadas
-                           h5("Asignadas", style = "text-align: center; margin-top: 10px;"),
-                           leafletOutput("map_avp_mapaAvp_asignadas", height = "200px"),
-                           height = "100%"))
+            # =======================================================
+            # MAPAS
+            # =======================================================
+            
+            div(
+              class = "dashboard-card maps-card",
+              
+              div(
+                class = "plot-title",
+                uiOutput("plot_title_mapaAvp")
               ),
-              tags$div(style = "padding-bottom: 10px;"),
-              tags$div(
-                style = "padding-bottom: 10px;",
+              
+              div(
+                class = "map-section",
+                
                 div(
-                  class = "card",
-                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
-                  h4(
-                    strong(actualizacion_avp3, style="margin: 0px;") 
-                  ),
-                  p(
-                    "Los datos representados en este mapa corresponden al
-                    total de viviendas públicas solicitadas y asignadas por
-                    violencia doméstica por región de la Administración de Vivienda Pública
-                    desde el año natural 2017 al 2025.",
-                    
-                    style = "font-size: 16px;padding: 0px;" 
-                  )
+                  class = "map-title",
+                  "Solicitadas"
+                ),
+                
+                leafletOutput(
+                  "map_avp_mapaAvp_solicitadas",
+                  height = "350px",
+                  width = "100%"
+                )
+              ),
+              
+              div(
+                class = "map-section",
+                
+                div(
+                  class = "map-title",
+                  "Asignadas"
+                ),
+                
+                leafletOutput(
+                  "map_avp_mapaAvp_asignadas",
+                  height = "350px",
+                  width = "100%"
                 )
               )
+            ),
+            
+            
+            # =======================================================
+            # FILTROS
+            # =======================================================
+            
+            div(
+              class = "dashboard-card filters-card",
+              
+              div(
+                class = "filters-row",
+                
+                # div(
+                #   class = "filter-box",
+                #   
+                #   selectInput(
+                #     "select_avp_mapaAvp_visualizacion",
+                #     "Seleccione Visualización:",
+                #     choices = c(
+                #       "Región",
+                #       "Municipios"
+                #     ),
+                #     selected = "Región"
+                #   )
+                # ),
+                
+                div(
+                  class = "filter-box",
+                  
+                  selectInput(
+                    "select_avp_mapaAvp_año",
+                    "Seleccione Año:",
+                    choices = levels(mapaAvp$Año),
+                    selected = 1
+                  )
+                ),
+                
+                div(
+                  class = "filter-switch",
+                  
+                  showDataToggle(
+                    inputId = "showTable_avp_mapaAvp"
+                  )
+                )
+                
+              )
+            ),
+            
+            
+            # =======================================================
+            # TABLA + INFORMACIÓN
+            # =======================================================
+            
+            div(
+              class = "bottom-row",
+              
+              uiOutput(
+                "dataTableUI_avp_mapaAvp"
+              ),
+              
+              div(
+                class = "info-column",
+                
+                # NOTA IMPORTANTE
+                div(
+                  class = "info-card",
+                  
+                  h4(
+                    class = "info-card-title",
+                    actualizacion_avp3
+                  ),
+                  
+                  p(
+                    "Los datos representados en este mapa corresponden al
+            total de viviendas públicas solicitadas y asignadas por
+            violencia doméstica por región de la Administración de
+            Vivienda Pública desde el año natural 2017 al 2025."
+                  )
+                ),
+                
+                # FUENTE
+                div(
+                  class = "source-card",
+                  
+                  h4(
+                    class = "source-card-title",
+                    "Fuente de los datos"
+                  ),
+                  
+                  p(
+                    tags$a(
+                      href = "https://www.avp.pr.gov/",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Administración de Vivienda Pública",
+                      class = "source-link"
+                    )
+                  )
+                )
+                
+              )
             )
+            
           )
-        ), 
+        ),
+        
+        # tabPanel(
+        #   lowercaseTitle("Mapas de viviendas públicas solicitadas y asignadas"),
+        #   br(), br(),
+        #   # Menu sidebar con widgets
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       # botón para seleccionar filtrado
+        #       selectInput("select_avp_mapaAvp_visualizacion", "Seleccione Visualización:",
+        #                   choices = c("Región", "Municipios"),
+        #                   selected = "Región"),
+        # 
+        #       # Botón para seleccionar el año
+        #       selectInput("select_avp_mapaAvp_año", "Seleccione Año:",
+        #                   choices = levels(mapaAvp$Año),
+        #                   selected = 1),
+        #       
+        #       # Centrar el checkbox y la tabla
+        #       div(
+        #         style = "flex: 0.7; display: flex; justify-content: center;",
+        #         
+        #         # Checkbox para mostrar/ocultar la tabla de datos
+        #         showDataCheckbox("showTable_avp_mapaAvp"),
+        #         ),
+        #         # Output UI para la tabla de datos
+        #         uiOutput("dataTableUI_avp_mapaAvp")
+        #       
+        #     ),
+        #     
+        #     # Sección principal con los gráficos
+        #     mainPanel(
+        #       fluidRow(
+        #         column(12, 
+        #                div(id = "scrollable-plot", 
+        #                    div(id = "plot-title", uiOutput("plot_title_mapaAvp")),
+        #                    # Mapa 1: Solicitadas
+        #                    h5("Solicitadas", style = "text-align: center; margin-top: 10px;"),
+        #                    leafletOutput("map_avp_mapaAvp_solicitadas", height = "200px"),
+        #                    tags$div(style = "margin-top: 10px;"),
+        #                    # Mapa 2: Asignadas
+        #                    h5("Asignadas", style = "text-align: center; margin-top: 10px;"),
+        #                    leafletOutput("map_avp_mapaAvp_asignadas", height = "200px"),
+        #                    height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 10px;"),
+        #       tags$div(
+        #         style = "padding-bottom: 10px;",
+        #         div(
+        #           class = "card",
+        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+        #           h4(
+        #             strong(actualizacion_avp3, style="margin: 0px;") 
+        #           ),
+        #           p(
+        #             "Los datos representados en este mapa corresponden al
+        #             total de viviendas públicas solicitadas y asignadas por
+        #             violencia doméstica por región de la Administración de Vivienda Pública
+        #             desde el año natural 2017 al 2025.",
+        #             
+        #             style = "font-size: 16px;padding: 0px;" 
+        #           )
+        #         )
+        #       )
+        #     )
+        #   )
+        # ), 
+        
+    #'     tabPanel(
+    #'       lowercaseTitle("Mapas de viviendas públicas solicitadas y asignadas"),
+    #'       
+    #'       tags$head(
+    #'         tags$style(HTML("
+    #' 
+    #'   /* =========================================================
+    #'      CONTENEDOR GENERAL
+    #'      ========================================================= */
+    #'   
+    #'   .mapa-avp-container {
+    #'     width: 100%;
+    #'     max-width: 1600px;
+    #'     margin: 0 auto;
+    #'     padding: 10px 20px 30px 20px;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      TARJETAS
+    #'      ========================================================= */
+    #'   
+    #'   .dashboard-card {
+    #'     background: #ffffff;
+    #'     border: 1px solid #e1e4e6;
+    #'     border-radius: 8px;
+    #'     padding: 18px;
+    #'     margin-bottom: 20px;
+    #'     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    #'   }
+    #'   
+    #'   .dashboard-card-title {
+    #'     font-size: 15px;
+    #'     font-weight: 600;
+    #'     color: #3e3f3a;
+    #'     margin-bottom: 15px;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      TARJETA DE MAPAS
+    #'      ========================================================= */
+    #'   
+    #'   .maps-card {
+    #'     padding: 15px 20px 20px 20px;
+    #'   }
+    #'   
+    #'   #plot-title {
+    #'     margin-bottom: 15px;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      CONTENEDOR DE CADA MAPA
+    #'      ========================================================= */
+    #'   
+    #'   .map-section {
+    #'     width: 100%;
+    #'     margin-bottom: 20px;
+    #'   }
+    #'   
+    #'   .map-section:last-child {
+    #'     margin-bottom: 0;
+    #'   }
+    #'   
+    #'   .map-title {
+    #'     text-align: center;
+    #'     font-size: 15px;
+    #'     font-weight: 600;
+    #'     color: #3e3f3a;
+    #'     margin-top: 5px;
+    #'     margin-bottom: 8px;
+    #'   }
+    #'   
+    #'   .map-output {
+    #'     width: 100% !important;
+    #'     border-radius: 6px;
+    #'     overflow: hidden;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      FILA DE FILTROS
+    #'      ========================================================= */
+    #'   
+    #'   .filters-row {
+    #'     display: flex;
+    #'     align-items: flex-end;
+    #'     gap: 15px;
+    #'     width: 100%;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      ICONO DE FILTRADO
+    #'      ========================================================= */
+    #'   
+    #'   .filter-icon {
+    #'     flex: 0 0 35px;
+    #'     width: 35px;
+    #'     height: 38px;
+    #'     
+    #'     display: flex;
+    #'     align-items: center;
+    #'     justify-content: center;
+    #'     
+    #'     color: #555;
+    #'     font-size: 16px;
+    #'     
+    #'     margin-bottom: 0;
+    #'   }
+    #'   
+    #'   .filter-icon i {
+    #'     font-size: 15px;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      CAJAS DE FILTRO
+    #'      ========================================================= */
+    #'   
+    #'   .filter-box {
+    #'     flex: 1;
+    #'     min-width: 0;
+    #'   }
+    #'   
+    #'   .filter-switch {
+    #'     flex: 0 0 180px;
+    #'     min-width: 180px;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      SELECT INPUT
+    #'      ========================================================= */
+    #'   
+    #'   .mapa-avp-container .form-group {
+    #'     margin-bottom: 0;
+    #'   }
+    #'   
+    #'   .mapa-avp-container .form-group > label {
+    #'     color: #555;
+    #'     font-size: 13px;
+    #'     font-weight: 400;
+    #'     margin-bottom: 6px;
+    #'   }
+    #'   
+    #'   .mapa-avp-container .selectize-input,
+    #'   .mapa-avp-container .selectize-control.single .selectize-input {
+    #'     background-color: #ffffff !important;
+    #'     border: 1px solid #d6d9db !important;
+    #'     border-radius: 6px !important;
+    #'     color: #555 !important;
+    #'     font-size: 13px;
+    #'     min-height: 38px;
+    #'     box-shadow: none !important;
+    #'     padding: 9px 12px;
+    #'   }
+    #'   
+    #'   .mapa-avp-container .selectize-input:hover,
+    #'   .mapa-avp-container .selectize-input.focus {
+    #'     border-color: #9a9c99 !important;
+    #'     box-shadow: 0 0 0 2px rgba(62,63,58,0.08) !important;
+    #'   }
+    #'   
+    #'   .mapa-avp-container .selectize-dropdown {
+    #'     border: 1px solid #e1e4e6;
+    #'     border-radius: 6px;
+    #'     box-shadow: 0 5px 15px rgba(0,0,0,0.10);
+    #'   }
+    #'   
+    #'   .mapa-avp-container .selectize-dropdown .option {
+    #'     color: #555;
+    #'     font-size: 13px;
+    #'     padding: 8px 12px;
+    #'   }
+    #'   
+    #'   .mapa-avp-container .selectize-dropdown .option:hover {
+    #'     background-color: #f3f4f4;
+    #'     color: #3e3f3a;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      SWITCH MOSTRAR DATOS
+    #'      ========================================================= */
+    #'   
+    #'   .custom-checkbox-wrapper {
+    #'     height: 100%;
+    #'     display: flex;
+    #'     align-items: center;
+    #'     padding-top: 20px;
+    #'   }
+    #'   
+    #'   .custom-checkbox-wrapper .material-switch {
+    #'     margin-bottom: 0;
+    #'   }
+    #'   
+    #'   .custom-checkbox-wrapper label {
+    #'     color: #555 !important;
+    #'     font-size: 11px !important;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      TABLA + INFORMACIÓN
+    #'      ========================================================= */
+    #'   
+    #'   .bottom-row {
+    #'     display: flex;
+    #'     align-items: flex-start;
+    #'     gap: 20px;
+    #'     width: 100%;
+    #'     margin-left: 0 !important;
+    #'     padding-left: 0 !important;
+    #'     padding-right: 0 !important;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      TABLA OCULTA
+    #'      ========================================================= */
+    #'   
+    #'   .bottom-row > #dataTableUI_avp_mapaAvp {
+    #'     width: 0;
+    #'     flex: 0 0 0;
+    #'     min-width: 0;
+    #'     overflow: hidden;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      INFORMACIÓN
+    #'      ========================================================= */
+    #'   
+    #'   .info-column {
+    #'     width: 100%;
+    #'     flex: 0 0 100%;
+    #'     min-width: 0;
+    #'     margin-left: 0 !important;
+    #'     padding-left: 0 !important;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      CUANDO SE MUESTRA LA TABLA
+    #'      ========================================================= */
+    #'   
+    #'   .bottom-row.show-table {
+    #'     gap: 20px;
+    #'   }
+    #'   
+    #'   .bottom-row.show-table > #dataTableUI_avp_mapaAvp {
+    #'     width: calc(66.666% - 10px);
+    #'     flex: 0 0 calc(66.666% - 10px);
+    #'     min-width: 0;
+    #'     overflow: visible;
+    #'   }
+    #'   
+    #'   .bottom-row.show-table .info-column {
+    #'     width: calc(33.333% - 10px);
+    #'     flex: 0 0 calc(33.333% - 10px);
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      TABLA RESPONSIVE
+    #'      ========================================================= */
+    #'   
+    #'   #dataTableUI_avp_mapaAvp {
+    #'     max-width: 100%;
+    #'   }
+    #'   
+    #'   #dataTableUI_avp_mapaAvp .dataTables_wrapper {
+    #'     width: 100% !important;
+    #'     max-width: 100% !important;
+    #'   }
+    #'   
+    #'   #dataTableUI_avp_mapaAvp table.dataTable {
+    #'     width: 100% !important;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      CONTENEDOR DE TABLA
+    #'      ========================================================= */
+    #'   
+    #'   .avp-table-container {
+    #'     width: 100%;
+    #'     min-width: 0;
+    #'   }
+    #'   
+    #'   .avp-table-wrapper {
+    #'     width: 100%;
+    #'     overflow-x: auto;
+    #'     margin-bottom: 15px;
+    #'   }
+    #'   
+    #'   .avp-table-wrapper .dataTables_wrapper {
+    #'     width: 100% !important;
+    #'     max-width: 100% !important;
+    #'   }
+    #'   
+    #'   .avp-table-wrapper table.dataTable {
+    #'     width: 100% !important;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      NOTA IMPORTANTE
+    #'      ========================================================= */
+    #'   
+    #'   .info-card {
+    #'     background-color: #ffffff;
+    #'     color: #555;
+    #'     border-left: 4px solid #8a8c88;
+    #'     border-top: 1px solid #e1e4e6;
+    #'     border-right: 1px solid #e1e4e6;
+    #'     border-bottom: 1px solid #e1e4e6;
+    #'     border-radius: 6px;
+    #'     padding: 18px 20px;
+    #'     margin-bottom: 20px;
+    #'     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    #'   }
+    #'   
+    #'   .info-card-title {
+    #'     font-size: 15px;
+    #'     font-weight: 600;
+    #'     color: #3e3f3a;
+    #'     margin-top: 0;
+    #'     margin-bottom: 8px;
+    #'   }
+    #'   
+    #'   .info-card p {
+    #'     font-size: 13px;
+    #'     color: #555;
+    #'     line-height: 1.5;
+    #'     margin-bottom: 0;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      FUENTE
+    #'      ========================================================= */
+    #'   
+    #'   .source-card {
+    #'     background-color: #f5f6f6;
+    #'     border-left: 4px solid #3e3f3a;
+    #'     border-radius: 6px;
+    #'     padding: 18px 20px;
+    #'     margin-bottom: 20px;
+    #'   }
+    #'   
+    #'   .source-card-title {
+    #'     font-size: 15px;
+    #'     font-weight: 600;
+    #'     color: #3e3f3a;
+    #'     margin-top: 0;
+    #'     margin-bottom: 8px;
+    #'   }
+    #'   
+    #'   .source-card p {
+    #'     font-size: 13px;
+    #'     color: #555;
+    #'     line-height: 1.5;
+    #'     margin-bottom: 0;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      LINKS
+    #'      ========================================================= */
+    #'   
+    #'   .source-link {
+    #'     color: #555 !important;
+    #'     text-decoration: none !important;
+    #'   }
+    #'   
+    #'   .source-link:hover {
+    #'     color: #3e3f3a !important;
+    #'     text-decoration: underline !important;
+    #'   }
+    #'   
+    #'   
+    #'   /* =========================================================
+    #'      RESPONSIVE
+    #'      ========================================================= */
+    #'   
+    #'   @media (max-width: 900px) {
+    #'     
+    #'     .mapa-avp-container {
+    #'       padding: 10px;
+    #'     }
+    #'     
+    #'     .filters-row {
+    #'       flex-direction: column;
+    #'       align-items: stretch;
+    #'       gap: 8px;
+    #'     }
+    #'     
+    #'     .filter-box,
+    #'     .filter-switch {
+    #'       width: 100%;
+    #'       min-width: 0;
+    #'     }
+    #'     
+    #'     .custom-checkbox-wrapper {
+    #'       padding-top: 0 !important;
+    #'       height: auto;
+    #'     }
+    #'     
+    #'     .bottom-row {
+    #'       flex-direction: column;
+    #'       gap: 15px;
+    #'     }
+    #'     
+    #'     .bottom-row.show-table > #dataTableUI_avp_mapaAvp,
+    #'     .bottom-row.show-table .info-column,
+    #'     .info-column {
+    #'       width: 100%;
+    #'       flex: 0 0 100%;
+    #'     }
+    #'     
+    #'     #dataTableUI_avp_mapaAvp {
+    #'       width: 100%;
+    #'       overflow-x: auto;
+    #'     }
+    #'     
+    #'     .map-title {
+    #'       font-size: 14px;
+    #'     }
+    #'     
+    #'   }
+    #'   
+    #' "))
+    #'       ),
+    #'       
+    #' 
+    #'       # CONTENEDOR GENERAL
+    #'       div(
+    #'         class = "mapa-avp-container",
+    #'         # MAPAS
+    #'         div(
+    #'           class = "dashboard-card maps-card",
+    #'           
+    #'           div(
+    #'             id = "plot-title",
+    #'             uiOutput("plot_title_mapaAvp")
+    #'           ),
+    #'           # MAPA SOLICITADAS
+    #'           div(
+    #'             class = "map-section",
+    #'             
+    #'             div(
+    #'               class = "map-title",
+    #'               "Solicitadas"
+    #'             ),
+    #'             
+    #'             leafletOutput(
+    #'               "map_avp_mapaAvp_solicitadas",
+    #'               height = "350px",
+    #'               width = "100%"
+    #'             )
+    #'           ),
+    #'           # MAPA ASIGNADAS
+    #'           div(
+    #'             class = "map-section",
+    #'             
+    #'             div(
+    #'               class = "map-title",
+    #'               "Asignadas"
+    #'             ),
+    #'             
+    #'             leafletOutput(
+    #'               "map_avp_mapaAvp_asignadas",
+    #'               height = "350px",
+    #'               width = "100%"
+    #'             )
+    #'           )
+    #'           
+    #'         ),
+    #'         # FILTROS
+    #'         div(
+    #'           class = "dashboard-card filters-card",
+    #'           
+    #'           div(
+    #'             class = "filters-row",
+    #'             # VISUALIZACIÓN
+    #'             div(
+    #'               class = "filter-box",
+    #'               
+    #'               selectInput(
+    #'                 "select_avp_mapaAvp_visualizacion",
+    #'                 "Seleccione Visualización:",
+    #'                 choices = c(
+    #'                   "Región",
+    #'                   "Municipios"
+    #'                 ),
+    #'                 selected = "Región"
+    #'               )
+    #'             ),
+    #'             # AÑO
+    #'             div(
+    #'               class = "filter-box",
+    #'               
+    #'               selectInput(
+    #'                 "select_avp_mapaAvp_año",
+    #'                 "Seleccione Año:",
+    #'                 choices = levels(mapaAvp$Año),
+    #'                 selected = 1
+    #'               )
+    #'             ),
+    #'             # MOSTRAR DATOS
+    #'             div(
+    #'               class = "filter-switch",
+    #'               
+    #'               showDataToggle(
+    #'                 inputId = "showTable_avp_mapaAvp"
+    #'               )
+    #'             )
+    #'             
+    #'           )
+    #'         ),
+    #'         # TABLA + INFORMACIÓN
+    #'         div(
+    #'           class = "bottom-row",
+    #'           # TABLA
+    #'           uiOutput(
+    #'             "dataTableUI_avp_mapaAvp"
+    #'           ),
+    #'           # INFORMACIÓN
+    #'           div(
+    #'             class = "info-column",
+    #'             # NOTA IMPORTANTE
+    #'             div(
+    #'               class = "info-card",
+    #'               
+    #'               h4(
+    #'                 class = "info-card-title",
+    #'                 actualizacion_avp3
+    #'               ),
+    #'               
+    #'               p(
+    #'                 "Los datos representados en este mapa corresponden al
+    #'         total de viviendas públicas solicitadas y asignadas por
+    #'         violencia doméstica por región de la Administración de
+    #'         Vivienda Pública desde el año natural 2017 al 2025."
+    #'               )
+    #'               
+    #'             ),
+    #'             # FUENTE
+    #'             div(
+    #'               class = "source-card",
+    #'               
+    #'               h4(
+    #'                 class = "source-card-title",
+    #'                 "Fuente de los datos"
+    #'               ),
+    #'               
+    #'               p(
+    #'                 tags$a(
+    #'                   href = "https://www.avp.pr.gov/",
+    #'                   target = "_blank",
+    #'                   rel = "noopener noreferrer",
+    #'                   "Administración de Vivienda Pública",
+    #'                   class = "source-link"
+    #'                 )
+    #'               )
+    #'             )
+    #'           )
+    #'         )
+    #'       )
+    #'     ),
+    #'     
         
         #### tab de Publicaciones del AVP ####
         # tabPanel(

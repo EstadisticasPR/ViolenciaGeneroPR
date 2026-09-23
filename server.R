@@ -1591,132 +1591,91 @@ server <- function(input, output, session) {
   })
   
   #### Tab de Administración de Vivienda Pública (mapaAvp) ####
-
-  # Filtrar el conjunto de datos según el año, delito o distrito seleccionado
+  # FILTRAR DATOS POR AÑO
   mapaAvp_filt <- reactive({
-    filter(mapaAvp,
-           # Visualizacion %in% input$select_avp_mapaAvp_visualizacion,
-           Año %in% input$select_avp_mapaAvp_año)
+    filter(
+      mapaAvp,
+      Año %in% input$select_avp_mapaAvp_año
+    )
   })
-
-
+  
+  
   mapaAvp_filt_asig <- reactive({
-    filter(mapaAvp_asig,
-           Año %in% input$select_avp_mapaAvp_año)
+    filter(
+      mapaAvp_asig,
+      Año %in% input$select_avp_mapaAvp_año
+    )
   })
-
+  
+  
   mapaAvp_filt_sol <- reactive({
-    filter(mapaAvp_sol,
-           Año %in% input$select_avp_mapaAvp_año)
+    filter(
+      mapaAvp_sol,
+      Año %in% input$select_avp_mapaAvp_año
+    )
   })
-
+  
+  # MAPA DE VIVIENDAS ASIGNADAS POR REGIÓN
+  
   output$map_avp_mapaAvp_asignadas <- renderLeaflet({
+    
     data <- mapaAvp_filt_asig()
-    renderMap_vivienda(data,
-                       value_col = "Cantidad",
-                       value_col_region = "Región",
-                       map_zoom = 8,
-                       # provider = providers$CartoDB.Positron,
-                       municipios_geo = municipios_geo_asig)
+    
+    renderMap_vivienda_new(
+      data,
+      value_col = "Cantidad",
+      value_col_region = "Región",
+      map_zoom = 9
+    )
+    
   })
-
-
+  # MAPA DE VIVIENDAS SOLICITADAS POR REGIÓN
+  
   output$map_avp_mapaAvp_solicitadas <- renderLeaflet({
+    
     data <- mapaAvp_filt_sol()
-    renderMap_vivienda(data,
-                       value_col = "Cantidad",
-                       value_col_region = "Región",
-                       map_zoom = 8,
-                       # provider = providers$CartoDB.Positron,
-                       municipios_geo = municipios_geo_sol)
+    
+    renderMap_vivienda_new(
+      data,
+      value_col = "Cantidad",
+      value_col_region = "Región",
+      map_zoom = 9
+    )
+    
   })
-
-  ## PARA REGION Y MUNICIPIOS
-  municipios_filt_asig <- reactive({
-    filter(mapaAvp_municipio_asig,
-      # municipios_geo_asig,
-      #      
-           Año %in% input$select_avp_mapaAvp_año)
-  })
-
-  municipios_filt_sol <- reactive({
-    filter(mapaAvp_municipio_soli,
-      # municipios_geo_sol,
-           Año %in% input$select_avp_mapaAvp_año)
-  })
-
-  output$map_avp_mapaAvp_asignadas <- renderLeaflet({
-    data <- mapaAvp_filt_asig()
-    municipios_geo_asig <- municipios_filt_asig()
-
-    if (input$select_avp_mapaAvp_visualizacion == "Municipios") {
-      renderMap_vivienda_municipio(
-                                municipios_geo_asig,
-                                   # dfAvp_municipios_asig,
-                                   value_col = "Cantidad",
-                                   value_col_region = "Municipio",
-                                   map_zoom = 8
-                                # ,
-                                #    provider = providers$CartoDB.Positron
-                                )
-    } else {
-      renderMap_vivienda_new(data,
-                         value_col = "Cantidad",
-                         value_col_region = "Región",
-                         map_zoom = 8
-                         # ,
-                         # provider = providers$CartoDB.Positron
-                         )
-    }
-  })
-
-  output$map_avp_mapaAvp_solicitadas <- renderLeaflet({
-    data <- mapaAvp_filt_sol()
-    municipios_geo_sol <-municipios_filt_sol()
-
-    if (input$select_avp_mapaAvp_visualizacion == "Municipios") {
-      renderMap_vivienda_municipio(
-                                 municipios_geo_sol,
-                                   # dfAvp_municipios_soli,
-                                   value_col = "Cantidad",
-                                   value_col_region = "Municipio",
-                                   map_zoom = 8
-                                 # ,
-                                 #   provider = providers$CartoDB.Positron
-                                 )
-    } else {
-      renderMap_vivienda_new(data,
-                         value_col = "Cantidad",
-                         value_col_region = "Región",
-                         map_zoom = 8
-                         # ,
-                         # provider = providers$CartoDB.Positron
-                         )
-    }
-  })
-
-
-
+  # DATOS PARA LA TABLA
+  
   mapaAvp_filt_noGeom <- reactive({
-    st_drop_geometry(mapaAvp_filt())%>%
-      rename(`Región de Vivienda` = Región)
+    
+    st_drop_geometry(
+      mapaAvp_filt()
+    ) %>%
+      rename(
+        `Región de Vivienda` = Región
+      )
+    
   })
-
-  # Data Table para el mapa de dfAvp
+  # DATA TABLE
+  
   output$dataTable_avp_mapaAvp <- renderDT({
-    renderDataTable(mapaAvp_filt_noGeom(), "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica")
+    
+    renderDataTable(
+      mapaAvp_filt_noGeom(),
+      "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica"
+    )
+    
   })
-
-  # Crear Card con Fuentes
+  # MOSTRAR / OCULTAR TABLA
+  
   output$dataTableUI_avp_mapaAvp <- renderUI({
     if (input$showTable_avp_mapaAvp) {
       hyperlinks <- c("https://www.avp.pr.gov/")
       texts <- c("Administración de Vivienda Pública")
-
+      
       tags$div(
         class = "card",
         style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
-
+        
         # Contenedor centrado para la tabla
         div(
           style = "padding: 5px; width: 98%; display: flex; justify-content: center;",
@@ -1725,14 +1684,155 @@ server <- function(input, output, session) {
             DTOutput("dataTable_avp_mapaAvp")
           )
         ),
-
+        
         createFuenteDiv(hyperlinks, texts)
       )
     }
   })
+  
+  #### Tab de Administración de Vivienda Pública (mapaAvp) con MUNICIPIOS ####
 
-  
-  
+  # # Filtrar el conjunto de datos según el año, delito o distrito seleccionado
+  # mapaAvp_filt <- reactive({
+  #   filter(mapaAvp,
+  #          # Visualizacion %in% input$select_avp_mapaAvp_visualizacion,
+  #          Año %in% input$select_avp_mapaAvp_año)
+  # })
+  # 
+  # 
+  # mapaAvp_filt_asig <- reactive({
+  #   filter(mapaAvp_asig,
+  #          Año %in% input$select_avp_mapaAvp_año)
+  # })
+  # 
+  # mapaAvp_filt_sol <- reactive({
+  #   filter(mapaAvp_sol,
+  #          Año %in% input$select_avp_mapaAvp_año)
+  # })
+  # 
+  # output$map_avp_mapaAvp_asignadas <- renderLeaflet({
+  #   data <- mapaAvp_filt_asig()
+  #   renderMap_vivienda(data,
+  #                      value_col = "Cantidad",
+  #                      value_col_region = "Región",
+  #                      map_zoom = 8,
+  #                      # provider = providers$CartoDB.Positron,
+  #                      municipios_geo = municipios_geo_asig)
+  # })
+  # 
+  # 
+  # output$map_avp_mapaAvp_solicitadas <- renderLeaflet({
+  #   data <- mapaAvp_filt_sol()
+  #   renderMap_vivienda(data,
+  #                      value_col = "Cantidad",
+  #                      value_col_region = "Región",
+  #                      map_zoom = 8,
+  #                      # provider = providers$CartoDB.Positron,
+  #                      municipios_geo = municipios_geo_sol)
+  # })
+  # 
+  # ## PARA REGION Y MUNICIPIOS
+  # municipios_filt_asig <- reactive({
+  #   filter(mapaAvp_municipio_asig,
+  #     # municipios_geo_asig,
+  #     #      
+  #          Año %in% input$select_avp_mapaAvp_año)
+  # })
+  # 
+  # municipios_filt_sol <- reactive({
+  #   filter(mapaAvp_municipio_soli,
+  #     # municipios_geo_sol,
+  #          Año %in% input$select_avp_mapaAvp_año)
+  # })
+  # 
+  # output$map_avp_mapaAvp_asignadas <- renderLeaflet({
+  #   data <- mapaAvp_filt_asig()
+  #   municipios_geo_asig <- municipios_filt_asig()
+  # 
+  #   if (input$select_avp_mapaAvp_visualizacion == "Municipios") {
+  #     renderMap_vivienda_municipio(
+  #                               municipios_geo_asig,
+  #                                  # dfAvp_municipios_asig,
+  #                                  value_col = "Cantidad",
+  #                                  value_col_region = "Municipio",
+  #                                  map_zoom = 8
+  #                               # ,
+  #                               #    provider = providers$CartoDB.Positron
+  #                               )
+  #   } else {
+  #     renderMap_vivienda_new(data,
+  #                        value_col = "Cantidad",
+  #                        value_col_region = "Región",
+  #                        map_zoom = 9
+  #                        # ,
+  #                        # provider = providers$CartoDB.Positron
+  #                        )
+  #   }
+  # })
+  # 
+  # output$map_avp_mapaAvp_solicitadas <- renderLeaflet({
+  #   data <- mapaAvp_filt_sol()
+  #   municipios_geo_sol <-municipios_filt_sol()
+  # 
+  #   if (input$select_avp_mapaAvp_visualizacion == "Municipios") {
+  #     renderMap_vivienda_municipio(
+  #                                municipios_geo_sol,
+  #                                  # dfAvp_municipios_soli,
+  #                                  value_col = "Cantidad",
+  #                                  value_col_region = "Municipio",
+  #                                  map_zoom = 8
+  #                                # ,
+  #                                #   provider = providers$CartoDB.Positron
+  #                                )
+  #   } else {
+  #     renderMap_vivienda_new(data,
+  #                        value_col = "Cantidad",
+  #                        value_col_region = "Región",
+  #                        map_zoom = 9
+  #                        # ,
+  #                        # provider = providers$CartoDB.Positron
+  #                        )
+  #   }
+  # })
+  # 
+  # 
+  # 
+  # mapaAvp_filt_noGeom <- reactive({
+  #   st_drop_geometry(mapaAvp_filt())%>%
+  #     rename(`Región de Vivienda` = Región)
+  # })
+  # 
+  # # Data Table para el mapa de dfAvp
+  # output$dataTable_avp_mapaAvp <- renderDT({
+  #   renderDataTable(mapaAvp_filt_noGeom(), "Datos: Viviendas públicas solicitadas y asignadas por violencia doméstica")
+  # })
+  # 
+  # # Crear Card con Fuentes
+  # output$dataTableUI_avp_mapaAvp <- renderUI({
+  #   if (input$showTable_avp_mapaAvp) {
+  #     hyperlinks <- c("https://www.avp.pr.gov/")
+  #     texts <- c("Administración de Vivienda Pública")
+  # 
+  #     tags$div(
+  #       class = "card",
+  #       style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+  # 
+  #       # Contenedor centrado para la tabla
+  #       div(
+  #         style = "padding: 5px; width: 98%; display: flex; justify-content: center;",
+  #         div(
+  #           style = "width: 98%; max-width: 800px; overflow-x: auto;",
+  #           DTOutput("dataTable_avp_mapaAvp")
+  #         )
+  #       ),
+  # 
+  #       createFuenteDiv(hyperlinks, texts)
+  #     )
+  #   }
+  # })
+  # 
+  # 
+  # 
   
   #### Tab de Publicaciones ####
   # PDF 1

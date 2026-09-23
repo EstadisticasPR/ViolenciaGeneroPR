@@ -3343,10 +3343,744 @@ renderMap <- function(data, value_col, value_col_region, map_zoom,
 
 #### renderMap_npprDS ####
 
+renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
+                             municipios_geo) {
+  # CARTO BASEMAP
+
+  carto_api_key <- Sys.getenv("CARTO_API_KEY")
+
+  carto_positron_url <- paste0(
+    "https://{s}.basemaps.cartocdn.com/rastertiles/",
+    "light_all/{z}/{x}/{y}.png?key=",
+    carto_api_key
+  )
+
+  carto_attribution <- paste0(
+    '&copy; <a href="https://www.openstreetmap.org/copyright" ',
+    'target="_blank">OpenStreetMap</a> contributors ',
+    '&copy; <a href="https://carto.com/attributions" ',
+    'target="_blank">CARTO</a>'
+  )
+
+  # VERIFICAR DATOS
+  if (
+    nrow(data) == 0 ||
+    !value_col %in% colnames(data) ||
+    !value_col_region %in% colnames(data)
+  ) {
+    return(
+      leaflet() %>%
+        addTiles()
+    )
+  }
+
+  # Obtener valores dinámicos
+  values <- as.numeric(data[[value_col]])
+  regiones <- data[[value_col_region]]
+
+  # CALCULAR LÍMITES
+  min_val <- 0
+  max_val <- max(values, na.rm = TRUE)
+
+  if (!is.finite(max_val)) {
+    return(
+      leaflet() %>%
+        setView(
+          lng = -66.5,
+          lat = 18.2,
+          zoom = map_zoom
+        ) %>%
+        addTiles(
+          urlTemplate = carto_positron_url,
+          attribution = carto_attribution,
+          options = tileOptions(
+            subdomains = "abcd",
+            maxZoom = 20
+          )
+        )
+    )
+  }
+
+  # Usar pretty() para cortes naturales
+  bins <- pretty(
+    c(min_val, max_val),
+    n = 7
+  )
+
+  if (length(bins) < 2) {
+    bins <- c(min_val, min_val + 1)
+  }
+
+  # PALETA
+
+  violet_colors <- c(
+    "#f9f5ff", "#f4e3ff", "#edd0ff", "#e2b3ff",
+    "#d89aff", "#cc80ff", "#bf66ff", "#a64dff",
+    "#8c33ff", "#701aff", "#5900f2", "#4400cc",
+    "#3000a6", "#1d007d", "#0d004c"
+  )
+
+  num_bins <- length(bins) - 1
+
+  colors <- violet_colors[
+    seq_len(min(num_bins, length(violet_colors)))
+  ]
+
+  pal <- colorBin(
+    colors,
+    domain = values,
+    bins = bins,
+    na.color = "transparent"
+  )
+
+  # MAPA
+  leaflet(data) %>%
+    setView(
+      lng = -66.5,
+      lat = 18.2,
+      zoom = map_zoom
+    ) %>%
+
+    addTiles(
+      urlTemplate = carto_positron_url,
+      attribution = carto_attribution,
+      options = tileOptions(
+        subdomains = "abcd",
+        maxZoom = 20
+      )
+    ) %>%
+
+    addPolygons(
+      fillColor = pal(values),
+      weight = 1,
+      opacity = 1,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+
+      label = paste0(
+        value_col_region, ": ", regiones,
+        "<br>",
+        value_col, ": ", values
+      ) %>%
+        lapply(htmltools::HTML),
+
+      highlightOptions = highlightOptions(
+        weight = 1,
+        color = "#666",
+        dashArray = "",
+        fillOpacity = 0.9,
+        bringToFront = TRUE
+      )
+    ) %>%
+
+    addLegend(
+      pal = pal,
+      values = values,
+      opacity = 0.7,
+      title = value_col,
+      position = "bottomright",
+      labFormat = labelFormat(digits = 0)
+    )
+}
+
 # renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
 #                              municipios_geo) {
+#   
+#### renderMap_npprDS NO COROPLETICO ####
 #   # CARTO BASEMAP
-#  
+#   carto_api_key <- Sys.getenv("CARTO_API_KEY")
+#   
+#   carto_positron_url <- paste0(
+#     "https://{s}.basemaps.cartocdn.com/rastertiles/",
+#     "light_all/{z}/{x}/{y}.png?key=",
+#     carto_api_key
+#   )
+#   
+#   carto_attribution <- paste0(
+#     '&copy; <a href="https://www.openstreetmap.org/copyright" ',
+#     'target="_blank">OpenStreetMap</a> contributors ',
+#     '&copy; <a href="https://carto.com/attributions" ',
+#     'target="_blank">CARTO</a>'
+#   )
+#   # VERIFICAR DATOS
+#   if (
+#     nrow(data) == 0 ||
+#     !value_col %in% colnames(data) ||
+#     !value_col_region %in% colnames(data)
+#   ) {
+#     
+#     return(
+#       leaflet() %>%
+#         setView(
+#           lng = -66.5,
+#           lat = 18.2,
+#           zoom = map_zoom
+#         ) %>%
+#         addTiles(
+#           urlTemplate = carto_positron_url,
+#           attribution = carto_attribution,
+#           options = tileOptions(
+#             subdomains = "abcd",
+#             maxZoom = 20
+#           )
+#         )
+#     )
+#   }
+#   # PREPARAR DATOS
+#   data <- st_as_sf(data)
+#   
+#   data$region_map <- trimws(
+#     as.character(data[[value_col_region]])
+#   )
+#   
+#   data$casos_map <- suppressWarnings(
+#     as.numeric(data[[value_col]])
+#   )
+#   
+#   # Los valores faltantes se consideran 0
+#   data$casos_map[is.na(data$casos_map)] <- 0
+#   # COLORES FIJOS POR REGIÓN
+#   # IMPORTANTE:
+#   # Cada región siempre tendrá el mismo color.
+#   #
+#   
+#   colores_regiones <- c(
+#     "Aguadilla" = "#6A4C93",
+#     "Arecibo"   = "#1982C4",
+#     "Bayamón"   = "#3A86A8",
+#     "Caguas"    = "#008C95",
+#     "Carolina"  = "#52A675",
+#     "Guayama"   = "#80C41C",
+#     "Humacao"   = "#FFBE2E",
+#     "Mayagüez"  = "#8338EC",
+#     "Ponce"     = "#F4A261",
+#     "San Juan"  = "#E76F51"
+#   )
+#   # NORMALIZAR NOMBRES PARA HACER MATCH
+#   region_key <- toupper(
+#     trimws(
+#       data$region_map
+#     )
+#   )
+#   
+#   colores_key <- toupper(
+#     names(colores_regiones)
+#   )
+#   # ASIGNAR COLOR A CADA POLÍGONO
+#   data$color_region <- unname(
+#     colores_regiones[
+#       match(
+#         region_key,
+#         colores_key
+#       )
+#     ]
+#   )
+#   # COLOR DE RESPALDO
+#   # Si existe alguna región cuyo nombre no coincide
+#   # exactamente con las 8 regiones definidas arriba,
+#   # se pintará gris en lugar de negro.
+#   #
+#   
+#   data$color_region[
+#     is.na(data$color_region)
+#   ] <- "#BDBDBD"
+#   # FORMATEAR CASOS
+#   data$casos_label <- format(
+#     data$casos_map,
+#     big.mark = ",",
+#     decimal.mark = ".",
+#     scientific = FALSE,
+#     trim = TRUE
+#   )
+#   # LABEL INTERACTIVO
+#   labels <- paste0(
+#     
+#     "<div style='
+#       font-family: Arial, Helvetica, sans-serif;
+#       padding: 3px 5px;
+#       min-width: 130px;
+#     '>",
+#     
+#     "<div style='
+#       font-size: 14px;
+#       font-weight: 700;
+#       color: #333333;
+#       margin-bottom: 4px;
+#     '>",
+#     
+#     data$region_map,
+#     
+#     "</div>",
+#     
+#     "<div style='
+#       font-size: 12px;
+#       color: #666666;
+#     '>",
+#     
+#     value_col,
+#     
+#     ": <strong style='color:#333333;'>",
+#     
+#     data$casos_label,
+#     
+#     "</strong>",
+#     
+#     "</div>",
+#     
+#     "</div>"
+#   )
+#   # CREAR MAPA
+#   mapa <- leaflet(data) %>%
+#     
+#     setView(
+#       lng = -66.5,
+#       lat = 18.2,
+#       zoom = map_zoom
+#     ) %>%
+#     
+#     addTiles(
+#       urlTemplate = carto_positron_url,
+#       attribution = carto_attribution,
+#       options = tileOptions(
+#         subdomains = "abcd",
+#         maxZoom = 20
+#       )
+#     ) %>%
+#   # POLÍGONOS
+#   addPolygons(
+#     # AQUÍ ESTÁ EL CAMBIO IMPORTANTE
+#     fillColor = ~color_region,
+#     
+#     fillOpacity = 0.78,
+#     
+#     color = "#FFFFFF",
+#     
+#     opacity = 1,
+#     
+#     weight = 2,
+#     
+#     smoothFactor = 0.4,
+#     
+#     label = lapply(
+#       labels,
+#       htmltools::HTML
+#     ),
+#     
+#     labelOptions = labelOptions(
+#       
+#       direction = "auto",
+#       
+#       textsize = "12px",
+#       
+#       style = list(
+#         "background" = "rgba(255,255,255,0.97)",
+#         "border" = "none",
+#         "border-radius" = "7px",
+#         "box-shadow" = "0 2px 7px rgba(0,0,0,0.18)",
+#         "padding" = "7px 9px"
+#       )
+#     ),
+#     
+#     highlightOptions = highlightOptions(
+#       weight = 3,
+#       color = "#333333",
+#       fillOpacity = 0.90,
+#       bringToFront = TRUE
+#     )
+#   )
+#   # POSICIÓN DE LOS NÚMEROS
+#   indices_validos <- which(
+#     is.finite(data$casos_map)
+#   )
+#   
+#   
+#   if (length(indices_validos) > 0) {
+#     
+#     # Punto que siempre queda dentro del polígono
+#     puntos <- st_point_on_surface(
+#       data[indices_validos, ]
+#     )
+#     
+#     coords <- st_coordinates(
+#       puntos
+#     )
+#     # NÚMERO SOBRE CADA REGIÓN
+#     value_labels <- paste0(
+#       
+#       "<div class='nppr-casos-label'>",
+#       
+#       data$casos_label[indices_validos],
+#       
+#       "</div>"
+#     )
+#     
+#     
+#     mapa <- mapa %>%
+#       
+#       addLabelOnlyMarkers(
+#         
+#         lng = coords[, 1],
+#         lat = coords[, 2],
+#         
+#         label = lapply(
+#           value_labels,
+#           htmltools::HTML
+#         ),
+#         
+#         labelOptions = labelOptions(
+#           
+#           noHide = TRUE,
+#           
+#           direction = "center",
+#           
+#           textOnly = TRUE,
+#           
+#           className = "nppr-casos-marker"
+#         )
+#       )
+#   }
+#   # ESTILOS CSS
+#   mapa <- mapa %>%
+#     
+#     addControl(
+#       
+#       html = "
+#       
+#       <style>
+#       
+#       /* =====================================================
+#          NÚMERO DE CASOS
+#          ===================================================== */
+#       
+#       .nppr-casos-marker {
+#         background: transparent !important;
+#         border: none !important;
+#         box-shadow: none !important;
+#         padding: 0 !important;
+#       }
+#       
+#       .nppr-casos-label {
+#         
+#         font-family:
+#           Arial,
+#           Helvetica,
+#           sans-serif;
+#         
+#         font-size: 13px;
+#         
+#         font-weight: 700;
+#         
+#         color: #FFFFFF;
+#         
+#         text-align: center;
+#         
+#         white-space: nowrap;
+#         
+#         pointer-events: none;
+#         
+#         text-shadow:
+#           -1px -1px 2px rgba(0,0,0,0.75),
+#            1px -1px 2px rgba(0,0,0,0.75),
+#           -1px  1px 2px rgba(0,0,0,0.75),
+#            1px  1px 2px rgba(0,0,0,0.75);
+#       }
+#       
+#       </style>
+#       
+#       ",
+#       
+#       position = "topleft"
+#     )
+#   # LEYENDA
+#   legend_items <- paste0(
+#     
+#     mapply(
+#       
+#       function(region, color) {
+#         
+#         paste0(
+#           
+#           "<div style='
+#             display:flex;
+#             align-items:center;
+#             margin:4px 0;
+#             font-size:12px;
+#             color:#555;
+#           '>",
+#           
+#           "<span style='
+#             display:inline-block;
+#             width:14px;
+#             height:14px;
+#             background:",
+#           color,
+#           ";
+#             border-radius:4px;
+#             margin-right:8px;
+#             flex-shrink:0;
+#           '></span>",
+#           
+#           "<span>",
+#           region,
+#           "</span>",
+#           
+#           "</div>"
+#         )
+#       },
+#       
+#       names(colores_regiones),
+#       colores_regiones,
+#       
+#       SIMPLIFY = TRUE
+#     ),
+#     
+#     collapse = ""
+#   )
+#   
+#   
+#   legend_html <- paste0(
+#     
+#     "<div style='
+#       background:rgba(255,255,255,0.96);
+#       padding:12px 14px;
+#       border-radius:9px;
+#       box-shadow:0 2px 10px rgba(0,0,0,0.18);
+#       font-family:Arial, Helvetica, sans-serif;
+#     '>",
+#     
+#     "<div style='
+#       font-size:14px;
+#       font-weight:700;
+#       color:#333;
+#       margin-bottom:7px;
+#     '>",
+#     
+#     "Regiones",
+#     
+#     "</div>",
+#     
+#     legend_items,
+#     
+#     "</div>"
+#   )
+#   
+#   
+#   mapa <- mapa %>%
+#     
+#     addControl(
+#       html = legend_html,
+#       position = "bottomright"
+#     )
+#   # RETORNAR
+#   mapa
+# }
+
+
+#### renderMap_vivienda ####
+renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,
+                               municipios_geo) {
+  # =========================================================
+  # CARTO BASEMAP
+  # =========================================================
+
+  carto_api_key <- Sys.getenv("CARTO_API_KEY")
+
+  carto_positron_url <- paste0(
+    "https://{s}.basemaps.cartocdn.com/rastertiles/",
+    "light_all/{z}/{x}/{y}.png?key=",
+    carto_api_key
+  )
+
+  carto_attribution <- paste0(
+    '&copy; <a href="https://www.openstreetmap.org/copyright" ',
+    'target="_blank">OpenStreetMap</a> contributors ',
+    '&copy; <a href="https://carto.com/attributions" ',
+    'target="_blank">CARTO</a>'
+  )
+
+  # =========================================================
+  # VERIFICAR QUE HAY DATOS DISPONIBLES
+  # =========================================================
+
+  if (
+    nrow(data) == 0 ||
+    !value_col %in% colnames(data) ||
+    !value_col_region %in% colnames(data)
+  ) {
+    return(
+      leaflet() %>%
+        addTiles()
+    )
+  }
+
+  # =========================================================
+  # OBTENER VALORES
+  # =========================================================
+
+  values <- as.numeric(data[[value_col]])
+  regiones <- data[[value_col_region]]
+
+  # =========================================================
+  # CALCULAR LÍMITES PARA LA ESCALA
+  # =========================================================
+
+  min_val <- 0
+  max_val <- max(values, na.rm = TRUE)
+
+  # Manejar datos sin valores válidos
+  if (!is.finite(max_val)) {
+    return(
+      leaflet() %>%
+        setView(
+          lng = -66.5,
+          lat = 18.2,
+          zoom = map_zoom
+        ) %>%
+        addTiles(
+          urlTemplate = carto_positron_url,
+          attribution = carto_attribution,
+          options = tileOptions(
+            subdomains = "abcd",
+            maxZoom = 20
+          )
+        )
+    )
+  }
+
+  rango <- max_val - min_val
+
+  # =========================================================
+  # DEFINIR BINS
+  # =========================================================
+
+  step <- ifelse(rango >= 30, 10, 5)
+
+  bins <- seq(
+    floor(min_val / step) * step,
+    ceiling(max_val / step) * step,
+    by = step
+  )
+
+  # Evitar problemas cuando solamente hay un bin
+  if (length(bins) < 2) {
+    bins <- c(min_val, min_val + step)
+  }
+
+  # =========================================================
+  # PALETA DE COLORES
+  # =========================================================
+
+  violet_colors <- c(
+    "#f9f5ff", "#f4e3ff", "#edd0ff", "#e2b3ff",
+    "#d89aff", "#cc80ff", "#bf66ff", "#a64dff",
+    "#8c33ff", "#701aff", "#5900f2", "#4400cc",
+    "#3000a6", "#1d007d", "#0d004c"
+  )
+
+  num_bins <- length(bins) - 1
+
+  colors <- violet_colors[
+    seq_len(min(num_bins, length(violet_colors)))
+  ]
+
+  # =========================================================
+  # PALETA DINÁMICA
+  # =========================================================
+
+  pal <- colorBin(
+    colors,
+    domain = values,
+    bins = bins,
+    na.color = "transparent"
+  )
+
+  # =========================================================
+  # MAPA
+  # =========================================================
+
+  leaflet(data) %>%
+
+    setView(
+      lng = -66.5,
+      lat = 18.2,
+      zoom = map_zoom
+    ) %>%
+
+    # ---------------------------------------------------------
+  # CARTO POSITRON
+  # ---------------------------------------------------------
+
+  addTiles(
+    urlTemplate = carto_positron_url,
+    attribution = carto_attribution,
+    options = tileOptions(
+      subdomains = "abcd",
+      maxZoom = 20
+    )
+  ) %>%
+
+    # ---------------------------------------------------------
+  # POLÍGONOS
+  # ---------------------------------------------------------
+
+  addPolygons(
+    fillColor = pal(values),
+    weight = 1,
+    opacity = 1,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+
+    label = paste0(
+      value_col_region, ": ", regiones,
+      "<br>",
+      value_col, ": ", values
+    ) %>%
+      lapply(htmltools::HTML),
+
+    highlightOptions = highlightOptions(
+      weight = 1,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.9,
+      bringToFront = TRUE
+    )
+  ) %>%
+
+    # ---------------------------------------------------------
+  # FRONTERAS DE LOS MUNICIPIOS
+  # ---------------------------------------------------------
+
+  # addPolylines(
+  #   data = municipios_geo,
+  #   weight = 1,
+  #   color = "#666",
+  #   opacity = 1
+  # ) %>%
+
+  # ---------------------------------------------------------
+  # LEYENDA
+  # ---------------------------------------------------------
+
+  addLegend(
+    pal = pal,
+    values = values,
+    opacity = 0.7,
+    title = value_col,
+    position = "bottomright",
+    labFormat = labelFormat(digits = 0)
+  )
+}
+
+#### renderMap_vivienda NO COROPLETICO ####
+# renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,
+#                                municipios_geo) {
+#   
+#   # =========================================================
+#   # CARTO BASEMAP
+#   # =========================================================
+#   
 #   carto_api_key <- Sys.getenv("CARTO_API_KEY")
 #   
 #   carto_positron_url <- paste0(
@@ -3362,27 +4096,17 @@ renderMap <- function(data, value_col, value_col_region, map_zoom,
 #     'target="_blank">CARTO</a>'
 #   )
 #   
+#   
+#   # =========================================================
 #   # VERIFICAR DATOS
+#   # =========================================================
+#   
 #   if (
 #     nrow(data) == 0 ||
 #     !value_col %in% colnames(data) ||
 #     !value_col_region %in% colnames(data)
 #   ) {
-#     return(
-#       leaflet() %>%
-#         addTiles()
-#     )
-#   }
-#   
-#   # Obtener valores dinámicos
-#   values <- as.numeric(data[[value_col]])
-#   regiones <- data[[value_col_region]]
-#   
-#   # CALCULAR LÍMITES
-#   min_val <- 0
-#   max_val <- max(values, na.rm = TRUE)
-#   
-#   if (!is.finite(max_val)) {
+#     
 #     return(
 #       leaflet() %>%
 #         setView(
@@ -3401,97 +4125,764 @@ renderMap <- function(data, value_col, value_col_region, map_zoom,
 #     )
 #   }
 #   
-#   # Usar pretty() para cortes naturales
-#   bins <- pretty(
-#     c(min_val, max_val),
-#     n = 7
+#   
+#   # =========================================================
+#   # PREPARAR DATOS
+#   # =========================================================
+#   
+#   data <- st_as_sf(data)
+#   
+#   data$region_map <- trimws(
+#     as.character(data[[value_col_region]])
 #   )
 #   
-#   if (length(bins) < 2) {
-#     bins <- c(min_val, min_val + 1)
-#   }
-#   
-#   # PALETA
-#   
-#   violet_colors <- c(
-#     "#f9f5ff", "#f4e3ff", "#edd0ff", "#e2b3ff",
-#     "#d89aff", "#cc80ff", "#bf66ff", "#a64dff",
-#     "#8c33ff", "#701aff", "#5900f2", "#4400cc",
-#     "#3000a6", "#1d007d", "#0d004c"
+#   data$casos_map <- suppressWarnings(
+#     as.numeric(data[[value_col]])
 #   )
 #   
-#   num_bins <- length(bins) - 1
+#   # Los valores faltantes se consideran 0
+#   data$casos_map[is.na(data$casos_map)] <- 0
 #   
-#   colors <- violet_colors[
-#     seq_len(min(num_bins, length(violet_colors)))
-#   ]
 #   
-#   pal <- colorBin(
-#     colors,
-#     domain = values,
-#     bins = bins,
-#     na.color = "transparent"
+#   # =========================================================
+#   # COLORES FIJOS POR REGIÓN
+#   # =========================================================
+#   
+#   colores_regiones <- c(
+#     "Aguadilla" = "#6A4C93",
+#     "Arecibo"   = "#1982C4",
+#     "Bayamón"   = "#3A86A8",
+#     "Caguas"    = "#008C95",
+#     "Carolina"  = "#52A675",
+#     "Guayama"   = "#80C41C",
+#     "Humacao"   = "#FFBE2E",
+#     "Mayagüez"  = "#8338EC",
+#     "Ponce"     = "#F4A261",
+#     "San Juan"  = "#E76F51"
 #   )
 #   
-#   # MAPA
-#   leaflet(data) %>%
+#   
+#   # =========================================================
+#   # NORMALIZAR NOMBRES PARA HACER MATCH
+#   # =========================================================
+#   
+#   region_key <- toupper(
+#     trimws(
+#       data$region_map
+#     )
+#   )
+#   
+#   colores_key <- toupper(
+#     names(colores_regiones)
+#   )
+#   
+#   
+#   # =========================================================
+#   # ASIGNAR COLOR A CADA POLÍGONO
+#   # =========================================================
+#   
+#   data$color_region <- unname(
+#     colores_regiones[
+#       match(
+#         region_key,
+#         colores_key
+#       )
+#     ]
+#   )
+#   
+#   
+#   # =========================================================
+#   # COLOR DE RESPALDO
+#   # =========================================================
+#   
+#   data$color_region[
+#     is.na(data$color_region)
+#   ] <- "#BDBDBD"
+#   
+#   
+#   # =========================================================
+#   # FORMATEAR CASOS
+#   # =========================================================
+#   
+#   data$casos_label <- format(
+#     data$casos_map,
+#     big.mark = ",",
+#     decimal.mark = ".",
+#     scientific = FALSE,
+#     trim = TRUE
+#   )
+#   
+#   
+#   # =========================================================
+#   # LABEL INTERACTIVO
+#   # =========================================================
+#   
+#   labels <- paste0(
+#     
+#     "<div style='
+#       font-family: Arial, Helvetica, sans-serif;
+#       padding: 3px 5px;
+#       min-width: 130px;
+#     '>",
+#     
+#     "<div style='
+#       font-size: 14px;
+#       font-weight: 700;
+#       color: #333333;
+#       margin-bottom: 4px;
+#     '>",
+#     
+#     data$region_map,
+#     
+#     "</div>",
+#     
+#     "<div style='
+#       font-size: 12px;
+#       color: #666666;
+#     '>",
+#     
+#     value_col,
+#     
+#     ": <strong style='color:#333333;'>",
+#     
+#     data$casos_label,
+#     
+#     "</strong>",
+#     
+#     "</div>",
+#     
+#     "</div>"
+#   )
+#   
+#   
+#   # =========================================================
+#   # CREAR MAPA
+#   # =========================================================
+#   
+#   mapa <- leaflet(data) %>%
+#     
 #     setView(
 #       lng = -66.5,
 #       lat = 18.2,
 #       zoom = map_zoom
 #     ) %>%
 #     
-#     addTiles(
-#       urlTemplate = carto_positron_url,
-#       attribution = carto_attribution,
-#       options = tileOptions(
-#         subdomains = "abcd",
-#         maxZoom = 20
-#       )
-#     ) %>%
-#     
-#     addPolygons(
-#       fillColor = pal(values),
-#       weight = 1,
-#       opacity = 1,
-#       color = "#666",
-#       dashArray = "",
-#       fillOpacity = 0.7,
-#       
-#       label = paste0(
-#         value_col_region, ": ", regiones,
-#         "<br>",
-#         value_col, ": ", values
-#       ) %>%
-#         lapply(htmltools::HTML),
-#       
-#       highlightOptions = highlightOptions(
-#         weight = 1,
-#         color = "#666",
-#         dashArray = "",
-#         fillOpacity = 0.9,
-#         bringToFront = TRUE
-#       )
-#     ) %>%
-#     
-#     addLegend(
-#       pal = pal,
-#       values = values,
-#       opacity = 0.7,
-#       title = value_col,
-#       position = "bottomright",
-#       labFormat = labelFormat(digits = 0)
+#     # =======================================================
+#   # CARTO POSITRON
+#   # =======================================================
+#   
+#   addTiles(
+#     urlTemplate = carto_positron_url,
+#     attribution = carto_attribution,
+#     options = tileOptions(
+#       subdomains = "abcd",
+#       maxZoom = 20
 #     )
+#   ) %>%
+#     
+#     # =======================================================
+#   # POLÍGONOS
+#   # =======================================================
+#   
+#   addPolygons(
+#     
+#     fillColor = ~color_region,
+#     
+#     fillOpacity = 0.78,
+#     
+#     color = "#FFFFFF",
+#     
+#     opacity = 1,
+#     
+#     weight = 2,
+#     
+#     smoothFactor = 0.4,
+#     
+#     label = lapply(
+#       labels,
+#       htmltools::HTML
+#     ),
+#     
+#     labelOptions = labelOptions(
+#       
+#       direction = "auto",
+#       
+#       textsize = "12px",
+#       
+#       style = list(
+#         "background" = "rgba(255,255,255,0.97)",
+#         "border" = "none",
+#         "border-radius" = "7px",
+#         "box-shadow" = "0 2px 7px rgba(0,0,0,0.18)",
+#         "padding" = "7px 9px"
+#       )
+#     ),
+#     
+#     highlightOptions = highlightOptions(
+#       weight = 3,
+#       color = "#333333",
+#       fillOpacity = 0.90,
+#       bringToFront = TRUE
+#     )
+#   )
+#   
+#   
+#   # =========================================================
+#   # POSICIÓN DE LOS NÚMEROS
+#   # =========================================================
+#   
+#   indices_validos <- which(
+#     is.finite(data$casos_map)
+#   )
+#   
+#   
+#   if (length(indices_validos) > 0) {
+#     
+#     # -------------------------------------------------------
+#     # PUNTO QUE SIEMPRE QUEDA DENTRO DEL POLÍGONO
+#     # -------------------------------------------------------
+#     
+#     puntos <- st_point_on_surface(
+#       data[indices_validos, ]
+#     )
+#     
+#     coords <- st_coordinates(
+#       puntos
+#     )
+#     
+#     
+#     # =======================================================
+#     # NÚMERO DE CASOS SOBRE CADA REGIÓN
+#     # =======================================================
+#     
+#     value_labels <- paste0(
+#       
+#       "<div class='vivienda-casos-label'>",
+#       
+#       data$casos_label[indices_validos],
+#       
+#       "</div>"
+#     )
+#     
+#     
+#     mapa <- mapa %>%
+#       
+#       addLabelOnlyMarkers(
+#         
+#         lng = coords[, 1],
+#         lat = coords[, 2],
+#         
+#         label = lapply(
+#           value_labels,
+#           htmltools::HTML
+#         ),
+#         
+#         labelOptions = labelOptions(
+#           
+#           noHide = TRUE,
+#           
+#           direction = "center",
+#           
+#           textOnly = TRUE,
+#           
+#           className = "vivienda-casos-marker"
+#         )
+#       )
+#   }
+#   
+#   
+#   # =========================================================
+#   # ESTILOS CSS
+#   # =========================================================
+#   
+#   mapa <- mapa %>%
+#     
+#     addControl(
+#       
+#       html = "
+#       
+#       <style>
+#       
+#       /* =====================================================
+#          NÚMERO DE CASOS
+#          ===================================================== */
+#       
+#       .vivienda-casos-marker {
+#         background: transparent !important;
+#         border: none !important;
+#         box-shadow: none !important;
+#         padding: 0 !important;
+#       }
+#       
+#       .vivienda-casos-label {
+#         
+#         font-family:
+#           Arial,
+#           Helvetica,
+#           sans-serif;
+#         
+#         font-size: 13px;
+#         
+#         font-weight: 700;
+#         
+#         color: #FFFFFF;
+#         
+#         text-align: center;
+#         
+#         white-space: nowrap;
+#         
+#         pointer-events: none;
+#         
+#         text-shadow:
+#           -1px -1px 2px rgba(0,0,0,0.75),
+#            1px -1px 2px rgba(0,0,0,0.75),
+#           -1px  1px 2px rgba(0,0,0,0.75),
+#            1px  1px 2px rgba(0,0,0,0.75);
+#       }
+#       
+#       </style>
+#       
+#       ",
+#       
+#       position = "topleft"
+#     )
+#   
+#   
+#   # =========================================================
+#   # LEYENDA PERSONALIZADA
+#   # =========================================================
+#   
+#   legend_items <- paste0(
+#     
+#     mapply(
+#       
+#       function(region, color) {
+#         
+#         paste0(
+#           
+#           "<div style='
+#             display:flex;
+#             align-items:center;
+#             margin:4px 0;
+#             font-size:12px;
+#             color:#555;
+#           '>",
+#           
+#           "<span style='
+#             display:inline-block;
+#             width:14px;
+#             height:14px;
+#             background:",
+#           
+#           color,
+#           
+#           ";
+#             border-radius:4px;
+#             margin-right:8px;
+#             flex-shrink:0;
+#           '></span>",
+#           
+#           "<span>",
+#           
+#           region,
+#           
+#           "</span>",
+#           
+#           "</div>"
+#         )
+#       },
+#       
+#       names(colores_regiones),
+#       colores_regiones,
+#       
+#       SIMPLIFY = TRUE
+#     ),
+#     
+#     collapse = ""
+#   )
+#   
+#   
+#   legend_html <- paste0(
+#     
+#     "<div style='
+#       background:rgba(255,255,255,0.96);
+#       padding:12px 14px;
+#       border-radius:9px;
+#       box-shadow:0 2px 10px rgba(0,0,0,0.18);
+#       font-family:Arial, Helvetica, sans-serif;
+#     '>",
+#     
+#     "<div style='
+#       font-size:14px;
+#       font-weight:700;
+#       color:#333;
+#       margin-bottom:7px;
+#     '>",
+#     
+#     "Regiones",
+#     
+#     "</div>",
+#     
+#     legend_items,
+#     
+#     "</div>"
+#   )
+#   
+#   
+#   mapa <- mapa %>%
+#     
+#     addControl(
+#       html = legend_html,
+#       position = "bottomright"
+#     )
+#   
+#   
+#   # =========================================================
+#   # RETORNAR MAPA
+#   # =========================================================
+#   
+#   mapa
 # }
 
-renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
-                             municipios_geo) {
-  
-  # =========================================================
-  # CARTO BASEMAP
-  # =========================================================
+# #### renderMap_vivienda_new ####
+# renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom) {
+#   
+#   # ============================================================
+#   # CARTO API KEY
+#   # Se obtiene desde el archivo .Renviron
+#   # ============================================================
+#   
+#   carto_api_key <- Sys.getenv("CARTO_API_KEY")
+#   
+#   # Verificar que la API Key exista
+#   if (carto_api_key == "") {
+#     warning(
+#       "CARTO_API_KEY no está configurada. ",
+#       "Verifica el archivo .Renviron."
+#     )
+#   }
+#   
+#   
+#   # ============================================================
+#   # URL DE CARTO POSITRON
+#   # ============================================================
+#   
+#   carto_positron_url <- paste0(
+#     "https://{s}.basemaps.cartocdn.com/rastertiles/",
+#     "light_all/{z}/{x}/{y}.png?key=",
+#     carto_api_key
+#   )
+#   
+#   
+#   # ============================================================
+#   # VERIFICAR QUE HAYA DATOS DISPONIBLES
+#   # ============================================================
+#   
+#   if (
+#     nrow(data) == 0 ||
+#     !value_col %in% colnames(data) ||
+#     !value_col_region %in% colnames(data)
+#   ) {
+#     
+#     return(
+#       leaflet() %>%
+#         setView(
+#           lng = -66.5,
+#           lat = 18.2,
+#           zoom = map_zoom
+#         ) %>%
+#         addTiles()
+#     )
+#   }
+#   
+#   
+#   # ============================================================
+#   # OBTENER VALORES DE LAS COLUMNAS DINÁMICAS
+#   # ============================================================
+#   
+#   values <- data[[value_col]]
+#   regiones <- data[[value_col_region]]
+#   
+#   
+#   # ============================================================
+#   # ASEGURAR QUE LOS VALORES SEAN NUMÉRICOS
+#   # ============================================================
+#   
+#   values <- as.numeric(values)
+#   
+#   
+#   # ============================================================
+#   # CALCULAR LÍMITES PARA LA ESCALA DE COLORES
+#   # ============================================================
+#   
+#   min_val <- 0
+#   
+#   max_val <- max(
+#     values,
+#     na.rm = TRUE
+#   )
+#   
+#   
+#   # Si no existen valores válidos
+#   if (!is.finite(max_val)) {
+#     
+#     return(
+#       leaflet(data) %>%
+#         setView(
+#           lng = -66.5,
+#           lat = 18.2,
+#           zoom = map_zoom
+#         ) %>%
+#         addTiles(
+#           urlTemplate = carto_positron_url,
+#           attribution = paste0(
+#             '&copy; <a href="https://www.openstreetmap.org/copyright">',
+#             'OpenStreetMap</a> contributors ',
+#             '&copy; <a href="https://carto.com/attributions">',
+#             'CARTO</a>'
+#           ),
+#           options = tileOptions(
+#             subdomains = "abcd",
+#             maxZoom = 20
+#           )
+#         )
+#     )
+#   }
+#   
+#   
+#   rango <- max_val - min_val
+#   
+#   
+#   # ============================================================
+#   # DEFINIR TAMAÑO DE LOS INTERVALOS
+#   # ============================================================
+#   
+#   step <- ifelse(
+#     rango >= 30,
+#     10,
+#     5
+#   )
+#   
+#   
+#   # ============================================================
+#   # CREAR BINS
+#   # ============================================================
+#   
+#   if (max_val == min_val) {
+#     
+#     bins <- c(
+#       min_val,
+#       min_val + step
+#     )
+#     
+#   } else {
+#     
+#     bins <- seq(
+#       floor(min_val / step) * step,
+#       ceiling(max_val / step) * step,
+#       by = step
+#     )
+#     
+#   }
+#   
+#   
+#   # Asegurar que existan al menos dos límites
+#   if (length(bins) < 2) {
+#     
+#     bins <- c(
+#       min_val,
+#       min_val + step
+#     )
+#     
+#   }
+#   
+#   
+#   # ============================================================
+#   # PALETA DE COLORES VIOLETA
+#   # ============================================================
+#   
+#   violet_colors <- c(
+#     "#f9f5ff",
+#     "#f4e3ff",
+#     "#edd0ff",
+#     "#e2b3ff",
+#     "#d89aff",
+#     "#cc80ff",
+#     "#bf66ff",
+#     "#a64dff",
+#     "#8c33ff",
+#     "#701aff",
+#     "#5900f2",
+#     "#4400cc",
+#     "#3000a6",
+#     "#1d007d",
+#     "#0d004c"
+#   )
+#   
+#   
+#   # ============================================================
+#   # NÚMERO DE INTERVALOS
+#   # ============================================================
+#   
+#   num_bins <- length(bins) - 1
+#   
+#   
+#   # ============================================================
+#   # AJUSTAR CANTIDAD DE COLORES
+#   # ============================================================
+#   
+#   if (num_bins <= length(violet_colors)) {
+#     
+#     colors <- violet_colors[
+#       seq_len(num_bins)
+#     ]
+#     
+#   } else {
+#     
+#     colors <- colorRampPalette(violet_colors)(
+#       num_bins
+#     )
+#     
+#   }
+#   
+#   
+#   # ============================================================
+#   # CREAR PALETA
+#   # ============================================================
+#   
+#   pal <- colorBin(
+#     palette = colors,
+#     domain = values,
+#     bins = bins,
+#     na.color = "transparent"
+#   )
+#   
+#   
+#   # ============================================================
+#   # CREAR MAPA
+#   # ============================================================
+#   
+#   leaflet(data) %>%
+#     
+#     
+#     # ----------------------------------------------------------
+#   # VISTA INICIAL
+#   # ----------------------------------------------------------
+#   
+#   setView(
+#     lng = -66.5,
+#     lat = 18.2,
+#     zoom = map_zoom
+#   ) %>%
+#     
+#     
+#     # ----------------------------------------------------------
+#   # CARTO POSITRON
+#   # ----------------------------------------------------------
+#   
+#   addTiles(
+#     urlTemplate = carto_positron_url,
+#     
+#     attribution = paste0(
+#       '&copy; <a href="https://www.openstreetmap.org/copyright" ',
+#       'target="_blank">OpenStreetMap</a> contributors ',
+#       '&copy; <a href="https://carto.com/attributions" ',
+#       'target="_blank">CARTO</a>'
+#     ),
+#     
+#     options = tileOptions(
+#       subdomains = "abcd",
+#       maxZoom = 20
+#     )
+#   ) %>%
+#     
+#     
+#     # ----------------------------------------------------------
+#   # POLÍGONOS
+#   # ----------------------------------------------------------
+#   
+#   addPolygons(
+#     
+#     fillColor = ~pal(values),
+#     
+#     weight = 1,
+#     
+#     opacity = 1,
+#     
+#     color = "#666",
+#     
+#     dashArray = "",
+#     
+#     fillOpacity = 0.7,
+#     
+#     
+#     # --------------------------------------------------------
+#     # LABEL
+#     # --------------------------------------------------------
+#     
+#     label = ~paste0(
+#       value_col_region,
+#       ": ",
+#       regiones,
+#       "<br>",
+#       value_col,
+#       ": ",
+#       values
+#     ) %>%
+#       lapply(htmltools::HTML),
+#     
+#     
+#     # --------------------------------------------------------
+#     # HIGHLIGHT
+#     # --------------------------------------------------------
+#     
+#     highlightOptions = highlightOptions(
+#       weight = 1,
+#       color = "#666",
+#       dashArray = "",
+#       fillOpacity = 0.9,
+#       bringToFront = TRUE
+#     )
+#     
+#   ) %>%
+#     
+#     
+#     # ----------------------------------------------------------
+#   # LEYENDA
+#   # ----------------------------------------------------------
+#   
+#   addLegend(
+#     
+#     pal = pal,
+#     
+#     values = ~values,
+#     
+#     opacity = 0.7,
+#     
+#     title = value_col,
+#     
+#     position = "bottomright",
+#     
+#     labFormat = labelFormat(
+#       digits = 0
+#     )
+#   )
+# }
+# 
+# 
+# 
+
+#### renderMap_vivienda_new NO COROPLETICO ####
+renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom) {
   
   carto_api_key <- Sys.getenv("CARTO_API_KEY")
+  
+  if (carto_api_key == "") {
+    warning(
+      "CARTO_API_KEY no está configurada. ",
+      "Verifica el archivo .Renviron."
+    )
+  }
   
   carto_positron_url <- paste0(
     "https://{s}.basemaps.cartocdn.com/rastertiles/",
@@ -3505,12 +4896,7 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
     '&copy; <a href="https://carto.com/attributions" ',
     'target="_blank">CARTO</a>'
   )
-  
-  
-  # =========================================================
   # VERIFICAR DATOS
-  # =========================================================
-  
   if (
     nrow(data) == 0 ||
     !value_col %in% colnames(data) ||
@@ -3535,11 +4921,7 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
     )
   }
   
-  
-  # =========================================================
   # PREPARAR DATOS
-  # =========================================================
-  
   data <- st_as_sf(data)
   
   data$region_map <- trimws(
@@ -3553,14 +4935,8 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
   # Los valores faltantes se consideran 0
   data$casos_map[is.na(data$casos_map)] <- 0
   
-  # =========================================================
-  # COLORES FIJOS POR REGIÓN
-  # =========================================================
-  #
-  # IMPORTANTE:
-  # Cada región siempre tendrá el mismo color.
-  #
   
+  # COLORES FIJOS POR REGIÓN
   colores_regiones <- c(
     "Aguadilla" = "#6A4C93",
     "Arecibo"   = "#1982C4",
@@ -3575,10 +4951,7 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
   )
   
   
-  # =========================================================
   # NORMALIZAR NOMBRES PARA HACER MATCH
-  # =========================================================
-  
   region_key <- toupper(
     trimws(
       data$region_map
@@ -3590,10 +4963,7 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
   )
   
   
-  # =========================================================
   # ASIGNAR COLOR A CADA POLÍGONO
-  # =========================================================
-  
   data$color_region <- unname(
     colores_regiones[
       match(
@@ -3604,24 +4974,13 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
   )
   
   
-  # =========================================================
   # COLOR DE RESPALDO
-  # =========================================================
-  #
-  # Si existe alguna región cuyo nombre no coincide
-  # exactamente con las 8 regiones definidas arriba,
-  # se pintará gris en lugar de negro.
-  #
-  
   data$color_region[
     is.na(data$color_region)
   ] <- "#BDBDBD"
   
   
-  # =========================================================
   # FORMATEAR CASOS
-  # =========================================================
-  
   data$casos_label <- format(
     data$casos_map,
     big.mark = ",",
@@ -3631,10 +4990,7 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
   )
   
   
-  # =========================================================
   # LABEL INTERACTIVO
-  # =========================================================
-  
   labels <- paste0(
     
     "<div style='
@@ -3673,10 +5029,7 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
   )
   
   
-  # =========================================================
   # CREAR MAPA
-  # =========================================================
-  
   mapa <- leaflet(data) %>%
     
     setView(
@@ -3685,25 +5038,19 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
       zoom = map_zoom
     ) %>%
     
-    addTiles(
-      urlTemplate = carto_positron_url,
-      attribution = carto_attribution,
-      options = tileOptions(
-        subdomains = "abcd",
-        maxZoom = 20
-      )
-    ) %>%
+  # CARTO POSITRON
+  addTiles(
+    urlTemplate = carto_positron_url,
+    attribution = carto_attribution,
+    options = tileOptions(
+      subdomains = "abcd",
+      maxZoom = 20
+    )
+  ) %>%
     
-    
-    # =======================================================
   # POLÍGONOS
-  # =======================================================
-  
   addPolygons(
     
-    # -----------------------------------------------------
-    # AQUÍ ESTÁ EL CAMBIO IMPORTANTE
-    # -----------------------------------------------------
     fillColor = ~color_region,
     
     fillOpacity = 0.78,
@@ -3745,10 +5092,7 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
   )
   
   
-  # =========================================================
   # POSICIÓN DE LOS NÚMEROS
-  # =========================================================
-  
   indices_validos <- which(
     is.finite(data$casos_map)
   )
@@ -3756,7 +5100,10 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
   
   if (length(indices_validos) > 0) {
     
-    # Punto que siempre queda dentro del polígono
+    # -------------------------------------------------------
+    # PUNTO QUE SIEMPRE QUEDA DENTRO DEL POLÍGONO
+    # -------------------------------------------------------
+    
     puntos <- st_point_on_surface(
       data[indices_validos, ]
     )
@@ -3767,12 +5114,12 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
     
     
     # =======================================================
-    # NÚMERO SOBRE CADA REGIÓN
+    # NÚMERO DE CASOS SOBRE CADA REGIÓN
     # =======================================================
     
     value_labels <- paste0(
       
-      "<div class='nppr-casos-label'>",
+      "<div class='vivienda-new-casos-label'>",
       
       data$casos_label[indices_validos],
       
@@ -3800,16 +5147,13 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
           
           textOnly = TRUE,
           
-          className = "nppr-casos-marker"
+          className = "vivienda-new-casos-marker"
         )
       )
   }
   
   
-  # =========================================================
   # ESTILOS CSS
-  # =========================================================
-  
   mapa <- mapa %>%
     
     addControl(
@@ -3822,14 +5166,14 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
          NÚMERO DE CASOS
          ===================================================== */
       
-      .nppr-casos-marker {
+      .vivienda-new-casos-marker {
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
         padding: 0 !important;
       }
       
-      .nppr-casos-label {
+      .vivienda-new-casos-label {
         
         font-family:
           Arial,
@@ -3863,9 +5207,7 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
     )
   
   
-  # =========================================================
-  # LEYENDA
-  # =========================================================
+  # LEYENDA PERSONALIZADA
   
   legend_items <- paste0(
     
@@ -3888,7 +5230,9 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
             width:14px;
             height:14px;
             background:",
+          
           color,
+          
           ";
             border-radius:4px;
             margin-right:8px;
@@ -3896,7 +5240,9 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
           '></span>",
           
           "<span>",
+          
           region,
+          
           "</span>",
           
           "</div>"
@@ -3947,538 +5293,38 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
       position = "bottomright"
     )
   
+  mapa <- mapa %>%
+    htmlwidgets::onRender("
+    function(el, x) {
+
+      var map = this;
+
+      if (window.MapHandlers) {
+
+        MapHandlers.init(map, {
+
+          bounds: [
+            [17.85, -67.30],
+            [18.55, -65.20]
+          ],
+
+          totals: {},
+
+          legendTitle: 'Casos',
+
+          infoTitle: 'Regiones'
+
+        });
+
+      }
+
+    }
+  ")
   
-  # =========================================================
-  # RETORNAR
-  # =========================================================
   
+  # RETORNAR MAPA
   mapa
 }
-
-
-#### renderMap_vivienda ####
-
-renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,
-                               municipios_geo) {
-  # =========================================================
-  # CARTO BASEMAP
-  # =========================================================
-  
-  carto_api_key <- Sys.getenv("CARTO_API_KEY")
-  
-  carto_positron_url <- paste0(
-    "https://{s}.basemaps.cartocdn.com/rastertiles/",
-    "light_all/{z}/{x}/{y}.png?key=",
-    carto_api_key
-  )
-  
-  carto_attribution <- paste0(
-    '&copy; <a href="https://www.openstreetmap.org/copyright" ',
-    'target="_blank">OpenStreetMap</a> contributors ',
-    '&copy; <a href="https://carto.com/attributions" ',
-    'target="_blank">CARTO</a>'
-  )
-  
-  # =========================================================
-  # VERIFICAR QUE HAY DATOS DISPONIBLES
-  # =========================================================
-  
-  if (
-    nrow(data) == 0 ||
-    !value_col %in% colnames(data) ||
-    !value_col_region %in% colnames(data)
-  ) {
-    return(
-      leaflet() %>%
-        addTiles()
-    )
-  }
-  
-  # =========================================================
-  # OBTENER VALORES
-  # =========================================================
-  
-  values <- as.numeric(data[[value_col]])
-  regiones <- data[[value_col_region]]
-  
-  # =========================================================
-  # CALCULAR LÍMITES PARA LA ESCALA
-  # =========================================================
-  
-  min_val <- 0
-  max_val <- max(values, na.rm = TRUE)
-  
-  # Manejar datos sin valores válidos
-  if (!is.finite(max_val)) {
-    return(
-      leaflet() %>%
-        setView(
-          lng = -66.5,
-          lat = 18.2,
-          zoom = map_zoom
-        ) %>%
-        addTiles(
-          urlTemplate = carto_positron_url,
-          attribution = carto_attribution,
-          options = tileOptions(
-            subdomains = "abcd",
-            maxZoom = 20
-          )
-        )
-    )
-  }
-  
-  rango <- max_val - min_val
-  
-  # =========================================================
-  # DEFINIR BINS
-  # =========================================================
-  
-  step <- ifelse(rango >= 30, 10, 5)
-  
-  bins <- seq(
-    floor(min_val / step) * step,
-    ceiling(max_val / step) * step,
-    by = step
-  )
-  
-  # Evitar problemas cuando solamente hay un bin
-  if (length(bins) < 2) {
-    bins <- c(min_val, min_val + step)
-  }
-  
-  # =========================================================
-  # PALETA DE COLORES
-  # =========================================================
-  
-  violet_colors <- c(
-    "#f9f5ff", "#f4e3ff", "#edd0ff", "#e2b3ff",
-    "#d89aff", "#cc80ff", "#bf66ff", "#a64dff",
-    "#8c33ff", "#701aff", "#5900f2", "#4400cc",
-    "#3000a6", "#1d007d", "#0d004c"
-  )
-  
-  num_bins <- length(bins) - 1
-  
-  colors <- violet_colors[
-    seq_len(min(num_bins, length(violet_colors)))
-  ]
-  
-  # =========================================================
-  # PALETA DINÁMICA
-  # =========================================================
-  
-  pal <- colorBin(
-    colors,
-    domain = values,
-    bins = bins,
-    na.color = "transparent"
-  )
-  
-  # =========================================================
-  # MAPA
-  # =========================================================
-  
-  leaflet(data) %>%
-    
-    setView(
-      lng = -66.5,
-      lat = 18.2,
-      zoom = map_zoom
-    ) %>%
-    
-    # ---------------------------------------------------------
-  # CARTO POSITRON
-  # ---------------------------------------------------------
-  
-  addTiles(
-    urlTemplate = carto_positron_url,
-    attribution = carto_attribution,
-    options = tileOptions(
-      subdomains = "abcd",
-      maxZoom = 20
-    )
-  ) %>%
-    
-    # ---------------------------------------------------------
-  # POLÍGONOS
-  # ---------------------------------------------------------
-  
-  addPolygons(
-    fillColor = pal(values),
-    weight = 1,
-    opacity = 1,
-    color = "#666",
-    dashArray = "",
-    fillOpacity = 0.7,
-    
-    label = paste0(
-      value_col_region, ": ", regiones,
-      "<br>",
-      value_col, ": ", values
-    ) %>%
-      lapply(htmltools::HTML),
-    
-    highlightOptions = highlightOptions(
-      weight = 1,
-      color = "#666",
-      dashArray = "",
-      fillOpacity = 0.9,
-      bringToFront = TRUE
-    )
-  ) %>%
-    
-    # ---------------------------------------------------------
-  # FRONTERAS DE LOS MUNICIPIOS
-  # ---------------------------------------------------------
-  
-  # addPolylines(
-  #   data = municipios_geo,
-  #   weight = 1,
-  #   color = "#666",
-  #   opacity = 1
-  # ) %>%
-  
-  # ---------------------------------------------------------
-  # LEYENDA
-  # ---------------------------------------------------------
-  
-  addLegend(
-    pal = pal,
-    values = values,
-    opacity = 0.7,
-    title = value_col,
-    position = "bottomright",
-    labFormat = labelFormat(digits = 0)
-  )
-}
-
-#### renderMap_vivienda_new ####
-renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom) {
-  
-  # ============================================================
-  # CARTO API KEY
-  # Se obtiene desde el archivo .Renviron
-  # ============================================================
-  
-  carto_api_key <- Sys.getenv("CARTO_API_KEY")
-  
-  # Verificar que la API Key exista
-  if (carto_api_key == "") {
-    warning(
-      "CARTO_API_KEY no está configurada. ",
-      "Verifica el archivo .Renviron."
-    )
-  }
-  
-  
-  # ============================================================
-  # URL DE CARTO POSITRON
-  # ============================================================
-  
-  carto_positron_url <- paste0(
-    "https://{s}.basemaps.cartocdn.com/rastertiles/",
-    "light_all/{z}/{x}/{y}.png?key=",
-    carto_api_key
-  )
-  
-  
-  # ============================================================
-  # VERIFICAR QUE HAYA DATOS DISPONIBLES
-  # ============================================================
-  
-  if (
-    nrow(data) == 0 ||
-    !value_col %in% colnames(data) ||
-    !value_col_region %in% colnames(data)
-  ) {
-    
-    return(
-      leaflet() %>%
-        setView(
-          lng = -66.5,
-          lat = 18.2,
-          zoom = map_zoom
-        ) %>%
-        addTiles()
-    )
-  }
-  
-  
-  # ============================================================
-  # OBTENER VALORES DE LAS COLUMNAS DINÁMICAS
-  # ============================================================
-  
-  values <- data[[value_col]]
-  regiones <- data[[value_col_region]]
-  
-  
-  # ============================================================
-  # ASEGURAR QUE LOS VALORES SEAN NUMÉRICOS
-  # ============================================================
-  
-  values <- as.numeric(values)
-  
-  
-  # ============================================================
-  # CALCULAR LÍMITES PARA LA ESCALA DE COLORES
-  # ============================================================
-  
-  min_val <- 0
-  
-  max_val <- max(
-    values,
-    na.rm = TRUE
-  )
-  
-  
-  # Si no existen valores válidos
-  if (!is.finite(max_val)) {
-    
-    return(
-      leaflet(data) %>%
-        setView(
-          lng = -66.5,
-          lat = 18.2,
-          zoom = map_zoom
-        ) %>%
-        addTiles(
-          urlTemplate = carto_positron_url,
-          attribution = paste0(
-            '&copy; <a href="https://www.openstreetmap.org/copyright">',
-            'OpenStreetMap</a> contributors ',
-            '&copy; <a href="https://carto.com/attributions">',
-            'CARTO</a>'
-          ),
-          options = tileOptions(
-            subdomains = "abcd",
-            maxZoom = 20
-          )
-        )
-    )
-  }
-  
-  
-  rango <- max_val - min_val
-  
-  
-  # ============================================================
-  # DEFINIR TAMAÑO DE LOS INTERVALOS
-  # ============================================================
-  
-  step <- ifelse(
-    rango >= 30,
-    10,
-    5
-  )
-  
-  
-  # ============================================================
-  # CREAR BINS
-  # ============================================================
-  
-  if (max_val == min_val) {
-    
-    bins <- c(
-      min_val,
-      min_val + step
-    )
-    
-  } else {
-    
-    bins <- seq(
-      floor(min_val / step) * step,
-      ceiling(max_val / step) * step,
-      by = step
-    )
-    
-  }
-  
-  
-  # Asegurar que existan al menos dos límites
-  if (length(bins) < 2) {
-    
-    bins <- c(
-      min_val,
-      min_val + step
-    )
-    
-  }
-  
-  
-  # ============================================================
-  # PALETA DE COLORES VIOLETA
-  # ============================================================
-  
-  violet_colors <- c(
-    "#f9f5ff",
-    "#f4e3ff",
-    "#edd0ff",
-    "#e2b3ff",
-    "#d89aff",
-    "#cc80ff",
-    "#bf66ff",
-    "#a64dff",
-    "#8c33ff",
-    "#701aff",
-    "#5900f2",
-    "#4400cc",
-    "#3000a6",
-    "#1d007d",
-    "#0d004c"
-  )
-  
-  
-  # ============================================================
-  # NÚMERO DE INTERVALOS
-  # ============================================================
-  
-  num_bins <- length(bins) - 1
-  
-  
-  # ============================================================
-  # AJUSTAR CANTIDAD DE COLORES
-  # ============================================================
-  
-  if (num_bins <= length(violet_colors)) {
-    
-    colors <- violet_colors[
-      seq_len(num_bins)
-    ]
-    
-  } else {
-    
-    colors <- colorRampPalette(violet_colors)(
-      num_bins
-    )
-    
-  }
-  
-  
-  # ============================================================
-  # CREAR PALETA
-  # ============================================================
-  
-  pal <- colorBin(
-    palette = colors,
-    domain = values,
-    bins = bins,
-    na.color = "transparent"
-  )
-  
-  
-  # ============================================================
-  # CREAR MAPA
-  # ============================================================
-  
-  leaflet(data) %>%
-    
-    
-    # ----------------------------------------------------------
-  # VISTA INICIAL
-  # ----------------------------------------------------------
-  
-  setView(
-    lng = -66.5,
-    lat = 18.2,
-    zoom = map_zoom
-  ) %>%
-    
-    
-    # ----------------------------------------------------------
-  # CARTO POSITRON
-  # ----------------------------------------------------------
-  
-  addTiles(
-    urlTemplate = carto_positron_url,
-    
-    attribution = paste0(
-      '&copy; <a href="https://www.openstreetmap.org/copyright" ',
-      'target="_blank">OpenStreetMap</a> contributors ',
-      '&copy; <a href="https://carto.com/attributions" ',
-      'target="_blank">CARTO</a>'
-    ),
-    
-    options = tileOptions(
-      subdomains = "abcd",
-      maxZoom = 20
-    )
-  ) %>%
-    
-    
-    # ----------------------------------------------------------
-  # POLÍGONOS
-  # ----------------------------------------------------------
-  
-  addPolygons(
-    
-    fillColor = ~pal(values),
-    
-    weight = 1,
-    
-    opacity = 1,
-    
-    color = "#666",
-    
-    dashArray = "",
-    
-    fillOpacity = 0.7,
-    
-    
-    # --------------------------------------------------------
-    # LABEL
-    # --------------------------------------------------------
-    
-    label = ~paste0(
-      value_col_region,
-      ": ",
-      regiones,
-      "<br>",
-      value_col,
-      ": ",
-      values
-    ) %>%
-      lapply(htmltools::HTML),
-    
-    
-    # --------------------------------------------------------
-    # HIGHLIGHT
-    # --------------------------------------------------------
-    
-    highlightOptions = highlightOptions(
-      weight = 1,
-      color = "#666",
-      dashArray = "",
-      fillOpacity = 0.9,
-      bringToFront = TRUE
-    )
-    
-  ) %>%
-    
-    
-    # ----------------------------------------------------------
-  # LEYENDA
-  # ----------------------------------------------------------
-  
-  addLegend(
-    
-    pal = pal,
-    
-    values = ~values,
-    
-    opacity = 0.7,
-    
-    title = value_col,
-    
-    position = "bottomright",
-    
-    labFormat = labelFormat(
-      digits = 0
-    )
-  )
-}
-
-
 
 
 #### renderMap_vivienda_municipio ####

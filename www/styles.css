@@ -1,0 +1,630 @@
+/* =========================================================
+   VIOLENCIA DE GÉNERO PR
+   ESTILOS GENERALES DEL DASHBOARD
+   ========================================================= */
+
+
+/* =========================================================
+   CONTENEDOR GENERAL
+   ========================================================= */
+
+.dashboard-container {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 10px 20px 30px 20px;
+}
+
+
+/* =========================================================
+   TARJETAS GENERALES
+   ========================================================= */
+
+.dashboard-card {
+  background: #ffffff;
+  border: 1px solid #e1e4e6;
+  border-radius: 8px;
+  padding: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.dashboard-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #3e3f3a;
+  margin-bottom: 15px;
+}
+
+
+/* =========================================================
+   TARJETA DE GRÁFICA
+   ========================================================= */
+
+.plot-card {
+  padding: 15px 20px 10px 20px;
+}
+
+.plot-card #plot-title {
+  margin-bottom: 5px;
+}
+
+
+/* =========================================================
+   TARJETA DE MAPAS
+   ========================================================= */
+
+.maps-card {
+  padding: 15px 20px 20px 20px;
+}
+
+
+/* =========================================================
+   TÍTULO DE GRÁFICAS / MAPAS
+   ========================================================= */
+
+.plot-title {
+  margin-bottom: 15px;
+}
+
+.map-title {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #3e3f3a;
+  margin-top: 5px;
+  margin-bottom: 8px;
+}
+
+
+/* =========================================================
+   CONTENEDOR DE MAPAS
+   ========================================================= */
+
+.map-section {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.map-section:last-child {
+  margin-bottom: 0;
+}
+
+.map-output {
+  width: 100% !important;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   FILA DE FILTROS
+   ========================================================= */
+
+.filters-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 15px;
+  width: 100%;
+}
+
+
+/* =========================================================
+   ICONO DE FILTRADO
+   ========================================================= */
+
+.filter-icon {
+  flex: 0 0 35px;
+  width: 35px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #555;
+  font-size: 16px;
+
+  margin-bottom: 0;
+}
+
+.filter-icon i {
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   CAJAS DE FILTRO
+   ========================================================= */
+
+.filter-box {
+  flex: 1;
+  min-width: 0;
+}
+
+.filter-switch {
+  flex: 0 0 180px;
+  min-width: 180px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
+.dashboard-container .form-group {
+  margin-bottom: 0;
+}
+
+.dashboard-container .form-group > label {
+  color: #555;
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 6px;
+}
+
+
+/* =========================================================
+   SELECTIZE
+   ========================================================= */
+
+.dashboard-container .selectize-input,
+.dashboard-container .selectize-control.single .selectize-input {
+  background-color: #ffffff !important;
+  border: 1px solid #d6d9db !important;
+  border-radius: 6px !important;
+  color: #555 !important;
+  font-size: 13px;
+  min-height: 38px;
+  box-shadow: none !important;
+  padding: 9px 12px;
+}
+
+.dashboard-container .selectize-input:hover,
+.dashboard-container .selectize-input.focus {
+  border-color: #9a9c99 !important;
+  box-shadow: 0 0 0 2px rgba(62,63,58,0.08) !important;
+}
+
+.dashboard-container .selectize-dropdown {
+  border: 1px solid #e1e4e6;
+  border-radius: 6px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.10);
+}
+
+.dashboard-container .selectize-dropdown .option {
+  color: #555;
+  font-size: 13px;
+  padding: 8px 12px;
+}
+
+.dashboard-container .selectize-dropdown .option:hover {
+  background-color: #f3f4f4;
+  color: #3e3f3a;
+}
+
+
+/* =========================================================
+   PICKER BOOTSTRAP-SELECT
+   ========================================================= */
+
+/* Evita mayúsculas automáticas */
+
+.bootstrap-select,
+.bootstrap-select *,
+.bootstrap-select .dropdown-toggle,
+.bootstrap-select .filter-option,
+.bootstrap-select .dropdown-menu,
+.bootstrap-select .dropdown-menu li a,
+.bootstrap-select .bs-actionsbox .btn {
+  text-transform: none !important;
+}
+
+
+/* Botón principal */
+
+.bootstrap-select > .dropdown-toggle {
+  background-color: #ffffff !important;
+  border: 1px solid #d6d9db !important;
+  border-radius: 6px !important;
+  color: #555 !important;
+  font-size: 13px;
+  min-height: 38px;
+  box-shadow: none !important;
+  transition: all 0.2s ease;
+}
+
+.bootstrap-select > .dropdown-toggle:hover,
+.bootstrap-select > .dropdown-toggle:focus {
+  border-color: #9a9c99 !important;
+  box-shadow: 0 0 0 2px rgba(62,63,58,0.08) !important;
+}
+
+
+/* Menú */
+
+.bootstrap-select .dropdown-menu {
+  border: 1px solid #e1e4e6;
+  border-radius: 6px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.10);
+}
+
+.bootstrap-select .dropdown-menu li a {
+  color: #555;
+  font-size: 13px;
+  padding: 8px 12px;
+}
+
+.bootstrap-select .dropdown-menu li a:hover {
+  background-color: #f3f4f4;
+  color: #3e3f3a;
+}
+
+.bootstrap-select .dropdown-menu li.selected a {
+  background-color: #eeeeed;
+  color: #3e3f3a;
+}
+
+
+/* Texto de seleccionados */
+
+.bootstrap-select .filter-option-inner-inner {
+  text-transform: none !important;
+}
+
+
+/* =========================================================
+   BOTONES SELECCIONAR / DESELECCIONAR
+   ========================================================= */
+
+.bootstrap-select .bs-actionsbox {
+  padding: 8px;
+}
+
+.bootstrap-select .bs-actionsbox .btn {
+  text-transform: none !important;
+  font-size: 12px;
+  border-radius: 5px;
+  border: 1px solid #d5d7d8;
+  background: #f7f7f7;
+  color: #555;
+  transition: all 0.2s ease;
+}
+
+.bootstrap-select .bs-actionsbox .btn:hover {
+  background: #e9eaea;
+  color: #3e3f3a;
+}
+
+
+/* =========================================================
+   SWITCH MOSTRAR DATOS
+   ========================================================= */
+
+.custom-checkbox-wrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.custom-checkbox-wrapper .material-switch {
+  margin-bottom: 0;
+}
+
+.custom-checkbox-wrapper label {
+  color: #555 !important;
+  font-size: 11px !important;
+}
+
+
+/* =========================================================
+   TABLA + INFORMACIÓN
+   ========================================================= */
+
+.bottom-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+
+/* =========================================================
+   TABLA OCULTA
+   ========================================================= */
+
+.bottom-row > [id^="dataTableUI_"] {
+  width: 0;
+  flex: 0 0 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   INFORMACIÓN
+   ========================================================= */
+
+.info-column {
+  width: 100%;
+  flex: 0 0 100%;
+  min-width: 0;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+
+/* =========================================================
+   CUANDO SE MUESTRA LA TABLA
+   ========================================================= */
+
+.bottom-row.show-table {
+  gap: 20px;
+}
+
+
+/*
+   La tabla ocupa aproximadamente 2/3
+*/
+
+.bottom-row.show-table > [id^="dataTableUI_"] {
+  width: calc(66.666% - 10px);
+  flex: 0 0 calc(66.666% - 10px);
+  min-width: 0;
+  overflow: visible;
+}
+
+
+/*
+   Información ocupa aproximadamente 1/3
+*/
+
+.bottom-row.show-table .info-column {
+  width: calc(33.333% - 10px);
+  flex: 0 0 calc(33.333% - 10px);
+}
+
+
+/* =========================================================
+   TABLAS RESPONSIVE
+   ========================================================= */
+
+[id^="dataTableUI_"] {
+  max-width: 100%;
+  min-width: 0;
+}
+
+[id^="dataTableUI_"] .dataTables_wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+[id^="dataTableUI_"] table.dataTable {
+  width: 100% !important;
+}
+
+
+/* =========================================================
+   CONTENEDOR DE TABLA
+   ========================================================= */
+
+.table-container {
+  width: 100%;
+  min-width: 0;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 15px;
+}
+
+
+/* =========================================================
+   NOTA IMPORTANTE
+   ========================================================= */
+
+.info-card {
+  background-color: #ffffff;
+  color: #555;
+
+  border-left: 4px solid #8a8c88;
+  border-top: 1px solid #e1e4e6;
+  border-right: 1px solid #e1e4e6;
+  border-bottom: 1px solid #e1e4e6;
+
+  border-radius: 6px;
+
+  padding: 18px 20px;
+
+  margin-bottom: 20px;
+
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.info-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #3e3f3a;
+
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.info-card p {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+
+/* =========================================================
+   FUENTE
+   ========================================================= */
+
+.source-card {
+  background-color: #f5f6f6;
+
+  border-left: 4px solid #3e3f3a;
+
+  border-radius: 6px;
+
+  padding: 18px 20px;
+
+  margin-bottom: 20px;
+}
+
+.source-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #3e3f3a;
+
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.source-card p {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+
+/* =========================================================
+   LINKS DE FUENTES
+   ========================================================= */
+
+.source-link {
+  color: #555 !important;
+  text-decoration: none !important;
+}
+
+.source-link:hover {
+  color: #3e3f3a !important;
+  text-decoration: underline !important;
+}
+
+
+/* =========================================================
+   CONTENEDORES DE MAPAS
+   ========================================================= */
+
+.map-dashboard {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 10px 20px 30px 20px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .dashboard-container,
+  .map-dashboard {
+    padding: 10px;
+  }
+
+
+  /* -------------------------
+     FILTROS
+     ------------------------- */
+
+  .filters-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .filter-icon {
+    width: 100%;
+    height: 25px;
+    justify-content: flex-start;
+  }
+
+  .filter-box,
+  .filter-switch {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .custom-checkbox-wrapper {
+    padding-top: 0 !important;
+    height: auto;
+  }
+
+
+  /* -------------------------
+     TABLA + INFORMACIÓN
+     ------------------------- */
+
+  .bottom-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .bottom-row.show-table > [id^="dataTableUI_"],
+  .bottom-row.show-table .info-column,
+  .info-column {
+    width: 100%;
+    flex: 0 0 100%;
+  }
+
+  [id^="dataTableUI_"] {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+
+  /* -------------------------
+     MAPAS
+     ------------------------- */
+
+  .map-title {
+    font-size: 14px;
+  }
+
+}
+
+
+/* =========================================================
+   PANTALLAS MUY PEQUEÑAS
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .dashboard-card {
+    padding: 14px;
+    border-radius: 7px;
+  }
+
+  .plot-card,
+  .maps-card {
+    padding: 12px;
+  }
+
+  .info-card,
+  .source-card {
+    padding: 15px;
+  }
+
+  .info-card-title,
+  .source-card-title {
+    font-size: 14px;
+  }
+
+  .info-card p,
+  .source-card p {
+    font-size: 12px;
+  }
+
+}
