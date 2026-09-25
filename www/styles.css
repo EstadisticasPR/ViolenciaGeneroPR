@@ -12,7 +12,7 @@
   width: 100%;
   max-width: 1600px;
   margin: 0 auto;
-  padding: 10px 20px 30px 20px;
+  padding: 10px 20px 10px 20px;
 }
 
 
@@ -55,7 +55,12 @@
    ========================================================= */
 
 .maps-card {
-  padding: 15px 20px 20px 20px;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding: 12px !important;
+  box-sizing: border-box !important;
 }
 
 
@@ -68,12 +73,8 @@
 }
 
 .map-title {
-  text-align: center;
-  font-size: 15px;
-  font-weight: 600;
-  color: #3e3f3a;
-  margin-top: 5px;
-  margin-bottom: 8px;
+  font-size: 14px;
+  width: 100%;
 }
 
 
@@ -82,9 +83,13 @@
    ========================================================= */
 
 .map-section {
-  width: 100%;
-  margin-bottom: 20px;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
 }
+
 
 .map-section:last-child {
   margin-bottom: 0;
@@ -92,8 +97,15 @@
 
 .map-output {
   width: 100% !important;
-  border-radius: 6px;
-  overflow: hidden;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.leaflet-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 
@@ -143,7 +155,7 @@
 }
 
 .filter-switch {
-  flex: 0 0 180px;
+  flex: 0 0 20px;
   min-width: 180px;
 }
 

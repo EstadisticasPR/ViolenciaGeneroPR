@@ -5035,7 +5035,7 @@ renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom) 
     setView(
       lng = -66.5,
       lat = 18.2,
-      zoom = map_zoom
+      zoom = 7
     ) %>%
     
   # CARTO POSITRON
@@ -5299,6 +5299,10 @@ renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom) 
 
       var map = this;
 
+      // =====================================================
+      // MAP HANDLERS
+      // =====================================================
+
       if (window.MapHandlers) {
 
         MapHandlers.init(map, {
@@ -5320,7 +5324,6 @@ renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom) 
 
     }
   ")
-  
   
   # RETORNAR MAPA
   mapa

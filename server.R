@@ -1625,7 +1625,7 @@ server <- function(input, output, session) {
       data,
       value_col = "Cantidad",
       value_col_region = "Región",
-      map_zoom = 9
+      map_zoom = 7
     )
     
   })
@@ -1639,7 +1639,7 @@ server <- function(input, output, session) {
       data,
       value_col = "Cantidad",
       value_col_region = "Región",
-      map_zoom = 9
+      map_zoom = 7
     )
     
   })

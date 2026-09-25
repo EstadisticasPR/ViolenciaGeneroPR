@@ -1,89 +1,345 @@
 // =============================================================================
-//  Manejadores del mapa leaflet
-// =============================================================================
-// A diferencia de los otros scripts, este expone un objeto global
-// (window.MapHandlers) con un método init() que se llama desde el código R/Leaflet, 
-// pasándole el mapa ya creado y un objeto de configuración.
-//
-// init(map, cfg) configura tres comportamientos sobre el mapa:
-//   Bloqueo de zoom mínimo -> el usuario no puede alejarse más allá del encuadre completo de la isla.
-//   Caja de información -> muestra la región y su total al pasar el cursor.
-//   Botón de reinicio -> vuelve al encuadre inicial de la isla.
-//
-// Contrato del objeto cfg:
-//    {
-//      bounds:      [[sur, oeste], [norte, este]],  // límites de la isla
-//      totals:      { <idRegión>: <número>, ... },  // total por región
-//      legendTitle: "texto",   // etiqueta del valor mostrado
-//      infoTitle:   "texto"    // título de la caja en estado inactivo
-//    }
+// Manejadores del mapa Leaflet
 // =============================================================================
 
 window.MapHandlers = {
+
   init: function(map, cfg) {
-    
-    // Límites geográficos de la isla, como objeto Leaflet.
-    var islandBounds = L.latLngBounds(cfg.bounds[0], cfg.bounds[1]);
-    
-    // --- Bloqueo de zoom mínimo ---
-    // Calcula el nivel de zoom en el que la isla completa cabe justo en el
-    // contenedor y lo fija como zoom mínimo. Así el usuario puede acercarse,
-    // pero no alejarse hasta perder de vista la isla.
-    function lockMinZoom() {
-      map.setMinZoom(map.getBoundsZoom(islandBounds, false));
+
+    // =====================================================
+    // LÍMITES DE PUERTO RICO
+    // =====================================================
+
+    var islandBounds = L.latLngBounds(
+      cfg.bounds[0],
+      cfg.bounds[1]
+    );
+
+
+    // =====================================================
+    // DETECTAR DISPOSITIVO
+    // =====================================================
+
+    function esMovil() {
+
+      return window.innerWidth <= 600;
+
     }
-    
-    // Se aplica cuando el mapa está listo.
-    map.whenReady(lockMinZoom);
-    
-    // y se recalcula al cambiar el tamaño del contenedor, porque el zoom
-    // que "encaja" depende del tamaño en píxeles del mapa.
-    map.on('resize', lockMinZoom);
-    
-    // --- Caja de información (hover) ---
-    // Actualiza el panel #info_box. Con un `id` de región, muestra su nombre y
-    // su total; sin `id` (null), muestra el mensaje inicial de instrucción.
-    function updateInfo(id) {
-      var box = document.getElementById('info_box');
-      if (!box) return; // Si el panel no existe, no hacemos nada.
-      if (id) {
-        // Total de la región; si no existe en cfg.totals, se usa 0.
-        var t = cfg.totals[id] != null ? cfg.totals[id] : 0;
-        box.innerHTML = '<b>Región Policiaca: ' + id + '</b><br>' + cfg.legendTitle + ': ' + t;
-      } else {
-        box.innerHTML = '<b>' + cfg.infoTitle + '</b><br>Pasa el cursor sobre una región';
+
+
+    // =====================================================
+    // AJUSTAR VISTA
+    // =====================================================
+
+    function ajustarVista() {
+
+      map.invalidateSize({
+        animate: false
+      });
+
+
+      // ---------------------------------------------------
+      // MÓVIL
+      // ---------------------------------------------------
+
+      if (esMovil()) {
+
+        map.setView(
+          [18.20, -66.50],
+          6,
+          {
+            animate: false
+          }
+        );
+
       }
+
+      // ---------------------------------------------------
+      // DESKTOP
+      // ---------------------------------------------------
+
+      else {
+
+        map.fitBounds(
+          islandBounds,
+          {
+            padding: [10, 10],
+            maxZoom: 8,
+            animate: false
+          }
+        );
+
+      }
+
     }
-    
-    // Recorre todas las capas del mapa y, en las que tienen layerId (las regiones), 
-    // enlaza los eventos de entrada/salida del cursor.
-    map.eachLayer(function(layer) {
-      if (layer.options && layer.options.layerId) {
-        layer.on('mouseover', function() { updateInfo(this.options.layerId); });
-        layer.on('mouseout', function() { updateInfo(null); });
+
+
+    // =====================================================
+    // CONFIGURAR LÍMITES DE ZOOM
+    // =====================================================
+
+    function configurarZoom() {
+
+      if (esMovil()) {
+
+        // En móvil:
+        // permite alejarse hasta zoom 5
+        // pero no acercarse más allá de zoom 7
+
+        map.setMinZoom(5);
+        map.setMaxZoom(7);
+
       }
+
+      else {
+
+        // Desktop
+
+        map.setMinZoom(6);
+        map.setMaxZoom(18);
+
+      }
+
+    }
+
+
+    // =====================================================
+    // INICIALIZACIÓN
+    // =====================================================
+
+    map.whenReady(function() {
+
+      setTimeout(function() {
+
+        configurarZoom();
+
+        ajustarVista();
+
+      }, 500);
+
     });
-    
-    // --- Botón de reinicio ---
-    // Control personalizado de Leaflet: un botón "⌂" que devuelve el mapa al
-    // encuadre inicial de la isla.
-    var ResetControl = L.Control.extend({
-      options: { position: 'topleft' },
-      onAdd: function() {
-        var btn = L.DomUtil.create('button', 'leaflet-bar reset-map-btn');
-        btn.innerHTML = '⌂';
-        btn.title = 'Volver a la vista inicial';
-        btn.style.cssText = 'width:34px;height:34px;cursor:pointer;font-size:16px;background:#fff;border:none;';
-        
-        // Al hacer click: detiene la propagación del evento (para que el mapa
-        // no lo interprete como click/arrastre) y reajusta a la isla.
-        L.DomEvent.on(btn, 'click', function(e) {
-          L.DomEvent.stop(e);
-          map.fitBounds(islandBounds);
+
+
+    // =====================================================
+    // CAMBIO DE TAMAÑO
+    // =====================================================
+
+    var resizeTimeout;
+
+    if (window.ResizeObserver) {
+
+      var resizeObserver =
+        new ResizeObserver(function() {
+
+          clearTimeout(resizeTimeout);
+
+          resizeTimeout = setTimeout(function() {
+
+            map.invalidateSize({
+              animate: false
+            });
+
+          }, 200);
+
         });
-        return btn;
-      }
+
+
+      resizeObserver.observe(
+        map.getContainer()
+      );
+
+    }
+
+
+    // =====================================================
+    // RESIZE DEL MAPA
+    // =====================================================
+
+    map.on('resize', function() {
+
+      clearTimeout(resizeTimeout);
+
+      resizeTimeout = setTimeout(function() {
+
+        map.invalidateSize({
+          animate: false
+        });
+
+      }, 200);
+
     });
-    map.addControl(new ResetControl());
+
+
+    // =====================================================
+    // CAJA DE INFORMACIÓN
+    // =====================================================
+
+    function updateInfo(id) {
+
+      var box =
+        document.getElementById('info_box');
+
+      if (!box) return;
+
+
+      if (id) {
+
+        var t =
+          cfg.totals[id] != null
+            ? cfg.totals[id]
+            : 0;
+
+
+        box.innerHTML =
+          '<b>Región Policiaca: ' +
+          id +
+          '</b><br>' +
+          cfg.legendTitle +
+          ': ' +
+          t;
+
+      }
+
+      else {
+
+        box.innerHTML =
+          '<b>' +
+          cfg.infoTitle +
+          '</b><br>' +
+          'Pasa el cursor sobre una región';
+
+      }
+
+    }
+
+
+    // =====================================================
+    // EVENTOS DE LAS REGIONES
+    // =====================================================
+
+    map.eachLayer(function(layer) {
+
+      if (
+        layer.options &&
+        layer.options.layerId
+      ) {
+
+        layer.on(
+          'mouseover',
+          function() {
+
+            updateInfo(
+              this.options.layerId
+            );
+
+          }
+        );
+
+
+        layer.on(
+          'mouseout',
+          function() {
+
+            updateInfo(null);
+
+          }
+        );
+
+      }
+
+    });
+
+
+    // =====================================================
+    // BOTÓN RESET
+    // =====================================================
+
+    var ResetControl =
+      L.Control.extend({
+
+        options: {
+          position: 'topleft'
+        },
+
+
+        onAdd: function() {
+
+          var btn =
+            L.DomUtil.create(
+              'button',
+              'leaflet-bar reset-map-btn'
+            );
+
+
+          btn.innerHTML = '⌂';
+
+
+          btn.title =
+            'Volver a la vista inicial';
+
+
+          btn.style.cssText =
+            'width:34px;' +
+            'height:34px;' +
+            'cursor:pointer;' +
+            'font-size:16px;' +
+            'background:#fff;' +
+            'border:none;';
+
+
+          L.DomEvent.on(
+            btn,
+            'click',
+            function(e) {
+
+              L.DomEvent.stop(e);
+
+
+              map.invalidateSize({
+                animate: false
+              });
+
+
+              if (esMovil()) {
+
+                map.setView(
+                  [18.20, -66.50],
+                  6,
+                  {
+                    animate: true
+                  }
+                );
+
+              }
+
+              else {
+
+                map.fitBounds(
+                  islandBounds,
+                  {
+                    padding: [10, 10],
+                    maxZoom: 8,
+                    animate: true
+                  }
+                );
+
+              }
+
+            }
+          );
+
+
+          return btn;
+
+        }
+
+      });
+
+
+    map.addControl(
+      new ResetControl()
+    );
+
   }
+
 };
