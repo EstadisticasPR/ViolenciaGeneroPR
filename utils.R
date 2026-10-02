@@ -390,7 +390,7 @@ cleanSheet_despDF <- function(file, tipo = c("Adultas", "Menores")) {
 #### cleanSheet_npprVDedad ####
 cleanSheet_vEdad <- function(file, years = 2021:2026) {
   
-
+  
   vEdad_list <- lapply(as.character(years), function(sheet_name) {
     read_excel(file, sheet = sheet_name) %>%
       mutate(Año = sheet_name)
@@ -1281,10 +1281,10 @@ cleanSheet_OP_148_SoliGrupEdad <- function(file,
 
 #### cleanSheet_OP_Ley148_ex_parteEmitidas ####
 cleanSheet_OP_Ley148_ex_parteEmitidas <- function(file, 
-                                           sheets = c("2020-2021", "2021-2022", "2022-2023", 
-                                                      "2023-2024", "2024-2025"),
-                                           new_names = c("Total", "Agresión Sexual", "Acoso Sexual",
-                                                         "Actos Lascivos", "Incesto") ) {
+                                                  sheets = c("2020-2021", "2021-2022", "2022-2023", 
+                                                             "2023-2024", "2024-2025"),
+                                                  new_names = c("Total", "Agresión Sexual", "Acoso Sexual",
+                                                                "Actos Lascivos", "Incesto") ) {
   
   df_list <- lapply(sheets, function(sheet_name) {
     
@@ -1332,10 +1332,10 @@ cleanSheet_OP_Ley148_ex_parteEmitidas <- function(file,
 
 #### cleanSheet_OP_LEY148Archivadas ####
 cleanSheet_OP_LEY148Archivadas <- function(file, 
-                                                  sheets = c("2020-2021", "2021-2022", "2022-2023",
-                                                             "2023-2024", "2024-2025"),
-                                                  new_names = c("Total", "Solicitud Peticionaria",
-                                                                "Otra Razón")) {
+                                           sheets = c("2020-2021", "2021-2022", "2022-2023",
+                                                      "2023-2024", "2024-2025"),
+                                           new_names = c("Total", "Solicitud Peticionaria",
+                                                         "Otra Razón")) {
   
   df_list <- lapply(sheets, function(sheet_name) {
     
@@ -1383,12 +1383,12 @@ cleanSheet_OP_LEY148Archivadas <- function(file,
 
 #### cleanSheet_OP_LEY148Denegadas ####
 cleanSheet_OP_LEY148Denegadas <- function(file, 
-                                           sheets = c("2020-2021", "2021-2022", "2022-2023", 
-                                                      "2023-2024", "2024-2025"),
-                                           new_names = c("No Aplican Disposiciones Ley148", 
-                                                         "No ha lugar archivo de petición",
-                                                         "No Prueban Elementos",
-                                                         "Otros")) {
+                                          sheets = c("2020-2021", "2021-2022", "2022-2023", 
+                                                     "2023-2024", "2024-2025"),
+                                          new_names = c("No Aplican Disposiciones Ley148", 
+                                                        "No ha lugar archivo de petición",
+                                                        "No Prueban Elementos",
+                                                        "Otros")) {
   
   df_list <- lapply(sheets, function(sheet_name) {
     read_excel(file, sheet = sheet_name) %>%
@@ -1431,10 +1431,10 @@ cleanSheet_OP_LEY148Denegadas <- function(file,
 
 #### cleanSheet_OP_LEY148FinalEmitidas ####
 cleanSheet_OP_LEY148FinalEmitidas <- function(file, 
-                                          sheets = c("2020-2021", "2021-2022", "2022-2023",
-                                                     "2023-2024", "2024-2025"),
-                                          new_names = c("Total", "Agresión Sexual", "Acoso Sexual",
-                                                        "Actos Lascivos", "Incesto")) {
+                                              sheets = c("2020-2021", "2021-2022", "2022-2023",
+                                                         "2023-2024", "2024-2025"),
+                                              new_names = c("Total", "Agresión Sexual", "Acoso Sexual",
+                                                            "Actos Lascivos", "Incesto")) {
   
   df_list <- lapply(sheets, function(sheet_name) {
     read_excel(file, sheet = sheet_name) %>%
@@ -1518,10 +1518,10 @@ cleanSheet_OP_LEY148Genero <- function(file, sheets = c("2020-2021", "2021-2022"
 #### cleanSheet_tribCasosCrim ####
 cleanSheet_tribCasosCrim <- function(file, 
                                      sheets = c("2019-2020", "2020-2021", "2021-2022", 
-                                               "2022-2023", "2023-2024", "2024-2025", "2025-2026"),
+                                                "2022-2023", "2023-2024", "2024-2025", "2025-2026"),
                                      new_names = c("Delito", "Pendiente Inicio", "Presentados", 
-                                                  "A Resolver", "Condenas", "Absoluciones", 
-                                                            "Archivos", "Traslados", "Otros", "Total", "Pendiente Final")) {
+                                                   "A Resolver", "Condenas", "Absoluciones", 
+                                                   "Archivos", "Traslados", "Otros", "Total", "Pendiente Final")) {
   
   df_list <- lapply(sheets, function(sheet_name) {
     read_excel(file, sheet = sheet_name) %>%
@@ -1737,422 +1737,84 @@ cleansheet_safekits_region <- function(file){
 #### Helper Functions: UI  ####
 ###############################
 #### createDropdownCheckbox / createDropdownCheckbox_añoFiscal ####
-# Esta función genera un elemento de selección de checkboxes en un botón desplegable dentro de una interfaz de Shiny.
-# Permite a los usuarios seleccionar o deseleccionar todas las opciones de la lista de manera interactiva.
+# Estas funciones generan selectores de checkboxes dentro de un botón desplegable.
 createDropdownCheckbox_añoFiscal <- function(label, choices, selected, id) {
-  # Step 1: Extract unique years and create custom labels
   unique_years <- unique(as.character(choices))
-  formatted_choices <- setNames(
-    unique_years,
-    paste0("jul ", as.numeric(unique_years) - 1, " - jun ", unique_years)
-  )
-  
-  # Step 2: Set all unique years as selected by default if selected is NULL
-  if (is.null(selected)) {
-    selected <- unique_years  # Select all unique years
-  }
-  
-  # Determinar texto inicial del botón
-  buttonLabel <- if (length(selected) > 1) {
-    HTML("Deseleccionar<br>todo")
-  } else {
-    HTML("Seleccionar<br>todo")
-  }
-  
-  div(
-    style = "display: flex; justify-content: center; width: 100%;",
-    dropdownButton(
-      circle = FALSE,
-      label = lowercaseTitle(label),
-      status = "default",
-      size = "default",
-      checkboxGroupInput(
-        paste0("checkGroup_", id),
-        label = "",
-        choices = formatted_choices,
-        selected = selected
-      ),
-      actionButton(
-        paste0("deselectAll_", id), 
-        buttonLabel,
-        class = "btn-toggle-select",
-        style = "display: block; margin: 10px auto; width: 100%;"
+  formatted_choices <- setNames(unique_years, paste0("jul ", as.numeric(unique_years) - 1, " - jun ", unique_years))
+  if (is.null(selected)) selected <- unique_years
+  buttonLabel <- if (length(selected) > 1) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  div(class = "dropdown-checkbox-container",
+      dropdownButton(circle = FALSE, label = lowercaseTitle(label), status = "default", size = "default",
+                     checkboxGroupInput(paste0("checkGroup_", id), label = "", choices = formatted_choices, selected = selected),
+                     actionButton(paste0("deselectAll_", id), buttonLabel, class = "btn-toggle-select")
       )
-    ),
-    style = "display: flex; padding-right: 20px; padding-top: 10px; width: 100%;",
-    tags$style(HTML('
-      .btn {
-        font-size: 12px !important;
-        background-color: #3e3f3a !important;
-        color: white !important;
-        border-color: #ccc !important;
-        max-width: 100%;
-        box-sizing: border-box;
-      }
-      .btn > span { 
-        font-size: 10px !important;
-      }
-      .btn-default:hover, .btn-default:focus, .btn-default:active {
-        background-color: #2c2c2a !important;
-        color: #b0dce4 !important;
-      }
-      .dropdown-menu {
-        width: 100% !important;
-        font-size: 8px !important;
-      }
-      .shiny-input-checkboxgroup {
-        display: flex;
-        flex-direction: column;
-      }
-      .btn-toggle-select {
-        text-transform: none !important;
-      }
-      @media (max-width: 1040px) {
-        .btn {
-          font-size: 10px !important;
-          padding: 6px 4px !important;
-          max-width: 100%;
-        }
-        .btn > span {
-          font-size: 10px !important;
-        }
-        .dropdown-menu {
-          font-size: 10px !important;
-        }
-      }
-      @media (min-width: 1041px) {
-        .btn {
-          font-size: 12px !important;
-          padding: 8px 6px !important;
-          max-width: 100%;
-        }
-        .btn > span {
-          font-size: 11px !important;
-        }
-        .dropdown-menu {
-          font-size: 12px !important;
-        }
-      }
-    '))
   )
 }
 
 createDropdownCheckbox <- function(label, choices, selected, id) {
   choices <- levels(choices)
-  if (is.null(selected)) {
-    selected <- choices  # Seleccionar todos los elementos
-  } else {
-    selected <- choices[selected]
-  }
-  
-  # Determinar texto inicial del botón
-  buttonLabel <- if (length(selected) > 1) {
-    HTML("Deseleccionar<br>todo")
-  } else {
-    HTML("Seleccionar<br>todo")
-  }
-  
-  div(
-    style = "display: flex; justify-content: center; width: 100%;",
-    dropdownButton(
-      circle = FALSE,
-      label = lowercaseTitle(label),
-      status = "default",
-      size = "default",
-      checkboxGroupInput(
-        paste0("checkGroup_", id),
-        label = "",
-        choices = choices,
-        selected = selected
-      ),
-      actionButton(
-        paste0("deselectAll_", id),
-        buttonLabel,
-        class = "btn-toggle-select",
-        style = "display: block; margin: 10px auto; width: 100%;"
+  if (is.null(selected)) selected <- choices else selected <- choices[selected]
+  buttonLabel <- if (length(selected) > 1) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  div(class = "dropdown-checkbox-container",
+      dropdownButton(circle = FALSE, label = lowercaseTitle(label), status = "default", size = "default",
+                     checkboxGroupInput(paste0("checkGroup_", id), label = "", choices = choices, selected = selected),
+                     actionButton(paste0("deselectAll_", id), buttonLabel, class = "btn-toggle-select")
       )
-    ),
-    style = "display: flex; padding-right: 20px; padding-top: 10px; width: 100%;",
-    tags$style(HTML('
-      .btn {
-        font-size: 12px !important;
-        background-color: #3e3f3a !important;
-        color: white !important;
-        border-color: #ccc !important;
-        max-width: 100%;
-        box-sizing: border-box;
-      }
-      .btn > span {
-        font-size: 10px !important;
-      }
-      .btn-default:hover, .btn-default:focus, .btn-default:active {
-        background-color: #2c2c2a !important;
-        color: #b0dce4 !important;
-      }
-      .dropdown-menu {
-        width: 100% !important;
-        font-size: 8px !important;
-      }
-      .shiny-input-checkboxgroup {
-        display: flex;
-        flex-direction: column;
-      }
-      .btn-toggle-select {
-        text-transform: none !important;
-      }
-      @media (max-width: 1040px) {
-        .btn {
-          font-size: 10px !important;
-          padding: 6px 4px !important;
-          max-width: 100%;
-        }
-        .btn > span {
-          font-size: 10px !important;
-        }
-        .dropdown-menu {
-          font-size: 10px !important;
-        }
-      }
-      @media (min-width: 1041px) {
-        .btn {
-          font-size: 12px !important;
-          padding: 8px 6px !important;
-          max-width: 100%;
-        }
-        .btn > span {
-          font-size: 11px !important;
-        }
-        .dropdown-menu {
-          font-size: 12px !important;
-        }
-      }
-    '))
   )
 }
 
 createDropdownCheckbox_region <- function(label, choices, selected = NULL, id) {
   choices <- levels(choices)
-  
-  # Si selected es NULL, no seleccionar ningún valor
-  if (is.null(selected)) {
-    selected <- character(0)
-  } else {
-    selected <- choices[selected]
-  }
-  
-  # Determinar texto inicial del botón
-  buttonLabel <- if (length(selected) > 1) {
-    HTML("Deseleccionar<br>todo")
-  } else {
-    HTML("Seleccionar<br>todo")
-  }
-  
-  div(
-    style = "display: flex; justify-content: center; width: 100%;",
-    dropdownButton(
-      circle = FALSE,
-      label = lowercaseTitle(label),
-      status = "default",
-      size = "default",
-      checkboxGroupInput(
-        paste0("checkGroup_", id),
-        label = "",
-        choices = choices,
-        selected = selected
-      ),
-      actionButton(
-        paste0("deselectAll_", id),
-        buttonLabel,
-        class = "btn-toggle-select",
-        style = "display: block; margin: 10px auto; width: 100%;"
+  if (is.null(selected)) selected <- character(0) else selected <- choices[selected]
+  buttonLabel <- if (length(selected) > 1) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  div(class = "dropdown-checkbox-container",
+      dropdownButton(circle = FALSE, label = lowercaseTitle(label), status = "default", size = "default",
+                     checkboxGroupInput(paste0("checkGroup_", id), label = "", choices = choices, selected = selected),
+                     actionButton(paste0("deselectAll_", id), buttonLabel, class = "btn-toggle-select")
       )
-    ),
-    style = "display: flex; padding-right: 20px; padding-top: 10px; width: 100%;",
-    tags$style(HTML('
-      .btn {
-        font-size: 12px !important;
-        background-color: #3e3f3a !important;
-        color: white !important;
-        border-color: #ccc !important;
-        max-width: 100%;
-        box-sizing: border-box;
-      }
-      .btn > span {
-        font-size: 10px !important;
-      }
-      .btn-default:hover, .btn-default:focus, .btn-default:active {
-        background-color: #2c2c2a !important;
-        color: #b0dce4 !important;
-      }
-      .dropdown-menu {
-        width: 100% !important;
-        font-size: 8px !important;
-      }
-      .shiny-input-checkboxgroup {
-        display: flex;
-        flex-direction: column;
-      }
-      .btn-toggle-select {
-        text-transform: none !important;
-      }
-      @media (max-width: 1040px) {
-        .btn {
-          font-size: 10px !important;
-          padding: 6px 4px !important;
-          max-width: 100%;
-        }
-        .btn > span {
-          font-size: 10px !important;
-        }
-        .dropdown-menu {
-          font-size: 10px !important;
-        }
-      }
-      @media (min-width: 1041px) {
-        .btn {
-          font-size: 12px !important;
-          padding: 8px 6px !important;
-          max-width: 100%;
-        }
-        .btn > span {
-          font-size: 11px !important;
-        }
-        .dropdown-menu {
-          font-size: 12px !important;
-        }
-      }
-    '))
   )
 }
 
 #### embedImage ####
 # Crea un elemento de lista con una imagen que enlaza a una página web especificada.
 embedImage <- function(ID, img_src, link_href, link_alt, size = "60", padding_bottom = "0px") {
-  tags$li(
-    style = 'display: inline-block; margin-right: 20px; vertical-align: middle;',
-    div(
-      id = ID,
-      tags$a(
-        tags$figure(
-          img(
-            src = img_src, 
-            height = size, 
-            alt = link_alt, 
-            deleteFile = FALSE, 
-            style = paste0("padding-bottom: ", padding_bottom, ";")
+  tags$li(class = "embed-image-item",
+          div(id = ID,
+              tags$a(href = link_href,
+                     tags$figure(img(src = img_src, height = size, alt = link_alt, deleteFile = FALSE, class = "embed-image"))
+              )
           )
-        ),
-        href = link_href
-      )
-    )
   )
 }
 
 #### showDataCheckbox ####
-# Crear un checkbox para mostrar u ocultar los datos.
 showDataCheckbox <- function(inputId, label = lowercaseTitle_mostrarDatos("Mostrar Datos"), value = FALSE) {
-  div(
-    style = "background-color: #3e3f3a; border-radius: 5px; width: 100px; height: 43px; display: flex; align-items: center; justify-content: center; margin-top: 13px;",
-    tags$style(HTML('
-      .custom-checkbox {
-        color: white;
-        font-size: 13px; /* Ajustar tamaño de fuente general */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100px;  /* Mantener el mismo tamaño del contenedor */
-        height: 43px;  /* Mantener el mismo tamaño del contenedor */
-        border-radius: 5px; /* Asegurar que el borde se mantenga */
-      }
-      .custom-checkbox:hover {
-        background-color: #2c2c2a; /* Cambiar color de fondo en hover */
-        color: #b0dce4; /* Cambiar color del texto en hover */
-        width: 100px;  /* Mantener el tamaño en hover */
-        height: 43px;  /* Mantener el tamaño en hover */
-      }
-      .custom-checkbox input[type="checkbox"] {
-        padding-top: 0px; /* Ajustar padding superior del checkbox */
-        margin-top: 0px;
-        margin-right: 5px; /* Separar el checkbox del texto */
-        width: 16px; /* Ajustar tamaño del checkbox */
-        height: 16px; /* Ajustar tamaño del checkbox */
-      }
-      .custom-checkbox label {
-        margin: 0; /* Asegurarse de que no haya margen alrededor del label */
-        padding-top: 15px; /* Aplicar padding-top al texto */
-        font-size: 8px; /* Ajustar el tamaño del texto del título */
-      }
-      .custom-checkbox label::before {
-        display: none; /* Eliminar el diseño predeterminado del checkbox */
-      }
-
-      /* Estilos para pantallas pequeñas */
-      @media (max-width: 768px) {
-        .custom-checkbox {
-          font-size: 8px; /* Reducir tamaño de fuente en pantallas medianas */
-          width: 97%; /* Ajustar el ancho en pantallas medianas */
-        }
-        .custom-checkbox label {
-          font-size: 10px !important; /* Mantener el texto pequeño */
-        }
-        .custom-checkbox:hover {
-          width: 97%; /* Mantener el mismo tamaño en hover en pantallas medianas */
-        }
-      }
-      @media (max-width: 600px) {
-        .custom-checkbox {
-          font-size: 8px; /* Reducir tamaño de fuente en pantallas pequeñas */
-          padding: 8px 6px;
-          width: 97%; /* Ajustar el ancho en pantallas pequeñas */
-        }
-        .custom-checkbox label {
-          font-size: 10px !important; /* Asegurar consistencia en el tamaño del texto */
-        }
-        .custom-checkbox:hover {
-          width: 97%; /* Mantener el mismo tamaño en hover en pantallas pequeñas */
-        }
-      }
-    ')),
-    div(
-      class = "custom-checkbox",
-      checkboxInput(inputId, tags$b(label), value = value)
-    )
+  div(class = "show-data-wrapper",
+      div(class = "custom-checkbox",
+          checkboxInput(inputId, tags$b(label), value = value)
+      )
   )
 }
 
 #### sectionTitle ####
-# Función para especificar el tamaño de los titulos de secciones
 sectionTitle <- function(title, font_size = "20px") {
-  HTML(paste("<div style='text-align: center; font-size:", font_size, ";'><b>", title, "</b></div>", sep = ""))
+  tags$div(class = "section-title", tags$b(title))
 }
 
 #### customSeparator ####
-# Función para crear separador personalizado
 customSeparator <- function() {
-  tags$div(
-    style = "margin: 5px 0;",
-    ""
-  )
+  tags$div(class = "custom-separator", "")
 }
 
 #### lowercaseTitle ####
-# Función para hacer que los titulos se muestren en letras minúsculas
 lowercaseTitle <- function(title, font_size = "15px") {
-  HTML(paste0(
-    "<span style='text-transform: none; font-size: ", font_size, ";'>",
-    title,
-    "</span>"
-  ))
+  title_class <- if (identical(font_size, "11px")) "lowercase-title-small" else "lowercase-title"
+  tags$span(class = title_class, title)
 }
 
 #### lowercaseTitle_mostrarDatos ####
-# Función para hacer que los titulos se muestren en letras minúsculas
 lowercaseTitle_mostrarDatos <- function(title, font_size = "11px") {
-  HTML(paste0(
-    "<span style='text-transform: none; font-size: ", font_size, ";'>",
-    title,
-    "</span>"
-  ))
+  tags$span(class = "lowercase-title-show-data", title)
 }
 
 #### authorTag ####
@@ -2250,7 +1912,7 @@ createPickerFilter_añoFiscal <- function(label, choices, selected = NULL, id) {
 
 
 #### showDataToggle ####
-# Creau un switch tipo (ON/OFF) para enseñar u ocultar la tabla de datos.
+# Crea un switch tipo (ON/OFF) para enseñar u ocultar la tabla de datos.
 showDataToggle <- function(inputId, label = "Mostrar Datos", value = FALSE) {
   # value = FALSE, ya que, el switch arranca apagaso (la tabla empieza oculta).
   div(class = "custom-checkbox-wrapper",
@@ -2422,7 +2084,7 @@ renderLinePlot <- function(data, x, y, group, color, title, xlab, ylab, colorlab
 
 #### renderLinePlot_poli ####
 renderLinePlot_poli <- function(data, x, y, group, color, title, xlab, ylab, 
-                           colorlab = color, emptyMessage) {
+                                colorlab = color, emptyMessage) {
   data_df <- data()  # Evaluar los datos reactivos una vez
   
   if (is.null(data_df) || nrow(data_df) == 0 || is.null(data_df[[x]])) {
@@ -2548,7 +2210,7 @@ create_empty_plot_with_message <- function(data, x, y, fill, xlab, ylab, emptyMe
 #Funcion para las graficas con FACETAS
 #Renderiza un gráfico de barras utilizando ggplot2 en el UI de Shiny.
 renderBarPlot_facets <- function(data, x, y, fill, xlab, ylab, fillLab = fill, colorFill = "Set1",
-                          emptyMessage, barWidth = 1, xGap = 0.1) {
+                                 emptyMessage, barWidth = 1, xGap = 0.1) {
   
   data_df <- data()  # Evaluate the reactive data once
   
@@ -2606,10 +2268,10 @@ renderBarPlot_facets <- function(data, x, y, fill, xlab, ylab, fillLab = fill, c
         plot.margin = margin(t = 105, r = 50, b = 100, l = 50),
         panel.grid.major.x = element_blank() # Elimina el grid line por defacto en el eje de X
       ) 
-      if (length(unique(data_df[[x]])) > 1) {
-        p <- p + geom_vline(xintercept = seq(1.5, length(unique(data_df[[x]])) - 0.5, by = 1), #Grid line en x
-                            linetype = "dotted", color = "grey", size = 0.3, alpha = 0.5) #Visualización del grid line
-      }
+    if (length(unique(data_df[[x]])) > 1) {
+      p <- p + geom_vline(xintercept = seq(1.5, length(unique(data_df[[x]])) - 0.5, by = 1), #Grid line en x
+                          linetype = "dotted", color = "grey", size = 0.3, alpha = 0.5) #Visualización del grid line
+    }
     
     return(p)
   }
@@ -2620,7 +2282,7 @@ renderBarPlot_facets <- function(data, x, y, fill, xlab, ylab, fillLab = fill, c
 #### renderBarPlot_stack ####
 # Renderiza un gráfico de barras apiladas 
 renderBarPlot_stack <- function(data, x, y, fill, title, xlab, ylab, fillLab = fill, colorFill = "Set1",
-                                 emptyMessage, barWidth = 0.4, xGap = 0.1) {  
+                                emptyMessage, barWidth = 0.4, xGap = 0.1) {  
   
   data_df <- data()  # Evalúa los datos reactivos una vez
   
@@ -2685,7 +2347,7 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1,
   } else {
     margin(150, 50, 150, 50)  # Márgenes predeterminados si no están definidos en el ggplot
   }
-
+  
   # Convertir márgenes de ggplot a formato compatible con plotly
   plotly_margins <- list(
     t = as.numeric(margins[1]),  # Top
@@ -2693,13 +2355,13 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1,
     b = as.numeric(margins[3]),  # Bottom
     l = as.numeric(margins[4])   # Left
   )
-
+  
   # Ajustar los tamaños basados en el tamaño del contenedor
   title_size <- ifelse(width < 500, 16, ifelse(width < 800, 18, 22))
   axis_text_size <- ifelse(width < 500, 13, ifelse(width < 800, 15, 18))
   tick_size <- ifelse(height < 400, 12, 14)
   legend_font_size <- ifelse(width < 500, 10, 12)  # Ajuste dinámico del tamaño de fuente de la leyenda
-
+  
   # Definir la posición de la leyenda y tamaño basado en el tamaño del contenedor
   if (width < 800 && isFacets == FALSE) {
     legend_position <- list(
@@ -2717,7 +2379,7 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1,
       xanchor = "center",
       yanchor = "bottom"
     ) 
-    } else {
+  } else {
     legend_position <- list(
       x = 1.05,
       y = 0.5,
@@ -2725,10 +2387,10 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1,
       yanchor = "middle"
     )
   }
-
+  
   # Convertir ggplot en un objeto plotly
   p_plotly <- ggplotly(p, tooltip = tooltip_value)
-
+  
   # Ajustar el diseño para que la leyenda se acople dinámicamente
   p_plotly <- p_plotly %>% layout(
     autosize = TRUE,
@@ -2784,7 +2446,7 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1,
         }
       }
     ")
-
+  
   # Ajustar las opciones de la leyenda en dispositivos pequeños
   if (width < 800) {
     p_plotly <- p_plotly %>% layout(
@@ -2836,36 +2498,20 @@ convert_to_plotly <- function(p, tooltip_value, isFacets = FALSE, numPlots = 1,
       }
     ")
   }
-
+  
   return(p_plotly)
 }
 
 #### createFuenteDiv ####
-# Genera un div que muestra una lista de enlaces con las Fuentes
 createFuenteDiv <- function(hyperlinks, fuenteTexts) {
-  if (length(hyperlinks) != length(fuenteTexts)) {
-    stop("The length of hyperlinks and fuenteTexts must be the same.")
-  }
-  
-  # Crear un string con hyperlinks y texto
+  if (length(hyperlinks) != length(fuenteTexts)) stop("The length of hyperlinks and fuenteTexts must be the same.")
   combined <- sapply(seq_along(hyperlinks), function(i) {
-    paste0(tags$a(href = hyperlinks[i], fuenteTexts[i], style = "color: white; text-decoration: none;"))
+    paste0(tags$a(href = hyperlinks[i], fuenteTexts[i], class = "source-inline-link"))
   })
-  
-  # Join de los strings con comas
   combined_text <- paste(combined, collapse = ", ")
-  
-  # Crear div con "Fuentes: "
-  tags$div(
-    style = "background-color: #3e3f3a; padding: 10px; border-radius: 5px; margin-top: 10px; text-align: center;",
-    tags$span(
-      "Fuentes: ",
-      style = "color: white; font-weight: bold;"
-    ),
-    tags$span(
-      HTML(combined_text),
-      style = "color: white;"
-    )
+  tags$div(class = "source-footer",
+           tags$span("Fuentes: ", class = "source-footer-title"),
+           tags$span(HTML(combined_text), class = "source-footer-text")
   )
 }
 
@@ -2903,13 +2549,13 @@ renderDataTable <- function(filtered_data, title, font_size = "18px") {
         #Para poder utilizar exportOption: modifier la funcion renderDT() debe
         #recibir como argumento server = FALSE. Ya que por defacto siempre es TRUE.
         list(
-                extend = 'copy',
-                text = 'Copiar',
-                title = title,        #El argumento que se recibe como titulo de la data.
-                exportOptions = list(
-                columns = ":visible",     #Solo se va a copiar las columnas visibles de la data.
-                modifier = list(page = "all") # ALL descarga toda la data seleccionada por el usuario. 
-                )
+          extend = 'copy',
+          text = 'Copiar',
+          title = title,        #El argumento que se recibe como titulo de la data.
+          exportOptions = list(
+            columns = ":visible",     #Solo se va a copiar las columnas visibles de la data.
+            modifier = list(page = "all") # ALL descarga toda la data seleccionada por el usuario. 
+          )
         ),
         list(
           extend = 'collection',
@@ -2920,7 +2566,7 @@ renderDataTable <- function(filtered_data, title, font_size = "18px") {
               exportOptions = list(
                 columns = ":visible", 
                 modifier = list(page = "all") # 'all' descarga toda la data seleccionada por el usuario.
-                ),                            # 'current' descarga solo la pagina visible.
+              ),                            # 'current' descarga solo la pagina visible.
               filename = title
               #filename = "datos_ViolenciaGeneroPR" #Nombre del archivo sin extension
             ),
@@ -3346,22 +2992,22 @@ renderMap <- function(data, value_col, value_col_region, map_zoom,
 renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
                              municipios_geo) {
   # CARTO BASEMAP
-
+  
   carto_api_key <- Sys.getenv("CARTO_API_KEY")
-
+  
   carto_positron_url <- paste0(
     "https://{s}.basemaps.cartocdn.com/rastertiles/",
     "light_all/{z}/{x}/{y}.png?key=",
     carto_api_key
   )
-
+  
   carto_attribution <- paste0(
     '&copy; <a href="https://www.openstreetmap.org/copyright" ',
     'target="_blank">OpenStreetMap</a> contributors ',
     '&copy; <a href="https://carto.com/attributions" ',
     'target="_blank">CARTO</a>'
   )
-
+  
   # VERIFICAR DATOS
   if (
     nrow(data) == 0 ||
@@ -3373,15 +3019,15 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
         addTiles()
     )
   }
-
+  
   # Obtener valores dinámicos
   values <- as.numeric(data[[value_col]])
   regiones <- data[[value_col_region]]
-
+  
   # CALCULAR LÍMITES
   min_val <- 0
   max_val <- max(values, na.rm = TRUE)
-
+  
   if (!is.finite(max_val)) {
     return(
       leaflet() %>%
@@ -3400,39 +3046,39 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
         )
     )
   }
-
+  
   # Usar pretty() para cortes naturales
   bins <- pretty(
     c(min_val, max_val),
     n = 7
   )
-
+  
   if (length(bins) < 2) {
     bins <- c(min_val, min_val + 1)
   }
-
+  
   # PALETA
-
+  
   violet_colors <- c(
     "#f9f5ff", "#f4e3ff", "#edd0ff", "#e2b3ff",
     "#d89aff", "#cc80ff", "#bf66ff", "#a64dff",
     "#8c33ff", "#701aff", "#5900f2", "#4400cc",
     "#3000a6", "#1d007d", "#0d004c"
   )
-
+  
   num_bins <- length(bins) - 1
-
+  
   colors <- violet_colors[
     seq_len(min(num_bins, length(violet_colors)))
   ]
-
+  
   pal <- colorBin(
     colors,
     domain = values,
     bins = bins,
     na.color = "transparent"
   )
-
+  
   # MAPA
   leaflet(data) %>%
     setView(
@@ -3440,7 +3086,7 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
       lat = 18.2,
       zoom = map_zoom
     ) %>%
-
+    
     addTiles(
       urlTemplate = carto_positron_url,
       attribution = carto_attribution,
@@ -3449,7 +3095,7 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
         maxZoom = 20
       )
     ) %>%
-
+    
     addPolygons(
       fillColor = pal(values),
       weight = 1,
@@ -3457,14 +3103,14 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
       color = "#666",
       dashArray = "",
       fillOpacity = 0.7,
-
+      
       label = paste0(
         value_col_region, ": ", regiones,
         "<br>",
         value_col, ": ", values
       ) %>%
         lapply(htmltools::HTML),
-
+      
       highlightOptions = highlightOptions(
         weight = 1,
         color = "#666",
@@ -3473,7 +3119,7 @@ renderMap_npprDS <- function(data, value_col, value_col_region, map_zoom,
         bringToFront = TRUE
       )
     ) %>%
-
+    
     addLegend(
       pal = pal,
       values = values,
@@ -3883,26 +3529,26 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,
   # =========================================================
   # CARTO BASEMAP
   # =========================================================
-
+  
   carto_api_key <- Sys.getenv("CARTO_API_KEY")
-
+  
   carto_positron_url <- paste0(
     "https://{s}.basemaps.cartocdn.com/rastertiles/",
     "light_all/{z}/{x}/{y}.png?key=",
     carto_api_key
   )
-
+  
   carto_attribution <- paste0(
     '&copy; <a href="https://www.openstreetmap.org/copyright" ',
     'target="_blank">OpenStreetMap</a> contributors ',
     '&copy; <a href="https://carto.com/attributions" ',
     'target="_blank">CARTO</a>'
   )
-
+  
   # =========================================================
   # VERIFICAR QUE HAY DATOS DISPONIBLES
   # =========================================================
-
+  
   if (
     nrow(data) == 0 ||
     !value_col %in% colnames(data) ||
@@ -3913,21 +3559,21 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,
         addTiles()
     )
   }
-
+  
   # =========================================================
   # OBTENER VALORES
   # =========================================================
-
+  
   values <- as.numeric(data[[value_col]])
   regiones <- data[[value_col_region]]
-
+  
   # =========================================================
   # CALCULAR LÍMITES PARA LA ESCALA
   # =========================================================
-
+  
   min_val <- 0
   max_val <- max(values, na.rm = TRUE)
-
+  
   # Manejar datos sin valores válidos
   if (!is.finite(max_val)) {
     return(
@@ -3947,70 +3593,70 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,
         )
     )
   }
-
+  
   rango <- max_val - min_val
-
+  
   # =========================================================
   # DEFINIR BINS
   # =========================================================
-
+  
   step <- ifelse(rango >= 30, 10, 5)
-
+  
   bins <- seq(
     floor(min_val / step) * step,
     ceiling(max_val / step) * step,
     by = step
   )
-
+  
   # Evitar problemas cuando solamente hay un bin
   if (length(bins) < 2) {
     bins <- c(min_val, min_val + step)
   }
-
+  
   # =========================================================
   # PALETA DE COLORES
   # =========================================================
-
+  
   violet_colors <- c(
     "#f9f5ff", "#f4e3ff", "#edd0ff", "#e2b3ff",
     "#d89aff", "#cc80ff", "#bf66ff", "#a64dff",
     "#8c33ff", "#701aff", "#5900f2", "#4400cc",
     "#3000a6", "#1d007d", "#0d004c"
   )
-
+  
   num_bins <- length(bins) - 1
-
+  
   colors <- violet_colors[
     seq_len(min(num_bins, length(violet_colors)))
   ]
-
+  
   # =========================================================
   # PALETA DINÁMICA
   # =========================================================
-
+  
   pal <- colorBin(
     colors,
     domain = values,
     bins = bins,
     na.color = "transparent"
   )
-
+  
   # =========================================================
   # MAPA
   # =========================================================
-
+  
   leaflet(data) %>%
-
+    
     setView(
       lng = -66.5,
       lat = 18.2,
       zoom = map_zoom
     ) %>%
-
+    
     # ---------------------------------------------------------
   # CARTO POSITRON
   # ---------------------------------------------------------
-
+  
   addTiles(
     urlTemplate = carto_positron_url,
     attribution = carto_attribution,
@@ -4019,11 +3665,11 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,
       maxZoom = 20
     )
   ) %>%
-
+    
     # ---------------------------------------------------------
   # POLÍGONOS
   # ---------------------------------------------------------
-
+  
   addPolygons(
     fillColor = pal(values),
     weight = 1,
@@ -4031,14 +3677,14 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,
     color = "#666",
     dashArray = "",
     fillOpacity = 0.7,
-
+    
     label = paste0(
       value_col_region, ": ", regiones,
       "<br>",
       value_col, ": ", values
     ) %>%
       lapply(htmltools::HTML),
-
+    
     highlightOptions = highlightOptions(
       weight = 1,
       color = "#666",
@@ -4047,22 +3693,22 @@ renderMap_vivienda <- function(data, value_col, value_col_region, map_zoom,
       bringToFront = TRUE
     )
   ) %>%
-
+    
     # ---------------------------------------------------------
   # FRONTERAS DE LOS MUNICIPIOS
   # ---------------------------------------------------------
-
+  
   # addPolylines(
   #   data = municipios_geo,
   #   weight = 1,
   #   color = "#666",
   #   opacity = 1
   # ) %>%
-
+  
   # ---------------------------------------------------------
   # LEYENDA
   # ---------------------------------------------------------
-
+  
   addLegend(
     pal = pal,
     values = values,
@@ -4992,39 +4638,9 @@ renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom) 
   
   # LABEL INTERACTIVO
   labels <- paste0(
-    
-    "<div style='
-      font-family: Arial, Helvetica, sans-serif;
-      padding: 3px 5px;
-      min-width: 130px;
-    '>",
-    
-    "<div style='
-      font-size: 14px;
-      font-weight: 700;
-      color: #333333;
-      margin-bottom: 4px;
-    '>",
-    
-    data$region_map,
-    
-    "</div>",
-    
-    "<div style='
-      font-size: 12px;
-      color: #666666;
-    '>",
-    
-    value_col,
-    
-    ": <strong style='color:#333333;'>",
-    
-    data$casos_label,
-    
-    "</strong>",
-    
-    "</div>",
-    
+    "<div class='map-region-label'>",
+    "<div class='map-region-label-title'>", data$region_map, "</div>",
+    "<div class='map-region-label-value'>", value_col, ": <strong>", data$casos_label, "</strong></div>",
     "</div>"
   )
   
@@ -5035,61 +4651,52 @@ renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom) 
     setView(
       lng = -66.5,
       lat = 18.2,
-      zoom = 7
+      zoom = map_zoom
     ) %>%
     
-  # CARTO POSITRON
-  addTiles(
-    urlTemplate = carto_positron_url,
-    attribution = carto_attribution,
-    options = tileOptions(
-      subdomains = "abcd",
-      maxZoom = 20
-    )
-  ) %>%
-    
-  # POLÍGONOS
-  addPolygons(
-    
-    fillColor = ~color_region,
-    
-    fillOpacity = 0.78,
-    
-    color = "#FFFFFF",
-    
-    opacity = 1,
-    
-    weight = 2,
-    
-    smoothFactor = 0.4,
-    
-    label = lapply(
-      labels,
-      htmltools::HTML
-    ),
-    
-    labelOptions = labelOptions(
-      
-      direction = "auto",
-      
-      textsize = "12px",
-      
-      style = list(
-        "background" = "rgba(255,255,255,0.97)",
-        "border" = "none",
-        "border-radius" = "7px",
-        "box-shadow" = "0 2px 7px rgba(0,0,0,0.18)",
-        "padding" = "7px 9px"
+    # CARTO POSITRON
+    addTiles(
+      urlTemplate = carto_positron_url,
+      attribution = carto_attribution,
+      options = tileOptions(
+        subdomains = "abcd",
+        maxZoom = 20
       )
-    ),
+    ) %>%
     
-    highlightOptions = highlightOptions(
-      weight = 3,
-      color = "#333333",
-      fillOpacity = 0.90,
-      bringToFront = TRUE
+    # POLÍGONOS
+    addPolygons(
+      
+      fillColor = ~color_region,
+      
+      fillOpacity = 0.78,
+      
+      color = "#FFFFFF",
+      
+      opacity = 1,
+      
+      weight = 2,
+      
+      smoothFactor = 0.4,
+      
+      label = lapply(
+        labels,
+        htmltools::HTML
+      ),
+      
+      labelOptions = labelOptions(
+        direction = "auto",
+        textsize = "12px",
+        className = "map-region-label-container"
+      ),
+      
+      highlightOptions = highlightOptions(
+        weight = 3,
+        color = "#333333",
+        fillOpacity = 0.90,
+        bringToFront = TRUE
+      )
     )
-  )
   
   
   # POSICIÓN DE LOS NÚMEROS
@@ -5100,9 +4707,7 @@ renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom) 
   
   if (length(indices_validos) > 0) {
     
-    # -------------------------------------------------------
     # PUNTO QUE SIEMPRE QUEDA DENTRO DEL POLÍGONO
-    # -------------------------------------------------------
     
     puntos <- st_point_on_surface(
       data[indices_validos, ]
@@ -5112,11 +4717,7 @@ renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom) 
       puntos
     )
     
-    
-    # =======================================================
     # NÚMERO DE CASOS SOBRE CADA REGIÓN
-    # =======================================================
-    
     value_labels <- paste0(
       
       "<div class='vivienda-new-casos-label'>",
@@ -5153,96 +4754,28 @@ renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom) 
   }
   
   
-  # ESTILOS CSS
-  mapa <- mapa %>%
-    
-    addControl(
-      
-      html = "
-      
-      <style>
-      
-      /* =====================================================
-         NÚMERO DE CASOS
-         ===================================================== */
-      
-      .vivienda-new-casos-marker {
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        padding: 0 !important;
-      }
-      
-      .vivienda-new-casos-label {
-        
-        font-family:
-          Arial,
-          Helvetica,
-          sans-serif;
-        
-        font-size: 13px;
-        
-        font-weight: 700;
-        
-        color: #FFFFFF;
-        
-        text-align: center;
-        
-        white-space: nowrap;
-        
-        pointer-events: none;
-        
-        text-shadow:
-          -1px -1px 2px rgba(0,0,0,0.75),
-           1px -1px 2px rgba(0,0,0,0.75),
-          -1px  1px 2px rgba(0,0,0,0.75),
-           1px  1px 2px rgba(0,0,0,0.75);
-      }
-      
-      </style>
-      
-      ",
-      
-      position = "topleft"
-    )
-  
+  # ESTILOS CSS se encuentran en www/styles.css
   
   # LEYENDA PERSONALIZADA
   
   legend_items <- paste0(
-    
     mapply(
-      
       function(region, color) {
         
         paste0(
+          "<div style='display:flex; align-items:center; ",
+          "margin:4px 0; font-size:12px; color:#555;'>",
           
-          "<div style='
-            display:flex;
-            align-items:center;
-            margin:4px 0;
-            font-size:12px;
-            color:#555;
-          '>",
-          
-          "<span style='
-            display:inline-block;
-            width:14px;
-            height:14px;
-            background:",
-          
-          color,
-          
-          ";
-            border-radius:4px;
-            margin-right:8px;
-            flex-shrink:0;
-          '></span>",
+          "<span style='display:inline-block; ",
+          "width:14px; height:14px; ",
+          "min-width:14px; min-height:14px; ",
+          "background-color:", color, "; ",
+          "border-radius:4px; ",
+          "margin-right:8px; ",
+          "border:1px solid rgba(0,0,0,0.20);'></span>",
           
           "<span>",
-          
           region,
-          
           "</span>",
           
           "</div>"
@@ -5261,20 +4794,8 @@ renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom) 
   
   legend_html <- paste0(
     
-    "<div style='
-      background:rgba(255,255,255,0.96);
-      padding:12px 14px;
-      border-radius:9px;
-      box-shadow:0 2px 10px rgba(0,0,0,0.18);
-      font-family:Arial, Helvetica, sans-serif;
-    '>",
-    
-    "<div style='
-      font-size:14px;
-      font-weight:700;
-      color:#333;
-      margin-bottom:7px;
-    '>",
+    "<div class='map-legend'>",
+    "<div class='map-legend-title'>",
     
     "Regiones",
     
@@ -5331,7 +4852,8 @@ renderMap_vivienda_new <- function(data, value_col, value_col_region, map_zoom) 
 
 
 #### renderMap_vivienda_municipio ####
-renderMap_vivienda_municipio <- function(municipios_geo, value_col, value_col_region, map_zoom) {
+renderMap_vivienda_municipio <- function(municipios_geo, value_col,
+                                         value_col_region, map_zoom) {
   
   # =========================================================
   # CARTO BASemap
@@ -5477,49 +4999,28 @@ renderMap_vivienda_municipio <- function(municipios_geo, value_col, value_col_re
 }
 
 #### definitionCards ####
-# Función para crear cards de definiciones y metadatos (Actualmente no se esta utilizando esta funcion)
 definitionCards <- function(definitions) {
   card_list <- lapply(definitions, function(def) {
-    background_color <- "#F2F2F3"
-    tags$div(
-      style = paste("background-color:", background_color, ";
-                    padding: 15px;
-                    margin: 10px;
-                    border-radius: 10px;"),
-      tags$h2(style = "font-weight: bold; margin: 0; padding: 0; font-size: 20px;", def$word),
-      tags$p(style = "margin: 0; padding-top: 5px; font-size: 14px;", def$definition)
+    tags$div(class = "definition-card",
+             tags$h2(class = "definition-card-title", def$word),
+             tags$p(class = "definition-card-text", def$definition)
     )
   })
   do.call(tagList, card_list)
 }
 
 #### publicationCardPDF ####
-
-
 publicationCardPDF <- function(id, title, pdf_file, height = "300px") {
-  
-  # Ruta de la imagen preview (misma carpeta que www/)
   preview_file <- sub("\\.pdf$", "_preview.png", pdf_file)
-  
-  # Generar imagen preview si no existe
   if (!file.exists(file.path("www", preview_file))) {
-    pdf_convert(
-      pdf = file.path("www", pdf_file),  # aquí va pdf=...
-      format = "png",
-      pages = 1,
-      filenames = file.path("www", preview_file)
-    )
+    pdf_convert(pdf = file.path("www", pdf_file), format = "png", pages = 1,
+                filenames = file.path("www", preview_file))
   }
-  
   ns <- NS(id)
-  
-  div(
-    class = "card shadow-sm p-3 mb-4 bg-white rounded",
-    tags$h4(title),
-    # Mostrar la primera página como imagen
-    tags$img(src = preview_file, width = "100%", height = height, style = "object-fit: contain;"),
-    br(),
-    downloadButton(ns("download_pdf"), "Descargar PDF")
+  div(class = "card shadow-sm p-3 mb-4 bg-white rounded publication-card",
+      tags$h4(title),
+      tags$img(src = preview_file, width = "100%", height = height, class = "publication-preview"),
+      br(), downloadButton(ns("download_pdf"), "Descargar PDF")
   )
 }
 
@@ -5540,31 +5041,13 @@ publicationCardPDFServer <- function(id, pdf_file) {
 #### publicationCardWeb ####
 publicationCardWeb <- function(title, url, height = "500px") {
   safe_id <- gsub("[^a-zA-Z0-9]", "_", title)
-  
-  div(
-    class = "card shadow-sm p-3 mb-4 bg-white rounded",
-    style = "text-align: center;",
-    
-    tags$h4(title, style = "margin-bottom: 15px;"),
-    
-    # iframe con sandbox para evitar abrir nuevas pestañas
-    tags$iframe(
-      src = url,
-      width = "100%",
-      height = height,
-      style = "border:none; border-radius: 8px;",
-      sandbox = "allow-scripts allow-same-origin allow-forms"  
-    ),
-    
-    br(),
-    
-    # botón externo por si el usuario quiere abrir la página completa
-    tags$a(
-      href = url,
-      target = "_blank",
-      class = "btn btn-primary",
-      "Ir a la página"
-    )
+  div(id = paste0("publication-web-", safe_id),
+      class = "card shadow-sm p-3 mb-4 bg-white rounded publication-card publication-web-card",
+      tags$h4(title, class = "publication-card-title"),
+      tags$iframe(src = url, width = "100%", height = height, class = "publication-iframe",
+                  sandbox = "allow-scripts allow-same-origin allow-forms"),
+      br(),
+      tags$a(href = url, target = "_blank", class = "btn btn-primary", "Abrir en una nueva pestaña")
   )
 }
 
@@ -5642,17 +5125,17 @@ setColorFill <- function(df, variable) {
 # }
 # 
 plotHeight <- function(plot_height, selected_plots){
-
+  
   num_selected_plots = selected_plots
   num_rows = (num_selected_plots/2)
-
+  
   if(num_selected_plots > 4){
     height = (350*num_rows)
   } else {
     height = plot_height
   }
   print(height)
-
+  
   return(height)
 }
 

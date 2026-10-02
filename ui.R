@@ -156,205 +156,205 @@ ui <-
       tabsetPanel(
         
         #### tab con datos de Homicidios por grupo de Edad ####
-        tabPanel(
-          lowercaseTitle("Homicidios de mujeres por edad"),
-          br(), br(),
-
-          # Menu sidebar con widgets
-            sidebarLayout(
-              sidebarPanel(
-                style = "display: flex; flex-direction: column; align-items: center;",
-
-                # Seleccionar valor de la variable
-                div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",
-                  div(
-                    style = "text-align: center; display: inline-block;",
-                    createDropdownCheckbox(
-                      label = HTML("Seleccione<br>Grupo(s) de Edad:"),
-                      choices = homiEdad$Edad,
-                      selected = homiEdad$Edad,
-                      id = "snmv_homiEdad_edad"
-                    )
-                  )
-                ),
-
-                div(
-                  style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
-                  div(
-                    style = "width: 100%; display: flex; justify-content: space-between; align-items: center;",
-
-                    div(
-                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
-                      createDropdownCheckbox(
-                        label = "Seleccione Año(s):",
-                        choices = homiEdad$Año,
-                        selected = NULL,
-                        id = "snmv_homiEdad_año"
-                      )
-                    ),
-                    div(
-                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;",
-                      showDataCheckbox("showTable_snmv")
-                    )
-                  )
-                ),
-
-                # Output UI para la tabla de datos
-                uiOutput("dataTableUI_snmv")
-              ),
-
-
-            # Sección principal con los gráficos
-            mainPanel(
-              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              fluidRow(
-                column(12,
-                       div(id = "scrollable-plot",
-                           div(id = "plot-title", uiOutput("plot_title_homiEdad")),
-                           plotlyOutput("barPlot_snmv"),  height = "100%"))
-              ),
-              tags$div(style = "padding-bottom: 10px;"),
-              tags$div(
-                style = "padding-bottom: 10px;",
-                div(
-                  class = "card",
-                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
-                  h4(
-                    strong(actualizacion_snmv1, style="margin: 0px;")
-                  ),
-                  p(
-                    "Los datos representados en esta gráfica corresponden a los
-                    homicidios de mujeres por grupo de edad desde el año natural 2017 al 2024.
-                    Los datos del año 2024 al 2026 son preliminares.",
-
-                    style = "font-size: 16px; padding: 0px;"
-                  )
-                )
-              )
-            )
-          )
-        ),
-
+        # tabPanel(
+        #   lowercaseTitle("Homicidios de mujeres por edad"),
+        #   br(), br(),
+        # 
+        #   # Menu sidebar con widgets
+        #     sidebarLayout(
+        #       sidebarPanel(
+        #         style = "display: flex; flex-direction: column; align-items: center;",
+        # 
+        #         # Seleccionar valor de la variable
+        #         div(
+        #           style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",
+        #           div(
+        #             style = "text-align: center; display: inline-block;",
+        #             createDropdownCheckbox(
+        #               label = HTML("Seleccione<br>Grupo(s) de Edad:"),
+        #               choices = homiEdad$Edad,
+        #               selected = homiEdad$Edad,
+        #               id = "snmv_homiEdad_edad"
+        #             )
+        #           )
+        #         ),
+        # 
+        #         div(
+        #           style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+        #           div(
+        #             style = "width: 100%; display: flex; justify-content: space-between; align-items: center;",
+        # 
+        #             div(
+        #               style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
+        #               createDropdownCheckbox(
+        #                 label = "Seleccione Año(s):",
+        #                 choices = homiEdad$Año,
+        #                 selected = NULL,
+        #                 id = "snmv_homiEdad_año"
+        #               )
+        #             ),
+        #             div(
+        #               style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;",
+        #               showDataCheckbox("showTable_snmv")
+        #             )
+        #           )
+        #         ),
+        # 
+        #         # Output UI para la tabla de datos
+        #         uiOutput("dataTableUI_snmv")
+        #       ),
+        # 
+        # 
+        #     # Sección principal con los gráficos
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       fluidRow(
+        #         column(12,
+        #                div(id = "scrollable-plot",
+        #                    div(id = "plot-title", uiOutput("plot_title_homiEdad")),
+        #                    plotlyOutput("barPlot_snmv"),  height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 10px;"),
+        #       tags$div(
+        #         style = "padding-bottom: 10px;",
+        #         div(
+        #           class = "card",
+        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+        #           h4(
+        #             strong(actualizacion_snmv1, style="margin: 0px;")
+        #           ),
+        #           p(
+        #             "Los datos representados en esta gráfica corresponden a los
+        #             homicidios de mujeres por grupo de edad desde el año natural 2017 al 2024.
+        #             Los datos del año 2024 al 2026 son preliminares.",
+        # 
+        #             style = "font-size: 16px; padding: 0px;"
+        #           )
+        #         )
+        #       )
+        #     )
+        #   )
+        # ),
+        # 
 
     
     #' #### LAYOUT grafica, filtros, datos y nota importante tab con datos de Homicidios por grupo de Edad ####
-    # tabPanel(
-    #   lowercaseTitle("Homicidios de mujeres por edad"),
-    #   # CONTENEDOR GENERAL
-    #   div(
-    #     class = "dashboard-container",
-    #     # GRÁFICA
-    #     div(
-    #       class = "dashboard-card plot-card",
-    #       
-    #       div(
-    #         id = "plot-title",
-    #         uiOutput("plot_title_homiEdad")
-    #       ),
-    #       
-    #       plotlyOutput(
-    #         "barPlot_snmv",
-    #         height = "calc(100vh - 350px)"
-    #       )
-    #     ),
-    #     # FILTROS
-    #     div(
-    #       class = "dashboard-card filters-card",
-    #       
-    #       div(
-    #         class = "filters-row",
-    #         # GRUPO DE EDAD
-    #         div(
-    #           class = "filter-box",
-    #           
-    #           createPickerFilter(
-    #             label = HTML("Seleccione<br>Grupo(s) de Edad:"),
-    #             choices = homiEdad$Edad,
-    #             selected = homiEdad$Edad,
-    #             id = "snmv_homiEdad_edad"
-    #           )
-    #         ),
-    #         # AÑO
-    #         div(
-    #           class = "filter-box",
-    #           
-    #           createPickerFilter(
-    #             label = "Seleccione Año(s):",
-    #             choices = homiEdad$Año,
-    #             selected = NULL,
-    #             id = "snmv_homiEdad_año"
-    #           )
-    #         ),
-    #         # MOSTRAR DATOS
-    #         div(
-    #           class = "filter-switch",
-    #           
-    #           showDataToggle(
-    #             inputId = "showTable_snmv"
-    #           )
-    #         )
-    #         
-    #       )
-    #     ),
-    #     # TABLA + INFORMACIÓN
-    #     div(
-    #       class = "bottom-row",
-    #       # TABLA
-    #       uiOutput(
-    #         "dataTableUI_snmv"
-    #       ),
-    #       # INFORMACIÓN
-    #       div(
-    #         class = "info-column",
-    #         # NOTA IMPORTANTE
-    #         div(
-    #           class = "info-card",
-    #           
-    #           h4(
-    #             class = "info-card-title",
-    #             actualizacion_snmv1
-    #           ),
-    #           
-    #           p(
-    #             "Los datos representados en esta gráfica corresponden a los
-    #         homicidios de mujeres por grupo de edad desde el año natural
-    #         2017 al 2024. Los datos del año 2024 al 2026 son preliminares."
-    #           )
-    #         ),
-    #         # FUENTE
-    #         div(
-    #           class = "source-card",
-    #           
-    #           h4(
-    #             class = "source-card-title",
-    #             "Fuente de los datos"
-    #           ),
-    #           
-    #           p(
-    #             tags$a(
-    #               href = "https://stacks.cdc.gov/view/cdc/149761",
-    #               target = "_blank",
-    #               rel = "noopener noreferrer",
-    #               "Sistema Nacional de Notificación de Muertes Violentas, ",
-    #               class = "source-link"
-    #             ),
-    #             
-    #             tags$a(
-    #               href = "https://estadisticas.pr/",
-    #               target = "_blank",
-    #               rel = "noopener noreferrer",
-    #               "Instituto de Estadísticas de Puerto Rico",
-    #               class = "source-link"
-    #             )
-    #           )
-    #         )
-    #         
-    #       )
-    #     )
-    #     
-    #   )
-    # ),
+    tabPanel(
+      lowercaseTitle("Homicidios de mujeres por edad"),
+      # CONTENEDOR GENERAL
+      div(
+        class = "dashboard-container",
+        # GRÁFICA
+        div(
+          class = "dashboard-card plot-card",
+
+          div(
+            id = "plot-title",
+            uiOutput("plot_title_homiEdad")
+          ),
+
+          plotlyOutput(
+            "barPlot_snmv",
+            height = "calc(100vh - 350px)"
+          )
+        ),
+        # FILTROS
+        div(
+          class = "dashboard-card filters-card",
+
+          div(
+            class = "filters-row",
+            # GRUPO DE EDAD
+            div(
+              class = "filter-box",
+
+              createPickerFilter(
+                label = HTML("Seleccione<br>Grupo(s) de Edad:"),
+                choices = homiEdad$Edad,
+                selected = homiEdad$Edad,
+                id = "snmv_homiEdad_edad"
+              )
+            ),
+            # AÑO
+            div(
+              class = "filter-box",
+
+              createPickerFilter(
+                label = "Seleccione Año(s):",
+                choices = homiEdad$Año,
+                selected = NULL,
+                id = "snmv_homiEdad_año"
+              )
+            ),
+            # MOSTRAR DATOS
+            div(
+              class = "filter-switch",
+
+              showDataToggle(
+                inputId = "showTable_snmv"
+              )
+            )
+
+          )
+        ),
+        # TABLA + INFORMACIÓN
+        div(
+          class = "bottom-row",
+          # TABLA
+          uiOutput(
+            "dataTableUI_snmv"
+          ),
+          # INFORMACIÓN
+          div(
+            class = "info-column",
+            # NOTA IMPORTANTE
+            div(
+              class = "info-card",
+
+              h4(
+                class = "info-card-title",
+                actualizacion_snmv1
+              ),
+
+              p(
+                "Los datos representados en esta gráfica corresponden a los
+            homicidios de mujeres por grupo de edad desde el año natural
+            2017 al 2024. Los datos del año 2024 al 2026 son preliminares."
+              )
+            ),
+            # FUENTE
+            div(
+              class = "source-card",
+
+              h4(
+                class = "source-card-title",
+                "Fuente de los datos"
+              ),
+
+              p(
+                tags$a(
+                  href = "https://stacks.cdc.gov/view/cdc/149761",
+                  target = "_blank",
+                  rel = "noopener noreferrer",
+                  "Sistema Nacional de Notificación de Muertes Violentas, ",
+                  class = "source-link"
+                ),
+
+                tags$a(
+                  href = "https://estadisticas.pr/",
+                  target = "_blank",
+                  rel = "noopener noreferrer",
+                  "Instituto de Estadísticas de Puerto Rico",
+                  class = "source-link"
+                )
+              )
+            )
+
+          )
+        )
+
+      )
+    ),
 
  
 
@@ -1173,7 +1173,7 @@ ui <-
             
             # MAPAS
             div(
-              class = "dashboard-card maps-card",
+              class = "maps-card",
               
               div(
                 class = "plot-title",
@@ -1185,7 +1185,7 @@ ui <-
                 
                 div(
                   class = "map-title",
-                  "Solicitadas"
+                  "Viviendas Solicitadas"
                 ),
                 
                 leafletOutput(
@@ -1200,7 +1200,7 @@ ui <-
                 
                 div(
                   class = "map-title",
-                  "Asignadas"
+                  "Viviendas Asignadas"
                 ),
                 
                 leafletOutput(
@@ -1210,6 +1210,7 @@ ui <-
                 )
               )
             ),
+            
             # FILTROS
             div(
               class = "dashboard-card filters-card",

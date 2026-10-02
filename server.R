@@ -1629,6 +1629,9 @@ server <- function(input, output, session) {
     )
     
   })
+  
+ 
+  
   # MAPA DE VIVIENDAS SOLICITADAS POR REGIÓN
   
   output$map_avp_mapaAvp_solicitadas <- renderLeaflet({
@@ -1643,6 +1646,17 @@ server <- function(input, output, session) {
     )
     
   })
+  
+  # TITULO DE VIVIENDAS SOLICITADAS Y ASIGNADAS POR REGIÓN
+  output$plot_title_mapaAvp <- renderUI({
+    
+    tags$div(
+      class = "map-main-title",
+      "Viviendas públicas solicitadas y asignadas anualmente por violencia doméstica"
+    )
+  })
+  
+  
   # DATOS PARA LA TABLA
   
   mapaAvp_filt_noGeom <- reactive({
@@ -1665,6 +1679,7 @@ server <- function(input, output, session) {
     )
     
   })
+  
   # MOSTRAR / OCULTAR TABLA
   
   output$dataTableUI_avp_mapaAvp <- renderUI({

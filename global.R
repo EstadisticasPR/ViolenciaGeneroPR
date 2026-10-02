@@ -107,12 +107,6 @@ guardarDatos_Polygons <- function(dataframe, nombre_archivo) {
 }
 
 
-
-
-
-
-
-
 ##################################################################################
 #### Procesamiento de datos del Sistema de Notificacion de Muertes Violentas #####
 ##################################################################################
@@ -612,10 +606,10 @@ mapa_cavv <- st_read(paste0(maps_fol, "/regiones_vivienda.shp")) %>%
 ##### Actualizaciones de los Datos #####
 ##################################################################################
 # Fecha actualizacion de los datos de SNMV tab1
-actualizacion_snmv1 <- "Última actualización: 30 de junio de 2026"
+actualizacion_snmv1 <- "Última actualización: 24 de septiembre de 2026"
 
 # Fecha actualizacion de los datos de SNMV tab2
-actualizacion_snmv2 <- "Última actualización: 30 de junio de 2026"
+actualizacion_snmv2 <- "Última actualización: 24 de septiembre de 2026"
 
 # Fecha actualizacion familia
 actualizacion_familia <- "Última actualización: 30 de junio de 2026"

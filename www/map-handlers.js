@@ -21,17 +21,15 @@ window.MapHandlers = {
     // =====================================================
 
     function esMovil() {
-
       return window.innerWidth <= 600;
-
     }
 
 
     // =====================================================
-    // AJUSTAR VISTA
+    // CONFIGURAR VISTA INICIAL
     // =====================================================
 
-    function ajustarVista() {
+    function ajustarVistaInicial() {
 
       map.invalidateSize({
         animate: false
@@ -46,13 +44,14 @@ window.MapHandlers = {
 
         map.setView(
           [18.20, -66.50],
-          6,
+          8,
           {
             animate: false
           }
         );
 
       }
+
 
       // ---------------------------------------------------
       // DESKTOP
@@ -64,41 +63,41 @@ window.MapHandlers = {
           islandBounds,
           {
             padding: [10, 10],
-            maxZoom: 8,
             animate: false
           }
         );
 
       }
 
-    }
+
+      // ===================================================
+      // OBTENER EL ZOOM REAL
+      // ===================================================
+
+      var zoomInicial = map.getZoom();
 
 
-    // =====================================================
-    // CONFIGURAR LÍMITES DE ZOOM
-    // =====================================================
+      // ===================================================
+      // LIMITES RELATIVOS
+      // ===================================================
 
-    function configurarZoom() {
+      map.setMinZoom(
+        zoomInicial - 1
+      );
 
-      if (esMovil()) {
+      map.setMaxZoom(
+        zoomInicial + 1
+      );
 
-        // En móvil:
-        // permite alejarse hasta zoom 5
-        // pero no acercarse más allá de zoom 7
 
-        map.setMinZoom(5);
-        map.setMaxZoom(7);
-
-      }
-
-      else {
-
-        // Desktop
-
-        map.setMinZoom(6);
-        map.setMaxZoom(18);
-
-      }
+      console.log(
+        "Zoom inicial:",
+        zoomInicial,
+        " | Min:",
+        zoomInicial - 1,
+        " | Max:",
+        zoomInicial + 1
+      );
 
     }
 
@@ -111,9 +110,7 @@ window.MapHandlers = {
 
       setTimeout(function() {
 
-        configurarZoom();
-
-        ajustarVista();
+        ajustarVistaInicial();
 
       }, 500);
 
@@ -121,7 +118,7 @@ window.MapHandlers = {
 
 
     // =====================================================
-    // CAMBIO DE TAMAÑO
+    // RESIZE
     // =====================================================
 
     var resizeTimeout;
@@ -149,25 +146,6 @@ window.MapHandlers = {
       );
 
     }
-
-
-    // =====================================================
-    // RESIZE DEL MAPA
-    // =====================================================
-
-    map.on('resize', function() {
-
-      clearTimeout(resizeTimeout);
-
-      resizeTimeout = setTimeout(function() {
-
-        map.invalidateSize({
-          animate: false
-        });
-
-      }, 200);
-
-    });
 
 
     // =====================================================
@@ -273,7 +251,6 @@ window.MapHandlers = {
 
           btn.innerHTML = '⌂';
 
-
           btn.title =
             'Volver a la vista inicial';
 
@@ -300,11 +277,15 @@ window.MapHandlers = {
               });
 
 
+              // =========================================
+              // RESTAURAR VISTA
+              // =========================================
+
               if (esMovil()) {
 
                 map.setView(
                   [18.20, -66.50],
-                  6,
+                  7,
                   {
                     animate: true
                   }
@@ -318,12 +299,43 @@ window.MapHandlers = {
                   islandBounds,
                   {
                     padding: [10, 10],
-                    maxZoom: 8,
                     animate: true
                   }
                 );
 
               }
+
+
+              // =========================================
+              // RECALCULAR LIMITES
+              // =========================================
+
+              setTimeout(function() {
+
+                var zoomInicial =
+                  map.getZoom();
+
+
+                map.setMinZoom(
+                  zoomInicial - 1
+                );
+
+
+                map.setMaxZoom(
+                  zoomInicial + 1
+                );
+
+
+                console.log(
+                  "RESET → Zoom:",
+                  zoomInicial,
+                  " | Min:",
+                  zoomInicial - 1,
+                  " | Max:",
+                  zoomInicial + 1
+                );
+
+              }, 300);
 
             }
           );
