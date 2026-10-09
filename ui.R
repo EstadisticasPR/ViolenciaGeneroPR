@@ -359,87 +359,212 @@ ui <-
  
 
         #### tab con datos de Incidentes segun el año ####
-        tabPanel(
-          lowercaseTitle("Tipos de incidentes violentos"),
-          br(), br(),
+        # tabPanel(
+        #   lowercaseTitle("Tipos de incidentes violentos"),
+        #   br(), br(),
+        #   
+        #     sidebarLayout(
+        #       sidebarPanel(
+        #         style = "display: flex; flex-direction: column; align-items: center;",
+        #         
+        #         # # seleccionar valor de la variable
+        #         div(
+        #           style = "width: 100%; display: flex; justify-content: center;  margin-bottom: 20px;", 
+        #           div(
+        #             style = "text-align: center; display: inline-block;",  
+        #             # botón para seleccionar tipo de incidente
+        #             createDropdownCheckbox(
+        #               label = HTML("Seleccione<br>Tipo(s) de Incidente:"),
+        #               choices = inci$Incidente,
+        #               selected = 3,
+        #               id = "snmv_inci_tipo"
+        #             )
+        #           )
+        #         ),
+        #         
+        #         div(
+        #           style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+        #           div(
+        #             style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+        #             div(
+        #               style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;", 
+        #               # botón para seleccionar año
+        #               createDropdownCheckbox(
+        #                 label = "Seleccione Año(s):",
+        #                 choices = inci$Año,
+        #                 selected = NULL,
+        #                 id = "snmv_inci_año"
+        #               )
+        #             ),
+        #             div(
+        #               style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+        #               showDataCheckbox("showTable_snmv_inci")
+        #             )
+        #           )
+        #         ),
+        #         
+        #         
+        #         # Output UI para la tabla de datos
+        #         uiOutput("dataTableUI_snmv_inci")
+        #         
+        #       ),
+        #     
+        #     
+        #     # Sección principal con los gráficos y datatable
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       fluidRow(
+        #         column(12, 
+        #                div(id = "scrollable-plot", 
+        #                    div(id = "plot-title", uiOutput("plot_title_inci")),
+        #                    plotlyOutput("barPlot_snmv_inci"),  height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 10px;"),
+        #       tags$div(
+        #         style = "padding-bottom: 10px;",
+        #         div(
+        #           class = "card",
+        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+        #           h4(
+        #             strong(actualizacion_snmv2, style="margin: 0px;") 
+        #           ),
+        #           p(
+        #             "Los datos representados en esta gráfica corresponden a la cantidad de 
+        #             incidentes violentos (según su tipo) desde el año natural 2017 al 2024.
+        #             Los datos del año 2024 al 2026 son preliminares.",
+        #             
+        #             style = "font-size: 16px; padding: 0px;" 
+        #           )
+        #         )
+        #       )
+        #     )
+        #   ),
+        # ), 
+
+    #### LAYOUT gráfica, filtros, datos y nota importante tab con datos de Tipos de incidentes violentos ####
+    tabPanel(
+      lowercaseTitle("Tipos de incidentes violentos"),
+      
+      # CONTENEDOR GENERAL
+      div(
+        class = "dashboard-container",
+        
+        # GRÁFICA
+        div(
+          class = "dashboard-card plot-card",
           
-            sidebarLayout(
-              sidebarPanel(
-                style = "display: flex; flex-direction: column; align-items: center;",
-                
-                # # seleccionar valor de la variable
-                div(
-                  style = "width: 100%; display: flex; justify-content: center;  margin-bottom: 20px;", 
-                  div(
-                    style = "text-align: center; display: inline-block;",  
-                    # botón para seleccionar tipo de incidente
-                    createDropdownCheckbox(
-                      label = HTML("Seleccione<br>Tipo(s) de Incidente:"),
-                      choices = inci$Incidente,
-                      selected = 3,
-                      id = "snmv_inci_tipo"
-                    )
-                  )
+          div(
+            id = "plot-title",
+            uiOutput("plot_title_inci")
+          ),
+          
+          plotlyOutput(
+            "barPlot_snmv_inci",
+            height = "calc(100vh - 350px)"
+          )
+        ),
+        
+        # FILTROS
+        div(
+          class = "dashboard-card filters-card",
+          
+          div(
+            class = "filters-row",
+            
+            # TIPO DE INCIDENTE
+            div(
+              class = "filter-box",
+              
+              createPickerFilter(
+                label = HTML("Seleccione<br>Tipo(s) de Incidente:"),
+                choices = inci$Incidente,
+                selected = inci$Incidente[3],
+                id = "snmv_inci_tipo"
+              )
+            ),
+            
+            # AÑO
+            div(
+              class = "filter-box",
+              
+              createPickerFilter(
+                label = "Seleccione Año(s):",
+                choices = inci$Año,
+                selected = NULL,
+                id = "snmv_inci_año"
+              )
+            ),
+            
+            # MOSTRAR DATOS
+            div(
+              class = "filter-switch",
+              
+              showDataToggle("showTable_snmv_inci")
+            )
+          )
+        ),
+        
+        # TABLA + INFORMACIÓN
+        div(
+          class = "bottom-row",
+          
+          # TABLA
+          uiOutput(
+            "dataTableUI_snmv_inci"
+          ),
+          
+          # INFORMACIÓN
+          div(
+            class = "info-column",
+            
+            # NOTA IMPORTANTE
+            div(
+              class = "info-card",
+              
+              h4(
+                class = "info-card-title",
+                actualizacion_snmv2
+              ),
+              
+              p(
+                "Los datos representados en esta gráfica corresponden a la
+            cantidad de incidentes violentos, según su tipo, desde el año
+            natural 2017 al 2024. Los datos del año 2024 al 2026 son
+            preliminares."
+              )
+            ),
+            
+            # FUENTE
+            div(
+              class = "source-card",
+              
+              h4(
+                class = "source-card-title",
+                "Fuente de los datos"
+              ),
+              
+              p(
+                tags$a(
+                  href = "https://stacks.cdc.gov/view/cdc/149761",
+                  target = "_blank",
+                  rel = "noopener noreferrer",
+                  "Sistema Nacional de Notificación de Muertes Violentas",
+                  class = "source-link"
                 ),
                 
-                div(
-                  style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
-                  div(
-                    style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-                    div(
-                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;", 
-                      # botón para seleccionar año
-                      createDropdownCheckbox(
-                        label = "Seleccione Año(s):",
-                        choices = inci$Año,
-                        selected = NULL,
-                        id = "snmv_inci_año"
-                      )
-                    ),
-                    div(
-                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-                      showDataCheckbox("showTable_snmv_inci")
-                    )
-                  )
-                ),
-                
-                
-                # Output UI para la tabla de datos
-                uiOutput("dataTableUI_snmv_inci")
-                
-              ),
-            
-            
-            # Sección principal con los gráficos y datatable
-            mainPanel(
-              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              fluidRow(
-                column(12, 
-                       div(id = "scrollable-plot", 
-                           div(id = "plot-title", uiOutput("plot_title_inci")),
-                           plotlyOutput("barPlot_snmv_inci"),  height = "100%"))
-              ),
-              tags$div(style = "padding-bottom: 10px;"),
-              tags$div(
-                style = "padding-bottom: 10px;",
-                div(
-                  class = "card",
-                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
-                  h4(
-                    strong(actualizacion_snmv2, style="margin: 0px;") 
-                  ),
-                  p(
-                    "Los datos representados en esta gráfica corresponden a la cantidad de 
-                    incidentes violentos (según su tipo) desde el año natural 2017 al 2024.
-                    Los datos del año 2024 al 2026 son preliminares.",
-                    
-                    style = "font-size: 16px; padding: 0px;" 
-                  )
+                tags$a(
+                  href = "https://estadisticas.pr/",
+                  target = "_blank",
+                  rel = "noopener noreferrer",
+                  "Instituto de Estadísticas de Puerto Rico",
+                  class = "source-link"
                 )
               )
             )
-          ),
-        ), 
+          )
+        )
+      )
+    ),
         
         #### tab de Publicaciones del SNMV ####
         # tabPanel(

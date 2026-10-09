@@ -107,10 +107,6 @@ server <- function(input, output, session) {
   # Crear Card con Fuentes
   output$dataTableUI_snmv <- renderUI({
     if (input$showTable_snmv) {
-      hyperlinks <- c("https://stacks.cdc.gov/view/cdc/149761",
-                      "https://estadisticas.pr/")
-      texts <- c("Sistema Nacional de Notificación de Muertes Violentas",
-                 "Instituto de Estadísticas de Puerto Rico")
       
       tags$div(
         class = "card",
@@ -123,9 +119,7 @@ server <- function(input, output, session) {
             style = "width: 98%; max-width: 800px; overflow-x: auto;",
             DTOutput("dataTable_snmv")
           )
-        ),
-        
-        createFuenteDiv(hyperlinks, texts)
+        )
       )
     }
   })
@@ -232,11 +226,6 @@ server <- function(input, output, session) {
   # Crear Card con Fuentes
   output$dataTableUI_snmv_inci <- renderUI({
     if (input$showTable_snmv_inci) {
-      hyperlinks <- c("https://stacks.cdc.gov/view/cdc/149761",
-                      "https://estadisticas.pr/")
-      texts <- c("Sistema Nacional de Notificación de Muertes Violentas",
-                 "Instituto de Estadísticas de Puerto Rico")
-      
       tags$div(
         class = "card",
         style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
@@ -248,10 +237,7 @@ server <- function(input, output, session) {
             style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_snmv_inci")
           )
-        ),
-        
-        
-        createFuenteDiv(hyperlinks, texts)
+        )
       )
     }
   })
