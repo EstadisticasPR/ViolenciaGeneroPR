@@ -619,96 +619,229 @@ ui <-
       icon = icon("users"),
       tabsetPanel(
         #### tab con datos de menores víctimas de maltrato (dfMalt)  ####
-        tabPanel(
-          lowercaseTitle("Maltrato de menores por sexo"),
-          br(), br(),
-          
-          sidebarLayout(
-            sidebarPanel(
-              style = "display: flex; flex-direction: column; align-items: center;",
+        # tabPanel(
+        #   lowercaseTitle("Maltrato de menores por sexo"),
+        #   br(), br(),
+        #   
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # # seleccionar valor de la variable
+        #       div(
+        #         style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+        #         div(
+        #           style = "text-align: center; display: inline-block;",  
+        #           # botón para seleccionar tipo de maltrato
+        #           createDropdownCheckbox(
+        #             label = HTML("Seleccione <br>Tipo(s) de Maltrato:"),
+        #             choices = dfMalt$Maltrato,
+        #             selected = 1,
+        #             id = "fam_dfMalt_tipo"
+        #           ),
+        #           createDropdownCheckbox(
+        #             label = HTML("Seleccione <br> Sexo de las Víctimas:"),
+        #             choices = dfMalt$Sexo,
+        #             selected = 1,
+        #             id = "fam_dfMalt_sexo"
+        #           )
+        #         )
+        #       ),
+        #       
+        #       div(
+        #         style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+        #         div(
+        #           style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+        #             # botón para seleccionar año
+        #             createDropdownCheckbox(
+        #               label = "Seleccionar Año:",
+        #               choices = dfMalt$Año,
+        #               selected = NULL,
+        #               id = "fam_dfMalt_año"
+        #             )
+        #           ),
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+        #             showDataCheckbox("showTable_fam")
+        #           )
+        #         )
+        #       ),
+        #       
+        #       
+        #       # Output UI para la tabla de datos
+        #       uiOutput("dataTableUI_fam")
+        #       
+        #     ),
+        #     
+        #     
+        #     # Sección principal con los gráficos
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       fluidRow(
+        #         column(12, 
+        #                div(id = "scrollable-plot", 
+        #                    div(id = "plot-title", uiOutput("plot_title_dfMalt")),
+        #                    plotlyOutput("barPlot_fam"),  height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 10px;"),
+        #       tags$div(
+        #         style = "padding-bottom: 10px;",
+        #         div(
+        #           class = "card",
+        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+        #           h4(
+        #             strong(actualizacion_familia, style="margin: 0px;") 
+        #           ),
+        #           p(
+                    # "Las cantidades podrían representar conteos duplicados del o
+                    # la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son
+                    # parte de uno o múltiples referidos. Este conteo es conocido por el Departamento
+                    # de la Familia como el pareo de menores-reportado. Estos datos están en proceso de
+                    # revisión por el Instituto de Estadísticas de Puerto Rico. Datos parciales
+                    # y preliminares del año 2022. Están disponibles hasta noviembre de 2022.",
+        #             
+        #             style = "font-size: 16px;padding: 0px;" 
+        #           )
+        #         )
+        #       )
+        #     )
+        #   )
+        # ),
+
+          #### TAB con datos de menores víctimas de maltrato (dfMalt) ####
+          tabPanel(
+            lowercaseTitle("Maltrato de menores por sexo"),
+            
+            # CONTENEDOR GENERAL
+            div(
+              class = "dashboard-container",
               
-              # # seleccionar valor de la variable
+              # GRÁFICA
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+                class = "dashboard-card plot-card",
+                
                 div(
-                  style = "text-align: center; display: inline-block;",  
-                  # botón para seleccionar tipo de maltrato
-                  createDropdownCheckbox(
-                    label = HTML("Seleccione <br>Tipo(s) de Maltrato:"),
-                    choices = dfMalt$Maltrato,
-                    selected = 1,
-                    id = "fam_dfMalt_tipo"
-                  ),
-                  createDropdownCheckbox(
-                    label = HTML("Seleccione <br> Sexo de las Víctimas:"),
-                    choices = dfMalt$Sexo,
-                    selected = 1,
-                    id = "fam_dfMalt_sexo"
-                  )
+                  id = "plot-title",
+                  uiOutput("plot_title_dfMalt")
+                ),
+                
+                plotlyOutput(
+                  "barPlot_fam",
+                  height = "calc(100vh - 350px)"
                 )
               ),
               
+              # FILTROS
               div(
-                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                class = "dashboard-card filters-card",
+                
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                  class = "filters-row",
+                  
+                  # TIPO DE MALTRATO
                   div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
-                    # botón para seleccionar año
-                    createDropdownCheckbox(
-                      label = "Seleccionar Año:",
+                    class = "filter-box",
+                    
+                    createPickerFilter(
+                      label = HTML("Seleccione<br>Tipo(s) de Maltrato:"),
+                      choices = dfMalt$Maltrato,
+                      selected = dfMalt$Maltrato[1],
+                      id = "fam_dfMalt_tipo"
+                    )
+                  ),
+                  
+                  # SEXO DE LAS VÍCTIMAS
+                  div(
+                    class = "filter-box",
+                    
+                    createPickerFilter(
+                      label = HTML("Seleccione<br>Sexo de las Víctimas:"),
+                      choices = dfMalt$Sexo,
+                      selected = dfMalt$Sexo[3],
+                      id = "fam_dfMalt_sexo"
+                    )
+                  ),
+                  
+                  # AÑO
+                  div(
+                    class = "filter-box",
+                    
+                    createPickerFilter(
+                      label = "Seleccione Año(s):",
                       choices = dfMalt$Año,
                       selected = NULL,
                       id = "fam_dfMalt_año"
                     )
                   ),
+                  
+                  # MOSTRAR DATOS
                   div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-                    showDataCheckbox("showTable_fam")
+                    class = "filter-switch",
+                    
+                    showDataToggle("showTable_fam")
                   )
+                  
                 )
               ),
               
-              
-              # Output UI para la tabla de datos
-              uiOutput("dataTableUI_fam")
-              
-            ),
-            
-            
-            # Sección principal con los gráficos
-            mainPanel(
-              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              fluidRow(
-                column(12, 
-                       div(id = "scrollable-plot", 
-                           div(id = "plot-title", uiOutput("plot_title_dfMalt")),
-                           plotlyOutput("barPlot_fam"),  height = "100%"))
-              ),
-              tags$div(style = "padding-bottom: 10px;"),
-              tags$div(
-                style = "padding-bottom: 10px;",
+              # TABLA + INFORMACIÓN
+              div(
+                class = "bottom-row",
+                
+                # TABLA
+                uiOutput(
+                  "dataTableUI_fam"
+                ),
+                
+                # INFORMACIÓN
                 div(
-                  class = "card",
-                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
-                  h4(
-                    strong(actualizacion_familia, style="margin: 0px;") 
-                  ),
-                  p(
-                    "Las cantidades podrían representar conteos duplicados del o 
-                    la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son 
-                    parte de uno o múltiples referidos. Este conteo es conocido por el Departamento 
-                    de la Familia como el pareo de menores-reportado. Estos datos están en proceso de
-                    revisión por el Instituto de Estadísticas de Puerto Rico. Datos parciales
-                    y preliminares del año 2022. Están disponibles hasta noviembre de 2022.",
+                  class = "info-column",
+                  
+                  # NOTA IMPORTANTE
+                  div(
+                    class = "info-card",
                     
-                    style = "font-size: 16px;padding: 0px;" 
+                    h4(
+                      class = "info-card-title",
+                      actualizacion_familia
+                    ),
+                    
+                    p(
+                     "Las cantidades podrían representar conteos duplicados del o
+                      la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son
+                      parte de uno o múltiples referidos. Este conteo es conocido por el Departamento
+                      de la Familia como el pareo de menores-reportado. Estos datos están en proceso de
+                      revisión por el Instituto de Estadísticas de Puerto Rico."
+                    )
+                  ),
+                  
+                  # FUENTE
+                  div(
+                    class = "source-card",
+                    
+                    h4(
+                      class = "source-card-title",
+                      "Fuente de los datos"
+                    ),
+                    
+                    p(
+                      tags$a(
+                        href = "https://www.familia.pr.gov/",
+                        target = "_blank",
+                        rel = "noopener noreferrer",
+                        "Departamento de la Familia",
+                        class = "source-link"
+                      )
+                    )
                   )
+                  
                 )
               )
+              
             )
-          )
-        ),
+          ),
         
         #### tab de Publicaciones del Departamento de la Familia ####
         # tabPanel(

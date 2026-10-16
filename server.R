@@ -467,9 +467,9 @@ server <- function(input, output, session) {
   # Crear Card con Fuentes
   output$dataTableUI_fam <- renderUI({
     if (input$showTable_fam) {
-      hyperlinks <- c("https://www.familia.pr.gov/")
-      texts <- c("Departamento de la Familia")
-      
+      # hyperlinks <- c("https://www.familia.pr.gov/")
+      # texts <- c("Departamento de la Familia")
+      # 
       tags$div(
         class = "card",
         style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
@@ -481,9 +481,10 @@ server <- function(input, output, session) {
             style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_fam")
           )
-        ),
-        
-        createFuenteDiv(hyperlinks, texts)
+        )
+        # ,
+        # 
+        # createFuenteDiv(hyperlinks, texts)
       )
     }
   })
