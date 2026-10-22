@@ -1865,6 +1865,44 @@ createPickerFilter <- function(label, choices, selected = NULL, id) {
   )
 }
 
+#### createPickerFilter_region ####
+
+#### createPickerFilter_region ####
+createPickerFilter_region <- function(label, choices, selected = NULL, id) {
+  
+  # Limpia las opciones: quita duplicados y las ordena.
+  choices <- if (is.factor(choices)) {
+    levels(choices)
+  } else {
+    sort(unique(choices))
+  }
+  
+  # Si selected es NULL, no selecciona ninguna región por defecto.
+  if (is.null(selected)) {
+    selected <- character(0)
+  }
+  
+  # Crea el selector con la misma apariencia que createPickerFilter.
+  pickerInput(
+    inputId = paste0("checkGroup_", id),
+    label = label,
+    choices = choices,
+    selected = selected,
+    multiple = TRUE,
+    
+    options = pickerOptions(
+      actionsBox = TRUE,
+      container = "body",
+      selectedTextFormat = "count > 2",
+      countSelectedText = "{0} seleccionados",
+      noneSelectedText = "Ninguno seleccionado",
+      selectAllText = "Seleccionar todo",
+      deselectAllText = "Deseleccionar todo"
+    )
+  )
+}
+
+
 #### createPickerFilter_añoFiscal ####
 createPickerFilter_añoFiscal <- function(label, choices, selected = NULL, id) {
   # PREPARAR AÑOS

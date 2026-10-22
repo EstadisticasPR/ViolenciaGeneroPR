@@ -461,7 +461,7 @@ server <- function(input, output, session) {
   # Data Table del DeptFam
   # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
   output$dataTable_fam <- renderDT(server = FALSE, {
-    renderDataTable(dfMalt_filt_rename(), "Datos: Menores victimas de maltrato")
+    renderDataTable(dfMalt_filt_rename(), "Datos: Menores víctimas de maltrato")
   })
   
   # Crear Card con Fuentes
@@ -820,8 +820,6 @@ server <- function(input, output, session) {
   # Crear Card con Fuentes
   output$dataTableUI_just <- renderUI({
     if (input$showTable_just) {
-      hyperlinks <- c("https://www.justicia.pr.gov/")
-      texts <- c("Departamento de Justicia")
       
       tags$div(
         class = "card",
@@ -834,9 +832,7 @@ server <- function(input, output, session) {
             style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_just")
           )
-        ),
-        
-        createFuenteDiv(hyperlinks, texts)
+        )
       )
     }
   })
@@ -1028,54 +1024,7 @@ server <- function(input, output, session) {
   
   
   
-  ############################################################################
-  ########## Server del Departamento del Trabajo y Recursos Humanos ##########
-  ############################################################################
-  #### Tab de Participación Laboral (parLab) ####
-  
-  # Filtrar el conjunto de datos según los valores seleccionados del año y el tipo de incidente
-  # parLab_filt <- reactive({
-  #   filter(parLab,
-  #          Año %in% input$checkGroup_trab_parLab_año,
-  #          Sexo %in% input$checkGroup_trab_parLab_sexo)
-  # })
-  # 
-  # ### funcion para el boton de deseleccionar/seleccionar del botón de año
-  # observeEvent(input$deselectAll_trab_parLab_año, {
-  #   updateCheckboxGroup(session, "checkGroup_trab_parLab_año", input, parLab$Año)
-  # })
-  # 
-  # ### funcion para el boton de deseleccionar/seleccionar del botón de sexo
-  # observeEvent(input$deselectAll_trab_parLab_sexo, {
-  #   updateCheckboxGroup(session, "checkGroup_trab_parLab_sexo", input, parLab$Sexo)
-  # })
-  # 
-  # # Colores de las edades
-  # parLab_fill_sexo <- setColorFill(parLab, "Sexo")
-  # # Grafico de barras
-  # output$barPlot_trab_parLab <- renderPlotly({
-  #   p <- renderBarPlot(parLab_filt, x = "Año", y = "Tasa", fill = "Sexo",
-  #                      paste("Tasa de participación laboral según el sexo"),
-  #                      xlab = "Año", ylab = "Tasa de participación", fillLab = "Sexo", 
-  #                      colorFill = parLab_fill_sexo)
-  # 
-  #   ggplotly(p, tooltip = c("fill", "x", "y"))
-  # })
-  # 
-  # # Data Table del SNMV
-  # output$dataTable_trab_parLab <- renderDT({
-  #   renderDataTable(parLab_filt())
-  # })
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+ 
   
   ##################################################################
   ########## Tab de la Administración de Vivienda Pública ##########
@@ -1308,9 +1257,6 @@ server <- function(input, output, session) {
   # Crear Card con Fuentes
   output$dataTableUI_avp_dfAvp_soli <- renderUI({
     if (input$showTable_avp_dfAvp_soli) {
-      hyperlinks <- c("https://www.avp.pr.gov/")
-      texts <- c("Administración de Vivienda Pública")
-      
       tags$div(
         class = "card",
         style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
@@ -1322,9 +1268,7 @@ server <- function(input, output, session) {
             style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_avp_dfAvp_soli")
           )
-        ),
-        
-        createFuenteDiv(hyperlinks, texts)
+        )
       )
     }
   })
@@ -1555,9 +1499,7 @@ server <- function(input, output, session) {
   # Crear Card con Fuentes
   output$dataTableUI_avp_dfAvp_asig <- renderUI({
     if (input$showTable_avp_dfAvp_asig) {
-      hyperlinks <- c("https://www.avp.pr.gov/")
-      texts <- c("Administración de Vivienda Pública")
-      
+
       tags$div(
         class = "card",
         style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
@@ -1570,9 +1512,7 @@ server <- function(input, output, session) {
             DTOutput("dataTable_avp_dfAvp_asig")
             
           )
-        ),
-        
-        createFuenteDiv(hyperlinks, texts)
+        )
       )
     }
   })

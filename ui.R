@@ -156,415 +156,249 @@ ui <-
       tabsetPanel(
         
         #### tab con datos de Homicidios por grupo de Edad ####
-        # tabPanel(
-        #   lowercaseTitle("Homicidios de mujeres por edad"),
-        #   br(), br(),
-        # 
-        #   # Menu sidebar con widgets
-        #     sidebarLayout(
-        #       sidebarPanel(
-        #         style = "display: flex; flex-direction: column; align-items: center;",
-        # 
-        #         # Seleccionar valor de la variable
-        #         div(
-        #           style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",
-        #           div(
-        #             style = "text-align: center; display: inline-block;",
-        #             createDropdownCheckbox(
-        #               label = HTML("Seleccione<br>Grupo(s) de Edad:"),
-        #               choices = homiEdad$Edad,
-        #               selected = homiEdad$Edad,
-        #               id = "snmv_homiEdad_edad"
-        #             )
-        #           )
-        #         ),
-        # 
-        #         div(
-        #           style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
-        #           div(
-        #             style = "width: 100%; display: flex; justify-content: space-between; align-items: center;",
-        # 
-        #             div(
-        #               style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
-        #               createDropdownCheckbox(
-        #                 label = "Seleccione Año(s):",
-        #                 choices = homiEdad$Año,
-        #                 selected = NULL,
-        #                 id = "snmv_homiEdad_año"
-        #               )
-        #             ),
-        #             div(
-        #               style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;",
-        #               showDataCheckbox("showTable_snmv")
-        #             )
-        #           )
-        #         ),
-        # 
-        #         # Output UI para la tabla de datos
-        #         uiOutput("dataTableUI_snmv")
-        #       ),
-        # 
-        # 
-        #     # Sección principal con los gráficos
-        #     mainPanel(
-        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-        #       fluidRow(
-        #         column(12,
-        #                div(id = "scrollable-plot",
-        #                    div(id = "plot-title", uiOutput("plot_title_homiEdad")),
-        #                    plotlyOutput("barPlot_snmv"),  height = "100%"))
-        #       ),
-        #       tags$div(style = "padding-bottom: 10px;"),
-        #       tags$div(
-        #         style = "padding-bottom: 10px;",
-        #         div(
-        #           class = "card",
-        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
-        #           h4(
-        #             strong(actualizacion_snmv1, style="margin: 0px;")
-        #           ),
-        #           p(
-        #             "Los datos representados en esta gráfica corresponden a los
-        #             homicidios de mujeres por grupo de edad desde el año natural 2017 al 2024.
-        #             Los datos del año 2024 al 2026 son preliminares.",
-        # 
-        #             style = "font-size: 16px; padding: 0px;"
-        #           )
-        #         )
-        #       )
-        #     )
-        #   )
-        # ),
-        # 
-
+        tabPanel(
+          lowercaseTitle("Homicidios de mujeres por edad"),
+          # CONTENEDOR GENERAL
+          div(
+            class = "dashboard-container",
+            # GRÁFICA
+            div(
+              class = "dashboard-card plot-card",
     
-    #' #### LAYOUT grafica, filtros, datos y nota importante tab con datos de Homicidios por grupo de Edad ####
-    tabPanel(
-      lowercaseTitle("Homicidios de mujeres por edad"),
-      # CONTENEDOR GENERAL
-      div(
-        class = "dashboard-container",
-        # GRÁFICA
-        div(
-          class = "dashboard-card plot-card",
-
-          div(
-            id = "plot-title",
-            uiOutput("plot_title_homiEdad")
-          ),
-
-          plotlyOutput(
-            "barPlot_snmv",
-            height = "calc(100vh - 350px)"
-          )
-        ),
-        # FILTROS
-        div(
-          class = "dashboard-card filters-card",
-
-          div(
-            class = "filters-row",
-            # GRUPO DE EDAD
-            div(
-              class = "filter-box",
-
-              createPickerFilter(
-                label = HTML("Seleccione<br>Grupo(s) de Edad:"),
-                choices = homiEdad$Edad,
-                selected = homiEdad$Edad,
-                id = "snmv_homiEdad_edad"
-              )
-            ),
-            # AÑO
-            div(
-              class = "filter-box",
-
-              createPickerFilter(
-                label = "Seleccione Año(s):",
-                choices = homiEdad$Año,
-                selected = NULL,
-                id = "snmv_homiEdad_año"
-              )
-            ),
-            # MOSTRAR DATOS
-            div(
-              class = "filter-switch",
-
-              showDataToggle(
-                inputId = "showTable_snmv"
-              )
-            )
-
-          )
-        ),
-        # TABLA + INFORMACIÓN
-        div(
-          class = "bottom-row",
-          # TABLA
-          uiOutput(
-            "dataTableUI_snmv"
-          ),
-          # INFORMACIÓN
-          div(
-            class = "info-column",
-            # NOTA IMPORTANTE
-            div(
-              class = "info-card",
-
-              h4(
-                class = "info-card-title",
-                actualizacion_snmv1
+              div(
+                id = "plot-title",
+                uiOutput("plot_title_homiEdad")
               ),
-
-              p(
-                "Los datos representados en esta gráfica corresponden a los
-            homicidios de mujeres por grupo de edad desde el año natural
-            2017 al 2024. Los datos del año 2024 al 2026 son preliminares."
+    
+              plotlyOutput(
+                "barPlot_snmv",
+                height = "calc(100vh - 350px)"
               )
             ),
-            # FUENTE
+            # FILTROS
             div(
-              class = "source-card",
-
-              h4(
-                class = "source-card-title",
-                "Fuente de los datos"
-              ),
-
-              p(
-                tags$a(
-                  href = "https://stacks.cdc.gov/view/cdc/149761",
-                  target = "_blank",
-                  rel = "noopener noreferrer",
-                  "Sistema Nacional de Notificación de Muertes Violentas, ",
-                  class = "source-link"
+              class = "dashboard-card filters-card",
+    
+              div(
+                class = "filters-row",
+                # GRUPO DE EDAD
+                div(
+                  class = "filter-box",
+    
+                  createPickerFilter(
+                    label = HTML("Seleccione<br>Grupo(s) de Edad:"),
+                    choices = homiEdad$Edad,
+                    selected = homiEdad$Edad,
+                    id = "snmv_homiEdad_edad"
+                  )
                 ),
-
-                tags$a(
-                  href = "https://estadisticas.pr/",
-                  target = "_blank",
-                  rel = "noopener noreferrer",
-                  "Instituto de Estadísticas de Puerto Rico",
-                  class = "source-link"
+                # AÑO
+                div(
+                  class = "filter-box",
+    
+                  createPickerFilter(
+                    label = "Seleccione Año(s):",
+                    choices = homiEdad$Año,
+                    selected = NULL,
+                    id = "snmv_homiEdad_año"
+                  )
+                ),
+                # MOSTRAR DATOS
+                div(
+                  class = "filter-switch",
+    
+                  showDataToggle(
+                    inputId = "showTable_snmv"
+                  )
                 )
+    
+              )
+            ),
+            # TABLA + INFORMACIÓN
+            div(
+              class = "bottom-row",
+              # TABLA
+              uiOutput(
+                "dataTableUI_snmv"
+              ),
+              # INFORMACIÓN
+              div(
+                class = "info-column",
+                # NOTA IMPORTANTE
+                div(
+                  class = "info-card",
+    
+                  h4(
+                    class = "info-card-title",
+                    actualizacion_snmv1
+                  ),
+    
+                  p(
+                    "Los datos representados en esta gráfica corresponden a los
+                homicidios de mujeres por grupo de edad desde el año natural
+                2017 al 2024. Los datos del año 2024 al 2026 son preliminares."
+                  )
+                ),
+                # FUENTE
+                div(
+                  class = "source-card",
+    
+                  h4(
+                    class = "source-card-title",
+                    "Fuente de los datos"
+                  ),
+    
+                  p(
+                    tags$a(
+                      href = "https://stacks.cdc.gov/view/cdc/149761",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Sistema Nacional de Notificación de Muertes Violentas, ",
+                      class = "source-link"
+                    ),
+    
+                    tags$a(
+                      href = "https://estadisticas.pr/",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Instituto de Estadísticas de Puerto Rico",
+                      class = "source-link"
+                    )
+                  )
+                )
+    
               )
             )
-
+    
           )
-        )
-
-      )
-    ),
+        ),
 
  
 
         #### tab con datos de Incidentes segun el año ####
-        # tabPanel(
-        #   lowercaseTitle("Tipos de incidentes violentos"),
-        #   br(), br(),
-        #   
-        #     sidebarLayout(
-        #       sidebarPanel(
-        #         style = "display: flex; flex-direction: column; align-items: center;",
-        #         
-        #         # # seleccionar valor de la variable
-        #         div(
-        #           style = "width: 100%; display: flex; justify-content: center;  margin-bottom: 20px;", 
-        #           div(
-        #             style = "text-align: center; display: inline-block;",  
-        #             # botón para seleccionar tipo de incidente
-        #             createDropdownCheckbox(
-        #               label = HTML("Seleccione<br>Tipo(s) de Incidente:"),
-        #               choices = inci$Incidente,
-        #               selected = 3,
-        #               id = "snmv_inci_tipo"
-        #             )
-        #           )
-        #         ),
-        #         
-        #         div(
-        #           style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
-        #           div(
-        #             style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-        #             div(
-        #               style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;", 
-        #               # botón para seleccionar año
-        #               createDropdownCheckbox(
-        #                 label = "Seleccione Año(s):",
-        #                 choices = inci$Año,
-        #                 selected = NULL,
-        #                 id = "snmv_inci_año"
-        #               )
-        #             ),
-        #             div(
-        #               style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-        #               showDataCheckbox("showTable_snmv_inci")
-        #             )
-        #           )
-        #         ),
-        #         
-        #         
-        #         # Output UI para la tabla de datos
-        #         uiOutput("dataTableUI_snmv_inci")
-        #         
-        #       ),
-        #     
-        #     
-        #     # Sección principal con los gráficos y datatable
-        #     mainPanel(
-        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-        #       fluidRow(
-        #         column(12, 
-        #                div(id = "scrollable-plot", 
-        #                    div(id = "plot-title", uiOutput("plot_title_inci")),
-        #                    plotlyOutput("barPlot_snmv_inci"),  height = "100%"))
-        #       ),
-        #       tags$div(style = "padding-bottom: 10px;"),
-        #       tags$div(
-        #         style = "padding-bottom: 10px;",
-        #         div(
-        #           class = "card",
-        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
-        #           h4(
-        #             strong(actualizacion_snmv2, style="margin: 0px;") 
-        #           ),
-        #           p(
-        #             "Los datos representados en esta gráfica corresponden a la cantidad de 
-        #             incidentes violentos (según su tipo) desde el año natural 2017 al 2024.
-        #             Los datos del año 2024 al 2026 son preliminares.",
-        #             
-        #             style = "font-size: 16px; padding: 0px;" 
-        #           )
-        #         )
-        #       )
-        #     )
-        #   ),
-        # ), 
-
-    #### LAYOUT gráfica, filtros, datos y nota importante tab con datos de Tipos de incidentes violentos ####
-    tabPanel(
-      lowercaseTitle("Tipos de incidentes violentos"),
-      
-      # CONTENEDOR GENERAL
-      div(
-        class = "dashboard-container",
-        
-        # GRÁFICA
-        div(
-          class = "dashboard-card plot-card",
+        tabPanel(
+          lowercaseTitle("Tipos de incidentes violentos"),
           
+          # CONTENEDOR GENERAL
           div(
-            id = "plot-title",
-            uiOutput("plot_title_inci")
-          ),
-          
-          plotlyOutput(
-            "barPlot_snmv_inci",
-            height = "calc(100vh - 350px)"
-          )
-        ),
-        
-        # FILTROS
-        div(
-          class = "dashboard-card filters-card",
-          
-          div(
-            class = "filters-row",
+            class = "dashboard-container",
             
-            # TIPO DE INCIDENTE
+            # GRÁFICA
             div(
-              class = "filter-box",
+              class = "dashboard-card plot-card",
               
-              createPickerFilter(
-                label = HTML("Seleccione<br>Tipo(s) de Incidente:"),
-                choices = inci$Incidente,
-                selected = inci$Incidente[3],
-                id = "snmv_inci_tipo"
-              )
-            ),
-            
-            # AÑO
-            div(
-              class = "filter-box",
-              
-              createPickerFilter(
-                label = "Seleccione Año(s):",
-                choices = inci$Año,
-                selected = NULL,
-                id = "snmv_inci_año"
-              )
-            ),
-            
-            # MOSTRAR DATOS
-            div(
-              class = "filter-switch",
-              
-              showDataToggle("showTable_snmv_inci")
-            )
-          )
-        ),
-        
-        # TABLA + INFORMACIÓN
-        div(
-          class = "bottom-row",
-          
-          # TABLA
-          uiOutput(
-            "dataTableUI_snmv_inci"
-          ),
-          
-          # INFORMACIÓN
-          div(
-            class = "info-column",
-            
-            # NOTA IMPORTANTE
-            div(
-              class = "info-card",
-              
-              h4(
-                class = "info-card-title",
-                actualizacion_snmv2
+              div(
+                id = "plot-title",
+                uiOutput("plot_title_inci")
               ),
               
-              p(
-                "Los datos representados en esta gráfica corresponden a la
-            cantidad de incidentes violentos, según su tipo, desde el año
-            natural 2017 al 2024. Los datos del año 2024 al 2026 son
-            preliminares."
+              plotlyOutput(
+                "barPlot_snmv_inci",
+                height = "calc(100vh - 350px)"
               )
             ),
             
-            # FUENTE
+            # FILTROS
             div(
-              class = "source-card",
+              class = "dashboard-card filters-card",
               
-              h4(
-                class = "source-card-title",
-                "Fuente de los datos"
-              ),
-              
-              p(
-                tags$a(
-                  href = "https://stacks.cdc.gov/view/cdc/149761",
-                  target = "_blank",
-                  rel = "noopener noreferrer",
-                  "Sistema Nacional de Notificación de Muertes Violentas",
-                  class = "source-link"
+              div(
+                class = "filters-row",
+                
+                # TIPO DE INCIDENTE
+                div(
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = HTML("Seleccione<br>Tipo(s) de Incidente:"),
+                    choices = inci$Incidente,
+                    selected = inci$Incidente[3],
+                    id = "snmv_inci_tipo"
+                  )
                 ),
                 
-                tags$a(
-                  href = "https://estadisticas.pr/",
-                  target = "_blank",
-                  rel = "noopener noreferrer",
-                  "Instituto de Estadísticas de Puerto Rico",
-                  class = "source-link"
+                # AÑO
+                div(
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = "Seleccione Año(s):",
+                    choices = inci$Año,
+                    selected = NULL,
+                    id = "snmv_inci_año"
+                  )
+                ),
+                
+                # MOSTRAR DATOS
+                div(
+                  class = "filter-switch",
+                  
+                  showDataToggle("showTable_snmv_inci")
+                )
+              )
+            ),
+            
+            # TABLA + INFORMACIÓN
+            div(
+              class = "bottom-row",
+              
+              # TABLA
+              uiOutput(
+                "dataTableUI_snmv_inci"
+              ),
+              
+              # INFORMACIÓN
+              div(
+                class = "info-column",
+                
+                # NOTA IMPORTANTE
+                div(
+                  class = "info-card",
+                  
+                  h4(
+                    class = "info-card-title",
+                    actualizacion_snmv2
+                  ),
+                  
+                  p(
+                    "Los datos representados en esta gráfica corresponden a la
+                cantidad de incidentes violentos, según su tipo, desde el año
+                natural 2017 al 2024. Los datos del año 2024 al 2026 son
+                preliminares."
+                  )
+                ),
+                
+                # FUENTE
+                div(
+                  class = "source-card",
+                  
+                  h4(
+                    class = "source-card-title",
+                    "Fuente de los datos"
+                  ),
+                  
+                  p(
+                    tags$a(
+                      href = "https://stacks.cdc.gov/view/cdc/149761",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Sistema Nacional de Notificación de Muertes Violentas",
+                      class = "source-link"
+                    ),
+                    
+                    tags$a(
+                      href = "https://estadisticas.pr/",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Instituto de Estadísticas de Puerto Rico",
+                      class = "source-link"
+                    )
+                  )
                 )
               )
             )
           )
-        )
-      )
-    ),
+        ),
         
         #### tab de Publicaciones del SNMV ####
         # tabPanel(
@@ -619,98 +453,6 @@ ui <-
       icon = icon("users"),
       tabsetPanel(
         #### tab con datos de menores víctimas de maltrato (dfMalt)  ####
-        # tabPanel(
-        #   lowercaseTitle("Maltrato de menores por sexo"),
-        #   br(), br(),
-        #   
-        #   sidebarLayout(
-        #     sidebarPanel(
-        #       style = "display: flex; flex-direction: column; align-items: center;",
-        #       
-        #       # # seleccionar valor de la variable
-        #       div(
-        #         style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
-        #         div(
-        #           style = "text-align: center; display: inline-block;",  
-        #           # botón para seleccionar tipo de maltrato
-        #           createDropdownCheckbox(
-        #             label = HTML("Seleccione <br>Tipo(s) de Maltrato:"),
-        #             choices = dfMalt$Maltrato,
-        #             selected = 1,
-        #             id = "fam_dfMalt_tipo"
-        #           ),
-        #           createDropdownCheckbox(
-        #             label = HTML("Seleccione <br> Sexo de las Víctimas:"),
-        #             choices = dfMalt$Sexo,
-        #             selected = 1,
-        #             id = "fam_dfMalt_sexo"
-        #           )
-        #         )
-        #       ),
-        #       
-        #       div(
-        #         style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
-        #         div(
-        #           style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-        #           div(
-        #             style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
-        #             # botón para seleccionar año
-        #             createDropdownCheckbox(
-        #               label = "Seleccionar Año:",
-        #               choices = dfMalt$Año,
-        #               selected = NULL,
-        #               id = "fam_dfMalt_año"
-        #             )
-        #           ),
-        #           div(
-        #             style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-        #             showDataCheckbox("showTable_fam")
-        #           )
-        #         )
-        #       ),
-        #       
-        #       
-        #       # Output UI para la tabla de datos
-        #       uiOutput("dataTableUI_fam")
-        #       
-        #     ),
-        #     
-        #     
-        #     # Sección principal con los gráficos
-        #     mainPanel(
-        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-        #       fluidRow(
-        #         column(12, 
-        #                div(id = "scrollable-plot", 
-        #                    div(id = "plot-title", uiOutput("plot_title_dfMalt")),
-        #                    plotlyOutput("barPlot_fam"),  height = "100%"))
-        #       ),
-        #       tags$div(style = "padding-bottom: 10px;"),
-        #       tags$div(
-        #         style = "padding-bottom: 10px;",
-        #         div(
-        #           class = "card",
-        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
-        #           h4(
-        #             strong(actualizacion_familia, style="margin: 0px;") 
-        #           ),
-        #           p(
-                    # "Las cantidades podrían representar conteos duplicados del o
-                    # la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son
-                    # parte de uno o múltiples referidos. Este conteo es conocido por el Departamento
-                    # de la Familia como el pareo de menores-reportado. Estos datos están en proceso de
-                    # revisión por el Instituto de Estadísticas de Puerto Rico. Datos parciales
-                    # y preliminares del año 2022. Están disponibles hasta noviembre de 2022.",
-        #             
-        #             style = "font-size: 16px;padding: 0px;" 
-        #           )
-        #         )
-        #       )
-        #     )
-        #   )
-        # ),
-
-          #### TAB con datos de menores víctimas de maltrato (dfMalt) ####
           tabPanel(
             lowercaseTitle("Maltrato de menores por sexo"),
             
@@ -895,238 +637,243 @@ ui <-
       tabsetPanel(
         #### tab con datos de delitos de violencia doméstica (dfDeli) ####
         tabPanel(
-          # lowercaseTitle("Órdenes de protección solicitadas por edad y región"), 
-          lowercaseTitle("Delitos Ley 54 por Distrito"), 
-          br(), br(),
-          sidebarLayout(
-            sidebarPanel(
-              style = "display: flex; flex-direction: column; align-items: center;",
+          lowercaseTitle("Delitos Ley 54 por Distrito"),
+          
+          div(
+            class = "dashboard-container",
+            
+            div(
+              class = "dashboard-card plot-card",
               
-              # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px; ",  
+                id = "plot-title",
+                uiOutput("plot_title_dfDeli")
+              ),
+              
+              # Contenedor con scroll vertical independiente
+              div(
+                id = "scrollable-plot",
+                style = paste(
+                  "height: calc(100vh - 350px);",
+                  "min-height: 350px;",
+                  "overflow-y: auto;",
+                  "overflow-x: hidden;",
+                  "width: 100%;"
+                ),
+                
+                plotlyOutput(
+                  "barPlot_just",
+                  height = "auto",
+                  width = "100%"
+                )
+              )
+            ),
+            
+            # FILTROS
+            div(
+              class = "dashboard-card filters-card",
+              
+              div(
+                class = "filters-row",
+                
+                # Filtro por artículo o delito de Ley 54
                 div(
-                  style = "text-align: center; display: inline-block;",  
-                  # botón para seleccionar el grupo de edad
-                  createDropdownCheckbox(
+                  class = "filter-box",
+                  
+                  createPickerFilter(
                     label = HTML("Seleccione<br>Artículo(s) de Ley 54:"),
                     choices = dfDeli$Delito,
                     selected = dfDeli$Delito,
                     id = "just_dfDeli_delito"
                   )
-                  ,
-                  # botón para seleccionar el distrito fiscal
-                  createDropdownCheckbox_region(
-                    label = HTML("Seleccione <br> Distrito Fiscal:"),
+                ),
+                
+                # Filtro por distrito fiscal
+                div(
+                  class = "filter-box",
+                  
+                  createPickerFilter_region(
+                    label = HTML("Seleccione<br>Distrito Fiscal:"),
                     choices = dfDeli$Distrito,
                     selected = NULL,
                     id = "just_dfDeli_distrito"
                   )
-                )
-              ),
-              
-              div(
-                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                ),
+                
+                # Filtro por año
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-                  div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
-                    # botón para seleccionar el año
-                    # createDropdownCheckbox_añoFiscal(
-                    #   label = HTML("Seleccione <br> Año(s) Fiscal:"),
-                    #   choices = dfDeli$Año,
-                    #   selected = dfDeli$Año,
-                    #   id = "just_dfDeli_año"
-                    # )
-                    createDropdownCheckbox(
-                      label = "Seleccione Año(s):",
-                      choices = dfDeli$Año,
-                      selected = dfDeli$Año,
-                      id = "just_dfDeli_año"
-                    )
-                  ),
-                  div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-                    showDataCheckbox("showTable_just")
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = "Seleccione Año(s):",
+                    choices = dfDeli$Año,
+                    selected = dfDeli$Año,
+                    id = "just_dfDeli_año"
                   )
-                )
-              ),
-              
-              # Output UI para la tabla de datos
-              uiOutput("dataTableUI_just")
-              
-            ),
-            
-            # Sección principal con los gráficos
-            mainPanel(
-              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              fluidRow(
-                column(12, 
-                       div(id = "scrollable-plot", 
-                           div(id = "plot-title", uiOutput("plot_title_dfDeli")),
-                           plotlyOutput("barPlot_just"),  height = "100%"))
-              ),
-              tags$div(style = "padding-bottom: 10px;"),
-              tags$div(
-                style = "padding-bottom: 10px;",
+                ),
+                
+                # Mostrar u ocultar tabla
                 div(
-                  class = "card",
-                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
-                  h4(
-                    strong(actualizacion_justicia1, style="margin: 0px;") 
-                  ),
-                  uiOutput("texto_Deli")
+                  class = "filter-switch",
+                  
+                  showDataToggle("showTable_just")
                 )
               )
-            )
-          ),
-        ),
-        
-        
-        # 
-        # 
-        # tabPanel(
-        #   lowercaseTitle("Delitos Ley 54 por Distrito"),
-        #   br(), br(), 
-        # 
-        #     sidebarLayout(
-        #       sidebarPanel(
-        #         style = "display: flex; flex-direction: column; align-items: center;",
-        #         
-        #         # # seleccionar valor de la variable
-        #         div(
-        #           style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
-        #           div(
-        #             style = "text-align: center; display: inline-block;",  
-        #             # botón para seleccionar tipo de maltrato
-        #             createDropdownCheckbox(
-        #               label = HTML("Seleccione<br>Artículo(s) de Ley 54:"),
-        #               choices = dfDeli$Delito,
-        #               selected = 2,
-        #               id = "just_dfDeli_delito"
-        #             ),
-        #             createDropdownCheckbox(
-        #               label = HTML("Seleccionar<br>Distrito(s):"),
-        #               choices = dfDeli$Distrito,
-        #               selected = NULL,
-        #               id = "just_dfDeli_distrito"
-        #             )
-        #           )
-        #         ),
-        #         
-        #         div(
-        #           style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
-        #           div(
-        #             style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-        #             div(
-        #               style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
-        #               # botón para seleccionar año
-        #               createDropdownCheckbox(
-        #                 label = "Seleccionar Año:",
-        #                 choices = dfDeli$Año,
-        #                 selected = NULL,
-        #                 id = "just_dfDeli_año"
-        #               )
-        #             ),
-        #             div(
-        #               style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-        #               showDataCheckbox("showTable_just")
-        #             )
-        #           )
-        #         ),
-        #         
-        #         
-        #         # Output UI para la tabla de datos
-        #         uiOutput("dataTableUI_just")
-        #         
-        #       ),
-        #     
-        #     
-        #     # Sección principal con los gráficos
-        #     mainPanel(
-        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-        #       fluidRow(
-        #         column(12, 
-        #                div(id = "scrollable-plot", 
-        #                    div(id = "plot-title", uiOutput("plot_title_dfDeli")),
-        #                    plotlyOutput("barPlot_just"),  height = "100%"))
-        #       ),
-        #       tags$div(style = "padding-bottom: 10px;"),
-        #       tags$div(
-        #         style = "padding-bottom: 10px;",
-        #         div(
-        #           class = "card",
-        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
-        #           h4(
-        #             strong(actualizacion_justicia1, style="margin: 0px;") 
-        #           ),
-        #           p(
-        #             "Los datos representados en esta gráfica corresponden al
-        #             número de casos radicados por distrito fiscal y Artículo 
-        #             de la Ley 54 desde el año natural 2020 al 2023.",
-        #             
-        #             style = "font-size: 16px;padding: 0px;" 
-        #           )
-        #         )
-        #       )
-        #     )
-        #   )
-        # ),
-        
-        
-        #### tab con datos del mapa delitos de violencia doméstica (mapaDeli) ####
-        tabPanel(
-          lowercaseTitle("Mapas de delitos Ley 54 por Distrito"),
-          br(), br(),
-          
-          # Menu sidebar con widgets
-          sidebarLayout(
-            sidebarPanel(
-              # botón para seleccionar delito
-              selectInput("select_just_mapaDeli_delito", "Seleccione Artículo de la Ley 54:",
-                          choices = levels(mapaDeli$Delito),
-                          selected = 2),
-              
-              # botón para seleccionar año
-              selectInput("select_just_mapaDeli_año", "Seleccione Año:",
-                          choices = levels(mapaDeli$Año),
-                          selected = 1),
-              
-              # Output UI para la tabla de datos
-              uiOutput("dataTableUI_just_mapaFisc")
             ),
             
-            # Sección principal con los gráficos
-            mainPanel(
-              fluidRow(
-                column(12, 
-                       div(id = "scrollable-plot", 
-                           div(id = "plot-title", uiOutput("plot_title_mapaDeli")),
-                           leafletOutput("map_just_mapaDeli", height = "450px"),  height = "100%"))
-              ),
-              #plotlyOutput("map_just_mapaDeli"),
-              tags$div(style = "padding-bottom: 10px;"),
-              tags$div(
-                style = "padding-bottom: 10px;",
+            # TABLA DE DATOS Y NOTAS INFORMATIVAS
+            
+            div(
+              class = "bottom-row",
+              
+              # Tabla de datos
+              uiOutput("dataTableUI_just"),
+              
+              # Columna de información
+              div(
+                class = "info-column",
+                
+                # Nota de actualización y explicación
                 div(
-                  class = "card",
-                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  class = "info-card",
+                  
                   h4(
-                    strong(actualizacion_justicia2, style="margin: 0px;") 
+                    class = "info-card-title",
+                    actualizacion_justicia1
                   ),
+                  
+                  uiOutput("texto_Deli")
+                ),
+                
+                # Fuente de los datos
+                div(
+                  class = "source-card",
+                  
+                  h4(
+                    class = "source-card-title",
+                    "Fuente de los datos"
+                  ),
+                  
                   p(
-                    "Los datos representados en este mapa corresponden al
-                    número de casos radicados por distrito fiscal y Artículo 
-                    de la Ley 54 desde el año natural 2020 al 2026. Los 
-                    datos para el año 2026 son preliminares",
-                    
-                    style = "font-size: 16px;padding: 0px;" 
+                    tags$a(
+                      href = "https://www.justicia.pr.gov/",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Departamento de Justicia",
+                      class = "source-link"
+                    )
                   )
                 )
               )
             )
           )
-        ), 
+        ),
+        
+        #### tab con datos del mapa delitos de violencia doméstica (mapaDeli) ####
+        tabPanel(
+          lowercaseTitle("Mapas de delitos Ley 54 por Distrito"),
+          
+          div(
+            class = "dashboard-container",
+            
+            # MAPA
+            div(
+              class = "maps-card",
+              
+              div(
+                class = "plot-title",
+                uiOutput("plot_title_mapaDeli")
+              ),
+              
+              div(
+                class = "map-section",
+                
+                leafletOutput(
+                  "map_just_mapaDeli",
+                  height = "450px",
+                  width = "100%"
+                )
+              )
+            ),
+            
+            # FILTROS
+            div(
+              class = "dashboard-card filters-card",
+              
+              div(
+                class = "filters-row",
+                
+                div(
+                  class = "filter-box",
+                  
+                  selectInput(
+                    "select_just_mapaDeli_delito",
+                    "Seleccione Artículo de la Ley 54:",
+                    choices = levels(mapaDeli$Delito),
+                    selected = 2
+                  )
+                ),
+                
+                div(
+                  class = "filter-box",
+                  
+                  selectInput(
+                    "select_just_mapaDeli_año",
+                    "Seleccione Año:",
+                    choices = levels(mapaDeli$Año),
+                    selected = 1
+                  )
+                )
+              )
+            ),
+            
+            # INFORMACIÓN
+            div(
+              class = "bottom-row",
+              
+              div(
+                class = "info-column",
+                
+                # NOTA IMPORTANTE
+                div(
+                  class = "info-card",
+                  
+                  h4(
+                    class = "info-card-title",
+                    actualizacion_justicia2
+                  ),
+                  
+                  p(
+                    "Los datos representados en este mapa corresponden al
+            número de casos radicados por distrito fiscal y Artículo
+            de la Ley 54 desde el año natural 2020 al 2026. Los
+            datos para el año 2026 son preliminares."
+                  )
+                ),
+                
+                # FUENTE
+                div(
+                  class = "source-card",
+                  
+                  h4(
+                    class = "source-card-title",
+                    "Fuente de los datos"
+                  ),
+                  
+                  p(
+                    tags$a(
+                      href = "https://www.justicia.pr.gov/",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Departamento de Justicia",
+                      class = "source-link"
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ),
         
         #### tab de Publicaciones del Departamento de Justicia ####
         # tabPanel(
@@ -1195,59 +942,6 @@ ui <-
     
     
     
-    #### Tab del Departamento del Trabajo y Recursos Humanos ####
-    # tabPanel(
-    #   lowercaseTitle("Departamento del Trabajo y Recursos Humanos"),
-    #   icon = icon("briefcase"),
-    #   tabsetPanel(
-    #     #### tab con datos de participación laboral (dtParlab) ####
-    #     tabPanel(
-    #       lowercaseTitle("Participación Laboral por Sexo"), 
-    #       # Título del Tab
-    #       titlePanel("Tasa de participación laboral por sexo"),
-    #       
-    #       # Fuente de Datos, Actualización
-    #       tags$span("Fuente: Departamento del Trabajo y Recursos Humanos"), tags$br(),
-    #       #tags$span("Actualización Datos:  ", actualizacion_trabajo), tags$br(),
-    #       
-    #       # Menu sidebar con widgets
-    #       sidebarLayout(
-    #         sidebarPanel(
-    #           
-    #           # botón para seleccionar el año
-    #           createDropdownCheckbox(
-    #             label = "Seleccione Año(s):",
-    #             choices = parLab$Año,
-    #             selected = parLab$Año,
-    #             id = "trab_parLab_año"
-    #           ),
-    #           
-    #           # botón para seleccionar el sexo
-    #           createDropdownCheckbox(
-    #             label = "Seleccione Sexo(s):",
-    #             choices = parLab$Sexo,
-    #             selected = parLab$Sexo,
-    #             id = "trab_parLab_sexo"
-    #           ),
-    #         ),
-    #         
-    #         # Sección principal con los gráficos
-    #         mainPanel(
-    #           plotlyOutput("barPlot_trab_parLab"),
-    #           DTOutput("dataTable_trab_parLab")
-    #         )
-    #       ),
-    #     ),
-    #     
-    #     #### tab de Definiciones y Metadatos ####
-    #     tabPanel(
-    #       lowercaseTitle("Definiciones y Metadatos"),
-    #       
-    #     )
-    #   )
-    # ),
-    
-    
     
     #### Tab de la Administración de Vivienda Pública ####
     tabPanel(
@@ -1256,170 +950,428 @@ ui <-
       tabsetPanel(
         
         #### tab con datos de Adminsitración de Vivienda Públicas(dfAvp_region_soli) ####
+        # tabPanel(
+        #   lowercaseTitle("Viviendas públicas solicitadas"), 
+        #   br(), br(),
+        #     sidebarLayout(
+        #       sidebarPanel(
+        #         style = "display: flex; flex-direction: column; align-items: center;",
+        #         
+        #         # # seleccionar valor de la variable
+        #         div(
+        #           style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+        #           div(
+        #             style = "text-align: center; display: inline-block;", 
+        #             # botón para seleccionar la región
+        #             createDropdownCheckbox_region(
+        #               label = HTML("Seleccione<br>Región de Vivienda:"),
+        #               choices = dfAvp_region_soli$Región,
+        #               selected = NULL,
+        #               id = "avp_dfAvp_soli_región"
+        #             )
+        #           )
+        #         ),
+        #         
+        #         div(
+        #           style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+        #           div(
+        #             style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+        #             div(
+        #               style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+        #               # botón para seleccionar el año
+        #               createDropdownCheckbox(
+        #                 label = "Seleccione Año(s):",
+        #                 choices = dfAvp_region_soli$Año,
+        #                 selected = dfAvp_region_soli$Año,
+        #                 id = "avp_dfAvp_soli_año"
+        #               )
+        #             ),
+        #             div(
+        #               style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+        #               showDataCheckbox("showTable_avp_dfAvp_soli")
+        #             )
+        #           )
+        #         ),
+        #         
+        #         
+        #         # Output UI para la tabla de datos
+        #         uiOutput("dataTableUI_avp_dfAvp_soli")
+        #         
+        #       ),
+        #     
+        #     # Sección principal con los gráficos
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       fluidRow(
+        #         column(12, 
+        #                div(id = "scrollable-plot", 
+        #                    div(id = "plot-title", uiOutput("plot_title_dfAvp_soli")),
+        #                    plotlyOutput("barPlot_avp_dfAvp_soli"),  height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 10px;"),
+        #       tags$div(
+        #         style = "padding-bottom: 10px;",
+        #         div(
+        #           class = "card",
+        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+        #           h4(
+        #             strong(actualizacion_avp1, style="margin: 0px;") 
+        #           ),
+        #           uiOutput("texto_dfAvp_region_soli")
+        #           # p(
+        #           #   "Los datos representados en esta gráfica corresponden al
+        #           #   total de viviendas públicas solicitadas por
+        #           #   violencia doméstica por región de la Administración de Vivienda Pública
+        #           #   desde el año natural 2017 al 2024.",
+        #           #   
+        #           #   style = "font-size: 16px;padding: 0px;" 
+        #           # )
+        #         )
+        #       )
+        #     )
+        #   ),
+        # ),
+        #
+        
+        
+        
         tabPanel(
-          lowercaseTitle("Viviendas públicas solicitadas"), 
-          br(), br(),
-            sidebarLayout(
-              sidebarPanel(
-                style = "display: flex; flex-direction: column; align-items: center;",
-                
-                # # seleccionar valor de la variable
-                div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
-                  div(
-                    style = "text-align: center; display: inline-block;", 
-                    # botón para seleccionar la región
-                    createDropdownCheckbox_region(
-                      label = HTML("Seleccione<br>Región de Vivienda:"),
-                      choices = dfAvp_region_soli$Región,
-                      selected = NULL,
-                      id = "avp_dfAvp_soli_región"
-                    )
-                  )
-                ),
-                
-                div(
-                  style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
-                  div(
-                    style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-                    div(
-                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
-                      # botón para seleccionar el año
-                      createDropdownCheckbox(
-                        label = "Seleccione Año(s):",
-                        choices = dfAvp_region_soli$Año,
-                        selected = dfAvp_region_soli$Año,
-                        id = "avp_dfAvp_soli_año"
-                      )
-                    ),
-                    div(
-                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-                      showDataCheckbox("showTable_avp_dfAvp_soli")
-                    )
-                  )
-                ),
-                
-                
-                # Output UI para la tabla de datos
-                uiOutput("dataTableUI_avp_dfAvp_soli")
-                
-              ),
+          lowercaseTitle("Viviendas públicas solicitadas"),
+          
+          # CONTENEDOR GENERAL
+          div(
+            class = "dashboard-container",
             
-            # Sección principal con los gráficos
-            mainPanel(
-              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              fluidRow(
-                column(12, 
-                       div(id = "scrollable-plot", 
-                           div(id = "plot-title", uiOutput("plot_title_dfAvp_soli")),
-                           plotlyOutput("barPlot_avp_dfAvp_soli"),  height = "100%"))
+            # GRÁFICA
+            div(
+              class = "dashboard-card plot-card",
+              
+              div(
+                id = "plot-title",
+                uiOutput("plot_title_dfAvp_soli")
               ),
-              tags$div(style = "padding-bottom: 10px;"),
-              tags$div(
-                style = "padding-bottom: 10px;",
+              
+              # CONTENEDOR CON SCROLL VERTICAL INDEPENDIENTE
+              div(
+                id = "scrollable-plot",
+                style = paste(
+                  "height: calc(100vh - 350px);",
+                  "min-height: 350px;",
+                  "overflow-y: auto;",
+                  "overflow-x: hidden;",
+                  "width: 100%;"
+                ),
+                
+                plotlyOutput(
+                  "barPlot_avp_dfAvp_soli",
+                  height = "auto",
+                  width = "100%"
+                )
+              )
+            ),
+            
+            # FILTROS
+            div(
+              class = "dashboard-card filters-card",
+              
+              div(
+                class = "filters-row",
+                
+                # REGIÓN DE VIVIENDA
                 div(
-                  class = "card",
-                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  class = "filter-box",
+                  
+                  createPickerFilter_region(
+                    label = HTML("Seleccione<br>Región de Vivienda:"),
+                    choices = dfAvp_region_soli$Región,
+                    selected = NULL,
+                    id = "avp_dfAvp_soli_región"
+                  )
+                ),
+                
+                # AÑO
+                div(
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = "Seleccione Año(s):",
+                    choices = dfAvp_region_soli$Año,
+                    selected = dfAvp_region_soli$Año,
+                    id = "avp_dfAvp_soli_año"
+                  )
+                ),
+                
+                # MOSTRAR DATOS
+                div(
+                  class = "filter-switch",
+                  
+                  showDataToggle(
+                    "showTable_avp_dfAvp_soli"
+                  )
+                )
+              )
+            ),
+            
+            # TABLA DE DATOS Y NOTAS INFORMATIVAS
+            div(
+              class = "bottom-row",
+              
+              # TABLA DE DATOS
+              uiOutput(
+                "dataTableUI_avp_dfAvp_soli"
+              ),
+              
+              # COLUMNA DE INFORMACIÓN
+              div(
+                class = "info-column",
+                
+                # NOTA DE ACTUALIZACIÓN Y EXPLICACIÓN
+                div(
+                  class = "info-card",
+                  
                   h4(
-                    strong(actualizacion_avp1, style="margin: 0px;") 
+                    class = "info-card-title",
+                    actualizacion_avp1
                   ),
+                  
                   uiOutput("texto_dfAvp_region_soli")
-                  # p(
-                  #   "Los datos representados en esta gráfica corresponden al
-                  #   total de viviendas públicas solicitadas por
-                  #   violencia doméstica por región de la Administración de Vivienda Pública
-                  #   desde el año natural 2017 al 2024.",
-                  #   
-                  #   style = "font-size: 16px;padding: 0px;" 
-                  # )
+                ),
+                
+                # FUENTE DE LOS DATOS
+                div(
+                  class = "source-card",
+                  
+                  h4(
+                    class = "source-card-title",
+                    "Fuente de los datos"
+                  ),
+                  
+                  p(
+                    tags$a(
+                      href = "https://www.avp.pr.gov/",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Administración de Vivienda Pública",
+                      class = "source-link"
+                    )
+                  )
                 )
               )
             )
-          ),
+          )
         ),
         
+        
         #### tab con datos de Adminsitración de Vivienda Públicas(dfAvp_region_asig) ####
+        # tabPanel(
+        #   lowercaseTitle("Viviendas públicas asignadas"), 
+        #   br(), br(),
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # # seleccionar valor de la variable
+        #       div(
+        #         style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+        #         div(
+        #           style = "text-align: center; display: inline-block;", 
+        #           # botón para seleccionar la región
+        #           createDropdownCheckbox_region(
+        #             label = HTML("Seleccione<br>Región de Vivienda:"),
+        #             choices = dfAvp_region_asig$Región,
+        #             selected = NULL,
+        #             id = "avp_dfAvp_asig_región"
+        #           )
+        #         )
+        #       ),
+        #       
+        #       div(
+        #         style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+        #         div(
+        #           style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+        #             # botón para seleccionar el año
+        #             createDropdownCheckbox(
+        #               label = "Seleccione Año(s):",
+        #               choices = dfAvp_region_asig$Año,
+        #               selected = dfAvp_region_asig$Año,
+        #               id = "avp_dfAvp_asig_año"
+        #             )
+        #           ),
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+        #             showDataCheckbox("showTable_avp_dfAvp_asig")
+        #           )
+        #         )
+        #       ),
+        #       
+        #       
+        #       # Output UI para la tabla de datos
+        #       uiOutput("dataTableUI_avp_dfAvp_asig")
+        #       
+        #     ),
+        #     
+        #     # Sección principal con los gráficos
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       fluidRow(
+        #         column(12, 
+        #                div(id = "scrollable-plot", 
+        #                    div(id = "plot-title", uiOutput("plot_title_dfAvp_asig")),
+        #                    plotlyOutput("barPlot_avp_dfAvp_asig"),  height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 10px;"),
+        #       tags$div(
+        #         style = "padding-bottom: 10px;",
+        #         div(
+        #           class = "card",
+        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+        #           h4(
+        #             strong(actualizacion_avp2, style="margin: 0px;") 
+        #           ),
+        #           uiOutput("texto_dfAvp_region_asig")
+        #           # p(
+        #           #   "Los datos representados en esta gráfica corresponden al
+        #           #   total de viviendas públicas asignadas por
+        #           #   violencia doméstica por región de la Administración de Vivienda Pública
+        #           #   desde el año natural 2017 al 2024.",
+        #           #   
+        #           #   style = "font-size: 16px;padding: 0px;" 
+        #           # )
+        #         )
+        #       )
+        #     )
+        #   ),
+        # ),
+        
+        
         tabPanel(
-          lowercaseTitle("Viviendas públicas asignadas"), 
-          br(), br(),
-          sidebarLayout(
-            sidebarPanel(
-              style = "display: flex; flex-direction: column; align-items: center;",
+          lowercaseTitle("Viviendas públicas asignadas"),
+          
+          # CONTENEDOR GENERAL
+          div(
+            class = "dashboard-container",
+            
+            # GRÁFICA
+            div(
+              class = "dashboard-card plot-card",
               
-              # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;", 
+                id = "plot-title",
+                uiOutput("plot_title_dfAvp_asig")
+              ),
+              
+              # CONTENEDOR CON SCROLL VERTICAL INDEPENDIENTE
+              div(
+                id = "scrollable-plot",
+                style = paste(
+                  "height: calc(100vh - 350px);",
+                  "min-height: 350px;",
+                  "overflow-y: auto;",
+                  "overflow-x: hidden;",
+                  "width: 100%;"
+                ),
+                
+                plotlyOutput(
+                  "barPlot_avp_dfAvp_asig",
+                  height = "auto",
+                  width = "100%"
+                )
+              )
+            ),
+            
+            # FILTROS
+            div(
+              class = "dashboard-card filters-card",
+              
+              div(
+                class = "filters-row",
+                
+                # REGIÓN DE VIVIENDA
                 div(
-                  style = "text-align: center; display: inline-block;", 
-                  # botón para seleccionar la región
-                  createDropdownCheckbox_region(
+                  class = "filter-box",
+                  
+                  createPickerFilter_region(
                     label = HTML("Seleccione<br>Región de Vivienda:"),
                     choices = dfAvp_region_asig$Región,
                     selected = NULL,
                     id = "avp_dfAvp_asig_región"
                   )
-                )
-              ),
-              
-              div(
-                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                ),
+                
+                # AÑO
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-                  div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
-                    # botón para seleccionar el año
-                    createDropdownCheckbox(
-                      label = "Seleccione Año(s):",
-                      choices = dfAvp_region_asig$Año,
-                      selected = dfAvp_region_asig$Año,
-                      id = "avp_dfAvp_asig_año"
-                    )
-                  ),
-                  div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-                    showDataCheckbox("showTable_avp_dfAvp_asig")
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = "Seleccione Año(s):",
+                    choices = dfAvp_region_asig$Año,
+                    selected = dfAvp_region_asig$Año,
+                    id = "avp_dfAvp_asig_año"
+                  )
+                ),
+                
+                # MOSTRAR DATOS
+                div(
+                  class = "filter-switch",
+                  
+                  showDataToggle(
+                    "showTable_avp_dfAvp_asig"
                   )
                 )
-              ),
-              
-              
-              # Output UI para la tabla de datos
-              uiOutput("dataTableUI_avp_dfAvp_asig")
-              
+              )
             ),
             
-            # Sección principal con los gráficos
-            mainPanel(
-              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              fluidRow(
-                column(12, 
-                       div(id = "scrollable-plot", 
-                           div(id = "plot-title", uiOutput("plot_title_dfAvp_asig")),
-                           plotlyOutput("barPlot_avp_dfAvp_asig"),  height = "100%"))
+            # TABLA DE DATOS Y NOTAS INFORMATIVAS
+            div(
+              class = "bottom-row",
+              
+              # TABLA DE DATOS
+              uiOutput(
+                "dataTableUI_avp_dfAvp_asig"
               ),
-              tags$div(style = "padding-bottom: 10px;"),
-              tags$div(
-                style = "padding-bottom: 10px;",
+              
+              # COLUMNA DE INFORMACIÓN
+              div(
+                class = "info-column",
+                
+                # NOTA DE ACTUALIZACIÓN Y EXPLICACIÓN
                 div(
-                  class = "card",
-                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  class = "info-card",
+                  
                   h4(
-                    strong(actualizacion_avp2, style="margin: 0px;") 
+                    class = "info-card-title",
+                    actualizacion_avp2
                   ),
+                  
                   uiOutput("texto_dfAvp_region_asig")
-                  # p(
-                  #   "Los datos representados en esta gráfica corresponden al
-                  #   total de viviendas públicas asignadas por
-                  #   violencia doméstica por región de la Administración de Vivienda Pública
-                  #   desde el año natural 2017 al 2024.",
-                  #   
-                  #   style = "font-size: 16px;padding: 0px;" 
-                  # )
+                ),
+                
+                # FUENTE DE LOS DATOS
+                div(
+                  class = "source-card",
+                  
+                  h4(
+                    class = "source-card-title",
+                    "Fuente de los datos"
+                  ),
+                  
+                  p(
+                    tags$a(
+                      href = "https://www.avp.pr.gov/",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Administración de Vivienda Pública",
+                      class = "source-link"
+                    )
+                  )
                 )
               )
             )
-          ),
+          )
         ),
+        
         
         
         #### tab para el mapa de Adminsitración de Vivienda Públicas (mapaAvp) ####
