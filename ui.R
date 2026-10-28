@@ -1786,7 +1786,7 @@ ui <-
                   createDropdownCheckbox(
                     label = HTML("Seleccione <br>Sexo de las Víctimas:"),
                     choices = vEdad$Sexo,
-                    selected = vEdad$Sexo[1],
+                    selected = vEdad$Sexo[5],
                     id = "poli_vEdad_sexo"
                   )
                 )
@@ -1849,7 +1849,7 @@ ui <-
                     víctimas de violencia doméstica (por edad de la víctima)
                     desde el año natural 2021 al 2026. Se reportaron otros casos: 
                     Hombre trans: para el 2024 (2 víctimas), 2025 (5 víctimas) y 
-                    2026 (3 víctimas), Mujer trans: para el 2024 (1 víctima), 2025 
+                    2026 (4 víctimas), Mujer trans: para el 2024 (1 víctima), 2025 
                     (3 víctimas) y No binario: para el 2025 (1 víctima). 
                     Datos del 2026 son preliminares.",
                     
@@ -4435,7 +4435,7 @@ ui <-
     #### Tab del Centro de Ayuda a Víctimas de Violación ####
        #### tab con datos de Tendencia Anual de SAFE Kits por Estado de Querella ####
   tabPanel(
-    lowercaseTitle("Centro Ayuda a Víctimas de Violación"),
+    lowercaseTitle("Instituto de Ciencias Forenses"),
     icon = icon("building-circle-exclamation"),
     tabsetPanel(
       
@@ -4792,7 +4792,7 @@ ui <-
      #    lowercaseTitle("Publicaciones"),
      #    icon = icon("info-circle"),
      #    tabsetPanel(
-     #      
+     # 
      #      # tab de los autores del proyecto
      #      tabPanel(
      #        lowercaseTitle("Publicaciones"),
@@ -4800,8 +4800,24 @@ ui <-
      #            uiOutput("publicaciones_view_content"))
      #      )
      #    )),
-     #        
-     #        
+  
+      tabPanel(
+        lowercaseTitle("Infografías"),
+        icon = icon("info-circle"),
+        
+        tabsetPanel(
+          tabPanel(
+            lowercaseTitle("Infografías"),
+            
+            div(
+              class = "publicaciones-container",
+              uiOutput("publicaciones_view_content")
+            )
+          )
+        )
+      ),
+  
+  
   
     #### Tab Acerca del Dashboard ####
     tabPanel(

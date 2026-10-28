@@ -8445,31 +8445,51 @@ server <- function(input, output, session) {
   #   )
   # })
   
+  # output$publicaciones_view_content <- renderUI({
+  #   tags$div(
+  #     style = "
+  #     width: 100%;
+  #     height: auto;
+  #     overflow: hidden; /* ocultar scroll interno */
+  #     display: flex;
+  #     justify-content: center;
+  #     padding-bottom: 40px; /* margen inferior opcional */
+  #   ",
+  #     tags$iframe(
+  #       src = "https://infogram.com/infografia-agencias-violencia-de-genero-1h984wv11jl1d2p",
+  #       style = "
+  #       width: 100%;
+  #       height: 2500px; /* agranda para cubrir toda la infografía */
+  #       border: none;
+  #       overflow: hidden; /* elimina barras internas */
+  #       transform: scale(0.9); /* reduce zoom */
+  #       transform-origin: top center;
+  #       pointer-events: auto; /* mantiene clics funcionales */
+  #     "
+  #     )
+  #   )
+  # })
+  # 
+  
   output$publicaciones_view_content <- renderUI({
+    
     tags$div(
-      style = "
-      width: 100%;
-      height: auto;
-      overflow: hidden; /* ocultar scroll interno */
-      display: flex;
-      justify-content: center;
-      padding-bottom: 40px; /* margen inferior opcional */
-    ",
+      class = "publicaciones-iframe-container",
+      
       tags$iframe(
-        src = "https://infogram.com/1p0yk2e59wrpqkuek2l20dx0w1unj70evey",
+        src = "https://infogram.com/infografia-agencias-violencia-de-genero-1h984wv11jl1d2p",
+        title = "Infografía de agencias de violencia de género",
+        scrolling = "no",
         style = "
+        display: block;
         width: 100%;
-        height: 2500px; /* agranda para cubrir toda la infografía */
+        height: 22500px;
         border: none;
-        overflow: hidden; /* elimina barras internas */
-        transform: scale(0.9); /* reduce zoom */
-        transform-origin: top center;
-        pointer-events: auto; /* mantiene clics funcionales */
       "
       )
     )
+    
   })
-  
   
   
   

@@ -983,6 +983,34 @@
 
 
 /* =========================================================
+   PUBLICACIONES - INFOGRAM
+   ========================================================= */
+
+.publicaciones-container {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.publicaciones-iframe-container {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.publicaciones-iframe-container iframe {
+  display: block;
+  width: 100%;
+  min-height: 3000px;
+  border: none;
+}
+
+
+
+/* =========================================================
    ETIQUETAS DEL MAPA DE VIVIENDAS
    ========================================================= */
 

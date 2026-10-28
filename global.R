@@ -630,10 +630,10 @@ actualizacion_avp2 <- "Última actualización: 30 de abril de 2026"
 actualizacion_avp3 <- "Última actualización: 30 de abril de 2026"
 
 # Fecha actualizacion policia tab1
-actualizacion_policia1 <- "Última actualización: 31 de agosto de 2026"
+actualizacion_policia1 <- "Última actualización: 30 de septiembre de 2026"
 
 # Fecha actualizacion policia tab2
-actualizacion_policia2 <- "Última actualización: 20 de septiembre de 2024"
+actualizacion_policia2 <- "Última actualización: 30 de septiembre de 2026"
 
 # Fecha actualizacion policia tab3
 actualizacion_policia3 <- "Última actualización: 31 de diciembre de 2025"
@@ -648,7 +648,7 @@ actualizacion_policia5 <- "Última actualización: 31 de mayo de 2026"
 actualizacion_policia6 <- "Última actualización: 31 de agosto de 2026"
 
 # Fecha actualizacion policia tab7
-actualizacion_policia7 <- "Última actualización: 31 de agosto de 2026"
+actualizacion_policia7 <- "Última actualización: 30 de septiembre de 2026"
 
 # Fecha actualizacion policia tab8
 actualizacion_policia8 <- "Última actualización: 31 de mayo de 2026"
@@ -657,19 +657,19 @@ actualizacion_policia8 <- "Última actualización: 31 de mayo de 2026"
 actualizacion_opm1 <- "Última actualización: 31 de agosto de 2026"
 
 # Fecha actualizacion opm tab2
-actualizacion_opm2 <- "Última actualización: 31 de agosto de 2026"
+actualizacion_opm2 <- "Última actualización: 30 de septiembre de 2026"
 
 # Fecha actualizacion opm tab3
-actualizacion_opm3 <- "Última actualización: 31 de agosto de 2026"
+actualizacion_opm3 <- "Última actualización: 30 de septiembre de 2026"
 
 # Fecha actualizacion opm tab4
-actualizacion_opm4 <- "Última actualización: 31 de agosto de 2026"
+actualizacion_opm4 <- "Última actualización: 30 de septiembre de 2026"
 
 # Fecha actualizacion opm tab5
-actualizacion_opm5 <- "Última actualización: 31 de agosto de 2026"
+actualizacion_opm5 <- "Última actualización: 30 de septiembre de 2026"
 
 # Fecha actualizacion opm tab6
-actualizacion_opm6 <- "Última actualización: 31 de agosto de 2026"
+actualizacion_opm6 <- "Última actualización: 30 de septiembre de 2026"
 
 # Fecha actualizacion correccion y rehabilitacion tab1
 actualizacion_dcr1 <- "Última actualización: 30 de junio de 2026"
@@ -711,16 +711,16 @@ actualizacion_tribunales6 <- "Última actualización: 15 de octubre de 2024"
 actualizacion_tribunales7 <- "Última actualización: 30 de junio de 2026"
 
 # Fecha actualizacion datos cavv tab1
-actualizacion_cavv1 <- "Última actualización: 31 de agosto de 2026"
+actualizacion_cavv1 <- "Última actualización: 30 de septiembre de 2026"
 
 # Fecha actualizacion datos cavv tab2
-actualizacion_cavv2 <- "Última actualización: 31 de agosto de 2026"
+actualizacion_cavv2 <- "Última actualización: 30 de septiembre de 2026"
 
 # Fecha actualizacion datos cavv tab3
-actualizacion_cavv3 <- "Última actualización: 31 de agosto de 2026"
+actualizacion_cavv3 <- "Última actualización: 30 de septiembre de 2026"
 
 # Fecha actualizacion datos cavv tab4
-actualizacion_cavv4 <- "Última actualización: 31 de agosto de 2026"
+actualizacion_cavv4 <- "Última actualización: 30 de septiembre de 2026"
 
 ##################################################################################
 ##### Credenciales para el web hosting #####

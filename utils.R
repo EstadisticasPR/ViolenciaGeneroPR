@@ -400,9 +400,9 @@ cleanSheet_vEdad <- function(file, years = 2021:2026) {
     reduce(full_join) %>%
     rename(
       Edad = `Grupos de Edad`,
-      `Ambos Sexos` = Total,
+      `Ambos sexos` = Total,
       Mujeres = `Cantidad de mujeres víctimas`,
-      Hombres = Masculino
+      Hombres = Masculino,
     ) %>%
     pivot_longer(
       !c(Edad, Año),
