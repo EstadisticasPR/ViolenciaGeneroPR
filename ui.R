@@ -453,137 +453,142 @@ ui <-
       icon = icon("users"),
       tabsetPanel(
         #### tab con datos de menores víctimas de maltrato (dfMalt)  ####
-          tabPanel(
-            lowercaseTitle("Maltrato de menores por sexo"),
+        
+        tabPanel(
+          lowercaseTitle("Maltrato de menores por sexo"),
+          
+          div(
+            class = "dashboard-container",
             
-            # CONTENEDOR GENERAL
+            # GRÁFICA
             div(
-              class = "dashboard-container",
+              class = "dashboard-card plot-card",
               
-              # GRÁFICA
               div(
-                class = "dashboard-card plot-card",
-                
-                div(
-                  id = "plot-title",
-                  uiOutput("plot_title_dfMalt")
+                id = "plot-title",
+                uiOutput("plot_title_dfMalt")
+              ),
+              
+              # Contenedor con scroll vertical independiente
+              div(
+                id = "scrollable-plot",
+                style = paste(
+                  "height: calc(100vh - 350px);",
+                  "min-height: 350px;",
+                  "overflow-y: auto;",
+                  "overflow-x: hidden;",
+                  "width: 100%;"
                 ),
                 
                 plotlyOutput(
                   "barPlot_fam",
-                  height = "calc(100vh - 350px)"
-                )
-              ),
-              
-              # FILTROS
-              div(
-                class = "dashboard-card filters-card",
-                
-                div(
-                  class = "filters-row",
-                  
-                  # TIPO DE MALTRATO
-                  div(
-                    class = "filter-box",
-                    
-                    createPickerFilter(
-                      label = HTML("Seleccione<br>Tipo(s) de Maltrato:"),
-                      choices = dfMalt$Maltrato,
-                      selected = dfMalt$Maltrato[1],
-                      id = "fam_dfMalt_tipo"
-                    )
-                  ),
-                  
-                  # SEXO DE LAS VÍCTIMAS
-                  div(
-                    class = "filter-box",
-                    
-                    createPickerFilter(
-                      label = HTML("Seleccione<br>Sexo de las Víctimas:"),
-                      choices = dfMalt$Sexo,
-                      selected = dfMalt$Sexo[3],
-                      id = "fam_dfMalt_sexo"
-                    )
-                  ),
-                  
-                  # AÑO
-                  div(
-                    class = "filter-box",
-                    
-                    createPickerFilter(
-                      label = "Seleccione Año(s):",
-                      choices = dfMalt$Año,
-                      selected = NULL,
-                      id = "fam_dfMalt_año"
-                    )
-                  ),
-                  
-                  # MOSTRAR DATOS
-                  div(
-                    class = "filter-switch",
-                    
-                    showDataToggle("showTable_fam")
-                  )
-                  
-                )
-              ),
-              
-              # TABLA + INFORMACIÓN
-              div(
-                class = "bottom-row",
-                
-                # TABLA
-                uiOutput(
-                  "dataTableUI_fam"
-                ),
-                
-                # INFORMACIÓN
-                div(
-                  class = "info-column",
-                  
-                  # NOTA IMPORTANTE
-                  div(
-                    class = "info-card",
-                    
-                    h4(
-                      class = "info-card-title",
-                      actualizacion_familia
-                    ),
-                    
-                    p(
-                     "Las cantidades podrían representar conteos duplicados del o
-                      la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son
-                      parte de uno o múltiples referidos. Este conteo es conocido por el Departamento
-                      de la Familia como el pareo de menores-reportado. Estos datos están en proceso de
-                      revisión por el Instituto de Estadísticas de Puerto Rico."
-                    )
-                  ),
-                  
-                  # FUENTE
-                  div(
-                    class = "source-card",
-                    
-                    h4(
-                      class = "source-card-title",
-                      "Fuente de los datos"
-                    ),
-                    
-                    p(
-                      tags$a(
-                        href = "https://www.familia.pr.gov/",
-                        target = "_blank",
-                        rel = "noopener noreferrer",
-                        "Departamento de la Familia",
-                        class = "source-link"
-                      )
-                    )
-                  )
-                  
+                  height = "auto",
+                  width = "100%"
                 )
               )
+            ),
+            
+            # FILTROS
+            div(
+              class = "dashboard-card filters-card",
               
+              div(
+                class = "filters-row",
+                
+                # TIPO DE MALTRATO
+                div(
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = HTML("Seleccione<br>Tipo(s) de Maltrato:"),
+                    choices = dfMalt$Maltrato,
+                    selected = dfMalt$Maltrato[1],
+                    id = "fam_dfMalt_tipo"
+                  )
+                ),
+                
+                # SEXO DE LAS VÍCTIMAS
+                div(
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = HTML("Seleccione<br>Sexo de las Víctimas:"),
+                    choices = dfMalt$Sexo,
+                    selected = dfMalt$Sexo[3],
+                    id = "fam_dfMalt_sexo"
+                  )
+                ),
+                
+                # AÑO
+                div(
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = "Seleccione Año(s):",
+                    choices = dfMalt$Año,
+                    selected = NULL,
+                    id = "fam_dfMalt_año"
+                  )
+                ),
+                
+                # MOSTRAR DATOS
+                div(
+                  class = "filter-switch",
+                  
+                  showDataToggle("showTable_fam")
+                )
+              )
+            ),
+            
+            # TABLA + INFORMACIÓN
+            div(
+              class = "bottom-row",
+              
+              # TABLA
+              uiOutput("dataTableUI_fam"),
+              
+              # INFORMACIÓN
+              div(
+                class = "info-column",
+                
+                # NOTA IMPORTANTE
+                div(
+                  class = "info-card",
+                  
+                  h4(
+                    class = "info-card-title",
+                    actualizacion_familia
+                  ),
+                  
+                  p(
+                    "Las cantidades podrían representar conteos duplicados del o la menor. Esto es, debido a que el menor se cuenta cada vez que él o ella son parte de uno o múltiples referidos. Este conteo es conocido por el Departamento de la Familia como el pareo de menores-reportado. Estos datos están en proceso de revisión por el Instituto de Estadísticas de Puerto Rico."
+                  )
+                ),
+                
+                # FUENTE
+                div(
+                  class = "source-card",
+                  
+                  h4(
+                    class = "source-card-title",
+                    "Fuente de los datos"
+                  ),
+                  
+                  p(
+                    tags$a(
+                      href = "https://www.familia.pr.gov/",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Departamento de la Familia",
+                      class = "source-link"
+                    )
+                  )
+                )
+              )
             )
-          ),
+          )
+        ),
+        
         
         #### tab de Publicaciones del Departamento de la Familia ####
         # tabPanel(
@@ -1666,394 +1671,1160 @@ ui <-
       tabsetPanel(
         
         #### tab con datos de mujeres desaparecidas (despDF) ####
+        # tabPanel(
+        #   lowercaseTitle("Mujeres desaparecidas y localizadas"), 
+        #   br(), br(),
+        #     sidebarLayout(
+        #       sidebarPanel(
+        #         style = "display: flex; flex-direction: column; align-items: center;",
+        #         
+        #         # # seleccionar valor de la variable
+        #         div(
+        #           style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+        #           div(
+        #             style = "text-align: center; display: inline-block;", 
+        #             # botón para seleccionar estado adultas
+        #             createDropdownCheckbox(
+        #               label = HTML("Seleccione<br>el Estado de la Víctima (Adultas):"),
+        #               choices = despDF_Adultas$Estado,
+        #               selected = despDF_Adultas$Estado,
+        #               id = "poli_despDF_categoría_adultas"
+        #             ),
+        #             # botón para seleccionar el estado menores
+        #             createDropdownCheckbox(
+        #               label = HTML("Seleccione<br>el Estado de la Víctima (Menores):"),
+        #               choices = despDF_Menores$Estado,
+        #               selected = despDF_Menores$Estado,
+        #               id = "poli_despDF_categoría_menores"
+        #             )
+        #           )
+        #         ),
+        #         
+        #         div(
+        #           style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+        #           div(
+        #             style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+        #             div(
+        #               style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+        #               # botón para seleccionar el año
+        #               createDropdownCheckbox(
+        #                 label = "Seleccione año(s):",
+        #                 choices = despDF_Adultas$Año,
+        #                 selected = despDF_Adultas$Año,
+        #                 id = "poli_despDF_año"
+        #               )
+        #             ),
+        #             div(
+        #               style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+        #               showDataCheckbox("showTable_poli_despDF")
+        #             )
+        #           )
+        #         ),
+        #         
+        #         # Output UI para la tabla de datos
+        #         uiOutput("dataTableUI_poli_despDF")
+        #         
+        #       ),
+        #     
+        #     
+        #     # Sección principal con los gráficos
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       fluidRow(
+        #         column(12, 
+        #                div(id = "scrollable-plot", 
+        #                    div(id = "plot-title", uiOutput("plot_title_despDF_adultas")),
+        #                    plotlyOutput("barPlot_poli_despDF_adultas"),  height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 10px;"),
+        #       fluidRow(
+        #         column(12, 
+        #                div(id = "scrollable-plot", 
+        #                    div(id = "plot-title", uiOutput("plot_title_despDF_menores")),
+        #                    plotlyOutput("barPlot_poli_despDF_menores"),  height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 10px;"),
+        #       tags$div(
+        #         style = "padding-bottom: 10px;",
+        #         div(
+        #           class = "card",
+        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+        #           h4(
+        #             strong(actualizacion_policia1, style="margin: 0px;") 
+        #           ),
+        #           p(
+        #             "Los datos representados en esta gráfica corresponden a la
+        #             cantidad de mujeres desaparecidas y localizadas (adultas y menores)
+        #             desde el año natural 2020 al 2026. Los datos para el año 2026 son
+        #             preliminares.",
+        #             
+        #             style = "font-size: 16px;padding: 0px;" 
+        #           )
+        #         )
+        #       )
+        #     )
+        #   ),
+        # ),
+        
+        
         tabPanel(
-          lowercaseTitle("Mujeres desaparecidas y localizadas"), 
-          br(), br(),
-            sidebarLayout(
-              sidebarPanel(
-                style = "display: flex; flex-direction: column; align-items: center;",
+          lowercaseTitle("Mujeres desaparecidas y localizadas"),
+          
+          div(
+            class = "dashboard-container",
+            
+            # GRÁFICA DE MUJERES ADULTAS
+            div(
+              class = "dashboard-card plot-card",
+              
+              div(
+                id = "plot-title",
+                uiOutput("plot_title_despDF_adultas")
+              ),
+              
+              # Contenedor con scroll vertical independiente
+              div(
+                id = "scrollable-plot",
+                style = paste(
+                  "height: calc(100vh - 350px);",
+                  "min-height: 350px;",
+                  "overflow-y: auto;",
+                  "overflow-x: hidden;",
+                  "width: 100%;"
+                ),
                 
-                # # seleccionar valor de la variable
+                plotlyOutput(
+                  "barPlot_poli_despDF_adultas",
+                  height = "auto",
+                  width = "100%"
+                )
+              )
+            ),
+            
+            # GRÁFICA DE MENORES
+            div(
+              class = "dashboard-card plot-card",
+              
+              div(
+                id = "plot-title",
+                uiOutput("plot_title_despDF_menores")
+              ),
+              
+              # Contenedor con scroll vertical independiente
+              div(
+                id = "scrollable-plot",
+                style = paste(
+                  "height: calc(100vh - 350px);",
+                  "min-height: 350px;",
+                  "overflow-y: auto;",
+                  "overflow-x: hidden;",
+                  "width: 100%;"
+                ),
+                
+                plotlyOutput(
+                  "barPlot_poli_despDF_menores",
+                  height = "auto",
+                  width = "100%"
+                )
+              )
+            ),
+            
+            # FILTROS
+            div(
+              class = "dashboard-card filters-card",
+              
+              div(
+                class = "filters-row",
+                
+                # ESTADO DE LA VÍCTIMA: ADULTAS
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
-                  div(
-                    style = "text-align: center; display: inline-block;", 
-                    # botón para seleccionar estado adultas
-                    createDropdownCheckbox(
-                      label = HTML("Seleccione<br>el Estado de la Víctima (Adultas):"),
-                      choices = despDF_Adultas$Estado,
-                      selected = despDF_Adultas$Estado,
-                      id = "poli_despDF_categoría_adultas"
-                    ),
-                    # botón para seleccionar el estado menores
-                    createDropdownCheckbox(
-                      label = HTML("Seleccione<br>el Estado de la Víctima (Menores):"),
-                      choices = despDF_Menores$Estado,
-                      selected = despDF_Menores$Estado,
-                      id = "poli_despDF_categoría_menores"
-                    )
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = HTML("Seleccione<br>el Estado de la Víctima (Adultas):"),
+                    choices = despDF_Adultas$Estado,
+                    selected = despDF_Adultas$Estado,
+                    id = "poli_despDF_categoría_adultas"
                   )
                 ),
                 
+                # ESTADO DE LA VÍCTIMA: MENORES
                 div(
-                  style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
-                  div(
-                    style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-                    div(
-                      style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
-                      # botón para seleccionar el año
-                      createDropdownCheckbox(
-                        label = "Seleccione año(s):",
-                        choices = despDF_Adultas$Año,
-                        selected = despDF_Adultas$Año,
-                        id = "poli_despDF_año"
-                      )
-                    ),
-                    div(
-                      style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-                      showDataCheckbox("showTable_poli_despDF")
-                    )
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = HTML("Seleccione<br>el Estado de la Víctima (Menores):"),
+                    choices = despDF_Menores$Estado,
+                    selected = despDF_Menores$Estado,
+                    id = "poli_despDF_categoría_menores"
                   )
                 ),
                 
-                # Output UI para la tabla de datos
-                uiOutput("dataTableUI_poli_despDF")
-                
-              ),
-            
-            
-            # Sección principal con los gráficos
-            mainPanel(
-              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              fluidRow(
-                column(12, 
-                       div(id = "scrollable-plot", 
-                           div(id = "plot-title", uiOutput("plot_title_despDF_adultas")),
-                           plotlyOutput("barPlot_poli_despDF_adultas"),  height = "100%"))
-              ),
-              tags$div(style = "padding-bottom: 10px;"),
-              fluidRow(
-                column(12, 
-                       div(id = "scrollable-plot", 
-                           div(id = "plot-title", uiOutput("plot_title_despDF_menores")),
-                           plotlyOutput("barPlot_poli_despDF_menores"),  height = "100%"))
-              ),
-              tags$div(style = "padding-bottom: 10px;"),
-              tags$div(
-                style = "padding-bottom: 10px;",
+                # AÑO
                 div(
-                  class = "card",
-                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = "Seleccione año(s):",
+                    choices = despDF_Adultas$Año,
+                    selected = despDF_Adultas$Año,
+                    id = "poli_despDF_año"
+                  )
+                ),
+                
+                # MOSTRAR DATOS
+                div(
+                  class = "filter-switch",
+                  
+                  showDataToggle("showTable_poli_despDF")
+                )
+              )
+            ),
+            
+            # TABLA + INFORMACIÓN
+            div(
+              class = "bottom-row",
+              
+              # TABLA DE DATOS
+              uiOutput("dataTableUI_poli_despDF"),
+              
+              # INFORMACIÓN
+              div(
+                class = "info-column",
+                
+                # NOTA IMPORTANTE
+                div(
+                  class = "info-card",
+                  
                   h4(
-                    strong(actualizacion_policia1, style="margin: 0px;") 
+                    class = "info-card-title",
+                    actualizacion_policia1
                   ),
+                  
                   p(
-                    "Los datos representados en esta gráfica corresponden a la
-                    cantidad de mujeres desaparecidas y localizadas (adultas y menores)
-                    desde el año natural 2020 al 2026. Los datos para el año 2026 son
-                    preliminares.",
-                    
-                    style = "font-size: 16px;padding: 0px;" 
+                    "Los datos representados en estas gráficas corresponden a la cantidad de mujeres desaparecidas y localizadas (adultas y menores) desde el año natural 2020 al 2026. Los datos para el año 2026 son preliminares."
+                  )
+                ),
+                
+                # FUENTE DE LOS DATOS
+                div(
+                  class = "source-card",
+                  
+                  h4(
+                    class = "source-card-title",
+                    "Fuente de los datos"
+                  ),
+                  
+                  p(
+                    tags$a(
+                      href = "https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Policía de Puerto Rico",
+                      class = "source-link"
+                    )
                   )
                 )
               )
             )
-          ),
+          )
         ),
         
+        
         #### tab para el barplot de incidentes de violencia doméstica por edad de la víctima (vEdad) ####
+        # tabPanel(
+        #   lowercaseTitle("Violencia doméstica por edad"),
+        #   br(), br(),
+        #   
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # # seleccionar valor de la variable
+        #       div(
+        #         style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+        #         div(
+        #           style = "text-align: center; display: inline-block;", 
+        #           # botón para seleccionar edad
+        #           createDropdownCheckbox(
+        #             label = HTML("Seleccione <br>Grupo(s) de Edad:"),
+        #             choices = vEdad$Edad,
+        #             selected = vEdad$Edad,
+        #             id = "poli_vEdad_edad"
+        #           ),
+        #           # botón para seleccionar el sexo
+        #           createDropdownCheckbox(
+        #             label = HTML("Seleccione <br>Sexo de las Víctimas:"),
+        #             choices = vEdad$Sexo,
+        #             selected = vEdad$Sexo[5],
+        #             id = "poli_vEdad_sexo"
+        #           )
+        #         )
+        #       ),
+        #       
+        #       div(
+        #         style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+        #         div(
+        #           style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+        #             # botón para seleccionar año
+        #             createDropdownCheckbox(
+        #               label = "Seleccione Año(s):",
+        #               choices = vEdad$Año,
+        #               selected = vEdad$Año,
+        #               id = "poli_vEdad_año"
+        #             )
+        #           ),
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+        #             showDataCheckbox("showTable_poli_vEdad")
+        #           )
+        #         )
+        #       ),
+        #       
+        #       # Output UI para la tabla de datos
+        #       uiOutput("dataTableUI_poli_vEdad")
+        #       
+        #     ),
+        #     
+        #     # Sección principal con los gráficos
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       fluidRow(
+        #         column(12, 
+        #                div(id = "scrollable-plot", 
+        #                    div(id = "plot-title", uiOutput("plot_title_vEdad")),
+        #                    plotlyOutput("barPlot_poli_vEdad"),  height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 10px;"),
+        #       # fluidRow(
+        #       #   column(
+        #       #     12, 
+        #       #     div(id = "scrollable-plot", 
+        #       #         div(id = "plot-title", uiOutput("plot_title_vEdad")),
+        #       #         plotlyOutput("heatmap_poli_vEdad"),
+        #       #         height = "100%"))
+        #       # ),
+        #       tags$div(
+        #         style = "padding-bottom: 10px;",
+        #         div(
+        #           class = "card",
+        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+        #           h4(
+        #             strong(actualizacion_policia2, style="margin: 0px;") 
+        #           ),
+        #           p(
+        #             "Los datos representados en esta gráfica corresponden a las
+        #             víctimas de violencia doméstica (por edad de la víctima)
+        #             desde el año natural 2021 al 2026. Se reportaron otros casos: 
+        #             Hombre trans: para el 2024 (2 víctimas), 2025 (5 víctimas) y 
+        #             2026 (4 víctimas), Mujer trans: para el 2024 (1 víctima), 2025 
+        #             (3 víctimas) y No binario: para el 2025 (1 víctima). 
+        #             Datos del 2026 son preliminares.",
+        #             
+        #             style = "font-size: 16px;padding: 0px;" 
+        #           )
+        #         )
+        #       )
+        #     )
+        #   )
+        # ), 
+        # 
+        
         tabPanel(
           lowercaseTitle("Violencia doméstica por edad"),
-          br(), br(),
           
-          sidebarLayout(
-            sidebarPanel(
-              style = "display: flex; flex-direction: column; align-items: center;",
+          div(
+            class = "dashboard-container",
+            
+            # GRÁFICA
+            div(
+              class = "dashboard-card plot-card",
               
-              # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                id = "plot-title",
+                uiOutput("plot_title_vEdad")
+              ),
+              
+              # Contenedor con scroll vertical independiente
+              div(
+                id = "scrollable-plot",
+                style = paste(
+                  "height: calc(100vh - 350px);",
+                  "min-height: 350px;",
+                  "overflow-y: auto;",
+                  "overflow-x: hidden;",
+                  "width: 100%;"
+                ),
+                
+                plotlyOutput(
+                  "barPlot_poli_vEdad",
+                  height = "auto",
+                  width = "100%"
+                )
+              )
+            ),
+            
+            # FILTROS
+            div(
+              class = "dashboard-card filters-card",
+              
+              div(
+                class = "filters-row",
+                
+                # GRUPO DE EDAD
                 div(
-                  style = "text-align: center; display: inline-block;", 
-                  # botón para seleccionar edad
-                  createDropdownCheckbox(
-                    label = HTML("Seleccione <br>Grupo(s) de Edad:"),
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = HTML("Seleccione<br>Grupo(s) de Edad:"),
                     choices = vEdad$Edad,
                     selected = vEdad$Edad,
                     id = "poli_vEdad_edad"
-                  ),
-                  # botón para seleccionar el sexo
-                  createDropdownCheckbox(
-                    label = HTML("Seleccione <br>Sexo de las Víctimas:"),
+                  )
+                ),
+                
+                # SEXO DE LAS VÍCTIMAS
+                div(
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = HTML("Seleccione<br>Sexo de las Víctimas:"),
                     choices = vEdad$Sexo,
                     selected = vEdad$Sexo[5],
                     id = "poli_vEdad_sexo"
                   )
-                )
-              ),
-              
-              div(
-                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                ),
+                
+                # AÑO
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-                  div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
-                    # botón para seleccionar año
-                    createDropdownCheckbox(
-                      label = "Seleccione Año(s):",
-                      choices = vEdad$Año,
-                      selected = vEdad$Año,
-                      id = "poli_vEdad_año"
-                    )
-                  ),
-                  div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-                    showDataCheckbox("showTable_poli_vEdad")
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = "Seleccione año(s):",
+                    choices = vEdad$Año,
+                    selected = vEdad$Año,
+                    id = "poli_vEdad_año"
                   )
+                ),
+                
+                # MOSTRAR DATOS
+                div(
+                  class = "filter-switch",
+                  
+                  showDataToggle("showTable_poli_vEdad")
                 )
-              ),
-              
-              # Output UI para la tabla de datos
-              uiOutput("dataTableUI_poli_vEdad")
-              
+              )
             ),
             
-            # Sección principal con los gráficos
-            mainPanel(
-              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              fluidRow(
-                column(12, 
-                       div(id = "scrollable-plot", 
-                           div(id = "plot-title", uiOutput("plot_title_vEdad")),
-                           plotlyOutput("barPlot_poli_vEdad"),  height = "100%"))
-              ),
-              tags$div(style = "padding-bottom: 10px;"),
-              # fluidRow(
-              #   column(
-              #     12, 
-              #     div(id = "scrollable-plot", 
-              #         div(id = "plot-title", uiOutput("plot_title_vEdad")),
-              #         plotlyOutput("heatmap_poli_vEdad"),
-              #         height = "100%"))
-              # ),
-              tags$div(
-                style = "padding-bottom: 10px;",
+            # TABLA + INFORMACIÓN
+            div(
+              class = "bottom-row",
+              
+              # TABLA DE DATOS
+              uiOutput("dataTableUI_poli_vEdad"),
+              
+              # INFORMACIÓN
+              div(
+                class = "info-column",
+                
+                # NOTA IMPORTANTE
                 div(
-                  class = "card",
-                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  class = "info-card",
+                  
                   h4(
-                    strong(actualizacion_policia2, style="margin: 0px;") 
+                    class = "info-card-title",
+                    actualizacion_policia2
                   ),
+                  
                   p(
-                    "Los datos representados en esta gráfica corresponden a las
-                    víctimas de violencia doméstica (por edad de la víctima)
-                    desde el año natural 2021 al 2026. Se reportaron otros casos: 
-                    Hombre trans: para el 2024 (2 víctimas), 2025 (5 víctimas) y 
-                    2026 (4 víctimas), Mujer trans: para el 2024 (1 víctima), 2025 
-                    (3 víctimas) y No binario: para el 2025 (1 víctima). 
-                    Datos del 2026 son preliminares.",
-                    
-                    style = "font-size: 16px;padding: 0px;" 
+                    paste0(
+                      "Los datos representados en esta gráfica corresponden a las ",
+                      "víctimas de violencia doméstica por edad de la víctima, ",
+                      "desde el año natural 2021 al 2026. Se reportaron otros casos: ",
+                      "Hombre trans: para el 2024 (2 víctimas), 2025 (5 víctimas) ",
+                      "y 2026 (4 víctimas); Mujer trans: para el 2024 (1 víctima) ",
+                      "y 2025 (3 víctimas); y No binario: para el 2025 (1 víctima). ",
+                      "Los datos para el año 2026 son preliminares."
+                    )
+                  )
+                ),
+                
+                # FUENTE DE LOS DATOS
+                div(
+                  class = "source-card",
+                  
+                  h4(
+                    class = "source-card-title",
+                    "Fuente de los datos"
+                  ),
+                  
+                  p(
+                    tags$a(
+                      href = "https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Policía de Puerto Rico",
+                      class = "source-link"
+                    )
                   )
                 )
               )
             )
           )
-        ), 
-        
+        ),
         
         #### tab para el barplot de incidentes de maltrato por sexo de la víctima (maltPoli) ####
+        # tabPanel(
+        #   lowercaseTitle("Tipos de Maltrato por sexo"),
+        #   br(), br(),
+        #   
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # # seleccionar valor de la variable
+        #       div(
+        #         style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+        #         div(
+        #           style = "text-align: center; display: inline-block;", 
+        #           # botón para seleccionar edad
+        #           createDropdownCheckbox(
+        #             label = HTML("Seleccione <br>Tipo(s) de Maltrato:"),
+        #             choices = maltPoli$Maltrato,
+        #             selected = maltPoli$Maltrato,
+        #             id = "poli_Malt"
+        #           ),
+        #           # botón para seleccionar el sexo
+        #           createDropdownCheckbox(
+        #             label = HTML("Seleccione <br>Sexo de las Víctimas:"),
+        #             choices = maltPoli$Sexo,
+        #             selected = maltPoli$Sexo[1:2],
+        #             id = "poli_Malt_sexo"
+        #           )
+        #         )
+        #       ),
+        #       
+        #       div(
+        #         style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+        #         div(
+        #           style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+        #             # botón para seleccionar año
+        #             createDropdownCheckbox(
+        #               label = "Seleccione Año(s):",
+        #               choices = maltPoli$Año,
+        #               selected = maltPoli$Año,
+        #               id = "poli_Malt_año"
+        #             )
+        #           ),
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+        #             showDataCheckbox("showTable_poli_Malt")
+        #           )
+        #         )
+        #       ),
+        #       
+        #       # Output UI para la tabla de datos
+        #       uiOutput("dataTableUI_poli_Malt")
+        #       
+        #     ),
+        #     
+        #     # Sección principal con los gráficos
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       fluidRow(
+        #         column(12, 
+        #                div(id = "scrollable-plot", 
+        #                    div(id = "plot-title", uiOutput("plot_title_maltPoli")),
+        #                    plotlyOutput("barPlot_poli_Malt"),  height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 10px;"),
+        #       tags$div(
+        #         style = "padding-bottom: 10px;",
+        #         div(
+        #           class = "card",
+        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+        #           h4(
+        #             strong(actualizacion_policia3, style="margin: 0px;") 
+        #           ),
+        #           p(
+        #             "Los datos representados en esta gráfica corresponden a las
+        #             víctimas de maltrato (por sexo de la víctima)
+        #             desde el año natural 2021 al 2025. Los datos de los incidentes en
+        #             mujeres trans, hombres trans, no binario y desconocido son visualizados
+        #             independientes de las categorias hombres y mujeres debido a la gran
+        #             diferencia en cantidad de casos entre las categorias.",
+        #             
+        #             style = "font-size: 16px;padding: 0px;" 
+        #           )
+        #         )
+        #       )
+        #     )
+        #   )
+        # ), 
+        
         tabPanel(
           lowercaseTitle("Tipos de Maltrato por sexo"),
-          br(), br(),
           
-          sidebarLayout(
-            sidebarPanel(
-              style = "display: flex; flex-direction: column; align-items: center;",
+          div(
+            class = "dashboard-container",
+            
+            # GRÁFICA
+            div(
+              class = "dashboard-card plot-card",
               
-              # # seleccionar valor de la variable
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                id = "plot-title",
+                uiOutput("plot_title_maltPoli")
+              ),
+              
+              # Contenedor con scroll vertical independiente
+              div(
+                id = "scrollable-plot",
+                style = paste(
+                  "height: calc(100vh - 350px);",
+                  "min-height: 350px;",
+                  "overflow-y: auto;",
+                  "overflow-x: hidden;",
+                  "width: 100%;"
+                ),
+                
+                plotlyOutput(
+                  "barPlot_poli_Malt",
+                  height = "auto",
+                  width = "100%"
+                )
+              )
+            ),
+            
+            # FILTROS
+            div(
+              class = "dashboard-card filters-card",
+              
+              div(
+                class = "filters-row",
+                
+                # TIPO DE MALTRATO
                 div(
-                  style = "text-align: center; display: inline-block;", 
-                  # botón para seleccionar edad
-                  createDropdownCheckbox(
-                    label = HTML("Seleccione <br>Tipo(s) de Maltrato:"),
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = HTML("Seleccione<br>Tipo(s) de Maltrato:"),
                     choices = maltPoli$Maltrato,
                     selected = maltPoli$Maltrato,
                     id = "poli_Malt"
-                  ),
-                  # botón para seleccionar el sexo
-                  createDropdownCheckbox(
-                    label = HTML("Seleccione <br>Sexo de las Víctimas:"),
+                  )
+                ),
+                
+                # SEXO DE LAS VÍCTIMAS
+                div(
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = HTML("Seleccione<br>Sexo de las Víctimas:"),
                     choices = maltPoli$Sexo,
                     selected = maltPoli$Sexo[1:2],
                     id = "poli_Malt_sexo"
                   )
-                )
-              ),
-              
-              div(
-                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                ),
+                
+                # AÑO
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
-                  div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
-                    # botón para seleccionar año
-                    createDropdownCheckbox(
-                      label = "Seleccione Año(s):",
-                      choices = maltPoli$Año,
-                      selected = maltPoli$Año,
-                      id = "poli_Malt_año"
-                    )
-                  ),
-                  div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-                    showDataCheckbox("showTable_poli_Malt")
+                  class = "filter-box",
+                  
+                  createPickerFilter(
+                    label = "Seleccione año(s):",
+                    choices = maltPoli$Año,
+                    selected = maltPoli$Año,
+                    id = "poli_Malt_año"
                   )
+                ),
+                
+                # MOSTRAR DATOS
+                div(
+                  class = "filter-switch",
+                  
+                  showDataToggle("showTable_poli_Malt")
                 )
-              ),
-              
-              # Output UI para la tabla de datos
-              uiOutput("dataTableUI_poli_Malt")
-              
+              )
             ),
             
-            # Sección principal con los gráficos
-            mainPanel(
-              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
-              fluidRow(
-                column(12, 
-                       div(id = "scrollable-plot", 
-                           div(id = "plot-title", uiOutput("plot_title_maltPoli")),
-                           plotlyOutput("barPlot_poli_Malt"),  height = "100%"))
-              ),
-              tags$div(style = "padding-bottom: 10px;"),
-              tags$div(
-                style = "padding-bottom: 10px;",
+            # TABLA + INFORMACIÓN
+            div(
+              class = "bottom-row",
+              
+              # TABLA DE DATOS
+              uiOutput("dataTableUI_poli_Malt"),
+              
+              # INFORMACIÓN
+              div(
+                class = "info-column",
+                
+                # NOTA IMPORTANTE
                 div(
-                  class = "card",
-                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+                  class = "info-card",
+                  
                   h4(
-                    strong(actualizacion_policia3, style="margin: 0px;") 
+                    class = "info-card-title",
+                    actualizacion_policia3
                   ),
+                  
                   p(
-                    "Los datos representados en esta gráfica corresponden a las
-                    víctimas de maltrato (por sexo de la víctima)
-                    desde el año natural 2021 al 2025. Los datos de los incidentes en
-                    mujeres trans, hombres trans, no binario y desconocido son visualizados
-                    independientes de las categorias hombres y mujeres debido a la gran
-                    diferencia en cantidad de casos entre las categorias.",
-                    
-                    style = "font-size: 16px;padding: 0px;" 
+                    paste0(
+                      "Los datos representados en esta gráfica corresponden a las ",
+                      "víctimas de maltrato por sexo de la víctima desde el año ",
+                      "natural 2021 al 2025. Los datos de los incidentes en mujeres ",
+                      "trans, hombres trans, no binario y desconocido se visualizan ",
+                      "independientemente de las categorías hombres y mujeres, debido ",
+                      "a la gran diferencia en la cantidad de casos entre las categorías."
+                    )
+                  )
+                ),
+                
+                # FUENTE DE LOS DATOS
+                div(
+                  class = "source-card",
+                  
+                  h4(
+                    class = "source-card-title",
+                    "Fuente de los datos"
+                  ),
+                  
+                  p(
+                    tags$a(
+                      href = "https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Policía de Puerto Rico",
+                      class = "source-link"
+                    )
                   )
                 )
               )
             )
           )
-        ), 
+        ),
         
         #### tab para el barplot de datos de víctimas y ofensores de delitos sexuales (npprDS_totales, npprDS_victima y npprDS_ofensores) ####
+        # tabPanel(
+        #   lowercaseTitle("Delitos Sexuales (victimas y ofensores)"),
+        #   br(), br(),
+        #   
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # # seleccionar valor de la variable
+        #       div(
+        #         style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+        #         div(
+        #           style = "text-align: center; display: inline-block;", 
+        #           # botón para seleccionar edad
+        #           createDropdownCheckbox(
+        #             label = HTML("Seleccione <br>Grupo(s) de Edad:"),
+        #             choices = npprDS_victima$Edad,
+        #             selected = npprDS_victima$Edad,
+        #             id = "npprDS_edad"
+        #           ),
+        #           # botón para seleccionar el sexo
+        #           createDropdownCheckbox(
+        #             label = HTML("Seleccione <br>Sexo de las Víctimas/Ofensores:"),
+        #             choices = npprDS_victima$Sexo,
+        #             selected = npprDS_victima$Sexo,
+        #             id = "npprDS_sexo"
+        #           )
+        #         )
+        #       ),
+        #       
+        #       div(
+        #         style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+        #         div(
+        #           style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
+        #             # botón para seleccionar año
+        #             createDropdownCheckbox(
+        #               label = "Seleccione Año(s):",
+        #               choices = npprDS_victima$Año,
+        #               selected = npprDS_victima$Año,
+        #               id = "npprDS_año"
+        #             )
+        #           ),
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
+        #             showDataCheckbox("showTable_npprDS")
+        #           )
+        #         )
+        #       ),
+        #       
+        #       # Output UI para la tabla de datos
+        #       uiOutput("dataTableUI_npprDS")
+        #       
+        #     ),
+        #     
+        #     # Sección principal con los gráficos
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       fluidRow(
+        #         column(12, 
+        #                div(id = "plot-container", 
+        #                    div(id = "plot-title", uiOutput("plot_title_npprDS_totales")),
+        #                    plotlyOutput("barPlot_npprDS_totales"),  height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 60px;"),
+        #       fluidRow(
+        #         column(12, 
+        #                div(id = "plot-container", 
+        #                    div(id = "plot-title", uiOutput("plot_title_npprDS_victima")),
+        #                    plotlyOutput("barPlot_npprDS_victima"),  height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 60px;"),
+        #       fluidRow(
+        #         column(12, 
+        #                div(id = "plot-container", 
+        #                    div(id = "plot-title", uiOutput("plot_title_npprDS_ofensores")),
+        #                    plotlyOutput("barPlot_npprDS_ofensores"),  height = "100%"))
+        #       ),
+        #       tags$div(style = "padding-bottom: 80px;"),
+        #       tags$div(
+        #         style = "padding-bottom: 40px;",
+        #         div(
+        #           class = "card",
+        #           style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
+        #           h4(
+        #             strong(actualizacion_policia4, style="margin: 0px;") 
+        #           ),
+        #           p(
+        #             "Los datos representados en esta gráfica corresponden a los
+        #              datos de víctimas y ofensores de delitos sexuales (por sexo)
+        #              desde el año natural 2019 al 2026. Los datos del 2026 son preliminares.",
+        #             
+        #             style = "font-size: 16px;padding: 0px;" 
+        #           )
+        #         )
+        #       )
+        #     )
+        #   )
+        # ), 
+        
+        
+        #### tab para el barplot de datos de víctimas de delitos sexuales (npprDS_totales_victima, npprDS_victima) ####
         tabPanel(
-          lowercaseTitle("Delitos Sexuales (victimas y ofensores)"),
+          lowercaseTitle("Víctimas de Delitos Sexuales"),
+          
           br(), br(),
           
           sidebarLayout(
             sidebarPanel(
               style = "display: flex; flex-direction: column; align-items: center;",
               
-              # # seleccionar valor de la variable
+              # Filtros de víctimas
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",  
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",
+                
                 div(
-                  style = "text-align: center; display: inline-block;", 
-                  # botón para seleccionar edad
+                  style = "text-align: center; display: inline-block;",
+                  
+                  # Grupo de edad
                   createDropdownCheckbox(
-                    label = HTML("Seleccione <br>Grupo(s) de Edad:"),
+                    label = HTML("Seleccione<br>Grupo(s) de Edad:"),
                     choices = npprDS_victima$Edad,
                     selected = npprDS_victima$Edad,
-                    id = "npprDS_edad"
+                    id = "npprDS_victimas_edad"
                   ),
-                  # botón para seleccionar el sexo
+                  
+                  # Sexo de las víctimas
                   createDropdownCheckbox(
-                    label = HTML("Seleccione <br>Sexo de las Víctimas/Ofensores:"),
+                    label = HTML("Seleccione<br>Sexo de las Víctimas:"),
                     choices = npprDS_victima$Sexo,
                     selected = npprDS_victima$Sexo,
-                    id = "npprDS_sexo"
+                    id = "npprDS_victimas_sexo"
                   )
                 )
               ),
               
+              # Filtro de año y control de la tabla
               div(
-                style = "width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 0px;",
+                style = paste(
+                  "width: 100%;",
+                  "display: flex;",
+                  "flex-direction: column;",
+                  "align-items: center;",
+                  "padding-top: 0px;"
+                ),
+                
                 div(
-                  style = "width: 100%; display: flex; justify-content: center; align-items: center;",
+                  style = paste(
+                    "width: 100%;",
+                    "display: flex;",
+                    "justify-content: center;",
+                    "align-items: center;"
+                  ),
+                  
                   div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px",
-                    # botón para seleccionar año
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
+                    
                     createDropdownCheckbox(
                       label = "Seleccione Año(s):",
                       choices = npprDS_victima$Año,
                       selected = npprDS_victima$Año,
-                      id = "npprDS_año"
+                      id = "npprDS_victimas_año"
                     )
                   ),
+                  
                   div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-left: 0px;", 
-                    showDataCheckbox("showTable_npprDS")
+                    style = "flex: 1; display: flex; justify-content: center;",
+                    
+                    showDataCheckbox("showTable_npprDS_victimas")
                   )
                 )
               ),
               
-              # Output UI para la tabla de datos
-              uiOutput("dataTableUI_npprDS")
-              
+              # Tabla de datos y fuente
+              uiOutput("dataTableUI_npprDS_victimas")
             ),
             
-            # Sección principal con los gráficos
             mainPanel(
               style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              
+              # Gráfica de totales
               fluidRow(
-                column(12, 
-                       div(id = "plot-container", 
-                           div(id = "plot-title", uiOutput("plot_title_npprDS_totales")),
-                           plotlyOutput("barPlot_npprDS_totales"),  height = "100%"))
+                column(
+                  12,
+                  div(
+                    id = "plot-container",
+                    div(
+                      id = "plot-title",
+                      uiOutput("plot_title_npprDS_totales_victimas")
+                    ),
+                    plotlyOutput(
+                      "barPlot_npprDS_totales_victimas",
+                      height = "450px"
+                    )
+                  )
+                )
               ),
+              
               tags$div(style = "padding-bottom: 60px;"),
+              
+              # Gráfica por grupo de edad
               fluidRow(
-                column(12, 
-                       div(id = "plot-container", 
-                           div(id = "plot-title", uiOutput("plot_title_npprDS_victima")),
-                           plotlyOutput("barPlot_npprDS_victima"),  height = "100%"))
+                column(
+                  12,
+                  div(
+                    id = "plot-container",
+                    div(
+                      id = "plot-title",
+                      uiOutput("plot_title_npprDS_victima")
+                    ),
+                    plotlyOutput(
+                      "barPlot_npprDS_victima",
+                      height = "450px"
+                    )
+                  )
+                )
               ),
-              tags$div(style = "padding-bottom: 60px;"),
-              fluidRow(
-                column(12, 
-                       div(id = "plot-container", 
-                           div(id = "plot-title", uiOutput("plot_title_npprDS_ofensores")),
-                           plotlyOutput("barPlot_npprDS_ofensores"),  height = "100%"))
-              ),
+              
               tags$div(style = "padding-bottom: 80px;"),
+              
+              # Nota de actualización
               tags$div(
                 style = "padding-bottom: 40px;",
+                
                 div(
                   class = "card",
-                  style = "padding: 15px;color: white; background-color: #3e3f3a; border-radius: 5px; margin-top: 0; width: 100%;",
-                  h4(
-                    strong(actualizacion_policia4, style="margin: 0px;") 
+                  style = paste(
+                    "padding: 15px;",
+                    "color: white;",
+                    "background-color: #3e3f3a;",
+                    "border-radius: 5px;",
+                    "margin-top: 0;",
+                    "width: 100%;"
                   ),
+                  
+                  h4(
+                    strong(
+                      actualizacion_policia4,
+                      style = "margin: 0px;"
+                    )
+                  ),
+                  
                   p(
-                    "Los datos representados en esta gráfica corresponden a los
-                     datos de víctimas y ofensores de delitos sexuales (por sexo)
-                     desde el año natural 2019 al 2026. Los datos del 2026 son preliminares.",
-                    
-                    style = "font-size: 16px;padding: 0px;" 
+                    paste(
+                      "Los datos representados corresponden a las víctimas",
+                      "de delitos sexuales por sexo y grupo de edad,",
+                      "desde el año natural 2019 al 2026.",
+                      "Los datos de 2026 son preliminares."
+                    ),
+                    style = "font-size: 16px; padding: 0px;"
                   )
                 )
               )
             )
           )
-        ), 
+        ),
+        
+        #### tab para el barplot de datos de víctimas y ofensores de delitos sexuales (npprDS_totales_ofensores y npprDS_ofensores) ####
+        
+        tabPanel(
+          lowercaseTitle("Ofensores de Delitos Sexuales"),
+          
+          br(), br(),
+          
+          sidebarLayout(
+            sidebarPanel(
+              style = "display: flex; flex-direction: column; align-items: center;",
+              
+              # Filtros de ofensores
+              div(
+                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",
+                
+                div(
+                  style = "text-align: center; display: inline-block;",
+                  
+                  # Grupo de edad
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione<br>Grupo(s) de Edad:"),
+                    choices = npprDS_ofensores$Edad,
+                    selected = npprDS_ofensores$Edad,
+                    id = "npprDS_ofensores_edad"
+                  ),
+                  
+                  # Sexo de los ofensores
+                  createDropdownCheckbox(
+                    label = HTML("Seleccione<br>Sexo de los Ofensores:"),
+                    choices = npprDS_ofensores$Sexo,
+                    selected = npprDS_ofensores$Sexo,
+                    id = "npprDS_ofensores_sexo"
+                  )
+                )
+              ),
+              
+              # Filtro de año y control de la tabla
+              div(
+                style = paste(
+                  "width: 100%;",
+                  "display: flex;",
+                  "flex-direction: column;",
+                  "align-items: center;",
+                  "padding-top: 0px;"
+                ),
+                
+                div(
+                  style = paste(
+                    "width: 100%;",
+                    "display: flex;",
+                    "justify-content: center;",
+                    "align-items: center;"
+                  ),
+                  
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
+                    
+                    createDropdownCheckbox(
+                      label = "Seleccione Año(s):",
+                      choices = npprDS_ofensores$Año,
+                      selected = npprDS_ofensores$Año,
+                      id = "npprDS_ofensores_año"
+                    )
+                  ),
+                  
+                  div(
+                    style = "flex: 1; display: flex; justify-content: center;",
+                    
+                    showDataCheckbox("showTable_npprDS_ofensores")
+                  )
+                )
+              ),
+              
+              # Tabla de datos y fuente
+              uiOutput("dataTableUI_npprDS_ofensores")
+            ),
+            
+            mainPanel(
+              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+              
+              # Gráfica de totales
+              fluidRow(
+                column(
+                  12,
+                  div(
+                    id = "plot-container",
+                    div(
+                      id = "plot-title",
+                      uiOutput("plot_title_npprDS_totales_ofensores")
+                    ),
+                    plotlyOutput(
+                      "barPlot_npprDS_totales_ofensores",
+                      height = "450px"
+                    )
+                  )
+                )
+              ),
+              
+              tags$div(style = "padding-bottom: 60px;"),
+              
+              # Gráfica por grupo de edad
+              fluidRow(
+                column(
+                  12,
+                  div(
+                    id = "plot-container",
+                    div(
+                      id = "plot-title",
+                      uiOutput("plot_title_npprDS_ofensores")
+                    ),
+                    plotlyOutput(
+                      "barPlot_npprDS_ofensores",
+                      height = "450px"
+                    )
+                  )
+                )
+              ),
+              
+              tags$div(style = "padding-bottom: 80px;"),
+              
+              # Nota de actualización
+              tags$div(
+                style = "padding-bottom: 40px;",
+                
+                div(
+                  class = "card",
+                  style = paste(
+                    "padding: 15px;",
+                    "color: white;",
+                    "background-color: #3e3f3a;",
+                    "border-radius: 5px;",
+                    "margin-top: 0;",
+                    "width: 100%;"
+                  ),
+                  
+                  h4(
+                    strong(
+                      actualizacion_policia4,
+                      style = "margin: 0px;"
+                    )
+                  ),
+                  
+                  p(
+                    paste(
+                      "Los datos representados corresponden a los ofensores",
+                      "de delitos sexuales por sexo y grupo de edad,",
+                      "desde el año natural 2019 al 2026.",
+                      "Los datos de 2026 son preliminares."
+                    ),
+                    style = "font-size: 16px; padding: 0px;"
+                  )
+                )
+              )
+            )
+          )
+        ),
+        
+        
         
         #### tab para el barplot de datos de casos de delitos sexuales por tipo de delito y sexo (npprDS_victimas_agrupados y npprDS_ofensores_agrupados) ####
         tabPanel(

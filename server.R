@@ -2064,9 +2064,6 @@ server <- function(input, output, session) {
   # Crear Card con Fuentes
   output$dataTableUI_poli_despDF <- renderUI({
     if (input$showTable_poli_despDF) {
-      hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
-      texts <- c("Policía de Puerto Rico")
-      
       tags$div(
         class = "card",
         style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
@@ -2078,9 +2075,7 @@ server <- function(input, output, session) {
             style = "width: 98%; max-width: 800px; overflow-x: auto;", 
             DTOutput("dataTable_poli_despDF")
           )
-        ),
-        
-        createFuenteDiv(hyperlinks, texts)
+        )
       )
     }
   })
@@ -2258,9 +2253,6 @@ server <- function(input, output, session) {
   # Crear Card con Fuentes
   output$dataTableUI_poli_vEdad  <- renderUI({
     if (input$showTable_poli_vEdad ) {
-      hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
-      texts <- c("Policía de Puerto Rico")
-      
       tags$div(
         class = "card",
         style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
@@ -2272,9 +2264,7 @@ server <- function(input, output, session) {
             style = "width: 98%; max-width: 800px; overflow-x: auto;",  
             DTOutput("dataTable_poli_vEdad")
           )
-        ),
-        
-        createFuenteDiv(hyperlinks, texts)
+        )
       )
     }
   })
@@ -2487,240 +2477,570 @@ server <- function(input, output, session) {
   })
   
   #### Tab con datos de victimas y agresores de delitos sexuales por sexo (npprDS_totales, npprDS_victima y npprDS_ofensores) ####
-  # Filtrar el conjunto de datos según los valores seleccionados del el grupo de edad y año 
-  npprDS_totales_filt <- reactive({
-    filter(npprDS_totales,
-           Año %in% input$checkGroup_npprDS_año,
-           Sexo %in% input$checkGroup_npprDS_sexo)
+  # # Filtrar el conjunto de datos según los valores seleccionados del el grupo de edad y año
+  # npprDS_totales_filt <- reactive({
+  #   filter(npprDS_totales,
+  #          Año %in% input$checkGroup_npprDS_año,
+  #          Sexo %in% input$checkGroup_npprDS_sexo)
+  # })
+  # 
+  # npprDS_victima_filt <- reactive({
+  #   filter(npprDS_victima,
+  #          Edad %in% input$checkGroup_npprDS_edad,
+  #          Año %in% input$checkGroup_npprDS_año,
+  #          Sexo %in% input$checkGroup_npprDS_sexo)
+  # })
+  # 
+  # npprDS_ofensores_filt <- reactive({
+  #   filter(npprDS_ofensores,
+  #          Edad %in% input$checkGroup_npprDS_edad,
+  #          Año %in% input$checkGroup_npprDS_año,
+  #          Sexo %in% input$checkGroup_npprDS_sexo)
+  # })
+  # 
+  # npprDS_rol_filt <- reactive({
+  #   filter(npprDS_rol,
+  #          Edad %in% input$checkGroup_npprDS_edad,
+  #          Año %in% input$checkGroup_npprDS_año,
+  #          Sexo %in% input$checkGroup_npprDS_sexo)
+  # })
+  # 
+  # ### funcion para el boton de deseleccionar/seleccionar el grupo de edad
+  # observeEvent(input$deselectAll_npprDS_edad, {
+  #   updateCheckboxGroup(session, "checkGroup_npprDS_edad", input, npprDS_victima$Edad)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_npprDS_edad"
+  #   buttonId <- "deselectAll_npprDS_edad"
+  #   all_choices <- levels(npprDS_victima$Edad)
+  #   selected <- input[[inputId]]
+  # 
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  # 
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # ### funcion para el boton de deseleccionar/seleccionar del botón de año
+  # observeEvent(input$deselectAll_npprDS_año, {
+  #   updateCheckboxGroup(session, "checkGroup_npprDS_año", input, npprDS_victima$Año)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_npprDS_año"
+  #   buttonId <- "deselectAll_npprDS_año"
+  #   all_choices <- levels(npprDS_victima$Año)
+  #   selected <- input[[inputId]]
+  # 
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  # 
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # ### funcion para el boton de deseleccionar/seleccionar el sexo
+  # observeEvent(input$deselectAll_npprDS_sexo, {
+  #   updateCheckboxGroup(session, "checkGroup_npprDS_sexo", input, npprDS_victima$Sexo)
+  # })
+  # 
+  # observe({
+  #   inputId <- "checkGroup_npprDS_sexo"
+  #   buttonId <- "deselectAll_npprDS_sexo"
+  #   all_choices <- levels(npprDS_victima$Sexo)
+  #   selected <- input[[inputId]]
+  # 
+  #   is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+  # 
+  #   updateActionButton(
+  #     session,
+  #     inputId = buttonId,
+  #     label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+  #   )
+  # })
+  # 
+  # # Colores del status
+  # npprDS_totales_fill <- setColorFill(npprDS_totales, "Sexo")
+  # npprDS_victima_fill <- setColorFill(npprDS_victima, "Edad")
+  # 
+  # # Grafico de barras totales
+  # output$barPlot_npprDS_totales <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_año <- length(input$checkGroup_npprDS_año) > 0
+  #   has_sexo <- length(input$checkGroup_npprDS_sexo) > 0
+  # 
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_año || !has_sexo) {
+  #     message <- HTML("Seleccione Sexo y Año(s) a visualizar")
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- renderBarPlot_facets(npprDS_totales_filt, x = "Año", y = "Casos", fill = "Sexo",
+  #                               xlab = "Año", ylab = "Casos", fillLab = "Sexo",
+  #                               colorFill = npprDS_totales_fill,
+  #                               emptyMessage = HTML("Seleccione Sexo y Año(s) a visualizar"),barWidth = 0, xGap = 0)
+  #     #Altura predeterminada para la grafica.
+  #     plot_height = 500
+  #     numPlots = length(input$checkGroup_npprDS_sexo)
+  #     #Altura predeterminada para la grafica.
+  #     total_height = plotHeight(plot_height, numPlots)
+  #     p <- p + facet_wrap(~Rol, ncol = 2)+
+  #       theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+  #             panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
+  #     p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+  # 
+  #     return(p)
+  #   }
+  # 
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(data = npprDS_totales_filt, x = "Año", y = "Casos", fill = "Sexo",
+  #                                                xlab = "Año", ylab = "Casos", message)
+  #   convert_to_plotly(empty_plot, tooltip = "text")
+  # })
+  # 
+  # #Titulo de la Grafica
+  # output$plot_title_npprDS_totales <- renderUI({
+  #   title <- "Total de casos de delitos sexuales por sexo de las victimas y ofensores"
+  # })
+  # 
+  # 
+  # # Grafico de barras victimas
+  # output$barPlot_npprDS_victima <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_edad <- length(input$checkGroup_npprDS_edad) > 0
+  #   has_año <- length(input$checkGroup_npprDS_año) > 0
+  #   has_sexo <- length(input$checkGroup_npprDS_sexo) > 0
+  # 
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_edad || !has_año || !has_sexo) {
+  #     message <- HTML("Seleccione Grupo(s) de Edad, Sexo \n y Año(s) a visualizar")
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- renderBarPlot_facets(npprDS_victima_filt, x = "Año", y = "Casos", fill = "Edad",
+  #                               xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Edad",
+  #                               colorFill = npprDS_victima_fill,
+  #                               emptyMessage = HTML("Seleccione Grupo(s) de Edad, Sexo \n y Año(s) a visualizar"),barWidth = 0, xGap = 0)
+  #     #Altura predeterminada para la grafica.
+  #     plot_height = 500
+  #     numPlots = length(input$checkGroup_npprDS_sexo)
+  #     #Altura predeterminada para la grafica.
+  #     total_height = plotHeight(plot_height, numPlots)
+  #     p <- p + facet_wrap(~Sexo, ncol = 2)+
+  #       theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+  #             panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
+  #     p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+  # 
+  #     return(p)
+  #   }
+  # 
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(data = npprDS_victima_filt, x = "Año", y = "Casos", fill = "Edad",
+  #                                                xlab = "Año", ylab = "Cantidad de víctimas", message)
+  #   convert_to_plotly(empty_plot, tooltip = "text")
+  # })
+
+  # #Titulo de la Grafica
+  # output$plot_title_npprDS_victima <- renderUI({
+  #   title <- "Casos de delitos sexuales por sexo de la víctima"
+  # })
+  # 
+  # # Grafico de barras ofensores
+  # output$barPlot_npprDS_ofensores <- renderPlotly({
+  #   # Verificar si hay opciones seleccionadas en cada grupo
+  #   has_edad <- length(input$checkGroup_npprDS_edad) > 0
+  #   has_año <- length(input$checkGroup_npprDS_año) > 0
+  #   has_sexo <- length(input$checkGroup_npprDS_sexo) > 0
+  # 
+  #   # Crear mensaje si faltan opciones seleccionadas
+  #   if (!has_edad || !has_año || !has_sexo) {
+  #     message <- HTML("Seleccione Grupo(s) de Edad, Sexo \n y Año(s) a visualizar")
+  #   } else {
+  #     # Si todas las opciones están seleccionadas, crear la gráfica
+  #     p <- renderBarPlot_facets(npprDS_ofensores_filt, x = "Año", y = "Casos", fill = "Edad",
+  #                               xlab = "Año", ylab = "Cantidad de ofensores", fillLab = "Edad",
+  #                               colorFill = npprDS_victima_fill,
+  #                               emptyMessage = HTML("Seleccione Grupo(s) de Edad, Sexo \n y Año(s) a visualizar"),barWidth = 0, xGap = 0)
+  #     #Altura predeterminada para la grafica.
+  #     plot_height = 500
+  #     numPlots = length(input$checkGroup_npprDS_sexo)
+  #     #Altura predeterminada para la grafica.
+  #     total_height = plotHeight(plot_height, numPlots)
+  #     p <- p + facet_wrap(~Sexo, ncol = 2)+
+  #       theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
+  #             panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
+  #     p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+  # 
+  #     return(p)
+  #   }
+  # 
+  #   # Crear la gráfica vacía con mensaje
+  #   empty_plot <- create_empty_plot_with_message(data = npprDS_ofensores_filt, x = "Año", y = "Casos", fill = "Edad",
+  #                                                xlab = "Año", ylab = "Cantidad de ofensores", message)
+  #   convert_to_plotly(empty_plot, tooltip = "text")
+  # })
+
+  # #Titulo de la Grafica
+  # output$plot_title_npprDS_ofensores <- renderUI({
+  #   title <- "Casos de delitos sexuales por sexo de los ofensores"
+  # })
+  # 
+  # # Data Table
+  # # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
+  # output$dataTable_npprDS <- renderDT(server = FALSE, {
+  #   renderDataTable(npprDS_rol_filt(), "Datos: Delitos Sexuales")
+  # })
+  # 
+  # # Crear Card con Fuentes
+  # output$dataTableUI_npprDS  <- renderUI({
+  #   if (input$showTable_npprDS) {
+  #     hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
+  #     texts <- c("Policía de Puerto Rico")
+  # 
+  #     tags$div(
+  #       class = "card",
+  #       style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+  # 
+  #       # Contenedor centrado para la tabla
+  #       div(
+  #         style = "padding: 5px; width: 98%; display: flex; justify-content: center;",
+  #         div(
+  #           style = "width: 98%; max-width: 800px; overflow-x: auto;",
+  #           DTOutput("dataTable_npprDS")
+  #         )
+  #       ),
+  # 
+  #       createFuenteDiv(hyperlinks, texts)
+  #     )
+  #   }
+  # })
+
+  
+  #### Tab con datos de victimas de delitos sexuales por sexo (npprDS_totales_victima y npprDS_victima) ####
+  # Filtrar los totales de víctimas por año y sexo
+  npprDS_totales_victimas_filt <- reactive({
+    filter(
+      npprDS_totales_victimas,
+      Año %in% input$checkGroup_npprDS_victimas_año,
+      Sexo %in% input$checkGroup_npprDS_victimas_sexo
+    )
   })
   
+  # Filtrar los datos de víctimas por edad, año y sexo
   npprDS_victima_filt <- reactive({
-    filter(npprDS_victima,
-           Edad %in% input$checkGroup_npprDS_edad,
-           Año %in% input$checkGroup_npprDS_año,
-           Sexo %in% input$checkGroup_npprDS_sexo)
+    filter(
+      npprDS_victima,
+      Edad %in% input$checkGroup_npprDS_victimas_edad,
+      Año %in% input$checkGroup_npprDS_victimas_año,
+      Sexo %in% input$checkGroup_npprDS_victimas_sexo
+    )
   })
   
-  npprDS_ofensores_filt <- reactive({
-    filter(npprDS_ofensores,
-           Edad %in% input$checkGroup_npprDS_edad,
-           Año %in% input$checkGroup_npprDS_año,
-           Sexo %in% input$checkGroup_npprDS_sexo)
-  })
   
-  npprDS_rol_filt <- reactive({
-    filter(npprDS_rol,
-           Edad %in% input$checkGroup_npprDS_edad,
-           Año %in% input$checkGroup_npprDS_año,
-           Sexo %in% input$checkGroup_npprDS_sexo)
-  })
+  ### BOTONES PARA SELECCIONAR / DESELECCIONAR TODO ###
   
-  ### funcion para el boton de deseleccionar/seleccionar el grupo de edad
-  observeEvent(input$deselectAll_npprDS_edad, {
-    updateCheckboxGroup(session, "checkGroup_npprDS_edad", input, npprDS_victima$Edad)
+  # Grupo de edad
+  observeEvent(input$deselectAll_npprDS_victimas_edad, {
+    updateCheckboxGroup(
+      session,
+      "checkGroup_npprDS_victimas_edad",
+      input,
+      npprDS_victima$Edad
+    )
   })
   
   observe({
-    inputId <- "checkGroup_npprDS_edad"
-    buttonId <- "deselectAll_npprDS_edad"
+    inputId <- "checkGroup_npprDS_victimas_edad"
+    buttonId <- "deselectAll_npprDS_victimas_edad"
+    
     all_choices <- levels(npprDS_victima$Edad)
     selected <- input[[inputId]]
     
-    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    is_all_selected <- !is.null(selected) &&
+      setequal(selected, all_choices)
     
     updateActionButton(
       session,
       inputId = buttonId,
-      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+      label = if (is_all_selected) {
+        HTML("Deseleccionar<br>todo")
+      } else {
+        HTML("Seleccionar<br>todo")
+      }
     )
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar del botón de año
-  observeEvent(input$deselectAll_npprDS_año, {
-    updateCheckboxGroup(session, "checkGroup_npprDS_año", input, npprDS_victima$Año)
+  # Año
+  observeEvent(input$deselectAll_npprDS_victimas_año, {
+    updateCheckboxGroup(
+      session,
+      "checkGroup_npprDS_victimas_año",
+      input,
+      npprDS_victima$Año
+    )
   })
   
   observe({
-    inputId <- "checkGroup_npprDS_año"
-    buttonId <- "deselectAll_npprDS_año"
+    inputId <- "checkGroup_npprDS_victimas_año"
+    buttonId <- "deselectAll_npprDS_victimas_año"
+    
     all_choices <- levels(npprDS_victima$Año)
     selected <- input[[inputId]]
     
-    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    is_all_selected <- !is.null(selected) &&
+      setequal(selected, all_choices)
     
     updateActionButton(
       session,
       inputId = buttonId,
-      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+      label = if (is_all_selected) {
+        HTML("Deseleccionar<br>todo")
+      } else {
+        HTML("Seleccionar<br>todo")
+      }
     )
   })
   
-  ### funcion para el boton de deseleccionar/seleccionar el sexo
-  observeEvent(input$deselectAll_npprDS_sexo, {
-    updateCheckboxGroup(session, "checkGroup_npprDS_sexo", input, npprDS_victima$Sexo)
+  # Sexo
+  observeEvent(input$deselectAll_npprDS_victimas_sexo, {
+    updateCheckboxGroup(
+      session,
+      "checkGroup_npprDS_victimas_sexo",
+      input,
+      npprDS_victima$Sexo
+    )
   })
   
   observe({
-    inputId <- "checkGroup_npprDS_sexo"
-    buttonId <- "deselectAll_npprDS_sexo"
+    inputId <- "checkGroup_npprDS_victimas_sexo"
+    buttonId <- "deselectAll_npprDS_victimas_sexo"
+    
     all_choices <- levels(npprDS_victima$Sexo)
     selected <- input[[inputId]]
     
-    is_all_selected <- !is.null(selected) && setequal(selected, all_choices)
+    is_all_selected <- !is.null(selected) &&
+      setequal(selected, all_choices)
     
     updateActionButton(
       session,
       inputId = buttonId,
-      label = if (is_all_selected) HTML("Deseleccionar<br>todo") else HTML("Seleccionar<br>todo")
+      label = if (is_all_selected) {
+        HTML("Deseleccionar<br>todo")
+      } else {
+        HTML("Seleccionar<br>todo")
+      }
     )
   })
   
-  # Colores del status
-  npprDS_totales_fill <- setColorFill(npprDS_totales, "Sexo")
-  npprDS_victima_fill <- setColorFill(npprDS_victima, "Edad")
   
-  # Grafico de barras totales
-  output$barPlot_npprDS_totales <- renderPlotly({
-    # Verificar si hay opciones seleccionadas en cada grupo
-    has_año <- length(input$checkGroup_npprDS_año) > 0
-    has_sexo <- length(input$checkGroup_npprDS_sexo) > 0
+  
+  ### COLORES DE LAS GRÁFICAS DE VÍCTIMAS ###
+  
+  npprDS_totales_victimas_fill <- setColorFill(
+    npprDS_totales_victimas,
+    "Sexo"
+  )
+  
+  npprDS_victima_fill <- setColorFill(
+    npprDS_victima,
+    "Edad"
+  )
+  
+  
+  ### GRÁFICA DE BARRAS: TOTALES DE VÍCTIMAS ###
+  
+  output$barPlot_npprDS_totales_victimas <- renderPlotly({
     
-    # Crear mensaje si faltan opciones seleccionadas
+    has_año <- length(input$checkGroup_npprDS_victimas_año) > 0
+    has_sexo <- length(input$checkGroup_npprDS_victimas_sexo) > 0
+    
     if (!has_año || !has_sexo) {
+      
       message <- HTML("Seleccione Sexo y Año(s) a visualizar")
+      
     } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(npprDS_totales_filt, x = "Año", y = "Casos", fill = "Sexo",
-                                xlab = "Año", ylab = "Casos", fillLab = "Sexo",
-                                colorFill = npprDS_totales_fill,
-                                emptyMessage = HTML("Seleccione Sexo y Año(s) a visualizar"),barWidth = 0, xGap = 0)
-      #Altura predeterminada para la grafica.
-      plot_height = 500
-      numPlots = length(input$checkGroup_npprDS_sexo)
-      #Altura predeterminada para la grafica.
-      total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Rol, ncol = 2)+
-        theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      
+      p <- renderBarPlot_facets(
+        npprDS_totales_victimas_filt,
+        x = "Año",
+        y = "Casos",
+        fill = "Sexo",
+        xlab = "Año",
+        ylab = "Cantidad de víctimas",
+        fillLab = "Sexo",
+        colorFill = npprDS_totales_victimas_fill,
+        emptyMessage = HTML(
+          "Seleccione Sexo y Año(s) a visualizar"
+        ),
+        barWidth = 0,
+        xGap = 0
+      )
+      
+      p <- convert_to_plotly(
+        p,
+        tooltip = "text"
+      ) %>%
+        layout(height = 450)
       
       return(p)
     }
     
-    # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = npprDS_totales_filt, x = "Año", y = "Casos", fill = "Sexo",
-                                                 xlab = "Año", ylab = "Casos", message)
+    empty_plot <- create_empty_plot_with_message(
+      data = npprDS_totales_victimas_filt,
+      x = "Año",
+      y = "Casos",
+      fill = "Sexo",
+      xlab = "Año",
+      ylab = "Cantidad de víctimas",
+      message
+    )
+    
     convert_to_plotly(empty_plot, tooltip = "text")
   })
   
-  #Titulo de la Grafica
-  output$plot_title_npprDS_totales <- renderUI({
-    title <- "Total de casos de delitos sexuales por sexo de las victimas y ofensores"
+  
+  # Título de la gráfica de totales
+  output$plot_title_npprDS_totales_victimas <- renderUI({
+    "Total de víctimas de delitos sexuales por sexo"
   })
   
   
-  # Grafico de barras victimas
+  
+  # #### Gráfica de barras: víctimas de delitos sexuales por sexo ####
+  
   output$barPlot_npprDS_victima <- renderPlotly({
-    # Verificar si hay opciones seleccionadas en cada grupo
-    has_edad <- length(input$checkGroup_npprDS_edad) > 0
-    has_año <- length(input$checkGroup_npprDS_año) > 0
-    has_sexo <- length(input$checkGroup_npprDS_sexo) > 0
+    
+    # Verificar si hay opciones seleccionadas
+    has_edad <- length(input$checkGroup_npprDS_victimas_edad) > 0
+    has_año  <- length(input$checkGroup_npprDS_victimas_año) > 0
+    has_sexo <- length(input$checkGroup_npprDS_victimas_sexo) > 0
     
     # Crear mensaje si faltan opciones seleccionadas
     if (!has_edad || !has_año || !has_sexo) {
-      message <- HTML("Seleccione Grupo(s) de Edad, Sexo \n y Año(s) a visualizar")
+      
+      message <- HTML(
+        "Seleccione Grupo(s) de Edad, Sexo y Año(s) a visualizar"
+      )
+      
     } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(npprDS_victima_filt, x = "Año", y = "Casos", fill = "Edad",
-                                xlab = "Año", ylab = "Cantidad de víctimas", fillLab = "Edad",
-                                colorFill = npprDS_victima_fill,
-                                emptyMessage = HTML("Seleccione Grupo(s) de Edad, Sexo \n y Año(s) a visualizar"),barWidth = 0, xGap = 0)
-      #Altura predeterminada para la grafica.
-      plot_height = 500
-      numPlots = length(input$checkGroup_npprDS_sexo)
-      #Altura predeterminada para la grafica.
-      total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Sexo, ncol = 2)+
-        theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+      
+      # Crear gráfica utilizando la función original
+      p <- renderBarPlot_facets(
+        npprDS_victima_filt,
+        x = "Año",
+        y = "Casos",
+        fill = "Edad",
+        xlab = "Año",
+        ylab = "Cantidad de víctimas",
+        fillLab = "Edad",
+        colorFill = npprDS_victima_fill,
+        emptyMessage = HTML(
+          "Seleccione Grupo(s) de Edad, Sexo y Año(s) a visualizar"
+        ),
+        barWidth = 0,
+        xGap = 0
+      )
+      
+      # Calcular altura según los sexos seleccionados
+      plot_height <- 500
+      numPlots <- length(input$checkGroup_npprDS_victimas_sexo)
+      total_height <- plotHeight(plot_height, numPlots)
+      
+      # Mantener las facetas por sexo del código original
+      p <- p +
+        facet_wrap(~Sexo, ncol = 2) +
+        theme(
+          panel.spacing.x = unit(0.4, "lines"),
+          panel.spacing.y = unit(1.75, "lines")
+        )
+      
+      # Convertir a Plotly conservando la configuración original
+      p <- convert_to_plotly(
+        p,
+        tooltip = "text",
+        TRUE,
+        numPlots
+      ) %>%
+        layout(height = total_height)
       
       return(p)
     }
     
-    # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = npprDS_victima_filt, x = "Año", y = "Casos", fill = "Edad",
-                                                 xlab = "Año", ylab = "Cantidad de víctimas", message)
+    # Crear gráfica vacía si faltan selecciones
+    empty_plot <- create_empty_plot_with_message(
+      data = npprDS_victima_filt,
+      x = "Año",
+      y = "Casos",
+      fill = "Edad",
+      xlab = "Año",
+      ylab = "Cantidad de víctimas",
+      message
+    )
+    
     convert_to_plotly(empty_plot, tooltip = "text")
   })
   
-  #Titulo de la Grafica
+  # Título de la gráfica
   output$plot_title_npprDS_victima <- renderUI({
-    title <- "Casos de delitos sexuales por sexo de la víctima"
+    title <- "Casos de delitos sexuales por grupo de edad y sexo de la víctima"
   })
   
-  # Grafico de barras ofensores
-  output$barPlot_npprDS_ofensores <- renderPlotly({
-    # Verificar si hay opciones seleccionadas en cada grupo
-    has_edad <- length(input$checkGroup_npprDS_edad) > 0
-    has_año <- length(input$checkGroup_npprDS_año) > 0
-    has_sexo <- length(input$checkGroup_npprDS_sexo) > 0
+  
+  
+  
+  ### TABLA DE DATOS DE VÍCTIMAS ###
+  
+  output$dataTable_npprDS_victimas <- renderDT(server = FALSE, {
+    renderDataTable(
+      npprDS_victima_filt(),
+      "Datos: Víctimas de delitos sexuales"
+    )
+  })
+  
+  
+  ### TARJETA DE LA TABLA Y FUENTE ###
+  
+  output$dataTableUI_npprDS_victimas <- renderUI({
     
-    # Crear mensaje si faltan opciones seleccionadas
-    if (!has_edad || !has_año || !has_sexo) {
-      message <- HTML("Seleccione Grupo(s) de Edad, Sexo \n y Año(s) a visualizar")
-    } else {
-      # Si todas las opciones están seleccionadas, crear la gráfica
-      p <- renderBarPlot_facets(npprDS_ofensores_filt, x = "Año", y = "Casos", fill = "Edad",
-                                xlab = "Año", ylab = "Cantidad de ofensores", fillLab = "Edad",
-                                colorFill = npprDS_victima_fill,
-                                emptyMessage = HTML("Seleccione Grupo(s) de Edad, Sexo \n y Año(s) a visualizar"),barWidth = 0, xGap = 0)
-      #Altura predeterminada para la grafica.
-      plot_height = 500
-      numPlots = length(input$checkGroup_npprDS_sexo)
-      #Altura predeterminada para la grafica.
-      total_height = plotHeight(plot_height, numPlots)
-      p <- p + facet_wrap(~Sexo, ncol = 2)+
-        theme(panel.spacing.x = unit(0.4, "lines"), #Espacio entre las facetas en x.
-              panel.spacing.y = unit(1.75, "lines")) #Espacio entre las facetas en y.
-      p <- convert_to_plotly(p, tooltip = "text", TRUE, numPlots) %>% layout(height = total_height)
+    if (isTRUE(input$showTable_npprDS_victimas)) {
       
-      return(p)
-    }
-    
-    # Crear la gráfica vacía con mensaje
-    empty_plot <- create_empty_plot_with_message(data = npprDS_ofensores_filt, x = "Año", y = "Casos", fill = "Edad",
-                                                 xlab = "Año", ylab = "Cantidad de ofensores", message)
-    convert_to_plotly(empty_plot, tooltip = "text")
-  })
-  
-  #Titulo de la Grafica
-  output$plot_title_npprDS_ofensores <- renderUI({
-    title <- "Casos de delitos sexuales por sexo de los ofensores"
-  })
-  
-  # Data Table 
-  # Con Server = FALSE, todos los datos se envían al cliente, mientras que solo los datos mostrados se envían al navegador con server = TRUE.
-  output$dataTable_npprDS <- renderDT(server = FALSE, {
-    renderDataTable(npprDS_rol_filt(), "Datos: Delitos Sexuales")
-  })
-  
-  # Crear Card con Fuentes
-  output$dataTableUI_npprDS  <- renderUI({
-    if (input$showTable_npprDS) {
-      hyperlinks <- c("https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico")
+      hyperlinks <- c(
+        "https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico"
+      )
+      
       texts <- c("Policía de Puerto Rico")
       
       tags$div(
         class = "card",
-        style = "padding: 10px; width: 98%; margin: 10px auto; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);",  # Usar margin: 10px auto para centrar el card
+        style = paste(
+          "padding: 10px;",
+          "width: 98%;",
+          "margin: 10px auto;",
+          "border: 1px solid #ddd;",
+          "border-radius: 5px;",
+          "box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"
+        ),
         
-        # Contenedor centrado para la tabla
         div(
-          style = "padding: 5px; width: 98%; display: flex; justify-content: center;", 
+          style = paste(
+            "padding: 5px;",
+            "width: 98%;",
+            "display: flex;",
+            "justify-content: center;"
+          ),
+          
           div(
-            style = "width: 98%; max-width: 800px; overflow-x: auto;",  
-            DTOutput("dataTable_npprDS")
+            style = paste(
+              "width: 98%;",
+              "max-width: 800px;",
+              "overflow-x: auto;"
+            ),
+            
+            DTOutput("dataTable_npprDS_victimas")
           )
         ),
         
@@ -2728,6 +3048,334 @@ server <- function(input, output, session) {
       )
     }
   })
+
+  
+  #### Tab con datos de agresores de delitos sexuales por sexo (npprDS_totales_agresores y npprDS_ofensores) ####
+  # Filtrar los totales de ofensores por año y sexo
+  npprDS_totales_ofensores_filt <- reactive({
+    filter(
+      npprDS__totales_ofensores,
+      Año %in% input$checkGroup_npprDS_ofensores_año,
+      Sexo %in% input$checkGroup_npprDS_ofensores_sexo
+    )
+  })
+  
+  # Filtrar los datos de ofensores por edad, año y sexo
+  npprDS_ofensores_filt <- reactive({
+    filter(
+      npprDS_ofensores,
+      Edad %in% input$checkGroup_npprDS_ofensores_edad,
+      Año %in% input$checkGroup_npprDS_ofensores_año,
+      Sexo %in% input$checkGroup_npprDS_ofensores_sexo
+    )
+  })
+  
+  
+  ### BOTONES PARA SELECCIONAR / DESELECCIONAR TODO ###
+  
+  # Grupo de edad
+  observeEvent(input$deselectAll_npprDS_ofensores_edad, {
+    updateCheckboxGroup(
+      session,
+      "checkGroup_npprDS_ofensores_edad",
+      input,
+      npprDS_ofensores$Edad
+    )
+  })
+  
+  observe({
+    inputId <- "checkGroup_npprDS_ofensores_edad"
+    buttonId <- "deselectAll_npprDS_ofensores_edad"
+    
+    all_choices <- levels(npprDS_ofensores$Edad)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) &&
+      setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) {
+        HTML("Deseleccionar<br>todo")
+      } else {
+        HTML("Seleccionar<br>todo")
+      }
+    )
+  })
+  
+  # Año
+  observeEvent(input$deselectAll_npprDS_ofensores_año, {
+    updateCheckboxGroup(
+      session,
+      "checkGroup_npprDS_ofensores_año",
+      input,
+      npprDS_ofensores$Año
+    )
+  })
+  
+  observe({
+    inputId <- "checkGroup_npprDS_ofensores_año"
+    buttonId <- "deselectAll_npprDS_ofensores_año"
+    
+    all_choices <- levels(npprDS_ofensores$Año)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) &&
+      setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) {
+        HTML("Deseleccionar<br>todo")
+      } else {
+        HTML("Seleccionar<br>todo")
+      }
+    )
+  })
+  
+  # Sexo
+  observeEvent(input$deselectAll_npprDS_ofensores_sexo, {
+    updateCheckboxGroup(
+      session,
+      "checkGroup_npprDS_ofensores_sexo",
+      input,
+      npprDS_ofensores$Sexo
+    )
+  })
+  
+  observe({
+    inputId <- "checkGroup_npprDS_ofensores_sexo"
+    buttonId <- "deselectAll_npprDS_ofensores_sexo"
+    
+    all_choices <- levels(npprDS_ofensores$Sexo)
+    selected <- input[[inputId]]
+    
+    is_all_selected <- !is.null(selected) &&
+      setequal(selected, all_choices)
+    
+    updateActionButton(
+      session,
+      inputId = buttonId,
+      label = if (is_all_selected) {
+        HTML("Deseleccionar<br>todo")
+      } else {
+        HTML("Seleccionar<br>todo")
+      }
+    )
+  })
+  
+  
+  npprDS_totales_ofensores_fill <- setColorFill(
+    npprDS__totales_ofensores,
+    "Sexo"
+  )
+  
+  npprDS_ofensores_fill <- setColorFill(
+    npprDS_ofensores,
+    "Edad"
+  )
+  
+  
+  ### GRÁFICA DE BARRAS: TOTALES DE OFENSORES ###
+  
+  output$barPlot_npprDS_totales_ofensores <- renderPlotly({
+    
+    has_año <- length(input$checkGroup_npprDS_ofensores_año) > 0
+    has_sexo <- length(input$checkGroup_npprDS_ofensores_sexo) > 0
+    
+    if (!has_año || !has_sexo) {
+      
+      message <- HTML("Seleccione Sexo y Año(s) a visualizar")
+      
+    } else {
+      
+      p <- renderBarPlot_facets(
+        npprDS_totales_ofensores_filt,
+        x = "Año",
+        y = "Casos",
+        fill = "Sexo",
+        xlab = "Año",
+        ylab = "Cantidad de ofensores",
+        fillLab = "Sexo",
+        colorFill = npprDS_totales_ofensores_fill,
+        emptyMessage = HTML(
+          "Seleccione Sexo y Año(s) a visualizar"
+        ),
+        barWidth = 0,
+        xGap = 0
+      )
+      
+      p <- convert_to_plotly(
+        p,
+        tooltip = "text"
+      ) %>%
+        layout(height = 450)
+      
+      return(p)
+    }
+    
+    empty_plot <- create_empty_plot_with_message(
+      data = npprDS_totales_ofensores_filt,
+      x = "Año",
+      y = "Casos",
+      fill = "Sexo",
+      xlab = "Año",
+      ylab = "Cantidad de ofensores",
+      message
+    )
+    
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  
+  # Título de la gráfica de totales
+  output$plot_title_npprDS_totales_ofensores <- renderUI({
+    "Total de ofensores de delitos sexuales por sexo"
+  })
+  
+  
+  ### GRÁFICA DE BARRAS: OFENSORES POR GRUPO DE EDAD ###
+  
+  # #### Gráfica de barras: ofensores de delitos sexuales por sexo ####
+  
+  output$barPlot_npprDS_ofensores <- renderPlotly({
+    
+    # Verificar si hay opciones seleccionadas
+    has_edad <- length(input$checkGroup_npprDS_ofensores_edad) > 0
+    has_año  <- length(input$checkGroup_npprDS_ofensores_año) > 0
+    has_sexo <- length(input$checkGroup_npprDS_ofensores_sexo) > 0
+    
+    # Crear mensaje si faltan opciones seleccionadas
+    if (!has_edad || !has_año || !has_sexo) {
+      
+      message <- HTML(
+        "Seleccione Grupo(s) de Edad, Sexo y Año(s) a visualizar"
+      )
+      
+    } else {
+      
+      # Crear gráfica utilizando la función original
+      p <- renderBarPlot_facets(
+        npprDS_ofensores_filt,
+        x = "Año",
+        y = "Casos",
+        fill = "Edad",
+        xlab = "Año",
+        ylab = "Cantidad de ofensores",
+        fillLab = "Edad",
+        colorFill = npprDS_ofensores_fill,
+        emptyMessage = HTML(
+          "Seleccione Grupo(s) de Edad, Sexo y Año(s) a visualizar"
+        ),
+        barWidth = 0,
+        xGap = 0
+      )
+      
+      # Calcular altura según los sexos seleccionados
+      plot_height <- 500
+      numPlots <- length(input$checkGroup_npprDS_ofensores_sexo)
+      total_height <- plotHeight(plot_height, numPlots)
+      
+      # Mantener las facetas por sexo del código original
+      p <- p +
+        facet_wrap(~Sexo, ncol = 2) +
+        theme(
+          panel.spacing.x = unit(0.4, "lines"),
+          panel.spacing.y = unit(1.75, "lines")
+        )
+      
+      # Convertir a Plotly conservando la configuración original
+      p <- convert_to_plotly(
+        p,
+        tooltip = "text",
+        TRUE,
+        numPlots
+      ) %>%
+        layout(height = total_height)
+      
+      return(p)
+    }
+    
+    # Crear gráfica vacía si faltan selecciones
+    empty_plot <- create_empty_plot_with_message(
+      data = npprDS_ofensores_filt,
+      x = "Año",
+      y = "Casos",
+      fill = "Edad",
+      xlab = "Año",
+      ylab = "Cantidad de ofensores",
+      message
+    )
+    
+    convert_to_plotly(empty_plot, tooltip = "text")
+  })
+  
+  # Título de la gráfica
+  output$plot_title_npprDS_ofensores <- renderUI({
+    title <- "Casos de delitos sexuales por grupo de edad y sexo de los ofensores"
+  })
+  
+  
+  
+  ### TABLA DE DATOS DE OFENSORES ###
+  
+  output$dataTable_npprDS_ofensores <- renderDT(server = FALSE, {
+    renderDataTable(
+      npprDS_ofensores_filt(),
+      "Datos: Ofensores de delitos sexuales"
+    )
+  })
+  
+  
+  ### TARJETA DE LA TABLA Y FUENTE ###
+  
+  output$dataTableUI_npprDS_ofensores <- renderUI({
+    
+    if (isTRUE(input$showTable_npprDS_ofensores)) {
+      
+      hyperlinks <- c(
+        "https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico"
+      )
+      
+      texts <- c("Policía de Puerto Rico")
+      
+      tags$div(
+        class = "card",
+        style = paste(
+          "padding: 10px;",
+          "width: 98%;",
+          "margin: 10px auto;",
+          "border: 1px solid #ddd;",
+          "border-radius: 5px;",
+          "box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"
+        ),
+        
+        div(
+          style = paste(
+            "padding: 5px;",
+            "width: 98%;",
+            "display: flex;",
+            "justify-content: center;"
+          ),
+          
+          div(
+            style = paste(
+              "width: 98%;",
+              "max-width: 800px;",
+              "overflow-x: auto;"
+            ),
+            
+            DTOutput("dataTable_npprDS_ofensores")
+          )
+        ),
+        
+        createFuenteDiv(hyperlinks, texts)
+      )
+    }
+  })
+  
   
   
   #### Tab con datos de victimas y agresores de delitos sexuales por region (npprDS_region) ####

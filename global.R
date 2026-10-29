@@ -292,6 +292,11 @@ poli <- here::here("data", "Negociado_de_Policia", "/")
 despDF_Adultas <- cleanSheet_despDF(paste0(poli, "npprDesp.xlsx"), "Adultas")
 despDF_Menores <- cleanSheet_despDF(paste0(poli, "npprDesp.xlsx"), "Menores")
 
+# Unir los datos de adultas y menores
+despDF <- dplyr::bind_rows(
+  despDF_Adultas,
+  despDF_Menores
+)
 
 #### vEdad ####
 vEdad <- cleanSheet_vEdad(paste0(poli, "npprVDedad.xlsx"))
@@ -301,6 +306,14 @@ maltPoli <- cleanSheet_maltPoli(paste0(poli, "nppr_maltrato.xlsx"))
 
 #### npprDS_totales ####
 npprDS_totales <- cleanSheet_npprDS_totales(paste0(poli, "npprDS_totales.xlsx"))
+# Datos totales de víctimas
+npprDS_totales_victimas <- npprDS_totales %>%
+  dplyr::filter(Rol == "Victimas")
+
+# Datos totales de ofensores
+npprDS__totales_ofensores <- npprDS_totales %>%
+  dplyr::filter(Rol == "Ofensores")
+
 
 #### npprDS_victima ####
 npprDS_victima <- cleanSheet_npprDS_victima(paste0(poli, "npprDS_victima.xlsx"))
