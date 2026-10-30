@@ -2049,18 +2049,18 @@ ui <-
               
               # Contenedor con scroll vertical independiente
               div(
-                id = "scrollable-plot",
-                style = paste(
-                  "height: calc(100vh - 350px);",
-                  "min-height: 350px;",
-                  "overflow-y: auto;",
-                  "overflow-x: hidden;",
-                  "width: 100%;"
-                ),
+                # id = "scrollable-plot",
+                # style = paste(
+                #   "height: calc(100vh - 350px);",
+                #   "min-height: 350px;",
+                #   "overflow-y: auto;",
+                #   "overflow-x: hidden;",
+                #   "width: 100%;"
+                # ),
                 
                 plotlyOutput(
                   "barPlot_poli_vEdad",
-                  height = "auto",
+                  height = "500px",
                   width = "100%"
                 )
               )
@@ -2283,18 +2283,18 @@ ui <-
               
               # Contenedor con scroll vertical independiente
               div(
-                id = "scrollable-plot",
-                style = paste(
-                  "height: calc(100vh - 350px);",
-                  "min-height: 350px;",
-                  "overflow-y: auto;",
-                  "overflow-x: hidden;",
-                  "width: 100%;"
-                ),
+                # id = "scrollable-plot",
+                # style = paste(
+                #   "height: calc(100vh - 350px);",
+                #   "min-height: 350px;",
+                #   "overflow-y: auto;",
+                #   "overflow-x: hidden;",
+                #   "width: 100%;"
+                # ),
                 
                 plotlyOutput(
                   "barPlot_poli_Malt",
-                  height = "auto",
+                  height = "500px",
                   width = "100%"
                 )
               )
@@ -2512,144 +2512,269 @@ ui <-
         
         
         #### tab para el barplot de datos de víctimas de delitos sexuales (npprDS_totales_victima, npprDS_victima) ####
+        # tabPanel(
+        #   lowercaseTitle("Víctimas de Delitos Sexuales"),
+        #   
+        #   br(), br(),
+        #   
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # Filtros de víctimas
+        #       div(
+        #         style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",
+        #         
+        #         div(
+        #           style = "text-align: center; display: inline-block;",
+        #           
+        #           # Grupo de edad
+        #           createDropdownCheckbox(
+        #             label = HTML("Seleccione<br>Grupo(s) de Edad:"),
+        #             choices = npprDS_victima$Edad,
+        #             selected = npprDS_victima$Edad,
+        #             id = "npprDS_victimas_edad"
+        #           ),
+        #           
+        #           # Sexo de las víctimas
+        #           createDropdownCheckbox(
+        #             label = HTML("Seleccione<br>Sexo de las Víctimas:"),
+        #             choices = npprDS_victima$Sexo,
+        #             selected = npprDS_victima$Sexo,
+        #             id = "npprDS_victimas_sexo"
+        #           )
+        #         )
+        #       ),
+        #       
+        #       # Filtro de año y control de la tabla
+        #       div(
+        #         style = paste(
+        #           "width: 100%;",
+        #           "display: flex;",
+        #           "flex-direction: column;",
+        #           "align-items: center;",
+        #           "padding-top: 0px;"
+        #         ),
+        #         
+        #         div(
+        #           style = paste(
+        #             "width: 100%;",
+        #             "display: flex;",
+        #             "justify-content: center;",
+        #             "align-items: center;"
+        #           ),
+        #           
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
+        #             
+        #             createDropdownCheckbox(
+        #               label = "Seleccione Año(s):",
+        #               choices = npprDS_victima$Año,
+        #               selected = npprDS_victima$Año,
+        #               id = "npprDS_victimas_año"
+        #             )
+        #           ),
+        #           
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center;",
+        #             
+        #             showDataCheckbox("showTable_npprDS_victimas")
+        #           )
+        #         )
+        #       ),
+        #       
+        #       # Tabla de datos y fuente
+        #       uiOutput("dataTableUI_npprDS_victimas")
+        #     ),
+        #     
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       
+        #       # Gráfica de totales
+        #       fluidRow(
+        #         column(
+        #           12,
+        #           div(
+        #             id = "plot-container",
+        #             div(
+        #               id = "plot-title",
+        #               uiOutput("plot_title_npprDS_totales_victimas")
+        #             ),
+        #             plotlyOutput(
+        #               "barPlot_npprDS_totales_victimas",
+        #               height = "450px"
+        #             )
+        #           )
+        #         )
+        #       ),
+        #       
+        #       tags$div(style = "padding-bottom: 60px;"),
+        #       
+        #       # Gráfica por grupo de edad
+        #       fluidRow(
+        #         column(
+        #           12,
+        #           div(
+        #             id = "plot-container",
+        #             div(
+        #               id = "plot-title",
+        #               uiOutput("plot_title_npprDS_victima")
+        #             ),
+        #             plotlyOutput(
+        #               "barPlot_npprDS_victima",
+        #               height = "450px"
+        #             )
+        #           )
+        #         )
+        #       ),
+        #       
+        #       tags$div(style = "padding-bottom: 80px;"),
+        #       
+        #       # Nota de actualización
+        #       tags$div(
+        #         style = "padding-bottom: 40px;",
+        #         
+        #         div(
+        #           class = "card",
+        #           style = paste(
+        #             "padding: 15px;",
+        #             "color: white;",
+        #             "background-color: #3e3f3a;",
+        #             "border-radius: 5px;",
+        #             "margin-top: 0;",
+        #             "width: 100%;"
+        #           ),
+        #           
+        #           h4(
+        #             strong(
+        #               actualizacion_policia4,
+        #               style = "margin: 0px;"
+        #             )
+        #           ),
+        #           
+        #           p(
+        #             paste(
+        #               "Los datos representados corresponden a las víctimas",
+        #               "de delitos sexuales por sexo y grupo de edad,",
+        #               "desde el año natural 2019 al 2026.",
+        #               "Los datos de 2026 son preliminares."
+        #             ),
+        #             style = "font-size: 16px; padding: 0px;"
+        #           )
+        #         )
+        #       )
+        #     )
+        #   )
+        # ),
+        
         tabPanel(
           lowercaseTitle("Víctimas de Delitos Sexuales"),
           
-          br(), br(),
-          
-          sidebarLayout(
-            sidebarPanel(
-              style = "display: flex; flex-direction: column; align-items: center;",
+          div(
+            class = "dashboard-container",
+            
+            # GRÁFICA DE TOTALES
+            div(
+              class = "dashboard-card plot-card",
               
-              # Filtros de víctimas
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",
+                id = "plot-title",
+                uiOutput("plot_title_npprDS_totales_victimas")
+              ),
+              
+              plotlyOutput(
+                "barPlot_npprDS_totales_victimas",
+                height = "450px",
+                width = "100%"
+              )
+            ),
+            
+            # GRÁFICA POR GRUPO DE EDAD
+            div(
+              class = "dashboard-card plot-card",
+              
+              div(
+                id = "plot-title",
+                uiOutput("plot_title_npprDS_victima")
+              ),
+              
+              plotlyOutput(
+                "barPlot_npprDS_victima",
+                height = "500px",
+                width = "100%"
+              )
+            ),
+            
+            # FILTROS
+            div(
+              class = "dashboard-card filters-card",
+              
+              div(
+                class = "filters-row",
                 
+                # GRUPO DE EDAD
                 div(
-                  style = "text-align: center; display: inline-block;",
+                  class = "filter-box",
                   
-                  # Grupo de edad
-                  createDropdownCheckbox(
+                  createPickerFilter(
                     label = HTML("Seleccione<br>Grupo(s) de Edad:"),
                     choices = npprDS_victima$Edad,
                     selected = npprDS_victima$Edad,
                     id = "npprDS_victimas_edad"
-                  ),
+                  )
+                ),
+                
+                # SEXO DE LAS VÍCTIMAS
+                div(
+                  class = "filter-box",
                   
-                  # Sexo de las víctimas
-                  createDropdownCheckbox(
+                  createPickerFilter(
                     label = HTML("Seleccione<br>Sexo de las Víctimas:"),
                     choices = npprDS_victima$Sexo,
                     selected = npprDS_victima$Sexo,
                     id = "npprDS_victimas_sexo"
                   )
-                )
-              ),
-              
-              # Filtro de año y control de la tabla
-              div(
-                style = paste(
-                  "width: 100%;",
-                  "display: flex;",
-                  "flex-direction: column;",
-                  "align-items: center;",
-                  "padding-top: 0px;"
                 ),
                 
+                # AÑO
                 div(
-                  style = paste(
-                    "width: 100%;",
-                    "display: flex;",
-                    "justify-content: center;",
-                    "align-items: center;"
-                  ),
+                  class = "filter-box",
                   
-                  div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
-                    
-                    createDropdownCheckbox(
-                      label = "Seleccione Año(s):",
-                      choices = npprDS_victima$Año,
-                      selected = npprDS_victima$Año,
-                      id = "npprDS_victimas_año"
-                    )
-                  ),
-                  
-                  div(
-                    style = "flex: 1; display: flex; justify-content: center;",
-                    
-                    showDataCheckbox("showTable_npprDS_victimas")
+                  createPickerFilter(
+                    label = "Seleccione año(s):",
+                    choices = npprDS_victima$Año,
+                    selected = npprDS_victima$Año,
+                    id = "npprDS_victimas_año"
                   )
+                ),
+                
+                # MOSTRAR DATOS
+                div(
+                  class = "filter-switch",
+                  
+                  showDataToggle("showTable_npprDS_victimas")
                 )
-              ),
-              
-              # Tabla de datos y fuente
-              uiOutput("dataTableUI_npprDS_victimas")
+              )
             ),
             
-            mainPanel(
-              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+            # TABLA + INFORMACIÓN
+            div(
+              class = "bottom-row",
               
-              # Gráfica de totales
-              fluidRow(
-                column(
-                  12,
-                  div(
-                    id = "plot-container",
-                    div(
-                      id = "plot-title",
-                      uiOutput("plot_title_npprDS_totales_victimas")
-                    ),
-                    plotlyOutput(
-                      "barPlot_npprDS_totales_victimas",
-                      height = "450px"
-                    )
-                  )
-                )
-              ),
+              # TABLA DE DATOS
+              uiOutput("dataTableUI_npprDS_victimas"),
               
-              tags$div(style = "padding-bottom: 60px;"),
-              
-              # Gráfica por grupo de edad
-              fluidRow(
-                column(
-                  12,
-                  div(
-                    id = "plot-container",
-                    div(
-                      id = "plot-title",
-                      uiOutput("plot_title_npprDS_victima")
-                    ),
-                    plotlyOutput(
-                      "barPlot_npprDS_victima",
-                      height = "450px"
-                    )
-                  )
-                )
-              ),
-              
-              tags$div(style = "padding-bottom: 80px;"),
-              
-              # Nota de actualización
-              tags$div(
-                style = "padding-bottom: 40px;",
+              # INFORMACIÓN
+              div(
+                class = "info-column",
                 
+                # NOTA IMPORTANTE
                 div(
-                  class = "card",
-                  style = paste(
-                    "padding: 15px;",
-                    "color: white;",
-                    "background-color: #3e3f3a;",
-                    "border-radius: 5px;",
-                    "margin-top: 0;",
-                    "width: 100%;"
-                  ),
+                  class = "info-card",
                   
                   h4(
-                    strong(
-                      actualizacion_policia4,
-                      style = "margin: 0px;"
-                    )
+                    class = "info-card-title",
+                    actualizacion_policia4
                   ),
                   
                   p(
@@ -2658,8 +2783,27 @@ ui <-
                       "de delitos sexuales por sexo y grupo de edad,",
                       "desde el año natural 2019 al 2026.",
                       "Los datos de 2026 son preliminares."
-                    ),
-                    style = "font-size: 16px; padding: 0px;"
+                    )
+                  )
+                ),
+                
+                # FUENTE DE LOS DATOS
+                div(
+                  class = "source-card",
+                  
+                  h4(
+                    class = "source-card-title",
+                    "Fuente de los datos"
+                  ),
+                  
+                  p(
+                    tags$a(
+                      href = "https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Policía de Puerto Rico",
+                      class = "source-link"
+                    )
                   )
                 )
               )
@@ -2669,144 +2813,270 @@ ui <-
         
         #### tab para el barplot de datos de víctimas y ofensores de delitos sexuales (npprDS_totales_ofensores y npprDS_ofensores) ####
         
+        # tabPanel(
+        #   lowercaseTitle("Ofensores de Delitos Sexuales"),
+        #   
+        #   br(), br(),
+        #   
+        #   sidebarLayout(
+        #     sidebarPanel(
+        #       style = "display: flex; flex-direction: column; align-items: center;",
+        #       
+        #       # Filtros de ofensores
+        #       div(
+        #         style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",
+        #         
+        #         div(
+        #           style = "text-align: center; display: inline-block;",
+        #           
+        #           # Grupo de edad
+        #           createDropdownCheckbox(
+        #             label = HTML("Seleccione<br>Grupo(s) de Edad:"),
+        #             choices = npprDS_ofensores$Edad,
+        #             selected = npprDS_ofensores$Edad,
+        #             id = "npprDS_ofensores_edad"
+        #           ),
+        #           
+        #           # Sexo de los ofensores
+        #           createDropdownCheckbox(
+        #             label = HTML("Seleccione<br>Sexo de los Ofensores:"),
+        #             choices = npprDS_ofensores$Sexo,
+        #             selected = npprDS_ofensores$Sexo,
+        #             id = "npprDS_ofensores_sexo"
+        #           )
+        #         )
+        #       ),
+        #       
+        #       # Filtro de año y control de la tabla
+        #       div(
+        #         style = paste(
+        #           "width: 100%;",
+        #           "display: flex;",
+        #           "flex-direction: column;",
+        #           "align-items: center;",
+        #           "padding-top: 0px;"
+        #         ),
+        #         
+        #         div(
+        #           style = paste(
+        #             "width: 100%;",
+        #             "display: flex;",
+        #             "justify-content: center;",
+        #             "align-items: center;"
+        #           ),
+        #           
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
+        #             
+        #             createDropdownCheckbox(
+        #               label = "Seleccione Año(s):",
+        #               choices = npprDS_ofensores$Año,
+        #               selected = npprDS_ofensores$Año,
+        #               id = "npprDS_ofensores_año"
+        #             )
+        #           ),
+        #           
+        #           div(
+        #             style = "flex: 1; display: flex; justify-content: center;",
+        #             
+        #             showDataCheckbox("showTable_npprDS_ofensores")
+        #           )
+        #         )
+        #       ),
+        #       
+        #       # Tabla de datos y fuente
+        #       uiOutput("dataTableUI_npprDS_ofensores")
+        #     ),
+        #     
+        #     mainPanel(
+        #       style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+        #       
+        #       # Gráfica de totales
+        #       fluidRow(
+        #         column(
+        #           12,
+        #           div(
+        #             id = "plot-container",
+        #             div(
+        #               id = "plot-title",
+        #               uiOutput("plot_title_npprDS_totales_ofensores")
+        #             ),
+        #             plotlyOutput(
+        #               "barPlot_npprDS_totales_ofensores",
+        #               height = "450px"
+        #             )
+        #           )
+        #         )
+        #       ),
+        #       
+        #       tags$div(style = "padding-bottom: 60px;"),
+        #       
+        #       # Gráfica por grupo de edad
+        #       fluidRow(
+        #         column(
+        #           12,
+        #           div(
+        #             id = "plot-container",
+        #             div(
+        #               id = "plot-title",
+        #               uiOutput("plot_title_npprDS_ofensores")
+        #             ),
+        #             plotlyOutput(
+        #               "barPlot_npprDS_ofensores",
+        #               height = "450px"
+        #             )
+        #           )
+        #         )
+        #       ),
+        #       
+        #       tags$div(style = "padding-bottom: 80px;"),
+        #       
+        #       # Nota de actualización
+        #       tags$div(
+        #         style = "padding-bottom: 40px;",
+        #         
+        #         div(
+        #           class = "card",
+        #           style = paste(
+        #             "padding: 15px;",
+        #             "color: white;",
+        #             "background-color: #3e3f3a;",
+        #             "border-radius: 5px;",
+        #             "margin-top: 0;",
+        #             "width: 100%;"
+        #           ),
+        #           
+        #           h4(
+        #             strong(
+        #               actualizacion_policia4,
+        #               style = "margin: 0px;"
+        #             )
+        #           ),
+        #           
+        #           p(
+        #             paste(
+        #               "Los datos representados corresponden a los ofensores",
+        #               "de delitos sexuales por sexo y grupo de edad,",
+        #               "desde el año natural 2019 al 2026.",
+        #               "Los datos de 2026 son preliminares."
+        #             ),
+        #             style = "font-size: 16px; padding: 0px;"
+        #           )
+        #         )
+        #       )
+        #     )
+        #   )
+        # ),
+        # 
+        
         tabPanel(
           lowercaseTitle("Ofensores de Delitos Sexuales"),
           
-          br(), br(),
-          
-          sidebarLayout(
-            sidebarPanel(
-              style = "display: flex; flex-direction: column; align-items: center;",
+          div(
+            class = "dashboard-container",
+            
+            # GRÁFICA DE TOTALES
+            div(
+              class = "dashboard-card plot-card",
               
-              # Filtros de ofensores
               div(
-                style = "width: 100%; display: flex; justify-content: center; margin-bottom: 20px;",
+                id = "plot-title",
+                uiOutput("plot_title_npprDS_totales_ofensores")
+              ),
+              
+              plotlyOutput(
+                "barPlot_npprDS_totales_ofensores",
+                height = "450px",
+                width = "100%"
+              )
+            ),
+            
+            # GRÁFICA POR GRUPO DE EDAD
+            div(
+              class = "dashboard-card plot-card",
+              
+              div(
+                id = "plot-title",
+                uiOutput("plot_title_npprDS_ofensores")
+              ),
+              
+              plotlyOutput(
+                "barPlot_npprDS_ofensores",
+                height = "500px",
+                width = "100%"
+              )
+            ),
+            
+            # FILTROS
+            div(
+              class = "dashboard-card filters-card",
+              
+              div(
+                class = "filters-row",
                 
+                # GRUPO DE EDAD
                 div(
-                  style = "text-align: center; display: inline-block;",
+                  class = "filter-box",
                   
-                  # Grupo de edad
-                  createDropdownCheckbox(
+                  createPickerFilter(
                     label = HTML("Seleccione<br>Grupo(s) de Edad:"),
                     choices = npprDS_ofensores$Edad,
                     selected = npprDS_ofensores$Edad,
                     id = "npprDS_ofensores_edad"
-                  ),
+                  )
+                ),
+                
+                # SEXO DE LOS OFENSORES
+                div(
+                  class = "filter-box",
                   
-                  # Sexo de los ofensores
-                  createDropdownCheckbox(
+                  createPickerFilter(
                     label = HTML("Seleccione<br>Sexo de los Ofensores:"),
                     choices = npprDS_ofensores$Sexo,
                     selected = npprDS_ofensores$Sexo,
                     id = "npprDS_ofensores_sexo"
                   )
-                )
-              ),
-              
-              # Filtro de año y control de la tabla
-              div(
-                style = paste(
-                  "width: 100%;",
-                  "display: flex;",
-                  "flex-direction: column;",
-                  "align-items: center;",
-                  "padding-top: 0px;"
                 ),
                 
+                # AÑO
                 div(
-                  style = paste(
-                    "width: 100%;",
-                    "display: flex;",
-                    "justify-content: center;",
-                    "align-items: center;"
-                  ),
+                  class = "filter-box",
                   
-                  div(
-                    style = "flex: 1; display: flex; justify-content: center; margin-right: 10px;",
-                    
-                    createDropdownCheckbox(
-                      label = "Seleccione Año(s):",
-                      choices = npprDS_ofensores$Año,
-                      selected = npprDS_ofensores$Año,
-                      id = "npprDS_ofensores_año"
-                    )
-                  ),
-                  
-                  div(
-                    style = "flex: 1; display: flex; justify-content: center;",
-                    
-                    showDataCheckbox("showTable_npprDS_ofensores")
+                  createPickerFilter(
+                    label = "Seleccione año(s):",
+                    choices = npprDS_ofensores$Año,
+                    selected = npprDS_ofensores$Año,
+                    id = "npprDS_ofensores_año"
                   )
+                ),
+                
+                # MOSTRAR DATOS
+                div(
+                  class = "filter-switch",
+                  
+                  showDataToggle("showTable_npprDS_ofensores")
                 )
-              ),
-              
-              # Tabla de datos y fuente
-              uiOutput("dataTableUI_npprDS_ofensores")
+              )
             ),
             
-            mainPanel(
-              style = "height: calc(100vh - 150px); padding-bottom: 10px;",
+            # TABLA + INFORMACIÓN
+            div(
+              class = "bottom-row",
               
-              # Gráfica de totales
-              fluidRow(
-                column(
-                  12,
-                  div(
-                    id = "plot-container",
-                    div(
-                      id = "plot-title",
-                      uiOutput("plot_title_npprDS_totales_ofensores")
-                    ),
-                    plotlyOutput(
-                      "barPlot_npprDS_totales_ofensores",
-                      height = "450px"
-                    )
-                  )
-                )
-              ),
+              # TABLA DE DATOS
+              uiOutput("dataTableUI_npprDS_ofensores"),
               
-              tags$div(style = "padding-bottom: 60px;"),
-              
-              # Gráfica por grupo de edad
-              fluidRow(
-                column(
-                  12,
-                  div(
-                    id = "plot-container",
-                    div(
-                      id = "plot-title",
-                      uiOutput("plot_title_npprDS_ofensores")
-                    ),
-                    plotlyOutput(
-                      "barPlot_npprDS_ofensores",
-                      height = "450px"
-                    )
-                  )
-                )
-              ),
-              
-              tags$div(style = "padding-bottom: 80px;"),
-              
-              # Nota de actualización
-              tags$div(
-                style = "padding-bottom: 40px;",
+              # INFORMACIÓN
+              div(
+                class = "info-column",
                 
+                # NOTA IMPORTANTE
                 div(
-                  class = "card",
-                  style = paste(
-                    "padding: 15px;",
-                    "color: white;",
-                    "background-color: #3e3f3a;",
-                    "border-radius: 5px;",
-                    "margin-top: 0;",
-                    "width: 100%;"
-                  ),
+                  class = "info-card",
                   
                   h4(
-                    strong(
-                      actualizacion_policia4,
-                      style = "margin: 0px;"
-                    )
+                    class = "info-card-title",
+                    actualizacion_policia4
                   ),
                   
                   p(
@@ -2815,15 +3085,33 @@ ui <-
                       "de delitos sexuales por sexo y grupo de edad,",
                       "desde el año natural 2019 al 2026.",
                       "Los datos de 2026 son preliminares."
-                    ),
-                    style = "font-size: 16px; padding: 0px;"
+                    )
+                  )
+                ),
+                
+                # FUENTE DE LOS DATOS
+                div(
+                  class = "source-card",
+                  
+                  h4(
+                    class = "source-card-title",
+                    "Fuente de los datos"
+                  ),
+                  
+                  p(
+                    tags$a(
+                      href = "https://www.dsp.pr.gov/negociados/negociado-de-la-policia-de-puerto-rico",
+                      target = "_blank",
+                      rel = "noopener noreferrer",
+                      "Policía de Puerto Rico",
+                      class = "source-link"
+                    )
                   )
                 )
               )
             )
           )
         ),
-        
         
         
         #### tab para el barplot de datos de casos de delitos sexuales por tipo de delito y sexo (npprDS_victimas_agrupados y npprDS_ofensores_agrupados) ####
@@ -5558,35 +5846,22 @@ ui <-
   
   
   
-    #### Tab Publicaciones Generales ####
-     # tabPanel(
-     #    lowercaseTitle("Publicaciones"),
-     #    icon = icon("info-circle"),
-     #    tabsetPanel(
-     # 
-     #      # tab de los autores del proyecto
-     #      tabPanel(
-     #        lowercaseTitle("Publicaciones"),
-     #        div(style = "height: 100%; padding-bottom: 10px;",
-     #            uiOutput("publicaciones_view_content"))
-     #      )
-     #    )),
-  
-      tabPanel(
-        lowercaseTitle("Infografías"),
-        icon = icon("info-circle"),
-        
-        tabsetPanel(
-          tabPanel(
-            lowercaseTitle("Infografías"),
-            
-            div(
-              class = "publicaciones-container",
-              uiOutput("publicaciones_view_content")
-            )
-          )
-        )
-      ),
+    #### Tab Infografias ####
+      # tabPanel(
+      #   lowercaseTitle("Infografías"),
+      #   icon = icon("info-circle"),
+      #   
+      #   tabsetPanel(
+      #     tabPanel(
+      #       lowercaseTitle("Infografías"),
+      #       
+      #       div(
+      #         class = "publicaciones-container",
+      #         uiOutput("publicaciones_view_content")
+      #       )
+      #     )
+      #   )
+      # ),
   
   
   

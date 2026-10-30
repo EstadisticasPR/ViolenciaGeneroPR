@@ -38,17 +38,33 @@
 
 
 /* =========================================================
-   TARJETA DE GRÁFICA
+   TARJETA DE GRÁFICAS
    ========================================================= */
 
 .plot-card {
-  padding: 15px 20px 10px 20px;
+  width: 100%;
+  height: auto !important;
+  min-height: 0;
+  max-height: none !important;
+
+  min-width: 0;
+  padding: 25px 30px 20px 30px;
+
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .plot-card #plot-title {
   margin-bottom: 5px;
 }
 
+/* Evitar que la gráfica exceda el ancho de la tarjeta */
+.plot-card .plotly,
+.plot-card .plot-container,
+.plot-card .js-plotly-plot {
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
 
 /* =========================================================
    TARJETA DE MAPAS
@@ -1089,3 +1105,11 @@
   color: #333;
   margin-bottom: 7px;
 }
+
+
+
+
+
+
+
+
